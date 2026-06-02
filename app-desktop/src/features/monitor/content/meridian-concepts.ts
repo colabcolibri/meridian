@@ -268,7 +268,7 @@ export const completeUsWorkflowSteps: DailyWorkflowStep[] = [
     actions: [
       "Command: /complete-us US-XXXX (ex.: /complete-us US-0017).",
       "Without an ID, AI asks which US or infers it from the session. Confirm if it infers.",
-      "Workflow usa board-keeper + skill complete-user-story.",
+      "Workflow uses board-keeper + skill complete-user-story.",
     ],
     commands: ["/complete-us US-XXXX"],
   },
@@ -781,7 +781,8 @@ export const phaseDocuments = PHASE_DOC_IDS.map((id) => ({
 export const nextStepsAfterConcepts = {
   title: "Next step",
   paragraphs: [
-    "Understood folders, phases, and status? Go to the Usage guide tab. It has the steps, commands (/init-meridian, /create-us, /complete-us...), and what to do in each situation.",
+    "Understood folders, phases, and status? Go to the Usage guide tab for steps and commands (/init-meridian, /create-us, /complete-us…).",
+    "The same guides live in the kit repo: .agent/references/start-here.md and .agent/references/usage-guide.md (for IDE and GitHub without this app).",
     "Open your repository's docs/ folder in this app to see Setup, Deliverables, and Board with real data.",
   ],
 }

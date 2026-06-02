@@ -65,7 +65,7 @@ US gate: `05_architecture` approved + referenced epic/version exist in `docs/epi
 
 ## How agents should work
 
-See also: [daily AI workflow](../../.agent/references/daily-ai-workflow.md) and `/daily-with-ai` in Cursor.
+See also: [Start here](../../.agent/references/start-here.md) · [Usage guide](../../.agent/references/usage-guide.md) · `/daily-with-ai` in Cursor.
 
 ### Daily loop (manager + AI)
 

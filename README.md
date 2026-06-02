@@ -9,38 +9,87 @@
 </p>
 
 <p align="center">
-  <strong>Documentation-driven development for AI-assisted teams</strong><br />
-  Docs before code · You stay manager of the process · <code>docs/</code> is the source of truth
+  <strong>The project documentation is the project</strong><br />
+  Track what you decided, what is in progress, and what is actually done — while building with AI agents.
 </p>
 
-<!-- GitHub About → Settings → Description (copy one line): -->
-<!-- Documentation-driven protocol for AI-assisted development — docs before code, you stay manager of the process. -->
+<!-- GitHub About → Settings → Description: -->
+<!-- Experimental docs-first workflow for AI-assisted dev — your repo docs track scope, decisions, and progress. -->
 
-> **Experimental** — Active development; not for critical production. [Roadmap](#roadmap) · Protocol: [`.agent/MERIDIAN.md`](.agent/MERIDIAN.md)
+> **Very early experiment** — I am testing flows to **document the project for real**, **keep building with integrity**, and **track what is done vs. what only looked done in chat**. Fine alone or in a small group; shapes and rules will change. [Roadmap](#roadmap) · [Protocol](.agent/MERIDIAN.md)
 
 # Meridian
 
 **Set the meridian before you write code.**
 
-Meridian is a protocol and toolkit for building software with AI agents (Cursor, Antigravity, and others) **without losing control**. Scope, acceptance criteria, architecture, and decisions live in Markdown under `docs/`. User stories drive implementation; `board.json` is generated from those files — never edited by hand.
+Meridian has two layers that work together:
 
-This repository contains:
+1. **`docs/`** in your repo — the project documentation (scope, architecture, acceptance, decisions, user stories). If it is not written here, it is not part of the process.
+2. **`.agent/`** — the kit that **defines the flow**: which agent runs when, slash workflows, skills, gates, and rules agents must follow. This is not optional; it is how Meridian stays consistent instead of reinventing the process in every chat.
 
-- **[`.agent/`](.agent/)** — agents, skills, workflows, and rules agents read at runtime (copy into any project).
-- **[`app-desktop/`](app-desktop/)** — local visual monitor: open a `docs/` folder and see setup progress, deliverables, decisions, and kanban in the browser (Chrome or Edge).
+Code implements `docs/`; agents operate through `.agent/`; **you** approve maturity and completion. Visual tracking in the browser is a separate, optional helper (see below).
+
+**Guides (same as the monitor tabs):** [Start here](.agent/references/start-here.md) · [Usage guide](.agent/references/usage-guide.md) — Markdown for the IDE and GitHub.
+
+## Who this is for
+
+- **Solo devs** using AI agents (Cursor, Antigravity, or any IDE that reads `.agent/`) who want a clear path from idea to shipped code — with a paper trail in Git.
+- **Founders and PMs** who need to see scope, decisions, and delivery without Jira, Linear, or another SaaS.
+- **Tech leads and builders in small teams** sharing one `docs/` tree — same protocol, same source of truth.
+
+You stay **manager of the process**: agents can draft, implement, and sync status, but direction and ✅ belong to you, with evidence in the files.
+
+Not aimed at large org workflow, permissions matrices, or unsupervised agent swarms — at least not in this version.
+
+## What is in this repository
+
+| Piece | Required? | What it does |
+| ----- | --------- | ------------ |
+| [`.agent/`](.agent/) + [protocol](.agent/MERIDIAN.md) | **Yes** | Defines the Meridian flow: agents, workflows (`/status`, `/complete-us`, …), skills, and always-on rules. **Copy into every Meridian project.** |
+| `docs/` (in *your* project) | **Yes** | Project documentation the agents read and update — not shipped inside this kit repo except as a [dogfooding example](app-desktop/docs/). |
+| `.cursor/` | Cursor only | Local mirror of `.agent/` ([adapter](.agent/CURSOR_ADAPTER.md)). Symlinks, not committed. |
+| [`app-desktop/`](app-desktop/) | **No** | Optional **visual tracker** (browser): read a `docs/` folder and see setup, deliverables, decisions, and kanban. Does not replace `.agent/` or your IDE. |
+
+## IDE support
+
+Meridian is **not tied to Cursor**. The kit lives in `.agent/` (Antigravity / ag-kit convention). Any IDE that reads `.agent/` can use it as-is.
+
+| IDE / tool | How you use Meridian |
+| ---------- | ------------------- |
+| **Antigravity, ag-kit, others** | Point the IDE at `.agent/` — workflows, agents, and skills work natively. |
+| **Cursor** | Cursor does not index `.agent/` by default. Run `./.agent/scripts/sync_cursor_kit.sh` to build a **local** `.cursor/` folder (rules, skills, agents, slash commands). Still edit the kit in `.agent/`; regenerate symlinks after clone or kit changes. |
+
+```txt
+.agent/          ← source of truth (commit this)
+.cursor/         ← Cursor adapter only (gitignored, symlinks → .agent/)
+```
+
+Details: [`.agent/CURSOR_ADAPTER.md`](.agent/CURSOR_ADAPTER.md)
 
 <p align="center">
-  <img src="assets/screenshots/monitor-setup.jpg" alt="Meridian Desktop — Setup tab showing phase document progress" width="920" />
+  <img src="assets/screenshots/monitor-setup.jpg" alt="Meridian Desktop — Setup tab with phase document progress" width="920" />
 </p>
-<p align="center"><em>Desktop monitor — Setup tab: phase documents 00–11, dependencies, and approval status.</em></p>
+<p align="center"><em>Optional monitor — Setup tab (the agent flow itself runs via <code>.agent/</code> in your IDE).</em></p>
+
+## How it works
+
+1. **Document** — Phase docs (`00_scope` … `05_architecture`, security, stack, …) and `docs/decisions/` for why things changed.
+2. **Plan** — Epics, versions, sprints, and user stories after architecture is approved enough to commit.
+3. **Execute** — Work from a US file; record evidence; `/complete-us` when it is really done.
+
+**Rule of thumb:** if it is not in `docs/`, it is not part of the managed process — chat does not count.
+
+No login. No cloud. Git holds the history. Agents follow `.agent/`; the desktop monitor, if you use it, only **reads** `docs/`.
 
 ## What it is / what it is not
 
-| It is | It is not |
-| ----- | --------- |
-| Protocol + `.agent/` kit (agents, skills, workflows) | SaaS, login, or hosted platform |
-| `docs/` → versions → user stories → code | Autonomous agents without human review |
-| Local app that **reads** your `docs/` folder | Replacement for Jira, Linear, or GitHub Projects |
+| Meridian is | Meridian is not |
+| ----------- | --------------- |
+| **`docs/`** = what is true about the project | A wiki or Notion bolted on the side |
+| **`.agent/`** = how the flow runs (workflows, agents, gates) | Ad-hoc prompts with no shared rules |
+| Optional **monitor** to see status in the browser | The monitor replacing agents or `docs/` |
+| Process tracked in files (decisions, US, board) | “Done” because the agent said so in chat |
+| Solo or small group; early protocol version | Enterprise PM or unsupervised agent swarms |
 
 ## Quick start
 
@@ -48,121 +97,126 @@ This repository contains:
 git clone https://github.com/colabcolibri/meridian.git
 cd meridian
 
-# Cursor (local symlinks — not in Git):
+# Cursor only — mirror .agent/ into .cursor/ (local, not committed):
 chmod +x .agent/scripts/sync_cursor_kit.sh
 ./.agent/scripts/sync_cursor_kit.sh
 
+# Optional — desktop monitor:
 cd app-desktop && pnpm install && pnpm dev
 ```
 
-Open **http://localhost:5173**, click **Open docs folder**, and select the `docs/` directory of a Meridian project (e.g. `app-desktop/docs/` in this repo for dogfooding).
+If your IDE already supports `.agent/`, skip the sync script and open the repo there.
 
-## Desktop monitor
+**New to Meridian?** [Start here](.agent/references/start-here.md) → [Usage guide](.agent/references/usage-guide.md) → `/init-meridian` or `/status`.
 
-The monitor does not replace your editor. It reads the same files you edit in Cursor and surfaces governance: what is approved, what is blocked, and where each user story stands.
+1. Open **http://localhost:5173** (optional monitor)
+2. Click **Open docs folder**
+3. Select a Meridian `docs/` directory (try `app-desktop/docs/` in this repo)
 
-### Start here
+## Desktop monitor (optional)
 
-Onboarding for newcomers: what Meridian is, how `docs/` is organized (phase files, epics, versions, sprints, user stories, decision log), and core principles (docs before code, derived board, evidence-based done).
+The **real Meridian loop runs in your IDE** through `.agent/` (workflows and agents). The desktop app is only a **read-only dashboard** for the same `docs/` files — useful to see what is approved, blocked, or still open, but not required to use the protocol.
 
-![Start here — concepts and docs/ layout](assets/screenshots/monitor-start-here.jpg)
+<details>
+<summary><strong>Start here</strong> — concepts and <code>docs/</code> layout</summary>
 
-### Usage guide
+![Start here](assets/screenshots/monitor-start-here.jpg)
 
-Practical workflow with AI: first-time setup (`/init-meridian`), document phases (`/status`, `/architecture`), build backlog (`/create-us`), implement, and close stories (`/complete-us`). Includes a “where am I?” map to the right slash command.
+Explains the Meridian model: phase docs, delivery folders (`epics/`, `versions/`, `sprints/`, `us/`), decision log, and why the board is derived from user stories. Full text: [start-here.md](.agent/references/start-here.md).
 
-![Usage guide — daily workflow and commands](assets/screenshots/monitor-usage-guide.jpg)
+</details>
 
-### Setup
+<details>
+<summary><strong>Usage guide</strong> — daily flow and slash commands</summary>
 
-Progress across the 10 phase documents (00–08 and 11): `draft` → `review` → `approved`, dependency gates, and which file to work on next (e.g. database after architecture).
+![Usage guide](assets/screenshots/monitor-usage-guide.jpg)
 
-![Setup — phase document progress](assets/screenshots/monitor-setup.jpg)
+Step-by-step paths (first run, document, backlog, implement, close US) with commands such as `/init-meridian`, `/status`, `/create-us`, and `/complete-us`. Full text: [usage-guide.md](.agent/references/usage-guide.md).
 
-### Decisions
+</details>
 
-Structured decision log from `docs/decisions/YYYY-MM-DD.json` — newest entries first, with what changed, why, and impact. Agents prepend here when scope or protocol shifts.
+<details>
+<summary><strong>Decisions</strong> — <code>docs/decisions/YYYY-MM-DD.json</code></summary>
 
-![Decisions — daily decision log](assets/screenshots/monitor-decisions.jpg)
+![Decisions](assets/screenshots/monitor-decisions.jpg)
 
-### Deliverables
+Daily JSON log: what changed, why, and which documents were affected. New entries go at the top; history is never deleted.
 
-Releases (`v0`, `v1`, `v2…`), sprints, and epics from `docs/versions/`, `docs/sprints/`, and `docs/epics/` — with user story coverage per epic.
+</details>
 
-![Deliverables — versions, sprints, and epics](assets/screenshots/monitor-deliverables.jpg)
+<details>
+<summary><strong>Deliverables</strong> — versions, sprints, epics</summary>
 
-### Board
+![Deliverables](assets/screenshots/monitor-deliverables.jpg)
 
-Kanban derived from user story frontmatter: pending, in progress, awaiting tests, complete, frozen. Filter by version and epic.
+Release-level view with user story coverage per epic and sprint lists per version.
 
-![Board — user story kanban](assets/screenshots/monitor-board.jpg)
+</details>
 
-### Story detail
+<details>
+<summary><strong>Board</strong> — kanban from user story status</summary>
 
-Drill into a single US: narrative, **Acceptance**, **Technical implementation**, tests (planned / executed), dependencies, and MoSCoW — aligned with the Meridian protocol in the repo.
+![Board](assets/screenshots/monitor-board.jpg)
 
-![Story detail — US-0009 example](assets/screenshots/monitor-story-detail.jpg)
+Columns driven by story frontmatter (pending, in progress, tests pending, done, frozen). Filter by version and epic.
 
-## Install kit in another project
+</details>
 
-Copy only the agent kit:
+<details>
+<summary><strong>Story detail</strong> — one user story opened</summary>
+
+![Story detail](assets/screenshots/monitor-story-detail.jpg)
+
+Full US view: narrative, acceptance checkboxes, technical implementation notes, and test evidence.
+
+</details>
+
+## Adopt Meridian in your project
+
+You need **both** in the target repo:
 
 ```txt
-.agent/
+your-project/
+  .agent/          ← required: flows, agents, skills (copy from this kit)
+  docs/            ← required: create via /init-meridian or init-project skill
 ```
 
-Cursor: run `./.agent/scripts/sync_cursor_kit.sh` after clone. Commit `.agent/` only (`.cursor/` stays local). See [`.agent/CURSOR_ADAPTER.md`](.agent/CURSOR_ADAPTER.md).
+```bash
+cp -R path/to/meridian/.agent ./your-project/
+```
+
+1. Commit `.agent/` and grow `docs/` as the living project record.
+2. **Antigravity / `.agent`-native IDE** — workflows and agents under `.agent/` drive the process.
+3. **Cursor** — run `./.agent/scripts/sync_cursor_kit.sh` for slash commands in `.cursor/`; still edit the kit in `.agent/`. Do not commit `.cursor/`.
+4. **Monitor (optional)** — run `app-desktop` locally if you want a visual read-only view of `docs/`.
 
 ## Agents and commands
 
-| Agent | Use for |
-| ----- | ------- |
-| `process-manager` | Governance, `/status` |
-| `scope-architect` | `00_scope.md` |
-| `documentation-strategist` | Phase docs `00–08`, `11` |
-| `security-steward` | `02_security.md` |
-| `architecture-guardian` | `05_architecture.md` |
-| `sprint-planner` | `docs/versions/`, `docs/sprints/` |
-| `board-keeper` | User stories, `board.json` |
-
-| Command | Purpose |
-| ------- | ------- |
-| `/init-meridian` | Create `docs/` structure |
-| `/status` | Blockers and next step |
-| `/create-us` · `/complete-us` | User stories |
-| `/sync-board` | Regenerate `board.json` |
-| `/daily-with-ai` | Daily manager + AI routine |
+| Where | Agents | Commands |
+| ----- | ------ | -------- |
+| `.agent/` (all IDEs) | `process-manager`, `scope-architect`, `documentation-strategist`, `security-steward`, `architecture-guardian`, `sprint-planner`, `board-keeper` | Workflows in `.agent/workflows/` (e.g. `init-meridian`, `status`, `complete-us`) |
+| `.cursor/` (Cursor) | Same personas (symlinked) | Slash commands: `/init-meridian`, `/status`, `/create-us`, `/complete-us`, `/sync-board`, `/daily-with-ai`, … |
 
 Full map: [`.agent/ARCHITECTURE.md`](.agent/ARCHITECTURE.md).
-
-## Repository layout
-
-| Path | Role |
-| ---- | ---- |
-| `README.md` | This page (GitHub home) |
-| `.agent/` | Canonical kit — **edit here** |
-| `.cursor/` | Cursor adapter (symlinks, **gitignored**) |
-| `app-desktop/` | Visual monitor (Vite + React) |
-| `assets/screenshots/` | Images for this README |
 
 ## Roadmap
 
 | Version | Status | Focus |
 | ------- | ------ | ----- |
 | v0 Foundation | done | `.agent/` kit |
-| v1 Folder Monitor | done | Read real `docs/` |
-| v2 VS Code bridge | planned | Extension, disk writes |
+| v1 Folder monitor | done | Read real `docs/` in the browser |
+| v2 VS Code bridge | planned | Extension, writes to disk |
 
-Details: [`app-desktop/docs/README.md`](app-desktop/docs/README.md).
+More detail: [`app-desktop/docs/README.md`](app-desktop/docs/README.md).
 
-## Authority
+## Protocol authority
 
-1. User instruction  
+1. Your instruction  
 2. [`.agent/MERIDIAN.md`](.agent/MERIDIAN.md)  
 3. [`.agent/rules/MERIDIAN.md`](.agent/rules/MERIDIAN.md)  
 4. Workflows → agents → skills  
 
-## Validate
+## Validate locally
 
 ```bash
 python3 .agent/scripts/validate_meridian.py app-desktop

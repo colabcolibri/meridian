@@ -119,4 +119,4 @@ Suggested next US:
 | Master protocol | `.agent/MERIDIAN.md` |
 | Close US | `.agent/workflows/complete-us.md` |
 | App — guides | **Start here** and **Usage guide** tabs / `meridian-concepts.ts` |
-| Summary flow | `.agent/references/daily-ai-workflow.md` |
+| Human guides | `.agent/references/start-here.md` · `.agent/references/usage-guide.md` (cheat sheet: Daily loop section) |
