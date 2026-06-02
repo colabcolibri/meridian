@@ -57,6 +57,12 @@ export async function pickMeridianFolder(): Promise<{
     )
   }
 
+  if (!window.showDirectoryPicker) {
+    throw new Error(
+      "Seu navegador não suporta abertura de pasta. Use Chrome ou Edge recente em localhost.",
+    )
+  }
+
   const handle = await window.showDirectoryPicker({ mode: "read" })
   await saveFolderHandle(handle)
   const granted = await hasReadPermission(handle)
