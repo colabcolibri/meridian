@@ -2,6 +2,33 @@
   "date": "2026-06-02",
   "entries": [
     {
+      "time": "20:00",
+      "title": "v2-S5 — board documentation UX (US-0073–0075)",
+      "affected_document": "docs/us/US-0073.md–0075.md, docs/sprints/v2-S5.md, docs/versions/v2.md, docs/epics/EPIC-03.md, docs/kanban/board.json",
+      "what_changed": "Created US-0073 (validate ## Technical implementation in monitor protocol), US-0074 (Doc/Sem doc badge on kanban cards), US-0075 (hide empty columns, collapse frozen by default). Added sprint v2-S5. EPIC-03 reactivated for v2 validation extension.",
+      "why_changed": "Manager identified gap: ✅ US could lack implementation record with no UI signal; frozen column wastes space when empty. Work must be documented before code per Meridian process.",
+      "impact": "75 US on board; v2-S5 runs after or parallel to v2-S4 Should items. Implementation blocked until US reviewed; no code without these acceptance criteria.",
+      "responsible": "Product/Engineering"
+    },
+    {
+      "time": "19:30",
+      "title": "Product roadmap v3–v6 — epics, sprints, 19 US",
+      "affected_document": "docs/versions/v3.md–v6.md, docs/epics/EPIC-07–10.md, docs/sprints/v3-S1..v5-S3.md, docs/us/US-0054..0072.md, docs/kanban/board.json, README.md",
+      "what_changed": "Planned v3 Native Desktop (EPIC-07, Tauri), v4 Authoring Workflows (EPIC-08, extension wizards), v5 Export/Git (EPIC-09, CSV + read-only GitHub), v6 Shared Workspace vision gate (EPIC-10, no US). Created 9 sprints and US-0054–0072 as roadmap backlog. EPIC-04 versions extended to v4.",
+      "why_changed": "Manager asked to imagine project evolutions ahead of implementation so delivery order and deferred items stay traceable in docs not chat.",
+      "impact": "72 US total on board; v3–v5 epics paused until prior version complete. v6 explicitly documentation-only until scope re-approved. Execution still starts at v2 US-0041.",
+      "responsible": "Product/Engineering"
+    },
+    {
+      "time": "19:00",
+      "title": "v2 sprint plan — 4 sprints, 13 US (US-0041–0053)",
+      "affected_document": "docs/versions/v2.md, docs/epics/EPIC-05.md, docs/sprints/v2-S1..S4.md, docs/us/US-0041..0053.md, docs/kanban/board.json, docs/README.md",
+      "what_changed": "Activated v2 and EPIC-05. Created sprints v2-S1 (foundation), v2-S2 (board sync + validate), v2-S3 (create US on disk), v2-S4 (templates + go-live). Added US-0041–0053 including generate_board.py script (US-0044) to fill agent-only board sync gap. EPIC-04 US-0051 adds stale board warning in monitor.",
+      "why_changed": "v1 complete (40 US); next delivery is VS Code extension with disk writes. Planning needed deterministic script and explicit dependency order before implementation.",
+      "impact": "v2 status active; EPIC-05 active; 13 new ❌ US on board. Deferred to post-v2: Tauri, marketplace publish, drag kanban, full epic/version wizards. Should US 0050–0051 may ship partial at go-live with manager sign-off.",
+      "responsible": "Product/Engineering"
+    },
+    {
       "time": "18:00",
       "title": "Remove root meridian.md — README + .agent/ only",
       "affected_document": "meridian.md (deleted), README.md, .agent/MERIDIAN.md, validate_meridian.py, kit docs",

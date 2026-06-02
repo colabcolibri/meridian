@@ -2,7 +2,7 @@
 id: EPIC-04
 title: Kanban and User Stories
 status: active
-versions: [v1, v2]
+versions: [v1, v2, v3, v4]
 profiles: [Process Manager, Local Operator, Future VSCode User]
 outcome: "Manager sees epics, US by status, and derived board.json — without editing JSON manually."
 ---

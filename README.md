@@ -230,7 +230,11 @@ Full map: [`.agent/ARCHITECTURE.md`](.agent/ARCHITECTURE.md).
 | ------- | ------ | ----- |
 | v0 Foundation | done | `.agent/` kit |
 | v1 Folder monitor | done | Read real `docs/` in the browser |
-| v2 VS Code bridge | planned | Extension, writes to disk |
+| v2 VS Code bridge | active | Extension, disk writes — `v2-S1`…`v2-S4` |
+| v3 Native desktop | planned | Tauri shell, bundled validate — `v3-S1`…`v3-S3` |
+| v4 Authoring workflows | planned | Extension wizards, US closure — `v4-S1`…`v4-S3` |
+| v5 Export and Git | planned | CSV, sprint report, GitHub link — `v5-S1`…`v5-S3` |
+| v6 Shared workspace | planned | Vision / go-no-go only — no US until v5 done |
 
 More detail: [`app-desktop/docs/README.md`](app-desktop/docs/README.md).
 

@@ -562,5 +562,508 @@
     "done_when": "Decisions tab lists days and entries from docs/decisions/ folder with structured detail in side sheet.",
     "tests": "required",
     "tests_status": "done"
+  },
+  {
+    "id": "US-0041",
+    "title": "Scaffold app-visual-studio extension",
+    "epic": "EPIC-05",
+    "version": "v2",
+    "status": "❌",
+    "moscow": "Must",
+    "depends_on": [
+      "US-0040"
+    ],
+    "done_when": "app-visual-studio/ loads in Extension Development Host with pnpm dev/build scripts documented.",
+    "tests": "required",
+    "tests_status": "pending"
+  },
+  {
+    "id": "US-0042",
+    "title": "Detect Meridian workspace in extension",
+    "epic": "EPIC-05",
+    "version": "v2",
+    "status": "❌",
+    "moscow": "Must",
+    "depends_on": [
+      "US-0041"
+    ],
+    "done_when": "Extension detects .agent/MERIDIAN.md and docs/ folder and exposes status in the status bar.",
+    "tests": "required",
+    "tests_status": "pending"
+  },
+  {
+    "id": "US-0043",
+    "title": "Document v2 extension layer in phase docs",
+    "epic": "EPIC-05",
+    "version": "v2",
+    "status": "❌",
+    "moscow": "Must",
+    "depends_on": [
+      "US-0041"
+    ],
+    "done_when": "05_architecture, 01_tech_stack, 02_security, and 08_environments describe app-visual-studio/ layer and commands.",
+    "tests": "required",
+    "tests_status": "pending"
+  },
+  {
+    "id": "US-0044",
+    "title": "generate_board.py script in kit",
+    "epic": "EPIC-05",
+    "version": "v2",
+    "status": "❌",
+    "moscow": "Must",
+    "depends_on": [
+      "US-0042",
+      "US-0043"
+    ],
+    "done_when": ".agent/scripts/generate_board.py reads docs/us/ and writes docs/kanban/board.json matching board-schema.",
+    "tests": "required",
+    "tests_status": "pending"
+  },
+  {
+    "id": "US-0045",
+    "title": "Meridian Sync Board command",
+    "epic": "EPIC-05",
+    "version": "v2",
+    "status": "❌",
+    "moscow": "Must",
+    "depends_on": [
+      "US-0044"
+    ],
+    "done_when": "Command Meridian Sync Board runs generate_board.py and shows success or errors in the editor.",
+    "tests": "required",
+    "tests_status": "pending"
+  },
+  {
+    "id": "US-0046",
+    "title": "Meridian Validate Project command",
+    "epic": "EPIC-05",
+    "version": "v2",
+    "status": "❌",
+    "moscow": "Must",
+    "depends_on": [
+      "US-0044"
+    ],
+    "done_when": "Command Meridian Validate Project runs validate_meridian.py and lists errors and warnings in the editor.",
+    "tests": "required",
+    "tests_status": "pending"
+  },
+  {
+    "id": "US-0047",
+    "title": "Meridian New User Story command",
+    "epic": "EPIC-05",
+    "version": "v2",
+    "status": "❌",
+    "moscow": "Must",
+    "depends_on": [
+      "US-0045",
+      "US-0046"
+    ],
+    "done_when": "Command creates a new US-XXXX.md in docs/us/ from kit template with epic and version picker.",
+    "tests": "required",
+    "tests_status": "pending"
+  },
+  {
+    "id": "US-0048",
+    "title": "Validate US frontmatter before write",
+    "epic": "EPIC-05",
+    "version": "v2",
+    "status": "❌",
+    "moscow": "Must",
+    "depends_on": [
+      "US-0047"
+    ],
+    "done_when": "New US command rejects invalid epic, version, depends_on, or empty done_when before writing file.",
+    "tests": "required",
+    "tests_status": "pending"
+  },
+  {
+    "id": "US-0049",
+    "title": "Auto-regenerate board after US create or save",
+    "epic": "EPIC-05",
+    "version": "v2",
+    "status": "❌",
+    "moscow": "Must",
+    "depends_on": [
+      "US-0047",
+      "US-0045"
+    ],
+    "done_when": "After creating or saving a US under docs/us/, board.json regenerates without a separate manual fragile step.",
+    "tests": "required",
+    "tests_status": "pending"
+  },
+  {
+    "id": "US-0050",
+    "title": "Epic and version file templates",
+    "epic": "EPIC-05",
+    "version": "v2",
+    "status": "❌",
+    "moscow": "Should",
+    "depends_on": [
+      "US-0049"
+    ],
+    "done_when": "Commands create or open epic and version files from kit templates under docs/epics/ and docs/versions/.",
+    "tests": "required",
+    "tests_status": "pending"
+  },
+  {
+    "id": "US-0051",
+    "title": "Monitor stale board.json warning",
+    "epic": "EPIC-04",
+    "version": "v2",
+    "status": "❌",
+    "moscow": "Should",
+    "depends_on": [
+      "US-0045"
+    ],
+    "done_when": "Monitor shows warning when board.json frontmatter differs from parsed docs/us/ files.",
+    "tests": "required",
+    "tests_status": "pending"
+  },
+  {
+    "id": "US-0052",
+    "title": "Extension kit docs and CI",
+    "epic": "EPIC-05",
+    "version": "v2",
+    "status": "❌",
+    "moscow": "Should",
+    "depends_on": [
+      "US-0046"
+    ],
+    "done_when": "Kit documents extension workflow and GitHub Actions runs extension compile/lint on PR.",
+    "tests": "required",
+    "tests_status": "pending"
+  },
+  {
+    "id": "US-0053",
+    "title": "v2 go-live and EPIC-05 complete",
+    "epic": "EPIC-05",
+    "version": "v2",
+    "status": "❌",
+    "moscow": "Must",
+    "depends_on": [
+      "US-0049",
+      "US-0052"
+    ],
+    "done_when": "versions/v2.md go-live checklist checked; EPIC-05 status complete; v2 status complete.",
+    "tests": "required",
+    "tests_status": "pending"
+  },
+  {
+    "id": "US-0054",
+    "title": "Tauri architecture decision",
+    "epic": "EPIC-07",
+    "version": "v3",
+    "status": "❌",
+    "moscow": "Must",
+    "depends_on": [
+      "US-0053"
+    ],
+    "done_when": "05_architecture documents Tauri choice, folder layout, and script invocation with decision log entry.",
+    "tests": "required",
+    "tests_status": "pending"
+  },
+  {
+    "id": "US-0055",
+    "title": "Scaffold Tauri desktop shell",
+    "epic": "EPIC-07",
+    "version": "v3",
+    "status": "❌",
+    "moscow": "Must",
+    "depends_on": [
+      "US-0054"
+    ],
+    "done_when": "Tauri dev loads existing Vite monitor UI inside native window on macOS.",
+    "tests": "required",
+    "tests_status": "pending"
+  },
+  {
+    "id": "US-0056",
+    "title": "Native desktop CI and build matrix",
+    "epic": "EPIC-07",
+    "version": "v3",
+    "status": "❌",
+    "moscow": "Must",
+    "depends_on": [
+      "US-0055"
+    ],
+    "done_when": "CI produces Tauri build artifact on tag; platform scope documented.",
+    "tests": "required",
+    "tests_status": "pending"
+  },
+  {
+    "id": "US-0057",
+    "title": "Native validate and sync board",
+    "epic": "EPIC-07",
+    "version": "v3",
+    "status": "❌",
+    "moscow": "Must",
+    "depends_on": [
+      "US-0056",
+      "US-0044"
+    ],
+    "done_when": "Production Tauri build runs validate_meridian.py and generate_board.py without Vite dev API.",
+    "tests": "required",
+    "tests_status": "pending"
+  },
+  {
+    "id": "US-0058",
+    "title": "Persist last opened docs folder",
+    "epic": "EPIC-07",
+    "version": "v3",
+    "status": "❌",
+    "moscow": "Must",
+    "depends_on": [
+      "US-0057"
+    ],
+    "done_when": "Native app restores last docs/ path on relaunch when still accessible.",
+    "tests": "required",
+    "tests_status": "pending"
+  },
+  {
+    "id": "US-0059",
+    "title": "File watcher refreshes monitor",
+    "epic": "EPIC-07",
+    "version": "v3",
+    "status": "❌",
+    "moscow": "Should",
+    "depends_on": [
+      "US-0058",
+      "US-0051"
+    ],
+    "done_when": "Changing us/*.md or board.json on disk refreshes loaded project data without manual re-open.",
+    "tests": "required",
+    "tests_status": "pending"
+  },
+  {
+    "id": "US-0060",
+    "title": "v3 go-live and EPIC-07 complete",
+    "epic": "EPIC-07",
+    "version": "v3",
+    "status": "❌",
+    "moscow": "Must",
+    "depends_on": [
+      "US-0059",
+      "US-0057"
+    ],
+    "done_when": "versions/v3.md checklist done; EPIC-07 complete; v3 status complete.",
+    "tests": "required",
+    "tests_status": "pending"
+  },
+  {
+    "id": "US-0061",
+    "title": "Meridian New Sprint wizard",
+    "epic": "EPIC-08",
+    "version": "v4",
+    "status": "❌",
+    "moscow": "Must",
+    "depends_on": [
+      "US-0053"
+    ],
+    "done_when": "Extension creates docs/sprints/vX-SY.md from kit sprint template with valid stories list.",
+    "tests": "required",
+    "tests_status": "pending"
+  },
+  {
+    "id": "US-0062",
+    "title": "Meridian Complete User Story wizard",
+    "epic": "EPIC-08",
+    "version": "v4",
+    "status": "❌",
+    "moscow": "Must",
+    "depends_on": [
+      "US-0061"
+    ],
+    "done_when": "Extension guides complete-user-story flow: acceptance, tests executed, technical implementation, status done.",
+    "tests": "required",
+    "tests_status": "pending"
+  },
+  {
+    "id": "US-0063",
+    "title": "Meridian New Decision wizard",
+    "epic": "EPIC-08",
+    "version": "v4",
+    "status": "❌",
+    "moscow": "Must",
+    "depends_on": [
+      "US-0062"
+    ],
+    "done_when": "Extension prepends structured entry to docs/decisions/YYYY-MM-DD.json per kit schema.",
+    "tests": "required",
+    "tests_status": "pending"
+  },
+  {
+    "id": "US-0064",
+    "title": "US status commands with board sync",
+    "epic": "EPIC-08",
+    "version": "v4",
+    "status": "❌",
+    "moscow": "Must",
+    "depends_on": [
+      "US-0045",
+      "US-0062"
+    ],
+    "done_when": "Palette commands set US status with validator-safe frontmatter updates.",
+    "tests": "required",
+    "tests_status": "pending"
+  },
+  {
+    "id": "US-0065",
+    "title": "Validator Problems panel integration",
+    "epic": "EPIC-08",
+    "version": "v4",
+    "status": "❌",
+    "moscow": "Should",
+    "depends_on": [
+      "US-0046",
+      "US-0064"
+    ],
+    "done_when": "validate_meridian.py errors appear as VS Code diagnostics with file links.",
+    "tests": "required",
+    "tests_status": "pending"
+  },
+  {
+    "id": "US-0066",
+    "title": "Monitor hints for extension actions",
+    "epic": "EPIC-04",
+    "version": "v4",
+    "status": "❌",
+    "moscow": "Should",
+    "depends_on": [
+      "US-0064",
+      "US-0051"
+    ],
+    "done_when": "US detail sheet in monitor shows suggested extension commands for status changes and sync.",
+    "tests": "required",
+    "tests_status": "pending"
+  },
+  {
+    "id": "US-0067",
+    "title": "v4 go-live and EPIC-08 complete",
+    "epic": "EPIC-08",
+    "version": "v4",
+    "status": "❌",
+    "moscow": "Must",
+    "depends_on": [
+      "US-0063",
+      "US-0066"
+    ],
+    "done_when": "versions/v4.md checklist done; EPIC-08 complete; v4 status complete.",
+    "tests": "required",
+    "tests_status": "pending"
+  },
+  {
+    "id": "US-0068",
+    "title": "Export board to CSV",
+    "epic": "EPIC-09",
+    "version": "v5",
+    "status": "❌",
+    "moscow": "Must",
+    "depends_on": [
+      "US-0067"
+    ],
+    "done_when": "Command exports board columns to CSV file chosen by user.",
+    "tests": "required",
+    "tests_status": "pending"
+  },
+  {
+    "id": "US-0069",
+    "title": "Export sprint summary markdown",
+    "epic": "EPIC-09",
+    "version": "v5",
+    "status": "❌",
+    "moscow": "Should",
+    "depends_on": [
+      "US-0068"
+    ],
+    "done_when": "Command generates markdown report for selected sprint with US table and progress counts.",
+    "tests": "required",
+    "tests_status": "pending"
+  },
+  {
+    "id": "US-0070",
+    "title": "Link GitHub repo in monitor",
+    "epic": "EPIC-09",
+    "version": "v5",
+    "status": "❌",
+    "moscow": "Should",
+    "depends_on": [
+      "US-0067"
+    ],
+    "done_when": "Monitor settings store optional GitHub repo URL and show link on Deliverables header.",
+    "tests": "required",
+    "tests_status": "pending"
+  },
+  {
+    "id": "US-0071",
+    "title": "Last commit on docs/us",
+    "epic": "EPIC-09",
+    "version": "v5",
+    "status": "❌",
+    "moscow": "Could",
+    "depends_on": [
+      "US-0070"
+    ],
+    "done_when": "When git available locally, monitor shows last commit touching docs/us/ (read-only).",
+    "tests": "required",
+    "tests_status": "pending"
+  },
+  {
+    "id": "US-0072",
+    "title": "v5 go-live and EPIC-09 complete",
+    "epic": "EPIC-09",
+    "version": "v5",
+    "status": "❌",
+    "moscow": "Must",
+    "depends_on": [
+      "US-0069",
+      "US-0071"
+    ],
+    "done_when": "versions/v5.md checklist done; EPIC-09 complete; v5 status complete.",
+    "tests": "required",
+    "tests_status": "pending"
+  },
+  {
+    "id": "US-0073",
+    "title": "Validate technical implementation section in monitor",
+    "epic": "EPIC-03",
+    "version": "v2",
+    "status": "✅",
+    "moscow": "Must",
+    "depends_on": [
+      "US-0014"
+    ],
+    "done_when": "Monitor flags US with status ✅ or 🔶 when",
+    "tests": "required",
+    "tests_status": "done"
+  },
+  {
+    "id": "US-0074",
+    "title": "Documentation badge on kanban cards",
+    "epic": "EPIC-04",
+    "version": "v2",
+    "status": "✅",
+    "moscow": "Must",
+    "depends_on": [
+      "US-0073",
+      "US-0013"
+    ],
+    "done_when": "Each kanban card shows a compact Doc / Sem doc indicator derived from technical implementation status; ✅ without doc matches card warning styling.",
+    "tests": "required",
+    "tests_status": "done"
+  },
+  {
+    "id": "US-0075",
+    "title": "Lean kanban columns — hide empty and collapse frozen",
+    "epic": "EPIC-04",
+    "version": "v2",
+    "status": "✅",
+    "moscow": "Should",
+    "depends_on": [
+      "US-0037"
+    ],
+    "done_when": "Board shows only columns with at least one visible US by default; frozen column hidden when empty and expandable via control when frozen US exist.",
+    "tests": "required",
+    "tests_status": "done"
   }
 ]

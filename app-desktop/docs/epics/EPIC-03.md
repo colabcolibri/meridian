@@ -1,8 +1,8 @@
 ---
 id: EPIC-03
 title: Meridian Validations
-status: complete
-versions: [v1]
+status: active
+versions: [v1, v2]
 profiles: [Process Manager, Local Operator, Future VSCode User]
 outcome: "Protocol violations appear in the app and in validate_meridian.py before marking a US as done."
 ---

@@ -41,14 +41,27 @@ Epics, versions, and sprints live **only** in the folders above — no parallel 
 
 ## Current version and sprint
 
-| Sprint               | Status  | US                             |
-| -------------------- | ------- | ------------------------------ |
-| v0-S1 Foundation     | ✅      | US-0001–007                    |
-| v0-S2 Monitor shell  | ✅      | US-0008                        |
-| v1-S1 Real reading   | ✅      | US-0009 → US-0017, US-0016     |
-| v1-S2 Monitor UX     | ✅      | US-0018 → US-0022 (EPIC-06)    |
-| v1-S6 JSON decisions | ✅      | US-0039, US-0040               |
-| **v2**               | planned | VSCode / disk writes (EPIC-05) |
+| Sprint                          | Status  | US                                    |
+| ------------------------------- | ------- | ------------------------------------- |
+| v0-S1 Foundation                | ✅      | US-0001–007                           |
+| v0-S2 Monitor shell             | ✅      | US-0008                               |
+| v1-S1 Real reading              | ✅      | US-0009 → US-0017, US-0016            |
+| v1-S2 Monitor UX                | ✅      | US-0018 → US-0022 (EPIC-06)           |
+| v1-S6 JSON decisions            | ✅      | US-0039, US-0040                      |
+| **v2-S1** Extension foundation  | planned | US-0041–0043 (EPIC-05)                |
+| **v2-S2** Board sync + validate | planned | US-0044–0046 (EPIC-05)                |
+| **v2-S3** Create US on disk     | planned | US-0047–0049 (EPIC-05)                |
+| **v2-S4** Templates + go-live   | planned | US-0050–0053 (EPIC-05/04)             |
+| **v3-S1** Tauri foundation      | planned | US-0054–0056 (EPIC-07)                |
+| **v3-S2** Native scripts        | planned | US-0057–0059 (EPIC-07)                |
+| **v3-S3** Go-live v3            | planned | US-0060 (EPIC-07)                     |
+| **v4-S1** Sprint + complete US  | planned | US-0061–0063 (EPIC-08)                |
+| **v4-S2** Status + diagnostics  | planned | US-0064–0066 (EPIC-08/04)             |
+| **v4-S3** Go-live v4            | planned | US-0067 (EPIC-08)                     |
+| **v5-S1** CSV + report export   | planned | US-0068–0069 (EPIC-09)                |
+| **v5-S2** GitHub read-only      | planned | US-0070–0071 (EPIC-09)                |
+| **v5-S3** Go-live v5            | planned | US-0072 (EPIC-09)                     |
+| **v6**                          | planned | Vision gate only — EPIC-10, no US yet |
 
 ## Work order
 
@@ -77,7 +90,7 @@ See also: [Start here](../../.agent/references/start-here.md) · [Usage guide](.
 
 ### Detail by artifact
 
-1. Pick a US in `docs/sprints/` or `docs/versions/` (next milestone: v2 in `versions/v2.md`).
+1. Pick a US in `docs/sprints/` or `docs/versions/` (active: **v2**; roadmap: v3–v5 in `versions/`).
 2. Implement citing `US-XXXX` in context.
 3. Fill `## Technical implementation` when done (skill `complete-user-story`).
 4. Update US frontmatter (`🔶` + `Missing:` or `✅` with evidence).
