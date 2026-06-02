@@ -10,11 +10,13 @@ import {
 } from "react"
 
 import {
+  hasReadPermission,
   isFileSystemAccessSupported,
   meridianFolderHints,
+  openSnapshotFromHandle,
   pickMeridianFolder,
-  requestReadPermission,
-  restoreMeridianFolder,
+  requestReadPermissionFromUser,
+  restoreMeridianFolderHandle,
 } from "@/features/folder/folder-access"
 import { clearFolderHandle } from "@/features/folder/folder-handle-store"
 import type {
@@ -27,10 +29,12 @@ interface ProjectFolderContextValue {
   status: ProjectFolderStatus
   folder: MeridianFolderSnapshot | null
   folderKey: string | null
+  pendingFolderName: string | null
   hints: string[]
   error: string | null
   fsAccessSupported: boolean
   openFolder: () => Promise<void>
+  grantReadPermission: () => Promise<void>
   clearFolder: () => Promise<void>
   getHandle: () => Promise<FileSystemDirectoryHandle | null>
 }
@@ -41,10 +45,12 @@ export function ProjectFolderProvider({ children }: { children: ReactNode }) {
   const [status, setStatus] = useState<ProjectFolderStatus>("none")
   const [folder, setFolder] = useState<MeridianFolderSnapshot | null>(null)
   const [folderKey, setFolderKey] = useState<string | null>(null)
+  const [pendingFolderName, setPendingFolderName] = useState<string | null>(null)
   const [hints, setHints] = useState<string[]>([])
   const [error, setError] = useState<string | null>(null)
 
   const handleRef = useRef<FileSystemDirectoryHandle | null>(null)
+  const folderKeyRef = useRef<string | null>(null)
   const restoreGenerationRef = useRef(0)
   const userOpenGenerationRef = useRef(0)
 
@@ -54,9 +60,26 @@ export function ProjectFolderProvider({ children }: { children: ReactNode }) {
     (snapshot: MeridianFolderSnapshot, handle: FileSystemDirectoryHandle) => {
       handleRef.current = handle
       setFolder(snapshot)
-      setFolderKey(`${handle.name}-${Date.now()}`)
+      const key = `${handle.name}-${Date.now()}`
+      folderKeyRef.current = key
+      setFolderKey(key)
+      setPendingFolderName(null)
       setHints(meridianFolderHints(snapshot.validation))
       setStatus("open")
+      setError(null)
+    },
+    [],
+  )
+
+  const requirePermissionForHandle = useCallback(
+    (handle: FileSystemDirectoryHandle) => {
+      handleRef.current = handle
+      setFolder(null)
+      folderKeyRef.current = null
+      setFolderKey(null)
+      setPendingFolderName(handle.name)
+      setHints([])
+      setStatus("permission_required")
       setError(null)
     },
     [],
@@ -65,10 +88,20 @@ export function ProjectFolderProvider({ children }: { children: ReactNode }) {
   const clearBoundFolder = useCallback(() => {
     handleRef.current = null
     setFolder(null)
+    folderKeyRef.current = null
     setFolderKey(null)
+    setPendingFolderName(null)
     setHints([])
     setStatus("none")
   }, [])
+
+  const finishOpenWithHandle = useCallback(
+    async (handle: FileSystemDirectoryHandle) => {
+      const opened = await openSnapshotFromHandle(handle)
+      bindFolder(opened.snapshot, opened.handle)
+    },
+    [bindFolder],
+  )
 
   useEffect(() => {
     if (!fsAccessSupported) {
@@ -79,7 +112,7 @@ export function ProjectFolderProvider({ children }: { children: ReactNode }) {
     let cancelled = false
 
     async function restore() {
-      const hasSaved = await restoreMeridianFolder()
+      const handle = await restoreMeridianFolderHandle()
       if (cancelled || generation !== restoreGenerationRef.current) {
         return
       }
@@ -87,12 +120,31 @@ export function ProjectFolderProvider({ children }: { children: ReactNode }) {
         return
       }
 
-      if (!hasSaved) {
+      if (!handle) {
         setStatus("none")
         return
       }
 
-      bindFolder(hasSaved.snapshot, hasSaved.handle)
+      if (!(await hasReadPermission(handle))) {
+        requirePermissionForHandle(handle)
+        return
+      }
+
+      try {
+        await finishOpenWithHandle(handle)
+      } catch (cause) {
+        if (cancelled) {
+          return
+        }
+        await clearFolderHandle()
+        clearBoundFolder()
+        setError(
+          cause instanceof Error
+            ? cause.message
+            : "Não foi possível restaurar a pasta.",
+        )
+        setStatus("error")
+      }
     }
 
     void restore()
@@ -100,7 +152,12 @@ export function ProjectFolderProvider({ children }: { children: ReactNode }) {
     return () => {
       cancelled = true
     }
-  }, [bindFolder, fsAccessSupported])
+  }, [
+    clearBoundFolder,
+    finishOpenWithHandle,
+    fsAccessSupported,
+    requirePermissionForHandle,
+  ])
 
   const openFolder = useCallback(async () => {
     userOpenGenerationRef.current += 1
@@ -109,20 +166,66 @@ export function ProjectFolderProvider({ children }: { children: ReactNode }) {
     setStatus("opening")
 
     try {
-      const opened = await pickMeridianFolder()
-      bindFolder(opened.snapshot, opened.handle)
+      const picked = await pickMeridianFolder()
+
+      if (!(await hasReadPermission(picked.handle))) {
+        requirePermissionForHandle(picked.handle)
+        return
+      }
+
+      await finishOpenWithHandle(picked.handle)
     } catch (cause) {
       if (cause instanceof DOMException && cause.name === "AbortError") {
-        setStatus(handleRef.current ? "open" : "none")
+        setStatus(
+          folderKeyRef.current
+            ? "open"
+            : handleRef.current
+              ? "permission_required"
+              : "none",
+        )
         return
       }
 
       const message =
         cause instanceof Error ? cause.message : "Não foi possível abrir a pasta."
       setError(message)
-      setStatus(handleRef.current ? "open" : "error")
+      setStatus(
+        folderKeyRef.current
+          ? "open"
+          : handleRef.current
+            ? "permission_required"
+            : "error",
+      )
     }
-  }, [bindFolder])
+  }, [finishOpenWithHandle, requirePermissionForHandle])
+
+  const grantReadPermission = useCallback(async () => {
+    const handle = handleRef.current
+    if (!handle) {
+      setError("Nenhuma pasta pendente. Use Abrir pasta novamente.")
+      setStatus("none")
+      return
+    }
+
+    setError(null)
+    setStatus("opening")
+
+    try {
+      const granted = await requestReadPermissionFromUser(handle)
+      if (!granted) {
+        setError("Permissão de leitura negada.")
+        setStatus("permission_required")
+        return
+      }
+
+      await finishOpenWithHandle(handle)
+    } catch (cause) {
+      const message =
+        cause instanceof Error ? cause.message : "Não foi possível conceder permissão."
+      setError(message)
+      setStatus("permission_required")
+    }
+  }, [finishOpenWithHandle])
 
   const clearFolder = useCallback(async () => {
     restoreGenerationRef.current += 1
@@ -137,8 +240,10 @@ export function ProjectFolderProvider({ children }: { children: ReactNode }) {
     if (!cached) {
       return null
     }
-    const granted = await requestReadPermission(cached)
-    return granted ? cached : null
+    if (!(await hasReadPermission(cached))) {
+      return null
+    }
+    return cached
   }, [])
 
   const value = useMemo<ProjectFolderContextValue>(
@@ -146,10 +251,12 @@ export function ProjectFolderProvider({ children }: { children: ReactNode }) {
       status,
       folder,
       folderKey,
+      pendingFolderName,
       hints,
       error,
       fsAccessSupported,
       openFolder,
+      grantReadPermission,
       clearFolder,
       getHandle,
     }),
@@ -157,10 +264,12 @@ export function ProjectFolderProvider({ children }: { children: ReactNode }) {
       status,
       folder,
       folderKey,
+      pendingFolderName,
       hints,
       error,
       fsAccessSupported,
       openFolder,
+      grantReadPermission,
       clearFolder,
       getHandle,
     ],

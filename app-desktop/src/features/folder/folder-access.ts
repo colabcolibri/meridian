@@ -1,5 +1,4 @@
 import {
-  clearFolderHandle,
   loadFolderHandle,
   saveFolderHandle,
 } from "@/features/folder/folder-handle-store"
@@ -14,16 +13,22 @@ export function isFileSystemAccessSupported(): boolean {
   return typeof window !== "undefined" && "showDirectoryPicker" in window
 }
 
-export async function requestReadPermission(
+/** Não exige user activation — use em restore, reload e após o picker. */
+export async function hasReadPermission(
   handle: FileSystemDirectoryHandle,
 ): Promise<boolean> {
-  const options = { mode: "read" as const }
-  const current = await handle.queryPermission(options)
-  if (current === "granted") {
-    return true
-  }
-  const next = await handle.requestPermission(options)
-  return next === "granted"
+  const state = await handle.queryPermission({ mode: "read" })
+  return state === "granted"
+}
+
+/**
+ * Exige user activation (clique). Não chamar em useEffect nem após await longo.
+ */
+export async function requestReadPermissionFromUser(
+  handle: FileSystemDirectoryHandle,
+): Promise<boolean> {
+  const state = await handle.requestPermission({ mode: "read" })
+  return state === "granted"
 }
 
 export interface MeridianFolderOpenResult {
@@ -42,7 +47,10 @@ async function snapshotFromHandle(
   return { name: handle.name, validation }
 }
 
-export async function pickMeridianFolder(): Promise<MeridianFolderOpenResult> {
+export async function pickMeridianFolder(): Promise<{
+  handle: FileSystemDirectoryHandle
+  granted: boolean
+}> {
   if (!isFileSystemAccessSupported()) {
     throw new Error(
       "Seu navegador não suporta abertura de pasta. Use Chrome ou Edge recente em localhost.",
@@ -57,19 +65,22 @@ export async function pickMeridianFolder(): Promise<MeridianFolderOpenResult> {
   }
 
   const handle = await picker.call(window, { mode: "read" })
-  const granted = await requestReadPermission(handle)
-  if (!granted) {
-    throw new Error("Permissão de leitura da pasta foi negada.")
-  }
-
-  const snapshot = await snapshotFromHandle(handle)
   await saveFolderHandle(handle)
+  const granted = await hasReadPermission(handle)
 
+  return { handle, granted }
+}
+
+/** Abre snapshot quando já há permissão de leitura. */
+export async function openSnapshotFromHandle(
+  handle: FileSystemDirectoryHandle,
+): Promise<MeridianFolderOpenResult> {
+  const snapshot = await snapshotFromHandle(handle)
   return { snapshot, handle }
 }
 
-/** Restaura pasta salva no IndexedDB (sem abrir o seletor). */
-export async function restoreMeridianFolder(): Promise<MeridianFolderOpenResult | null> {
+/** Restaura handle salvo; não pede permissão (sem user activation). */
+export async function restoreMeridianFolderHandle(): Promise<FileSystemDirectoryHandle | null> {
   if (!isFileSystemAccessSupported()) {
     return null
   }
@@ -79,19 +90,7 @@ export async function restoreMeridianFolder(): Promise<MeridianFolderOpenResult 
     return null
   }
 
-  const granted = await requestReadPermission(handle)
-  if (!granted) {
-    await clearFolderHandle()
-    return null
-  }
-
-  try {
-    const snapshot = await snapshotFromHandle(handle)
-    return { snapshot, handle }
-  } catch {
-    await clearFolderHandle()
-    return null
-  }
+  return handle
 }
 
 export async function getActiveFolderHandle(): Promise<FileSystemDirectoryHandle | null> {
@@ -99,8 +98,10 @@ export async function getActiveFolderHandle(): Promise<FileSystemDirectoryHandle
   if (!handle) {
     return null
   }
-  const granted = await requestReadPermission(handle)
-  return granted ? handle : null
+  if (!(await hasReadPermission(handle))) {
+    return null
+  }
+  return handle
 }
 
 export { meridianFolderHints }

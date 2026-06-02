@@ -83,7 +83,11 @@ export function ProjectDataProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (folderStatus !== "open" || !folderKey) {
-      if (folderStatus === "none" || folderStatus === "error") {
+      if (
+        folderStatus === "none" ||
+        folderStatus === "error" ||
+        folderStatus === "permission_required"
+      ) {
         loadGenerationRef.current += 1
         setData(null)
         setLoading(false)

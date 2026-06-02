@@ -10,4 +10,10 @@ export interface MeridianFolderSnapshot {
   validation: MeridianFolderValidation
 }
 
-export type ProjectFolderStatus = "none" | "opening" | "open" | "error"
+export type ProjectFolderStatus =
+  | "none"
+  | "opening"
+  | "open"
+  | "error"
+  /** Handle salvo, mas o browser exige um clique para conceder leitura. */
+  | "permission_required"
