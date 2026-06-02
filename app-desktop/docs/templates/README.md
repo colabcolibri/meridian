@@ -9,8 +9,8 @@ Agents e workflows **devem** ler o template completo antes de criar ou editar ar
 ## Fluxo
 
 ```txt
-/create-us     → us-template.md        (ready: false)
-/refine-us     → refine-checklist.md   (ready: true quando pronto)
+/create-us     → writing-guide.md + us-template.md  (Why/Where/Approach; ready: false)
+/refine-us     → writing-guide.md + refine-checklist.md  (Approach explicativo; ready: true)
 implementar    → bloqueado se ready ≠ true
 /complete-us   → implementation-template.md
 /sync-board    → board-schema.md
@@ -31,6 +31,7 @@ Detalhe: [lifecycle.md](../../.agent/references/templates/lifecycle.md) no kit.
 | [implementation-template.md](implementation-template.md) | Fechar US (`/complete-us`)                |
 | [refine-checklist.md](refine-checklist.md)               | Refinar US (`/refine-us`)                 |
 | [section-contracts.md](section-contracts.md)             | Contrato fixo de seções (`##` / `###`)    |
+| [writing-guide.md](writing-guide.md)                     | **Como escrever** epic, version, US       |
 | [lifecycle.md](lifecycle.md)                             | Ordem create → refine → implement → close |
 
 Symlinks apontam para `.agent/` — uma única fonte de verdade.
@@ -44,6 +45,6 @@ ready: false   # padrão em /create-us
 ready: true    # só após /refine-us passar no checklist
 ```
 
-Implementação de código exige `ready: true` e `## Context & constraints` preenchido.
+Implementação de código exige `ready: true` e Context com **Why this story**, **Where it fits**, **Approach** (bullets explicativos).
 
 Validar: `python3 ../../.agent/scripts/validate_meridian.py app-desktop`

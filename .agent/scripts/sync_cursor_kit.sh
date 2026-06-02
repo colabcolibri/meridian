@@ -26,7 +26,7 @@ link() {
 
 link "../../../.agent/references/templates/INDEX.md" "${CURSOR}/references/templates/INDEX.md"
 link "../../../.agent/references/templates/lifecycle.md" "${CURSOR}/references/templates/lifecycle.md"
-for tpl in us-template epic-template version-template sprint-template implementation-template decision-template doc-templates board-schema refine-checklist section-contracts; do
+for tpl in us-template epic-template version-template sprint-template implementation-template decision-template doc-templates board-schema refine-checklist section-contracts writing-guide; do
   link "../../../../.agent/references/templates/${tpl}.md" "${CURSOR}/references/templates/${tpl}.md"
 done
 

@@ -10,66 +10,50 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 
 | File | When to read |
 | ------- | ---------- |
-| `.agent/references/templates/INDEX.md` | Before any epic create — confirm agent protocol |
-| `.agent/references/templates/section-contracts.md` | Fixed `##` for epic — do not rename or omit |
-| `references/epic-template.md` | **Mandatory** before drafting `docs/epics/EPIC-XX.md` — read full template, then Write |
-| `docs/03_user_types.md` | Validate profiles in `profiles` |
-| `docs/epics/` | Existing files (IDs, duplication) |
-| `docs/versions/` | Validate `versions:` in frontmatter |
+| `.agent/references/templates/writing-guide.md` | **Mandatory** — epic prose + golden example |
+| `references/epic-template.md` | **Mandatory** before Write |
+| `docs/03_user_types.md` | Validate `profiles` |
+| `docs/epics/`, `docs/versions/` | IDs and duplication |
 
 ## Preconditions
 
 | Doc | Required status |
 | --- | -------------- |
 | `05_architecture.md` | `approved` |
-| `00_scope.md` | `approved` or explicit in scope |
-| `03_user_types.md` | `approved` (epic profiles must exist here) |
+| `00_scope.md` | in scope |
+| `03_user_types.md` | `approved` |
 
-Epics are **product capability**, not technical modules (`src/…`).
+Epic = **product capability**, not a folder in `src/`.
 
-## What an epic contains (concept)
+## Writing rules (mandatory)
 
-| Field | Where | Role |
-| ----- | ---- | ----- |
-| `id`, `title`, `status`, `versions`, `profiles` | frontmatter | Metadata for app and validation |
-| `outcome` | frontmatter | Epic done at **product** level (not implementation) |
-| Capability | body | What the user can now do |
-| Out of scope for this epic | body | Boundaries — prevents scope creep |
+| Section | Rule |
+| ------- | ---- |
+| **Capability** | ≥ 2 paragraphs: (1) user problem today (2) product behavior after epic |
+| **Expected outcome** | 1 paragraph — observable “done” for manager/user |
+| **Out of scope** | Bullets with **why** each item is excluded |
+| **outcome** (frontmatter) | One sentence summary — body expands, not repeats |
 
-User stories **reference** the epic (`epic: EPIC-XX` in US frontmatter). The US **does not** repeat description, outcome or epic scope.
+Forbidden: feature bullet list without problem narrative; module names as capability.
 
 ## Procedure
 
-1. Read `.agent/references/templates/INDEX.md` and **full** `references/epic-template.md`.
-2. List `docs/epics/EPIC-*.md` → next ID = highest number + 1 (permanent IDs).
-3. Fill template — copy structure from epic-template, do not invent sections.
-3. Validate each `profiles` item against `03_user_types.md`.
-4. Validate each `versions` item against files in `docs/versions/`.
-5. Save `docs/epics/EPIC-XX.md` (filename = `id`).
-6. If relevant change → `update-decisions-log`.
-
-## Validations before saving
-
-- Product-level measurable `outcome`
-- **Structure:** `Capability`, `Expected outcome`, `Out of scope for this epic` (see `section-contracts.md`)
-- `versions` reference releases in `docs/versions/` (when provided)
-- Do not duplicate capability already covered by another epic
-- Filename = `id` (`EPIC-07.md` → `id: EPIC-07`)
-
-## Optional validation
-
-```bash
-python .agent/scripts/validate_meridian.py <project-root>
-```
+1. Read `writing-guide.md` + `epic-template.md`.
+2. Next ID = max EPIC-XX + 1.
+3. Write prose sections per rules above.
+4. Validate `profiles` vs `03_user_types.md`; `versions` vs `docs/versions/`.
+5. Save `docs/epics/EPIC-XX.md`.
+6. `update-decisions-log` if boundaries change.
 
 ## Output
 
 ```txt
 Epic created:
-File: docs/epics/EPIC-XX.md
+File:
 Outcome:
 Versions:
 Profiles:
-epic file saved: yes | no
+Narrative complete: yes | no
 Open questions:
+Next: /create-us for slices
 ```

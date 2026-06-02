@@ -11,16 +11,18 @@ Templates are mirrored here from skills (`references/`) so every agent uses the 
 | Artifact | Template (read before Write) | Primary agent | Skill | Workflow |
 | -------- | ---------------------------- | ------------- | ----- | -------- |
 | Phase docs `00`–`11` | `doc-templates.md` | `documentation-strategist` | `init-project` | `/init-meridian` |
-| Epic `docs/epics/EPIC-XX.md` | `epic-template.md` | `documentation-strategist` | `create-epic` | `/create-epic` |
-| Version `docs/versions/vX.md` | `version-template.md` | `sprint-planner` | `create-version` | `/create-version` |
+| Epic `docs/epics/EPIC-XX.md` | `epic-template.md` + **`writing-guide.md`** | `documentation-strategist` | `create-epic` | `/create-epic` |
+| Version `docs/versions/vX.md` | `version-template.md` + **`writing-guide.md`** | `sprint-planner` | `create-version` | `/create-version` |
 | Sprint `docs/sprints/vX-SY.md` | `sprint-template.md` | `sprint-planner` | `create-sprint` | `/plan-sprint` |
-| User story `docs/us/US-XXXX.md` (create) | `us-template.md` | `board-keeper` | `create-user-story` | `/create-us` |
-| User story (refine) | `us-template.md` + `refine-checklist.md` | `board-keeper` | `refine-user-story` | `/refine-us` |
+| User story (create) | `us-template.md` + **`writing-guide.md`** | `board-keeper` | `create-user-story` | `/create-us` |
+| User story (refine) | `us-template.md` + `refine-checklist.md` + **`writing-guide.md`** | `board-keeper` | `refine-user-story` | `/refine-us` |
 | User story (close) | `implementation-template.md` + `us-template.md` | `board-keeper` | `complete-user-story` | `/complete-us` |
 | Decision entry | `decision-template.md` | any relevant agent | `update-decisions-log` | — |
 | Board JSON | `board-schema.md` | `board-keeper` | `generate-board-json` | `/sync-board` |
 
-**Section contracts:** `section-contracts.md` — fixed `##` / `###` for US, epic, version (validated by script + monitor).
+**Section contracts:** `section-contracts.md` — fixed `##` / `###` for US, epic, version.
+
+**Writing quality:** `writing-guide.md` — **mandatory** before creating or refining epics, versions, US.
 
 All paths in this folder are relative to `.agent/references/templates/`.
 
@@ -33,8 +35,9 @@ When an agent from the table is activated:
 1. Read `.agent/agents/{agent}.md` (persona + prohibitions).
 2. Read the skill `SKILL.md` listed in the table.
 3. Read the **full template file** from this folder — not only frontmatter examples in `MERIDIAN.md`.
-4. Read `section-contracts.md` when creating or editing US, epic, or version — do not rename or omit required sections.
-5. Only then create or edit the artifact.
+4. Read **`writing-guide.md`** when creating or refining epic, version, or US.
+5. Read `section-contracts.md` when editing US, epic, or version structure.
+6. Only then create or edit the artifact.
 
 If the request is **implement code** for a US (`process-manager` gate):
 

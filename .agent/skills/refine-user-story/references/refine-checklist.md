@@ -1,6 +1,8 @@
 # Refine checklist — US ready for implementation
 
-Use after `/create-us`, before any product code. Mark `ready: true` in frontmatter only when **every** required row passes.
+Use after `/create-us`, before any product code. Mark `ready: true` only when **every** required row passes.
+
+Read `writing-guide.md` for tone: Approach bullets must **explain**, not telegraph.
 
 ---
 
@@ -8,49 +10,50 @@ Use after `/create-us`, before any product code. Mark `ready: true` in frontmatt
 
 | # | Check | Pass when |
 | - | ----- | --------- |
-| 1 | `## Context & constraints` exists | Section present in US body |
-| 2 | Architecture refs | At least one real path + § heading from `docs/05_architecture.md` (not `§ [section name]` placeholder) |
-| 3 | API / DB impact | Explicit `_n/a_` **or** named endpoint/table/migration |
-| 4 | Implementation hints | At least one likely file path + 2+ bullets describing approach |
-| 5 | Acceptance | Each item is verifiable (observable outcome, not intent) |
-| 6 | Tests / Planned | No "add when implementation scope is known"; each item has command or numbered steps |
-| 7 | `done_when` | Single measurable sentence in frontmatter |
-| 8 | Epic link | `epic: EPIC-XX` exists; epic file read for boundaries — no duplicated epic text |
+| 1 | `### Why this story` | 2+ sentences; explains slice, before/after; not epic paste |
+| 2 | `### Where it fits` | 2+ sentences; release position, deps, unblocks; US ids ok |
+| 3 | `### Approach` | 2+ bullets; **each bullet explains** intent + area (not bare paths) |
+| 4 | Architecture refs | Real `docs/05_architecture.md` — § **exact heading** (not `§ [section name]`) |
+| 5 | API / DB impact | `_n/a_` with short phrase **or** named endpoint/table/migration |
+| 6 | Acceptance | Each item observable; not vague intent |
+| 7 | Tests / Planned | Numbered manual steps and/or exact commands; no “add when known” |
+| 8 | `done_when` | One measurable sentence in frontmatter |
+| 9 | Epic link | `epic: EPIC-XX` in frontmatter only — body explains slice in own words |
+
+---
+
+## Approach — good vs bad
+
+| Bad | Good |
+| --- | ---- |
+| `- KanbanView.tsx` | `- Update KanbanView to filter stories before column split so v0 cards never render when v1 is selected.` |
+| `- see architecture` | `- Reuse monitor filter context so Deliverables (US-0025) shares version state without a second source of truth.` |
+| `- implement filter` | `- Add VersionFilterBar above columns; persist selection in MonitorVersionFilterContext when switching tabs.` |
 
 ---
 
 ## Placeholder patterns (fail until replaced)
 
-Treat as **not ready** if Context or Tests contain only:
-
-- `_(fill in`
-- `_(pending)_`
-- `§ [section name`
+- `_(fill in` / `_(pending)_` / `§ [section name` / `path/to/…`
 - `add when implementation scope is known`
 - `verify acceptance criteria end-to-end` without numbered steps
-- `Likely files: path/to/…` without real paths under the project
+- Approach bullets under 6 words with no verb
 
 ---
 
 ## Frontmatter
 
 ```yaml
-ready: false   # default on /create-us
-ready: true    # set by /refine-us when checklist passes
+ready: false   # /create-us — narrative draft
+ready: true    # /refine-us — implement allowed
 ```
 
-| Field | Rule |
-| ----- | ---- |
-| `ready: true` | Implementation allowed (`process-manager` gate) |
-| `ready: false` or absent | Block implement; run `/refine-us` |
-| `status: ✅` | Ignore `ready` — story closed |
-
-Legacy US without `ready` field: validator warns; agent blocks implement until `/refine-us`.
+Legacy `### Implementation hints (preliminary)` — rename to `### Approach` on refine.
 
 ---
 
 ## What refine does **not** do
 
-- Does not fill `## Technical implementation` with delivery record (that's `/complete-us`)
+- Does not fill `## Technical implementation` (that's `/complete-us`)
 - Does not mark acceptance `[x]` or `status: ✅`
 - Does not write product code

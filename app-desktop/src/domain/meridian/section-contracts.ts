@@ -14,6 +14,16 @@ export const US_H2_SECTIONS = [
 ] as const
 
 export const US_CONTEXT_H3 = [
+  "Why this story",
+  "Where it fits",
+  "Approach",
+  "Architecture refs",
+  "API / DB impact",
+  "Security notes",
+  "Related decisions",
+] as const
+
+export const US_CONTEXT_H3_LEGACY = [
   "Architecture refs",
   "API / DB impact",
   "Security notes",
@@ -97,11 +107,25 @@ export function validateUserStoryStructure(
       }
     }
 
-    for (const subsection of US_CONTEXT_H3) {
-      if (!listH3InSection(body, "Context & constraints").includes(subsection)) {
-        messages.push(
-          `${storyId}: missing ### ${subsection} under ## Context & constraints.`,
-        )
+    const contextH3 = listH3InSection(body, "Context & constraints")
+    const hasNewContext = US_CONTEXT_H3.every((name) => contextH3.includes(name))
+    const hasLegacyContext = US_CONTEXT_H3_LEGACY.every((name) =>
+      contextH3.includes(name),
+    )
+
+    if (hasNewContext) {
+      // canonical Context subsections
+    } else if (hasLegacyContext) {
+      messages.push(
+        `${storyId}: Context uses legacy subsections — run /refine-us to add Why this story, Where it fits, and Approach.`,
+      )
+    } else {
+      for (const subsection of US_CONTEXT_H3) {
+        if (!contextH3.includes(subsection)) {
+          messages.push(
+            `${storyId}: missing ### ${subsection} under ## Context & constraints.`,
+          )
+        }
       }
     }
 

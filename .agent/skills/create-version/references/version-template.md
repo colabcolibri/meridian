@@ -1,5 +1,7 @@
 # Version template (release)
 
+> **Writing quality:** read `.agent/references/templates/writing-guide.md`. Objective and Done criteria are **paragraphs** explaining the release theme.
+
 ```md
 ---
 id: vX
@@ -12,19 +14,24 @@ outcome: "When this release is delivered at product level."
 
 ## Objective
 
-Clear sentence of what this release delivers to user/manager.
+**Paragraph.** What changes for the user/manager in this release — theme, main capabilities, how it differs from the previous version. Not a bullet list of tickets.
 
 ## Done criteria
 
-Objective condition to mark version as `complete`.
+**Paragraph.** Observable condition to mark version `complete` — who validates, what they can do, what must be true in docs/product.
 
 ## Included in this version
 
-- Planned capabilities and US (reference by ID, do not copy epic text)
+Reference epics/US by id with **one line each** explaining why they belong (not copy-paste from epic body).
+
+- EPIC-XX — …
+- US-YYYY — … (when already known)
 
 ## Explicitly out
 
-- What stays for future versions
+Bullets with short rationale — what waits for a later version and why.
+
+- …
 
 ## Go-live checklist
 
@@ -34,7 +41,7 @@ Objective condition to mark version as `complete`.
 
 ## Sprints
 
-- `vX-S1` — (create in docs/sprints/ with create-sprint)
+- `vX-S1` — theme of sprint in a phrase (file in docs/sprints/)
 ```
 
 ## Status
@@ -47,6 +54,6 @@ Objective condition to mark version as `complete`.
 
 ## Relationship with US and epics
 
-- US uses `version: vX` in frontmatter — reference by ID.
-- Epic uses `versions: [vX]` — which releases the capability participates in.
-- Version detail stays **only** in this file.
+- US uses `version: vX` in frontmatter.
+- Epic uses `versions: [vX]`.
+- Release narrative lives **only** in this file.

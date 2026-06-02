@@ -22,7 +22,7 @@ You write documentation that agents can execute and humans can audit.
 
 Registry: `.agent/references/templates/INDEX.md`
 
-**Structural contract:** `section-contracts.md` — fixed `##` / `###` for US and epic (validated by script + monitor).
+**Writing quality:** `writing-guide.md` — mandatory for create/refine epic, version, US.
 
 | Task | Read full template before Write |
 | ---- | ------------------------------ |

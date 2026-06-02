@@ -68,7 +68,8 @@ export function collectStoryProtocolIssues(
       strict,
       story.status,
     )) {
-      const isRecommendedOnly = message.includes("(recommended")
+      const isRecommendedOnly =
+        message.includes("(recommended") || message.includes("legacy subsections")
       issues.push({
         file: `us/${story.id}.md`,
         message,

@@ -11,8 +11,17 @@ const minimalUsBody = `
 - [ ] criterion
 
 ## Context & constraints
+### Why this story
+Problem before and outcome after this slice.
+
+### Where it fits
+Part of v1; depends on US-0022.
+
+### Approach
+- Update KanbanView to filter by version so planning sessions stay focused.
+
 ### Architecture refs
-- docs/05_architecture.md
+- docs/05_architecture.md — Monitor
 
 ### API / DB impact
 - _n/a_
@@ -22,9 +31,6 @@ const minimalUsBody = `
 
 ### Related decisions
 - _n/a_
-
-### Implementation hints (preliminary)
-- src/foo.ts
 
 ## Technical implementation
 ### Files
@@ -54,18 +60,17 @@ _(pending)_
 `
 
 describe("validateUserStoryStructure", () => {
-  it("passes strict US with full template sections", () => {
+  it("passes strict US with canonical Context subsections", () => {
     expect(validateUserStoryStructure("US-0099", minimalUsBody, true, "❌")).toEqual([])
   })
 
-  it("errors when core section missing", () => {
-    const messages = validateUserStoryStructure(
-      "US-0099",
-      "## Acceptance\n",
-      false,
-      "❌",
+  it("warns on legacy Context subsections", () => {
+    const legacy = minimalUsBody.replace(
+      "### Why this story\nProblem before and outcome after this slice.\n\n### Where it fits\nPart of v1; depends on US-0022.\n\n### Approach\n- Update KanbanView to filter by version so planning sessions stay focused.\n\n",
+      "### Implementation hints (preliminary)\n- src/foo.ts\n\n",
     )
-    expect(messages.some((m) => m.includes("## Tests"))).toBe(true)
+    const messages = validateUserStoryStructure("US-0099", legacy, true, "❌")
+    expect(messages.some((m) => m.includes("legacy subsections"))).toBe(true)
   })
 })
 

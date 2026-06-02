@@ -23,12 +23,14 @@ You keep execution state honest.
 
 Before creating or closing delivery artifacts, read `.agent/references/templates/INDEX.md`, then the **full** template file — **before** Write or Edit.
 
-**Structural contract:** `.agent/references/templates/section-contracts.md` — fixed `##` / `###` for US, epic, version (do not rename or omit). Validated by `validate_meridian.py` + monitor.
+**Structural contract:** `.agent/references/templates/section-contracts.md`
+
+**Writing quality:** `.agent/references/templates/writing-guide.md` — mandatory for create/refine epic, version, US.
 
 | Task | Read first |
 | ---- | ---------- |
-| Create US | `us-template.md` + skill `create-user-story` |
-| Refine US | `us-template.md` + `refine-checklist.md` + skill `refine-user-story` |
+| Create US | `writing-guide.md` + `us-template.md` + skill `create-user-story` |
+| Refine US | `writing-guide.md` + `refine-checklist.md` + skill `refine-user-story` |
 | Close US | `implementation-template.md` + `us-template.md` + skill `complete-user-story` |
 | Create epic | `epic-template.md` + skill `create-epic` |
 | Sync board | `board-schema.md` + skill `generate-board-json` |

@@ -1,5 +1,7 @@
 # Full epic template
 
+> **Writing quality:** read `.agent/references/templates/writing-guide.md`. Capability and Expected outcome are **prose paragraphs**, not feature lists.
+
 ```md
 ---
 id: EPIC-XX
@@ -7,29 +9,41 @@ title: Short capability name
 status: active
 versions: [v1]
 profiles: [Profile documented in 03_user_types.md]
-outcome: "Objective sentence: when this epic is delivered at product level."
+outcome: "One sentence: epic done at product level."
 ---
 
 # EPIC-XX — Short capability name
 
 ## Capability
 
-What the user can now do or what the product now offers.
-Describe in product language, not folder or class in `src/`.
+**Minimum two short paragraphs.**
+
+Paragraph 1 — user problem today (who suffers, in what workflow, what friction exists).
+
+Paragraph 2 — what the product offers after this epic: behavior in user language. Mention main surfaces (app, extension) only when needed for clarity — not as a folder tree.
 
 ## Expected outcome
 
-Paragraph expanding frontmatter `outcome` — how the manager knows the epic can be marked `complete`.
+**One paragraph.** How the manager or user recognizes the epic is done — observable signal, not “all US ✅” alone (though that may be part of it).
 
 ## Out of scope for this epic
 
-- What belongs to another epic or version
-- What is implementation detail (that goes in US)
+Bullets OK — each line explains what belongs elsewhere and **why** (another epic, later version, or US-level detail).
+
+- …
 
 ## Notes
 
-- Links, decisions in `docs/decisions/`, risks
+Optional: decisions, risks, links — explanatory when present.
 ```
+
+## Writing rules
+
+| Section | Do | Don't |
+| ------- | -- | ----- |
+| Capability | User problem → product behavior | List `src/` modules or US ids |
+| Expected outcome | Observable “done” for manager/user | Copy frontmatter `outcome` word-for-word |
+| Out of scope | Boundaries with rationale | Empty “see US” stubs |
 
 ## Epic status
 
@@ -37,16 +51,15 @@ Paragraph expanding frontmatter `outcome` — how the manager knows the epic can
 | ----- | ----------- |
 | `active` | Capability in delivery; US can be created |
 | `complete` | Outcome reached; only closure or bugfix US |
-| `paused` | Deliberately frozen (e.g. distant v2) |
+| `paused` | Deliberately frozen |
 
 ## Relationship with user stories
 
-- Epic = **what** and **why** (product capability).
-- US = **executable slice** with verifiable acceptance.
-- In US use only: `epic: EPIC-XX` — reference by ID, do not paste epic text.
+- Epic = **what** and **why** at product level.
+- US = **executable slice** — explains itself via Why / Where / Approach; references `epic: EPIC-XX` only in frontmatter.
+- New US → `/create-us` after `05_architecture` approved.
 
 ## After creating
 
-1. Validate with `python .agent/scripts/validate_meridian.py <project-root>`.
-2. Only create US when `05_architecture.md` is `approved` and epic/version exist in folders.
-3. New US → skill `create-user-story`.
+1. `python3 .agent/scripts/validate_meridian.py <project-root>`
+2. Plan US slices — each US should be a coherent story, not a task label.

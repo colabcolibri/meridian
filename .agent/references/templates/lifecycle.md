@@ -11,9 +11,9 @@ Version (version-template.md)
   ↓
 Sprint (sprint-template.md) — optional but recommended
   ↓
-User story create (us-template.md) — status ❌, ready: false
+User story create (us-template.md + writing-guide.md) — status ❌, ready: false, Why/Where/Approach prose
   ↓
-/refine-us (refine-checklist.md + section-contracts.md) — ready: true when checklist passes
+/refine-us (refine-checklist.md) — deepen Approach bullets, exact architecture §, ready: true
   ↓
 Implement — process-manager gate: ready true + Context filled
   ↓
@@ -28,8 +28,8 @@ Board sync (board-schema.md)
 
 | Moment | Template | What changes |
 | ------ | -------- | ------------ |
-| **Create** (`/create-us`) | `us-template.md` | Full file; `status: ❌`; `ready: false`; Context may start minimal |
-| **Refine** (`/refine-us`) | `refine-checklist.md` | Context + tests concrete; `ready: true` when checklist passes |
+| **Create** (`/create-us`) | `us-template.md` + `writing-guide.md` | Why / Where / Approach prose; `ready: false` |
+| **Refine** (`/refine-us`) | `refine-checklist.md` | Explanatory Approach + exact § refs; `ready: true` |
 | **Close** (`/complete-us`) | `implementation-template.md` | Replace `## Technical implementation`; `status: ✅` |
 
 Between create and close, the US file is the **contract for implementation**. Structure is enforced by `section-contracts.md` (Python + monitor). If Context or Tests/Planned are still generic placeholders, the agent must **not** implement — refine the US first.

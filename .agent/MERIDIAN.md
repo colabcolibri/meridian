@@ -987,7 +987,19 @@ tests_status: pending | done | n/a
 
 ## Context & constraints
 
-> **Required on creation.** Links US to architecture/API/DB — does not duplicate epic text.
+Explain this slice — frontmatter already has `epic:`. Do not paste epic text.
+
+### Why this story
+
+2–4 sentences: before/after **this US**.
+
+### Where it fits
+
+2–4 sentences: version, dependencies, what this unblocks.
+
+### Approach
+
+Explanatory bullets (full thoughts, not bare paths).
 
 ### Architecture refs
 
@@ -1004,10 +1016,6 @@ tests_status: pending | done | n/a
 ### Related decisions
 
 - _n/a_ | …
-
-### Implementation hints (preliminary)
-
-- Likely files + 2–3 bullet approach (plan; replaced on close)
 
 ## Technical implementation
 

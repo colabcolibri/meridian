@@ -1,6 +1,6 @@
 ---
 name: refine-user-story
-description: Refines a Meridian user story for implementation — fills Context & constraints, concrete tests and hints. Use between /create-us and coding, or /refine-us US-XXXX.
+description: Refines a Meridian user story for implementation — deepens Approach, architecture refs and tests. Use between /create-us and coding, or /refine-us US-XXXX.
 allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 ---
 
@@ -10,53 +10,40 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 
 | File | When to read |
 | ------- | ---------- |
-| `.agent/references/templates/INDEX.md` | Before refine — confirm protocol |
-| `.agent/references/templates/us-template.md` | Full US structure |
-| `.agent/references/templates/section-contracts.md` | Fixed `##` / `###` — do not rename or omit |
-| `references/refine-checklist.md` | **Mandatory** — readiness criteria before implement |
-| Target epic `docs/epics/EPIC-XX.md` | Scope boundaries (read, do not copy) |
-| Paths in `05_architecture.md` cited by US | Before filling Architecture refs |
+| `.agent/references/templates/writing-guide.md` | Refine example — Approach depth, tests |
+| `references/refine-checklist.md` | **Mandatory** — ready gate |
+| `references/us-template.md` | Full structure |
+| Target US + `depends_on` US | What already exists |
+| `docs/05_architecture.md` | Sections cited in Architecture refs |
 
 ## When to trigger
 
 - After `/create-us`, before implementation.
-- US exists but Context or Tests/Planned are placeholders.
+- Approach or Architecture refs still thin.
 - Workflow `/refine-us US-XXXX`.
-- `process-manager` blocked implement → delegate refine here.
 
 **Do not** mark `✅` — use `complete-user-story` after code.
 
-## Preconditions
-
-| Check | Requirement |
-| ----- | ----------- |
-| US exists | `docs/us/US-XXXX.md` |
-| Gate | `05_architecture.md` = `approved` |
-| Epic | `epic:` matches file in `docs/epics/` |
-| Status | Not `✅` (closed US → no refine) |
-
 ## Procedure
 
-1. Read INDEX + **full** `us-template.md` + `refine-checklist.md`.
-2. Read target US, linked epic, and architecture sections needed for Context.
-3. Fill or expand **`## Context & constraints`**:
-   - real Architecture refs (doc path + § heading);
-   - API/DB impact (`_n/a_` only when truly none);
-   - security notes when relevant;
-   - related decisions if any;
-   - **Implementation hints** — likely file paths + 2–3 bullet approach.
-4. Replace generic **Tests / Planned** with concrete commands and steps (no "add when known").
-5. Tighten **Acceptance** if criteria are vague (still `[ ]` — not done until `/complete-us`).
-6. Set frontmatter `ready: true` only when **all** items in `refine-checklist.md` pass.
-7. Keep `status: ❌` (or `🔶` if partial doc work with `Missing:`).
-8. Invoke `generate-board-json` if frontmatter changed.
-9. `update-decisions-log` only if acceptance model or scope changed.
+1. Read `writing-guide.md`, checklist, target US, architecture sections.
+2. **Deepen `### Why this story` / `### Where it fits`** only if create left gaps — do not bloat; fix clarity.
+3. **Expand `### Approach`** — bullets stay, but each must explain:
+   - what changes,
+   - where in codebase (paths ok **inside** explanatory bullet),
+   - constraint or non-goal.
+4. Set **Architecture refs** to exact `§ heading` from `05_architecture.md`.
+5. Fill API/DB/Security/Decisions with short phrases when not `_n/a_`.
+6. Replace generic **Tests / Planned** with numbered steps or exact commands.
+7. Tighten **Acceptance** if vague (keep `[ ]`).
+8. Set `ready: true` only when checklist passes.
+9. `generate-board-json`; `update-decisions-log` if scope changed.
 
-## Validations before `ready: true`
+## Approach — refine quality bar
 
-See `references/refine-checklist.md` — all required items must pass.
+Minimum 2 bullets. Each bullet ≥ one full sentence. Example pattern:
 
-Structural contract: every `##` and `###` from `us-template.md` / `section-contracts.md` must be present (validator: `validate_meridian.py` + monitor).
+`- [Action verb] [component/path] so that [reason linked to acceptance or Where it fits].`
 
 ## Output
 
@@ -64,9 +51,10 @@ Structural contract: every `##` and `###` from `us-template.md` / `section-contr
 US refined:
 File:
 Ready for implementation: yes | no
-Context filled: yes | partial
+Approach explanatory: yes | no
+Architecture § exact: yes | no
 Tests concrete: yes | no
-Board updated: yes | no
-Blockers for implement:
-Next: implement US-XXXX | /refine-us again after manager input
+Board updated:
+Blockers:
+Next: implement US-XXXX | /refine-us again
 ```

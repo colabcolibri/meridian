@@ -10,45 +10,41 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 
 | File | When to read |
 | ------- | ---------- |
-| `.agent/references/templates/INDEX.md` | Before any version create |
-| `.agent/references/templates/section-contracts.md` | Fixed `##` for version — do not rename or omit |
-| `references/version-template.md` | **Mandatory** before drafting `docs/versions/vX.md` |
-| `docs/versions/` | Existing files (IDs) |
-| `docs/00_scope.md` | Validate release scope |
+| `.agent/references/templates/writing-guide.md` | Release prose example |
+| `references/version-template.md` | **Mandatory** before Write |
+| `docs/versions/`, `docs/00_scope.md` | IDs and scope |
 
 ## Preconditions
 
 | Doc | Required status |
 | --- | -------------- |
 | `05_architecture.md` | `approved` |
-| `00_scope.md` | `approved` or explicit in scope |
-| `03_user_types.md` | `approved` |
+| `00_scope.md`, `03_user_types.md` | aligned with release |
 
-Version = **product release** (go-live), not sprint or technical module.
+## Writing rules (mandatory)
+
+| Section | Rule |
+| ------- | ---- |
+| **Objective** | Paragraph — release theme, user-visible change vs previous version |
+| **Done criteria** | Paragraph — who validates complete, observable end state |
+| **Included** | Epics/US ids with **one explanatory line each** — not copy-paste from epic |
+| **Explicitly out** | Bullets with rationale |
 
 ## Procedure
 
-1. Read `.agent/references/templates/INDEX.md` and **full** `references/version-template.md`.
-2. List `docs/versions/v*.md` → next ID = highest number + 1 (`v3`, `v4`…).
-3. Fill template — copy structure from version-template, do not invent sections.
-3. Save `docs/versions/vX.md` (filename = `id`).
-4. If relevant change → `update-decisions-log`.
-5. Validate: `python .agent/scripts/validate_meridian.py <project-root>`.
-
-## Validations
-
-- Product-level measurable `outcome`
-- **Structure:** `Objective`, `Done criteria`, `Included in this version`, `Explicitly out`, `Go-live checklist` (see `section-contracts.md`)
-- `v0` only for technical foundation
-- Version sprints → skill `create-sprint` in `docs/sprints/`
+1. Read `writing-guide.md` + `version-template.md`.
+2. Next `vX` id.
+3. Write prose Objective + Done criteria.
+4. Save `docs/versions/vX.md`.
+5. `update-decisions-log` if boundaries change.
+6. `validate_meridian.py`
 
 ## Output
 
 ```txt
 Version created:
-File: docs/versions/vX.md
+File:
 Outcome:
-version file saved: yes | no
-Open questions:
-Next: create-sprint or /plan-sprint
+Narrative complete: yes | no
+Next: /plan-sprint → /create-us
 ```

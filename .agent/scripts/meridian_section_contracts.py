@@ -21,6 +21,16 @@ US_H2_SECTIONS: tuple[str, ...] = (
 )
 
 US_CONTEXT_H3: tuple[str, ...] = (
+    "Why this story",
+    "Where it fits",
+    "Approach",
+    "Architecture refs",
+    "API / DB impact",
+    "Security notes",
+    "Related decisions",
+)
+
+US_CONTEXT_H3_LEGACY: tuple[str, ...] = (
     "Architecture refs",
     "API / DB impact",
     "Security notes",
@@ -132,11 +142,23 @@ def validate_us_structure(
             if section not in h2_present:
                 errors.append(f"{story_name}: missing required ## {section} (strict US with `ready`).")
 
-        for subsection in US_CONTEXT_H3:
-            if subsection not in list_h3_in_section(body, "Context & constraints"):
-                errors.append(
-                    f"{story_name}: missing ### {subsection} under ## Context & constraints."
-                )
+        context_h3 = list_h3_in_section(body, "Context & constraints")
+        has_new_context = all(name in context_h3 for name in US_CONTEXT_H3)
+        has_legacy_context = all(name in context_h3 for name in US_CONTEXT_H3_LEGACY)
+
+        if has_new_context:
+            pass
+        elif has_legacy_context:
+            warnings.append(
+                f"{story_name}: Context uses legacy subsections — run /refine-us to add "
+                "Why this story, Where it fits, and Approach."
+            )
+        else:
+            for subsection in US_CONTEXT_H3:
+                if subsection not in context_h3:
+                    errors.append(
+                        f"{story_name}: missing ### {subsection} under ## Context & constraints."
+                    )
 
         for subsection in US_TECH_H3:
             if subsection not in list_h3_in_section(body, "Technical implementation"):

@@ -25,7 +25,7 @@ Drafts in `docs/versions/` and `docs/sprints/` may exist before user stories —
 
 Registry: `.agent/references/templates/INDEX.md`
 
-**Structural contract:** `section-contracts.md` — fixed `##` / `###` for version and US (validated by script + monitor).
+**Writing quality:** `writing-guide.md` — mandatory for version and US prose.
 
 | Task | Read full template before Write |
 | ---- | ------------------------------ |

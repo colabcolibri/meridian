@@ -1,6 +1,6 @@
 # Section contracts — delivery artifacts
 
-> **Source of truth for structure.** Validators in Python (`meridian_section_contracts.py`) and TypeScript (`section-contracts.ts`) mirror this file. Agents must not add, rename, or reorder `##` / `###` outside these contracts.
+> **Source of truth for structure.** Validators mirror this file. **Writing quality** is in `writing-guide.md`.
 
 ---
 
@@ -14,38 +14,36 @@
 | `ready` | `false` | required |
 | `done_when`, `tests`, `tests_status` | required | required |
 
-Legacy US without `ready` in frontmatter: structural warnings only for Context; core sections still enforced.
-
 ### `##` sections (fixed order)
 
 | # | Section | Create | Refine | Close |
 | - | ------- | ------ | ------ | ----- |
-| 1 | Acceptance | required | tighten criteria | mark `[x]` |
-| 2 | Context & constraints | required (minimal OK) | fill all `###` | unchanged |
-| 3 | Technical implementation | placeholders | hints only | real record |
-| 4 | Tests | Planned required | concrete steps | Planned `[x]` + Executed |
-| 5 | Out of scope for this story | required | optional edit | optional |
-| 6 | Notes | required | optional | optional |
+| 1 | Acceptance | required | tighten | mark `[x]` |
+| 2 | Context & constraints | Why/Where/Approach prose | deepen + real § refs | unchanged |
+| 3 | Technical implementation | placeholders | unchanged | real record |
+| 4 | Tests | Planned draft | concrete steps | `[x]` + Executed |
+| 5 | Out of scope for this story | required | optional | optional |
+| 6 | Notes | optional | optional | optional |
 
-### `###` under Context & constraints (strict US)
+### `###` under Context & constraints (canonical)
 
-- Architecture refs  
-- API / DB impact  
-- Security notes  
-- Related decisions  
-- Implementation hints (preliminary)
+1. Why this story  
+2. Where it fits  
+3. Approach  
+4. Architecture refs  
+5. API / DB impact  
+6. Security notes  
+7. Related decisions  
+
+**Legacy (warn, migrate on refine):** `Implementation hints (preliminary)` → rename to `Approach`.
 
 ### `###` under Technical implementation
 
-- Files  
-- Backend  
-- Frontend  
-- Scripts / Docs  
+Files · Backend · Frontend · Scripts / Docs
 
 ### `###` under Tests
 
-- Planned  
-- Executed  
+Planned · Executed
 
 ---
 
@@ -53,9 +51,9 @@ Legacy US without `ready` in frontmatter: structural warnings only for Context; 
 
 | `##` section | Required |
 | ------------ | -------- |
-| Capability | yes |
-| Expected outcome | yes |
-| Out of scope for this epic | yes (alias: `Out of this epic`) |
+| Capability | yes — prose (see writing-guide) |
+| Expected outcome | yes — prose |
+| Out of scope for this epic | yes |
 | Notes | recommended |
 
 ---
@@ -64,17 +62,11 @@ Legacy US without `ready` in frontmatter: structural warnings only for Context; 
 
 | `##` section | Required |
 | ------------ | -------- |
-| Objective | yes (alias: `Goal`) |
-| Done criteria | yes |
+| Objective | yes (alias: `Goal`) — prose |
+| Done criteria | yes — prose |
 | Included in this version | yes |
 | Explicitly out | yes |
 | Go-live checklist | yes |
-
----
-
-## Sprint (`sprint-template.md`)
-
-Frontmatter is canonical (`id`, `version`, `title`, `status`, `done_when`, `stories`). Body table is optional; no fixed `##` sections required.
 
 ---
 
@@ -84,7 +76,4 @@ Frontmatter is canonical (`id`, `version`, `title`, `status`, `done_when`, `stor
 python3 .agent/scripts/validate_meridian.py <project-folder>
 ```
 
-- **ERROR** — breaks contract; fix before merge or `/complete-us`  
-- **WARN** — legacy or recommended; fix with `/refine-us` before implement  
-
-Monitor (Setup banner) uses the same rules in TypeScript when loading `docs/`.
+Monitor uses the same structural rules in TypeScript.
