@@ -138,11 +138,7 @@ export function ProjectFolderProvider({ children }: { children: ReactNode }) {
         }
         await clearFolderHandle()
         clearBoundFolder()
-        setError(
-          cause instanceof Error
-            ? cause.message
-            : "Não foi possível restaurar a pasta.",
-        )
+        setError(cause instanceof Error ? cause.message : "Could not restore folder.")
         setStatus("error")
       }
     }
@@ -186,8 +182,7 @@ export function ProjectFolderProvider({ children }: { children: ReactNode }) {
         return
       }
 
-      const message =
-        cause instanceof Error ? cause.message : "Não foi possível abrir a pasta."
+      const message = cause instanceof Error ? cause.message : "Could not open folder."
       setError(message)
       setStatus(
         folderKeyRef.current
@@ -202,7 +197,7 @@ export function ProjectFolderProvider({ children }: { children: ReactNode }) {
   const grantReadPermission = useCallback(async () => {
     const handle = handleRef.current
     if (!handle) {
-      setError("Nenhuma pasta pendente. Use Abrir pasta novamente.")
+      setError("No pending folder. Use Open folder again.")
       setStatus("none")
       return
     }
@@ -213,7 +208,7 @@ export function ProjectFolderProvider({ children }: { children: ReactNode }) {
     try {
       const granted = await requestReadPermissionFromUser(handle)
       if (!granted) {
-        setError("Permissão de leitura negada.")
+        setError("Read permission denied.")
         setStatus("permission_required")
         return
       }
@@ -221,7 +216,7 @@ export function ProjectFolderProvider({ children }: { children: ReactNode }) {
       await finishOpenWithHandle(handle)
     } catch (cause) {
       const message =
-        cause instanceof Error ? cause.message : "Não foi possível conceder permissão."
+        cause instanceof Error ? cause.message : "Could not grant permission."
       setError(message)
       setStatus("permission_required")
     }

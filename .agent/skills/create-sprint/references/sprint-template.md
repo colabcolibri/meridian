@@ -1,26 +1,26 @@
-# Template de sprint
+# Sprint template
 
 ```md
 ---
 id: v1-S1
 version: v1
-title: Nome curto da sprint
+title: Short sprint name
 status: planned
-done_when: "Condição objetiva de encerramento da sprint."
+done_when: "Objective sprint closure condition."
 stories: [US-0023, US-0024]
 ---
 
-# v1-S1 — Nome curto da sprint
+# v1-S1 — Short sprint name
 
-Sprint da versão **v1**.
+Sprint for version **v1**.
 
-| US      | Status | MoSCoW | Depende de | Epic    | Descrição |
+| US      | Status | MoSCoW | Depends on | Epic    | Description |
 | ------- | ------ | ------ | ---------- | ------- | --------- |
 | US-0023 | ❌     | Must   | —          | EPIC-03 | …         |
 ```
 
-## Regras
+## Rules
 
-- `id` deve coincidir com o nome do arquivo (`v1-S1.md`).
-- `version` deve existir em `docs/versions/`.
-- `stories` no frontmatter é a lista canônica para validação; tabela no corpo é opcional (legibilidade).
+- `id` must match filename (`v1-S1.md`).
+- `version` must exist in `docs/versions/`.
+- `stories` in frontmatter is canonical list for validation; body table is optional (readability).

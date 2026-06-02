@@ -82,7 +82,7 @@ export function ConceptsView() {
 
       <ConceptAccordion
         defaultOpen
-        subtitle="Documentos de fase na raiz e pastas de entrega"
+        subtitle="Phase documents at the root and delivery folders"
         title={folderStructure.title}
       >
         <Prose paragraphs={folderStructure.intro} />
@@ -101,13 +101,13 @@ export function ConceptsView() {
       </ConceptAccordion>
 
       <ConceptAccordion
-        subtitle="Dois eixos: sistema (Configuração) → entrega (pastas + Quadro)"
-        title="O fluxo do projeto (fases)"
+        subtitle="Two axes: system (Setup) → delivery (folders + Board)"
+        title="Project flow (phases)"
       >
         <p className={typeScale.body}>
-          Meridian amadurece documentos em dois eixos: primeiro o sistema (fundação →
-          princípios → arquitetura → detalhe na aba Configuração), depois a entrega nas
-          pastas epics/, versions/, sprints/ e us/ (Entregas e Quadro).
+          Meridian matures documents along two axes: first the system (foundation →
+          principles → architecture → detail in the Setup tab), then delivery in the
+          epics/, versions/, sprints/, and us/ folders (Deliverables and Board).
         </p>
         <p className={cn(typeScale.bodySm, "mt-3 text-muted-foreground")}>
           {docFlowNote}
@@ -120,14 +120,14 @@ export function ConceptsView() {
       </ConceptAccordion>
 
       <ConceptAccordion
-        subtitle="Conceitos, campos do arquivo e exemplos de leitura"
-        title="Épicos, versões e user stories"
+        subtitle="Concepts, file fields, and reading examples"
+        title="Epics, versions, and user stories"
       >
         <p className={typeScale.body}>
-          Três conceitos encadeados: <strong className="text-foreground">épico</strong>{" "}
-          (capacidade de produto) → <strong className="text-foreground">versão</strong>{" "}
-          (release) → <strong className="text-foreground">user story</strong> (tarefa
-          executável).
+          Three linked concepts: <strong className="text-foreground">epic</strong>{" "}
+          (product capability) → <strong className="text-foreground">version</strong>{" "}
+          (release) → <strong className="text-foreground">user story</strong>{" "}
+          (executable task).
         </p>
         <div className="mt-4 grid gap-4">
           {epicsVersionsStories.map((section) => (
@@ -135,7 +135,7 @@ export function ConceptsView() {
           ))}
         </div>
         <div className="mt-6 space-y-4">
-          <p className={typeScale.label}>Como ler cada arquivo</p>
+          <p className={typeScale.label}>How to read each file</p>
           <AnatomyCard guide={epicAnatomy} />
           <AnatomyCard guide={versionAnatomy} />
           <AnatomyCard guide={userStoryAnatomy} />
@@ -143,12 +143,12 @@ export function ConceptsView() {
       </ConceptAccordion>
 
       <ConceptAccordion
-        subtitle="Docs de fase, épico, versão e US"
+        subtitle="Phase docs, epic, version, and US"
         title={statusGuide.title}
       >
         <div className="grid gap-4 lg:grid-cols-2">
           <div className="rounded-xl border border-border p-5">
-            <p className={typeScale.label}>Documentos de fase (00–08 e 11)</p>
+            <p className={typeScale.label}>Phase documents (00–08 and 11)</p>
             <ul className="mt-3 space-y-3">
               {statusGuide.documentStatuses.map((s) => (
                 <li className="flex gap-2" key={s.label}>
@@ -163,7 +163,7 @@ export function ConceptsView() {
           </div>
           <div className="space-y-4">
             <div className="rounded-xl border border-border p-5">
-              <p className={typeScale.label}>Épicos (docs/epics/)</p>
+              <p className={typeScale.label}>Epics (docs/epics/)</p>
               <ul className="mt-3 space-y-3">
                 {statusGuide.epicStatuses.map((s) => (
                   <li className="flex gap-2" key={s.label}>
@@ -174,7 +174,7 @@ export function ConceptsView() {
               </ul>
             </div>
             <div className="rounded-xl border border-border p-5">
-              <p className={typeScale.label}>Versões (docs/versions/)</p>
+              <p className={typeScale.label}>Versions (docs/versions/)</p>
               <ul className="mt-3 space-y-3">
                 {statusGuide.versionStatuses.map((s) => (
                   <li className="flex gap-2" key={s.label}>
@@ -206,7 +206,7 @@ export function ConceptsView() {
       </ConceptAccordion>
 
       <ConceptAccordion
-        subtitle="Navegação depois de abrir docs/"
+        subtitle="Navigation after opening docs/"
         title={appIntro.title}
       >
         <Prose paragraphs={appIntro.paragraphs} />
@@ -224,8 +224,8 @@ export function ConceptsView() {
       </ConceptAccordion>
 
       <ConceptAccordion
-        subtitle="Quatro regras que governam todo o fluxo"
-        title="Regras de ouro"
+        subtitle="Four rules that govern the entire flow"
+        title="Golden rules"
       >
         <div className="grid gap-4 sm:grid-cols-2">
           {corePrinciples.map((block) => (

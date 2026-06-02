@@ -1,5 +1,5 @@
 ---
-title: Ambientes
+title: Environments
 status: approved
 version: 1.0
 updated: 2026-06-02
@@ -7,24 +7,24 @@ depends_on: [01_tech_stack.md, 05_architecture.md]
 blocks: []
 ---
 
-# 08 — Ambientes
+# 08 — Environments
 
-## Como rodar localmente
+## How to run locally
 
-### Pré-requisitos
+### Prerequisites
 
-- Node.js compatível com Vite.
+- Node.js compatible with Vite.
 - pnpm.
-- Python 3 (para `validate_meridian.py` no dev e no terminal).
+- Python 3 (for `validate_meridian.py` in dev and in the terminal).
 
-### Setup inicial
+### Initial setup
 
 ```bash
 pnpm install
 pnpm prepare
 ```
 
-### Comandos do dia a dia
+### Day-to-day commands
 
 ```bash
 pnpm dev
@@ -35,40 +35,40 @@ pnpm format:check
 python3 ../.agent/scripts/validate_meridian.py .
 ```
 
-### Validar governança Meridian
+### Validate Meridian governance
 
-Na raiz do repositório (ou em `app-desktop/`):
+At the repository root (or in `app-desktop/`):
 
 ```bash
 python3 .agent/scripts/validate_meridian.py app-desktop
 ```
 
-No app (`pnpm dev`), use o botão **Validar pasta** — chama o mesmo script via API local (`/api/meridian/validate`).
+In the app (`pnpm dev`), use the **Validate folder** button — it calls the same script via local API (`/api/meridian/validate`).
 
-## Variáveis de ambiente
+## Environment variables
 
-v0 não exige variáveis de ambiente.
+v0 does not require environment variables.
 
-| Variável | Descrição                      | Obrigatória | Exemplo |
-| -------- | ------------------------------ | ----------: | ------- |
-| —        | Nenhuma variável exigida em v0 |         Não | —       |
+| Variable | Description                | Required | Example |
+| -------- | -------------------------- | -------: | ------- |
+| —        | No variable required in v0 |       No | —       |
 
-## Arquivos protegidos
+## Protected files
 
 - `.env`
 - `.env.*`
 - `node_modules/`
 - `dist/`
-- caches e logs locais
+- local caches and logs
 
-`.env.example` deve ser versionado como contrato de configuração.
+`.env.example` should be versioned as a configuration contract.
 
-## Ambientes disponíveis
+## Available environments
 
-| Ambiente | Propósito            | Branch   | Deploy automático |
-| -------- | -------------------- | -------- | ----------------- |
-| local    | desenvolvimento Vite | qualquer | não               |
+| Environment | Purpose          | Branch | Automatic deploy |
+| ----------- | ---------------- | ------ | ---------------- |
+| local       | Vite development | any    | no               |
 
-## Diferenças entre ambientes
+## Differences between environments
 
-Ainda não há ambientes remotos na v0.
+There are no remote environments in v0 yet.

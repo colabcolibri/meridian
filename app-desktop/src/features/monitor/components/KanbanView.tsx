@@ -23,26 +23,26 @@ import { cn } from "@/lib/utils"
 
 const columnMeta: Record<KanbanColumnId, { title: string; description: string }> = {
   "❌": {
-    title: "Pendente",
-    description: "Status ❌ no frontmatter — ainda não iniciada ou não concluída.",
+    title: "Pending",
+    description: "Status ❌ in frontmatter — not started or not complete.",
   },
   "🔶": {
-    title: "Em andamento",
+    title: "In progress",
     description:
-      "Status 🔶 — parcialmente feita; o aceite deve incluir “Falta:” explicando o que falta.",
+      'Status 🔶 — partially done; Acceptance must include "Missing:" explaining what is left.',
   },
   "🧪": {
-    title: "Aguardando testes",
+    title: "Awaiting tests",
     description:
-      "Coluna derivada: status ✅ no frontmatter, mas tests_status ainda pending (ou Testes sem evidência).",
+      "Derived column: status ✅ in frontmatter, but tests_status still pending (or Tests without evidence).",
   },
   "✅": {
-    title: "Concluída",
-    description: "Status ✅ com critérios de aceite e testes comprovados nos arquivos.",
+    title: "Complete",
+    description: "Status ✅ with acceptance criteria and tests verified in the files.",
   },
   "🧊": {
-    title: "Congelada",
-    description: "Status 🧊 — pausada de propósito; não entra no fluxo agora.",
+    title: "Frozen",
+    description: "Status 🧊 — paused on purpose; not in the flow now.",
   },
 }
 
@@ -65,7 +65,7 @@ function KanbanColumnHeader({
         <Popover.Root>
           <Popover.Trigger asChild>
             <Button
-              aria-label={`Sobre a coluna ${meta.title}`}
+              aria-label={`About the ${meta.title} column`}
               className="size-7 shrink-0 text-muted-foreground hover:text-foreground"
               size="icon-sm"
               type="button"
@@ -247,12 +247,12 @@ export function KanbanView({
       <div className="overflow-hidden rounded-xl border border-border bg-card">
         <div className="space-y-3 border-b border-border/80 px-4 py-3">
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <p className={typeScale.label}>Filtrar por epic</p>
+            <p className={typeScale.label}>Filter by epic</p>
             <p className={typeScale.caption}>
-              {totalVisible} US visíve{totalVisible === 1 ? "l" : "is"}
+              {totalVisible} visible stor{totalVisible === 1 ? "y" : "ies"}
               {selectedVersionIds.size > 0
                 ? ` · ${selectedLabel}`
-                : " · nenhuma versão"}
+                : " · no version selected"}
             </p>
           </div>
           <div className="flex flex-wrap gap-2">
@@ -261,7 +261,7 @@ export function KanbanView({
               onClick={() => setEpicFilter("all")}
               type="button"
             >
-              Todos
+              All
             </button>
             {availableEpics.map((epic) => (
               <button
@@ -280,7 +280,7 @@ export function KanbanView({
           </div>
           {selectedVersionIds.size === 0 ? (
             <p className={cn(typeScale.caption, "text-destructive")}>
-              Selecione ao menos uma versão acima.
+              Select at least one version above.
             </p>
           ) : null}
         </div>
@@ -300,7 +300,7 @@ export function KanbanView({
                 <div className="flex flex-col gap-3 p-3">
                   {columnStories.length === 0 ? (
                     <p className={cn(typeScale.caption, "px-1 py-10 text-center")}>
-                      Nenhuma US nesta coluna
+                      No stories in this column
                     </p>
                   ) : (
                     columnStories.map((story) => (

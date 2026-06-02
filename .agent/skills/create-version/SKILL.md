@@ -8,37 +8,37 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 
 ## Selective reading
 
-| Arquivo | Quando ler |
+| File | When to read |
 | ------- | ---------- |
-| `references/version-template.md` | Ao redigir `docs/versions/vX.md` |
-| `docs/versions/` | Arquivos existentes (IDs) |
-| `docs/00_scope.md` | Validar escopo do release |
+| `references/version-template.md` | When drafting `docs/versions/vX.md` |
+| `docs/versions/` | Existing files (IDs) |
+| `docs/00_scope.md` | Validate release scope |
 
-## Pré-condições
+## Preconditions
 
-| Doc | Status exigido |
+| Doc | Required status |
 | --- | -------------- |
 | `05_architecture.md` | `approved` |
-| `00_scope.md` | `approved` ou explícito no escopo |
+| `00_scope.md` | `approved` or explicit in scope |
 | `03_user_types.md` | `approved` |
 
-Versão = **release de produto** (go-live), não sprint nem módulo técnico.
+Version = **product release** (go-live), not sprint or technical module.
 
-## Procedimento
+## Procedure
 
-1. Listar `docs/versions/v*.md` → próximo ID = maior número + 1 (`v3`, `v4`…).
-2. Preencher `references/version-template.md`.
-3. Salvar `docs/versions/vX.md` (nome do arquivo = `id`).
-4. Se mudança relevante → `update-decisions-log`.
-5. Validar: `python .agent/scripts/validate_meridian.py <project-root>`.
+1. List `docs/versions/v*.md` → next ID = highest number + 1 (`v3`, `v4`…).
+2. Fill `references/version-template.md`.
+3. Save `docs/versions/vX.md` (filename = `id`).
+4. If relevant change → `update-decisions-log`.
+5. Validate: `python .agent/scripts/validate_meridian.py <project-root>`.
 
-## Validações
+## Validations
 
-- `outcome` mensurável no nível produto
-- `v0` só para fundação técnica
-- Sprints da versão → skill `create-sprint` em `docs/sprints/`
+- Product-level measurable `outcome`
+- `v0` only for technical foundation
+- Version sprints → skill `create-sprint` in `docs/sprints/`
 
-## Saída
+## Output
 
 ```txt
 Version created:
@@ -46,5 +46,5 @@ File: docs/versions/vX.md
 Outcome:
 version file saved: yes | no
 Open questions:
-Next: create-sprint ou /plan-sprint
+Next: create-sprint or /plan-sprint
 ```

@@ -2,20 +2,20 @@
 description: Close a Meridian user story after implementation — fill technical summary, acceptance and status.
 ---
 
-# /complete-us — fechar user story
+# /complete-us — close user story
 
 $ARGUMENTS
 
 ---
 
-## Regras críticas
+## Critical rules
 
 1. Use `board-keeper` + `@[skills/complete-user-story]`
-2. **Gate:** implementação entregue; testes aplicáveis passaram; `depends_on` em `✅`
-3. Template de implementação: `references/implementation-template.md`
-4. **Não** marcar `✅` com placeholder em `## Implementação técnica`
-5. Regenerar `board.json` ao final
-6. `update-decisions-log` só se decisão cross-cutting
+2. **Gate:** implementation delivered; applicable tests passed; `depends_on` at `✅`
+3. Implementation template: `references/implementation-template.md`
+4. **Do not** mark `✅` with placeholder in `## Technical implementation`
+5. Regenerate `board.json` at the end
+6. `update-decisions-log` only if cross-cutting decision
 
 ---
 
@@ -29,16 +29,16 @@ CONTEXT:
 RULES:
 1. board-keeper Phase 0 — verify US id and dependencies
 2. Inspect git diff / files touched for evidence
-3. Fill ## Implementação técnica (Arquivos + camadas)
-4. Mark aceite [x]; update ## Testes (Planejado [x] + Executado); set tests_status: done
-5. Set status ✅ (or 🔶 + Falta: if partial) — only ✅ if tests: none or tests_status: done
+3. Fill ## Technical implementation (Files + layers)
+4. Mark acceptance [x]; update ## Tests (Planned [x] + Executed); set tests_status: done
+5. Set status ✅ (or 🔶 + Missing: if partial) — only ✅ if tests: none or tests_status: done
 6. generate-board-json
 7. update-decisions-log if protocol/architecture changed
 ```
 
 ---
 
-## Saída
+## Output
 
 ```txt
 US completed:
@@ -54,10 +54,10 @@ Open items:
 
 ---
 
-## Exemplos
+## Examples
 
-| Pedido | Resultado |
+| Request | Result |
 | ------ | --------- |
-| `/complete-us US-0034` | US-0034 com implementação técnica + ✅ + board |
-| `/complete-us` sem id | Perguntar qual US ou inferir da sessão de implementação |
-| Implementação parcial | Status 🔶 + Falta: explícito; não forçar ✅ |
+| `/complete-us US-0034` | US-0034 with technical implementation + ✅ + board |
+| `/complete-us` without id | Ask which US or infer from implementation session |
+| Partial implementation | Status 🔶 + explicit Missing:; do not force ✅ |

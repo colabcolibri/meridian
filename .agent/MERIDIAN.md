@@ -1,181 +1,176 @@
-# Meridian — Protocolo de Desenvolvimento Orientado por Documentação para Agentes de IA
+# Meridian — Documentation-Driven Development Protocol for AI Agents
 
-> Defina o meridiano antes de escrever o código.
-> Ele é o que mantém pessoas, agentes de IA, decisões e entregas alinhados.
+> Define the meridian before writing code.
+> It is what keeps people, AI agents, decisions, and deliverables aligned.
 
-Este é o protocolo master para agentes.
-O `meridian.md` da raiz explica o projeto como um todo; este arquivo define como
-agentes devem trabalhar.
-
----
-
-## 1. O que é Meridian
-
-Meridian é um protocolo pragmático de desenvolvimento orientado por documentação,
-criado para a nova era de trabalho com agentes de IA.
-
-Ele não é uma ferramenta específica, não depende de uma extensão, não exige um SaaS
-e não presume que o projeto será desenvolvido dentro de um sistema de gestão próprio.
-Meridian é antes de tudo uma estrutura de trabalho: um conjunto de documentos,
-dependências, regras de maturidade e artefatos gerados que permite conduzir
-desenvolvimento de software com clareza.
-
-A ideia central é simples:
-
-**a documentação é o projeto.**
-
-O código existe para implementar o que está documentado. Agentes de IA podem acelerar
-execução, sugerir alternativas, preencher rascunhos e implementar tarefas, mas eles
-não substituem direção, contexto, critérios de aceite e decisões registradas.
-
-Meridian existe para que uma pessoa continue sendo manager do processo enquanto
-usa agentes de IA de forma produtiva, auditável e consistente.
+This is the master protocol for agents.
+In the kit monorepo, [`README.md`](../README.md) is the GitHub onboarding page;
+this file defines how agents should work in any Meridian project.
 
 ---
 
-## 2. Para quem é
+## 1. What is Meridian
 
-Meridian é para qualquer pessoa ou grupo que queira desenvolver software com agentes
-de IA sem perder controle do processo.
+Meridian is a pragmatic documentation-driven development protocol,
+built for the new era of working with AI agents.
 
-Isso inclui:
+It is not a specific tool, does not depend on an extension, does not require a SaaS,
+and does not assume the project will be developed inside a proprietary management system.
+Meridian is above all a working structure: a set of documents,
+dependencies, maturity rules, and generated artifacts that allows software development
+to be conducted with clarity.
 
-- devs trabalhando sozinhos;
-- founders construindo um produto;
-- product managers conduzindo um projeto digital;
-- designers ou operadores que precisam transformar uma ideia em sistema;
-- tech leads estruturando trabalho para um time;
-- times de qualquer tamanho que queiram um fluxo simples e auditável;
-- pessoas usando agentes de código e querendo manter visibilidade do que está sendo feito.
+The central idea is simple:
 
-Meridian não é apenas para times pequenos.
-Meridian também não é uma malha complexa de agentes.
+**the documentation is the project.**
 
-Ele é um fluxo mínimo, explícito e suficiente para desenvolvimento consistente.
+Code exists to implement what is documented. AI agents can accelerate
+execution, suggest alternatives, fill drafts, and implement tasks, but they
+do not replace direction, context, acceptance criteria, and recorded decisions.
 
----
-
-## 3. O problema que Meridian resolve
-
-Agentes de IA tornam fácil produzir código rapidamente. Isso é útil, mas também cria
-um novo risco: agentes podem trabalhar muito, por muito tempo, sem que o projeto esteja
-realmente mais claro.
-
-Sem um fluxo explícito, é comum acontecer:
-
-- código antes de escopo;
-- features antes de arquitetura;
-- banco antes de entender tipos de usuário;
-- implementação antes de critérios de aceite;
-- decisões importantes perdidas no chat;
-- agentes criando arquivos sem uma fonte de verdade;
-- user stories sem dependências claras;
-- status marcado como concluído só porque compilou;
-- documentação defasada em relação ao código;
-- retrabalho porque a direção mudou sem registro.
-
-Meridian resolve isso exigindo que o agente trabalhe dentro de um protocolo.
-
-Antes de escrever código, o agente deve entender o projeto.
-Antes de executar uma sprint, o agente deve saber quais documentos estão aprovados.
-Antes de criar user stories, epics e versões precisam estar definidos.
-Antes de marcar algo como concluído, o aceite precisa estar comprovado.
-
-O objetivo não é "software rápido" a qualquer custo.
-O objetivo é desenvolvimento consistente.
+Meridian exists so that a person remains manager of the process while
+using AI agents productively, auditably, and consistently.
 
 ---
 
-## 4. Princípios centrais
+## 2. Who it is for
 
-### 4.1 A documentação precede o código
+Meridian is for any person or group that wants to develop software with AI agents
+without losing control of the process.
 
-Nada entra em desenvolvimento sem estar documentado.
-Nada está done se a documentação não reflete o estado real.
+This includes:
 
-### 4.2 A pessoa é manager do processo
+- devs working solo;
+- founders building a product;
+- product managers running a digital project;
+- designers or operators who need to turn an idea into a system;
+- tech leads who need a simple and auditable workflow;
+- people using coding agents and wanting to keep visibility over what is being done.
 
-Agentes de IA executam, sugerem, verificam e implementam.
-A pessoa decide direção, aprova maturidade, aceita mudanças relevantes e controla
-o que entra no fluxo.
+Meridian is also not a complex mesh of agents.
 
-### 4.3 Agentes trabalham com contexto explícito
-
-Um agente não deve depender de memória de conversa quando a decisão deveria estar
-no projeto. Decisões, escopo, constraints, arquitetura e critérios de aceite devem
-estar nos arquivos Meridian.
-
-### 4.4 Simplicidade é parte do produto
-
-Meridian deve evitar burocracia desnecessária. O fluxo existe para dar clareza, não
-para criar 1001 agentes, 1001 documentos ou um processo pesado.
-
-### 4.5 Status precisa ser auditável
-
-Um item não está concluído porque "parece pronto" ou porque "compilou".
-Status deve refletir evidência.
-
-### 4.6 O board é derivado, não editado manualmente
-
-O board canônico é `docs/kanban/board.json`.
-Ele é gerado a partir dos frontmatters das user stories.
-Ele nunca deve ser editado manualmente como fonte primária.
+It is a minimal, explicit, and sufficient flow for consistent development.
 
 ---
 
-## 5. Como usar este arquivo
+## 3. The problem Meridian solves
 
-Este `meridian.md` é um iniciador universal.
+AI agents make it easy to produce code quickly. This is useful, but it also creates
+a new risk: agents can work a lot, for a long time, without the project actually
+becoming clearer.
 
-Use-o assim:
+Without an explicit flow, it is common for:
 
-1. Coloque este arquivo na raiz de um novo projeto.
-2. Peça a um agente de IA para ler este arquivo integralmente.
-3. O agente deve criar a estrutura `/docs`.
-4. O agente deve iniciar o log de decisões.
-5. O agente deve seguir a ordem de documentos, dependências e aprovações.
-6. O agente só deve escrever código quando a documentação exigida para aquela etapa existir.
+- code to come before scope;
+- features to come before architecture;
+- databases to be built before understanding user types;
+- implementation to happen before acceptance criteria;
+- important decisions to be lost in the chat;
+- agents to create files without a source of truth;
+- user stories to have no clear dependencies;
+- status to be marked as done just because it compiled;
+- documentation to fall behind the code;
+- rework to happen because direction changed without a record.
 
-Este arquivo não obriga o uso de um app de gestão Meridian.
+Meridian solves this by requiring the agent to work within a protocol.
 
-Um app, extensão ou painel pode monitorar a pasta do projeto e visualizar a estrutura,
-mas o protocolo funciona apenas com arquivos Markdown e JSON.
+Before writing code, the agent must understand the project.
+Before executing a sprint, the agent must know which documents are approved.
+Before creating user stories, epics and versions must be defined.
+Before marking something as done, acceptance must be proven.
 
----
-
-## 6. Instrução obrigatória para agentes de IA
-
-Se você é um agente de IA lendo este arquivo, siga estas regras:
-
-1. Não comece escrevendo código.
-2. Primeiro verifique se existe uma pasta `docs/`.
-3. Se `docs/` não existir, crie a estrutura Meridian.
-4. Registre decisões relevantes em `docs/decisions/YYYY-MM-DD.json` antes de tomar mudanças cross-cutting.
-5. Crie `docs/00_scope.md` e mantenha-o como primeira fonte de verdade do projeto.
-6. Não avance documentos dependentes para além de `draft` se seus predecessores não estiverem `approved`.
-7. Não crie user stories antes de `05_architecture.md` estar `approved` (gate de entrega).
-8. Não edite `docs/kanban/board.json` como fonte primária; gere-o a partir dos US.
-9. Sempre registre decisões que mudam escopo, stack, arquitetura, segurança, versão ou critérios.
-10. Se um documento `approved` precisar mudar, registre a decisão e volte o documento para `review`.
-11. Se uma US estiver `🔶`, o aceite deve conter `Falta:`.
-12. Se uma US depende de outra, ela só pode sair de `❌` quando todas as dependências estiverem `✅`.
-13. Antes de implementar, identifique qual US, versão e epic justificam a mudança.
-14. Antes de finalizar, atualize os documentos afetados e rode as validações aplicáveis.
-
-Se o usuário pedir velocidade sem documentação mínima, explique o risco e proponha o
-menor conjunto de documentos necessário para avançar com segurança.
+The goal is not "fast software" at any cost.
+The goal is consistent development.
 
 ---
 
-## 7. Estrutura de pastas
+## 4. Core principles
 
-Ao iniciar um projeto Meridian, crie a estrutura do projeto em `docs/`.
-Opcionalmente, mantenha uma pasta `.agent/` no mesmo nível de `meridian.md`
-quando quiser dar agentes, skills, workflows, rules e scripts especializados para IA.
+### 4.1 Documentation precedes code
+
+Nothing enters development without being documented.
+Nothing is done if the documentation does not reflect the real state.
+
+### 4.2 The person is manager of the process
+
+AI agents execute, suggest, verify, and implement.
+The person decides direction, approves maturity, accepts relevant changes, and controls
+what enters the flow.
+
+### 4.3 Agents work with explicit context
+
+An agent should not rely on conversation memory when the decision should be
+in the project. Decisions, scope, constraints, architecture, and acceptance criteria must
+be in Meridian files.
+
+### 4.4 Simplicity is part of the product
+
+Meridian must avoid unnecessary bureaucracy. The flow exists to provide clarity, not
+to create 1001 agents, 1001 documents, or a heavy process.
+
+### 4.5 Status must be auditable
+
+An item is not done because it "looks ready" or because "it compiled".
+Status must reflect evidence.
+
+### 4.6 The board is derived, not manually edited
+
+The canonical board is `docs/kanban/board.json`.
+It is generated from the frontmatters of user stories.
+It must never be manually edited as a primary source.
+
+---
+
+## 5. How to use this file
+
+Copy `.agent/` (including this file) to the project root, then use it as follows:
+
+1. Ensure `.agent/MERIDIAN.md` is at the project root (inside `.agent/`).
+2. Ask an AI agent to read this file in full.
+3. The agent must create the `/docs` structure.
+4. The agent must initialize the decision log.
+5. The agent must follow the document order, dependencies, and approvals.
+6. The agent should only write code when the documentation required for that stage exists.
+
+This file does not require the use of a Meridian management app.
+
+An app, extension, or dashboard can monitor the project folder and visualize the structure,
+but the protocol works with only Markdown and JSON files.
+
+---
+
+## 6. Mandatory instructions for AI agents
+
+If you are an AI agent reading this file, follow these rules:
+
+1. Do not start by writing code.
+2. First check whether a `docs/` folder exists.
+3. If `docs/` does not exist, create the Meridian structure.
+4. Record relevant decisions in `docs/decisions/YYYY-MM-DD.json` before making cross-cutting changes.
+5. Create `docs/00_scope.md` and maintain it as the project's first source of truth.
+6. Do not advance dependent documents beyond `draft` if their predecessors are not `approved`.
+7. Do not create user stories before `05_architecture.md` is `approved` (delivery gate).
+8. Do not edit `docs/kanban/board.json` as a primary source; generate it from user stories.
+9. Always record decisions that change scope, stack, architecture, security, version, or criteria.
+10. If an `approved` document needs to change, record the decision and move the document back to `review`.
+11. If a US is `🔶`, the acceptance section must contain `Missing:`.
+12. If a US depends on another, it can only leave `❌` when all dependencies are `✅`.
+13. Before implementing, identify which US, version, and epic justify the change.
+14. Before finishing, update the affected documents and run applicable validations.
+
+If the user asks for speed without minimum documentation, explain the risk and propose the
+smallest set of documents needed to move forward safely.
+
+---
+
+## 7. Folder structure
+
+When starting a Meridian project, create the project structure in `docs/`.
+Maintain a `.agent/` folder at the project root with specialized agents, skills,
+workflows, rules, and scripts for AI.
 
 ```txt
-/README.md          # opcional no repo do kit; convenção Git
-/meridian.md
+/README.md          # optional; Git convention (kit monorepo uses it for onboarding)
 
 /.agent
   MERIDIAN.md
@@ -224,32 +219,32 @@ quando quiser dar agentes, skills, workflows, rules e scripts especializados par
     board.json
 ```
 
-### 7.1 Sobre `.agent/` e `.cursor/`
+### 7.1 About `.agent/` and `.cursor/`
 
-`.agent/` contém a camada operacional portátil para agentes de IA (padrão Antigravity).
+`.agent/` contains the portable operational layer for AI agents (Antigravity standard).
 
-Ela é opcional para projetos simples, mas recomendada quando agentes serão usados
-com frequência. A função dela é manter instruções especializadas fora do protocolo
-principal, sem perder governança.
+It is optional for simple projects, but recommended when agents will be used
+frequently. Its purpose is to keep specialized instructions outside the main protocol,
+without losing governance.
 
-**Cursor IDE:** o Cursor não indexa `.agent/` nativamente. Use `.cursor/` como adapter **local**:
+**Cursor IDE:** Cursor does not natively index `.agent/`. Use `.cursor/` as a **local** adapter:
 
-- Edite o kit em `.agent/` (fonte versionada).
-- Rode `./.agent/scripts/sync_cursor_kit.sh` após clone ou ao adicionar skill/agent/workflow.
-- **Não commitar `.cursor/`** — symlinks locais (`.gitignore` na raiz do kit).
-- Regra always-on: `.agent/rules/meridian.mdc` → espelhada em `.cursor/rules/meridian.mdc`.
-- Slash commands: `.cursor/commands/` espelha `.agent/workflows/`.
+- Edit the kit in `.agent/` (versioned source).
+- Run `./.agent/scripts/sync_cursor_kit.sh` after clone or when adding a skill/agent/workflow.
+- **Do not commit `.cursor/`** — local symlinks (`.gitignore` at the kit root).
+- Always-on rule: `.agent/rules/meridian.mdc` → mirrored in `.cursor/rules/meridian.mdc`.
+- Slash commands: `.cursor/commands/` mirrors `.agent/workflows/`.
 
-Estrutura recomendada:
+Recommended structure:
 
-- `agents/`: papéis/personas de agentes;
-- `skills/`: pacotes de conhecimento com `SKILL.md`;
-- `workflows/`: procedimentos acionáveis;
-- `rules/MERIDIAN.md`: regras globais sempre ativas (`trigger: always_on`);
-- `scripts/`: validações e automações locais;
-- `.shared/`: recursos compartilhados.
+- `agents/`: agent roles/personas;
+- `skills/`: knowledge packages with `SKILL.md`;
+- `workflows/`: actionable procedures;
+- `rules/MERIDIAN.md`: global rules always active (`trigger: always_on`);
+- `scripts/`: local validations and automations;
+- `.shared/`: shared resources.
 
-Skills oficiais do kit (ver `.agent/skills/doc.md`):
+Official kit skills (see `.agent/skills/doc.md`):
 
 - `init-project`
 - `create-epic`
@@ -262,46 +257,46 @@ Skills oficiais do kit (ver `.agent/skills/doc.md`):
 - `update-decisions-log`
 - `meridian-routing`
 
-Regras:
+Rules:
 
-- `meridian.md` continua sendo a autoridade principal.
-- `.agent/rules/` define regras globais para agentes.
-- `.agent/workflows/` define procedimentos.
-- `.agent/agents/` define responsabilidades.
-- `.agent/skills/` detalha tarefas específicas.
-- Se houver conflito entre skill e `meridian.md`, `meridian.md` vence.
-- Se uma skill causar mudança relevante, registre em `docs/decisions/YYYY-MM-DD.json`.
+- `.agent/MERIDIAN.md` (this file) is the primary protocol authority.
+- `.agent/rules/` defines global rules for agents.
+- `.agent/workflows/` defines procedures.
+- `.agent/agents/` defines responsibilities.
+- `.agent/skills/` details specific tasks.
+- If there is a conflict between a skill and this file, `.agent/MERIDIAN.md` wins.
+- If a skill causes a relevant change, record it in `docs/decisions/YYYY-MM-DD.json`.
 
-### 7.2 Sobre `docs/README.md`
+### 7.2 About `docs/README.md`
 
-`docs/README.md` é a porta de entrada humana do projeto.
-Ele deve conter:
+`docs/README.md` is the human entry point for the project.
+It must contain:
 
-- link para cada documento de fase;
-- status atual de cada documento;
-- versão atual do produto;
-- próximo milestone;
-- user stories ativas da versão em andamento;
-- observações úteis para agentes e pessoas.
+- a link to each phase document;
+- current status of each document;
+- current product version;
+- next milestone;
+- active user stories for the version in progress;
+- useful notes for agents and people.
 
-### 7.3 Sobre `docs/kanban/board.json`
+### 7.3 About `docs/kanban/board.json`
 
-`board.json` é um artefato gerado.
-Ele representa uma visão consolidada dos frontmatters das user stories.
+`board.json` is a generated artifact.
+It represents a consolidated view of the frontmatters of user stories.
 
-Não crie `board.csv` como arquivo mantido em paralelo.
-CSV, planilhas ou outros formatos são exportações derivadas, geradas sob demanda
-por ferramentas futuras.
+Do not create `board.csv` as a file maintained in parallel.
+CSV, spreadsheets, or other formats are derived exports, generated on demand
+by future tooling.
 
 ---
 
-## 8. Frontmatter padrão dos documentos de fase
+## 8. Standard frontmatter for phase documents
 
-Todo documento de fase deve começar com:
+Every phase document must begin with:
 
 ```yaml
 ---
-title: Nome do documento
+title: Document name
 status: draft | review | approved
 version: 1.0
 updated: YYYY-MM-DD
@@ -310,92 +305,92 @@ blocks: []
 ---
 ```
 
-### Status dos documentos
+### Document statuses
 
-- `draft`: documento em criação ou incompleto.
-- `review`: documento completo o suficiente para validação humana.
-- `approved`: documento aprovado e liberando dependentes.
+- `draft`: document being created or incomplete.
+- `review`: document complete enough for human validation.
+- `approved`: document approved and unblocking dependents.
 
-### Regra de maturidade
+### Maturity rule
 
 ```txt
 draft -> review -> approved
           ^          |
           |----------|
-     mudança relevante volta para review
+     relevant change returns to review
 ```
 
-Nenhum documento dependente deve avançar além de `draft` enquanto seus predecessores
-não estiverem `approved`.
+No dependent document should advance beyond `draft` while its predecessors
+are not `approved`.
 
 ---
 
-## 9. Mapa de dependências
+## 9. Dependency map
 
 ```txt
 11_decisions + docs/decisions/
-  stub de regras; entradas em YYYY-MM-DD.md — começa no dia 1; nunca bloqueia nada
+  rules stub; entries in YYYY-MM-DD.md — starts on day 1; never blocks anything
 
 00_scope
-  desbloqueia todos os outros documentos
+  unblocks all other documents
 
 01_tech_stack
-  depende de 00_scope
-  desbloqueia 02_security, 04_principles, 08_environments
+  depends on 00_scope
+  unblocks 02_security, 04_principles, 08_environments
 
 02_security
-  depende de 00_scope, 01_tech_stack
-  desbloqueia 03_user_types, 04_principles
+  depends on 00_scope, 01_tech_stack
+  unblocks 03_user_types, 04_principles
 
 03_user_types
-  depende de 02_security
-  desbloqueia 04_principles, 05_architecture, 06_database, 07_api_contracts
+  depends on 02_security
+  unblocks 04_principles, 05_architecture, 06_database, 07_api_contracts
 
 04_principles
-  depende de 01_tech_stack, 02_security, 03_user_types
-  desbloqueia 05_architecture
+  depends on 01_tech_stack, 02_security, 03_user_types
+  unblocks 05_architecture
 
 05_architecture
-  depende de 00_scope, 01_tech_stack, 02_security, 03_user_types, 04_principles
-  desbloqueia 06_database, 07_api_contracts, 08_environments
-  desbloqueia criação de user stories (epic/version nas pastas)
+  depends on 00_scope, 01_tech_stack, 02_security, 03_user_types, 04_principles
+  unblocks 06_database, 07_api_contracts, 08_environments
+  unblocks creation of user stories (epic/version in the folders)
 
 06_database
-  depende de 03_user_types, 05_architecture
-  desbloqueia 07_api_contracts
+  depends on 03_user_types, 05_architecture
+  unblocks 07_api_contracts
 
 07_api_contracts
-  depende de 03_user_types, 05_architecture, 06_database
+  depends on 03_user_types, 05_architecture, 06_database
 
 08_environments
-  depende de 01_tech_stack, 05_architecture
+  depends on 01_tech_stack, 05_architecture
 ```
 
-Entrega (pastas — fonte de verdade, sem índice markdown):
+Delivery (folders — source of truth, no markdown index):
 
 ```txt
 docs/epics/EPIC-XX.md
 docs/versions/vX.md
 docs/sprints/vX-SY.md
 docs/us/US-XXXX.md
-docs/kanban/board.json   # derivado das US
+docs/kanban/board.json   # derived from user stories
 ```
 
-User stories só podem ser criadas quando:
+User stories can only be created when:
 
 ```txt
 05_architecture = approved
-epic referenciado existe em docs/epics/
-version referenciada existe em docs/versions/
+referenced epic exists in docs/epics/
+referenced version exists in docs/versions/
 ```
 
 ---
 
-## 10. Fluxo de trabalho por fases
+## 10. Phase-by-phase workflow
 
-### Fase 0 — Fundação
+### Phase 0 — Foundation
 
-Sempre sequencial.
+Always sequential.
 
 1. `11_decisions.md`
 2. `00_scope.md`
@@ -403,440 +398,440 @@ Sempre sequencial.
 4. `02_security.md`
 5. `03_user_types.md`
 
-A segurança vem antes da arquitetura.
-Tipos de usuário vêm antes de princípios e arquitetura.
-Releases, épicos e sprints vêm depois da arquitetura (eixo de entrega).
+Security comes before architecture.
+User types come before principles and architecture.
+Releases, epics, and sprints come after architecture (delivery axis).
 
-### Fase 1 — Princípios
+### Phase 1 — Principles
 
 - `04_principles.md`
 
-Convenções de código e qualidade — orientam implementação e arquitetura.
+Code conventions and quality — guide implementation and architecture.
 
-### Fase 2 — Arquitetura
+### Phase 2 — Architecture
 
 - `05_architecture.md`
 
-A arquitetura reflete escopo, stack, segurança, usuários e princípios.
+Architecture reflects scope, stack, security, users, and principles.
 
-### Fase 3 — Detalhamento técnico
+### Phase 3 — Technical detail
 
 - `06_database.md`
 - `07_api_contracts.md`
 - `08_environments.md`
 
-Banco vem antes de contratos completos de API.
-Ambientes documentam setup, comandos, variáveis e diferenças entre local/dev/staging/prod.
+Database comes before full API contracts.
+Environments document setup, commands, variables, and differences between local/dev/staging/prod.
 
-### Backlog de entrega (pastas)
+### Delivery backlog (folders)
 
-- `docs/epics/EPIC-XX.md` — capacidades de produto
+- `docs/epics/EPIC-XX.md` — product capabilities
 - `docs/versions/vX.md` — releases
-- `docs/sprints/vX-SY.md` — fatias de tempo
+- `docs/sprints/vX-SY.md` — time slices
 
-Só criar user stories depois de `05_architecture.md` approved.
-Cada US referencia epic e version que já existem nas pastas.
+Only create user stories after `05_architecture.md` is approved.
+Each US references an epic and version that already exist in the folders.
 
-### Execução
+### Execution
 
-- arquivos individuais de US em `docs/us/`;
-- sprints em `docs/sprints/`;
-- código;
-- checklist de go-live;
-- atualização contínua de decisões.
+- individual US files in `docs/us/`;
+- sprints in `docs/sprints/`;
+- code;
+- go-live checklist;
+- continuous update of decisions.
 
 ---
 
-## 11. Conteúdo obrigatório de cada documento
+## 11. Required content for each document
 
-### 11.1 `00_scope.md` — Escopo
+### 11.1 `00_scope.md` — Scope
 
-Deve responder:
+Must answer:
 
-- Qual é o nome do projeto?
-- O que o projeto faz?
-- Qual problema resolve?
-- Para quem resolve?
-- O que está dentro do escopo?
-- O que está fora do escopo?
-- Quais restrições existem?
-- Quais premissas estão sendo assumidas?
-- Quais riscos já são conhecidos?
+- What is the name of the project?
+- What does the project do?
+- What problem does it solve?
+- Who does it solve it for?
+- What is in scope?
+- What is out of scope?
+- What constraints exist?
+- What assumptions are being made?
+- What risks are already known?
 
-Regra para agentes:
+Rule for agents:
 
-Não trate escopo como lista genérica. Escreva limites concretos.
-O que está fora do escopo é tão importante quanto o que está dentro.
+Do not treat scope as a generic list. Write concrete boundaries.
+What is out of scope is as important as what is in scope.
 
-### 11.2 `01_tech_stack.md` — Tech Stack
+### 11.2 `01_tech_stack.md` — Tech stack
 
-Deve cobrir:
+Must cover:
 
 - frontend;
 - backend;
-- banco de dados;
-- infra;
+- database;
+- infrastructure;
 - CI/CD;
 - containers;
 - DX;
 - linting;
-- formatação;
-- testes;
-- justificativa de cada escolha;
-- alternativas descartadas.
+- formatting;
+- testing;
+- justification for each choice;
+- discarded alternatives.
 
-Regra para agentes:
+Rule for agents:
 
-Não escolha tecnologia só por familiaridade. Explique por que a escolha serve ao projeto.
+Do not choose technology merely out of familiarity. Explain why the choice serves the project.
 
-### 11.3 `02_security.md` — Segurança
+### 11.3 `02_security.md` — Security
 
-Deve cobrir:
+Must cover:
 
-- modelo de ameaça mínimo;
-- autenticação;
-- autorização;
-- proteção de dados;
-- validação de inputs e outputs;
+- minimum threat model;
+- authentication;
+- authorization;
+- data protection;
+- input and output validation;
 - rate limiting;
-- auditoria e logs;
-- gestão de segredos;
-- segurança de dependências;
-- segurança no uso de agentes de IA;
-- conformidade;
-- OWASP Top 10 no contexto do projeto;
-- riscos aceitos e fora de escopo.
+- audit and logs;
+- secrets management;
+- dependency security;
+- AI agent security;
+- compliance;
+- OWASP Top 10 in the project context;
+- accepted risks and out-of-scope risks.
 
-O documento deve ser prático. Não basta listar "usar HTTPS" ou "validar inputs".
-O agente deve explicar como a segurança se aplica ao projeto específico.
+The document must be practical. Listing "use HTTPS" or "validate inputs" is not enough.
+The agent must explain how security applies to the specific project.
 
-#### 11.3.1 Modelo de ameaça mínimo
+#### 11.3.1 Minimum threat model
 
-Inclua:
+Include:
 
-- atores internos e externos;
-- perfis de usuário com acesso ao sistema;
-- dados sensíveis;
-- superfícies de ataque;
-- integrações externas;
-- operações destrutivas;
-- impacto de vazamento, alteração indevida ou indisponibilidade.
+- internal and external actors;
+- user profiles with system access;
+- sensitive data;
+- attack surfaces;
+- external integrations;
+- destructive operations;
+- impact of leak, unauthorized modification, or unavailability.
 
-Perguntas obrigatórias:
+Mandatory questions:
 
-- Quem pode tentar acessar dados indevidamente?
-- Que dados não podem vazar?
-- Que ações precisam de autorização forte?
-- Que partes do sistema recebem input não confiável?
-- Quais integrações externas ampliam risco?
-- O que acontece se um agente de IA receber contexto sensível por engano?
+- Who might try to access data without authorization?
+- What data must not leak?
+- What actions require strong authorization?
+- What parts of the system receive untrusted input?
+- Which external integrations increase risk?
+- What happens if an AI agent accidentally receives sensitive context?
 
-#### 11.3.2 Gestão de segredos
+#### 11.3.2 Secrets management
 
-Defina:
+Define:
 
-- quais arquivos de ambiente existem;
-- quais arquivos nunca entram no Git;
-- se `.env.example` é obrigatório;
-- como secrets são carregados;
-- como secrets são rotacionados;
-- onde secrets não podem aparecer.
+- which environment files exist;
+- which files never go into Git;
+- whether `.env.example` is required;
+- how secrets are loaded;
+- how secrets are rotated;
+- where secrets must not appear.
 
-Regras obrigatórias:
+Mandatory rules:
 
-- `.env` e `.env.*` não entram no Git.
-- `.env.example` deve ser versionado sem valores reais.
-- Secrets não devem aparecer em logs.
-- Secrets não devem ser colados em prompts para agentes de IA.
-- Tokens, cookies, headers de autorização e chaves privadas são dados sensíveis.
+- `.env` and `.env.*` do not go into Git.
+- `.env.example` must be versioned without real values.
+- Secrets must not appear in logs.
+- Secrets must not be pasted into prompts for AI agents.
+- Tokens, cookies, authorization headers, and private keys are sensitive data.
 
-#### 11.3.3 Segurança de agentes de IA
+#### 11.3.3 AI agent security
 
-Quando agentes de IA participarem do desenvolvimento, documente:
+When AI agents participate in development, document:
 
-- quais arquivos podem ser compartilhados com agentes;
-- quais arquivos não devem ser enviados a serviços externos;
-- quais comandos exigem confirmação humana;
-- como lidar com comandos destrutivos;
-- como registrar decisões sugeridas por agentes;
-- como validar código gerado por agentes.
+- which files may be shared with agents;
+- which files must not be sent to external services;
+- which commands require human confirmation;
+- how to handle destructive commands;
+- how to record decisions suggested by agents;
+- how to validate code generated by agents.
 
-Regras obrigatórias para agentes:
+Mandatory rules for agents:
 
-- Não executar comando destrutivo sem autorização explícita.
-- Não exfiltrar `.env`, secrets, chaves, tokens ou dados privados.
-- Não reduzir segurança para "fazer funcionar" sem registrar decisão.
-- Não criar bypass de autenticação/autorização sem marcar como risco crítico.
-- Não marcar segurança como concluída sem evidência.
+- Do not execute destructive commands without explicit authorization.
+- Do not exfiltrate `.env`, secrets, keys, tokens, or private data.
+- Do not reduce security to "make it work" without recording a decision.
+- Do not create authentication/authorization bypasses without marking them as critical risk.
+- Do not mark security as done without evidence.
 
-#### 11.3.4 Autenticação e autorização
+#### 11.3.4 Authentication and authorization
 
-Defina:
+Define:
 
-- se o sistema é público, autenticado ou híbrido;
-- estratégia de sessão, JWT, OAuth, SSO ou outro modelo;
-- expiração, renovação e revogação;
-- perfis autorizados por ação;
-- modelo RBAC, ABAC ou custom;
-- isolamento multi-tenant quando aplicável.
+- whether the system is public, authenticated, or hybrid;
+- session strategy — JWT, OAuth, SSO, or another model;
+- expiration, renewal, and revocation;
+- authorized profiles per action;
+- RBAC, ABAC, or custom model;
+- multi-tenant isolation where applicable.
 
-Regra:
+Rule:
 
-Autenticação responde "quem é".
-Autorização responde "o que pode fazer".
-Não misture as duas.
+Authentication answers "who you are".
+Authorization answers "what you can do".
+Do not mix the two.
 
-#### 11.3.5 Proteção de dados
+#### 11.3.5 Data protection
 
-Classifique:
+Classify:
 
-- dados públicos;
-- dados internos;
-- dados sensíveis;
+- public data;
+- internal data;
+- sensitive data;
 - PII;
-- dados financeiros;
-- dados de saúde;
-- dados legais/regulatórios;
-- credenciais e secrets.
+- financial data;
+- health data;
+- legal/regulatory data;
+- credentials and secrets.
 
-Para cada categoria, defina:
+For each category, define:
 
-- armazenamento;
-- acesso;
-- criptografia;
-- retenção;
+- storage;
+- access;
+- encryption;
+- retention;
 - logs;
 - backup;
-- exclusão.
+- deletion.
 
-#### 11.3.6 Validação e injeção
+#### 11.3.6 Validation and injection
 
-Defina:
+Define:
 
-- onde inputs são validados;
-- quais schemas são usados;
-- quem sanitiza output;
-- como evitar SQL injection, command injection, XSS e path traversal;
-- como uploads são validados;
-- como markdown, HTML ou conteúdo gerado por usuário é renderizado.
+- where inputs are validated;
+- which schemas are used;
+- who sanitizes output;
+- how to prevent SQL injection, command injection, XSS, and path traversal;
+- how uploads are validated;
+- how markdown, HTML, or user-generated content is rendered.
 
-#### 11.3.7 Dependências e supply chain
+#### 11.3.7 Dependencies and supply chain
 
-Defina:
+Define:
 
-- gerenciador de pacotes;
-- lockfile único;
-- política de audit;
-- atualização de dependências;
-- critérios para adicionar bibliotecas;
-- prevenção de pacotes abandonados ou desnecessários;
-- secret scanning quando aplicável.
+- package manager;
+- single lockfile;
+- audit policy;
+- dependency updates;
+- criteria for adding libraries;
+- prevention of abandoned or unnecessary packages;
+- secret scanning where applicable.
 
-#### 11.3.8 Logs, auditoria e monitoramento
+#### 11.3.8 Logs, audit, and monitoring
 
-Defina:
+Define:
 
-- eventos que devem ser logados;
-- eventos que não devem ser logados;
-- retenção de logs;
-- acesso aos logs;
-- trilha de auditoria;
-- alertas mínimos;
-- proteção contra vazamento de PII e secrets.
+- events that must be logged;
+- events that must not be logged;
+- log retention;
+- log access;
+- audit trail;
+- minimum alerts;
+- protection against PII and secrets leakage.
 
-#### 11.3.9 Checklist OWASP contextual
+#### 11.3.9 Contextual OWASP checklist
 
-Para cada item do OWASP Top 10, indique:
+For each item of the OWASP Top 10, indicate:
 
-- se é aplicável;
-- onde aparece no projeto;
-- risco principal;
-- mitigação;
-- pendência.
+- whether it is applicable;
+- where it appears in the project;
+- main risk;
+- mitigation;
+- open items.
 
-Não escreva apenas "não aplicável" sem justificativa.
+Do not write only "not applicable" without justification.
 
-Regra para agentes:
+Rule for agents:
 
-Segurança não é etapa final. Segurança vem antes da arquitetura.
-Se a segurança estiver incompleta, arquitetura e implementação devem declarar o risco.
+Security is not a final step. Security comes before architecture.
+If security is incomplete, architecture and implementation must declare the risk.
 
-### 11.4 `03_user_types.md` — Tipos de usuário
+### 11.4 `03_user_types.md` — User types
 
-Para cada perfil:
+For each profile:
 
 ```md
-## Nome do Perfil
+## Profile name
 
-- **Descrição:** quem é esse usuário
-- **Origem:** como entra no sistema
-- **Permissões:** ações permitidas
-- **Restrições:** ações proibidas
-- **Sessão:** expiração, renovação, logout
-- **Dados visíveis:** entidades e campos acessíveis
-- **Casos de borda:** inativo, convite expirado, downgrade, acesso simultâneo
+- **Description:** who this user is
+- **Origin:** how they enter the system
+- **Permissions:** allowed actions
+- **Restrictions:** prohibited actions
+- **Session:** expiration, renewal, logout
+- **Visible data:** accessible entities and fields
+- **Edge cases:** inactive, expired invite, downgrade, concurrent access
 ```
 
-Regra para agentes:
+Rule for agents:
 
-Não avance para banco, API ou autorização antes de entender os perfis.
+Do not advance to database, API, or authorization before understanding the profiles.
 
-### 11.5 `docs/epics/` — Épicos (capacidades de produto)
+### 11.5 `docs/epics/` — Epics (product capabilities)
 
-Cada épico vive em **`docs/epics/EPIC-XX.md`** (pasta flat, um arquivo por epic),
-no mesmo espírito de `docs/us/US-XXXX.md`. Não há índice markdown duplicado.
+Each epic lives in **`docs/epics/EPIC-XX.md`** (flat folder, one file per epic),
+in the same spirit as `docs/us/US-XXXX.md`. There is no duplicate markdown index.
 
-Formato de cada epic (`docs/epics/EPIC-XX.md`):
+Format for each epic (`docs/epics/EPIC-XX.md`):
 
 ```yaml
 ---
 id: EPIC-XX
-title: Nome curto
+title: Short name
 status: active | complete | paused
 versions: [v0, v1]
-profiles: [Perfil A, Perfil B]
-outcome: "Done do epic no nível produto — frase objetiva."
+profiles: [Profile A, Profile B]
+outcome: "Epic done at product level — objective sentence."
 ---
 
-# EPIC-XX — Nome
+# EPIC-XX — Name
 
-## Capacidade
+## Capability
 
-O que o usuário passa a conseguir (linguagem de produto).
+What the user is now able to do (product language).
 
-## Resultado esperado
+## Expected outcome
 
-Como o manager sabe que o epic pode ir para `complete`.
+How the manager knows the epic can move to `complete`.
 
-## Fora deste epic
+## Out of scope for this epic
 
-Limites — o que pertence a outro epic ou versão.
+Boundaries — what belongs to another epic or version.
 ```
 
-Regras:
+Rules:
 
-- IDs permanentes: `EPIC-01`, `EPIC-02`, … (nunca reutilizar).
-- Nome do arquivo deve coincidir com `id` (`EPIC-01.md` → `id: EPIC-01`).
-- `outcome` é obrigatório no frontmatter (done no nível produto, não implementação).
-- Não crie subpastas dentro de `docs/epics/`.
-- Só criar épicos e user stories depois de `05_architecture.md` `approved`.
-- User stories **referenciam** o epic (`epic: EPIC-XX`) — não repetem descrição, `outcome` nem escopo do epic.
+- Permanent IDs: `EPIC-01`, `EPIC-02`, … (never reuse).
+- Filename must match `id` (`EPIC-01.md` → `id: EPIC-01`).
+- `outcome` is mandatory in the frontmatter (done at product level, not implementation).
+- Do not create subfolders inside `docs/epics/`.
+- Only create epics and user stories after `05_architecture.md` is `approved`.
+- User stories **reference** the epic (`epic: EPIC-XX`) — they do not repeat the epic's description, `outcome`, or scope.
 
-Regra para agentes:
+Rule for agents:
 
-Epic não é módulo técnico. Epic é capacidade de produto. Novo epic → skill `create-epic`.
+An epic is not a technical module. An epic is a product capability. New epic → skill `create-epic`.
 
-### 11.6 `04_principles.md` — Princípios de código
+### 11.6 `04_principles.md` — Code principles
 
-Deve definir:
+Must define:
 
-- onde vivem componentes;
-- onde vivem validações;
-- onde vivem tipos;
-- onde vivem constantes;
-- onde vivem queries;
-- padrão de camadas;
-- nomenclatura;
+- where components live;
+- where validations live;
+- where types live;
+- where constants live;
+- where queries live;
+- layer pattern;
+- naming conventions;
 - branches;
 - commits;
-- tratamento de erros;
-- padrão de API;
-- padrões de formatação e lint.
+- error handling;
+- API pattern;
+- formatting and lint standards.
 
-Regra para agentes:
+Rule for agents:
 
-Use este documento para evitar que cada agente invente uma estrutura diferente.
+Use this document to prevent each agent from inventing a different structure.
 
-### 11.7 `docs/versions/` e `docs/sprints/` — Releases e sprints
+### 11.7 `docs/versions/` and `docs/sprints/` — Releases and sprints
 
-Cada versão vive em **`docs/versions/vX.md`**; sprints em **`docs/sprints/vX-SY.md`**.
-Não há índice markdown duplicado — a pasta é a fonte de verdade.
+Each version lives in **`docs/versions/vX.md`**; sprints in **`docs/sprints/vX-SY.md`**.
+There is no duplicate markdown index — the folder is the source of truth.
 
-Formato de cada versão (`docs/versions/vX.md`):
+Format for each version (`docs/versions/vX.md`):
 
 ```yaml
 ---
 id: v1
-title: Nome curto do release
+title: Short release name
 status: planned | active | complete
-outcome: "Done do release no nível produto."
+outcome: "Release done at product level."
 ---
 
-# v1 — Nome
+# v1 — Name
 
-## Objetivo
-## Critério de Done
-## Incluído nesta versão
-## Explicitamente fora
-## Checklist go-live
+## Objective
+## Done criteria
+## Included in this version
+## Explicitly out
+## Go-live checklist
 ## Sprints
 ```
 
-Formato de cada sprint (`docs/sprints/v1-S1.md`):
+Format for each sprint (`docs/sprints/v1-S1.md`):
 
 ```yaml
 ---
 id: v1-S1
 version: v1
-title: Nome da sprint
+title: Sprint name
 status: planned | active | complete
-done_when: "Condição objetiva."
+done_when: "Objective condition."
 stories: [US-0001, US-0002]
 ---
 
-# v1-S1 — Nome
+# v1-S1 — Name
 
-(tabela opcional de US no corpo)
+(optional US table in the body)
 ```
 
-Regras:
+Rules:
 
-- IDs de versão: `v0`, `v1`, `v2`… (`v0.md` → `id: v0`). `v0` é fundação técnica — não vender como produto.
-- IDs de sprint: `v1-S1`, `v2-S1`…
-- User stories referenciam **`version: vX`** — não repetem plano da versão.
-- Epics referenciam **`versions: [v0, v1]`** — releases onde a capacidade entra.
-- Gate de US: `05_architecture.md` = `approved` + epic/version existem nas pastas.
-- Novo release → skill `create-version` ou `/create-version`.
-- Nova sprint → skill `create-sprint` ou `/plan-sprint`.
+- Version IDs: `v0`, `v1`, `v2`… (`v0.md` → `id: v0`). `v0` is technical foundation — do not sell as product.
+- Sprint IDs: `v1-S1`, `v2-S1`…
+- User stories reference **`version: vX`** — they do not repeat the version plan.
+- Epics reference **`versions: [v0, v1]`** — releases where the capability lands.
+- US gate: `05_architecture.md` = `approved` + epic/version exist in the folders.
+- New release → skill `create-version` or `/create-version`.
+- New sprint → skill `create-sprint` or `/plan-sprint`.
 
-### 11.8 `05_architecture.md` — Arquitetura
+### 11.8 `05_architecture.md` — Architecture
 
-Deve cobrir:
+Must cover:
 
-- tipo de arquitetura;
-- diagrama de componentes;
-- fluxo de dados;
-- estrutura do frontend;
-- estrutura do backend;
-- estratégia de estado;
-- estratégia de fetch/cache;
-- estratégia de formulários;
-- integrações externas;
-- logging e observabilidade.
+- architecture type;
+- component diagram;
+- data flow;
+- frontend structure;
+- backend structure;
+- state strategy;
+- fetch/cache strategy;
+- form strategy;
+- external integrations;
+- logging and observability.
 
-Regra para agentes:
+Rule for agents:
 
-Arquitetura deve explicar decisões, não apenas listar pastas.
+Architecture must explain decisions, not just list folders.
 
-### 11.9 `06_database.md` — Banco de dados
+### 11.9 `06_database.md` — Database
 
-Deve cobrir:
+Must cover:
 
-- diagrama ER;
-- tabelas/collections;
-- campos;
-- tipos;
+- ER diagram;
+- tables/collections;
+- fields;
+- types;
 - nullable;
 - defaults;
-- índices;
-- relacionamentos;
-- auditoria;
+- indexes;
+- relationships;
+- audit;
 - soft delete;
-- campos sensíveis;
+- sensitive fields;
 - migrations;
 - seeds.
 
-Campos de auditoria recomendados:
+Recommended audit fields:
 
 ```sql
 id UUID PRIMARY KEY DEFAULT gen_random_uuid()
@@ -846,54 +841,54 @@ deleted_at TIMESTAMPTZ NULL
 created_by UUID REFERENCES users(id)
 ```
 
-### 11.10 `07_api_contracts.md` — Contratos de API
+### 11.10 `07_api_contracts.md` — API contracts
 
-Para cada endpoint:
+For each endpoint:
 
 ```md
 ## METHOD /path
 
-- **Autenticação:** obrigatória | pública
-- **Permissão mínima:** perfil
-- **Versão:** disponível a partir de vX
+- **Authentication:** required | public
+- **Minimum permission:** profile
+- **Version:** available from vX
 
 ### Request
 
-### Response — Sucesso
+### Response — Success
 
-### Response — Erros
+### Response — Errors
 ```
 
-Regra:
+Rule:
 
-Contrato de API completo depende do banco quando o endpoint retorna dados persistidos.
+A complete API contract depends on the database when the endpoint returns persisted data.
 
-### 11.11 `08_environments.md` — Ambientes
+### 11.11 `08_environments.md` — Environments
 
-Deve cobrir:
+Must cover:
 
-- pré-requisitos;
-- setup local;
-- comandos do dia a dia;
-- variáveis de ambiente;
-- arquivos protegidos;
-- ambientes disponíveis;
-- diferenças entre ambientes.
+- prerequisites;
+- local setup;
+- day-to-day commands;
+- environment variables;
+- protected files;
+- available environments;
+- differences between environments.
 
-Regra:
+Rule:
 
-`.env` e `.env.*` não devem entrar no Git.
-Use `.env.example` como contrato versionado.
+`.env` and `.env.*` must not go into Git.
+Use `.env.example` as the versioned contract.
 
-### 11.12 `11_decisions.md` + `docs/decisions/` — Log de decisões
+### 11.12 `11_decisions.md` + `docs/decisions/` — Decision log
 
-Começa no dia 1.
-`11_decisions.md` é stub com regras; o log vive em **`docs/decisions/YYYY-MM-DD.json`** — um arquivo por dia.
+Starts on day 1.
+`11_decisions.md` is a stub with rules; the log lives in **`docs/decisions/YYYY-MM-DD.json`** — one file per day.
 
-Novas entradas vão **no início** do array `entries` (prepend no mesmo dia).
-Nunca edite uma entrada antiga; registre uma nova decisão acima das anteriores.
+New entries go **at the beginning** of the `entries` array (prepend on the same day).
+Never edit an old entry; record a new decision above the previous ones.
 
-Formato do arquivo diário:
+Format of the daily file:
 
 ```json
 {
@@ -901,100 +896,100 @@ Formato do arquivo diário:
   "entries": [
     {
       "time": "17:30",
-      "title": "Título objetivo",
-      "affected_document": "caminho/do/doc.md",
-      "what_changed": "descrição objetiva",
-      "why_changed": "contexto e motivação",
-      "impact": "lista de docs afetados",
-      "responsible": "pessoa ou papel"
+      "title": "Objective title",
+      "affected_document": "path/to/doc.md",
+      "what_changed": "objective description",
+      "why_changed": "context and motivation",
+      "impact": "list of affected docs",
+      "responsible": "person or role"
     }
   ]
 }
 ```
 
-Regras:
+Rules:
 
-- `date` deve coincidir com o nome do arquivo (`2026-06-02.json`).
-- `time` usa formato `HH:MM` (24h).
-- Novo dia calendário → novo arquivo JSON.
-- Mesmo dia → prepend em `entries[0]`.
+- `date` must match the filename (`2026-06-02.json`).
+- `time` uses `HH:MM` format (24h).
+- New calendar day → new JSON file.
+- Same day → prepend at `entries[0]`.
 
-Arquivamento: quando um dia acumular dezenas de entradas, mantenha o arquivo do dia;
-dias antigos permanecem como histórico imutável na pasta.
+Archiving: when a day accumulates dozens of entries, keep the day's file;
+old days remain as immutable history in the folder.
 
 ---
 
 ## 12. User stories
 
-Cada US é um arquivo individual em:
+Each US is an individual file in:
 
 ```txt
 docs/us/US-XXXX.md
 ```
 
-A pasta é flat.
-Não crie subpastas por epic.
+The folder is flat.
+Do not create subfolders by epic.
 
-Cada US referencia um epic em `docs/epics/` via frontmatter `epic: EPIC-XX`.
-O epic referenciado deve existir como arquivo em `docs/epics/`.
+Each US references an epic in `docs/epics/` via the frontmatter `epic: EPIC-XX`.
+The referenced epic must exist as a file in `docs/epics/`.
 
-### 12.1 Regra de criação
+### 12.1 Creation rule
 
-US só podem ser criadas após:
+USs can only be created after:
 
 ```txt
 05_architecture.md = approved
-epic referenciado em docs/epics/
-version referenciada em docs/versions/
+referenced epic in docs/epics/
+referenced version in docs/versions/
 ```
 
-### 12.2 Política de IDs
+### 12.2 ID policy
 
-- IDs são permanentes.
-- IDs nunca são reutilizados.
-- Formato fixo: **`US-XXXX`** — quatro dígitos com zero à esquerda (`US-0001`, `US-0017`, `US-0123`).
-- Nome do arquivo deve coincidir com `id` (`US-0001.md` → `id: US-0001`).
-- Buracos são aceitáveis.
-- Próximo ID = maior número existente + 1, sempre com 4 dígitos.
+- IDs are permanent.
+- IDs are never reused.
+- Fixed format: **`US-XXXX`** — four digits with leading zeros (`US-0001`, `US-0017`, `US-0123`).
+- Filename must match `id` (`US-0001.md` → `id: US-0001`).
+- Gaps are acceptable.
+- Next ID = highest existing number + 1, always with 4 digits.
 
-### 12.3 Frontmatter de US
+### 12.3 US frontmatter
 
 ```yaml
 ---
 id: US-XXXX
-title: Título curto
+title: Short title
 epic: EPIC-XX
 version: v1
 status: ✅ | 🔶 | ❌ | 🧊
 moscow: Must | Should | Could | Won't
 depends_on: [US-YYYY]
-done_when: "Condição objetiva e mensurável."
+done_when: "Objective and measurable condition."
 tests: required | none
 tests_status: pending | done | n/a
 ---
 ```
 
-### 12.4 Corpo de US
+### 12.4 US body
 
 ```md
-# US-XXXX — Título curto
+# US-XXXX — Short title
 
-**Como** [tipo de usuário],
-**quero** [ação],
-**para que** [benefício].
+**As** [user type],
+**I want** [action],
+**so that** [benefit].
 
-## Aceite
+## Acceptance
 
-- Condição objetiva
-- Condição objetiva
-- **Falta:** obrigatório quando status = 🔶
+- Objective condition
+- Objective condition
+- **Missing:** required when status = 🔶
 
-## Implementação técnica
+## Technical implementation
 
-> **Criação:** placeholder ou plano preliminar opcional.  
-> **Fechamento (`✅`):** registro real — arquivos tocados, resumo por camada. Skill `complete-user-story`.
+> **Creation:** placeholder or optional preliminary plan.  
+> **Closing (`✅`):** real record — touched files, summary by layer. Skill `complete-user-story`.
 
-### Arquivos
+### Files
 
 ### Backend
 
@@ -1002,232 +997,232 @@ tests_status: pending | done | n/a
 
 ### Scripts / Docs
 
-## Testes
+## Tests
 
-> **Criação:** preencher **Planejado**. **Fechamento:** marcar `[x]` e registrar em **Executado**; então `tests_status: done`.
+> **Creation:** fill in **Planned**. **Closing:** check `[x]` and record in **Executed**; then set `tests_status: done`.
 
-### Planejado
+### Planned
 
-- [ ] **automated** — `pnpm test` — descrever escopo
-- [ ] **manual** — passos e resultado esperado
+- [ ] **automated** — `pnpm test` — describe scope
+- [ ] **manual** — steps and expected result
 
-### Executado
+### Executed
 
-_(pendente)_
+_(pending)_
 
-## Fora de escopo desta story
+## Out of scope for this story
 
-## Notas
+## Notes
 ```
 
-### 12.5 Status de US
+### 12.5 US statuses
 
-| Símbolo | Nome         | Significado                        |
-| ------- | ------------ | ---------------------------------- |
-| ✅      | Concluída    | Entregue e aceite comprovado       |
-| 🔶      | Em andamento | Parcial; precisa declarar `Falta:` |
-| ❌      | Pendente     | Ainda não existe para o usuário    |
-| 🧊      | Congelada    | Won't do nesta versão              |
+| Symbol | Name        | Meaning                                  |
+| ------ | ----------- | ---------------------------------------- |
+| ✅     | Done        | Delivered and acceptance proven          |
+| 🔶     | In progress | Partial; must declare `Missing:`         |
+| ❌     | Pending     | Does not exist yet for the user          |
+| 🧊     | Frozen      | Won't do in this version                 |
 
-Regras:
+Rules:
 
-- `✅` exige aceite comprovado e, se `tests: required`, `tests_status: done` com **Planejado** `[x]` e **Executado** preenchido.
-- `🔶` exige `Falta:` no aceite.
-- `❌` não deve esconder trabalho parcial.
-- `🧊` exige decisão deliberada, não esquecimento.
+- `✅` requires proven acceptance and, if `tests: required`, `tests_status: done` with **Planned** `[x]` and **Executed** filled in.
+- `🔶` requires `Missing:` in the acceptance section.
+- `❌` must not hide partial work.
+- `🧊` requires a deliberate decision, not forgetfulness.
 
-**Campos de teste (frontmatter):**
+**Test fields (frontmatter):**
 
-| Campo | Valores | Uso |
-| ----- | ------- | --- |
-| `tests` | `required` / `none` | US precisa de verificação antes de fechar? |
-| `tests_status` | `pending` / `done` / `n/a` | `n/a` só com `tests: none` |
+| Field          | Values                    | Use                                            |
+| -------------- | ------------------------- | ---------------------------------------------- |
+| `tests`        | `required` / `none`       | Does the US need verification before closing?  |
+| `tests_status` | `pending` / `done` / `n/a` | `n/a` only with `tests: none`                 |
 
-**Coluna derivada no monitor:** `🧪` quando `tests: required` e `tests_status: pending` (não gravar emoji no YAML).
+**Derived column in the monitor:** `🧪` when `tests: required` and `tests_status: pending` (do not store emoji in YAML).
 
 ---
 
 ## 13. Board JSON
 
-O board canônico é:
+The canonical board is:
 
 ```txt
 docs/kanban/board.json
 ```
 
-Ele é gerado a partir dos frontmatters dos arquivos `docs/us/US-XXXX.md`.
+It is generated from the frontmatters of `docs/us/US-XXXX.md` files.
 
-Estrutura:
+Structure:
 
 ```json
 [
   {
     "id": "US-0001",
-    "title": "Título curto",
+    "title": "Short title",
     "epic": "EPIC-01",
     "version": "v1",
     "status": "❌",
     "moscow": "Must",
     "depends_on": ["US-0002"],
-    "done_when": "Condição objetiva de conclusão."
+    "done_when": "Objective completion condition."
   }
 ]
 ```
 
-Regras para agentes:
+Rules for agents:
 
-- Não edite `board.json` como fonte primária.
-- Atualize US primeiro.
-- Gere `board.json` depois.
-- Se houver divergência entre US e board, a US vence.
-- CSV é exportação futura, não fonte de verdade.
-
----
-
-## 14. Agentes de IA dentro do fluxo Meridian
-
-Meridian assume que agentes de IA serão usados.
-Mas agentes devem trabalhar com governança.
-
-### 14.1 O agente pode
-
-- criar rascunhos de documentos;
-- sugerir decisões;
-- apontar riscos;
-- criar user stories após desbloqueio;
-- implementar US aprovadas;
-- rodar testes;
-- atualizar documentação afetada;
-- gerar `board.json`;
-- sugerir próximos passos.
-
-### 14.2 O agente não deve
-
-- começar pelo código sem documentação mínima;
-- inventar escopo sem registrar premissas;
-- criar US antes de epics e versões aprovados;
-- marcar algo como `✅` sem evidência;
-- editar decisões antigas;
-- esconder bloqueios;
-- transformar Meridian em uma rede complexa de agentes autônomos;
-- agir indefinidamente sem devolver visibilidade ao manager do processo.
-- ler, copiar ou expor secrets sem necessidade explícita;
-- enviar dados sensíveis para serviços externos sem autorização;
-- executar comandos destrutivos sem confirmação;
-- enfraquecer autenticação, autorização ou validação para acelerar entrega;
-- tratar código gerado como confiável sem revisão.
-
-### 14.3 Como o agente deve responder quando faltar documentação
-
-Se o usuário pedir implementação e a documentação mínima não existir, o agente deve dizer:
-
-1. qual documento falta;
-2. por que ele bloqueia a implementação;
-3. qual é o menor conteúdo necessário para avançar;
-4. se pode criar um rascunho para revisão.
-
-O agente deve preferir progresso documentado a velocidade sem direção.
+- Do not edit `board.json` as a primary source.
+- Update the US first.
+- Generate `board.json` afterwards.
+- If there is a divergence between a US and the board, the US wins.
+- CSV is a future export, not a source of truth.
 
 ---
 
-## 15. Checklist de bootstrap para agente
+## 14. AI agents within the Meridian flow
 
-Ao receber um projeto novo com este arquivo, execute:
+Meridian assumes AI agents will be used.
+But agents must work with governance.
 
-1. Ler `meridian.md` inteiro.
-2. Verificar se existe `docs/`.
-3. Se não existir, criar estrutura base.
-4. Criar `docs/11_decisions.md` (stub) e `docs/decisions/YYYY-MM-DD.json`.
-5. Registrar a decisão inicial em JSON: "Projeto iniciado com Meridian".
-6. Criar `docs/00_scope.md` em `draft`.
-7. Perguntar ou inferir com cuidado o escopo inicial.
-8. Promover `00_scope.md` para `review` apenas quando estiver completo.
-9. Só promover para `approved` quando houver confirmação humana ou autorização explícita.
-10. Criar os demais documentos respeitando dependências.
-11. Criar `docs/kanban/board.json` como array vazio.
-12. Se existir ou for desejado, criar `.agent/` com agents, skills, workflows, rules e scripts.
-13. Garantir `.gitignore` mínimo antes de qualquer segredo ou dependência local.
-14. Não criar US até `05_architecture` estar `approved` e epic/version existirem nas pastas.
-15. Antes de escrever código, identificar versão, epic e US.
-16. Após implementar, atualizar US, docs afetados e board.
+### 14.1 The agent may
 
----
+- create document drafts;
+- suggest decisions;
+- point out risks;
+- create user stories after unblocking;
+- implement approved USs;
+- run tests;
+- update affected documentation;
+- generate `board.json`;
+- suggest next steps.
 
-## 16. Checklist antes de código
+### 14.2 The agent must not
 
-Antes de qualquer implementação, confirme:
+- start with code without minimum documentation;
+- invent scope without recording assumptions;
+- create USs before epics and versions are approved;
+- mark anything as `✅` without evidence;
+- edit old decisions;
+- hide blockers;
+- turn Meridian into a complex network of autonomous agents;
+- act indefinitely without returning visibility to the process manager;
+- read, copy, or expose secrets without explicit need;
+- send sensitive data to external services without authorization;
+- execute destructive commands without confirmation;
+- weaken authentication, authorization, or validation to speed up delivery;
+- treat generated code as trustworthy without review.
 
-- Existe `00_scope.md`?
-- O escopo relevante está aprovado?
-- A stack está definida?
-- Segurança foi documentada com ameaças, segredos, dados e permissões?
-- Tipos de usuário existem?
-- Existe epic relacionado?
-- Existe versão relacionada?
-- Existe US relacionada?
-- Dependências da US estão concluídas?
-- Critério de aceite está claro?
-- Testes ou validações esperadas estão definidos?
-- `.env`, secrets, builds e dependências locais estão protegidos no Git?
-- O agente precisa de alguma skill específica antes de executar?
+### 14.3 How the agent should respond when documentation is missing
 
-Se a resposta for "não" para algum item essencial, documente antes.
+If the user asks for implementation and the minimum documentation does not exist, the agent must say:
 
----
+1. which document is missing;
+2. why it blocks implementation;
+3. what is the smallest content needed to move forward;
+4. whether it can create a draft for review.
 
-## 17. Checklist de done
-
-Uma entrega só está done quando:
-
-- código foi implementado;
-- build/lint/test aplicável passou;
-- aceite foi validado;
-- `## Implementação técnica` da US preenchida com arquivos alterados/criados e resumo do que foi feito (sem placeholder);
-- documentação afetada foi atualizada;
-- decisões relevantes foram registradas;
-- US foi atualizada (aceite, status, implementação, testes);
-- `board.json` foi regenerado;
-- nada ficou `🔶` sem `Falta:`.
+The agent should prefer documented progress over speed without direction.
 
 ---
 
-## 18. Meridian e ferramentas de gestão
+## 15. Bootstrap checklist for agents
 
-Meridian pode ser usado sem ferramenta.
+Upon receiving a new project with this file, execute:
 
-Um sistema de gestão Meridian pode abrir uma pasta de projeto e monitorar:
+1. Read `.agent/MERIDIAN.md` in full.
+2. Check whether `docs/` exists.
+3. If it does not exist, create the base structure.
+4. Create `docs/11_decisions.md` (stub) and `docs/decisions/YYYY-MM-DD.json`.
+5. Record the initial decision in JSON: "Project initialized with Meridian".
+6. Create `docs/00_scope.md` in `draft`.
+7. Ask for or carefully infer the initial scope.
+8. Promote `00_scope.md` to `review` only when it is complete.
+9. Only promote to `approved` when there is human confirmation or explicit authorization.
+10. Create the remaining documents respecting dependencies.
+11. Create `docs/kanban/board.json` as an empty array.
+12. If desired or present, create `.agent/` with agents, skills, workflows, rules, and scripts.
+13. Ensure a minimum `.gitignore` before any secret or local dependency.
+14. Do not create USs until `05_architecture` is `approved` and epic/version exist in the folders.
+15. Before writing code, identify the version, epic, and US.
+16. After implementing, update the US, affected docs, and the board.
 
-- documentos de fase;
-- status;
-- dependências;
-- bloqueios;
-- decisões;
+---
+
+## 16. Pre-code checklist
+
+Before any implementation, confirm:
+
+- Does `00_scope.md` exist?
+- Is the relevant scope approved?
+- Is the stack defined?
+- Has security been documented with threats, secrets, data, and permissions?
+- Do user types exist?
+- Is there a related epic?
+- Is there a related version?
+- Is there a related US?
+- Are the US dependencies done?
+- Is the acceptance criterion clear?
+- Are expected tests or validations defined?
+- Are `.env`, secrets, builds, and local dependencies protected in Git?
+- Does the agent need any specific skill before executing?
+
+If the answer is "no" for any essential item, document first.
+
+---
+
+## 17. Done checklist
+
+A delivery is only done when:
+
+- code has been implemented;
+- applicable build/lint/test has passed;
+- acceptance has been validated;
+- `## Technical implementation` of the US is filled with changed/created files and a summary of what was done (no placeholder);
+- affected documentation has been updated;
+- relevant decisions have been recorded;
+- the US has been updated (acceptance, status, implementation, tests);
+- `board.json` has been regenerated;
+- nothing is left `🔶` without `Missing:`.
+
+---
+
+## 18. Meridian and management tools
+
+Meridian can be used without any tool.
+
+A Meridian management system can open a project folder and monitor:
+
+- phase documents;
+- statuses;
+- dependencies;
+- blockers;
+- decisions;
 - user stories;
 - board JSON;
-- inconsistências.
+- inconsistencies.
 
-Mas a ferramenta não é a fonte de verdade.
+But the tool is not the source of truth.
 
-A fonte de verdade é a pasta do projeto.
+The source of truth is the project folder.
 
-Isso permite que qualquer pessoa use Meridian apenas com arquivos, e que ferramentas
-visuais sejam camadas opcionais por cima do protocolo.
-
----
-
-## 19. Frase operacional
-
-Quando houver dúvida, aplique esta regra:
-
-> Se não está documentado, não está pronto para ser implementado.
-> Se foi implementado, precisa estar refletido na documentação.
-> Se um agente trabalhou, o manager do processo precisa conseguir auditar o que mudou.
+This allows anyone to use Meridian with only files, and visual tools to be
+optional layers on top of the protocol.
 
 ---
 
-## 20. Versão deste protocolo
+## 19. Operational phrase
+
+When in doubt, apply this rule:
+
+> If it is not documented, it is not ready to be implemented.
+> If it has been implemented, it must be reflected in the documentation.
+> If an agent worked, the process manager must be able to audit what changed.
+
+---
+
+## 20. Protocol version
 
 Meridian Protocol Version: 1.0
 
-Este arquivo é feito para ser copiado para qualquer projeto como iniciador de trabalho
-com agentes de IA e desenvolvimento consistente.
+This file is meant to be copied to any project as a starter for working
+with AI agents and consistent development.

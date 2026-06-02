@@ -50,10 +50,11 @@ export function UsageGuideView() {
       <section className={cn(monitorPanelClass, "p-4 sm:p-5")}>
         <div className="flex items-center gap-2">
           <Compass className="h-5 w-5 text-meridian" aria-hidden />
-          <h3 className={typeScale.sectionTitle}>Onde estou?</h3>
+          <h3 className={typeScale.sectionTitle}>Where am I?</h3>
         </div>
         <p className={cn(typeScale.bodySm, "mt-2 text-muted-foreground")}>
-          Abra a seção que combina com sua situação — não precisa ler tudo.
+          Open the section that matches your situation — you do not need to read
+          everything.
         </p>
         <ul className="mt-4 space-y-2">
           {usageSituations.map((item) => (
@@ -96,9 +97,9 @@ export function UsageGuideView() {
           )}
         >
           <div className="min-w-0 flex-1">
-            <h3 className={typeScale.sectionTitle}>Referência de comandos</h3>
+            <h3 className={typeScale.sectionTitle}>Command reference</h3>
             <p className={cn(typeScale.caption, "mt-0.5")}>
-              Slash commands no chat do Cursor
+              Slash commands in the Cursor chat
             </p>
           </div>
           <ChevronDown
@@ -125,9 +126,9 @@ export function UsageGuideView() {
         >
           <AlertTriangle className="h-5 w-5 shrink-0 text-amber-600" aria-hidden />
           <div className="min-w-0 flex-1">
-            <h3 className={typeScale.sectionTitle}>Validar e evitar erros</h3>
+            <h3 className={typeScale.sectionTitle}>Validate and avoid mistakes</h3>
             <p className={cn(typeScale.caption, "mt-0.5")}>
-              Script de validação e anti-padrões comuns
+              Validation script and common anti-patterns
             </p>
           </div>
           <ChevronDown

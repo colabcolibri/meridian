@@ -23,9 +23,9 @@ export function SetupProgressHeader({
   return (
     <Card>
       <CardHeader>
-        <CardTitle className={typeScale.pageTitle}>Configuração do projeto</CardTitle>
+        <CardTitle className={typeScale.pageTitle}>Project setup</CardTitle>
         <CardDescription className={typeScale.bodySm}>
-          {complete} de {total} documentos prontos no protocolo Meridian
+          {complete} of {total} documents ready in the Meridian protocol
         </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-6 sm:flex-row sm:items-end sm:justify-between">
@@ -46,13 +46,13 @@ export function SetupProgressHeader({
               style={{ width: `${percent}%` }}
             />
           </div>
-          <p className={cn(typeScale.caption, "mt-2")}>{percent}% concluído</p>
+          <p className={cn(typeScale.caption, "mt-2")}>{percent}% complete</p>
         </div>
 
         {nextStep ? (
           <div className="shrink-0 rounded-lg border border-meridian-border bg-meridian-muted px-5 py-4 sm:max-w-sm">
             <p className={cn(typeScale.label, "text-meridian-muted-foreground")}>
-              Próximo foco
+              Next focus
             </p>
             <p className={cn(typeScale.cardTitle, "mt-2 text-foreground")}>
               {nextStep.title}
@@ -68,7 +68,7 @@ export function SetupProgressHeader({
               "shrink-0 rounded-lg border border-meridian-success/30 bg-meridian-success-muted px-5 py-4 text-meridian-success-foreground",
             )}
           >
-            Todos os documentos estão em dia no fluxo.
+            All documents are up to date in the flow.
           </div>
         )}
       </CardContent>

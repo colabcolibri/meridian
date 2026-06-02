@@ -2,18 +2,18 @@
 description: Report current Meridian project health, blockers and next actions.
 ---
 
-# /status — saúde do projeto
+# /status — project health
 
 $ARGUMENTS
 
 ---
 
-## Regras críticas
+## Critical rules
 
-1. **Somente leitura** — não altere docs sem pedido explícito no `$ARGUMENTS`
+1. **Read-only** — do not change docs without explicit request in `$ARGUMENTS`
 2. Use `process-manager`
-3. Leia `docs/README.md` e frontmatter de `00`–`11`
-4. Opcional: `python .agent/scripts/validate_meridian.py <root>`
+3. Read `docs/README.md` and frontmatter of `00`–`11`
+4. Optional: `python .agent/scripts/validate_meridian.py <root>`
 
 ---
 
@@ -25,7 +25,7 @@ CONTEXT:
 - Mode: STATUS REPORT
 
 PROCEDURE:
-1. Read meridian.md or .agent/MERIDIAN.md
+1. Read .agent/MERIDIAN.md
 2. Read docs/README.md
 3. For each phase doc 00–08 and 11: record status from frontmatter
 4. Count US by status from docs/us/ or board.json
@@ -35,7 +35,7 @@ PROCEDURE:
 
 ---
 
-## Saída
+## Output
 
 ```txt
 Current phase:

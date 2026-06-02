@@ -1,40 +1,40 @@
-# Checklists de segurança Meridian
+# Meridian security checklists
 
-Use com `02_security.md`. Marque cada seção no doc ou no relatório.
+Use with `02_security.md`. Mark each section in the doc or report.
 
-## 1. Segredos
+## 1. Secrets
 
-- [ ] `.env` e `.env.*` no `.gitignore`
-- [ ] `.env.example` sem valores reais
-- [ ] Sem secrets em código, docs, testes
-- [ ] Logs não vazam tokens/PII
-- [ ] Plano de rotação de chaves (se aplicável)
+- [ ] `.env` and `.env.*` in `.gitignore`
+- [ ] `.env.example` without real values
+- [ ] No secrets in code, docs, tests
+- [ ] Logs do not leak tokens/PII
+- [ ] Key rotation plan (if applicable)
 
-## 2. Dados sensíveis
+## 2. Sensitive data
 
-- [ ] PII identificada
-- [ ] Dados regulados mapeados
-- [ ] Armazenamento e retenção definidos
-- [ ] Minimização de coleta
+- [ ] PII identified
+- [ ] Regulated data mapped
+- [ ] Storage and retention defined
+- [ ] Data collection minimization
 
-## 3. Autenticação
+## 3. Authentication
 
-- [ ] Modelo definido (sessão/JWT/OAuth/SSO)
-- [ ] Expiração e revogação
-- [ ] MFA (atual ou futuro documentado)
+- [ ] Model defined (session/JWT/OAuth/SSO)
+- [ ] Expiration and revocation
+- [ ] MFA (current or future documented)
 
-## 4. Autorização
+## 4. Authorization
 
-- [ ] Alinhado a `03_user_types.md`
-- [ ] RBAC/ABAC/custom explícito
-- [ ] Menor privilégio por ação sensível
-- [ ] Multi-tenant / IDOR considerados
+- [ ] Aligned with `03_user_types.md`
+- [ ] RBAC/ABAC/custom explicit
+- [ ] Least privilege per sensitive action
+- [ ] Multi-tenant / IDOR considered
 
-## 5. Inputs e outputs
+## 5. Inputs and outputs
 
-- [ ] Validação server-side
-- [ ] Schemas compartilhados quando útil
-- [ ] Uploads com limites e tipo
+- [ ] Server-side validation
+- [ ] Shared schemas when useful
+- [ ] Uploads with limits and type
 
 ## 6. OWASP (contextual)
 
@@ -49,22 +49,22 @@ Use com `02_security.md`. Marque cada seção no doc ou no relatório.
 - [ ] Logging/Monitoring Failures
 - [ ] SSRF
 
-## 7. Agentes de IA
+## 7. AI agents
 
-- [ ] Sem arquivos sensíveis desnecessários no contexto
-- [ ] Sem comandos destrutivos não aprovados
-- [ ] Sem envio de dados privados a serviços externos sem permissão
-- [ ] Mudanças de segurança registradas em `docs/decisions/YYYY-MM-DD.json`
+- [ ] No unnecessary sensitive files in context
+- [ ] No unapproved destructive commands
+- [ ] No sending private data to external services without permission
+- [ ] Security changes registered in `docs/decisions/YYYY-MM-DD.json`
 
-## 8. Dependências
+## 8. Dependencies
 
-- [ ] Lockfile único
-- [ ] `npm audit` / equivalente documentado
-- [ ] Estratégia de atualização
+- [ ] Single lockfile
+- [ ] `npm audit` / equivalent documented
+- [ ] Update strategy
 
-## 9. Git e supply chain
+## 9. Git and supply chain
 
-- [ ] `.gitignore` desde o início
-- [ ] Hooks lint/test (se aplicável)
-- [ ] Secret scanning planejado
-- [ ] CI planejado
+- [ ] `.gitignore` from the start
+- [ ] Lint/test hooks (if applicable)
+- [ ] Secret scanning planned
+- [ ] CI planned

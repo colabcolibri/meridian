@@ -1,29 +1,29 @@
 ---
 name: Bug report
-about: Reportar um problema no kit ou no app desktop
+about: Report a problem in the kit or desktop app
 title: "[bug] "
 labels: bug
 assignees: ""
 ---
 
-## Descrição
+## Description
 
-<!-- O que aconteceu? -->
+<!-- What happened? -->
 
-## Passos para reproduzir
+## Steps to reproduce
 
 1.
 2.
 
-## Comportamento esperado
+## Expected behavior
 
-## Ambiente
+## Environment
 
-- SO:
-- Navegador (app desktop):
-- IDE (Cursor / outro):
-- Commit ou tag:
+- OS:
+- Browser (desktop app):
+- IDE (Cursor / other):
+- Commit or tag:
 
 ## Logs / screenshots
 
-<!-- Se aplicável -->
+<!-- If applicable -->

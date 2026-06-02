@@ -14,9 +14,9 @@ import { typeScale } from "@/features/monitor/monitor-typography"
 import { cn } from "@/lib/utils"
 
 function releaseStatusLabel(status: ProductVersion["status"]) {
-  if (status === "complete") return "concluída"
-  if (status === "active") return "ativa"
-  return "planejada"
+  if (status === "complete") return "complete"
+  if (status === "active") return "active"
+  return "planned"
 }
 
 function VersionCard({
@@ -68,7 +68,7 @@ function VersionCard({
           <span className="font-medium text-foreground">
             {done}/{total}
           </span>{" "}
-          user stories nesta versão
+          user stories in this version
         </div>
       </CardContent>
     </Card>
@@ -92,17 +92,17 @@ export function VersionsView({
     <div className="space-y-6">
       <div className="flex items-center gap-2">
         <GitBranch className="h-5 w-5 text-meridian" aria-hidden />
-        <h2 className={typeScale.sectionTitle}>Versões (releases)</h2>
+        <h2 className={typeScale.sectionTitle}>Versions (releases)</h2>
       </div>
       <p className={typeScale.bodySm}>
-        Releases lidos de <code className="font-mono text-xs">docs/versions/</code>.
-        Sprints em <code className="font-mono text-xs">docs/sprints/</code>. Cada US
-        referencia <code className="font-mono text-xs">version: vX</code> no
+        Releases read from <code className="font-mono text-xs">docs/versions/</code>.
+        Sprints in <code className="font-mono text-xs">docs/sprints/</code>. Each US
+        references <code className="font-mono text-xs">version: vX</code> in the
         frontmatter.
       </p>
       {active.length > 0 ? (
         <div>
-          <h3 className={cn(typeScale.label, "mb-4 text-foreground")}>Ativas</h3>
+          <h3 className={cn(typeScale.label, "mb-4 text-foreground")}>Active</h3>
           <div className="grid gap-4 md:grid-cols-2">
             {active.map((version) => (
               <VersionCard
@@ -117,7 +117,7 @@ export function VersionsView({
       ) : null}
       {complete.length > 0 ? (
         <div>
-          <h3 className={cn(typeScale.label, "mb-4 text-foreground")}>Concluídas</h3>
+          <h3 className={cn(typeScale.label, "mb-4 text-foreground")}>Complete</h3>
           <div className="grid gap-4 md:grid-cols-2">
             {complete.map((version) => (
               <VersionCard
@@ -132,7 +132,7 @@ export function VersionsView({
       ) : null}
       {planned.length > 0 ? (
         <div>
-          <h3 className={cn(typeScale.label, "mb-4 text-foreground")}>Planejadas</h3>
+          <h3 className={cn(typeScale.label, "mb-4 text-foreground")}>Planned</h3>
           <div className="grid gap-4 md:grid-cols-2">
             {planned.map((version) => (
               <VersionCard

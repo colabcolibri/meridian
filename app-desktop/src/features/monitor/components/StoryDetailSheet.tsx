@@ -37,7 +37,7 @@ export function StoryDetailSheet({
       summary={
         <div className="space-y-4">
           <div className="space-y-1">
-            <p className={typeScale.label}>Entrega (done_when)</p>
+            <p className={typeScale.label}>Delivery (done_when)</p>
             <p className={typeScale.bodySm}>{story.doneWhen}</p>
           </div>
 
@@ -51,14 +51,14 @@ export function StoryDetailSheet({
 
           {story.dependsOn.length > 0 ? (
             <div className="space-y-1">
-              <p className={typeScale.label}>Depende de</p>
+              <p className={typeScale.label}>Depends on</p>
               <p className={typeScale.bodySm}>{story.dependsOn.join(", ")}</p>
             </div>
           ) : null}
 
           {storyIssues.length > 0 ? (
             <div className="space-y-2">
-              <p className={typeScale.label}>Alertas</p>
+              <p className={typeScale.label}>Alerts</p>
               <ul className="space-y-1">
                 {storyIssues.map((issue, index) => (
                   <li

@@ -1,40 +1,40 @@
-# Template — Implementação técnica (preencher ao concluir)
+# Template — Technical implementation (fill in on completion)
 
-> **Criação da US:** placeholder ou plano preliminar opcional.  
-> **Fechamento (`✅`):** substituir pelo registro real do que foi entregue.
+> **US creation:** placeholder or preliminary plan optional.  
+> **Closure (`✅`):** replace with real record of what was delivered.
 
-## Placeholder na criação (status `❌`)
+## Placeholder on creation (status `❌`)
 
 ```md
-## Implementação técnica
+## Technical implementation
 
-### Arquivos
+### Files
 
-_(preencher ao concluir a implementação)_
+_(fill in when implementation is complete)_
 
 ### Backend
 
-_(preencher quando aplicável)_
+_(fill in when applicable)_
 
 ### Frontend
 
-_(preencher quando aplicável)_
+_(fill in when applicable)_
 
 ### Scripts / Docs
 
-_(preencher quando aplicável)_
+_(fill in when applicable)_
 ```
 
-## Registro ao concluir (status `✅`)
+## Record on completion (status `✅`)
 
 ```md
-## Implementação técnica
+## Technical implementation
 
-### Arquivos
+### Files
 
-- `src/features/monitor/VersionFilterBar.tsx` — barra de filtro compartilhada
-- `src/context/MonitorVersionFilterContext.tsx` — estado de versão entre abas
-- `src/features/monitor/MonitorDashboard.tsx` — wiring do provider
+- `src/features/monitor/VersionFilterBar.tsx` — shared filter bar
+- `src/context/MonitorVersionFilterContext.tsx` — version state across tabs
+- `src/features/monitor/MonitorDashboard.tsx` — provider wiring
 
 ### Backend
 
@@ -42,29 +42,29 @@ _(preencher quando aplicável)_
 
 ### Frontend
 
-- Contexto React compartilhado entre abas Entregas e Quadro.
-- Versão selecionada persiste ao trocar de aba.
-- Default: versão `active`; fallback última versão com US na pasta.
+- Shared React context across Delivery and Board tabs.
+- Selected version persists when switching tabs.
+- Default: `active` version; fallback last version with US in folder.
 
 ### Scripts / Docs
 
 - _n/a_
 ```
 
-## Regras
+## Rules
 
-| Regra | Detalhe |
+| Rule | Detail |
 | ----- | ------- |
-| Paths | Relativos à raiz do app ou repo; incluir pasta |
-| Uma linha por arquivo | O que mudou naquele arquivo |
-| Camadas vazias | `_n/a_` — não omitir o heading |
-| Plano vs entrega | Na conclusão, remover bullets que descrevem intenção não implementada |
-| Decisões globais | Registrar em `docs/decisions/YYYY-MM-DD.json`; local da US fica aqui |
-| Git | Commit/PR opcional em `## Notas`; a US é o índice legível |
+| Paths | Relative to app root or repo; include folder |
+| One line per file | What changed in that file |
+| Empty layers | `_n/a_` — do not omit heading |
+| Plan vs delivery | On completion, remove bullets describing unimplemented intent |
+| Global decisions | Register in `docs/decisions/YYYY-MM-DD.json`; local US record stays here |
+| Git | Optional commit/PR in `## Notes`; US is the readable index |
 
-## Anti-padrões (bloqueiam `✅`)
+## Anti-patterns (block `✅`)
 
-- `_(preencher quando aplicável)_` ainda presente
-- Só "Sem alteração funcional" sem listar arquivos quando houve mudança
-- Aceite `[x]` sem correspondência em Implementação técnica ou Testes
-- Lista genérica sem paths ("componentes do monitor atualizados")
+- `_(fill in when applicable)_` still present
+- Only "No functional change" without listing files when there was a change
+- Acceptance `[x]` without match in Technical implementation or Tests
+- Generic list without paths ("monitor components updated")

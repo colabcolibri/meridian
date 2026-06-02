@@ -2,19 +2,19 @@
 description: Review and deepen security documentation before architecture or implementation.
 ---
 
-# /security-pass — revisão de segurança
+# /security-pass — security review
 
 $ARGUMENTS
 
 ---
 
-## Regras críticas
+## Critical rules
 
 1. Use `security-steward` + `@[skills/security-review]`
-2. Ler `references/checklists.md` por completo
-3. Atualizar `02_security.md`
-4. Decisões relevantes → `docs/decisions/YYYY-MM-DD.json`
-5. Bloquear silenciosamente arquitetura `approved` se gaps críticos abertos
+2. Read `references/checklists.md` in full
+3. Update `02_security.md`
+4. Relevant decisions → `docs/decisions/YYYY-MM-DD.json`
+5. Do not silently approve architecture `approved` if critical gaps remain open
 
 ---
 
@@ -35,7 +35,7 @@ RULES:
 
 ---
 
-## Saída
+## Output
 
 ```txt
 02_security status:
@@ -47,8 +47,8 @@ Decisions logged:
 
 ---
 
-## Depois
+## After
 
 ```txt
-Próximo: manager aprova 02_security → /architecture quando estável
+Next: manager approves 02_security → /architecture when stable
 ```

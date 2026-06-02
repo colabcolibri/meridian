@@ -9,12 +9,12 @@ import { acceptanceHasFalta, validateStoryBody } from "@/domain/meridian/story-b
 import type { PhaseDocument, UserStory } from "@/domain/meridian/types"
 
 describe("protocol validators", () => {
-  it("detecta doc approved com dependência aberta", () => {
+  it("detects doc approved with open dependency", () => {
     const documents: PhaseDocument[] = [
       {
         id: "05_architecture",
-        title: "Arquitetura",
-        phase: "Fase 2",
+        title: "Architecture",
+        phase: "Phase 2",
         status: "draft",
         dependsOn: [],
         blocks: [],
@@ -22,8 +22,8 @@ describe("protocol validators", () => {
       },
       {
         id: "08_environments",
-        title: "Ambientes",
-        phase: "Fase 3",
+        title: "Environments",
+        phase: "Phase 3",
         status: "approved",
         dependsOn: ["05_architecture"],
         blocks: [],
@@ -35,15 +35,15 @@ describe("protocol validators", () => {
     expect(issues.some((issue) => issue.targetId === "08_environments")).toBe(true)
   })
 
-  it("exige Falta no aceite quando US é 🔶", () => {
-    const body = `## Aceite\n\n- [ ] Critério sem falta\n`
+  it("requires Missing in Acceptance when US is 🔶", () => {
+    const body = `## Acceptance\n\n- [ ] Criterion without missing note\n`
     expect(acceptanceHasFalta(body)).toBe(false)
     expect(
       validateStoryBody({ status: "🔶", tests: "none", testsStatus: "n/a" }, body),
     ).toHaveLength(1)
   })
 
-  it("compara board.json com arquivos US", () => {
+  it("compares board.json with US files", () => {
     const stories: UserStory[] = [
       {
         id: "US-0001",

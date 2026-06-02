@@ -1,25 +1,25 @@
 ---
 name: Feature request
-about: Propor melhoria no protocolo, kit ou app
+about: Propose an improvement to the protocol, kit, or app
 title: "[feat] "
 labels: enhancement
 assignees: ""
 ---
 
-## Problema ou oportunidade
+## Problem or opportunity
 
-<!-- Qual dor o Meridian deveria resolver? -->
+<!-- What pain should Meridian solve? -->
 
-## Proposta
+## Proposal
 
-<!-- Descreva a solução desejada -->
+<!-- Describe the desired solution -->
 
-## Alternativas consideradas
+## Alternatives considered
 
-## Impacto no protocolo
+## Protocol impact
 
-- [ ] Altera `.agent/MERIDIAN.md` ou regras de governança
-- [ ] Só app desktop / tooling
-- [ ] Documentação
+- [ ] Changes `.agent/MERIDIAN.md` or governance rules
+- [ ] Desktop app / tooling only
+- [ ] Documentation
 
-## Contexto adicional
+## Additional context

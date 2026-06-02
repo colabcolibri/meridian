@@ -8,26 +8,26 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 
 ## Selective reading
 
-| Arquivo | Quando ler |
+| File | When to read |
 | ------- | ---------- |
-| `references/sprint-template.md` | Ao redigir `docs/sprints/vX-SY.md` |
-| `docs/versions/vX.md` | Versão pai deve existir |
-| `docs/sprints/` | Sprints existentes da versão |
+| `references/sprint-template.md` | When drafting `docs/sprints/vX-SY.md` |
+| `docs/versions/vX.md` | Parent version must exist |
+| `docs/sprints/` | Existing sprints for version |
 
-## Pré-condições
+## Preconditions
 
-- Arquivo `docs/versions/{version}.md` existe (`version: v1` no sprint).
-- Versão referenciada está `planned` ou `active`.
-- `05_architecture.md` `approved` antes de criar US novas.
+- File `docs/versions/{version}.md` exists (`version: v1` in sprint).
+- Referenced version is `planned` or `active`.
+- `05_architecture.md` `approved` before creating new US.
 
-## Procedimento
+## Procedure
 
-1. Listar sprints da versão em `docs/sprints/vX-S*.md` → próximo SY = maior + 1.
-2. Preencher template com `stories: [US-XXXX, …]` (US existentes ou planejadas).
-3. Salvar `docs/sprints/vX-SY.md`.
-4. US novas → `/create-us` após gates; depois `/sync-board`.
+1. List sprints for version in `docs/sprints/vX-S*.md` → next SY = highest + 1.
+2. Fill template with `stories: [US-XXXX, …]` (existing or planned US).
+3. Save `docs/sprints/vX-SY.md`.
+4. New US → `/create-us` after gates; then `/sync-board`.
 
-## Saída
+## Output
 
 ```txt
 Sprint created:

@@ -1,5 +1,5 @@
 ---
-title: Contratos de API
+title: API Contracts
 status: draft
 version: 1.0
 updated: 2026-06-02
@@ -7,15 +7,15 @@ depends_on: [03_user_types.md, 05_architecture.md, 06_database.md]
 blocks: []
 ---
 
-# 07 — Contratos de API
+# 07 — API Contracts
 
-## Estado atual
+## Current state
 
-Fora do escopo da v0.
+Out of scope for v0.
 
-Meridian Desktop não possui backend nem API remota na fundação.
+Meridian Desktop has no backend or remote API in the foundation.
 
-## Pendências
+## Pending
 
-- Confirmar se a futura ponte desktop/editor terá contratos locais.
-- Documentar endpoints apenas se houver backend, bridge ou extensão com interface formal.
+- Confirm whether the future desktop/editor bridge will have local contracts.
+- Document endpoints only if there is a backend, bridge, or extension with a formal interface.

@@ -1,52 +1,52 @@
-# Template de versão (release)
+# Version template (release)
 
 ```md
 ---
 id: vX
-title: Nome curto do release
+title: Short release name
 status: planned
-outcome: "Quando este release está entregue no nível produto."
+outcome: "When this release is delivered at product level."
 ---
 
-# vX — Nome curto do release
+# vX — Short release name
 
-## Objetivo
+## Goal
 
-Frase clara do que este release entrega ao usuário/manager.
+Clear sentence of what this release delivers to user/manager.
 
-## Critério de Done
+## Done criteria
 
-Condição objetiva para marcar a versão como `complete`.
+Objective condition to mark version as `complete`.
 
-## Incluído nesta versão
+## Included in this version
 
-- Capacidades e US previstas (referência por ID, não copiar texto de epics)
+- Planned capabilities and US (reference by ID, do not copy epic text)
 
-## Explicitamente fora
+## Explicitly out
 
-- O que fica para versões futuras
+- What stays for future versions
 
-## Checklist go-live
+## Go-live checklist
 
-### Produto
+### Product
 
 - [ ] …
 
 ## Sprints
 
-- `vX-S1` — (criar em docs/sprints/ com create-sprint)
+- `vX-S1` — (create in docs/sprints/ with create-sprint)
 ```
 
 ## Status
 
-| Valor | Significado |
+| Value | Meaning |
 | ----- | ----------- |
-| `planned` | Definida, ainda sem entrega |
-| `active` | Release em andamento |
-| `complete` | Outcome atingido |
+| `planned` | Defined, not yet delivered |
+| `active` | Release in progress |
+| `complete` | Outcome reached |
 
-## Relação com US e epics
+## Relationship with US and epics
 
-- US usa `version: vX` no frontmatter — referência por ID.
-- Epic usa `versions: [vX]` — em quais releases a capacidade participa.
-- Detalhe da versão fica **só** neste arquivo.
+- US uses `version: vX` in frontmatter — reference by ID.
+- Epic uses `versions: [vX]` — which releases the capability participates in.
+- Version detail stays **only** in this file.

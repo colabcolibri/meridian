@@ -17,33 +17,33 @@ export { GUIDE_VIEWS }
 const tabs: { id: MonitorView; label: string; hint: string }[] = [
   {
     id: "concepts",
-    label: "Comece aqui",
-    hint: "O que é o Meridian, pastas, fases e conceitos",
+    label: "Start here",
+    hint: "What Meridian is, folders, phases, and concepts",
   },
   {
     id: "usage",
-    label: "Guia de uso",
-    hint: "Três fases: documentar, backlog, executar.",
+    label: "Usage guide",
+    hint: "Three phases: document, backlog, execute.",
   },
   {
     id: "setup",
-    label: "Configuração",
-    hint: "Progresso dos documentos iniciais do projeto",
+    label: "Setup",
+    hint: "Progress of the project's initial documents",
   },
   {
     id: "decisions",
-    label: "Decisões",
-    hint: "Histórico por data — docs/decisions/YYYY-MM-DD.json",
+    label: "Decisions",
+    hint: "History by date — docs/decisions/YYYY-MM-DD.json",
   },
   {
     id: "epics",
-    label: "Entregas",
-    hint: "Grandes blocos de capacidade do produto",
+    label: "Deliverables",
+    hint: "Large product capability blocks",
   },
   {
     id: "kanban",
-    label: "Quadro",
-    hint: "Status de cada user story",
+    label: "Board",
+    hint: "Status of each user story",
   },
 ]
 
@@ -61,7 +61,7 @@ export function MonitorTabs({
   return (
     <div className="border-b border-border bg-card">
       <nav
-        aria-label="Visões do monitor"
+        aria-label="Monitor views"
         className={cn(MONITOR_CONTAINER, "flex gap-2 overflow-x-auto py-3")}
       >
         {tabs.map((tab) => {

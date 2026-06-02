@@ -22,7 +22,7 @@ export function splitMarkdown(raw: string): SplitMarkdown {
   }
 }
 
-/** Colapsa arrays YAML multilinha (ex.: depends_on) para o parser yaml. */
+/** Collapses multiline YAML arrays (e.g. depends_on) for the yaml parser. */
 export function collapseMultilineYamlArrays(yaml: string): string {
   const lines = yaml.split("\n")
   const out: string[] = []
@@ -63,7 +63,7 @@ export function parseFrontmatterRecord(yaml: string): Record<string, unknown> {
   const collapsed = collapseMultilineYamlArrays(yaml)
   const parsed = parseYaml(collapsed)
   if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
-    throw new Error("Frontmatter inválido: esperado objeto YAML.")
+    throw new Error("Invalid frontmatter: expected YAML object.")
   }
   return parsed as Record<string, unknown>
 }

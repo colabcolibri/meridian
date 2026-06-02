@@ -5,7 +5,7 @@ import type { UserStory } from "@/domain/meridian/types"
 
 const baseStory: UserStory = {
   id: "US-0099",
-  title: "Exemplo",
+  title: "Example",
   epic: "EPIC-01",
   version: "v1",
   status: "✅",
@@ -17,19 +17,19 @@ const baseStory: UserStory = {
 }
 
 describe("kanban columns", () => {
-  it("deriva 🧪 quando tests_status é pending", () => {
+  it("derives 🧪 when tests_status is pending", () => {
     expect(resolveKanbanColumn(baseStory)).toBe("🧪")
   })
 
-  it("mantém ✅ quando tests_status é done", () => {
+  it("keeps ✅ when tests_status is done", () => {
     expect(resolveKanbanColumn({ ...baseStory, testsStatus: "done" })).toBe("✅")
   })
 
-  it("mantém ❌ mesmo com tests pendente", () => {
+  it("keeps ❌ even with pending tests", () => {
     expect(resolveKanbanColumn({ ...baseStory, status: "❌" })).toBe("❌")
   })
 
-  it("ignora tests quando tests: none", () => {
+  it("ignores tests when tests: none", () => {
     expect(
       resolveKanbanColumn({
         ...baseStory,

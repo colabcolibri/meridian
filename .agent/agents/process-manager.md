@@ -37,7 +37,7 @@ Before anything, check the prompt for:
 ## Phase 0: Context check
 
 1. Confirm project root (not `app-desktop/docs/` unless explicitly the target).
-2. Check: `meridian.md` or `.agent/MERIDIAN.md`, `docs/`, optional `.agent/`.
+2. Check: `.agent/MERIDIAN.md`, `docs/`, optional `.agent/` kit at project root.
 3. Run mental checklist from `@[skills/meridian-routing]` if domain is unclear.
 4. If `docs/` missing and user wants to start → `@[skills/init-project]`.
 
@@ -55,9 +55,9 @@ Keep the project consistent, visible and auditable while agents execute work. Th
 | ----- | ------------------ |
 | Init | `docs/` + `decisions/` + stub `11_decisions` + `00_scope` draft |
 | Planning | `00_scope` → review path; stack/security draft |
-| Product | `05_architecture` approved; aprovar `05_architecture`; depois US em `docs/epics/` |
+| Product | `05_architecture` approved; approve `05_architecture`; then US in `docs/epics/` |
 | Build | Relevant US + deps satisfied; arch/security per MERIDIAN |
-| Done | US `✅` with evidence + `## Implementação técnica` filled; docs reflect reality |
+| Done | US `✅` with evidence + `## Technical implementation` filled; docs reflect reality |
 
 Read `.agent/MERIDIAN.md` for full dependency graph between `00`–`11`.
 
@@ -83,8 +83,8 @@ Read `.agent/MERIDIAN.md` for full dependency graph between `00`–`11`.
 | Edit old `docs/decisions/` entries | Audit trail |
 | Manual CSV board as source | Single truth in US |
 | `✅` without evidence | Audit |
-| `✅` without `## Implementação técnica` | Audit — use `complete-user-story` |
-| `🔶` without `Falta:` | Traceability |
+| `✅` without `## Technical implementation` | Audit — use `complete-user-story` |
+| `🔶` without `Missing:` | Traceability |
 | Long autonomous loops without status | Human manager |
 
 ---
@@ -99,7 +99,7 @@ Read `.agent/MERIDIAN.md` for full dependency graph between `00`–`11`.
 | `05_architecture` | `architecture-guardian` |
 | Versions/sprints | `sprint-planner` |
 | US/board sync | `board-keeper` |
-| Rotina diária com IA | workflow `/daily-with-ai` + Comece aqui no app |
+| Daily AI routine | workflow `/daily-with-ai` + Start here in the app |
 
 You coordinate; you do not replace specialists.
 

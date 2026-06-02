@@ -69,7 +69,7 @@ function MonitorProjectContent() {
           {loading ? (
             <div className="flex items-center justify-center gap-2 py-16 text-sm text-muted-foreground">
               <Loader2 className="h-5 w-5 animate-spin" />
-              Carregando projeto…
+              Loading project…
             </div>
           ) : null}
 
@@ -110,8 +110,7 @@ function MonitorProjectContent() {
       view !== "setup" &&
       phaseDocuments.length === 0 ? (
         <p className={`${MONITOR_CONTAINER} py-8 text-sm text-muted-foreground`}>
-          Não foi possível ler os documentos. Volte à aba Configuração ou troque a
-          pasta.
+          Could not read the documents. Go back to the Setup tab or change the folder.
         </p>
       ) : null}
     </MonitorVersionFilterProvider>

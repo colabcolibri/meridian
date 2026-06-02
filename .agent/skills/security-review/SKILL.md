@@ -6,38 +6,38 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 
 # Security review (Meridian)
 
-> Segurança antes de arquitetura e antes de agentes executarem trabalho sensível.
+> Security before architecture and before agents execute sensitive work.
 
 ## Selective reading
 
-| Arquivo | Quando ler |
+| File | When to read |
 | ------- | ---------- |
-| `references/checklists.md` | Durante revisão completa ou criação de `02_security.md` |
+| `references/checklists.md` | During full review or `02_security.md` creation |
 
-## Quando acionar
+## When to trigger
 
-- Criar ou revisar `02_security.md`
-- Pedido de threat model, segredos, OWASP, supply chain
-- Antes de `05_architecture.md` ir para `approved`
-- Suspeita de violação por agente (comando destrutivo, vazamento)
+- Create or review `02_security.md`
+- Threat model, secrets, OWASP, supply chain request
+- Before `05_architecture.md` goes to `approved`
+- Suspected agent violation (destructive command, leak)
 
-## Procedimento
+## Procedure
 
-1. Ler `00_scope.md`, `01_tech_stack.md`, `03_user_types.md` (contexto).
-2. Percorrer **todas** as seções de `references/checklists.md`.
-3. Atualizar `02_security.md` com riscos, mitigações, pendências, fora de escopo.
-4. Registrar decisões relevantes via `update-decisions-log`.
-5. Não enfraquecer auth/validação/logging sem decisão explícita.
+1. Read `00_scope.md`, `01_tech_stack.md`, `03_user_types.md` (context).
+2. Go through **all** sections of `references/checklists.md`.
+3. Update `02_security.md` with risks, mitigations, open items, out of scope.
+4. Register relevant decisions via `update-decisions-log`.
+5. Do not weaken auth/validation/logging without explicit decision.
 
-## Resultado em `02_security.md`
+## Result in `02_security.md`
 
-- Riscos priorizados
-- Decisões de segurança
-- Mitigações e pendências
-- Impacto em arquitetura, banco, API, ambientes
-- Postura para agentes de IA no projeto
+- Prioritized risks
+- Security decisions
+- Mitigations and open items
+- Impact on architecture, database, API, environments
+- AI agent posture for the project
 
-## Saída
+## Output
 
 ```txt
 Security review:

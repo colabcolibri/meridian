@@ -1,24 +1,24 @@
 ---
 id: EPIC-01
-title: Estrutura do Projeto
+title: Project Structure
 status: complete
 versions: [v0]
-profiles: [Manager do Processo, Operador Local]
-outcome: "Repositório com kit Meridian, app Vite e docs/ governando o trabalho — pronto para dogfooding."
+profiles: [Process Manager, Local Operator]
+outcome: "Repository with Meridian kit, Vite app, and docs/ governing work — ready for dogfooding."
 ---
 
-# EPIC-01 — Estrutura do Projeto
+# EPIC-01 — Project Structure
 
-## Capacidade
+## Capability
 
-Fundação do repositório e do app Vite: separação clara entre protocolo (`meridian.md`, `.agent/`) e produto (`app-desktop/`), qualidade local (Git, lint, hooks) e kit operacional para agentes de IA.
+Repository and Vite app foundation: clear separation between protocol (`.agent/`, root `README.md` for the kit repo) and product (`app-desktop/`), local quality (Git, lint, hooks), and operational kit for AI agents.
 
-## Resultado esperado
+## Expected outcome
 
-Manager consegue clonar o repo, rodar `pnpm dev`, abrir a pasta `docs/` no monitor e ver documentos + US alinhados ao protocolo Meridian.
+Manager can clone the repo, run `pnpm dev`, open the `docs/` folder in the monitor, and see documents + US aligned with the Meridian protocol.
 
-## Fora deste epic
+## Out of scope for this epic
 
-- Leitura real de pasta no browser (EPIC-02).
-- Validações visíveis de protocolo (EPIC-03).
-- Extensão VS Code (EPIC-05).
+- Real folder reading in the browser (EPIC-02).
+- Visible protocol validations (EPIC-03).
+- VS Code extension (EPIC-05).

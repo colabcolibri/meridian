@@ -1,7 +1,7 @@
 #!/usr/bin/env npx tsx
 /**
- * Migra US antigas para tests/tests_status + seção Testes (Planejado/Executado).
- * Uso: npx tsx scripts/migrate-us-tests.ts
+ * Migrates legacy user stories to tests/tests_status + Tests section (Planned/Executed).
+ * Usage: npx tsx scripts/migrate-us-tests.ts
  */
 import { readFileSync, readdirSync, writeFileSync } from "node:fs"
 import { resolve } from "node:path"
@@ -19,13 +19,35 @@ import {
 
 const docsUs = resolve(import.meta.dirname, "../docs/us")
 
+const PLANNED_HEADINGS = ["Planned", "Planejado"]
+const EXECUTED_HEADINGS = ["Executed", "Executado"]
+const TESTS_HEADINGS = ["Tests", "Testes"]
+
+function extractSubsection(body: string, headings: string[]): string {
+  for (const heading of headings) {
+    const value = extractMarkdownSubsection(body, heading)
+    if (value) return value
+  }
+  return ""
+}
+
+function extractTestsSection(body: string): string {
+  for (const heading of TESTS_HEADINGS) {
+    const value = extractMarkdownSection(body, heading)
+    if (value || body.includes(`## ${heading}`)) {
+      return value
+    }
+  }
+  return ""
+}
+
 function oldLineHasEvidence(line: string): boolean {
   const trimmed = line.trim()
   if (!trimmed || /^-\s*`[^`]+`\s*$/.test(trimmed)) return false
   if (/^-\s*\[x\]/i.test(trimmed)) return true
   if (/^-\s*(Manual:|Dogfooding|Grep:)/i.test(trimmed)) return true
-  if (/passou|passaram|validado|\sok\b|—/i.test(trimmed)) return true
-  if (/pnpm\s+(test|build).*(passou|passaram|ok)/i.test(trimmed)) return true
+  if (/passed|validated|\sok\b|—/i.test(trimmed)) return true
+  if (/pnpm\s+(test|build).*(passed|ok)/i.test(trimmed)) return true
   return false
 }
 
@@ -48,22 +70,27 @@ function buildTestsSection(oldTestsBody: string): {
   section: string
   testsStatus: "done" | "pending"
 } {
-  if (extractMarkdownSubsection(oldTestsBody, "Planejado")) {
-    const planned = extractMarkdownSubsection(oldTestsBody, "Planejado")
-    const plannedLines = planned.split("\n").filter((l) => /^-\s*\[/.test(l.trim()))
+  const plannedSub = extractSubsection(oldTestsBody, PLANNED_HEADINGS)
+  if (plannedSub) {
+    const plannedLines = plannedSub.split("\n").filter((l) => /^-\s*\[/.test(l.trim()))
     const allChecked =
       plannedLines.length > 0 && plannedLines.every((l) => /^-\s*\[x\]/i.test(l.trim()))
-    const executado = extractMarkdownSubsection(oldTestsBody, "Executado")
-    const hasExec = executado
+    const executedSub = extractSubsection(oldTestsBody, EXECUTED_HEADINGS)
+    const hasExec = executedSub
       .split("\n")
       .some(
         (l) =>
           l.trim() &&
-          !/^_\(?pendente\)?_\s*$/i.test(l.trim()) &&
+          !/^_\(?pending\)?_\s*$/i.test(l.trim()) &&
           !/^_\([^)]*\)_/.test(l.trim()),
       )
+    const bodyWithoutHeading = oldTestsBody.replace(/^## (Tests|Testes)\s*\n?/, "")
     return {
-      section: `## Testes\n\n> Na **criação**: preencher **Planejado**. Ao **fechar** (\`complete-user-story\`): marcar \`[x]\` e registrar em **Executado**.\n\n${oldTestsBody.replace(/^## Testes\s*\n?/, "")}`,
+      section: `## Tests
+
+> On **creation**: fill in **Planned**. On **close** (\`complete-user-story\`): mark \`[x]\` and record in **Executed**.
+
+${bodyWithoutHeading}`,
       testsStatus: allChecked && hasExec ? "done" : "pending",
     }
   }
@@ -74,10 +101,12 @@ function buildTestsSection(oldTestsBody: string): {
     .filter((l) => l.startsWith("-") && !l.startsWith("#"))
 
   const planned: string[] = []
-  const executado: string[] = []
+  const executed: string[] = []
 
   for (const line of oldLines) {
-    if (/^-\s*Teste manual ou automatizado/i.test(line)) continue
+    if (/^-\s*(Manual or automated test|Teste manual ou automatizado)/i.test(line)) {
+      continue
+    }
     const text = normalizeOldTestLine(line)
     const type = inferTestType(text)
     const done = oldLineHasEvidence(line)
@@ -85,36 +114,36 @@ function buildTestsSection(oldTestsBody: string): {
       `- [${done ? "x" : " "}] **${type}** — ${text.replace(/^Manual:\s*/i, "")}`,
     )
     if (done) {
-      executado.push(`- ${text}`)
+      executed.push(`- ${text}`)
     }
   }
 
   if (planned.length === 0) {
-    planned.push("- [ ] **manual** — descrever verificação")
+    planned.push("- [ ] **manual** — describe verification")
   }
 
-  const allDone = planned.every((l) => /^-\s*\[x\]/i.test(l)) && executado.length > 0
+  const allDone = planned.every((l) => /^-\s*\[x\]/i.test(l)) && executed.length > 0
 
-  const section = `## Testes
+  const section = `## Tests
 
-> Na **criação**: preencher **Planejado**. Ao **fechar** (\`complete-user-story\`): marcar \`[x]\` e registrar em **Executado**.
+> On **creation**: fill in **Planned**. On **close** (\`complete-user-story\`): mark \`[x]\` and record in **Executed**.
 
-### Planejado
+### Planned
 
 ${planned.join("\n")}
 
-### Executado
+### Executed
 
-${allDone ? executado.join("\n") : "_(pendente)_"}
+${allDone ? executed.join("\n") : "_(pending)_"}
 `
 
   return { section, testsStatus: allDone ? "done" : "pending" }
 }
 
 function replaceTestsSection(body: string, newTestsSection: string): string {
-  const start = body.search(/^## Testes\s*$/m)
+  const start = body.search(/^## (Tests|Testes)\s*$/m)
   if (start === -1) {
-    const insertBefore = body.search(/^## Fora de escopo/m)
+    const insertBefore = body.search(/^## Out of scope/m)
     if (insertBefore === -1) {
       return `${body}\n\n${newTestsSection}\n`
     }
@@ -138,7 +167,7 @@ for (const filename of readdirSync(docsUs).filter((f) => /^US-\d{4}\.md$/.test(f
   delete record.tests
   delete record.tests_status
 
-  const oldTests = extractMarkdownSection(body, "Testes")
+  const oldTests = extractTestsSection(body)
   const { section: newTestsSection, testsStatus } = buildTestsSection(oldTests)
   const newBody = replaceTestsSection(body, newTestsSection)
 

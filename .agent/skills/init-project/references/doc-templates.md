@@ -1,10 +1,10 @@
-# Templates de documentos Meridian
+# Meridian document templates
 
-Frontmatter obrigatório em todo doc de fase:
+Required frontmatter on every phase doc:
 
 ```yaml
 ---
-title: Nome do documento
+title: Document name
 status: draft
 version: 1.0
 updated: YYYY-MM-DD
@@ -13,45 +13,45 @@ blocks: []
 ---
 ```
 
-## `docs/README.md` (porta humana)
+## `docs/README.md` (human entry point)
 
 ```markdown
-# Nome do projeto
+# Project name
 
-Breve descrição.
+Brief description.
 
-## Documentos de fase
+## Phase documents
 
-| Doc | Status | Descrição |
+| Doc | Status | Description |
 | --- | ------ | --------- |
-| 00_scope | draft | Escopo |
+| 00_scope | draft | Scope |
 | ... | ... | ... |
 
-## Como trabalhar
+## How to work
 
-1. Aprovar docs na ordem de dependência: fundação → princípios → arquitetura → detalhe.
-2. Montar backlog em `docs/epics/`, `docs/versions/` e `docs/sprints/`.
-3. Criar US só após `05_architecture` approved e epic/version nas pastas.
-4. Regenerar board após mudanças em US.
+1. Approve docs in dependency order: foundation → principles → architecture → detail.
+2. Build backlog in `docs/epics/`, `docs/versions/` and `docs/sprints/`.
+3. Create US only after `05_architecture` approved and epic/version in folders.
+4. Regenerate board after US changes.
 ```
 
-## `00_scope.md` (rascunho inicial)
+## `00_scope.md` (initial draft)
 
-Seções mínimas:
+Minimum sections:
 
-- Problema
-- Usuários
-- Dentro do escopo
-- Fora do escopo
-- Premissas
-- Restrições
-- Riscos conhecidos
-- Perguntas em aberto
+- Problem
+- Users
+- In scope
+- Out of scope
+- Assumptions
+- Constraints
+- Known risks
+- Open questions
 
-## `11_decisions.md` + `docs/decisions/` (primeira entrada)
+## `11_decisions.md` + `docs/decisions/` (first entry)
 
-Criar stub `11_decisions.md` (regras) e pasta `docs/decisions/`.
-No primeiro dia, criar `docs/decisions/YYYY-MM-DD.json`:
+Create stub `11_decisions.md` (rules) and folder `docs/decisions/`.
+On first day, create `docs/decisions/YYYY-MM-DD.json`:
 
 ```json
 {
@@ -59,11 +59,11 @@ No primeiro dia, criar `docs/decisions/YYYY-MM-DD.json`:
   "entries": [
     {
       "time": "HH:MM",
-      "title": "Projeto iniciado com Meridian",
+      "title": "Project started with Meridian",
       "affected_document": "docs/",
-      "what_changed": "Estrutura Meridian criada.",
-      "why_changed": "Início do projeto com governança documental.",
-      "impact": "Todos os docs de fase em draft.",
+      "what_changed": "Meridian structure created.",
+      "why_changed": "Project start with document governance.",
+      "impact": "All phase docs in draft.",
       "responsible": "[manager]"
     }
   ]

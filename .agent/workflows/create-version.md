@@ -2,20 +2,20 @@
 description: Create a Meridian release in docs/versions.
 ---
 
-# /create-version — criar versão (release)
+# /create-version — create version (release)
 
 $ARGUMENTS
 
 ---
 
-## Regras críticas
+## Critical rules
 
-1. Use `sprint-planner` ou `documentation-strategist` + `@[skills/create-version]`
-2. **Gate:** `05_architecture.md` `approved`; `00_scope.md` + `03_user_types.md` sólidos
+1. Use `sprint-planner` or `documentation-strategist` + `@[skills/create-version]`
+2. **Gate:** `05_architecture.md` `approved`; solid `00_scope.md` + `03_user_types.md`
 3. Template: `references/version-template.md`
-4. Versão = **release**, não sprint nem pasta em `src/`
-5. Salvar em `docs/versions/vX.md` (fonte de verdade)
-6. Sprints → `/plan-sprint` ou `create-sprint` depois
+4. Version = **release**, not sprint or folder in `src/`
+5. Save in `docs/versions/vX.md` (source of truth)
+6. Sprints → `/plan-sprint` or `create-sprint` later
 
 ---
 
@@ -29,7 +29,7 @@ CONTEXT:
 RULES:
 1. Phase 0 — scope + user types + architecture approved
 2. List docs/versions/v*.md → next vX
-3. Fill version-template.md (outcome, objetivo, in/out)
+3. Fill version-template.md (outcome, goal, in/out)
 4. Save docs/versions/vX.md
 5. update-decisions-log if release boundaries change
 6. validate_meridian.py
@@ -37,7 +37,7 @@ RULES:
 
 ---
 
-## Saída
+## Output
 
 ```txt
 Version created:

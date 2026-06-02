@@ -21,11 +21,11 @@ export interface PhaseDocument {
 export interface Epic {
   id: string
   title: string
-  /** O que esta capacidade entrega ao usuário (seção Capacidade). */
+  /** What this capability delivers to the user (Capability section). */
   description: string
-  /** Quando consideramos o epic concluído no nível produto (frontmatter). */
+  /** When we consider the epic done at product level (frontmatter). */
   outcome: string
-  /** Limites explícitos — o que não pertence a este epic. */
+  /** Explicit boundaries — what does not belong to this epic. */
   scopeOut: string
   versions: string[]
   profiles: string[]
@@ -43,7 +43,7 @@ export interface ProductVersion {
   status: ReleaseStatus
 }
 
-/** Sprint dentro de uma versão (docs/sprints/vX-SY.md). */
+/** Sprint within a version (docs/sprints/vX-SY.md). */
 export interface Sprint {
   id: string
   versionId: string
@@ -77,7 +77,7 @@ export interface DecisionEntry {
   responsible: string
 }
 
-/** Arquivo diário em docs/decisions/. */
+/** Daily file in docs/decisions/. */
 export interface DecisionDay {
   date: string
   filename: string

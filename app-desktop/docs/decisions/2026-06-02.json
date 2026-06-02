@@ -2,283 +2,292 @@
   "date": "2026-06-02",
   "entries": [
     {
+      "time": "18:00",
+      "title": "Remove root meridian.md — README + .agent/ only",
+      "affected_document": "meridian.md (deleted), README.md, .agent/MERIDIAN.md, validate_meridian.py, kit docs",
+      "what_changed": "Deleted `meridian.md` at kit repo root. Monorepo onboarding stays in `README.md`; protocol authority is `.agent/MERIDIAN.md`. Client projects copy only `.agent/`. Validator detects kit via `.agent/MERIDIAN.md` instead of `meridian.md`.",
+      "why_changed": "Two root markdown files duplicated pitch and confused GitHub About vs portable protocol; README is enough for the kit repo.",
+      "impact": "Install kit with `.agent/` only; agents and workflows no longer fall back to `meridian.md`. Historical US still mention `meridian.md` as past state.",
+      "responsible": "Product/Engineering"
+    },
+    {
       "time": "17:30",
-      "title": "Decisões como JSON por dia (docs/decisions/)",
-      "affected_document": "docs/decisions/, 11_decisions.md, .agent/MERIDIAN.md §11.12, skill update-decisions-log, validate_meridian.py, aba Decisões",
-      "what_changed": "Log diário passa de markdown para JSON: docs/decisions/YYYY-MM-DD.json com array entries (time, title, affected_document, what_changed, why_changed, impact, responsible). Novo dia → novo arquivo; mesmo dia → prepend no array.",
-      "why_changed": "Decisões são dados estruturados de log — JSON evita parsing frágil de markdown, alinha com board.json e facilita UI/validação.",
-      "impact": "Agents editam JSON; validador exige schema; app renderiza campos estruturados sem ler markdown.",
-      "responsible": "Produto/Engenharia"
+      "title": "Decisions as JSON per day (docs/decisions/)",
+      "affected_document": "docs/decisions/, 11_decisions.md, .agent/MERIDIAN.md §11.12, skill update-decisions-log, validate_meridian.py, Decisions tab",
+      "what_changed": "Daily log moves from markdown to JSON: docs/decisions/YYYY-MM-DD.json with entries array (time, title, affected_document, what_changed, why_changed, impact, responsible). New day → new file; same day → prepend in array.",
+      "why_changed": "Decisions are structured log data — JSON avoids fragile markdown parsing, aligns with board.json, and facilitates UI/validation.",
+      "impact": "Agents edit JSON; validator requires schema; app renders structured fields without reading markdown.",
+      "responsible": "Product/Engineering"
     },
     {
       "time": "17:15",
-      "title": "Decisões em pasta por data (docs/decisions/)",
-      "affected_document": "`11_decisions.md` (stub), `docs/decisions/`, `.agent/MERIDIAN.md` §11.12, skill `update-decisions-log`, `validate_meridian.py`, aba Decisões no app",
-      "what_changed": "Log de decisões migra de arquivo monolítico para **`docs/decisions/YYYY-MM-DD.md`** — um arquivo por dia. Entradas usam `## HH:MM — Título` (hora no heading; data no nome do arquivo). Novo dia → novo arquivo; mesmo dia → prepend no topo do arquivo do dia. `11_decisions.md` vira stub com regras e ponteiro.",
-      "why_changed": "Dezenas de entradas no mesmo arquivo dificultam leitura e edição; data + hora organizam o histórico e habilitam UI dedicada.",
-      "impact": "Agents prepend em `decisions/YYYY-MM-DD.md`; validador exige pasta e formato; app ganha aba **Decisões** para listar e ler entradas.",
-      "responsible": "Produto/Engenharia"
+      "title": "Decisions in folder by date (docs/decisions/)",
+      "affected_document": "`11_decisions.md` (stub), `docs/decisions/`, `.agent/MERIDIAN.md` §11.12, skill `update-decisions-log`, `validate_meridian.py`, Decisions tab in the app",
+      "what_changed": "Decision log migrates from monolithic file to **`docs/decisions/YYYY-MM-DD.md`** — one file per day. Entries use `## HH:MM — Title` (time in heading; date in file name). New day → new file; same day → prepend at top of day's file. `11_decisions.md` becomes stub with rules and pointer.",
+      "why_changed": "Dozens of entries in the same file make reading and editing difficult; date + time organize history and enable dedicated UI.",
+      "impact": "Agents prepend in `decisions/YYYY-MM-DD.md`; validator requires folder and format; app gains **Decisions** tab to list and read entries.",
+      "responsible": "Product/Engineering"
     },
     {
       "time": "17:00",
-      "title": "Log de decisões: novas entradas no topo",
-      "affected_document": "`11_decisions.md`, `.agent/MERIDIAN.md` §11.12, skill `update-decisions-log`, rules do kit",
-      "what_changed": "Novas decisões passam a ser inseridas **no topo** do arquivo (após este título), não no final. Entradas antigas permanecem abaixo, intactas.",
-      "why_changed": "Quem abre o log precisa ver o estado atual primeiro; append no final escondia decisões recentes no meio de dezenas de linhas.",
-      "impact": "Agents e skills usam prepend; proibido append no final ou reordenar entradas antigas.",
-      "responsible": "Produto/Engenharia"
+      "title": "Decision log: new entries at top",
+      "affected_document": "`11_decisions.md`, `.agent/MERIDIAN.md` §11.12, skill `update-decisions-log`, kit rules",
+      "what_changed": "New decisions are inserted **at the top** of the file (after this title), not at the end. Old entries remain below, intact.",
+      "why_changed": "Whoever opens the log needs to see current state first; append at end hid recent decisions among dozens of lines.",
+      "impact": "Agents and skills use prepend; append at end or reordering old entries is forbidden.",
+      "responsible": "Product/Engineering"
     },
     {
       "time": "16:45",
-      "title": "Entrega só nas pastas (remove índices 20_epics e 21_versions)",
-      "affected_document": "`20_epics.md`, `21_versions.md` (removidos), `.agent/MERIDIAN.md` §7–§12, `validate_meridian.py`, `phase-doc-files.ts`, `protocol-validators.ts`, skills/agents de epic/version, guias do app",
-      "what_changed": "Épicos, versões e sprints passam a ser gerenciados **somente** em `docs/epics/`, `docs/versions/` e `docs/sprints/`. Índices markdown duplicados eliminados. Gate de US: `05_architecture` approved + epic/version referenciados existem nas pastas.",
-      "why_changed": "Duplicação entre índice e pastas; app já lia pastas como fonte de verdade (Entregas/Quadro).",
-      "impact": "Skills `create-epic`/`create-version`/`create-sprint` deixam de atualizar tabelas; Configuração perde fase 4 como docs 20/21; US históricas que citam índices permanecem como registro.",
-      "responsible": "Produto/Engenharia"
+      "title": "Delivery only in folders (remove 20_epics and 21_versions indexes)",
+      "affected_document": "`20_epics.md`, `21_versions.md` (removed), `.agent/MERIDIAN.md` §7–§12, `validate_meridian.py`, `phase-doc-files.ts`, `protocol-validators.ts`, epic/version skills/agents, app guides",
+      "what_changed": "Epics, versions, and sprints are managed **only** in `docs/epics/`, `docs/versions/`, and `docs/sprints/`. Duplicate markdown indexes eliminated. US gate: `05_architecture` approved + referenced epic/version exist in folders.",
+      "why_changed": "Duplication between index and folders; app already read folders as source of truth (Deliverables/Board).",
+      "impact": "Skills `create-epic`/`create-version`/`create-sprint` stop updating tables; Setup loses phase 4 as docs 20/21; historical US citing indexes remain as record.",
+      "responsible": "Product/Engineering"
     },
     {
       "time": "16:30",
-      "title": "Ordem canônica das fases (arquitetura antes de épicos)",
-      "affected_document": "`.agent/MERIDIAN.md` §9–§10, `20_epics.md`, `validate_meridian.py`, guias do app (`meridian-concepts.ts`), agents/skills de epic",
-      "what_changed": "`20_epics.md` deixa de bloquear `05_architecture`; aprovação de `04` exige `07` approved. Fases UI/kit: fundação → princípios/releases → arquitetura → detalhe → backlog (04) → execução.",
-      "why_changed": "Comece aqui e Configuração mostravam épicos antes da arquitetura — ordem incoerente com o fluxo documentar → backlog → executar.",
-      "impact": "`/create-epic` e validador enforcem gate; `.cursor` espelha `.agent` via `sync_cursor_kit.sh`.",
-      "responsible": "Produto/Engenharia"
+      "title": "Canonical phase order (architecture before epics)",
+      "affected_document": "`.agent/MERIDIAN.md` §9–§10, `20_epics.md`, `validate_meridian.py`, app guides (`meridian-concepts.ts`), epic agents/skills",
+      "what_changed": "`20_epics.md` no longer blocks `05_architecture`; approval of `04` requires `07` approved. UI/kit phases: foundation → principles/releases → architecture → detail → backlog (04) → execution.",
+      "why_changed": "Get Started and Setup showed epics before architecture — inconsistent with the document → backlog → execute flow.",
+      "impact": "`/create-epic` and validator enforce gate; `.cursor` mirrors `.agent` via `sync_cursor_kit.sh`.",
+      "responsible": "Product/Engineering"
     },
     {
       "time": "16:15",
-      "title": "Campos tests / tests_status e checklist Planejado/Executado",
+      "title": "tests / tests_status fields and Planned/Executed checklist",
       "affected_document": "`.agent/MERIDIAN.md` §12.3–12.5, `us-template.md`, `complete-user-story`, `board-keeper`, `validate_meridian.py`, `parser.ts`, `story-body.ts`, `kanban-columns.ts`, `board.json`, `docs/us/*.md`",
-      "what_changed": "Frontmatter ganha `tests: required|none` e `tests_status: pending|done|n/a`. Seção **Testes** espelha Aceite: **Planejado** (`- [ ]`) + **Executado** (evidência). Coluna 🧪 no monitor = `tests_status: pending`. Removida heurística de parsing de prosa.",
-      "why_changed": "Garantir rastreabilidade explícita de testes; evitar falsos positivos/negativos do detector automático.",
-      "impact": "US migradas; US v0 fechadas com `tests_status: done` e evidência em **Executado**.",
-      "responsible": "Produto/Engenharia"
+      "what_changed": "Frontmatter gains `tests: required|none` and `tests_status: pending|done|n/a`. **Tests** section mirrors Acceptance: **Planned** (`- [ ]`) + **Executed** (evidence). 🧪 column in monitor = `tests_status: pending`. Prose parsing heuristic removed.",
+      "why_changed": "Ensure explicit test traceability; avoid false positives/negatives from automatic detector.",
+      "impact": "US migrated; v0 US closed with `tests_status: done` and evidence in **Executed**.",
+      "responsible": "Product/Engineering"
     },
     {
       "time": "16:00",
-      "title": "Fluxo diário com IA (Comece aqui + `/daily-with-ai`)",
+      "title": "Daily AI workflow (Get Started + `/daily-with-ai`)",
       "affected_document": "`meridian-concepts.ts`, `ConceptsView.tsx`, `.agent/workflows/daily-with-ai.md`, `.agent/references/daily-ai-workflow.md`, `docs/README.md`",
-      "what_changed": "Nova seção no guia Comece aqui (loop orientar → contextualizar → implementar → fechar → revisar); workflow `/daily-with-ai` e referência no kit; docs/README com loop diário explícito.",
-      "why_changed": "Comece aqui explicava o sistema, mas faltava roteiro prático para manager usar IA no Cursor no dia a dia.",
-      "impact": "meridian-routing reconhece pedidos de rotina diária; complementa `/complete-us` no passo de fechamento.",
-      "responsible": "Produto/Engenharia"
+      "what_changed": "New section in the Get Started guide (loop orient → contextualize → implement → close → review); `/daily-with-ai` workflow and reference in the kit; docs/README with explicit daily loop.",
+      "why_changed": "Get Started explained the system but lacked a practical guide for the manager to use AI in Cursor daily.",
+      "impact": "meridian-routing recognizes daily routine requests; complements `/complete-us` in closing step.",
+      "responsible": "Product/Engineering"
     },
     {
       "time": "15:45",
-      "title": "Fechamento de US com implementação técnica (`complete-user-story`)",
+      "title": "US closure with technical implementation (`complete-user-story`)",
       "affected_document": "`.agent/MERIDIAN.md`, `.agent/skills/complete-user-story/`, `.agent/workflows/complete-us.md`, `board-keeper`, `create-user-story/references/us-template.md`, `rules/MERIDIAN.md`",
-      "what_changed": "Formalizado o passo de fechamento pós-implementação: skill `complete-user-story`, workflow `/complete-us`, gate no `board-keeper` e checklist de done exigem `## Implementação técnica` preenchida (arquivos + camadas) antes de `✅`.",
-      "why_changed": "Rastreabilidade entre aceite de produto e código entregue; evitar US marcadas done com seção vazia ou só plano antecipado.",
-      "impact": "Agentes implementadores devem invocar `complete-user-story` ao terminar; US existentes em `✅` com seção rasa podem ser enriquecidas sob demanda.",
-      "responsible": "Produto/Engenharia"
+      "what_changed": "Formalized the post-implementation closure step: skill `complete-user-story`, workflow `/complete-us`, gate in `board-keeper` and done checklist require `## Technical implementation` filled in (files + layers) before `✅`.",
+      "why_changed": "Traceability between product acceptance and delivered code; avoid US marked done with empty section or only anticipated plan.",
+      "impact": "Implementing agents must invoke `complete-user-story` when done; existing US in `✅` with shallow section can be enriched on demand.",
+      "responsible": "Product/Engineering"
     },
     {
       "time": "15:30",
-      "title": "UX v1-S6 (densidade e foco)",
+      "title": "UX v1-S6 (density and focus)",
       "affected_document": "`MonitorVersionFilterContext`, `VersionFilterBar`, `KanbanView`, `DeliverablesView`, `StoryDetailSheet`, `MonitorDashboard`, sprints v1-S6, US-0034–0038",
-      "what_changed": "Filtro de versão global compartilhado entre Entregas e Quadro; chips de epic cascateados pela versão; Entregas com versão em destaque e demais recolhidas; cards do kanban compactos com detalhes em sheet; ferramentas avançadas restritas à aba Configuração.",
-      "why_changed": "Polish visual (S3–S5) não resolveu sobrecarga de informação, filtros incoerentes e excesso de caixas aninhadas reportados no uso real.",
-      "impact": "EPIC-04 permanece `active` (kanban/entregas ainda evoluem); v2 inalterado.",
-      "responsible": "Produto/Engenharia"
+      "what_changed": "Global version filter shared between Deliverables and Board; epic chips cascaded by version; Deliverables with selected version highlighted and others collapsed; compact kanban cards with details in sheet; advanced tools restricted to Setup tab.",
+      "why_changed": "Visual polish (S3–S5) did not resolve information overload, incoherent filters, and excess nested boxes reported in real use.",
+      "impact": "EPIC-04 remains `active` (kanban/deliverables still evolving); v2 unchanged.",
+      "responsible": "Product/Engineering"
     },
     {
       "time": "15:15",
-      "title": "UX v1-S3–S5 e fechamento do EPIC-06",
-      "affected_document": "`KanbanView`, `DeliverablesView`, `SetupMonitorView` (estilos), `ConceptsView`, `monitor-ui.tsx`, `EPIC-06.md`, sprints v1-S3–S5",
-      "what_changed": "Três sprints de polish visual após o MVP funcional: dados no quadro/entregas (S3), tokens e progresso (S4), Configuração e ferramentas avançadas (S5). EPIC-06 marcado `complete`.",
-      "why_changed": "Manager precisava de interface coerente antes de considerar v1 “presentável”; zinc solto e cards inconsistentes atrapalhavam leitura diária.",
-      "impact": "v2 e EPIC-05 permanecem `planned`/`paused`; próximo marco é ponte VSCode, não mais polish de leitura v1.",
-      "responsible": "Produto/Engenharia"
+      "title": "UX v1-S3–S5 and EPIC-06 closure",
+      "affected_document": "`KanbanView`, `DeliverablesView`, `SetupMonitorView` (styles), `ConceptsView`, `monitor-ui.tsx`, `EPIC-06.md`, sprints v1-S3–S5",
+      "what_changed": "Three visual polish sprints after functional MVP: data on board/deliverables (S3), tokens and progress (S4), Setup and advanced tools (S5). EPIC-06 marked `complete`.",
+      "why_changed": "Manager needed coherent interface before considering v1 'presentable'; loose zinc and inconsistent cards hindered daily reading.",
+      "impact": "v2 and EPIC-05 remain `planned`/`paused`; next milestone is VSCode bridge, not more v1 reading polish.",
+      "responsible": "Product/Engineering"
     },
     {
       "time": "15:00",
-      "title": "Versões e sprints em arquivos (`docs/versions/`, `docs/sprints/`)",
-      "affected_document": "`21_versions.md`, `docs/versions/v*.md`, `docs/sprints/*.md`, `parser.ts`, `project-loader.ts`, `validate_meridian.py`, skills `create-version`/`create-sprint`, guia Comece aqui, aba Entregas",
-      "what_changed": "Releases migraram de seções monolíticas em `21_versions.md` para `docs/versions/vX.md`; sprints para `docs/sprints/vX-SY.md`. `21_versions.md` virou índice de fase. US referencia `version: vX`; validador exige arquivo correspondente.",
-      "why_changed": "Simetria com épicos/US, clareza para IA (`/create-version`, `/plan-sprint`) e escala do roadmap.",
-      "impact": "Workflows `/create-version`, skills novas; sprint-planner e create-user-story atualizados.",
-      "responsible": "Produto/Engenharia"
+      "title": "Versions and sprints in files (`docs/versions/`, `docs/sprints/`)",
+      "affected_document": "`21_versions.md`, `docs/versions/v*.md`, `docs/sprints/*.md`, `parser.ts`, `project-loader.ts`, `validate_meridian.py`, skills `create-version`/`create-sprint`, Get Started guide, Deliverables tab",
+      "what_changed": "Releases migrated from monolithic sections in `21_versions.md` to `docs/versions/vX.md`; sprints to `docs/sprints/vX-SY.md`. `21_versions.md` became phase index. US references `version: vX`; validator requires corresponding file.",
+      "why_changed": "Symmetry with epics/US, clarity for AI (`/create-version`, `/plan-sprint`), and roadmap scale.",
+      "impact": "Workflows `/create-version`, new skills; sprint-planner and create-user-story updated.",
+      "responsible": "Product/Engineering"
     },
     {
       "time": "14:45",
-      "title": "IDs de user story com 4 dígitos (`US-XXXX`)",
+      "title": "User story IDs with 4 digits (`US-XXXX`)",
       "affected_document": "`docs/us/US-*.md`, `docs/kanban/board.json`, `21_versions.md`, `.agent/MERIDIAN.md` §12.2, `validate_meridian.py`, `parser.ts`, skills/templates",
-      "what_changed": "Formato de ID fixo `US-XXXX` (quatro dígitos, zero à esquerda). Arquivos renomeados (`US-001.md` → `US-0001.md`). Nome do arquivo deve coincidir com `id` no frontmatter.",
-      "why_changed": "Escala do catálogo — evita colisão visual e mantém ordenação lexicográfica alinhada à numérica até US-9999.",
-      "impact": "Entradas históricas neste log mantêm nomenclatura antiga onde citadas; referências operacionais usam o novo formato.",
-      "responsible": "Produto/Engenharia"
+      "what_changed": "Fixed ID format `US-XXXX` (four digits, zero-padded). Files renamed (`US-001.md` → `US-0001.md`). File name must match `id` in frontmatter.",
+      "why_changed": "Catalog scale — avoids visual collision and keeps lexicographic order aligned with numeric up to US-9999.",
+      "impact": "Historical entries in this log keep old nomenclature where cited; operational references use new format.",
+      "responsible": "Product/Engineering"
     },
     {
       "time": "14:30",
-      "title": "Modelo enriquecido de epic (`outcome`, anatomia)",
-      "affected_document": "`docs/epics/EPIC-*.md`, `20_epics.md`, `.agent/MERIDIAN.md` §11.5, `.agent/skills/create-epic/`, `parser.ts`, `EpicsView.tsx`, guia Comece aqui, agents/skills",
-      "what_changed": "Epic passou a exigir `outcome` no frontmatter e seções estruturadas (Capacidade, Resultado esperado, Fora deste epic). US referencia epic só por `epic: EPIC-XX` — fonte canônica do epic é `docs/epics/`. Nova skill `create-epic`.",
-      "why_changed": "Separar conceito de capacidade de produto (epic) da tarefa executável (US) e dar critério claro de “done” no nível produto.",
-      "impact": "Validador Python e parser TS exigem `outcome`; agents documentation-strategist, sprint-planner, process-manager e board-keeper atualizados.",
-      "responsible": "Produto/Engenharia"
+      "title": "Enriched epic model (`outcome`, anatomy)",
+      "affected_document": "`docs/epics/EPIC-*.md`, `20_epics.md`, `.agent/MERIDIAN.md` §11.5, `.agent/skills/create-epic/`, `parser.ts`, `EpicsView.tsx`, Get Started guide, agents/skills",
+      "what_changed": "Epic now requires `outcome` in frontmatter and structured sections (Capability, Expected Outcome, Out of this epic). US references epic only by `epic: EPIC-XX` — canonical epic source is `docs/epics/`. New skill `create-epic`.",
+      "why_changed": "Separate product capability concept (epic) from executable task (US) and give clear 'done' criteria at product level.",
+      "impact": "Python validator and TS parser require `outcome`; agents documentation-strategist, sprint-planner, process-manager and board-keeper updated.",
+      "responsible": "Product/Engineering"
     },
     {
       "time": "14:15",
-      "title": "Épicos em arquivos individuais (`docs/epics/`)",
-      "affected_document": "20_epics.md, 05_architecture.md, `.agent/MERIDIAN.md`, `validate_meridian.py`, `project-loader.ts`, `parser.ts`, guia Comece aqui",
-      "what_changed": "Cada épico passou de seção em `20_epics.md` para arquivo próprio em `docs/epics/EPIC-XX.md` com frontmatter YAML (como user stories). `20_epics.md` virou índice de fase com tabela-resumo. App e validador leem a pasta `epics/`.",
-      "why_changed": "Simetria com `docs/us/`, menos conflito em edição paralela, frontmatter estruturado e escala quando o catálogo crescer.",
-      "impact": "Gate de criação de US continua exigindo `20_epics.md` + `21_versions.md` approved; US referenciam `epic:` que deve existir em `docs/epics/`.",
-      "responsible": "Produto/Engenharia"
+      "title": "Epics in individual files (`docs/epics/`)",
+      "affected_document": "20_epics.md, 05_architecture.md, `.agent/MERIDIAN.md`, `validate_meridian.py`, `project-loader.ts`, `parser.ts`, Get Started guide",
+      "what_changed": "Each epic moved from a section in `20_epics.md` to its own file in `docs/epics/EPIC-XX.md` with YAML frontmatter (like user stories). `20_epics.md` became a phase index with summary table. App and validator read the `epics/` folder.",
+      "why_changed": "Symmetry with `docs/us/`, less parallel edit conflict, structured frontmatter, and scale as catalog grows.",
+      "impact": "US creation gate still requires `20_epics.md` + `21_versions.md` approved; US reference `epic:` that must exist in `docs/epics/`.",
+      "responsible": "Product/Engineering"
     },
     {
       "time": "14:00",
       "title": "UX v1-S2 (EPIC-06)",
       "affected_document": "20_epics.md, 21_versions.md, US-018–US-022, `src/features/monitor/`, board.json",
-      "what_changed": "Epic **EPIC-06** e sprint **v1-S2** com onboarding (`WelcomeScreen`), barra única (`MonitorTopBar`), abas Configuração/Entregas/Quadro, alertas recolhíveis, kanban enxuto, validação Python em ferramentas avançadas.",
-      "why_changed": "v1 entregou função mas a UI era confusa e pouco amigável ao manager.",
-      "impact": "Iterações futuras de UX podem virar v1-S3 ou critérios em v2; não bloqueia EPIC-05.",
-      "responsible": "Produto/Engenharia"
+      "what_changed": "Epic **EPIC-06** and sprint **v1-S2** with onboarding (`WelcomeScreen`), single bar (`MonitorTopBar`), Setup/Deliverables/Board tabs, collapsible alerts, lean kanban, Python validation in advanced tools.",
+      "why_changed": "v1 delivered function but UI was confusing and unfriendly to manager.",
+      "impact": "Future UX iterations may become v1-S3 or v2 criteria; does not block EPIC-05.",
+      "responsible": "Product/Engineering"
     },
     {
       "time": "13:45",
       "title": "Go-live v1-S1 (Folder Monitor MVP)",
       "affected_document": "21_versions.md, 05_architecture.md, 20_epics.md (EPIC-02), docs/README.md, board.json",
-      "what_changed": "v1-S1 marcada concluída com checklist go-live; `05_architecture.md` → `approved` (pasta monitorada = `docs/`); EPIC-02 → `complete`; board regenerado das US.",
-      "why_changed": "Fechar o marco v1 antes de planejar v2 (VSCode / escrita).",
-      "impact": "Próximo trabalho de produto entra em `21_versions` seção v2 e novas US sob EPIC-05.",
-      "responsible": "Produto/Engenharia"
+      "what_changed": "v1-S1 marked complete with go-live checklist; `05_architecture.md` → `approved` (monitored folder = `docs/`); EPIC-02 → `complete`; board regenerated from US.",
+      "why_changed": "Close v1 milestone before planning v2 (VSCode / writes).",
+      "impact": "Next product work goes in `21_versions` v2 section and new US under EPIC-05.",
+      "responsible": "Product/Engineering"
     },
     {
       "time": "13:30",
-      "title": "Pasta monitorada = `docs/` (não raiz do repositório)",
+      "title": "Monitored folder = `docs/` (not repository root)",
       "affected_document": "US-009, app-desktop `src/features/folder/`, monitor UI",
-      "what_changed": "O File System Access API abre diretamente a pasta **docs/** do projeto (`00_scope.md` na raiz do handle, `us/`, `kanban/`). Validação deixa de exigir subpasta `docs/` dentro da raiz escolhida. Loader e leitor de fase leem arquivos na raiz do handle. Mensagens de issue usam caminhos relativos à pasta docs (`20_epics.md`, `us/US-001.md`).",
-      "why_changed": "Toda a estrutura Meridian que o manager edita com agentes vive em `docs/`; abrir o repositório ou `app-desktop/` era conceito errado para dogfooding.",
-      "impact": "`validate_meridian.py` em dev continua recebendo a raiz do app (`app-desktop/`), não só `docs/`. US-015 inalterada nesse ponto.",
-      "responsible": "Produto/Engenharia"
+      "what_changed": "The File System Access API opens directly the project's **docs/** folder (`00_scope.md` at the handle root, `us/`, `kanban/`). Validation no longer requires a `docs/` subfolder inside the selected root. Loader and phase reader read files at the handle root. Issue messages use paths relative to the docs folder (`20_epics.md`, `us/US-001.md`).",
+      "why_changed": "All Meridian structure that manager edits with agents lives in `docs/`; opening repository or `app-desktop/` was wrong concept for dogfooding.",
+      "impact": "`validate_meridian.py` in dev still receives app root (`app-desktop/`), not only `docs/`. US-015 unchanged on this point.",
+      "responsible": "Product/Engineering"
     },
     {
       "time": "13:15",
-      "title": "Leitura inline dos docs 00–11 (US-017)",
+      "title": "Inline reading of docs 00–11 (US-017)",
       "affected_document": "20_epics.md (EPIC-02), 21_versions.md, US-017.md, US-011.md, board.json",
-      "what_changed": "Capacidade de **ler cada `.md` de configuração inicial** no app (botão Ler .md + painel frontmatter/conteúdo). Registrada como **US-017** no epic **EPIC-02**, não como epic separado — é parte do monitor de configuração.",
-      "why_changed": "Manager precisa revisar documentos na mesma ferramenta que monitora o fluxo, sem só ver status agregado.",
-      "impact": "US-010 deve reutilizar `splitFrontmatter` / leitor; US-011 foca status da lista a partir do parser.",
-      "responsible": "Produto/Engenharia"
+      "what_changed": "Capability to **read each initial setup `.md`** in the app (Read .md button + frontmatter/content panel). Registered as **US-017** in epic **EPIC-02**, not as a separate epic — it is part of the setup monitor.",
+      "why_changed": "Manager needs to review documents in the same tool that monitors the flow, not just see aggregated status.",
+      "impact": "US-010 should reuse `splitFrontmatter` / reader; US-011 focuses list status from parser.",
+      "responsible": "Product/Engineering"
     },
     {
       "time": "13:00",
-      "title": "Modelo de produto do monitor e backlog v1",
+      "title": "Monitor product model and v1 backlog",
       "affected_document": "20_epics.md, 21_versions.md, docs/us/US-002.md, US-008–US-016, kanban/board.json",
-      "what_changed": "Epics EPIC-02/03/04 redefinidos para as três abas (Configuração inicial, Épicos, Kanban + validações). EPIC-01 marcado complete. Criadas US-008 (shell v0) e US-009–US-016 (v1-S1: pasta real, parser, abas, validações, fim do mock). US-002 reaberta como 🔶 até leitura real (US-011). Fonte de verdade permanece Markdown; app passa a ser leitor na v1, não autor. Tasks/Bug/Spike não viram artefatos — trabalho técnico fica em **Implementação técnica** dentro da US.",
-      "why_changed": "Alinhar produto ao uso com agentes (dogfooding em `app-desktop/docs`) sem replicar Jira; eliminar UI confusa (duas colunas status/fluxo).",
-      "impact": "05_architecture.md deve ir para review com parser e File System Access; README docs; agents devem citar US antes de codar v1.",
-      "responsible": "Manager do Processo / Produto"
+      "what_changed": "Epics EPIC-02/03/04 redefined for the three tabs (Initial setup, Epics, Kanban + validations). EPIC-01 marked complete. Created US-008 (v0 shell) and US-009–US-016 (v1-S1: real folder, parser, tabs, validations, end of mock). US-002 reopened as 🔶 until real reading (US-011). Source of truth remains Markdown; app becomes reader in v1, not author. Tasks/Bug/Spike do not become artifacts — technical work stays in **Technical implementation** inside the US.",
+      "why_changed": "Align product with agent use (dogfooding in `app-desktop/docs`) without replicating Jira; eliminate confusing UI (two status/flow columns).",
+      "impact": "05_architecture.md should go to review with parser and File System Access; README docs; agents must cite US before coding v1.",
+      "responsible": "Process Manager / Product"
     },
     {
       "time": "12:45",
-      "title": "Kit `.agent` alinhado ao padrão Antigravity",
-      "affected_document": "README.md (raiz), meridian.md, `.agent/`",
-      "what_changed": "Criado `README.md` na raiz do repositório; `rules/MERIDIAN.md` passou a usar `trigger: always_on`; adicionados `meridian-routing`, `skills/doc.md`, `references/` nas skills, agents operacionais com fases, workflows com `$ARGUMENTS` e `ARCHITECTURE.md` atualizado.",
-      "why_changed": "O kit precisa da mesma profundidade operacional do Antigravity (progressive disclosure, roteamento, gates) adaptada à governança documental Meridian, não apenas pastas vazias.",
-      "impact": "app-desktop/docs (US-007, README, 00_scope, 21_versions, 05_architecture), board.json e validação do app.",
-      "responsible": "Produto/Engenharia"
+      "title": "`.agent` kit aligned to Antigravity standard",
+      "affected_document": "README.md (root), meridian.md, `.agent/`",
+      "what_changed": "Created `README.md` at the repository root; `rules/MERIDIAN.md` now uses `trigger: always_on`; added `meridian-routing`, `skills/doc.md`, `references/` in skills, operational agents with phases, workflows with `$ARGUMENTS`, and updated `ARCHITECTURE.md`.",
+      "why_changed": "Kit needs same operational depth as Antigravity (progressive disclosure, routing, gates) adapted to Meridian documentation governance, not just empty folders.",
+      "impact": "app-desktop/docs (US-007, README, 00_scope, 21_versions, 05_architecture), board.json and app validation.",
+      "responsible": "Product/Engineering"
     },
     {
       "time": "12:30",
-      "title": "Pasta `skills/` foi removida",
+      "title": "`skills/` folder was removed",
       "affected_document": "meridian.md",
-      "what_changed": "A pasta raiz `skills/` foi removida. Skills passam a existir apenas como pacotes formais em `.agent/skills/{skill}/SKILL.md`.",
-      "why_changed": "A estrutura baseada em `.agent/` é mais completa e permite organizar agents, skills, workflows, rules e scripts em uma única camada operacional para agentes.",
-      "impact": "00_scope.md, 21_versions.md, US-005.md, US-006.md, board.json e `.agent/MERIDIAN.md`.",
-      "responsible": "Produto/Engenharia"
+      "what_changed": "Root `skills/` folder was removed. Skills now exist only as formal packages in `.agent/skills/{skill}/SKILL.md`.",
+      "why_changed": "`.agent/`-based structure is more complete and allows organizing agents, skills, workflows, rules, and scripts in a single operational layer for agents.",
+      "impact": "00_scope.md, 21_versions.md, US-005.md, US-006.md, board.json and `.agent/MERIDIAN.md`.",
+      "responsible": "Product/Engineering"
     },
     {
       "time": "12:15",
-      "title": "Camada operacional de agentes usa `.agent`",
+      "title": "Agent operational layer uses `.agent`",
       "affected_document": "meridian.md",
-      "what_changed": "A estrutura de agentes foi organizada em `.agent/`, com subpastas para agents, skills, workflows, rules e scripts.",
-      "why_changed": "Meridian precisa de uma camada operacional reutilizável para agentes, separada do app visual e mais estruturada que skills soltas na raiz.",
-      "impact": "00_scope.md, 21_versions.md, skills/README.md e futuras validações do app desktop.",
-      "responsible": "Produto/Engenharia"
+      "what_changed": "Agent structure was organized in `.agent/`, with subfolders for agents, skills, workflows, rules, and scripts.",
+      "why_changed": "Meridian needs a reusable operational layer for agents, separate from visual app and more structured than loose skills at root.",
+      "impact": "00_scope.md, 21_versions.md, skills/README.md and future desktop app validations.",
+      "responsible": "Product/Engineering"
     },
     {
       "time": "12:00",
-      "title": "Skills para agentes entram no protocolo",
+      "title": "Agent skills enter the protocol",
       "affected_document": "meridian.md",
-      "what_changed": "Foi criada a pasta raiz `skills/` com instruções auxiliares para agentes e a seção de segurança do protocolo foi aprofundada.",
-      "why_changed": "Meridian precisa separar gestão visual do app e orientação operacional para agentes. Skills ajudam agentes a executar tarefas recorrentes sem inflar a home do app ou depender de uma ferramenta visual.",
-      "impact": "00_scope.md, 21_versions.md e futuras validações do app desktop.",
-      "responsible": "Produto/Engenharia"
+      "what_changed": "Root `skills/` folder was created with auxiliary instructions for agents and protocol security section was deepened.",
+      "why_changed": "Meridian needs to separate visual app management and operational guidance for agents. Skills help agents execute recurring tasks without inflating app home or depending on a visual tool.",
+      "impact": "00_scope.md, 21_versions.md and future desktop app validations.",
+      "responsible": "Product/Engineering"
     },
     {
       "time": "11:45",
-      "title": "Protocolo e app desktop foram separados",
+      "title": "Protocol and desktop app were separated",
       "affected_document": "00_scope.md",
-      "what_changed": "`meridian.md` passou a ser o protocolo universal para agentes de IA, enquanto o app Vite e sua documentação foram separados em `app-desktop/`.",
-      "why_changed": "O protocolo precisa ser copiável para qualquer projeto, e o app desktop deve ser apenas uma camada visual que abre e monitora uma pasta Meridian.",
-      "impact": "README.md, 21_versions.md e tela inicial do app.",
-      "responsible": "Produto/Engenharia"
+      "what_changed": "`meridian.md` became the universal protocol for AI agents, while the Vite app and its documentation were separated into `app-desktop/`.",
+      "why_changed": "Protocol needs to be copyable to any project, and desktop app should only be a visual layer that opens and monitors a Meridian folder.",
+      "impact": "README.md, 21_versions.md, and the app's home screen.",
+      "responsible": "Product/Engineering"
     },
     {
       "time": "11:30",
-      "title": "Git e qualidade local entram na fundação",
+      "title": "Git and local quality enter foundation",
       "affected_document": "01_tech_stack.md",
-      "what_changed": "O projeto passou a usar Git desde a fundação, `.gitignore` para proteger arquivos locais, Prettier, Husky e lint-staged.",
-      "why_changed": "O fluxo Meridian exige consistência e governança antes de acelerar implementação com agentes de IA.",
-      "impact": "02_security.md, 04_principles.md e 08_environments.md.",
-      "responsible": "Produto/Engenharia"
+      "what_changed": "The project started using Git from the foundation, `.gitignore` to protect local files, Prettier, Husky, and lint-staged.",
+      "why_changed": "Meridian flow requires consistency and governance before accelerating implementation with AI agents.",
+      "impact": "02_security.md, 04_principles.md and 08_environments.md.",
+      "responsible": "Product/Engineering"
     },
     {
       "time": "11:15",
-      "title": "shadcn deve ser instalado pelo CLI oficial",
+      "title": "shadcn must be installed via official CLI",
       "affected_document": "01_tech_stack.md",
-      "what_changed": "A base visual deve usar o instalador oficial do shadcn para gerar componentes.",
-      "why_changed": "O projeto deve seguir o fluxo esperado da biblioteca e evitar componentes shadcn recriados manualmente.",
-      "impact": "04_principles.md e implementação do app Vite.",
-      "responsible": "Produto/Engenharia"
+      "what_changed": "Visual base must use official shadcn installer to generate components.",
+      "why_changed": "Project must follow library expected flow and avoid manually recreated shadcn components.",
+      "impact": "04_principles.md and the Vite app implementation.",
+      "responsible": "Product/Engineering"
     },
     {
       "time": "11:00",
-      "title": "Meridian é um fluxo para desenvolvimento com agentes de IA",
+      "title": "Meridian is a flow for development with AI agents",
       "affected_document": "00_scope.md",
-      "what_changed": "O escopo passou a declarar explicitamente que Meridian é feito para a nova era de trabalho com agentes de IA.",
-      "why_changed": "O ponto central do produto é permitir que pessoas gerenciem desenvolvimento com agentes mantendo contexto, controle, visibilidade e consistência.",
-      "impact": "03_user_types.md, 04_principles.md e futuras telas do app Vite.",
-      "responsible": "Produto/Engenharia"
+      "what_changed": "Scope was updated to explicitly declare that Meridian is built for the new era of working with AI agents.",
+      "why_changed": "Central product point is allowing people to manage development with agents while maintaining context, control, visibility, and consistency.",
+      "impact": "03_user_types.md, 04_principles.md and future Vite app screens.",
+      "responsible": "Product/Engineering"
     },
     {
       "time": "10:45",
-      "title": "Meridian prioriza desenvolvimento consistente",
+      "title": "Meridian prioritizes consistent development",
       "affected_document": "00_scope.md",
-      "what_changed": "O posicionamento foi ampliado para qualquer pessoa, dev, time ou área que queira conduzir desenvolvimento com um fluxo pragmático baseado em SDD.",
-      "why_changed": "Meridian não deve ser tratado como ferramenta apenas para times pequenos nem como uma malha de agentes. O produto existe para dar visibilidade, controle e consistência ao manager do processo.",
-      "impact": "03_user_types.md, 20_epics.md, 21_versions.md e meridian.md.",
-      "responsible": "Produto/Engenharia"
+      "what_changed": "Positioning was expanded to anyone, dev, team, or area wanting to conduct development with a pragmatic SDD-based flow.",
+      "why_changed": "Meridian should not be treated as tool only for small teams nor as an agent mesh. Product exists to give visibility, control, and consistency to the process manager.",
+      "impact": "03_user_types.md, 20_epics.md, 21_versions.md and meridian.md.",
+      "responsible": "Product/Engineering"
     },
     {
       "time": "10:30",
-      "title": "Board canônico será JSON",
+      "title": "Canonical board will be JSON",
       "affected_document": "meridian.md",
-      "what_changed": "O board gerado pelo Meridian passa a ter `board.json` como formato canônico. CSV deixa de fazer parte da estrutura base.",
-      "why_changed": "O app Vite e a futura extensão precisam operar sobre uma estrutura rica e estável; exportações como CSV devem ser derivadas sob demanda, não mantidas como fonte paralela.",
-      "impact": "README.md, 21_versions.md e futura documentação de arquitetura.",
-      "responsible": "Produto/Engenharia"
+      "what_changed": "Board generated by Meridian now has `board.json` as canonical format. CSV no longer part of base structure.",
+      "why_changed": "Vite app and future extension need to operate on rich stable structure; exports like CSV should be derived on demand, not maintained as parallel source.",
+      "impact": "README.md, 21_versions.md and future architecture documentation.",
+      "responsible": "Product/Engineering"
     },
     {
       "time": "10:15",
-      "title": "Primeiro app será Vite antes da extensão",
+      "title": "First app will be Vite before extension",
       "affected_document": "01_tech_stack.md",
-      "what_changed": "A primeira entrega será um app Vite local com React, TypeScript e shadcn/ui.",
-      "why_changed": "Um app Vite permite validar a experiência, regras de documentação e estrutura visual antes de investir na extensão VSCode.",
-      "impact": "00_scope.md, 01_tech_stack.md, 20_epics.md, 21_versions.md e 05_architecture.md.",
-      "responsible": "Produto/Engenharia"
+      "what_changed": "First delivery will be a local Vite app with React, TypeScript, and shadcn/ui.",
+      "why_changed": "A Vite app allows validating experience, documentation rules, and visual structure before investing in VSCode extension.",
+      "impact": "00_scope.md, 01_tech_stack.md, 20_epics.md, 21_versions.md and 05_architecture.md.",
+      "responsible": "Product/Engineering"
     },
     {
       "time": "10:00",
-      "title": "Meridian começa seguindo seu próprio fluxo",
+      "title": "Meridian starts following its own flow",
       "affected_document": "00_scope.md",
-      "what_changed": "O projeto será desenvolvido usando a própria estrutura Meridian desde o início.",
-      "why_changed": "O produto precisa provar seu fluxo de documentação viva enquanto é construído.",
-      "impact": "Criação da pasta `app-desktop/docs` e dos documentos de Fase 0 do app desktop.",
-      "responsible": "Produto/Engenharia"
+      "what_changed": "Project will be developed using Meridian structure from the start.",
+      "why_changed": "Product needs to prove its living documentation flow while being built.",
+      "impact": "Creation of `app-desktop/docs` folder and Phase 0 documents for desktop app.",
+      "responsible": "Product/Engineering"
     }
   ]
 }

@@ -11,14 +11,20 @@ import { useProjectFolder } from "@/features/folder/ProjectFolderContext"
 import { typeScale } from "@/features/monitor/monitor-typography"
 import { cn } from "@/lib/utils"
 
-const SETUP_PHASE_ORDER = ["Fase 0", "Fase 1", "Fase 2", "Fase 3", "Contínuo"] as const
+const SETUP_PHASE_ORDER = [
+  "Phase 0",
+  "Phase 1",
+  "Phase 2",
+  "Phase 3",
+  "Continuous",
+] as const
 
 const phaseLabels: Record<string, string> = {
-  "Fase 0": "Fundação do projeto",
-  "Fase 1": "Princípios de código",
-  "Fase 2": "Arquitetura",
-  "Fase 3": "Detalhe técnico",
-  Contínuo: "Registro contínuo",
+  "Phase 0": "Project foundation",
+  "Phase 1": "Code principles",
+  "Phase 2": "Architecture",
+  "Phase 3": "Technical detail",
+  Continuous: "Continuous record",
 }
 
 function groupByPhase(documents: PhaseDocument[]) {
@@ -40,7 +46,7 @@ function defaultPhaseOpen(
   const hasAlert = phaseDocs.some(
     (doc) => getSetupStepState(doc, allDocuments) === "alert",
   )
-  return hasActive || hasAlert || phase === "Fase 0"
+  return hasActive || hasAlert || phase === "Phase 0"
 }
 
 export function SetupMonitorView({
@@ -61,10 +67,10 @@ export function SetupMonitorView({
   if (canRead && documents.length === 0) {
     return (
       <div className="rounded-xl border border-dashed border-border bg-card px-6 py-12 text-center">
-        <p className={typeScale.label}>Nenhum documento carregado</p>
+        <p className={typeScale.label}>No documents loaded</p>
         <p className={cn(typeScale.bodySm, "mt-2")}>
-          Confira os alertas acima ou se a pasta aberta contém os arquivos 00–08 e 11 na
-          raiz.
+          Check the alerts above or whether the open folder contains files 00–08 and 11
+          at the root.
         </p>
       </div>
     )

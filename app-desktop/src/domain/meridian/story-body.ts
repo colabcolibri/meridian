@@ -31,15 +31,15 @@ export function extractMarkdownSubsection(section: string, heading: string): str
 }
 
 export function acceptanceHasFalta(body: string): boolean {
-  const acceptance = extractMarkdownSection(body, "Aceite")
-  return /\*\*Falta:\*\*|^-\s+\[[ x]\]\s+.*Falta:/im.test(acceptance)
+  const acceptance = extractMarkdownSection(body, "Acceptance")
+  return /\*\*Missing:\*\*|^-\s+\[[ x]\]\s+.*Missing:/im.test(acceptance)
 }
 
 const PLANNED_TEST_LINE = /^-\s*\[( |x|X)\]\s+/i
 
 export function getPlannedTestLines(body: string): string[] {
-  const tests = extractMarkdownSection(body, "Testes")
-  const planned = extractMarkdownSubsection(tests, "Planejado")
+  const tests = extractMarkdownSection(body, "Tests")
+  const planned = extractMarkdownSubsection(tests, "Planned")
   if (!planned) {
     return []
   }
@@ -58,8 +58,8 @@ export function allPlannedTestsChecked(body: string): boolean {
 }
 
 export function executadoHasEvidence(body: string): boolean {
-  const tests = extractMarkdownSection(body, "Testes")
-  const executado = extractMarkdownSubsection(tests, "Executado")
+  const tests = extractMarkdownSection(body, "Tests")
+  const executado = extractMarkdownSubsection(tests, "Executed")
   if (!executado) {
     return false
   }
@@ -68,7 +68,7 @@ export function executadoHasEvidence(body: string): boolean {
     .map((line) => line.trim())
     .filter((line) => line.length > 0 && !line.startsWith("#"))
   return lines.some(
-    (line) => !/^_\([^)]*\)_\s*$/.test(line) && !/^_\(?pendente\)?_\s*$/i.test(line),
+    (line) => !/^_\([^)]*\)_\s*$/.test(line) && !/^_\(?pending\)?_\s*$/i.test(line),
   )
 }
 
@@ -79,42 +79,40 @@ export function validateStoryBody(
   const messages: string[] = []
 
   if (story.status === "🔶" && !acceptanceHasFalta(body)) {
-    messages.push('Status 🔶 exige "Falta:" na seção Aceite.')
+    messages.push('Status 🔶 requires "Missing:" in the Acceptance section.')
   }
 
   if (story.tests === "none") {
     if (story.testsStatus !== "n/a") {
-      messages.push("tests: none exige tests_status: n/a.")
+      messages.push("tests: none requires tests_status: n/a.")
     }
     return messages
   }
 
   if (story.testsStatus === "n/a") {
-    messages.push("tests: required não pode usar tests_status: n/a.")
+    messages.push("tests: required cannot use tests_status: n/a.")
   }
 
   const planned = getPlannedTestLines(body)
   if (planned.length === 0) {
-    messages.push("tests: required exige ### Planejado com itens `- [ ]`.")
+    messages.push("tests: required requires ### Planned with `- [ ]` items.")
   }
 
   if (story.testsStatus === "done") {
     if (!allPlannedTestsChecked(body)) {
-      messages.push(
-        "tests_status: done exige todos os itens em ### Planejado marcados [x].",
-      )
+      messages.push("tests_status: done requires all items in ### Planned marked [x].")
     }
     if (!executadoHasEvidence(body)) {
-      messages.push("tests_status: done exige ### Executado preenchido.")
+      messages.push("tests_status: done requires ### Executed filled in.")
     }
   }
 
   if (story.status === "✅") {
     if (story.testsStatus === "pending") {
-      messages.push("status: ✅ exige tests_status: done (ou tests: none).")
+      messages.push("status: ✅ requires tests_status: done (or tests: none).")
     }
     if (story.testsStatus === "done" && !allPlannedTestsChecked(body)) {
-      messages.push("status: ✅ com testes incompletos em ### Planejado.")
+      messages.push("status: ✅ with incomplete tests in ### Planned.")
     }
   }
 

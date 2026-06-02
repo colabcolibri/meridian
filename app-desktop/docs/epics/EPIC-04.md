@@ -1,23 +1,23 @@
 ---
 id: EPIC-04
-title: Kanban e User Stories
+title: Kanban and User Stories
 status: active
 versions: [v1, v2]
-profiles: [Manager do Processo, Operador Local, Futuro Usuário VSCode]
-outcome: "Manager vê épicos, US por status e board.json derivado — sem editar JSON manualmente."
+profiles: [Process Manager, Local Operator, Future VSCode User]
+outcome: "Manager sees epics, US by status, and derived board.json — without editing JSON manually."
 ---
 
-# EPIC-04 — Kanban e User Stories
+# EPIC-04 — Kanban and User Stories
 
-## Capacidade
+## Capability
 
-Abas **Entregas** e **Quadro**: épicos lidos de `docs/epics/`, user stories de `docs/us/`, kanban derivado de frontmatters, filtro por epic.
+**Deliverables** and **Board** tabs: epics read from `docs/epics/`, user stories from `docs/us/`, kanban derived from frontmatter, filter by epic.
 
-## Resultado esperado
+## Expected outcome
 
-Cada US referencia um epic por ID (`epic: EPIC-XX`); o app agrupa US por epic e mostra colunas de status sem duplicar a definição do epic dentro da US.
+Each US references an epic by ID (`epic: EPIC-XX`); the app groups US by epic and shows status columns without duplicating the epic definition inside the US.
 
-## Fora deste epic
+## Out of scope for this epic
 
-- Criar/editar US pelo app (EPIC-05 / v2).
-- Definir novos épicos (skill `create-epic` + docs/epics/).
+- Create/edit US via the app (EPIC-05 / v2).
+- Define new epics (skill `create-epic` + docs/epics/).

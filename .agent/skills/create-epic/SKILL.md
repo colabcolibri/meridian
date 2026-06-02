@@ -8,57 +8,57 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 
 ## Selective reading
 
-| Arquivo | Quando ler |
+| File | When to read |
 | ------- | ---------- |
-| `references/epic-template.md` | Ao redigir `docs/epics/EPIC-XX.md` |
-| `docs/03_user_types.md` | Validar perfis em `profiles` |
-| `docs/epics/` | Arquivos existentes (IDs, duplicação) |
-| `docs/versions/` | Validar `versions:` no frontmatter |
+| `references/epic-template.md` | When drafting `docs/epics/EPIC-XX.md` |
+| `docs/03_user_types.md` | Validate profiles in `profiles` |
+| `docs/epics/` | Existing files (IDs, duplication) |
+| `docs/versions/` | Validate `versions:` in frontmatter |
 
-## Pré-condições
+## Preconditions
 
-| Doc | Status exigido |
+| Doc | Required status |
 | --- | -------------- |
 | `05_architecture.md` | `approved` |
-| `00_scope.md` | `approved` ou explícito no escopo |
-| `03_user_types.md` | `approved` (perfis do epic devem existir aqui) |
+| `00_scope.md` | `approved` or explicit in scope |
+| `03_user_types.md` | `approved` (epic profiles must exist here) |
 
-Épicos são **capacidade de produto**, não módulos técnicos (`src/…`).
+Epics are **product capability**, not technical modules (`src/…`).
 
-## O que um epic contém (conceito)
+## What an epic contains (concept)
 
-| Campo | Onde | Papel |
+| Field | Where | Role |
 | ----- | ---- | ----- |
-| `id`, `title`, `status`, `versions`, `profiles` | frontmatter | Metadados para app e validação |
-| `outcome` | frontmatter | Done do epic no nível **produto** (não implementação) |
-| Capacidade | corpo | O que o usuário passa a conseguir |
-| Fora deste epic | corpo | Limites — evita escopo creep |
+| `id`, `title`, `status`, `versions`, `profiles` | frontmatter | Metadata for app and validation |
+| `outcome` | frontmatter | Epic done at **product** level (not implementation) |
+| Capability | body | What the user can now do |
+| Out of this epic | body | Boundaries — prevents scope creep |
 
-User stories **referenciam** o epic (`epic: EPIC-XX` no frontmatter da US). A US **não** repete descrição, outcome nem escopo do epic.
+User stories **reference** the epic (`epic: EPIC-XX` in US frontmatter). The US **does not** repeat description, outcome or epic scope.
 
-## Procedimento
+## Procedure
 
-1. Listar `docs/epics/EPIC-*.md` → próximo ID = maior número + 1 (IDs permanentes).
-2. Preencher `references/epic-template.md`.
-3. Validar cada item de `profiles` contra `03_user_types.md`.
-4. Validar cada item de `versions` contra arquivos em `docs/versions/`.
-5. Salvar `docs/epics/EPIC-XX.md` (nome do arquivo = `id`).
-6. Se mudança relevante → `update-decisions-log`.
+1. List `docs/epics/EPIC-*.md` → next ID = highest number + 1 (permanent IDs).
+2. Fill `references/epic-template.md`.
+3. Validate each `profiles` item against `03_user_types.md`.
+4. Validate each `versions` item against files in `docs/versions/`.
+5. Save `docs/epics/EPIC-XX.md` (filename = `id`).
+6. If relevant change → `update-decisions-log`.
 
-## Validações antes de salvar
+## Validations before saving
 
-- `outcome` mensurável no nível produto
-- `versions` referenciam releases em `docs/versions/` (quando informado)
-- Não duplicar capacidade já coberta por outro epic
-- Nome do arquivo = `id` (`EPIC-07.md` → `id: EPIC-07`)
+- Product-level measurable `outcome`
+- `versions` reference releases in `docs/versions/` (when provided)
+- Do not duplicate capability already covered by another epic
+- Filename = `id` (`EPIC-07.md` → `id: EPIC-07`)
 
-## Validação opcional
+## Optional validation
 
 ```bash
 python .agent/scripts/validate_meridian.py <project-root>
 ```
 
-## Saída
+## Output
 
 ```txt
 Epic created:

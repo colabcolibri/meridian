@@ -1,5 +1,5 @@
 ---
-title: Log de Decisões
+title: Decision Log
 status: approved
 version: 2.1
 updated: 2026-06-02
@@ -7,11 +7,11 @@ depends_on: []
 blocks: []
 ---
 
-# 11 — Log de Decisões
+# 11 — Decision Log
 
-Decisões vivem em **`docs/decisions/YYYY-MM-DD.json`** — um arquivo JSON por dia calendário.
+Decisions live in **`docs/decisions/YYYY-MM-DD.json`** — one JSON file per calendar day.
 
-## Formato
+## Format
 
 ```json
 {
@@ -19,21 +19,21 @@ Decisões vivem em **`docs/decisions/YYYY-MM-DD.json`** — um arquivo JSON por 
   "entries": [
     {
       "time": "17:30",
-      "title": "Título objetivo",
-      "affected_document": "caminho/do/doc.md",
-      "what_changed": "descrição factual",
-      "why_changed": "contexto e motivação",
-      "impact": "docs afetados; marcar review",
-      "responsible": "papel ou pessoa"
+      "title": "Objective title",
+      "affected_document": "path/to/doc.md",
+      "what_changed": "factual description",
+      "why_changed": "context and motivation",
+      "impact": "affected docs; mark review",
+      "responsible": "role or person"
     }
   ]
 }
 ```
 
-- `date` deve coincidir com o nome do arquivo
-- `entries`: mais recente no **início** do array (prepend no mesmo dia)
-- Novo dia → novo arquivo `YYYY-MM-DD.json`
+- `date` must match the file name
+- `entries`: most recent at the **start** of the array (prepend on the same day)
+- New day → new file `YYYY-MM-DD.json`
 
-## Onde ver
+## Where to view
 
-Aba **Decisões** neste app — lista por data com detalhe estruturado de cada entrada.
+**Decisions** tab in this app — list by date with structured detail for each entry.

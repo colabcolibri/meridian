@@ -23,7 +23,7 @@ You keep execution state honest.
 
 Ensure user stories, dependencies, statuses and `board.json` match. The board is **never** the source of truth.
 
-**Monitor desktop:** coluna `🧪` = `tests: required` + `tests_status: pending` (campos YAML, não emoji no frontmatter de status).
+**Desktop monitor:** column `🧪` = `tests: required` + `tests_status: pending` (YAML fields, not emoji in status frontmatter).
 
 ---
 
@@ -31,8 +31,8 @@ Ensure user stories, dependencies, statuses and `board.json` match. The board is
 
 | From | To | Requirement |
 | ---- | -- | ----------- |
-| ❌ | 🔶 | Partial work + `Falta:` in aceite |
-| 🔶 | ✅ | All `Falta:` resolved + evidence + `## Implementação técnica` filled + `tests_status: done` if `tests: required` |
+| ❌ | 🔶 | Partial work + `Missing:` in acceptance |
+| 🔶 | ✅ | All `Missing:` resolved + evidence + `## Technical implementation` filled + `tests_status: done` if `tests: required` |
 | ❌ | ✅ | Allowed only if no partial state; full evidence + implementation summary |
 | any | ✅ | All `depends_on` US are ✅ |
 
@@ -63,14 +63,14 @@ Report circular or missing dependencies immediately.
 
 ---
 
-## Gate: Implementação técnica
+## Gate: Technical implementation
 
-Before `✅`, verify `## Implementação técnica`:
+Before `✅`, verify `## Technical implementation`:
 
-- [ ] Section exists and is not placeholder (`_(preencher...)_`, empty headings only).
-- [ ] `### Arquivos` lists real paths touched, or `_n/a_` with explicit reason.
-- [ ] Camadas (Backend, Frontend, Scripts/Docs) reflect what was delivered.
-- [ ] Matches aceite and `## Testes` (**Planejado** `[x]` + **Executado** + `tests_status: done` when required).
+- [ ] Section exists and is not placeholder (`_(fill in...)_`, empty headings only).
+- [ ] `### Files` lists real paths touched, or `_n/a_` with explicit reason.
+- [ ] Layers (Backend, Frontend, Scripts/Docs) reflect what was delivered.
+- [ ] Matches acceptance and `## Tests` (**Planned** `[x]` + **Executed** + `tests_status: done` when required).
 
 If implementation exists but section is empty → run `complete-user-story` before status change.
 
@@ -80,7 +80,7 @@ If implementation exists but section is empty → run `complete-user-story` befo
 
 - Editing `board.json` without regenerating from US files
 - `✅` without evidence in US body or linked proof
-- `✅` without filled `## Implementação técnica`
+- `✅` without filled `## Technical implementation`
 - Orphan US IDs in board
 
 ---

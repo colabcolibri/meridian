@@ -2,25 +2,25 @@
 description: Initialize a project using the Meridian protocol and minimum governance.
 ---
 
-# /init-meridian — inicializar projeto
+# /init-meridian — initialize project
 
 $ARGUMENTS
 
 ---
 
-## Regras críticas
+## Critical rules
 
-1. **SEM CÓDIGO DE PRODUTO** — apenas estrutura `docs/` e governança
-2. Use o agent `process-manager`, não modo plan genérico do IDE
-3. Siga `@[skills/init-project]` e fases do `process-manager`
-4. Máximo 3 perguntas se intenção do projeto estiver vaga
-5. Registre decisão inicial em `docs/decisions/YYYY-MM-DD.json`
+1. **NO PRODUCT CODE** — only `docs/` structure and governance
+2. Use agent `process-manager`, not generic IDE plan mode
+3. Follow `@[skills/init-project]` and `process-manager` phases
+4. Maximum 3 questions if project intent is vague
+5. Register initial decision in `docs/decisions/YYYY-MM-DD.json`
 
 ---
 
 ## Task
 
-Use `process-manager` com este contexto:
+Use `process-manager` with this context:
 
 ```txt
 CONTEXT:
@@ -29,11 +29,11 @@ CONTEXT:
 - Target: project root (confirm with user if ambiguous)
 
 RULES:
-1. Read .agent/MERIDIAN.md or meridian.md
+1. Read .agent/MERIDIAN.md
 2. Run init-project skill procedure
 3. Create docs/ tree per skill
 4. 00_scope.md = draft
-5. `11_decisions.md` stub + primeira entrada JSON em `docs/decisions/`
+5. `11_decisions.md` stub + first JSON entry in `docs/decisions/`
 6. board.json = []
 7. Validate .gitignore baseline
 8. REPORT exact paths created
@@ -41,18 +41,18 @@ RULES:
 
 ---
 
-## Entregáveis
+## Deliverables
 
-| Item | Local |
+| Item | Location |
 | ---- | ----- |
-| Estrutura docs | `docs/` + subpastas |
-| Escopo inicial | `docs/00_scope.md` |
-| Log de decisões | `docs/decisions/YYYY-MM-DD.json` + stub `11_decisions.md` |
-| Board vazio | `docs/kanban/board.json` |
+| Docs structure | `docs/` + subfolders |
+| Initial scope | `docs/00_scope.md` |
+| Decision log | `docs/decisions/YYYY-MM-DD.json` + stub `11_decisions.md` |
+| Empty board | `docs/kanban/board.json` |
 
 ---
 
-## Saída esperada
+## Expected output
 
 ```txt
 Meridian initialized:
@@ -65,15 +65,15 @@ Next human decision:
 
 ---
 
-## Depois
+## After
 
-Informe ao usuário:
+Tell the user:
 
 ```txt
-Próximos passos:
-1. Revisar docs/00_scope.md
-2. Preencher 01_tech_stack, 02_security, 03_user_types, 04_principles
-3. Aprovar 05_architecture (+ 08–10 se aplicável)
-4. Planejar entrega: /create-version, /create-epic — planejar epics/versions/sprints nas pastas
-5. /create-us (gate: 04 + 06 approved) → implementar → /complete-us → /sync-board
+Next steps:
+1. Review docs/00_scope.md
+2. Fill in 01_tech_stack, 02_security, 03_user_types, 04_principles
+3. Approve 05_architecture (+ 08–10 if applicable)
+4. Plan delivery: /create-version, /create-epic — plan epics/versions/sprints in folders
+5. /create-us (gate: 04 + 06 approved) → implement → /complete-us → /sync-board
 ```

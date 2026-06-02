@@ -32,10 +32,10 @@ export const setupStepStyles: Record<
 
 export const docStatusStyles: Record<DocStatus, { label: string; className: string }> =
   {
-    draft: { label: "Rascunho", className: "bg-muted text-muted-foreground" },
-    review: { label: "Em revisão", className: "bg-amber-50 text-amber-900" },
+    draft: { label: "Draft", className: "bg-muted text-muted-foreground" },
+    review: { label: "In review", className: "bg-amber-50 text-amber-900" },
     approved: {
-      label: "Aprovado",
+      label: "Approved",
       className: "bg-meridian-success-muted text-meridian-success-foreground",
     },
   }

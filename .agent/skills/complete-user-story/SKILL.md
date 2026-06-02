@@ -1,6 +1,6 @@
 ---
 name: complete-user-story
-description: Fecha uma Meridian user story após implementação — preenche Implementação técnica, aceite, status e board. Use when marking US done, completing US-XXXX, or after implementing a user story.
+description: Closes a Meridian user story after implementation — fills Technical implementation, acceptance, status and board. Use when marking US done, completing US-XXXX, or after implementing a user story.
 allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 ---
 
@@ -8,63 +8,63 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 
 ## Selective reading
 
-| Arquivo | Quando ler |
+| File | When to read |
 | ------- | ---------- |
-| `references/implementation-template.md` | Ao preencher `## Implementação técnica` |
-| `../create-user-story/references/us-template.md` | Estrutura completa da US |
+| `references/implementation-template.md` | When filling `## Technical implementation` |
+| `../create-user-story/references/us-template.md` | Full US structure |
 
-## Quando acionar
+## When to trigger
 
-- Implementação de código (ou docs de produto) terminou para uma US.
-- Manager pede marcar US como `✅`.
-- Workflow `/complete-us` ou fechamento explícito pós-implementação.
+- Code (or product docs) implementation finished for a US.
+- Manager asks to mark US as `✅`.
+- Workflow `/complete-us` or explicit post-implementation closure.
 
-**Não** use na criação da US — use `create-user-story`.
+**Do not** use on US creation — use `create-user-story`.
 
-## Pré-condições (hard gate)
+## Preconditions (hard gate)
 
-| Verificação | Exigência |
+| Check | Requirement |
 | ----------- | --------- |
-| US existe | `docs/us/US-XXXX.md` |
-| Dependências | Todo `depends_on` com status `✅` |
-| Evidência | Build/lint/test aplicável passou |
-| Aceite | Critérios comprovados (marcar `[x]`) |
+| US exists | `docs/us/US-XXXX.md` |
+| Dependencies | Every `depends_on` with status `✅` |
+| Evidence | Applicable build/lint/test passed |
+| Acceptance | Criteria proven (mark `[x]`) |
 
-Se algo falhar → **não** marcar `✅`; use `🔶` com `Falta:` no aceite.
+If anything fails → **do not** mark `✅`; use `🔶` with `Missing:` in acceptance.
 
-## Procedimento
+## Procedure
 
-1. Ler `docs/us/US-XXXX.md` e identificar escopo (aceite + `done_when`).
-2. Inspecionar o que foi entregue: `git diff`, arquivos alterados, output de testes.
-3. Substituir `## Implementação técnica` pelo **registro real** (ver `references/implementation-template.md`):
-   - paths relativos ao repo (não só nomes soltos);
-   - resumo por camada (Backend, Frontend, Scripts, Docs);
-   - remover placeholders `_(preencher...)_` e planos antecipados que não refletem o código.
-4. Em `## Testes`:
-   - marcar `[x]` em **todos** os itens de **Planejado**;
-   - preencher **Executado** com comando/verificação + resultado (data opcional);
-   - atualizar frontmatter `tests_status: done` (quando `tests: required`).
-5. Marcar aceite `[x]` com evidência objetiva.
-6. Atualizar frontmatter `status: ✅` (ou `🔶` se parcial + `Falta:`). Só marcar `✅` se `tests: none` **ou** `tests_status: done`.
-7. Invocar `generate-board-json`.
-8. Se mudança relevante cross-cutting → `update-decisions-log` (decisões locais da US ficam em Implementação técnica).
+1. Read `docs/us/US-XXXX.md` and identify scope (acceptance + `done_when`).
+2. Inspect what was delivered: `git diff`, changed files, test output.
+3. Replace `## Technical implementation` with the **real record** (see `references/implementation-template.md`):
+   - paths relative to repo (not bare filenames);
+   - summary per layer (Backend, Frontend, Scripts, Docs);
+   - remove placeholders `_(fill in...)_` and prior plans that do not match code.
+4. In `## Tests`:
+   - mark `[x]` on **all** **Planned** items;
+   - fill **Executed** with command/check + result (date optional);
+   - update frontmatter `tests_status: done` (when `tests: required`).
+5. Mark acceptance `[x]` with objective evidence.
+6. Update frontmatter `status: ✅` (or `🔶` if partial + `Missing:`). Only mark `✅` if `tests: none` **or** `tests_status: done`.
+7. Invoke `generate-board-json`.
+8. If relevant cross-cutting change → `update-decisions-log` (local US decisions stay in Technical implementation).
 
-## Validações antes de marcar `✅`
+## Validations before marking `✅`
 
-- `## Implementação técnica` preenchida — não placeholder, não só plano.
-- Seção `### Arquivos` lista paths reais tocados (ou `_n/a_` com justificativa explícita).
-- Todo item de aceite verificável está `[x]` ou há `Falta:` com status `🔶`.
-- `depends_on` satisfeitas.
-- Se `tests: required`: `tests_status: done`, **Planejado** todo `[x]`, **Executado** preenchido.
+- `## Technical implementation` filled — not placeholder, not plan only.
+- `### Files` section lists real paths touched (or `_n/a_` with explicit justification).
+- Every verifiable acceptance item is `[x]` or has `Missing:` with status `🔶`.
+- `depends_on` satisfied.
+- If `tests: required`: `tests_status: done`, all **Planned** `[x]`, **Executed** filled.
 
-## Saída
+## Output
 
 ```txt
 US completed:
 File:
 Status:
-Implementation summary: (1 linha)
-Files touched: (contagem)
+Implementation summary: (1 line)
+Files touched: (count)
 Tests run:
 Board updated:
 Decisions logged: yes | no

@@ -1,6 +1,6 @@
 import type { SetupStepState } from "@/domain/meridian/types"
 
-/** Metadados de fluxo — rótulos curtos para legenda e acordeão. */
+/** Flow metadata — short labels for legend and accordion. */
 export const setupStepMeta: Record<
   SetupStepState,
   {
@@ -9,24 +9,24 @@ export const setupStepMeta: Record<
   }
 > = {
   complete: {
-    shortLabel: "Pronto",
-    legendHint: "Aprovado e dependências satisfeitas",
+    shortLabel: "Ready",
+    legendHint: "Approved and dependencies satisfied",
   },
   active: {
-    shortLabel: "Em andamento",
-    legendHint: "Pode ser editado ou revisado agora",
+    shortLabel: "In progress",
+    legendHint: "Can be edited or reviewed now",
   },
   locked: {
-    shortLabel: "Não iniciado",
-    legendHint: "Aguardando documentos anteriores",
+    shortLabel: "Not started",
+    legendHint: "Waiting for earlier documents",
   },
   alert: {
-    shortLabel: "Atenção",
-    legendHint: "Aprovado fora de ordem ou inconsistência",
+    shortLabel: "Attention",
+    legendHint: "Approved out of order or inconsistent",
   },
 }
 
-/** Ordem fixa na legenda. */
+/** Fixed order in the legend. */
 export const setupStepLegendOrder: SetupStepState[] = [
   "complete",
   "active",

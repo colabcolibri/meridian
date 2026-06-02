@@ -24,12 +24,12 @@ export function VersionFilterBar({ versions }: { versions: ProductVersion[] }) {
   return (
     <div className="space-y-3" onClick={(event) => event.stopPropagation()}>
       <p className={typeScale.label}>
-        Filtrar versões
+        Filter versions
         <span className="font-normal text-muted-foreground">
           {" · "}
           {selectedCount === 0
-            ? "nenhuma selecionada"
-            : `${selectedCount} de ${versionIds.length} no quadro`}
+            ? "none selected"
+            : `${selectedCount} of ${versionIds.length} on board`}
         </span>
       </p>
 
@@ -46,7 +46,7 @@ export function VersionFilterBar({ versions }: { versions: ProductVersion[] }) {
           }}
           type="button"
         >
-          Marcar todas
+          Select all
         </button>
         <button
           className={cn(
@@ -60,7 +60,7 @@ export function VersionFilterBar({ versions }: { versions: ProductVersion[] }) {
           }}
           type="button"
         >
-          Desmarcar todas
+          Clear all
         </button>
 
         {sortedVersions.map((version) => {
@@ -75,7 +75,7 @@ export function VersionFilterBar({ versions }: { versions: ProductVersion[] }) {
                 event.stopPropagation()
                 toggleVersion(version.id)
               }}
-              title={`${selected ? "Ocultar" : "Mostrar"} ${version.id} no quadro — ${version.title}`}
+              title={`${selected ? "Hide" : "Show"} ${version.id} on board — ${version.title}`}
               type="button"
             >
               <span className="font-mono">{version.id}</span>

@@ -6,32 +6,32 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 
 # Init project (Meridian)
 
-> Cria estrutura mínima em `docs/` para governança antes de qualquer código de produto.
+> Creates minimum structure in `docs/` for governance before any product code.
 
 ## Selective reading
 
-| Arquivo | Quando ler |
+| File | When to read |
 | ------- | ---------- |
-| `references/doc-templates.md` | Ao criar arquivos de fase e primeira decisão |
-| `references/gitignore-baseline.md` | Antes de `npm install` ou primeiro commit |
+| `references/doc-templates.md` | When creating phase files and first decision |
+| `references/gitignore-baseline.md` | Before `npm install` or first commit |
 
-## Quando acionar
+## When to trigger
 
-- Projeto novo com intenção Meridian
-- Existe `meridian.md` ou `.agent/` mas falta `docs/`
-- Estrutura incompleta ou corrompida
-- Agente tentou implementar sem base documental
+- New project with Meridian intent
+- `.agent/` exists but `docs/` missing
+- Incomplete or corrupted structure
+- Agent tried to implement without document base
 
-## Fase 0 — context check
+## Phase 0 — context check
 
-1. Ler `.agent/MERIDIAN.md` se existir; senão `meridian.md`.
-2. Confirmar pasta alvo e autorização do usuário para criar arquivos.
-3. Se faltar intenção do projeto → máximo **3 perguntas** (problema, usuário, restrições).
+1. Read `.agent/MERIDIAN.md` if it exists.
+2. Confirm target folder and user authorization to create files.
+3. If project intent missing → maximum **3 questions** (problem, user, constraints).
 
-## Procedimento
+## Procedure
 
-1. Verificar se `docs/` existe.
-2. Se ausente, criar árvore:
+1. Check if `docs/` exists.
+2. If absent, create tree:
 
 ```txt
 docs/
@@ -43,30 +43,30 @@ docs/
   us/
 ```
 
-3. Aplicar frontmatter de `references/doc-templates.md` em cada doc (`status: draft`, exceto decisão inicial).
-4. `11_decisions.md` (stub) + `docs/decisions/YYYY-MM-DD.json` com entrada "Projeto iniciado com Meridian".
-5. `00_scope.md`: rascunho com premissas explícitas se necessário.
+3. Apply frontmatter from `references/doc-templates.md` on each doc (`status: draft`, except initial decision).
+4. `11_decisions.md` (stub) + `docs/decisions/YYYY-MM-DD.json` with entry "Project started with Meridian".
+5. `00_scope.md`: draft with explicit assumptions if needed.
 6. `board.json`: `[]`
-7. Validar `.gitignore` com `references/gitignore-baseline.md`.
-8. **Não** criar US, app, API, banco ou migrations.
+7. Validate `.gitignore` with `references/gitignore-baseline.md`.
+8. **Do not** create US, app, API, database or migrations.
 
 ## Checkpoints
 
-| # | Verificação |
+| # | Check |
 | - | ----------- |
-| 1 | `docs/`, `decisions/`, `us/`, `sprints/`, `board.json`, `11_decisions`, `00_scope` existem |
-| 2 | `.env*` protegidos no `.gitignore` |
-| 3 | Nenhum código de produto criado |
+| 1 | `docs/`, `decisions/`, `us/`, `sprints/`, `board.json`, `11_decisions`, `00_scope` exist |
+| 2 | `.env*` protected in `.gitignore` |
+| 3 | No product code created |
 
-## Proibições
+## Prohibitions
 
-| Proibido | Permitido |
+| Forbidden | Allowed |
 | -------- | --------- |
-| Marcar fase docs como `approved` sem humano | `draft` + premissas |
-| Criar US | Estrutura vazia `us/` |
-| Implementar features | Docs + decisão inicial |
+| Mark phase docs as `approved` without human | `draft` + assumptions |
+| Create US | Empty `us/` structure |
+| Implement features | Docs + initial decision |
 
-## Saída
+## Output
 
 ```txt
 Meridian initialized:

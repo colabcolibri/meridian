@@ -1,4 +1,4 @@
-/** Validação da pasta docs/ aberta no monitor (raiz = conteúdo Meridian). */
+/** Validation of the docs/ folder opened in the monitor (root = Meridian content). */
 export interface MeridianFolderValidation {
   hasScopeDoc: boolean
   hasUsDir: boolean
@@ -15,5 +15,5 @@ export type ProjectFolderStatus =
   | "opening"
   | "open"
   | "error"
-  /** Handle salvo, mas o browser exige um clique para conceder leitura. */
+  /** Handle stored, but the browser requires a click to grant read permission. */
   | "permission_required"

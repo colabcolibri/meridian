@@ -1,23 +1,23 @@
 ---
 id: EPIC-06
-title: Experiência do monitor
+title: Monitor experience
 status: complete
 versions: [v1]
-profiles: [Manager do Processo, Operador Local]
-outcome: "Manager entende o Meridian pelo guia Comece aqui e opera o app sem jargão técnico."
+profiles: [Process Manager, Local Operator]
+outcome: "Manager understands Meridian via the Get Started guide and operates the app without technical jargon."
 ---
 
-# EPIC-06 — Experiência do monitor
+# EPIC-06 — Monitor experience
 
-## Capacidade
+## Capability
 
-Interface clara para quem gerencia o processo: guia introdutório, onboarding para abrir `docs/`, linguagem acessível, hierarquia visual e ferramentas avançadas recolhidas.
+Clear interface for whoever manages the process: introductory guide, onboarding to open `docs/`, accessible language, visual hierarchy, and collapsed advanced tools.
 
-## Resultado esperado
+## Expected outcome
 
-Pessoa que nunca viu Meridian abre o app, lê **Comece aqui**, abre a pasta docs e entende fases, épicos, US e quadro sem ler o protocolo master.
+Someone who has never seen Meridian opens the app, reads **Get Started**, opens the docs folder, and understands phases, epics, US, and board without reading the master protocol.
 
-## Fora deste epic
+## Out of scope for this epic
 
-- Funcionalidades de leitura/validação (outros epics).
-- Marketing ou site público do produto.
+- Reading/validation features (other epics).
+- Marketing or public product site.

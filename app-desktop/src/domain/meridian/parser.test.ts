@@ -14,17 +14,17 @@ import {
 const docsRoot = resolve(__dirname, "../../../docs")
 
 describe("meridian parser", () => {
-  it("parseia 00_scope.md", () => {
+  it("parses 00_scope.md", () => {
     const raw = readFileSync(resolve(docsRoot, "00_scope.md"), "utf8")
     const doc = parsePhaseDocument("00_scope", raw)
 
     expect(doc.status).toBe("approved")
     expect(doc.dependsOn).toEqual([])
     expect(doc.blocks).toContain("01_tech_stack")
-    expect(doc.title).toBe("Escopo")
+    expect(doc.title).toBe("Scope")
   })
 
-  it("parseia 05_architecture.md com depends_on multilinha", () => {
+  it("parses 05_architecture.md with multiline depends_on", () => {
     const raw = readFileSync(resolve(docsRoot, "05_architecture.md"), "utf8")
     const doc = parsePhaseDocument("05_architecture", raw)
 
@@ -34,7 +34,7 @@ describe("meridian parser", () => {
     expect(doc.dependsOn).not.toContain("21_versions")
   })
 
-  it("parseia US-0001.md", () => {
+  it("parses US-0001.md", () => {
     const raw = readFileSync(resolve(docsRoot, "us/US-0001.md"), "utf8")
     const story = parseUserStoryFile("US-0001.md", raw)
 
@@ -44,20 +44,20 @@ describe("meridian parser", () => {
     expect(story.moscow).toBe("Must")
   })
 
-  it("rejeita id US com menos de 4 dígitos", () => {
+  it("rejects US id with fewer than 4 digits", () => {
     const raw = readFileSync(resolve(docsRoot, "us/US-0001.md"), "utf8").replace(
       /US-0001/g,
       "US-001",
     )
-    expect(() => parseUserStoryFile("US-001.md", raw)).toThrow(/4 dígitos/)
+    expect(() => parseUserStoryFile("US-001.md", raw)).toThrow(/4 digits/)
   })
 
-  it("parseia EPIC-02.md em docs/epics/", () => {
+  it("parses EPIC-02.md in docs/epics/", () => {
     const raw = readFileSync(resolve(docsRoot, "epics/EPIC-02.md"), "utf8")
     const epic = parseEpicFile("EPIC-02.md", raw)
 
     expect(epic.id).toBe("EPIC-02")
-    expect(epic.title).toContain("Configuração")
+    expect(epic.title).toContain("Setup")
     expect(epic.status).toBe("complete")
     expect(epic.versions).toContain("v0")
     expect(epic.versions).toContain("v1")
@@ -67,7 +67,7 @@ describe("meridian parser", () => {
     expect(epic.scopeOut.length).toBeGreaterThan(5)
   })
 
-  it("parseia todos os epics em docs/epics/", () => {
+  it("parses all epics in docs/epics/", () => {
     const epicsDir = resolve(docsRoot, "epics")
     const files = readdirSync(epicsDir).filter((name) => /^EPIC-\d+\.md$/i.test(name))
 
@@ -86,7 +86,7 @@ describe("meridian parser", () => {
     expect(epic05.status).toBe("paused")
   })
 
-  it("parseia v1.md em docs/versions/", () => {
+  it("parses v1.md in docs/versions/", () => {
     const raw = readFileSync(resolve(docsRoot, "versions/v1.md"), "utf8")
     const version = parseVersionFile("v1.md", raw)
 
@@ -97,7 +97,7 @@ describe("meridian parser", () => {
     expect(version.objective.length).toBeGreaterThan(10)
   })
 
-  it("parseia v1-S1.md em docs/sprints/", () => {
+  it("parses v1-S1.md in docs/sprints/", () => {
     const raw = readFileSync(resolve(docsRoot, "sprints/v1-S1.md"), "utf8")
     const sprint = parseSprintFile("v1-S1.md", raw)
 
@@ -106,7 +106,7 @@ describe("meridian parser", () => {
     expect(sprint.storyIds.length).toBeGreaterThan(3)
   })
 
-  it("parseia decisions/2026-06-02.json", () => {
+  it("parses decisions/2026-06-02.json", () => {
     const raw = readFileSync(resolve(docsRoot, "decisions/2026-06-02.json"), "utf8")
     const day = parseDecisionDayFile("2026-06-02.json", raw)
 

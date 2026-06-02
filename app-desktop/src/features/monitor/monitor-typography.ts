@@ -1,34 +1,34 @@
 /**
- * Escala tipográfica do monitor (hierarquia / type scale).
- * Use estas classes em vez de text-xs/text-sm soltos.
+ * Monitor type scale (hierarchy).
+ * Prefer these classes over ad-hoc text-xs/text-sm.
  */
 export const typeScale = {
-  /** Título de página (ex.: configuração do projeto) */
+  /** Page title (e.g. project setup) */
   pageTitle: "font-heading text-2xl font-semibold tracking-tight text-foreground",
-  /** Grupo de fase: Fase 0, Fase 1… */
+  /** Phase group: Phase 0, Phase 1… */
   sectionTitle: "font-heading text-xl font-semibold tracking-tight text-foreground",
-  /** Subtítulo do grupo (Fundação, Produto…) */
+  /** Group subtitle (Foundation, Product…) */
   sectionSubtitle: "text-base text-muted-foreground",
-  /** Título do card de documento */
+  /** Phase document card title */
   cardTitle: "font-heading text-lg font-semibold leading-snug text-foreground",
-  /** Código do doc (00_scope) */
+  /** Doc id (00_scope) */
   docId: "font-mono text-xs font-medium uppercase tracking-wider text-muted-foreground",
-  /** Corpo principal — largura total do container */
+  /** Primary body — full container width */
   body: "w-full max-w-none text-base leading-relaxed text-muted-foreground",
-  /** Corpo secundário */
+  /** Secondary body */
   bodySm: "w-full max-w-none text-sm leading-relaxed text-muted-foreground",
-  /** Prose em painéis (markdown, conceitos) */
+  /** Prose in panels (markdown, concepts) */
   prose: "w-full max-w-none text-base leading-relaxed text-foreground",
-  /** Rótulos e ênfase curta */
+  /** Short labels and emphasis */
   label: "text-sm font-medium text-foreground",
-  /** Metadados, contadores, hints */
+  /** Metadata, counters, hints */
   caption: "text-sm text-muted-foreground",
-  /** Pills de status */
+  /** Status pills */
   badge: "text-xs font-medium leading-none",
-  /** Abas de navegação */
+  /** Navigation tabs */
   tab: "text-base font-medium",
-  /** Número de progresso */
+  /** Progress number */
   stat: "font-heading text-3xl font-semibold tabular-nums text-foreground",
-  /** Título do sheet / painel */
+  /** Sheet / panel title */
   panelTitle: "font-heading text-xl font-semibold text-foreground",
 } as const

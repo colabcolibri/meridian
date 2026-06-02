@@ -2,19 +2,19 @@
 description: Create or review 05_architecture.md after required Meridian documents are approved.
 ---
 
-# /architecture — arquitetura
+# /architecture — architecture
 
 $ARGUMENTS
 
 ---
 
-## Regras críticas
+## Critical rules
 
 1. Use `architecture-guardian`
-2. Pré-requisitos: scope, stack, security, users (mínimo draft)
-3. Alinhar com `02_security` — carregar `security-review` se gaps
-4. Mudança material → `docs/decisions/YYYY-MM-DD.json` (skill `update-decisions-log`)
-5. Sem código de produto neste workflow (salvo pedido explícito em $ARGUMENTS)
+2. Prerequisites: scope, stack, security, users (draft minimum)
+3. Align with `02_security` — load `security-review` if gaps
+4. Material change → `docs/decisions/YYYY-MM-DD.json` (skill `update-decisions-log`)
+5. No product code in this workflow (unless explicit request in $ARGUMENTS)
 
 ---
 
@@ -35,7 +35,7 @@ RULES:
 
 ---
 
-## Saída
+## Output
 
 ```txt
 05_architecture status:

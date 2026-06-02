@@ -2,121 +2,121 @@
 description: Daily workflow for managers using AI agents with Meridian — orient, implement, close US.
 ---
 
-# /daily-with-ai — fluxo diário com IA
+# /daily-with-ai — daily AI workflow
 
 $ARGUMENTS
 
 ---
 
-## Regras críticas
+## Critical rules
 
-1. Manager humano aprova; agentes executam dentro de `docs/`.
-2. Uma US por ciclo de implementação quando possível.
-3. Código só com docs mínimos: `05_architecture` approved; epic/version nas pastas; depois US.
-4. Fechamento sempre com `complete-user-story` ou `/complete-us` — nunca ✅ só no chat.
-5. `board.json` é derivado — use `/sync-board` após mudar US.
-
----
-
-## Para quem é
-
-Pessoa que já leu **Comece aqui** e **Guia de uso** no app (três fases: documentar → backlog → executar).
+1. Human manager approves; agents execute within `docs/`.
+2. One US per implementation cycle when possible.
+3. Code only with minimum docs: `05_architecture` approved; epic/version in folders; then US.
+4. Always close with `complete-user-story` or `/complete-us` — never ✅ in chat only.
+5. `board.json` is derived — use `/sync-board` after changing US.
 
 ---
 
-## Loop diário
+## Who it is for
 
-### 1. Orientar
+People who have already read **Start here** and **Usage guide** in the app (three phases: document → backlog → execute).
+
+---
+
+## Daily loop
+
+### 1. Orient
 
 ```txt
 Agent: process-manager
-Skill: meridian-routing (opcional)
-Comando: /status
-App: aba Configuração + **Decisões** (log) + Quadro
+Skill: meridian-routing (optional)
+Command: /status
+App: Settings tab + **Decisions** (log) + Board
 ```
 
-- Identificar bloqueios (docs draft, deps de US).
-- Escolher próxima US Must desbloqueada.
+- Identify blockers (draft docs, US deps).
+- Choose next unblocked Must US.
 
-### 2. Contextualizar
+### 2. Contextualize
 
 ```txt
-Citar: US-XXXX ou docs/us/US-XXXX.md
-Prompt: "Implemente US-XXXX conforme aceite. Não marque ✅ sem evidência."
+Cite: US-XXXX or docs/us/US-XXXX.md
+Prompt: "Implement US-XXXX per acceptance. Do not mark ✅ without evidence."
 ```
 
-- Citar ID da US sempre.
-- Para docs de fase: citar arquivo (`05_architecture.md`) + agent adequado.
+- Always cite US ID.
+- For phase docs: cite file (`05_architecture.md`) + appropriate agent.
 
-### 3. Implementar
+### 3. Implement
 
-- Agente lê US, arquitetura, dependências antes de codar.
-- Manager revisa diff.
-- Parcial → `🔶` + `Falta:` no aceite da US.
+- Agent reads US, architecture, dependencies before coding.
+- Manager reviews diff.
+- Partial → `🔶` + `Missing:` in US acceptance.
 
-### 4. Fechar
+### 4. Close
 
 ```txt
 Agent: board-keeper
 Skill: complete-user-story
-Comando: /complete-us US-XXXX
-Depois: /sync-board
+Command: /complete-us US-XXXX
+Then: /sync-board
 ```
 
-- Preencher `## Implementação técnica` (arquivos + camadas).
-- Aceite `[x]`, status `✅`, testes documentados.
-- Decisão cross-cutting → skill `update-decisions-log` (`docs/decisions/YYYY-MM-DD.json`).
+- Fill `## Technical implementation` (files + layers).
+- Acceptance `[x]`, status `✅`, tests documented.
+- Cross-cutting decision → skill `update-decisions-log` (`docs/decisions/YYYY-MM-DD.json`).
 
-### 5. Revisar
+### 5. Review
 
-- App: aba Quadro — US na coluna certa?
-- Implementação técnica coerente com o que foi testado?
+- App: Board tab — US in correct column?
+- Technical implementation consistent with what was tested?
 
 ---
 
-## Comandos do dia a dia
+## Day-to-day commands
 
-| Comando | Uso |
+| Command | Use |
 | ------- | --- |
-| `/status` | Início de sessão |
-| `/create-us` | Nova tarefa (gates ok) |
-| `/complete-us` | Fechar US pós-implementação |
-| `/sync-board` | Regenerar kanban JSON |
-| `/plan-sprint` | Fatia de trabalho na versão |
-| `/create-epic` | Nova capacidade de produto |
-| `/architecture` | Doc 05 antes de mudança estrutural |
-| `/security-pass` | Doc 02 antes de feature sensível |
+| `/status` | Session start |
+| `/create-us` | New task (gates OK) |
+| `/complete-us` | Close US after implementation |
+| `/sync-board` | Regenerate kanban JSON |
+| `/plan-sprint` | Work slice in version |
+| `/create-epic` | New product capability |
+| `/architecture` | Doc 05 before structural change |
+| `/security-pass` | Doc 02 before sensitive feature |
 
 ---
 
-## Anti-padrões
+## Anti-patterns
 
-- Código sem US ou sem docs de fase mínimos.
-- ✅ no chat sem atualizar `docs/us/US-XXXX.md`.
-- Editar `board.json` à mão.
-- Conversa única com muitas features misturadas.
-- `approved` em doc de fase sem leitura humana.
+- Code without US or minimum phase docs.
+- ✅ in chat without updating `docs/us/US-XXXX.md`.
+- Editing `board.json` by hand.
+- Single conversation mixing many features.
+- `approved` on phase doc without human review.
 
 ---
 
-## Saída esperada
+## Expected output
 
 ```txt
-Sessão:
-US trabalhada:
-Status final:
-Board atualizado: yes | no
-Bloqueios restantes:
-Próxima US sugerida:
+Session:
+US worked:
+Final status:
+Board updated: yes | no
+Remaining blockers:
+Suggested next US:
 ```
 
 ---
 
-## Referências
+## References
 
-| Recurso | Caminho |
+| Resource | Path |
 | ------- | ------- |
-| Protocolo master | `.agent/MERIDIAN.md` |
-| Fechar US | `.agent/workflows/complete-us.md` |
-| App — guias | abas **Comece aqui** e **Guia de uso** / `meridian-concepts.ts` |
-| Fluxo resumido | `.agent/references/daily-ai-workflow.md` |
+| Master protocol | `.agent/MERIDIAN.md` |
+| Close US | `.agent/workflows/complete-us.md` |
+| App — guides | **Start here** and **Usage guide** tabs / `meridian-concepts.ts` |
+| Summary flow | `.agent/references/daily-ai-workflow.md` |

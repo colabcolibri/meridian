@@ -12,56 +12,56 @@ blocks: [02_security.md, 04_principles.md, 08_environments.md]
 ## Frontend
 
 - Framework: React
-- Linguagem: TypeScript
+- Language: TypeScript
 - Bundler: Vite
-- Estilização: Tailwind CSS
-- Componentes: shadcn/ui
-- Ícones: lucide-react
+- Styling: Tailwind CSS
+- Components: shadcn/ui
+- Icons: lucide-react
 
-**Justificativa:** React com Vite entrega uma base leve, rápida e simples de rodar localmente com `pnpm`. shadcn/ui oferece componentes profissionais, customizáveis e compatíveis com Tailwind, sem prender o projeto a uma biblioteca fechada.
+**Rationale:** React with Vite delivers a lightweight, fast base that is simple to run locally with `pnpm`. shadcn/ui offers professional, customizable components compatible with Tailwind, without locking the project into a closed library.
 
-**Alternativas descartadas:**
+**Discarded alternatives:**
 
-- Next.js: poderoso, mas desnecessário para a primeira versão local.
-- Vue/Svelte: válidos, mas React combina melhor com shadcn/ui e com o ecossistema esperado para a futura extensão.
-- CSS puro: menos consistente para uma interface operacional com muitos estados.
+- Next.js: powerful, but unnecessary for the first local version.
+- Vue/Svelte: valid, but React pairs better with shadcn/ui and the ecosystem expected for the future extension.
+- Plain CSS: less consistent for an operational interface with many states.
 
 ## Backend
 
-Não haverá backend na primeira versão Vite.
+There will be no backend in the first Vite version.
 
-A persistência inicial será local e voltada para prototipação da experiência. A escrita real em arquivos será tratada na etapa VSCode/desktop.
+Initial persistence will be local and aimed at experience prototyping. Real file writes will be handled in the VSCode/desktop stage.
 
-## Banco de dados
+## Database
 
-Não haverá banco de dados na primeira versão.
+There will be no database in the first version.
 
-Dados iniciais ficarão em módulos TypeScript. Preferências e simulações poderão usar `localStorage`.
+Initial data will live in TypeScript modules. Preferences and simulations may use `localStorage`.
 
-## Infra
+## Infrastructure
 
-- Execução local: `pnpm dev`
-- Build local: `pnpm build`
-- Preview local: `pnpm preview`
-- Deploy: fora do escopo inicial
+- Local run: `pnpm dev`
+- Local build: `pnpm build`
+- Local preview: `pnpm preview`
+- Deploy: out of initial scope
 
 ## DX
 
-- TypeScript estrito quando viável.
-- ESLint conforme template Vite.
-- Prettier como formatador padrão.
-- Husky para hooks locais de Git.
-- lint-staged para formatar e aplicar lint apenas em arquivos staged.
-- `.editorconfig` e `.vscode/settings.json` para format on save.
-- `pnpm-lock.yaml` como único lockfile versionado.
-- Componentização por domínio da interface.
-- Dados do fluxo Meridian centralizados em módulos reutilizáveis.
+- Strict TypeScript when feasible.
+- ESLint per Vite template.
+- Prettier as the default formatter.
+- Husky for local Git hooks.
+- lint-staged to format and lint only staged files.
+- `.editorconfig` and `.vscode/settings.json` for format on save.
+- `pnpm-lock.yaml` as the only versioned lockfile.
+- Componentization by interface domain.
+- Meridian flow data centralized in reusable modules.
 
-## Decisão visual
+## Visual decision
 
-A UI deve se comportar como ferramenta de trabalho, não como landing page. Prioridades:
+The UI should behave as a work tool, not a landing page. Priorities:
 
-- Navegação clara.
-- Densidade moderada de informação.
-- Estados visuais consistentes.
-- Componentes shadcn/ui para cards, badges, tabs, scroll areas, inputs, sheets e separadores quando fizer sentido.
+- Clear navigation.
+- Moderate information density.
+- Consistent visual states.
+- shadcn/ui components for cards, badges, tabs, scroll areas, inputs, sheets, and separators when it makes sense.

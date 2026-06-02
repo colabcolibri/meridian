@@ -101,13 +101,11 @@ def main() -> int:
     warnings: list[str] = []
 
     kit_root: Path | None = None
-    if (root / "meridian.md").exists():
+    if (root / ".agent" / "MERIDIAN.md").exists():
         kit_root = root
-    elif (root.parent / "meridian.md").exists():
+    elif (root.parent / ".agent" / "MERIDIAN.md").exists():
         kit_root = root.parent
-    if kit_root is None:
-        warnings.append("Missing meridian.md at project or parent root.")
-    else:
+    if kit_root is not None:
         if not (kit_root / "README.md").exists():
             warnings.append("Missing README.md at kit repository root.")
         validate_agent_kit(kit_root, errors, warnings)
@@ -155,10 +153,10 @@ def main() -> int:
             version_ids.add(version_id)
             if version_path.stem != version_id:
                 errors.append(
-                    f"{version_path.name}: id {version_id} não confere com o nome do arquivo"
+                    f"{version_path.name}: id {version_id} does not match filename"
                 )
             if not re.match(r"^v\d+$", str(version_id)):
-                errors.append(f"{version_path.name}: id deve usar formato vX")
+                errors.append(f"{version_path.name}: id must use vX format")
             if not frontmatter.get("outcome"):
                 errors.append(f"Missing outcome in {version_path.name}")
             if not frontmatter.get("title"):
@@ -179,11 +177,11 @@ def main() -> int:
                 continue
             if sprint_path.stem != sprint_id:
                 errors.append(
-                    f"{sprint_path.name}: id {sprint_id} não confere com o nome do arquivo"
+                    f"{sprint_path.name}: id {sprint_id} does not match filename"
                 )
             if version_ref and version_ids and version_ref not in version_ids:
                 errors.append(
-                    f"{sprint_path.name}: version {version_ref} não existe em docs/versions/"
+                    f"{sprint_path.name}: version {version_ref} does not exist in docs/versions/"
                 )
 
     if epics_dir.exists():
@@ -201,7 +199,7 @@ def main() -> int:
             epic_ids.add(epic_id)
             if epic_path.stem != epic_id:
                 errors.append(
-                    f"{epic_path.name}: id {epic_id} não confere com o nome do arquivo"
+                    f"{epic_path.name}: id {epic_id} does not match filename"
                 )
             if "status" not in frontmatter:
                 errors.append(f"Missing status in {epic_path.name}")
@@ -214,7 +212,7 @@ def main() -> int:
                 for version_ref in epic_versions:
                     if version_ids and version_ref not in version_ids:
                         errors.append(
-                            f"{epic_path.name}: versions referencia {version_ref} inexistente"
+                            f"{epic_path.name}: versions references unknown {version_ref}"
                         )
     else:
         errors.append("Missing docs/epics/ directory.")
@@ -237,16 +235,16 @@ def main() -> int:
                 errors.append(f"Missing date in {decision_path.name}")
             elif date != decision_path.stem:
                 errors.append(
-                    f"{decision_path.name}: date {date} não confere com o nome do arquivo"
+                    f"{decision_path.name}: date {date} does not match filename"
                 )
             elif not re.match(r"^\d{4}-\d{2}-\d{2}$", str(date)):
-                errors.append(f"{decision_path.name}: date deve usar formato YYYY-MM-DD")
+                errors.append(f"{decision_path.name}: date must use YYYY-MM-DD format")
             entries = payload.get("entries")
             if not isinstance(entries, list):
                 errors.append(f"{decision_path.name}: entries must be an array")
                 continue
             if not entries:
-                warnings.append(f"{decision_path.name}: nenhuma entrada em entries")
+                warnings.append(f"{decision_path.name}: no entries in entries array")
             for index, entry in enumerate(entries):
                 if not isinstance(entry, dict):
                     errors.append(f"{decision_path.name}: entries[{index}] must be an object")
@@ -279,7 +277,7 @@ def main() -> int:
         for story in sorted(us_dir.glob("US-*.md")):
             match = re.match(r"US-\d{4}\.md$", story.name)
             if not match:
-                errors.append(f"Invalid story filename: {story.name} (use US-XXXX com 4 dígitos)")
+                errors.append(f"Invalid story filename: {story.name} (use US-XXXX with 4 digits)")
                 continue
             frontmatter = read_frontmatter(story)
             story_id = frontmatter.get("id")
@@ -292,23 +290,23 @@ def main() -> int:
                 story_ids.add(story_id)
                 if story.stem != story_id:
                     errors.append(
-                        f"{story.name}: id {story_id} não confere com o nome do arquivo"
+                        f"{story.name}: id {story_id} does not match filename"
                     )
                 if not re.match(r"^US-\d{4}$", story_id):
-                    errors.append(f"{story.name}: id deve usar formato US-XXXX (4 dígitos)")
+                    errors.append(f"{story.name}: id must use US-XXXX format (4 digits)")
             else:
                 errors.append(f"Missing id in {story}")
             if epic_ref and epic_ids and epic_ref not in epic_ids:
                 errors.append(
-                    f"{story.name}: epic {epic_ref} não existe em docs/epics/"
+                    f"{story.name}: epic {epic_ref} does not exist in docs/epics/"
                 )
             if version_ref and version_ids and version_ref not in version_ids:
                 errors.append(
-                    f"{story.name}: version {version_ref} não existe em docs/versions/"
+                    f"{story.name}: version {version_ref} does not exist in docs/versions/"
                 )
             story_text = story.read_text(encoding="utf-8")
-            if status == "🔶" and "Falta:" not in story_text:
-                errors.append(f"{story.name} is 🔶 but has no 'Falta:' in acceptance.")
+            if status == "🔶" and "Missing:" not in story_text:
+                errors.append(f"{story.name} is 🔶 but has no 'Missing:' in acceptance.")
 
             tests = frontmatter.get("tests")
             tests_status = frontmatter.get("tests_status")
@@ -328,12 +326,12 @@ def main() -> int:
                 errors.append(
                     f"{story.name}: status ✅ requires tests_status done when tests required."
                 )
-            if effective_tests == "required" and "### Planejado" not in story_text:
-                errors.append(f"{story.name}: tests required needs ### Planejado section.")
+            if effective_tests == "required" and "### Planned" not in story_text:
+                errors.append(f"{story.name}: tests required needs ### Planned section.")
 
         if story_ids and not architecture_approved:
             errors.append(
-                "User stories exist but 05_architecture.md is not approved (gate de entrega)."
+                "User stories exist but 05_architecture.md is not approved (delivery gate)."
             )
 
     if board_path.exists():

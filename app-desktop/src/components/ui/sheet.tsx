@@ -71,7 +71,7 @@ function SheetContent({
         {showCloseButton ? (
           <SheetPrimitive.Close className="absolute top-4 right-4 rounded-md opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:ring-3 focus:ring-ring/50 focus:outline-none">
             <X className="size-5" />
-            <span className="sr-only">Fechar</span>
+            <span className="sr-only">Close</span>
           </SheetPrimitive.Close>
         ) : null}
       </SheetPrimitive.Content>

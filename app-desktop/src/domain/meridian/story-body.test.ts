@@ -15,27 +15,27 @@ const baseStory: Pick<UserStory, "status" | "tests" | "testsStatus"> = {
 }
 
 describe("story-body tests", () => {
-  it("lista itens em ### Planejado", () => {
-    const body = `## Testes
+  it("lists items in ### Planned", () => {
+    const body = `## Tests
 
-### Planejado
+### Planned
 
 - [ ] **build** — \`pnpm build\`
-- [x] **manual** — abrir app
+- [x] **manual** — open app
 `
     expect(getPlannedTestLines(body)).toHaveLength(2)
   })
 
-  it("bloqueia status ✅ com tests_status pending", () => {
-    const body = `## Testes
+  it("blocks status ✅ with tests_status pending", () => {
+    const body = `## Tests
 
-### Planejado
+### Planned
 
 - [ ] **build** — \`pnpm build\`
 
-### Executado
+### Executed
 
-_(pendente)_
+_(pending)_
 `
     const messages = validateStoryBody(
       { status: "✅", tests: "required", testsStatus: "pending" },
@@ -44,33 +44,33 @@ _(pendente)_
     expect(messages.some((m) => m.includes("tests_status: done"))).toBe(true)
   })
 
-  it("exige planejado [x] e executado quando tests_status done", () => {
-    const body = `## Testes
+  it("requires planned [x] and executed when tests_status done", () => {
+    const body = `## Tests
 
-### Planejado
+### Planned
 
 - [ ] **build** — \`pnpm build\`
 
-### Executado
+### Executed
 
-_(pendente)_
+_(pending)_
 `
     expect(validateStoryBody({ ...baseStory, testsStatus: "done" }, body)).toEqual(
       expect.arrayContaining([
-        expect.stringContaining("Planejado marcados [x]"),
-        expect.stringContaining("Executado preenchido"),
+        expect.stringContaining("Planned marked [x]"),
+        expect.stringContaining("Executed filled"),
       ]),
     )
   })
 
-  it("aceita fechamento completo", () => {
-    const body = `## Testes
+  it("accepts complete closure", () => {
+    const body = `## Tests
 
-### Planejado
+### Planned
 
 - [x] **build** — \`pnpm build\`
 
-### Executado
+### Executed
 
 - \`pnpm build\` — ok
 `
@@ -79,9 +79,9 @@ _(pendente)_
     expect(validateStoryBody(baseStory, body)).toHaveLength(0)
   })
 
-  it("tests: none exige tests_status n/a", () => {
+  it("tests: none requires tests_status n/a", () => {
     expect(
       validateStoryBody({ status: "✅", tests: "none", testsStatus: "pending" }, ""),
-    ).toContain("tests: none exige tests_status: n/a.")
+    ).toContain("tests: none requires tests_status: n/a.")
   })
 })

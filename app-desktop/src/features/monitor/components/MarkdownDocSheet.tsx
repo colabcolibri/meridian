@@ -76,7 +76,7 @@ function MarkdownDocSheetBody({
 
     const handle = await getHandle()
     if (!handle) {
-      setError("Abra a pasta docs do projeto para ler os arquivos.")
+      setError("Open the project docs folder to read files.")
       setLoading(false)
       return
     }
@@ -85,9 +85,7 @@ function MarkdownDocSheetBody({
       const result = await readMarkdownDocFromFolder(handle, docPath)
       setContent(result)
     } catch {
-      setError(
-        `Não foi possível ler ${docPath}. Confirme que o arquivo existe na pasta aberta.`,
-      )
+      setError(`Could not read ${docPath}. Confirm the file exists in the open folder.`)
     } finally {
       setLoading(false)
     }
@@ -120,7 +118,7 @@ function MarkdownDocSheetBody({
         {loading ? (
           <div className="flex items-center justify-center gap-2 py-20 text-muted-foreground">
             <Loader2 className="size-5 animate-spin" />
-            <span className={typeScale.bodySm}>Carregando documento…</span>
+            <span className={typeScale.bodySm}>Loading document…</span>
           </div>
         ) : null}
 
@@ -133,7 +131,7 @@ function MarkdownDocSheetBody({
             {content.frontmatter ? (
               <section className="w-full border-b bg-muted/40 px-6 py-4">
                 <h3 className={cn(typeScale.label, "mb-2 uppercase tracking-wide")}>
-                  Metadados
+                  Metadata
                 </h3>
                 <pre className="w-full overflow-x-auto rounded-lg border bg-background p-3 font-mono text-sm leading-relaxed whitespace-pre-wrap text-foreground">
                   {content.frontmatter}
@@ -142,7 +140,7 @@ function MarkdownDocSheetBody({
             ) : null}
             <article className="w-full px-6 py-5">
               <h3 className={cn(typeScale.label, "mb-3 uppercase tracking-wide")}>
-                Conteúdo
+                Content
               </h3>
               <MarkdownContent body={content.body} />
             </article>

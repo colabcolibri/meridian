@@ -32,11 +32,11 @@ export function MonitorTopBar() {
             <p className={typeScale.label}>Meridian</p>
             {folder ? (
               <p className={cn(typeScale.caption, "truncate")}>
-                Projeto:{" "}
+                Project:{" "}
                 <span className="font-medium text-foreground">{folder.name}</span>
               </p>
             ) : (
-              <p className={typeScale.caption}>Nenhum projeto aberto</p>
+              <p className={typeScale.caption}>No project open</p>
             )}
           </div>
           {folder && problemCount > 0 ? (
@@ -45,9 +45,9 @@ export function MonitorTopBar() {
                 "shrink-0 rounded-full px-2.5 py-0.5 text-xs font-medium",
                 errors > 0 ? "bg-red-100 text-red-900" : "bg-amber-100 text-amber-900",
               )}
-              title={`${errors} crítico(s), ${warnings} aviso(s)`}
+              title={`${errors} critical, ${warnings} warning(s)`}
             >
-              {problemCount} alerta{problemCount === 1 ? "" : "s"}
+              {problemCount} alert{problemCount === 1 ? "" : "s"}
             </span>
           ) : null}
         </div>
@@ -64,11 +64,11 @@ export function MonitorTopBar() {
             ) : (
               <FolderOpen className="mr-2 h-4 w-4" />
             )}
-            {folder ? "Trocar pasta" : "Abrir pasta"}
+            {folder ? "Change folder" : "Open folder"}
           </Button>
           {folder ? (
             <Button
-              aria-label="Fechar projeto"
+              aria-label="Close project"
               disabled={isOpening}
               onClick={() => void clearFolder()}
               size="sm"

@@ -8,34 +8,34 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 
 ## Selective reading
 
-| Arquivo | Quando ler |
+| File | When to read |
 | ------- | ---------- |
-| `references/board-schema.md` | Validação de campos e divergências |
+| `references/board-schema.md` | Field validation and divergences |
 
-## Fonte de verdade
+## Source of truth
 
 ```txt
-docs/us/US-XXXX.md  →  derivado  →  docs/kanban/board.json
+docs/us/US-XXXX.md  →  derived  →  docs/kanban/board.json
 ```
 
-Nunca editar o board como fonte primária.
+Never edit the board as primary source.
 
-## Procedimento
+## Procedure
 
 1. Glob `docs/us/US-*.md`
-2. Extrair frontmatter: `id`, `title`, `epic`, `version`, `status`, `moscow`, `depends_on`, `done_when`, `tests`, `tests_status`
-3. Validar contra `references/board-schema.md` e pastas epics/versions
-4. Ordenar por ID crescente
-5. Escrever `docs/kanban/board.json`
-6. Reportar US inválidas sem incluí-las
+2. Extract frontmatter: `id`, `title`, `epic`, `version`, `status`, `moscow`, `depends_on`, `done_when`, `tests`, `tests_status`
+3. Validate against `references/board-schema.md` and epics/versions folders
+4. Sort by ascending ID
+5. Write `docs/kanban/board.json`
+6. Report invalid US without including them
 
-## Validação opcional
+## Optional validation
 
 ```bash
 python .agent/scripts/validate_meridian.py <project-root>
 ```
 
-## Saída
+## Output
 
 ```txt
 Stories read:

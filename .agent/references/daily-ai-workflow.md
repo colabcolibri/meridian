@@ -1,23 +1,23 @@
-# Fluxo com IA (Meridian)
+# AI workflow (Meridian)
 
-Dois eixos, três conversas — não misturar.
+Two axes, three conversations — do not mix.
 
-## Eixo A — Documentar o sistema
+## Axis A — Document the system
 
-**Docs:** `00`–`08`, `11` (documentos de fase)  
-**App:** Configuração  
-**Ordem:** fundação → princípios → arquitetura → detalhe técnico  
+**Docs:** `00`–`08`, `11` (phase documents)  
+**App:** Settings  
+**Order:** foundation → principles → architecture → technical detail  
 
-## Eixo B — Backlog de entrega
+## Axis B — Delivery backlog
 
 **Docs:** `docs/epics/`, `docs/versions/`, `docs/sprints/`, `docs/us/`  
-**App:** Entregas · Quadro  
-**Gate:** `05_architecture` approved; US exige epic/version nas pastas  
+**App:** Delivery · Board  
+**Gate:** `05_architecture` approved; US requires epic/version in folders  
 
-## Executar
+## Execute
 
 **Docs:** `us/US-XXXX`, `board.json`  
-**App:** Quadro  
-**Fechamento:** `/complete-us`, `/sync-board`  
+**App:** Board  
+**Closure:** `/complete-us`, `/sync-board`  
 
-Detalhe: abas **Comece aqui** e **Guia de uso** no app.
+Detail: **Start here** and **Usage guide** tabs in the app.

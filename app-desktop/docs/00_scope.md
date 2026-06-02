@@ -1,5 +1,5 @@
 ---
-title: Escopo
+title: Scope
 status: approved
 version: 1.0
 updated: 2026-06-02
@@ -7,71 +7,70 @@ depends_on: []
 blocks: [01_tech_stack.md, 04_principles.md, 05_architecture.md]
 ---
 
-# 00 — Escopo
+# 00 — Scope
 
-## Nome e descrição
+## Name and description
 
-Meridian Desktop é o app local de monitoramento visual para projetos que usam o protocolo Meridian. Na raiz do repositório do kit: `../../README.md` (onboarding), `../../meridian.md` (protocolo/produto), `../../.agent/MERIDIAN.md` (protocolo master) e `../../.agent/rules/MERIDIAN.md` (regras sempre ativas para agentes).
+Meridian Desktop is the local visual monitoring app for projects using the Meridian protocol. At the kit repository root: `../../README.md` (monorepo onboarding), `../../.agent/MERIDIAN.md` (master protocol for agents), and `../../.agent/rules/MERIDIAN.md` (always-on rules for agents).
 
-O objetivo do app não é substituir o protocolo. O objetivo é abrir a pasta **`docs/`** do projeto Meridian, ler os documentos de fase (00–08 e 11), as pastas de entrega (`epics/`, `versions/`, `sprints/`, `us/`) e `board.json`, e dar visibilidade ao manager do processo.
+The app does not replace the protocol. It opens the project's **`docs/`** folder, reads phase documents (00–08 and 11), delivery folders (`epics/`, `versions/`, `sprints/`, `us/`), and `board.json`, and gives the process manager visibility.
 
-A primeira entrega é um app Vite local em `app-desktop/`. Futuramente, uma extensão em `app-visual-studio/` poderá operar arquivos reais dentro do editor.
+The first delivery is a local Vite app in `app-desktop/`. Later, an extension in `app-visual-studio/` may operate on real files inside the editor.
 
-Na raiz do repositório, `README.md`, `meridian.md` e `.agent/` (agents, skills com `references/`, workflows, rules `always_on`, scripts) formam o kit para agentes de IA, no padrão operacional Antigravity adaptado ao Meridian. O app desktop é uma camada visual separada que monitora uma pasta Meridian.
+At the kit repository root, `README.md` (GitHub onboarding) and `.agent/` (agents, skills with `references/`, workflows, `always_on` rules, scripts) form the agent kit, in an Antigravity-style layout adapted to Meridian. Client projects copy only `.agent/`. The desktop app is a separate visual layer that monitors a Meridian folder.
 
-## Problema que resolve
+## Problem it solves
 
-Projetos de software com agentes de IA frequentemente avançam para código antes de terem documentação mínima, critérios de aceite e decisões registradas. Isso cria retrabalho, desalinhamento, sprints pouco auditáveis, perda de contexto e agentes executando sem direção clara.
+Software projects with AI agents often move to code before minimum documentation, acceptance criteria, and recorded decisions exist. That creates rework, misalignment, hard-to-audit sprints, lost context, and agents running without clear direction.
 
-Meridian Desktop ajuda a monitorar esse problema. Ele não é a fonte de verdade: a fonte de verdade continua sendo a pasta do projeto monitorado.
+Meridian Desktop helps monitor that gap. It is not the source of truth: the monitored project folder remains the source of truth.
 
-## Para quem
+## Who it is for
 
-- Qualquer pessoa que queira conduzir desenvolvimento de software com agentes de IA sem perder controle, clareza e consistência.
-- Devs, founders, product managers, tech leads, designers, operadores e pessoas de outras áreas que precisem gerenciar um projeto digital sem depender de uma estrutura pesada.
-- Usuários que trabalham com agentes de código e querem permanecer como managers do processo em vez de deixar agentes executando indefinidamente sem visibilidade.
-- Times de qualquer tamanho que prefiram um fluxo simples, explícito e auditável.
+- Anyone who wants to run software development with AI agents without losing control, clarity, or consistency.
+- Devs, founders, product managers, tech leads, designers, operators, and others who need to manage a digital project without a heavy toolchain.
+- People using coding agents who want to stay process managers instead of letting agents run indefinitely without visibility.
 
-## Dentro do escopo inicial
+## In initial scope
 
-- App Vite local com React, TypeScript e shadcn/ui dentro de `app-desktop/`.
-- Dashboard dos documentos de fase de uma pasta Meridian.
-- Visualização de dependências entre documentos.
-- Estados `draft`, `review` e `approved`.
-- Regras de bloqueio visual entre documentos.
-- Ordem de maturidade: fundação (00–03) → princípios (04) → arquitetura (05) → detalhe (06–08) → backlog (`epics/`, `versions/`, `sprints/`) → user stories.
-- Estrutura base para user stories e `board.json`.
-- Reconhecimento de `README.md`, `meridian.md` e `.agent/` (incl. `meridian-routing`) como kit para agentes.
-- Abertura da pasta `docs/` via File System Access (v1) e leitura real dos arquivos.
+- Local Vite app with React, TypeScript, and shadcn/ui inside `app-desktop/`.
+- Dashboard for phase documents of a Meridian folder.
+- Visualization of dependencies between documents.
+- `draft`, `review`, and `approved` states.
+- Visual blocking rules between documents.
+- Maturity order: foundation (00–03) → principles (04) → architecture (05) → detail (06–08) → backlog (`epics/`, `versions/`, `sprints/`) → user stories.
+- Base structure for user stories and `board.json`.
+- Recognition of `.agent/` (including `meridian-routing`) as the agent kit; kit monorepo also has root `README.md`.
+- Opening the `docs/` folder via File System Access (v1) and real file reads.
 
-## Fora do escopo inicial
+## Out of initial scope
 
-- Extensão Visual Studio/VSCode completa.
-- Escrita real em disco a partir do browser sem ponte local.
-- Backend remoto, autenticação, multiusuário e sincronização em nuvem.
-- Malha complexa de agentes automáticos.
-- Agentes autônomos executando trabalho sem revisão humana, sem documentação e sem registro no fluxo.
-- Integração com GitHub, Linear, Jira ou outros sistemas externos.
-- Exportação CSV do board, reservada para a futura extensão.
+- Full Visual Studio/VS Code extension.
+- Real disk writes from the browser without a local bridge.
+- Remote backend, authentication, multi-user, and cloud sync.
+- Complex mesh of automatic agents.
+- Autonomous agents doing work without human review, documentation, or flow records.
+- Integration with GitHub, Linear, Jira, or other external systems.
+- CSV export of the board, reserved for the future extension.
 
-## Restrições conhecidas
+## Known constraints
 
-- O app Vite deve rodar de forma simples no desktop com `pnpm`.
-- A interface visual deve usar shadcn/ui como base.
-- O app deve ser profissional, denso o suficiente para uso real e sem aparência de landing page.
-- O fluxo Meridian deve ser seguido no próprio desenvolvimento do app.
-- O produto deve favorecer controle, visibilidade e consistência no uso de agentes de IA, não velocidade sem governança.
+- The Vite app must run simply on desktop with `pnpm`.
+- The UI must use shadcn/ui as a base.
+- The app must look professional, dense enough for real use, and not like a marketing landing page.
+- The Meridian flow must be followed in the app's own development.
+- The product must favor control, visibility, and consistency with AI agents, not speed without governance.
 
-## Premissas
+## Assumptions
 
-- A primeira versão pode usar dados locais em TypeScript ou `localStorage`.
-- A escrita real em arquivos será tratada em uma etapa posterior, provavelmente com extensão Visual Studio/VSCode ou camada desktop/local.
-- A documentação inicial pode começar em `review` quando já for suficiente para orientar o trabalho.
+- The first version may use local data in TypeScript or `localStorage`.
+- Real file writes will come in a later step, likely via VS Code extension or a desktop/local layer.
+- Initial documentation may start in `review` when it is already enough to guide work.
 
-## Riscos identificados
+## Identified risks
 
-- O app virar apenas uma visualização bonita sem executar regras reais do Meridian.
-- Escrever código antes de fechar documentos mínimos de Fase 0.
-- Criar uma UI genérica, sem densidade e utilidade para gestão de documentação.
-- Acoplar cedo demais a solução Vite à futura arquitetura da extensão VSCode.
-- Parecer uma ferramenta de automação por agentes sem gestão, quando o posicionamento correto é coordenação pragmática do desenvolvimento com IA.
+- The app becomes only a pretty view without enforcing real Meridian rules.
+- Writing code before closing minimum Phase 0 documents.
+- Building a generic UI without density and utility for documentation management.
+- Coupling the Vite solution too early to the future VS Code extension architecture.
+- Looking like an agent automation tool without management, when the correct positioning is pragmatic coordination of AI-assisted development.

@@ -2,21 +2,21 @@
 description: Create a Meridian epic file in docs/epics.
 ---
 
-# /create-epic — criar epic
+# /create-epic — create epic
 
 $ARGUMENTS
 
 ---
 
-## Regras críticas
+## Critical rules
 
 1. Use `documentation-strategist` + `@[skills/create-epic]`
-2. **Gate:** `05_architecture.md` `approved`; `03_user_types.md` `approved` para perfis do epic
+2. **Gate:** `05_architecture.md` `approved`; `03_user_types.md` `approved` for epic profiles
 3. Template: `references/epic-template.md`
-4. Epic = **capacidade de produto**, não módulo em `src/`
-5. Salvar `docs/epics/EPIC-XX.md` (fonte de verdade)
-6. **Não** cria user story — US vem depois com `/create-us` (exige `05_architecture` approved)
-7. Rodar `validate_meridian.py` quando possível
+4. Epic = **product capability**, not a module in `src/`
+5. Save `docs/epics/EPIC-XX.md` (source of truth)
+6. **Do not** create user story — US comes later with `/create-us` (requires `05_architecture` approved)
+7. Run `validate_meridian.py` when possible
 
 ---
 
@@ -31,7 +31,7 @@ RULES:
 1. documentation-strategist Phase 0 — verify scope + user types
 2. If blocked, report smallest doc to fix
 3. List docs/epics/EPIC-*.md → next ID = max + 1 (EPIC-07, EPIC-08…)
-4. Fill epic-template.md: outcome (produto), Capacidade, Fora deste epic
+4. Fill epic-template.md: outcome (product), Capability, Out of this epic
 5. Validate profiles against 03_user_types.md
 6. Save docs/epics/EPIC-XX.md (filename = id)
 7. Save epic file in docs/epics/
@@ -41,7 +41,7 @@ RULES:
 
 ---
 
-## Saída
+## Output
 
 ```txt
 Epic created:
@@ -57,10 +57,10 @@ Next step: /create-us (after 05_architecture approved)
 
 ---
 
-## Exemplos
+## Examples
 
-| Pedido | Resultado |
+| Request | Result |
 | ------ | --------- |
-| `/create-epic exportar relatório PDF` | EPIC-07 com outcome de produto + perfis |
-| `/create-epic` sem capacidade clara | Perguntar: quem usa, o quê entrega, o que fica fora |
-| `/create-us` sem epic existente | Bloquear US → `/create-epic` primeiro |
+| `/create-epic export PDF report` | EPIC-07 with product outcome + profiles |
+| `/create-epic` without clear capability | Ask: who uses it, what it delivers, what stays out |
+| `/create-us` without existing epic | Block US → `/create-epic` first |

@@ -1,19 +1,19 @@
 [
   {
     "id": "US-0001",
-    "title": "Abrir app Meridian localmente",
+    "title": "Open Meridian app locally",
     "epic": "EPIC-01",
     "version": "v0",
     "status": "✅",
     "moscow": "Must",
     "depends_on": [],
-    "done_when": "App roda com pnpm dev e renderiza layout inicial profissional.",
+    "done_when": "App runs with pnpm dev and renders a professional initial layout.",
     "tests": "required",
     "tests_status": "done"
   },
   {
     "id": "US-0002",
-    "title": "Ver documentos de fase e status",
+    "title": "View phase documents and status",
     "epic": "EPIC-02",
     "version": "v0",
     "status": "✅",
@@ -21,13 +21,13 @@
     "depends_on": [
       "US-0001"
     ],
-    "done_when": "Lista de documentos exibe status, dependências e bloqueios básicos.",
+    "done_when": "Document list shows status, dependencies, and basic blockers.",
     "tests": "required",
     "tests_status": "done"
   },
   {
     "id": "US-0003",
-    "title": "Configurar Git e qualidade local",
+    "title": "Configure Git and local quality",
     "epic": "EPIC-01",
     "version": "v0",
     "status": "✅",
@@ -35,13 +35,13 @@
     "depends_on": [
       "US-0001"
     ],
-    "done_when": "Git, gitignore, Prettier, Husky e lint-staged estão configurados.",
+    "done_when": "Git, gitignore, Prettier, Husky, and lint-staged are configured.",
     "tests": "required",
     "tests_status": "done"
   },
   {
     "id": "US-0004",
-    "title": "Separar protocolo universal e app desktop",
+    "title": "Separate universal protocol and desktop app",
     "epic": "EPIC-01",
     "version": "v0",
     "status": "✅",
@@ -49,13 +49,13 @@
     "depends_on": [
       "US-0001"
     ],
-    "done_when": "meridian.md fica na raiz como protocolo universal e o app Vite fica em app-desktop.",
+    "done_when": "meridian.md stays at root as universal protocol and Vite app stays in app-desktop.",
     "tests": "required",
     "tests_status": "done"
   },
   {
     "id": "US-0005",
-    "title": "Criar skills iniciais em .agent",
+    "title": "Create initial skills in .agent",
     "epic": "EPIC-05",
     "version": "v0",
     "status": "✅",
@@ -63,13 +63,13 @@
     "depends_on": [
       "US-0004"
     ],
-    "done_when": ".agent/skills contém skills iniciais para agentes usarem junto com .agent/MERIDIAN.md.",
+    "done_when": ".agent/skills contains initial skills for agents to use with .agent/MERIDIAN.md.",
     "tests": "required",
     "tests_status": "done"
   },
   {
     "id": "US-0006",
-    "title": "Organizar camada operacional .agent",
+    "title": "Organize .agent operational layer",
     "epic": "EPIC-05",
     "version": "v0",
     "status": "✅",
@@ -77,13 +77,13 @@
     "depends_on": [
       "US-0005"
     ],
-    "done_when": ".agent contém agents, skills, workflows, rules e scripts no padrão Meridian.",
+    "done_when": ".agent contains agents, skills, workflows, rules, and scripts in Meridian standard.",
     "tests": "required",
     "tests_status": "done"
   },
   {
     "id": "US-0007",
-    "title": "Alinhar kit .agent ao padrão Antigravity",
+    "title": "Align .agent kit to Antigravity standard",
     "epic": "EPIC-01",
     "version": "v0",
     "status": "✅",
@@ -91,13 +91,13 @@
     "depends_on": [
       "US-0006"
     ],
-    "done_when": "README.md na raiz, rules always_on, agents/skills/workflows operacionais e meridian-routing existem no kit.",
+    "done_when": "Root README.md, always_on rules, operational agents/skills/workflows, and meridian-routing exist in the kit.",
     "tests": "required",
     "tests_status": "done"
   },
   {
     "id": "US-0008",
-    "title": "Monitor com três abas de produto",
+    "title": "Monitor with three product tabs",
     "epic": "EPIC-02",
     "version": "v0",
     "status": "✅",
@@ -105,13 +105,13 @@
     "depends_on": [
       "US-0002"
     ],
-    "done_when": "App exibe abas Configuração inicial, Épicos e Kanban com um estado legível por doc/US.",
+    "done_when": "App shows Initial Setup, Epics, and Kanban tabs with readable state per doc/US.",
     "tests": "required",
     "tests_status": "done"
   },
   {
     "id": "US-0009",
-    "title": "Abrir pasta Meridian no app",
+    "title": "Open Meridian folder in the app",
     "epic": "EPIC-02",
     "version": "v1",
     "status": "✅",
@@ -119,13 +119,13 @@
     "depends_on": [
       "US-0008"
     ],
-    "done_when": "Usuário escolhe a pasta docs/ do projeto e o app persiste o handle da sessão para releitura.",
+    "done_when": "User selects the project's docs/ folder and the app persists the session handle for re-reading.",
     "tests": "required",
     "tests_status": "done"
   },
   {
     "id": "US-0010",
-    "title": "Parser de Markdown e frontmatter",
+    "title": "Markdown and frontmatter parser",
     "epic": "EPIC-02",
     "version": "v1",
     "status": "✅",
@@ -133,13 +133,13 @@
     "depends_on": [
       "US-0009"
     ],
-    "done_when": "Módulo de domínio extrai frontmatter YAML de arquivos .md da pasta docs/ sem erros nas US existentes.",
+    "done_when": "Domain module extracts YAML frontmatter from .md files in docs/ without errors on existing US.",
     "tests": "required",
     "tests_status": "done"
   },
   {
     "id": "US-0011",
-    "title": "Configuração inicial com docs reais",
+    "title": "Initial setup with real docs",
     "epic": "EPIC-02",
     "version": "v1",
     "status": "✅",
@@ -147,13 +147,13 @@
     "depends_on": [
       "US-0010"
     ],
-    "done_when": "Aba Configuração reflete documentos de fase da pasta aberta; progresso e alertas batem com frontmatter.",
+    "done_when": "Setup tab reflects phase documents from opened folder; progress and alerts match frontmatter.",
     "tests": "required",
     "tests_status": "done"
   },
   {
     "id": "US-0012",
-    "title": "Aba Entregas lê docs/epics/",
+    "title": "Deliverables tab reads docs/epics/",
     "epic": "EPIC-04",
     "version": "v1",
     "status": "✅",
@@ -161,13 +161,13 @@
     "depends_on": [
       "US-0010"
     ],
-    "done_when": "Aba Entregas lista EPIC-XX da pasta aberta com descrição, versões, status e contagem de US do mesmo projeto.",
+    "done_when": "Deliverables tab lists EPIC-XX from opened folder with description, versions, status, and US count from same project.",
     "tests": "required",
     "tests_status": "done"
   },
   {
     "id": "US-0013",
-    "title": "Kanban lê user stories e board.json",
+    "title": "Kanban reads user stories and board.json",
     "epic": "EPIC-04",
     "version": "v1",
     "status": "✅",
@@ -175,13 +175,13 @@
     "depends_on": [
       "US-0010"
     ],
-    "done_when": "Aba Kanban exibe US da pasta com colunas por status, filtro por epic e done_when; board.json opcional como cache derivado.",
+    "done_when": "Kanban tab shows US from folder with status columns, epic filter, and done_when; board.json optional as derived cache.",
     "tests": "required",
     "tests_status": "done"
   },
   {
     "id": "US-0014",
-    "title": "Validações de protocolo na UI",
+    "title": "Protocol validations in the UI",
     "epic": "EPIC-03",
     "version": "v1",
     "status": "✅",
@@ -190,13 +190,13 @@
       "US-0011",
       "US-0013"
     ],
-    "done_when": "App destaca inconsistências de docs e US conforme regras P0 do MERIDIAN.md na pasta aberta.",
+    "done_when": "App highlights doc and US inconsistencies per P0 MERIDIAN.md rules in opened folder.",
     "tests": "required",
     "tests_status": "done"
   },
   {
     "id": "US-0015",
-    "title": "Invocar validate_meridian.py na pasta",
+    "title": "Invoke validate_meridian.py on folder",
     "epic": "EPIC-03",
     "version": "v1",
     "status": "✅",
@@ -204,13 +204,13 @@
     "depends_on": [
       "US-0014"
     ],
-    "done_when": "App dispara validação do script na pasta aberta e exibe erros/avisos na UI.",
+    "done_when": "App triggers script validation on opened folder and shows errors/warnings in UI.",
     "tests": "required",
     "tests_status": "done"
   },
   {
     "id": "US-0016",
-    "title": "Remover mock data.ts como fonte",
+    "title": "Remove mock data.ts as source",
     "epic": "EPIC-02",
     "version": "v1",
     "status": "✅",
@@ -220,13 +220,13 @@
       "US-0012",
       "US-0013"
     ],
-    "done_when": "Nenhuma aba do monitor importa phaseDocuments/userStories/epics de data.ts; só dados da pasta ou estado vazio.",
+    "done_when": "No monitor tab imports phaseDocuments/userStories/epics from data.ts; only folder data or empty state.",
     "tests": "required",
     "tests_status": "done"
   },
   {
     "id": "US-0017",
-    "title": "Ler documentos de fase em Markdown no app",
+    "title": "Read phase documents in Markdown in the app",
     "epic": "EPIC-02",
     "version": "v1",
     "status": "✅",
@@ -234,13 +234,13 @@
     "depends_on": [
       "US-0009"
     ],
-    "done_when": "Na aba Configuração, cada documento de fase (00–08 e 11) abre o .md correspondente na raiz da pasta docs aberta.",
+    "done_when": "On Setup tab, each phase document (00–08 and 11) opens the corresponding .md at root of opened docs folder.",
     "tests": "required",
     "tests_status": "done"
   },
   {
     "id": "US-0018",
-    "title": "Onboarding para abrir pasta docs",
+    "title": "Onboarding to open docs folder",
     "epic": "EPIC-06",
     "version": "v1",
     "status": "✅",
@@ -248,13 +248,13 @@
     "depends_on": [
       "US-0009"
     ],
-    "done_when": "Primeiro uso mostra passos claros e um único CTA principal para abrir a pasta docs, sem mensagens técnicas duplicadas.",
+    "done_when": "First use shows clear steps and a single primary CTA to open docs folder, without duplicated technical messages.",
     "tests": "required",
     "tests_status": "done"
   },
   {
     "id": "US-0019",
-    "title": "Shell visual consistente do monitor",
+    "title": "Consistent monitor visual shell",
     "epic": "EPIC-06",
     "version": "v1",
     "status": "✅",
@@ -262,13 +262,13 @@
     "depends_on": [
       "US-0018"
     ],
-    "done_when": "Layout usa largura máxima única, espaçamento e fundo consistentes em todas as visões.",
+    "done_when": "Layout uses single max width, spacing, and background consistent across all views.",
     "tests": "required",
     "tests_status": "done"
   },
   {
     "id": "US-0020",
-    "title": "Barra superior simplificada",
+    "title": "Simplified top bar",
     "epic": "EPIC-06",
     "version": "v1",
     "status": "✅",
@@ -276,13 +276,13 @@
     "depends_on": [
       "US-0019"
     ],
-    "done_when": "Uma única barra combina marca, pasta aberta, contagem de problemas e ações; sem três faixas de mensagens.",
+    "done_when": "Single bar combines brand, opened folder, issue count, and actions; no three message bands.",
     "tests": "required",
     "tests_status": "done"
   },
   {
     "id": "US-0021",
-    "title": "Abas com linguagem de manager",
+    "title": "Tabs with manager language",
     "epic": "EPIC-06",
     "version": "v1",
     "status": "✅",
@@ -290,13 +290,13 @@
     "depends_on": [
       "US-0019"
     ],
-    "done_when": "Abas usam rótulos Configuração, Entregas e Quadro; descrições técnicas só na aba ativa ou em tooltip.",
+    "done_when": "Tabs use labels Setup, Deliverables, and Board; technical descriptions only on active tab or in tooltip.",
     "tests": "required",
     "tests_status": "done"
   },
   {
     "id": "US-0022",
-    "title": "Kanban com cards enxutos",
+    "title": "Kanban with lean cards",
     "epic": "EPIC-06",
     "version": "v1",
     "status": "✅",
@@ -304,13 +304,13 @@
     "depends_on": [
       "US-0021"
     ],
-    "done_when": "Cards mostram título e entrega; detalhes técnicos ficam recolhidos; filtro de epic exibe nome legível.",
+    "done_when": "Cards show title and delivery; technical details collapsed; epic filter shows readable name.",
     "tests": "required",
     "tests_status": "done"
   },
   {
     "id": "US-0023",
-    "title": "Kanban exibe EPIC-XX e título do epic",
+    "title": "Kanban shows EPIC-XX and epic title",
     "epic": "EPIC-04",
     "version": "v1",
     "status": "✅",
@@ -318,13 +318,13 @@
     "depends_on": [
       "US-0022"
     ],
-    "done_when": "Cards e filtros mostram EPIC-XX junto ao título abreviado do epic.",
+    "done_when": "Cards and filters show EPIC-XX alongside abbreviated epic title.",
     "tests": "required",
     "tests_status": "done"
   },
   {
     "id": "US-0024",
-    "title": "Kanban com badge de versão e filtro",
+    "title": "Kanban with version badge and filter",
     "epic": "EPIC-04",
     "version": "v1",
     "status": "✅",
@@ -332,13 +332,13 @@
     "depends_on": [
       "US-0022"
     ],
-    "done_when": "Cada card mostra badge da versão; quadro filtra por v0/v1/v2.",
+    "done_when": "Each card shows version badge; board filters by v0/v1/v2.",
     "tests": "required",
     "tests_status": "done"
   },
   {
     "id": "US-0025",
-    "title": "Entregas com hierarquia versão → epic",
+    "title": "Deliverables with version → epic hierarchy",
     "epic": "EPIC-04",
     "version": "v1",
     "status": "✅",
@@ -346,13 +346,13 @@
     "depends_on": [
       "US-0012"
     ],
-    "done_when": "Aba Entregas agrupa por versão, lista épicos com contagem de US e sprints da versão.",
+    "done_when": "Deliverables tab groups by version, lists epics with US count and version sprints.",
     "tests": "required",
     "tests_status": "done"
   },
   {
     "id": "US-0026",
-    "title": "Quadro ordena US por ID",
+    "title": "Board sorts US by ID",
     "epic": "EPIC-04",
     "version": "v1",
     "status": "✅",
@@ -360,13 +360,13 @@
     "depends_on": [
       "US-0022"
     ],
-    "done_when": "Colunas do kanban listam US em ordem numérica crescente (US-0001, US-0002…).",
+    "done_when": "Kanban columns list US in ascending numeric order (US-0001, US-0002…).",
     "tests": "required",
     "tests_status": "done"
   },
   {
     "id": "US-0027",
-    "title": "Validar e expor versions e sprints na UI",
+    "title": "Validate and expose versions and sprints in UI",
     "epic": "EPIC-03",
     "version": "v1",
     "status": "✅",
@@ -375,13 +375,13 @@
       "US-0014",
       "US-0017"
     ],
-    "done_when": "Loader lê docs/versions/ e docs/sprints/; alertas citam arquivo; Entregas mostra sprints por versão.",
+    "done_when": "Loader reads docs/versions/ and docs/sprints/; alerts cite file; Deliverables shows sprints per version.",
     "tests": "required",
     "tests_status": "done"
   },
   {
     "id": "US-0028",
-    "title": "Quadro com tokens visuais consistentes",
+    "title": "Board with consistent visual tokens",
     "epic": "EPIC-06",
     "version": "v1",
     "status": "✅",
@@ -389,13 +389,13 @@
     "depends_on": [
       "US-0023"
     ],
-    "done_when": "Kanban e banner de issues usam bg-card/border-border; filtros em painel único; sem zinc-* solto.",
+    "done_when": "Kanban and issue banner use bg-card/border-border; filters in single panel; no loose zinc-*.",
     "tests": "required",
     "tests_status": "done"
   },
   {
     "id": "US-0029",
-    "title": "Entregas com cards e barra de progresso",
+    "title": "Deliverables with cards and progress bar",
     "epic": "EPIC-06",
     "version": "v1",
     "status": "✅",
@@ -403,13 +403,13 @@
     "depends_on": [
       "US-0025"
     ],
-    "done_when": "Cada versão em card com header destacado, progresso % e barra visual; épicos com mini progresso.",
+    "done_when": "Each version in card with highlighted header, progress % and visual bar; epics with mini progress.",
     "tests": "required",
     "tests_status": "done"
   },
   {
     "id": "US-0030",
-    "title": "Shell do monitor com logo e fundo refinado",
+    "title": "Monitor shell with logo and refined background",
     "epic": "EPIC-06",
     "version": "v1",
     "status": "✅",
@@ -417,13 +417,13 @@
     "depends_on": [
       "US-0019"
     ],
-    "done_when": "Top bar usa favicon; página com gradiente sutil; welcome screen alinhada aos tokens.",
+    "done_when": "Top bar uses favicon; page with subtle gradient; welcome screen aligned to tokens.",
     "tests": "required",
     "tests_status": "done"
   },
   {
     "id": "US-0031",
-    "title": "Configuração com tokens visuais consistentes",
+    "title": "Setup with consistent visual tokens",
     "epic": "EPIC-06",
     "version": "v1",
     "status": "✅",
@@ -431,13 +431,13 @@
     "depends_on": [
       "US-0028"
     ],
-    "done_when": "Estados locked/draft e ícone de fase usam bg-muted e stroke-border; sem zinc-* na aba Configuração.",
+    "done_when": "Locked/draft states and phase icon use bg-muted and stroke-border; no zinc-* on Setup tab.",
     "tests": "required",
     "tests_status": "done"
   },
   {
     "id": "US-0032",
-    "title": "Ferramentas avançadas com painel consistente",
+    "title": "Advanced tools with consistent panel",
     "epic": "EPIC-06",
     "version": "v1",
     "status": "✅",
@@ -445,13 +445,13 @@
     "depends_on": [
       "US-0028"
     ],
-    "done_when": "AdvancedToolsPanel e ScriptValidationPanel usam monitorDashedPanelClass e inlineCodeClass.",
+    "done_when": "AdvancedToolsPanel and ScriptValidationPanel use monitorDashedPanelClass and inlineCodeClass.",
     "tests": "required",
     "tests_status": "done"
   },
   {
     "id": "US-0033",
-    "title": "EPIC-06 concluído — monitor visualmente unificado",
+    "title": "EPIC-06 complete — visually unified monitor",
     "epic": "EPIC-06",
     "version": "v1",
     "status": "✅",
@@ -460,13 +460,13 @@
       "US-0031",
       "US-0032"
     ],
-    "done_when": "Nenhum zinc-* em src/features/monitor/; EPIC-06 marcado complete.",
+    "done_when": "No zinc-* in src/features/monitor/; EPIC-06 marked complete.",
     "tests": "required",
     "tests_status": "done"
   },
   {
     "id": "US-0034",
-    "title": "Filtro de versão global no monitor",
+    "title": "Global version filter in monitor",
     "epic": "EPIC-04",
     "version": "v1",
     "status": "✅",
@@ -475,13 +475,13 @@
       "US-0024",
       "US-0025"
     ],
-    "done_when": "Entregas e Quadro compartilham o mesmo filtro de versão; default na versão ativa ou última com US.",
+    "done_when": "Deliverables and Board share same version filter; default to active version or last with US.",
     "tests": "required",
     "tests_status": "done"
   },
   {
     "id": "US-0035",
-    "title": "Filtro de epic cascateado pela versão",
+    "title": "Epic filter cascaded by version",
     "epic": "EPIC-04",
     "version": "v1",
     "status": "✅",
@@ -489,13 +489,13 @@
     "depends_on": [
       "US-0034"
     ],
-    "done_when": "Chips de epic no Quadro listam só épicos com US na versão selecionada; epic reseta ao mudar versão.",
+    "done_when": "Epic chips on Board list only epics with US in selected version; epic resets when version changes.",
     "tests": "required",
     "tests_status": "done"
   },
   {
     "id": "US-0036",
-    "title": "Entregas focada com layout plano",
+    "title": "Focused Deliverables with flat layout",
     "epic": "EPIC-04",
     "version": "v1",
     "status": "✅",
@@ -503,13 +503,13 @@
     "depends_on": [
       "US-0034"
     ],
-    "done_when": "Entregas destaca versão do filtro global; outras versões ficam recolhidas; épicos em linhas planas.",
+    "done_when": "Deliverables highlights global filter version; other versions collapsed; epics in flat rows.",
     "tests": "required",
     "tests_status": "done"
   },
   {
     "id": "US-0037",
-    "title": "Quadro compacto com detalhes em sheet",
+    "title": "Compact board with details in sheet",
     "epic": "EPIC-04",
     "version": "v1",
     "status": "✅",
@@ -517,13 +517,13 @@
     "depends_on": [
       "US-0035"
     ],
-    "done_when": "Cards do kanban são linhas compactas; done_when e deps abrem em sheet; colunas vazias ocultas ao filtrar versão.",
+    "done_when": "Kanban cards are compact rows; done_when and deps open in sheet; empty columns hidden when filtering version.",
     "tests": "required",
     "tests_status": "done"
   },
   {
     "id": "US-0038",
-    "title": "Ferramentas avançadas só na Configuração",
+    "title": "Advanced tools only on Setup",
     "epic": "EPIC-06",
     "version": "v1",
     "status": "✅",
@@ -531,13 +531,13 @@
     "depends_on": [
       "US-0032"
     ],
-    "done_when": "AdvancedToolsPanel aparece apenas na aba Configuração; Entregas e Quadro sem painel tracejado acima.",
+    "done_when": "AdvancedToolsPanel appears only on Setup tab; Deliverables and Board without dashed panel above.",
     "tests": "required",
     "tests_status": "done"
   },
   {
     "id": "US-0039",
-    "title": "Log de decisões JSON por dia",
+    "title": "JSON decision log per day",
     "epic": "EPIC-03",
     "version": "v1",
     "status": "✅",
@@ -545,13 +545,13 @@
     "depends_on": [
       "US-0014"
     ],
-    "done_when": "docs/decisions/YYYY-MM-DD.json é fonte do log; validate_meridian.py valida schema; kit .agent documenta prepend em entries.",
+    "done_when": "docs/decisions/YYYY-MM-DD.json is log source; validate_meridian.py validates schema; .agent kit documents prepend in entries.",
     "tests": "required",
     "tests_status": "done"
   },
   {
     "id": "US-0040",
-    "title": "Aba Decisões no monitor",
+    "title": "Decisions tab in monitor",
     "epic": "EPIC-06",
     "version": "v1",
     "status": "✅",
@@ -559,7 +559,7 @@
     "depends_on": [
       "US-0039"
     ],
-    "done_when": "Aba Decisões lista dias e entradas da pasta docs/decisions/ com detalhe estruturado em sheet lateral.",
+    "done_when": "Decisions tab lists days and entries from docs/decisions/ folder with structured detail in side sheet.",
     "tests": "required",
     "tests_status": "done"
   }

@@ -4,14 +4,14 @@ import { cn } from "@/lib/utils"
 export const monitorPanelClass =
   "rounded-xl border border-border bg-card text-card-foreground shadow-sm"
 
-/** Painel com borda tracejada (ferramentas secundárias). */
+/** Panel with dashed border (secondary tools). */
 export const monitorDashedPanelClass =
   "rounded-xl border border-dashed border-border bg-muted/30"
 
-/** `<code>` inline dentro de parágrafos do monitor. */
+/** Inline `<code>` inside monitor paragraphs. */
 export const inlineCodeClass = "rounded bg-muted px-1.5 py-0.5 font-mono text-xs"
 
-/** Chip de filtro (versão, epic, etc.). */
+/** Filter chip (version, epic, etc.). */
 export function filterChipClass(active: boolean) {
   return cn(
     "shrink-0 rounded-full px-3 py-1.5 text-xs font-medium transition-colors",

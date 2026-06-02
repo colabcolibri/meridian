@@ -1,45 +1,45 @@
-# Política de segurança
+# Security policy
 
-## Status do projeto
+## Project status
 
-Meridian é um **projeto experimental** em desenvolvimento ativo. Não há programa formal de bug bounty nem SLA de resposta garantido.
+Meridian is an **experimental project** under active development. There is no formal bug bounty program or guaranteed response SLA.
 
-## Versões suportadas
+## Supported versions
 
-| Versão | Suporte |
-| ------ | ------- |
-| `main` | Recebe correções de segurança conforme capacidade do maintainer |
-| Tags de release | Melhor esforço — preferir sempre a última tag |
+| Version | Support |
+| ------- | ------- |
+| `main` | Security fixes as maintainer capacity allows |
+| Release tags | Best effort — prefer the latest tag |
 
-## Reportar uma vulnerabilidade
+## Reporting a vulnerability
 
-**Não abra issue pública** para vulnerabilidades de segurança.
+**Do not open a public issue** for security vulnerabilities.
 
-Envie um reporte privado via [GitHub Security Advisories](https://github.com/colabcolibri/meridian/security/advisories/new) (ajuste a URL após publicar o repositório) ou abra uma issue genérica pedindo contato privado se Advisories ainda não estiver disponível.
+Send a private report via [GitHub Security Advisories](https://github.com/colabcolibri/meridian/security/advisories/new) (adjust the URL after publishing the repository) or open a generic issue asking for private contact if Advisories is not yet available.
 
-Inclua:
+Include:
 
-- Descrição do problema
-- Passos para reproduzir
-- Impacto estimado
-- Versão/commit afetado (se souber)
+- Problem description
+- Steps to reproduce
+- Estimated impact
+- Affected version/commit (if known)
 
-## Escopo
+## Scope
 
-Este repositório inclui:
+This repository includes:
 
-- Kit de agentes (`.agent/`)
-- App desktop Vite (`app-desktop/`) — leitura local de pastas via File System Access API
+- Agent kit (`.agent/`)
+- Vite desktop app (`app-desktop/`) — local folder reading via File System Access API
 
-Fora de escopo imediato: integrações cloud, autenticação multiusuário, extensão VS Code (planejada).
+Out of immediate scope: cloud integrations, multi-user authentication, VS Code extension (planned).
 
-## Boas práticas para quem usa o kit
+## Best practices for kit users
 
-- **Nunca** commite `.env` ou credenciais — o baseline está em `.agent/skills/init-project/references/gitignore-baseline.md`.
-- O app desktop lê arquivos **locais** que você autoriza no navegador; não envia dados para servidores Meridian (não há backend).
-- Revise conteúdo gerado por agentes antes de merge — o kit orienta governança, mas não substitui revisão humana.
-- Mantenha dependências atualizadas (`pnpm audit` em `app-desktop/`).
+- **Never** commit `.env` or credentials — baseline is in `.agent/skills/init-project/references/gitignore-baseline.md`.
+- The desktop app reads **local** files you authorize in the browser; it does not send data to Meridian servers (there is no backend).
+- Review agent-generated content before merge — the kit guides governance but does not replace human review.
+- Keep dependencies updated (`pnpm audit` in `app-desktop/`).
 
-## Divulgação responsável
+## Responsible disclosure
 
-Pedimos tempo razoável para investigar e corrigir antes de divulgação pública. Agradecemos reports construtivos.
+We ask for reasonable time to investigate and fix before public disclosure. We appreciate constructive reports.

@@ -68,7 +68,7 @@ function recordParseIssue(issues: MonitorIssue[], error: unknown) {
   }
   issues.push({
     file: ".",
-    message: error instanceof Error ? error.message : "Erro desconhecido ao ler pasta.",
+    message: error instanceof Error ? error.message : "Unknown error reading folder.",
     severity: "error",
     scope: "parse",
   })
@@ -77,7 +77,7 @@ function recordParseIssue(issues: MonitorIssue[], error: unknown) {
 function parseBoardJson(raw: string): BoardEntry[] {
   const parsed = JSON.parse(raw) as unknown
   if (!Array.isArray(parsed)) {
-    throw new Error("board.json deve ser um array.")
+    throw new Error("board.json must be an array.")
   }
   return parsed as BoardEntry[]
 }
@@ -132,7 +132,7 @@ async function loadEpics(
     if (filenames.length === 0) {
       parseIssues.push({
         file: "epics/",
-        message: "Nenhum arquivo EPIC-XX.md encontrado em docs/epics/.",
+        message: "No EPIC-XX.md files found in docs/epics/.",
         severity: "error",
         scope: "parse",
       })
@@ -164,7 +164,7 @@ async function loadEpics(
   } catch {
     parseIssues.push({
       file: "epics/",
-      message: 'Pasta "epics/" não encontrada. Crie docs/epics/ com EPIC-XX.md.',
+      message: 'Folder "epics/" not found. Create docs/epics/ with EPIC-XX.md.',
       severity: "error",
       scope: "parse",
     })
@@ -198,7 +198,7 @@ async function loadVersions(
     if (filenames.length === 0) {
       parseIssues.push({
         file: "versions/",
-        message: "Nenhum arquivo vX.md encontrado em docs/versions/.",
+        message: "No vX.md files found in docs/versions/.",
         severity: "error",
         scope: "parse",
       })
@@ -230,7 +230,7 @@ async function loadVersions(
   } catch {
     parseIssues.push({
       file: "versions/",
-      message: 'Pasta "versions/" não encontrada. Crie docs/versions/ com vX.md.',
+      message: 'Folder "versions/" not found. Create docs/versions/ with vX.md.',
       severity: "error",
       scope: "parse",
     })
@@ -286,7 +286,7 @@ async function loadSprints(
   } catch {
     parseIssues.push({
       file: "sprints/",
-      message: 'Pasta "sprints/" não encontrada (opcional até primeira sprint).',
+      message: 'Folder "sprints/" not found (optional until first sprint).',
       severity: "warning",
       scope: "parse",
     })
@@ -320,7 +320,7 @@ async function loadDecisions(
     if (filenames.length === 0) {
       parseIssues.push({
         file: "decisions/",
-        message: "Nenhum arquivo YYYY-MM-DD.json encontrado em docs/decisions/.",
+        message: "No YYYY-MM-DD.json files found in docs/decisions/.",
         severity: "warning",
         scope: "parse",
       })
@@ -353,7 +353,7 @@ async function loadDecisions(
     parseIssues.push({
       file: "decisions/",
       message:
-        'Pasta "decisions/" não encontrada. Crie docs/decisions/ com YYYY-MM-DD.json.',
+        'Folder "decisions/" not found. Create docs/decisions/ with YYYY-MM-DD.json.',
       severity: "error",
       scope: "parse",
     })
@@ -400,7 +400,7 @@ async function loadUserStories(
   } catch {
     parseIssues.push({
       file: "us/",
-      message: 'Pasta "us/" não encontrada.',
+      message: 'Folder "us/" not found.',
       severity: "error",
       scope: "parse",
     })
@@ -409,7 +409,7 @@ async function loadUserStories(
   return userStories
 }
 
-/** Carrega fases, US, épicos e board a partir da pasta docs/ aberta (raiz do handle). */
+/** Loads phase docs, user stories, epics, and board from the opened docs/ folder (handle root). */
 export async function loadMeridianProject(
   docsRoot: FileSystemDirectoryHandle,
 ): Promise<MeridianProjectData> {
@@ -434,7 +434,7 @@ export async function loadMeridianProject(
   } catch (error) {
     parseIssues.push({
       file: "kanban/board.json",
-      message: error instanceof Error ? error.message : "Falha ao ler board.json",
+      message: error instanceof Error ? error.message : "Failed to read board.json",
       severity: "warning",
       scope: "parse",
     })

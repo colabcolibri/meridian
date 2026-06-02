@@ -8,31 +8,31 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 
 ## Selective reading
 
-| Arquivo | Quando ler |
+| File | When to read |
 | ------- | ---------- |
-| `references/decision-template.md` | Ao registrar cada nova entrada |
-| `references/decision-schema.md` | Ao criar arquivo do dia ou validar campos |
+| `references/decision-template.md` | When registering each new entry |
+| `references/decision-schema.md` | When creating daily file or validating fields |
 
-## Quando registrar
+## When to register
 
-Mudança em: escopo, stack, segurança, usuários, epics, versões, arquitetura, banco, API, ambientes, aceite, governança de agents.
+Change in: scope, stack, security, users, epics, versions, architecture, database, API, environments, acceptance, agent governance.
 
-## Procedimento
+## Procedure
 
-1. Determinar a data de hoje (`YYYY-MM-DD`).
-2. Abrir ou criar `docs/decisions/YYYY-MM-DD.json`.
-3. Inserir **no início** de `entries` usando `references/decision-template.md`.
-4. Garantir que `date` no JSON coincide com o nome do arquivo.
-5. Entradas antigas permanecem **abaixo**, intactas.
-6. Se doc `approved` foi alterado → `status: review` nesse doc + mencionar no impacto.
-7. **Nunca** editar ou reordenar entradas antigas.
+1. Determine today's date (`YYYY-MM-DD`).
+2. Open or create `docs/decisions/YYYY-MM-DD.json`.
+3. Insert **at the beginning** of `entries` using `references/decision-template.md`.
+4. Ensure `date` in JSON matches filename.
+5. Old entries remain **below**, intact.
+6. If `approved` doc was changed → `status: review` on that doc + mention in impact.
+7. **Never** edit or reorder old entries.
 
-## Arquivamento
+## Archiving
 
-Dias antigos permanecem como arquivos JSON imutáveis em `docs/decisions/`.
-Não compactar nem mover entradas antigas — o histórico é append-only por prepend.
+Old days remain as immutable JSON files in `docs/decisions/`.
+Do not compact or move old entries — history is append-only by prepend.
 
-## Saída
+## Output
 
 ```txt
 Decision logged:

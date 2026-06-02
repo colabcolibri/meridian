@@ -245,8 +245,8 @@ export function SlashCommandsTable({ commands }: { commands: SlashCommandHint[] 
       <table className="w-full min-w-[28rem] text-left text-sm">
         <thead>
           <tr className="border-b border-border bg-muted/30">
-            <th className={cn(typeScale.label, "px-4 py-3")}>Comando</th>
-            <th className={cn(typeScale.label, "px-4 py-3")}>Quando usar</th>
+            <th className={cn(typeScale.label, "px-4 py-3")}>Command</th>
+            <th className={cn(typeScale.label, "px-4 py-3")}>When to use</th>
           </tr>
         </thead>
         <tbody>
@@ -256,7 +256,7 @@ export function SlashCommandsTable({ commands }: { commands: SlashCommandHint[] 
                 <code className="font-mono text-meridian">{item.command}</code>
                 {item.example ? (
                   <p className={cn(typeScale.caption, "mt-1 text-muted-foreground")}>
-                    ex.: <code className="font-mono text-xs">{item.example}</code>
+                    e.g. <code className="font-mono text-xs">{item.example}</code>
                   </p>
                 ) : null}
               </td>
@@ -284,15 +284,15 @@ export function OpenFolderCallout({ className }: { className?: string }) {
         className,
       )}
     >
-      <h3 className={typeScale.sectionTitle}>Experimente com seu projeto</h3>
+      <h3 className={typeScale.sectionTitle}>Try it with your project</h3>
       <p className={cn(typeScale.body, "mt-2")}>
-        Abra a pasta <strong className="font-medium text-foreground">docs</strong> do
-        repositório (ex.:{" "}
+        Open the <strong className="font-medium text-foreground">docs</strong> folder
+        from the repository (e.g.{" "}
         <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-sm">
           app-desktop/docs
         </code>
-        ) para ver documentos, épicos e user stories reais nas abas Configuração,
-        Entregas e Quadro.
+        ) to see real documents, epics, and user stories in the Setup, Deliverables, and
+        Board tabs.
       </p>
       <Button
         className="mt-4"
@@ -304,11 +304,11 @@ export function OpenFolderCallout({ className }: { className?: string }) {
         ) : (
           <FolderOpen className="mr-2 h-4 w-4" />
         )}
-        Abrir pasta docs
+        Open docs folder
       </Button>
       {!fsAccessSupported ? (
         <p className={cn(typeScale.caption, "mt-3 text-amber-800")}>
-          Use Chrome ou Edge em localhost para abrir pastas no computador.
+          Use Chrome or Edge on localhost to open folders on your computer.
         </p>
       ) : null}
     </section>

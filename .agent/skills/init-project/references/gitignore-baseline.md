@@ -1,6 +1,6 @@
-# Baseline `.gitignore` (Meridian)
+# `.gitignore` baseline (Meridian)
 
-Verificar ou criar na raiz do projeto alvo:
+Verify or create at target project root:
 
 ```gitignore
 # Secrets
@@ -32,13 +32,13 @@ Thumbs.db
 # Test / coverage
 coverage/
 
-# Python (se aplicável)
+# Python (if applicable)
 __pycache__/
 .venv/
 ```
 
-Regras:
+Rules:
 
-- Nunca commitar valores reais de `.env`.
-- Manter um único lockfile por stack (npm/pnpm/yarn — escolher um).
-- Registrar em `docs/decisions/YYYY-MM-DD.json` se a stack exigir exceções.
+- Never commit real `.env` values.
+- Keep a single lockfile per stack (npm/pnpm/yarn — choose one).
+- Register in `docs/decisions/YYYY-MM-DD.json` if stack requires exceptions.

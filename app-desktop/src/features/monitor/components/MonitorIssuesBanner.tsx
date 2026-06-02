@@ -63,17 +63,17 @@ export function MonitorIssuesBanner({ issues }: { issues: MonitorIssue[] }) {
           {errors > 0 ? (
             <span className="inline-flex items-center gap-2 text-destructive">
               <AlertCircle className="h-4 w-4" />
-              {errors} problema{errors === 1 ? "" : "s"} a corrigir
+              {errors} issue{errors === 1 ? "" : "s"} to fix
             </span>
           ) : (
             <span className="inline-flex items-center gap-2 text-amber-700 dark:text-amber-400">
               <AlertTriangle className="h-4 w-4" />
-              {warnings} aviso{warnings === 1 ? "" : "s"}
+              {warnings} warning{warnings === 1 ? "" : "s"}
             </span>
           )}
           {errors > 0 && warnings > 0 ? (
             <span className="text-xs font-normal text-muted-foreground">
-              + {warnings} aviso{warnings === 1 ? "" : "s"}
+              + {warnings} warning{warnings === 1 ? "" : "s"}
             </span>
           ) : null}
         </span>
@@ -91,7 +91,7 @@ export function MonitorIssuesBanner({ issues }: { issues: MonitorIssue[] }) {
             {errorsList.length > 0 ? (
               <div className="space-y-2">
                 <p className={cn(typeScale.label, "text-destructive")}>
-                  Problemas ({errorsList.length})
+                  Issues ({errorsList.length})
                 </p>
                 <IssueList items={errorsList} tone="error" />
               </div>
@@ -101,7 +101,7 @@ export function MonitorIssuesBanner({ issues }: { issues: MonitorIssue[] }) {
                 <p
                   className={cn(typeScale.label, "text-amber-800 dark:text-amber-300")}
                 >
-                  Avisos ({warningsList.length})
+                  Warnings ({warningsList.length})
                 </p>
                 <IssueList items={warningsList} tone="warning" />
               </div>

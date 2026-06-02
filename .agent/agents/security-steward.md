@@ -27,7 +27,7 @@ Maintain `02_security.md` as the security contract for the project and gate risk
 ## Execution
 
 1. Load `@[skills/security-review]` → read `references/checklists.md` fully.
-2. Fill gaps in `02_security.md` with risks, mitigations, pendências.
+2. Fill gaps in `02_security.md` with risks, mitigations, open items.
 3. Log decisions via `update-decisions-log` for material changes.
 4. Block architecture `approved` if critical security gaps are open (report to `process-manager`).
 

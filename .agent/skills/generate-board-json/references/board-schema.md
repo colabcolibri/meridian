@@ -1,47 +1,47 @@
 # Schema `docs/kanban/board.json`
 
-Array ordenado por `id` crescente (`US-0001`, `US-0002`, ...).
+Array sorted by ascending `id` (`US-0001`, `US-0002`, ...).
 
 ```json
 [
   {
     "id": "US-0001",
-    "title": "Título curto",
+    "title": "Short title",
     "epic": "EPIC-01",
     "version": "v1",
     "status": "❌",
     "moscow": "Must",
     "depends_on": [],
-    "done_when": "Condição objetiva.",
+    "done_when": "Objective condition.",
     "tests": "required",
     "tests_status": "pending"
   }
 ]
 ```
 
-## Campos obrigatórios
+## Required fields
 
-| Campo | Fonte |
+| Field | Source |
 | ----- | ----- |
-| Todos | Frontmatter YAML de `docs/us/US-XXXX.md` |
+| All | YAML frontmatter of `docs/us/US-XXXX.md` |
 
-## Validações
+## Validations
 
-- ID único, formato `US-XXXX` (4 dígitos)
-- Epic existe em `docs/epics/EPIC-XX.md`
-- Versão existe em `docs/versions/vX.md`
-- Cada `depends_on` referencia US existente
-- `done_when` não vazio
-- Se `status` é `🔶`, aceite contém `Falta:`
-- `tests`: `required` ou `none`
-- `tests_status`: `pending`, `done` ou `n/a` (`n/a` só com `tests: none`)
-- `status: ✅` com `tests: required` exige `tests_status: done`
+- Unique ID, format `US-XXXX` (4 digits)
+- Epic exists in `docs/epics/EPIC-XX.md`
+- Version exists in `docs/versions/vX.md`
+- Each `depends_on` references existing US
+- `done_when` not empty
+- If `status` is `🔶`, acceptance contains `Missing:`
+- `tests`: `required` or `none`
+- `tests_status`: `pending`, `done` or `n/a` (`n/a` only with `tests: none`)
+- `status: ✅` with `tests: required` requires `tests_status: done`
 
-## Divergências comuns
+## Common divergences
 
-| Problema | Ação |
+| Problem | Action |
 | -------- | ---- |
-| US no disco, ausente no board | Regenerar |
-| Entrada no board sem arquivo | Remover entrada |
-| Epic/versão inválidos | Bloquear export; reportar |
-| `tests` / `tests_status` desatualizados | Regenerar board |
+| US on disk, absent from board | Regenerate |
+| Board entry without file | Remove entry |
+| Invalid epic/version | Block export; report |
+| Outdated `tests` / `tests_status` | Regenerate board |

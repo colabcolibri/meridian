@@ -59,11 +59,11 @@ function DecisionDetailSheet({
           </p>
         </SheetHeader>
         <div className="flex-1 space-y-5 overflow-y-auto px-6 py-5">
-          <DecisionField label="Documento afetado" value={entry.affectedDocument} />
-          <DecisionField label="O que mudou" value={entry.whatChanged} />
-          <DecisionField label="Por que mudou" value={entry.whyChanged} />
-          <DecisionField label="Impacto em outros docs" value={entry.impact} />
-          <DecisionField label="Responsável" value={entry.responsible} />
+          <DecisionField label="Affected document" value={entry.affectedDocument} />
+          <DecisionField label="What changed" value={entry.whatChanged} />
+          <DecisionField label="Why it changed" value={entry.whyChanged} />
+          <DecisionField label="Impact on other docs" value={entry.impact} />
+          <DecisionField label="Responsible" value={entry.responsible} />
         </div>
       </SheetContent>
     </Sheet>
@@ -110,8 +110,8 @@ function DayBlock({
             <h2 className={typeScale.sectionTitle}>{day.date}</h2>
           </div>
           <p className={cn(typeScale.caption, "mt-1 tabular-nums")}>
-            {day.entries.length} decisão{day.entries.length === 1 ? "" : "ões"}
-            {!expanded ? " · recolhido" : null}
+            {day.entries.length} decision{day.entries.length === 1 ? "" : "s"}
+            {!expanded ? " · collapsed" : null}
           </p>
         </div>
       </button>
@@ -180,9 +180,9 @@ export function DecisionsView({ decisionDays }: { decisionDays: DecisionDay[] })
   if (sortedDays.length === 0) {
     return (
       <p className={typeScale.bodySm}>
-        Nenhuma decisão em <code className="text-xs">docs/decisions/</code>. Crie{" "}
-        <code className="text-xs">YYYY-MM-DD.json</code> com array{" "}
-        <code className="text-xs">entries</code> (time, title, campos do log).
+        No decisions in <code className="text-xs">docs/decisions/</code>. Create{" "}
+        <code className="text-xs">YYYY-MM-DD.json</code> with an{" "}
+        <code className="text-xs">entries</code> array (time, title, log fields).
       </p>
     )
   }

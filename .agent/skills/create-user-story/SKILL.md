@@ -8,53 +8,53 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 
 ## Selective reading
 
-| Arquivo | Quando ler |
+| File | When to read |
 | ------- | ---------- |
-| `references/us-template.md` | Ao redigir o arquivo `docs/us/US-XXXX.md` |
+| `references/us-template.md` | When drafting `docs/us/US-XXXX.md` |
 
-## Pré-condições (hard gate)
+## Preconditions (hard gate)
 
-| Doc | Status exigido |
+| Doc | Required status |
 | --- | -------------- |
 | `05_architecture.md` | `approved` |
-| epic/version nas pastas | existem |
-| Epic citado | arquivo `docs/epics/EPIC-XX.md` existe |
-| Versão citada | arquivo `docs/versions/vX.md` existe |
-| Perfil em `03_user_types.md` | existe |
+| epic/version in folders | exist |
+| Referenced epic | file `docs/epics/EPIC-XX.md` exists |
+| Referenced version | file `docs/versions/vX.md` exists |
+| Profile in `03_user_types.md` | exists |
 
-A US **referencia** o epic pelo campo `epic: EPIC-XX`. Não copie descrição, `outcome` nem escopo do epic para dentro da US — a fonte canônica do epic é `docs/epics/`.
+The US **references** the epic via `epic: EPIC-XX`. Do not copy description, `outcome` or epic scope into the US — canonical epic source is `docs/epics/`.
 
-Se o epic não existir → use skill `create-epic` antes de salvar a US.
+If epic does not exist → use skill `create-epic` before saving US.
 
-Se falhar → **não** salvar US válida; reportar bloqueio e menor doc necessário.
+If check fails → **do not** save valid US; report blocker and smallest doc needed.
 
-## Fase 0 — clarificação
+## Phase 0 — clarification
 
-Pedido vago → perguntas de produto:
+Vague request → product questions:
 
-1. Quem usa?
-2. Qual ação?
-3. Qual benefício?
-4. Como saber que terminou (`done_when`)?
+1. Who uses it?
+2. What action?
+3. What benefit?
+4. How to know it is done (`done_when`)?
 
-## Procedimento
+## Procedure
 
-1. Listar `docs/us/US-*.md` → próximo ID = maior número + 1, formatado como `US-XXXX` (4 dígitos, zero à esquerda).
-2. Preencher template de `references/us-template.md`.
-3. Validar `done_when` mensurável; `🔶` exige `Falta:` no aceite.
-4. Salvar `docs/us/US-XXXX.md`.
-5. Invocar `generate-board-json` ou regenerar `board.json`.
-6. Se mudança relevante → `update-decisions-log`.
+1. List `docs/us/US-*.md` → next ID = highest number + 1, formatted as `US-XXXX` (4 digits, zero-padded).
+2. Fill template from `references/us-template.md`.
+3. Validate measurable `done_when`; `🔶` requires `Missing:` in acceptance.
+4. Save `docs/us/US-XXXX.md`.
+5. Invoke `generate-board-json` or regenerate `board.json`.
+6. If relevant change → `update-decisions-log`.
 
-**Fechamento:** após implementação, usar skill `complete-user-story` (workflow `/complete-us`) — não marcar `✅` nesta skill.
+**Closure:** after implementation, use skill `complete-user-story` (workflow `/complete-us`) — do not mark `✅` in this skill.
 
-## Validações antes de salvar
+## Validations before saving
 
-- ID novo, formato `US-XXXX` (4 dígitos); nome do arquivo = `{id}.md`
-- Dependências existem e estão `✅` antes de marcar dependente como `✅`
-- Fora de escopo preenchido se houver risco de ambiguidade
+- New ID, format `US-XXXX` (4 digits); filename = `{id}.md`
+- Dependencies exist and are `✅` before marking dependent as `✅`
+- Out of scope filled if ambiguity risk exists
 
-## Saída
+## Output
 
 ```txt
 US created:

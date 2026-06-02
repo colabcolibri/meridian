@@ -2,19 +2,19 @@
 description: Regenerate docs/kanban/board.json from Meridian user stories.
 ---
 
-# /sync-board — sincronizar board
+# /sync-board — sync board
 
 $ARGUMENTS
 
 ---
 
-## Regras críticas
+## Critical rules
 
 1. Use `board-keeper` + `@[skills/generate-board-json]`
-2. Fonte de verdade: `docs/us/*.md` apenas
-3. Não preservar entradas órfãs no JSON
-4. Reportar US inválidas sem exportar
-5. Opcional: `validate_meridian.py`
+2. Source of truth: `docs/us/*.md` only
+3. Do not preserve orphan entries in JSON
+4. Report invalid US without exporting
+5. Optional: `validate_meridian.py`
 
 ---
 
@@ -34,7 +34,7 @@ RULES:
 
 ---
 
-## Saída
+## Output
 
 ```txt
 Stories read:

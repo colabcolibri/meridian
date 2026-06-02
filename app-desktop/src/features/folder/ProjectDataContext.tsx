@@ -71,8 +71,7 @@ export function ProjectDataProvider({ children }: { children: ReactNode }) {
         issues: [
           {
             file: ".",
-            message:
-              error instanceof Error ? error.message : "Falha ao carregar projeto.",
+            message: error instanceof Error ? error.message : "Failed to load project.",
             severity: "error",
             scope: "parse",
           },

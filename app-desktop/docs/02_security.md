@@ -1,5 +1,5 @@
 ---
-title: Segurança
+title: Security
 status: approved
 version: 1.0
 updated: 2026-06-02
@@ -7,52 +7,52 @@ depends_on: [00_scope.md, 01_tech_stack.md]
 blocks: [03_user_types.md, 04_principles.md]
 ---
 
-# 02 — Segurança
+# 02 — Security
 
-## Modelo de autenticação
+## Authentication model
 
-Não haverá autenticação na primeira versão Vite local.
+There will be no authentication in the first local Vite version.
 
-## Modelo de autorização
+## Authorization model
 
-Não haverá perfis com permissões técnicas na primeira versão. O app será usado localmente por um único operador.
+There will be no profiles with technical permissions in the first version. The app will be used locally by a single operator.
 
-## Proteção de dados
+## Data protection
 
-- Nenhum dado sensível deve ser exigido na primeira versão.
-- Conteúdo de documentação pode conter informações de projeto e deve ser tratado como dado local do usuário.
-- Futuras integrações com escrita em disco devem evitar envio remoto de conteúdo sem ação explícita.
+- No sensitive data should be required in the first version.
+- Documentation content may contain project information and should be treated as local user data.
+- Future integrations with disk writes must avoid remote content transmission without explicit action.
 
-## Validação de inputs
+## Input validation
 
-- Validações de estrutura Meridian devem ocorrer na camada de domínio do frontend.
-- Campos obrigatórios de frontmatter devem ser validados antes de uma US ou documento ser considerado válido.
-- Status `🔶` deve exigir `Falta:` no aceite.
+- Meridian structure validations must occur in the frontend domain layer.
+- Required frontmatter fields must be validated before a US or document is considered valid.
+- Status `🔶` must require `Missing:` in acceptance.
 
 ## Rate limiting
 
-Fora do escopo da primeira versão local.
+Out of scope for the first local version.
 
-## Auditoria e logs
+## Audit and logs
 
-- A primeira versão deve representar o log em `docs/decisions/` (stub `11_decisions.md` só com regras).
-- Futuramente, edição de documento `approved` deve sugerir ou registrar decisão.
+- The first version should represent the log in `docs/decisions/` (stub `11_decisions.md` with rules only).
+- In the future, editing an `approved` document should suggest or record a decision.
 
-## Gestão de segredos
+## Secrets management
 
-- `.env`, `.env.*` e arquivos locais de segredo não entram no Git.
-- `.env.example` entra no Git como contrato de configuração.
-- v0 não exige variáveis de ambiente.
-- Nenhum segredo deve ser salvo em `localStorage`.
+- `.env`, `.env.*`, and local secret files do not go in Git.
+- `.env.example` goes in Git as a configuration contract.
+- v0 does not require environment variables.
+- No secrets should be saved in `localStorage`.
 
-## Conformidade
+## Compliance
 
-Sem conformidade regulatória específica na primeira versão. O produto deve evitar coletar dados pessoais desnecessários.
+No specific regulatory compliance in the first version. The product should avoid collecting unnecessary personal data.
 
 ## OWASP Top 10
 
-O risco inicial é baixo por não haver backend remoto. Ainda assim:
+Initial risk is low because there is no remote backend. Still:
 
-- Validar dados renderizados para evitar injeção em previews futuros.
-- Não executar conteúdo Markdown como código.
-- Não persistir segredos em `localStorage`.
+- Validate rendered data to avoid injection in future previews.
+- Do not execute Markdown content as code.
+- Do not persist secrets in `localStorage`.

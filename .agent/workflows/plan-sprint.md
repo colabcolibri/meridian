@@ -2,20 +2,20 @@
 description: Plan a Meridian version or sprint without writing implementation code.
 ---
 
-# /plan-sprint — planejar versão/sprint
+# /plan-sprint — plan version/sprint
 
 $ARGUMENTS
 
 ---
 
-## Regras críticas
+## Critical rules
 
-1. **SEM CÓDIGO** — apenas `docs/versions/`, `docs/sprints/` e US (se gate OK)
-2. Use `sprint-planner` + `@[skills/create-sprint]` + `@[skills/create-user-story]` quando aplicável
-3. Exige `05_architecture.md` approved
-4. Novas US só com epic/version referenciados existentes nas pastas
-5. Sprints em **`docs/sprints/`** — um arquivo por sprint
-6. Ao alterar US → `/sync-board`
+1. **NO CODE** — only `docs/versions/`, `docs/sprints/` and US (if gate OK)
+2. Use `sprint-planner` + `@[skills/create-sprint]` + `@[skills/create-user-story]` when applicable
+3. Requires `05_architecture.md` approved
+4. New US only with epic/version referenced in existing folders
+5. Sprints in **`docs/sprints/`** — one file per sprint
+6. After changing US → `/sync-board`
 
 ---
 
@@ -37,17 +37,17 @@ RULES:
 
 ---
 
-## Entregáveis
+## Deliverables
 
-| Item | Local |
+| Item | Location |
 | ---- | ----- |
-| Versão planejada | `docs/versions/vX.md` |
+| Planned version | `docs/versions/vX.md` |
 | Sprint doc | `docs/sprints/vX-SY.md` |
-| US novas | `docs/us/` (somente se pré-condições OK) |
+| New US | `docs/us/` (only if preconditions OK) |
 
 ---
 
-## Saída
+## Output
 
 ```txt
 Version:
@@ -61,8 +61,8 @@ Human approval needed:
 
 ---
 
-## Depois
+## After
 
 ```txt
-Próximo: revisar release com manager → /create-us para stories → /sync-board
+Next: review release with manager → /create-us for stories → /sync-board
 ```

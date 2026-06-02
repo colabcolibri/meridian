@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils"
 export function SetupStateLegend({ className }: { className?: string }) {
   return (
     <section
-      aria-label="Legenda dos estados dos documentos"
+      aria-label="Document state legend"
       className={cn("border-b border-border pb-4", className)}
     >
       <ul className="flex list-none flex-wrap gap-x-6 gap-y-2">

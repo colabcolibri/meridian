@@ -1,23 +1,23 @@
 ---
 id: EPIC-05
-title: Ponte VSCode
+title: VSCode Bridge
 status: paused
 versions: [v2]
-profiles: [Futuro Usuário VSCode]
-outcome: "Desenvolvedor edita docs/us e docs/epics no editor com sync e geração de board integrada."
+profiles: [Future VSCode User]
+outcome: "Developer edits docs/us and docs/epics in the editor with sync and integrated board generation."
 ---
 
-# EPIC-05 — Ponte VSCode
+# EPIC-05 — VSCode Bridge
 
-## Capacidade
+## Capability
 
-Extensão no editor para escrita real em Markdown na pasta do workspace, geração de board e operação Meridian sem depender só do browser.
+Editor extension for real Markdown writes in the workspace folder, board generation, and Meridian operation without relying only on the browser.
 
-## Resultado esperado
+## Expected outcome
 
-Usuário VSCode cria US referenciando epic existente, salva em disco e board.json regenera sem passo manual frágil.
+VSCode user creates a US referencing an existing epic, saves to disk, and board.json regenerates without a fragile manual step.
 
-## Fora deste epic
+## Out of scope for this epic
 
-- Monitor web v1 (EPIC-02, EPIC-04).
-- Backend ou multiusuário.
+- v1 web monitor (EPIC-02, EPIC-04).
+- Backend or multi-user.

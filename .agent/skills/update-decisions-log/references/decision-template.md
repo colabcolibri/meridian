@@ -1,7 +1,7 @@
-# Template de decisão
+# Decision template
 
-Inserir **no início** de `entries` em `docs/decisions/YYYY-MM-DD.json`.
-Se o arquivo do dia não existir, criar:
+Insert **at the beginning** of `entries` in `docs/decisions/YYYY-MM-DD.json`.
+If daily file does not exist, create:
 
 ```json
 {
@@ -10,32 +10,32 @@ Se o arquivo do dia não existir, criar:
 }
 ```
 
-Nova entrada (prepend — primeiro item do array):
+New entry (prepend — first item in array):
 
 ```json
 {
   "time": "HH:MM",
-  "title": "Título objetivo da decisão",
-  "affected_document": "caminho/do/doc.md",
-  "what_changed": "descrição factual do delta",
-  "why_changed": "contexto, restrição ou aprendizado que motivou",
-  "impact": "lista; marcar docs que voltam para review",
-  "responsible": "manager ou papel"
+  "title": "Objective decision title",
+  "affected_document": "path/to/doc.md",
+  "what_changed": "factual description of delta",
+  "why_changed": "context, constraint or learning that motivated",
+  "impact": "list; mark docs that return to review",
+  "responsible": "manager or role"
 }
 ```
 
-## Quando usar
+## When to use
 
-- Escopo, stack, segurança, usuários, epics, versões, arquitetura, banco, API, ambientes, aceite, governança de agents.
+- Scope, stack, security, users, epics, versions, architecture, database, API, environments, acceptance, agent governance.
 
-## Proibido
+## Forbidden
 
-- Editar ou apagar entradas antigas.
-- Append no final de `entries` (ordem correta: **novo no início**).
-- Entrada vaga ("ajustado escopo") sem impacto listado.
+- Edit or delete old entries.
+- Append at end of `entries` (correct order: **new at beginning**).
+- Vague entry ("adjusted scope") without listed impact.
 
-## Após decisão que altera doc `approved`
+## After decision that changes `approved` doc
 
-1. Prepend em `docs/decisions/YYYY-MM-DD.json`.
-2. Alterar `status` do doc afetado para `review`.
-3. Informar o manager qual reaprovação é necessária.
+1. Prepend in `docs/decisions/YYYY-MM-DD.json`.
+2. Change affected doc `status` to `review`.
+3. Inform manager which re-approval is needed.

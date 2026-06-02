@@ -69,7 +69,7 @@ function DeliverableSheet({
           <div className="space-y-3">
             <p className={typeScale.bodySm}>{version.outcome}</p>
             <p className={typeScale.caption}>
-              Progresso: {done}/{total} US ({progress}%)
+              Progress: {done}/{total} stories ({progress}%)
             </p>
           </div>
         }
@@ -127,8 +127,8 @@ function DeliverableSheet({
           <p className={typeScale.bodySm}>{epic.outcome}</p>
           <p className={typeScale.caption}>
             {target.versionId === "—"
-              ? `Total: ${done}/${total} US (${progress}%)`
-              : `Nesta versão: ${done}/${total} US (${progress}%)`}
+              ? `Total: ${done}/${total} stories (${progress}%)`
+              : `In this version: ${done}/${total} stories (${progress}%)`}
           </p>
         </div>
       }
@@ -198,7 +198,7 @@ function VersionBlock({
             </div>
             <p className={cn(typeScale.caption, "mt-1 tabular-nums")}>
               {done}/{total} US · {progress}% · {version.status}
-              {!expanded ? " · recolhida" : null}
+              {!expanded ? " · collapsed" : null}
             </p>
           </div>
         </button>
@@ -207,7 +207,7 @@ function VersionBlock({
             {version.status}
           </Badge>
           <button
-            aria-label={`Abrir documento ${version.id}`}
+            aria-label={`Open document ${version.id}`}
             className="inline-flex items-center gap-1 rounded-lg border border-border px-2.5 py-1.5 text-xs font-medium text-muted-foreground transition-colors hover:bg-muted/50 hover:text-foreground"
             onClick={(event) => {
               event.stopPropagation()
@@ -216,7 +216,7 @@ function VersionBlock({
             type="button"
           >
             <FileText className="size-3.5" aria-hidden />
-            Ler doc
+            Read doc
           </button>
         </div>
       </div>
@@ -242,7 +242,7 @@ function VersionBlock({
 
       {expanded && versionEpics.length > 0 ? (
         <div className="px-2 py-2">
-          <p className={cn(typeScale.label, "px-2 pb-1")}>Épicos</p>
+          <p className={cn(typeScale.label, "px-2 pb-1")}>Epics</p>
           {versionEpics.map((epic) => {
             const {
               done: epicDone,
@@ -371,7 +371,7 @@ export function DeliverablesView({
         <section className="rounded-xl border border-border bg-card px-2 py-2">
           <div className="flex items-center gap-2 px-2 py-2">
             <Layers className="h-4 w-4 text-primary" />
-            <h3 className={typeScale.cardTitle}>Outros épicos</h3>
+            <h3 className={typeScale.cardTitle}>Other epics</h3>
           </div>
           {orphans.map((epic) => {
             const { total, done } = countStoriesByEpic(stories, epic.id)

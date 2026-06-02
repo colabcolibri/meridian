@@ -1,5 +1,5 @@
 ---
-title: Tipos de Usuário
+title: User Types
 status: approved
 version: 1.0
 updated: 2026-06-02
@@ -7,34 +7,34 @@ depends_on: [02_security.md]
 blocks: [04_principles.md, 05_architecture.md, 06_database.md, 07_api_contracts.md]
 ---
 
-# 03 — Tipos de Usuário
+# 03 — User Types
 
-## Manager do Processo
+## Process Manager
 
-- **Descrição:** pessoa responsável por conduzir o fluxo de desenvolvimento com agentes de IA, mantendo visibilidade, consistência e decisões documentadas. Pode ser dev, founder, product manager, designer, tech lead ou alguém de outra área.
-- **Origem:** acesso direto ao app local.
-- **Permissões:** visualizar documentos, entender bloqueios, revisar maturidade, acompanhar US, consultar templates, decidir próximos passos e orientar agentes de IA com contexto documentado.
-- **Restrições:** não delega o processo a agentes autônomos sem registro, revisão, critérios explícitos e documentação atualizada.
-- **Sessão:** sem sessão autenticada.
-- **Dados visíveis:** todos os dados carregados localmente no app.
-- **Casos de borda:** projeto sem documentação, excesso de documentos sem aprovação, agente sugerindo mudanças fora do fluxo, agentes trabalhando sem aceite claro, decisões não registradas.
+- **Description:** person responsible for conducting the development flow with AI agents, maintaining visibility, consistency, and documented decisions. May be a dev, founder, product manager, designer, tech lead, or someone from another area.
+- **Origin:** direct access to the local app.
+- **Permissions:** view documents, understand blockers, review maturity, track US, consult templates, decide next steps, and guide AI agents with documented context.
+- **Restrictions:** does not delegate the process to autonomous agents without registration, review, explicit criteria, and updated documentation.
+- **Session:** no authenticated session.
+- **Visible data:** all data loaded locally in the app.
+- **Edge cases:** project without documentation, excess of documents without approval, agent suggesting changes outside the flow, agents working without clear acceptance, unrecorded decisions.
 
-## Operador Local
+## Local Operator
 
-- **Descrição:** pessoa usando o app Vite localmente para organizar e validar a documentação Meridian de um projeto.
-- **Origem:** acesso direto ao app local.
-- **Permissões:** visualizar documentos, simular mudanças de status, ver bloqueios, consultar templates e operar user stories locais.
-- **Restrições:** não sincroniza dados remotamente e não escreve arquivos reais na primeira versão.
-- **Sessão:** sem sessão autenticada.
-- **Dados visíveis:** todos os dados carregados localmente no app.
-- **Casos de borda:** projeto sem `/docs`, documentos incompletos, dependências não aprovadas, US com frontmatter inválido.
+- **Description:** person using the local Vite app to organize and validate a project's Meridian documentation.
+- **Origin:** direct access to the local app.
+- **Permissions:** view documents, simulate status changes, see blockers, consult templates, and operate local user stories.
+- **Restrictions:** does not sync data remotely and does not write real files in the first version.
+- **Session:** no authenticated session.
+- **Visible data:** all data loaded locally in the app.
+- **Edge cases:** project without `/docs`, incomplete documents, unapproved dependencies, US with invalid frontmatter.
 
-## Futuro Usuário VSCode
+## Future VSCode User
 
-- **Descrição:** pessoa usando a futura extensão dentro do VSCode para criar e manter arquivos reais do Meridian.
-- **Origem:** instalação da extensão.
-- **Permissões:** inicializar templates, editar documentos, gerar kanban, receber alertas e registrar decisões.
-- **Restrições:** respeita permissões do workspace local.
-- **Sessão:** sem sessão obrigatória prevista.
-- **Dados visíveis:** arquivos do workspace aberto no VSCode.
-- **Casos de borda:** workspace sem permissão de escrita, arquivos modificados fora da extensão, conflitos com Git e documentos aprovados editados manualmente.
+- **Description:** person using the future extension inside VSCode to create and maintain real Meridian files.
+- **Origin:** extension installation.
+- **Permissions:** initialize templates, edit documents, generate kanban, receive alerts, and record decisions.
+- **Restrictions:** respects local workspace permissions.
+- **Session:** no mandatory session planned.
+- **Visible data:** files from the workspace open in VSCode.
+- **Edge cases:** workspace without write permission, files modified outside the extension, Git conflicts, and manually edited approved documents.

@@ -2,20 +2,20 @@
 description: Create a Meridian user story after checking epics, versions and dependencies.
 ---
 
-# /create-us — criar user story
+# /create-us — create user story
 
 $ARGUMENTS
 
 ---
 
-## Regras críticas
+## Critical rules
 
 1. Use `board-keeper` + `@[skills/create-user-story]`
-2. **Gate:** `05_architecture` = `approved`; epic referenciado deve existir em `docs/epics/` (senão → `/create-epic` primeiro)
+2. **Gate:** `05_architecture` = `approved`; referenced epic must exist in `docs/epics/` (otherwise → `/create-epic` first)
 3. Template: `references/us-template.md`
-4. Regenerar `board.json` ao final
-5. Não marcar `✅` na criação — nasce `❌`
-6. Fechamento pós-implementação → `/complete-us` + skill `complete-user-story`
+4. Regenerate `board.json` at the end
+5. Do not mark `✅` on creation — starts as `❌`
+6. Post-implementation closure → `/complete-us` + skill `complete-user-story`
 
 ---
 
@@ -29,7 +29,7 @@ CONTEXT:
 RULES:
 1. board-keeper Phase 0 — verify prerequisites
 2. If blocked, report smallest doc to fix
-3. Assign next `US-XXXX` id (4 dígitos, zero à esquerda)
+3. Assign next `US-XXXX` id (4 digits, zero-padded)
 4. Fill template with measurable done_when
 5. generate-board-json
 6. update-decisions-log if acceptance model changes
@@ -37,7 +37,7 @@ RULES:
 
 ---
 
-## Saída
+## Output
 
 ```txt
 US created:
@@ -51,9 +51,9 @@ Open questions:
 
 ---
 
-## Exemplos
+## Examples
 
-| Pedido | Resultado |
+| Request | Result |
 | ------ | --------- |
-| `/create-us login do manager` | US-00N com epic/version explícitos |
-| `/create-us` sem epic | Perguntar epic + versão antes de salvar |
+| `/create-us manager login` | US-00N with explicit epic/version |
+| `/create-us` without epic | Ask epic + version before saving |

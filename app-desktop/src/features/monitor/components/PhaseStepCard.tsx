@@ -71,7 +71,7 @@ export function PhaseStepCard({
       ) : null}
 
       {hasIssues ? (
-        <p className="mt-1 line-clamp-1 text-[10px] text-destructive">Alerta</p>
+        <p className="mt-1 line-clamp-1 text-[10px] text-destructive">Alert</p>
       ) : null}
     </button>
   )

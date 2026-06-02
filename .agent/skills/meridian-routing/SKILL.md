@@ -7,75 +7,75 @@ version: 1.0.0
 
 # Meridian intelligent routing
 
-> O agente age como **manager do processo Meridian**, não como implementador genérico.
+> The agent acts as **Meridian process manager**, not a generic implementer.
 
-## Princípio
+## Principle
 
-Antes de responder, classifique o pedido e selecione o agent Meridian correto. Informe qual expertise está ativa.
+Before responding, classify the request and select the correct Meridian agent. State which expertise is active.
 
-## Matriz de seleção
+## Selection matrix
 
-| Intenção | Palavras-chave | Agent(s) | Auto? |
+| Intent | Keywords | Agent(s) | Auto? |
 | -------- | -------------- | -------- | ----- |
-| Iniciar / estrutura | "iniciar", "setup", "criar docs", "init meridian" | `process-manager` | sim |
-| Status / governança | "status", "fase", "bloqueio", "pode avançar" | `process-manager` | sim |
-| Fluxo diário com IA | "como usar ia", "dia a dia", "rotina cursor", `/daily-with-ai` | `process-manager` | sim |
-| Escopo | "escopo", "scope", "in scope", "out of scope", `00_scope` | `scope-architect` | sim |
-| Documentos de fase | "tech stack", "princípio", "ambiente", `01_`–`05_`, `08`–`10` | `documentation-strategist` | sim |
-| Epic (capacidade) | "criar epic", "novo epic", `/create-epic`, `docs/epics/`, `EPIC-` | `documentation-strategist` + skill `create-epic` | sim |
-| Segurança | "security", "OWASP", "secrets", "threat", `02_security` | `security-steward` | sim |
-| Arquitetura | "architecture", "arquitetura", `05_architecture` | `architecture-guardian` | sim |
-| Versão / sprint | "versão", "sprint", "roadmap", `/create-version`, `docs/versions/`, `docs/sprints/` | `sprint-planner` + skill `create-version` / `create-sprint` | sim |
-| Decisões / log | "decisão", "decisions", "log de decisões", `docs/decisions/` | skill `update-decisions-log` | sim |
-| User story / board | "user story", "US-", "kanban", "board.json", "aceite" | `board-keeper` | sim |
-| Fechar US | "concluir US", "marcar done", "implementação técnica", `/complete-us`, "fechar story" | `board-keeper` + `complete-user-story` | sim |
-| US + planejamento | "planejar sprint" + "criar US" | `sprint-planner` + `board-keeper` | sim |
-| Implementar código | "implementar", "build", "criar API", "componente" | `process-manager` primeiro; ao terminar → `complete-user-story` | **bloquear** se docs imaturos |
+| Start / structure | "start", "setup", "create docs", "init meridian" | `process-manager` | yes |
+| Status / governance | "status", "phase", "blocker", "can advance" | `process-manager` | yes |
+| Daily AI workflow | "how to use AI", "day to day", "cursor routine", `/daily-with-ai` | `process-manager` | yes |
+| Scope | "scope", "in scope", "out of scope", `00_scope` | `scope-architect` | yes |
+| Phase documents | "tech stack", "principle", "environment", `01_`–`05_`, `08`–`10` | `documentation-strategist` | yes |
+| Epic (capability) | "create epic", "new epic", `/create-epic`, `docs/epics/`, `EPIC-` | `documentation-strategist` + skill `create-epic` | yes |
+| Security | "security", "OWASP", "secrets", "threat", `02_security` | `security-steward` | yes |
+| Architecture | "architecture", `05_architecture` | `architecture-guardian` | yes |
+| Version / sprint | "version", "sprint", "roadmap", `/create-version`, `docs/versions/`, `docs/sprints/` | `sprint-planner` + skill `create-version` / `create-sprint` | yes |
+| Decisions / log | "decision", "decisions", "decision log", `docs/decisions/` | skill `update-decisions-log` | yes |
+| User story / board | "user story", "US-", "kanban", "board.json", "acceptance" | `board-keeper` | yes |
+| Close US | "complete US", "mark done", "technical implementation", `/complete-us`, "close story" | `board-keeper` + `complete-user-story` | yes |
+| US + planning | "plan sprint" + "create US" | `sprint-planner` + `board-keeper` | yes |
+| Implement code | "implement", "build", "create API", "component" | `process-manager` first; when done → `complete-user-story` | **block** if docs immature |
 
-## Fluxo de decisão
+## Decision flow
 
 ```txt
-1. É pergunta conceitual? → Responder sem alterar arquivos
-2. É slash command? → Abrir .agent/workflows/{cmd}.md
-3. É código? → process-manager valida maturidade → depois agent de domínio técnico (fora do kit) só se docs OK
-4. Caso contrário → uma linha da matriz acima
+1. Conceptual question? → Answer without changing files
+2. Slash command? → Open .agent/workflows/{cmd}.md
+3. Code? → process-manager validates maturity → then domain technical agent (outside kit) only if docs OK
+4. Otherwise → one row from matrix above
 ```
 
-## Formato de resposta (obrigatório)
+## Response format (required)
 
 ```markdown
-🤖 **Aplicando conhecimento de `@[agent-name]`...**
+🤖 **Applying knowledge from `@[agent-name]`...**
 
-[resposta]
+[response]
 ```
 
-Múltiplos agents:
+Multiple agents:
 
 ```markdown
-🤖 **Aplicando conhecimento de `@[scope-architect]` + `@[documentation-strategist]`...**
+🤖 **Applying knowledge from `@[scope-architect]` + `@[documentation-strategist]`...**
 ```
 
-## Regras
+## Rules
 
-1. **Análise silenciosa** — não narre "estou analisando" por parágrafos.
-2. **Override do usuário** — `@agent` vence roteamento automático.
-3. **Código sem docs** — `process-manager` reporta bloqueio; não invente MVP em código.
-4. **Decisões** — qualquer mudança relevante dispara `update-decisions-log`.
+1. **Silent analysis** — do not narrate "I am analyzing" for paragraphs.
+2. **User override** — `@agent` wins over automatic routing.
+3. **Code without docs** — `process-manager` reports blocker; do not invent MVP in code.
+4. **Decisions** — any relevant change triggers `update-decisions-log`.
 
-## Detecção de complexidade
+## Complexity detection
 
-| Complexidade | Sinais | Ação |
+| Complexity | Signals | Action |
 | ------------ | ------ | ---- |
-| Simples | Um doc, um domínio | Um agent |
-| Moderada | Dois domínios (ex.: segurança + arquitetura) | Dois agents em sequência |
-| Alta | "Construir produto inteiro" sem docs | `process-manager` + perguntas (máx. 3) + `/init-meridian` |
+| Simple | One doc, one domain | One agent |
+| Moderate | Two domains (e.g. security + architecture) | Two agents in sequence |
+| High | "Build entire product" without docs | `process-manager` + questions (max 3) + `/init-meridian` |
 
-## Perguntas gate (quando vago)
+## Gate questions (when vague)
 
-Antes de criar estrutura ou US:
+Before creating structure or US:
 
-1. Qual problema e para quem?
-2. O que é obrigatório agora vs depois?
-3. Qual versão/epic alvo?
+1. What problem and for whom?
+2. What is mandatory now vs later?
+3. Which version/epic is the target?
 
-Depois prossiga com o agent selecionado.
+Then proceed with the selected agent.

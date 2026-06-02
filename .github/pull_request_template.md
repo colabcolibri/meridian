@@ -1,28 +1,28 @@
-## Resumo
+## Summary
 
-<!-- O quê e por quê, em 1–3 frases -->
+<!-- What and why, in 1–3 sentences -->
 
-## Tipo de mudança
+## Change type
 
 - [ ] Fix
 - [ ] Feature
-- [ ] Docs / protocolo
+- [ ] Docs / protocol
 - [ ] Refactor
 - [ ] Chore (CI, deps)
 
-## Como testar
+## How to test
 
 1.
 2.
 
 ## Checklist
 
-- [ ] Rodei `python3 .agent/scripts/validate_meridian.py app-desktop` (se aplicável)
-- [ ] Rodei `pnpm lint`, `pnpm test` e `pnpm build` em `app-desktop/` (se aplicável)
-- [ ] Editei `.agent/` (não `.cursor/`) para mudanças no kit
-- [ ] Prepend em `docs/decisions/YYYY-MM-DD.json` se mudou escopo, stack ou arquitetura
-- [ ] Não incluí segredos, `.env` ou `node_modules/`
+- [ ] Ran `python3 .agent/scripts/validate_meridian.py app-desktop` (if applicable)
+- [ ] Ran `pnpm lint`, `pnpm test`, and `pnpm build` in `app-desktop/` (if applicable)
+- [ ] Edited `.agent/` (not `.cursor/`) for kit changes
+- [ ] Prepended to `docs/decisions/YYYY-MM-DD.json` if scope, stack, or architecture changed
+- [ ] Did not include secrets, `.env`, or `node_modules/`
 
 ## Screenshots
 
-<!-- Se houver mudança visual -->
+<!-- If there is a visual change -->

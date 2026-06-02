@@ -1,5 +1,5 @@
 ---
-title: Arquitetura
+title: Architecture
 status: approved
 version: 1.1
 updated: 2026-06-02
@@ -8,72 +8,72 @@ depends_on:
 blocks: [06_database.md, 07_api_contracts.md, 08_environments.md]
 ---
 
-# 05 — Arquitetura
+# 05 — Architecture
 
-## Objetivo
+## Objective
 
-Documentar a arquitetura do Meridian Desktop e como ele se relaciona com o kit Meridian na raiz do repositório.
+Document Meridian Desktop architecture and how it relates to the Meridian kit at the repository root.
 
-## Contexto do repositório
+## Repository context
 
 ```txt
-meridian/                    # repositório do kit + app
-  README.md                  # onboarding Git
-  meridian.md                # protocolo/produto
-  .agent/                    # kit operacional para agentes
+meridian/                    # kit + app repository
+  README.md                  # Git onboarding
+  README.md                  # kit monorepo onboarding only (optional in client projects)
+  .agent/                    # operational kit for agents
     rules/MERIDIAN.md        # P0 — always_on
-    MERIDIAN.md              # protocolo master
+    MERIDIAN.md              # master protocol
     agents/                  # 7 personas
     skills/                  # progressive disclosure + references/
     workflows/               # slash commands
     scripts/validate_meridian.py
-  app-desktop/               # este app (Vite)
-    docs/                    # fonte de verdade DESTE app (pasta monitorada no dogfooding)
+  app-desktop/               # this app (Vite)
+    docs/                    # source of truth for THIS app (monitored folder in dogfooding)
       00_scope.md … 11_decisions.md
       decisions/YYYY-MM-DD.json
       us/
       epics/
       versions/
       sprints/
-      kanban/board.json      # derivado das US
+      kanban/board.json      # derived from US
     src/
 ```
 
-O app **não** é fonte de verdade do protocolo. Ele monitora a pasta **`docs/`** do projeto Meridian (a mesma que agentes editam no Cursor).
+The app is **not** the source of truth for the protocol. It monitors the project's **`docs/`** folder (the same one agents edit in Cursor).
 
-## Camadas
+## Layers
 
-| Camada               | Responsabilidade                                                                                               |
-| -------------------- | -------------------------------------------------------------------------------------------------------------- |
-| Protocolo            | `meridian.md` + `.agent/MERIDIAN.md`                                                                           |
-| Governança always-on | `.agent/rules/MERIDIAN.md`                                                                                     |
-| Projeto monitorado   | docs de fase 00–08 e 11, `docs/decisions/`, `docs/epics/`, `docs/versions/`, `docs/us/`, `board.json` derivado |
-| App desktop          | Leitura, validação visual, status, bloqueios                                                                   |
-| Futuro VSCode        | Escrita real em disco perto do editor                                                                          |
+| Layer                | Responsibility                                                                                                |
+| -------------------- | ------------------------------------------------------------------------------------------------------------- |
+| Protocol             | `.agent/MERIDIAN.md` (copy `.agent/` into client projects)                                                    |
+| Always-on governance | `.agent/rules/MERIDIAN.md`                                                                                    |
+| Monitored project    | phase docs 00–08 and 11, `docs/decisions/`, `docs/epics/`, `docs/versions/`, `docs/us/`, derived `board.json` |
+| Desktop app          | Reading, visual validation, status, blockers                                                                  |
+| Future VSCode        | Real disk writes near the editor                                                                              |
 
-## App desktop (v1)
+## Desktop app (v1)
 
 - **Stack:** Vite, React, TypeScript, Tailwind, shadcn/ui, `yaml` (frontmatter).
-- **Pasta aberta:** File System Access API → usuário escolhe **`docs/`** (ex.: `app-desktop/docs/`). O handle é a raiz; docs de fase na raiz; subpastas `decisions/`, `us/`, `epics/`, `versions/`, `sprints/`, `kanban/`.
-- **Carregamento:** `project-loader.ts` lê fases, `decisions/*.json`, `epics/`, `versions/`, `sprints/`, `us/` e `kanban/board.json`.
-- **Validação TS:** `protocol-validators.ts` (regras P0 na UI).
-- **Validação Python (dev):** `vite-meridian-validate.ts` → `POST /api/meridian/validate` executa `validate_meridian.py` com raiz **`app-desktop/`** (projeto completo com subpasta `docs/`). Build estático não executa Python.
+- **Opened folder:** File System Access API → user selects **`docs/`** (e.g. `app-desktop/docs/`). The handle is the root; phase docs at root; subfolders `decisions/`, `us/`, `epics/`, `versions/`, `sprints/`, `kanban/`.
+- **Loading:** `project-loader.ts` reads phases, `decisions/*.json`, `epics/`, `versions/`, `sprints/`, `us/`, and `kanban/board.json`.
+- **TS validation:** `protocol-validators.ts` (P0 rules in the UI).
+- **Python validation (dev):** `vite-meridian-validate.ts` → `POST /api/meridian/validate` runs `validate_meridian.py` with root **`app-desktop/`** (full project with `docs/` subfolder). Static build does not run Python.
 
-## Visões do monitor (v1)
+## Monitor views (v1)
 
-| Aba          | Fonte (relativa à pasta `docs/` aberta)      |
-| ------------ | -------------------------------------------- |
-| Configuração | docs 00–08 e 11 parseados + leitor inline    |
-| Decisões     | `decisions/*.json` — log estruturado por dia |
-| Entregas     | `versions/`, `sprints/`, `epics/`            |
-| Quadro       | `us/*.md` + diff com `kanban/board.json`     |
+| Tab          | Source (relative to opened `docs/` folder) |
+| ------------ | ------------------------------------------ |
+| Setup        | parsed docs 00–08 and 11 + inline reader   |
+| Decisions    | `decisions/*.json` — structured log by day |
+| Deliverables | `versions/`, `sprints/`, `epics/`          |
+| Board        | `us/*.md` + diff with `kanban/board.json`  |
 
-## Pendências (v2)
+## Pending (v2)
 
-- Escrita em disco / extensão VSCode.
-- Validar pasta arbitrária via Python sem bridge do dev server (ex.: Tauri).
+- Disk writes / VSCode extension.
+- Validate arbitrary folder via Python without dev server bridge (e.g. Tauri).
 
-## Limites
+## Limits
 
-- Browser não **escreve** em disco no v1 (somente leitura).
-- App não substitui roteamento de agents (`meridian-routing` continua no IDE).
+- Browser does not **write** to disk in v1 (read-only).
+- App does not replace agent routing (`meridian-routing` stays in the IDE).

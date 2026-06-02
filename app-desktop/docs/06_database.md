@@ -1,5 +1,5 @@
 ---
-title: Banco de Dados
+title: Database
 status: draft
 version: 1.0
 updated: 2026-06-02
@@ -7,17 +7,16 @@ depends_on: [03_user_types.md, 05_architecture.md]
 blocks: [07_api_contracts.md]
 ---
 
-# 06 — Banco de Dados
+# 06 — Database
 
-## Estado atual
+## Current state
 
-Fora do escopo da v0.
+Out of scope for v0.
 
-Meridian Desktop não usa banco de dados na fundação. O estado inicial é derivado de
-arquivos do projeto monitorado e dados locais em TypeScript.
+Meridian Desktop does not use a database in the foundation. Initial state is derived from monitored project files and local TypeScript data.
 
-## Pendências
+## Pending
 
-- Confirmar se versões futuras precisarão de cache local.
-- Definir se haverá IndexedDB, SQLite, arquivo local ou nenhuma persistência.
-- Documentar estratégia somente quando houver necessidade real.
+- Confirm whether future versions will need local cache.
+- Define whether there will be IndexedDB, SQLite, local file, or no persistence.
+- Document strategy only when there is real need.

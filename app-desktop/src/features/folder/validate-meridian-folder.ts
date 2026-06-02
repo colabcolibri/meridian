@@ -34,10 +34,10 @@ export function assertMeridianFolder(
   validation: MeridianFolderValidation,
 ): string | null {
   if (!validation.hasScopeDoc) {
-    return 'Pasta inválida: falta "00_scope.md" na raiz. Escolha a pasta docs/ do projeto (ex.: app-desktop/docs/).'
+    return 'Invalid folder: missing "00_scope.md" at the root. Choose the project docs/ folder (e.g. app-desktop/docs/).'
   }
   if (!validation.hasUsDir) {
-    return 'Pasta inválida: falta a pasta "us/". Escolha a pasta docs/ do projeto Meridian.'
+    return 'Invalid folder: missing "us/" folder. Choose the Meridian project docs/ folder.'
   }
   return null
 }
@@ -45,7 +45,7 @@ export function assertMeridianFolder(
 export function meridianFolderHints(validation: MeridianFolderValidation): string[] {
   const hints: string[] = []
   if (!validation.hasKanban) {
-    hints.push('Pasta "kanban/" não encontrada (board.json opcional até sync-board).')
+    hints.push('Folder "kanban/" not found (board.json optional until sync-board).')
   }
   return hints
 }

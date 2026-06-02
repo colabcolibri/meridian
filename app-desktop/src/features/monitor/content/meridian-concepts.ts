@@ -47,11 +47,11 @@ export type AnatomyGuide = {
 }
 
 export const meridianIntro = {
-  title: "Guia para quem nunca viu o Meridian",
+  title: "Guide for people new to Meridian",
   paragraphs: [
-    "Meridian é um jeito de organizar projetos de software usando arquivos Markdown na pasta docs/. Você escreve o que vai fazer, aprova, e só então pede código — manualmente ou com agentes de IA no Cursor.",
-    "Não é um Jira, não é um Notion e não exige login. A fonte de verdade são os arquivos no seu repositório. Este app só lê essa pasta e mostra o progresso de forma visual.",
-    "Use esta aba para entender a estrutura. Depois vá em Guia de uso (passos e comandos) e abra a pasta docs/ neste app.",
+    "Meridian is a way to organize software projects using Markdown files in the docs/ folder. You write what you will build, approve it, and only then ask for code, manually or with AI agents in Cursor.",
+    "It is not Jira, it is not Notion, and it does not require a login. The source of truth is the files in your repository. This app only reads that folder and shows progress visually.",
+    "Use this tab to understand the structure. Then go to Usage guide (steps and commands) and open the docs/ folder in this app.",
   ],
 }
 
@@ -64,39 +64,39 @@ export type UsageGuideSection = {
 }
 
 export const usageGuideIntro = {
-  title: "Guia de uso",
-  lead: "Roteiro prático para trabalhar no projeto com IA — abra a seção que combina com sua situação agora.",
+  title: "Usage guide",
+  lead: "A practical roadmap for working on the project with AI. Open the section that matches your current situation.",
   paragraphs: [
-    "Meridian apoia você: mostra o que falta, sugere o próximo passo e registra progresso nos arquivos. Você aprova; a IA executa dentro do que está documentado.",
-    "Conceitos (pastas, fases, status) ficam em Comece aqui. Aqui só entram ações, comandos e o que conferir antes de avançar.",
+    "Meridian supports you: it shows what is missing, suggests the next step, and records progress in the files. You approve; AI executes within what is documented.",
+    "Concepts (folders, phases, status) live in Start here. This section only covers actions, commands, and what to check before moving forward.",
   ],
 }
 
-/** Atalho: qual seção abrir conforme a situação atual. */
+/** Shortcut: which section to open based on the current situation. */
 export const usageSituations = [
   {
-    situation: "Projeto ainda sem pasta docs/",
-    section: "Primeira vez",
+    situation: "Project does not have a docs/ folder yet",
+    section: "First time",
     command: "/init-meridian",
   },
   {
-    situation: "Docs de fase incompletos ou em draft",
-    section: "Documentar",
+    situation: "Phase docs are incomplete or in draft",
+    section: "Document",
     command: "/status",
   },
   {
-    situation: "Arquitetura ok, mas falta épico, versão ou US",
-    section: "Montar backlog",
+    situation: "Architecture is ok, but epic, version, or US is missing",
+    section: "Build backlog",
     command: "/create-us",
   },
   {
-    situation: "US escolhida — hora de codar",
-    section: "Implementar US",
+    situation: "US selected, time to code",
+    section: "Implement US",
     command: undefined,
   },
   {
-    situation: "Código pronto — falta registrar nos arquivos",
-    section: "Fechar US",
+    situation: "Code is ready, registration in the files is missing",
+    section: "Close US",
     command: "/complete-us",
   },
 ]
@@ -104,42 +104,42 @@ export const usageSituations = [
 export const gettingStartedSteps: DailyWorkflowStep[] = [
   {
     id: "open-cursor",
-    title: "Abrir o repositório no Cursor",
-    when: "Qualquer sessão de trabalho.",
+    title: "Open the repository in Cursor",
+    when: "Any work session.",
     actions: [
-      "Abra a pasta raiz do projeto (onde ficam .agent/ ou .cursor/ e, depois, docs/).",
-      "Não abra só docs/ no Cursor — agents e scripts ficam na raiz.",
+      "Open the project root folder (where .agent/ or .cursor/ live, and later docs/).",
+      "Do not open only docs/ in Cursor. Agents and scripts live at the root.",
     ],
   },
   {
     id: "init-meridian",
-    title: "Criar estrutura Meridian (se docs/ não existir)",
-    when: "Repositório novo ou sem documentos de fase (00–08 e 11).",
+    title: "Create Meridian structure (if docs/ does not exist)",
+    when: "New repository or no phase documents (00–08 and 11).",
     actions: [
-      "No chat, rode /init-meridian — o workflow cria docs/, governança e board.json vazio.",
-      "A IA pode fazer até 3 perguntas se algo estiver ambíguo; você confirma o que for necessário.",
-      "Revise o que foi gerado antes de seguir — ainda sem código de produto.",
+      "In chat, run /init-meridian. The workflow creates docs/, governance, and an empty board.json.",
+      "AI may ask up to 3 questions if something is ambiguous; you confirm what is needed.",
+      "Review what was generated before moving on. Still no product code.",
     ],
     commands: ["/init-meridian"],
-    tip: "Se docs/ já existe no git, pule para o próximo passo.",
+    tip: "If docs/ already exists in git, skip to the next step.",
   },
   {
     id: "open-docs-app",
-    title: "Abrir docs/ neste app",
-    when: "Para ver progresso visual enquanto trabalha no Cursor.",
+    title: "Open docs/ in this app",
+    when: "To see visual progress while working in Cursor.",
     actions: [
-      "Use o botão Abrir pasta docs (abaixo ou no topo do app).",
-      "Selecione a pasta docs/ do repositório.",
-      "Aba Configuração: veja qual doc está bloqueado, em draft ou approved.",
+      "Use the Open docs folder button (below or at the top of the app).",
+      "Select the repository's docs/ folder.",
+      "Setup tab: see which doc is blocked, in draft, or approved.",
     ],
   },
   {
     id: "first-status",
-    title: "Saber por onde continuar",
-    when: "Após abrir o projeto ou ao retomar depois de dias.",
+    title: "Know where to continue",
+    when: "After opening the project or resuming after a few days.",
     actions: [
-      "Rode /status — relatório de bloqueios, docs pendentes e próxima ação sugerida.",
-      "Opcional: python3 .agent/scripts/validate_meridian.py <pasta-do-projeto> na raiz.",
+      "Run /status. It reports blockers, pending docs, and the suggested next action.",
+      "Optional: python3 .agent/scripts/validate_meridian.py <project-folder> at the root.",
     ],
     commands: ["/status"],
   },
@@ -148,34 +148,34 @@ export const gettingStartedSteps: DailyWorkflowStep[] = [
 export const documentWorkflowSteps: DailyWorkflowStep[] = [
   {
     id: "doc-pick",
-    title: "Escolher um doc por conversa",
-    when: "Antes de backlog ou código — amadurecer docs/ na aba Configuração.",
+    title: "Choose one doc per conversation",
+    when: "Before backlog or code, mature docs/ in the Setup tab.",
     actions: [
-      "Veja na Configuração qual doc está desbloqueado e em draft ou review.",
-      "Trabalhe um arquivo por vez — ex.: docs/02_security.md, docs/05_architecture.md.",
-      "Cite o caminho completo no chat; peça rascunho, lacunas ou revisão — sem implementar produto.",
+      "Check Setup to see which doc is unblocked and in draft or review.",
+      "Work on one file at a time, for example docs/02_security.md or docs/05_architecture.md.",
+      "Mention the full path in chat; ask for a draft, gaps, or review, without implementing product code.",
     ],
     commands: ["/status"],
   },
   {
     id: "doc-commands",
-    title: "Usar comandos especializados quando couber",
-    when: "Doc alvo identificado.",
+    title: "Use specialized commands when appropriate",
+    when: "Target doc identified.",
     actions: [
-      "/architecture — redigir ou revisar 05_architecture.md.",
-      "/security-pass — redigir ou revisar 02_security.md.",
-      "Mudança de escopo ou stack → prepend em docs/decisions/YYYY-MM-DD.json (nunca apague entradas).",
+      "/architecture — draft or review 05_architecture.md.",
+      "/security-pass — draft or review 02_security.md.",
+      "Scope or stack change -> prepend to docs/decisions/YYYY-MM-DD.json (never delete entries).",
     ],
     commands: ["/architecture", "/security-pass"],
   },
   {
     id: "doc-approve",
-    title: "Você aprova no frontmatter",
-    when: "Conteúdo revisado por você — a IA não marca approved sozinha.",
+    title: "You approve in frontmatter",
+    when: "Content reviewed by you. AI does not mark approved on its own.",
     actions: [
-      "Altere status: draft → review → approved no YAML do arquivo.",
-      "Confira se o próximo doc da sequência desbloqueou na Configuração.",
-      "Gate para backlog: 05_architecture.md com status approved.",
+      "Change status: draft -> review -> approved in the file YAML.",
+      "Check whether the next doc in the sequence became unblocked in Setup.",
+      "Backlog gate: 05_architecture.md with status approved.",
     ],
   },
 ]
@@ -183,32 +183,32 @@ export const documentWorkflowSteps: DailyWorkflowStep[] = [
 export const backlogWorkflowSteps: DailyWorkflowStep[] = [
   {
     id: "backlog-gate",
-    title: "Confirmar que pode criar US",
-    when: "Antes de /create-epic ou /create-us.",
+    title: "Confirm you can create US",
+    when: "Before /create-epic or /create-us.",
     actions: [
-      "05_architecture.md precisa estar approved (aba Configuração ou /status).",
-      "Se não estiver, volte à seção Documentar.",
+      "05_architecture.md must be approved (Setup tab or /status).",
+      "If it is not, go back to the Document section.",
     ],
     commands: ["/status"],
   },
   {
     id: "backlog-structure",
-    title: "Criar épico, versão e sprint",
-    when: "Arquitetura aprovada; falta planejar entregas.",
+    title: "Create epic, version, and sprint",
+    when: "Architecture approved; delivery planning is missing.",
     actions: [
-      "Ordem usual: épico (capacidade de produto) → versão (release) → sprint (fatia de tempo).",
-      "Um comando por conversa quando possível.",
+      "Usual order: epic (product capability) -> version (release) -> sprint (time slice).",
+      "One command per conversation when possible.",
     ],
     commands: ["/create-epic", "/create-version", "/plan-sprint"],
   },
   {
     id: "backlog-us",
-    title: "Criar user stories executáveis",
-    when: "Epic e version já existem em docs/epics/ e docs/versions/.",
+    title: "Create executable user stories",
+    when: "Epic and version already exist in docs/epics/ and docs/versions/.",
     actions: [
-      "/create-us — aceite com checkboxes verificáveis, epic e version no frontmatter.",
-      "Confira na aba Entregas (cobertura) e Quadro (posição e deps).",
-      "Depois de criar ou alterar US: /sync-board.",
+      "/create-us — Acceptance with verifiable checkboxes, epic and version in frontmatter.",
+      "Check the Deliverables tab (coverage) and Board tab (position and deps).",
+      "After creating or changing US: /sync-board.",
     ],
     commands: ["/create-us", "/sync-board"],
   },
@@ -217,34 +217,34 @@ export const backlogWorkflowSteps: DailyWorkflowStep[] = [
 export const implementWorkflowSteps: DailyWorkflowStep[] = [
   {
     id: "pick-us",
-    title: "Escolher a US do dia",
-    when: "Há US Must no Quadro com depends_on satisfeitas.",
+    title: "Choose the US of the day",
+    when: "There is a Must US on the Board with satisfied depends_on.",
     actions: [
-      "Aba Quadro: prefira Must (❌ ou 🔶) desbloqueada.",
-      "/status se não souber qual pegar.",
-      "Uma US por ciclo de implementação.",
+      "Board tab: prefer an unblocked Must (❌ or 🔶).",
+      "/status if you do not know which one to take.",
+      "One US per implementation cycle.",
     ],
     commands: ["/status"],
   },
   {
     id: "context-us",
-    title: "Pedir implementação ancorada no arquivo",
-    when: "US escolhida — nova conversa ou thread focada.",
+    title: "Ask for implementation anchored in the file",
+    when: "US selected, new conversation or focused thread.",
     actions: [
-      "Cite o ID e o arquivo: US-0017 ou docs/us/US-0017.md.",
-      "Deixe claro: implementar conforme aceite; não marcar ✅ só no chat.",
-      "A IA lê US, arquitetura e dependências antes de codar.",
+      "Mention the ID and file: US-0017 or docs/us/US-0017.md.",
+      "Be clear: implement according to Acceptance; do not mark ✅ only in chat.",
+      "AI reads the US, architecture, and dependencies before coding.",
     ],
-    tip: "Exemplo: «Implemente docs/us/US-0017.md conforme aceite. Status nos arquivos, não só aqui.»",
+    tip: 'Example: "Implement docs/us/US-0017.md according to Acceptance. Status in the files, not only here."',
   },
   {
     id: "review-diff",
-    title: "Você revisa antes de fechar",
-    when: "Agente entregou diff.",
+    title: "You review before closing",
+    when: "Agent delivered a diff.",
     actions: [
-      "Revise o código no Cursor; rode build/test do projeto.",
-      "Parcial → ainda não use /complete-us; peça ajuste ou marque 🔶 manualmente com Falta: no aceite.",
-      "Pronto com evidência → vá à seção Fechar US.",
+      "Review the code in Cursor; run the project's build/test.",
+      "Partial -> do not use /complete-us yet; ask for an adjustment or manually mark 🔶 with Missing: in Acceptance.",
+      "Ready with evidence -> go to the Close US section.",
     ],
   },
 ]
@@ -252,45 +252,45 @@ export const implementWorkflowSteps: DailyWorkflowStep[] = [
 export const completeUsWorkflowSteps: DailyWorkflowStep[] = [
   {
     id: "complete-gate",
-    title: "Conferir pré-condições",
-    when: "Antes de /complete-us — implementação já revisada por você.",
+    title: "Check preconditions",
+    when: "Before /complete-us, implementation already reviewed by you.",
     actions: [
-      "Todo depends_on da US está ✅.",
-      "Aceite verificável com evidência (teste, diff, comportamento no app).",
-      "Se tests: required no frontmatter — testes passaram ou estão documentados.",
+      "Every depends_on for the US is ✅.",
+      "Verifiable Acceptance with evidence (test, diff, behavior in the app).",
+      "If tests: required in frontmatter, tests passed or are documented.",
     ],
-    tip: "Se algo falhar, não force ✅ — use 🔶 e Falta: no aceite.",
+    tip: "If something fails, do not force ✅. Use 🔶 and Missing: in Acceptance.",
   },
   {
     id: "complete-run",
-    title: "Rodar /complete-us",
-    when: "Gates ok; melhor em conversa focada só no fechamento.",
+    title: "Run /complete-us",
+    when: "Gates ok; best in a conversation focused only on closing.",
     actions: [
-      "Comando: /complete-us US-XXXX (ex.: /complete-us US-0017).",
-      "Sem ID, a IA pergunta qual US ou infere da sessão — confirme se inferir.",
+      "Command: /complete-us US-XXXX (ex.: /complete-us US-0017).",
+      "Without an ID, AI asks which US or infers it from the session. Confirm if it infers.",
       "Workflow usa board-keeper + skill complete-user-story.",
     ],
     commands: ["/complete-us US-XXXX"],
   },
   {
     id: "complete-what-ai-does",
-    title: "O que a IA registra no arquivo",
-    when: "Durante o /complete-us.",
+    title: "What AI records in the file",
+    when: "During /complete-us.",
     actions: [
-      "Preenche ## Implementação técnica — paths reais, resumo por camada (sem placeholder).",
-      "Marca aceite [x]; atualiza ## Testes (Planejado + Executado) se tests: required.",
-      "Frontmatter: status ✅ (ou 🔶 + Falta: se parcial); tests_status: done quando couber.",
-      "Decisão cross-cutting → prepend em docs/decisions/YYYY-MM-DD.json.",
+      "Fills ## Technical implementation — real paths, summary by layer (no placeholder).",
+      "Marks Acceptance [x]; updates ## Tests (Planned + Executed) if tests: required.",
+      "Frontmatter: status ✅ (or 🔶 + Missing: if partial); tests_status: done when appropriate.",
+      "Cross-cutting decision -> prepend to docs/decisions/YYYY-MM-DD.json.",
     ],
   },
   {
     id: "complete-board",
-    title: "Atualizar quadro e conferir",
-    when: "Imediatamente após /complete-us.",
+    title: "Update board and check",
+    when: "Immediately after /complete-us.",
     actions: [
-      "A IA roda generate-board-json; você pode confirmar com /sync-board.",
-      "Aba Quadro: US na coluna certa (✅, 🔶 ou 🧪 se tests pendentes).",
-      "Implementação técnica bate com o que você testou? Se não, corrija antes de seguir.",
+      "AI runs generate-board-json; you can confirm with /sync-board.",
+      "Board tab: US in the right column (✅, 🔶, or 🧪 if tests are pending).",
+      "Does Technical implementation match what you tested? If not, fix it before continuing.",
     ],
     commands: ["/sync-board", "/status"],
   },
@@ -299,474 +299,476 @@ export const completeUsWorkflowSteps: DailyWorkflowStep[] = [
 export const usageGuideSections: UsageGuideSection[] = [
   {
     id: "start",
-    title: "Primeira vez",
+    title: "First time",
     subtitle:
-      "Repositório no Cursor, docs/ criado ou existente, pasta aberta neste app.",
+      "Repository in Cursor, docs/ created or already existing, folder open in this app.",
     defaultOpen: true,
     steps: gettingStartedSteps,
   },
   {
     id: "document",
-    title: "Documentar",
-    subtitle: "Amadurecer docs/ na Configuração. Gate: 05_architecture approved.",
+    title: "Document",
+    subtitle: "Mature docs/ in Setup. Gate: 05_architecture approved.",
     steps: documentWorkflowSteps,
   },
   {
     id: "backlog",
-    title: "Montar backlog",
-    subtitle: "Épicos, versões, sprints e US — abas Entregas e Quadro.",
+    title: "Build backlog",
+    subtitle: "Epics, versions, sprints, and US. Deliverables and Board tabs.",
     steps: backlogWorkflowSteps,
   },
   {
     id: "implement",
-    title: "Implementar US",
-    subtitle: "Escolher US, pedir código ancorado no aceite, revisar diff.",
+    title: "Implement US",
+    subtitle: "Choose US, ask for code anchored in Acceptance, review diff.",
     steps: implementWorkflowSteps,
   },
   {
     id: "complete-us",
-    title: "Fechar US",
-    subtitle: "Registrar entrega nos arquivos — /complete-us + quadro atualizado.",
+    title: "Close US",
+    subtitle: "Record delivery in the files. /complete-us + updated board.",
     steps: completeUsWorkflowSteps,
   },
 ]
 
 export const slashCommandReference: SlashCommandHint[] = [
-  { command: "/init-meridian", when: "Projeto novo — criar docs/ e governança" },
-  { command: "/status", when: "Início de sessão — bloqueios e próxima ação" },
-  { command: "/architecture", when: "Redigir ou revisar 05_architecture.md" },
-  { command: "/security-pass", when: "Redigir ou revisar 02_security.md" },
-  { command: "/create-epic", when: "Nova capacidade em docs/epics/" },
-  { command: "/create-version", when: "Novo release em docs/versions/" },
-  { command: "/plan-sprint", when: "Fatia de tempo em docs/sprints/" },
-  { command: "/create-us", when: "Nova tarefa em docs/us/ (gates ok)" },
+  { command: "/init-meridian", when: "New project, create docs/ and governance" },
+  { command: "/status", when: "Session start, blockers and next action" },
+  { command: "/architecture", when: "Draft or review 05_architecture.md" },
+  { command: "/security-pass", when: "Draft or review 02_security.md" },
+  { command: "/create-epic", when: "New capability in docs/epics/" },
+  { command: "/create-version", when: "New release in docs/versions/" },
+  { command: "/plan-sprint", when: "Time slice in docs/sprints/" },
+  { command: "/create-us", when: "New task in docs/us/ (gates ok)" },
   {
     command: "/complete-us",
-    when: "Fechar US — implementação técnica, aceite, status, board",
+    when: "Close US, Technical implementation, Acceptance, status, board",
     example: "/complete-us US-0017",
   },
-  { command: "/sync-board", when: "Regenerar docs/kanban/board.json após mudar US" },
+  {
+    command: "/sync-board",
+    when: "Regenerate docs/kanban/board.json after changing US",
+  },
   {
     command: "/daily-with-ai",
-    when: "Atalho: loop completo da sessão (quem já conhece o fluxo)",
+    when: "Shortcut: complete session loop (for people who already know the flow)",
   },
 ]
 
 export const usageAntiPatterns = [
-  "Pedir código sem US ou sem 05_architecture approved.",
-  "Marcar ✅ no chat sem /complete-us nos arquivos.",
-  "Editar board.json à mão — use /sync-board.",
-  "Misturar documentar, backlog e implementar na mesma conversa.",
-  "Pular /complete-us e editar status na mão sem Implementação técnica.",
-  "approved em doc de fase sem você ter lido o conteúdo.",
+  "Asking for code without a US or without 05_architecture approved.",
+  "Marking ✅ in chat without /complete-us in the files.",
+  "Editing board.json by hand. Use /sync-board.",
+  "Mixing documentation, backlog, and implementation in the same conversation.",
+  "Skipping /complete-us and manually editing status without Technical implementation.",
+  "approved in a phase doc without you having read the content.",
 ]
 
 export const validateProjectHint = {
-  title: "Validar estrutura Meridian",
-  command: "python3 .agent/scripts/validate_meridian.py <pasta-do-projeto>",
-  note: "Rode na raiz do repositório alvo. Corrija erros antes de criar US ou marcar docs approved.",
+  title: "Validate Meridian structure",
+  command: "python3 .agent/scripts/validate_meridian.py <project-folder>",
+  note: "Run it at the target repository root. Fix errors before creating US or marking docs approved.",
 }
 
 export const folderStructure = {
-  title: "O que tem dentro de docs/",
+  title: "What is inside docs/",
   intro: [
-    "Todo projeto Meridian tem uma pasta docs/ na raiz — é ela que você abre neste app. O conteúdo se divide em documentos de fase na raiz de docs/ e pastas de entrega:",
+    "Every Meridian project has a docs/ folder at the root. That is the folder you open in this app. Its content is split between phase documents at the docs/ root and delivery folders:",
   ],
   items: [
     {
       path: "docs/*.md",
-      label: "10 documentos de fase",
+      label: "10 phase documents",
       description:
-        "Arquivos 00–08 e 11: fundação (00–03), princípios (04), arquitetura (05), detalhe (06–08). Entrega fica nas pastas epics/, versions/, sprints/ e us/.",
+        "Files 00–08 and 11: foundation (00–03), principles (04), architecture (05), details (06–08). Delivery lives in the epics/, versions/, sprints/, and us/ folders.",
     },
     {
       path: "docs/epics/EPIC-XX.md",
-      label: "Épicos (capacidades de produto)",
+      label: "Epics (product capabilities)",
       description:
-        "Um arquivo por épico, com frontmatter YAML — igual às user stories. Ex.: EPIC-02.md descreve o monitor de configuração.",
+        "One file per epic, with YAML frontmatter, just like user stories. Example: EPIC-02.md describes the setup monitor.",
     },
     {
       path: "docs/versions/vX.md",
-      label: "Versões (releases)",
+      label: "Versions (releases)",
       description:
-        "Um arquivo por release (v0, v1, v2…). Objetivo, outcome, escopo e checklist de go-live.",
+        "One file per release (v0, v1, v2...). Goal, outcome, scope, and go-live checklist.",
     },
     {
       path: "docs/sprints/vX-SY.md",
       label: "Sprints",
       description:
-        "Fatias de tempo dentro de uma versão. Lista de US planejadas (`stories` no frontmatter).",
+        "Time slices within a version. List of planned US (`stories` in frontmatter).",
     },
     {
       path: "docs/us/US-XXXX.md",
-      label: "User stories (tarefas)",
+      label: "User stories (tasks)",
       description:
-        "Um arquivo por tarefa de desenvolvimento. Só depois de 05_architecture approved e epic/version existirem nas pastas.",
+        "One file per development task. Only after 05_architecture is approved and epic/version exist in the folders.",
     },
     {
       path: "docs/decisions/YYYY-MM-DD.json",
-      label: "Log de decisões (JSON por dia)",
+      label: "Decision log (JSON per day)",
       description:
-        "Um arquivo JSON por dia calendário. Array entries com time, title, affected_document, what_changed, why_changed, impact, responsible — mais recente no início.",
+        "One JSON file per calendar day. entries array with time, title, affected_document, what_changed, why_changed, impact, responsible, newest first.",
     },
     {
       path: "docs/kanban/board.json",
-      label: "Quadro kanban (gerado)",
+      label: "Kanban board (generated)",
       description:
-        "Resumo automático do status de todas as user stories. Nunca edite à mão — ele é montado a partir dos arquivos em docs/us/.",
+        "Automatic status summary for all user stories. Never edit it by hand. It is built from the files in docs/us/.",
     },
   ],
 }
 
 export const docFlowNote =
-  "Dependências entre docs: 00–03 em sequência; 04_principles antes de 05_architecture; 06–08 depois de 05 (06 antes de 07). Log de decisões em docs/decisions/ desde o dia 1. Épicos, versões e US só após 05_architecture approved."
+  "Dependencies between docs: 00–03 in sequence; 04_principles before 05_architecture; 06–08 after 05 (06 before 07). Decision log in docs/decisions/ from day 1. Epics, versions, and US only after 05_architecture is approved."
 
 export const journeyPhases: JourneyPhase[] = [
   {
     id: "fase-0",
-    label: "Fase 0 — Fundação",
-    subtitle: "Entender o projeto",
+    label: "Phase 0 — Foundation",
+    subtitle: "Understand the project",
     purpose:
-      "Responde: o que estamos construindo, com qual tecnologia, para quem, com quais riscos. Sequencial — um documento libera o próximo.",
+      "Answers: what we are building, with which technology, for whom, and with which risks. Sequential: one document unlocks the next.",
     documents: [
-      "11_decisions.md — regras do log (stub)",
-      "docs/decisions/YYYY-MM-DD.json — log estruturado por dia",
-      "00_scope.md — problema, escopo, o que entra e o que fica de fora",
-      "01_tech_stack.md — linguagens, frameworks, ferramentas",
-      "02_security.md — ameaças, dados sensíveis, regras",
-      "03_user_types.md — perfis de quem usa o produto",
+      "11_decisions.md — log rules (stub)",
+      "docs/decisions/YYYY-MM-DD.json — structured log by day",
+      "00_scope.md — problem, scope, what is in and what is out",
+      "01_tech_stack.md — languages, frameworks, tools",
+      "02_security.md — threats, sensitive data, rules",
+      "03_user_types.md — profiles of people who use the product",
     ],
   },
   {
     id: "fase-1",
-    label: "Fase 1 — Princípios",
-    subtitle: "Regras de código e qualidade",
+    label: "Phase 1 — Principles",
+    subtitle: "Code and quality rules",
     purpose:
-      "Convenções que orientam implementação e revisão — antes de desenhar módulos e limites do sistema.",
-    documents: ["04_principles.md — convenções de código e qualidade"],
+      "Conventions that guide implementation and review, before designing system modules and boundaries.",
+    documents: ["04_principles.md — code and quality conventions"],
   },
   {
     id: "fase-2",
-    label: "Fase 2 — Arquitetura",
-    subtitle: "Como o sistema é dividido",
+    label: "Phase 2 — Architecture",
+    subtitle: "How the system is divided",
     purpose:
-      "Apps, módulos, integrações e limites — com base em escopo, stack, segurança, usuários e princípios.",
+      "Apps, modules, integrations, and boundaries, based on scope, stack, security, users, and principles.",
     documents: ["05_architecture.md"],
   },
   {
     id: "fase-3",
-    label: "Fase 3 — Detalhe técnico",
-    subtitle: "Banco, APIs e ambientes",
+    label: "Phase 3 — Technical details",
+    subtitle: "Database, APIs, and environments",
     purpose:
-      "Detalha dados, contratos entre serviços e onde o sistema roda (local, staging, produção).",
+      "Details data, contracts between services, and where the system runs (local, staging, production).",
     documents: ["06_database.md", "07_api_contracts.md", "08_environments.md"],
   },
   {
     id: "fase-4",
-    label: "Fase 4 — Backlog de entrega",
-    subtitle: "Releases, épicos, sprints e US",
+    label: "Phase 4 — Delivery backlog",
+    subtitle: "Releases, epics, sprints, and US",
     purpose:
-      "Só depois da arquitetura: fatiar o sistema em releases, capacidades de produto e tarefas executáveis.",
+      "Only after architecture: split the system into releases, product capabilities, and executable tasks.",
     documents: [
-      "docs/epics/EPIC-XX.md — capacidade de produto (outcome)",
-      "docs/versions/vX.md — objetivo e escopo de cada release",
-      "docs/sprints/vX-SY.md — fatias de tempo dentro da versão",
+      "docs/epics/EPIC-XX.md — product capability (outcome)",
+      "docs/versions/vX.md — goal and scope of each release",
+      "docs/sprints/vX-SY.md — time slices within the version",
     ],
-    note: "Ordem usual de criação: épico → versão → sprint → US. Gate de US: 05_architecture approved + epic/version existem nas pastas.",
+    note: "Usual creation order: epic -> version -> sprint -> US. US gate: 05_architecture approved + epic/version exist in the folders.",
   },
   {
     id: "execucao",
-    label: "Execução",
-    subtitle: "Implementar e refletir nos arquivos",
+    label: "Execution",
+    subtitle: "Implement and reflect in the files",
     purpose:
-      "Implementar user stories, marcar status no frontmatter e deixar o quadro kanban derivar o andamento.",
+      "Implement user stories, mark status in frontmatter, and let the kanban board derive progress.",
     documents: [
-      "docs/us/US-0001.md… — uma tarefa por arquivo",
-      "docs/kanban/board.json — visão consolidada (gerada)",
+      "docs/us/US-0001.md... — one task per file",
+      "docs/kanban/board.json — consolidated view (generated)",
     ],
   },
 ]
 
 export const epicsVersionsStories: GuideSubsection[] = [
   {
-    title: "Épico — o bloco grande de produto",
+    title: "Epic — the large product block",
     paragraphs: [
-      "Um épico agrupa uma capacidade inteira do produto. Exemplo: EPIC-02 “Monitor de Configuração Inicial” engloba abrir pasta, ler documentos de fase e pastas de entrega, mostrar progresso.",
-      "Cada épico é um arquivo em docs/epics/EPIC-XX.md: frontmatter com id, title, status, versions, profiles e outcome (done no nível produto); corpo com Capacidade, Resultado esperado e Fora deste epic.",
-      "Não há índice markdown duplicado — a pasta docs/epics/ é a fonte de verdade. Crie épicos só depois de 05_architecture approved.",
+      'An epic groups a whole product capability. Example: EPIC-02 "Initial setup monitor" covers opening a folder, reading phase documents and delivery folders, and showing progress.',
+      "Each epic is a file in docs/epics/EPIC-XX.md: frontmatter with id, title, status, versions, profiles, and outcome (done at product level); body with Capability, Expected result, and Out of this epic.",
+      "There is no duplicated markdown index. The docs/epics/ folder is the source of truth. Create epics only after 05_architecture is approved.",
     ],
     bullets: [
-      "Status do épico: active, complete ou paused (diferente de draft/review/approved dos docs de fase).",
-      "User stories referenciam o epic só pelo ID no frontmatter (`epic: EPIC-02`) — não copiam texto do epic.",
-      "Na aba Entregas deste app você vê outcome, perfis e quantas US já terminaram.",
+      "Epic status: active, complete, or paused (different from draft/review/approved in phase docs).",
+      "User stories reference the epic only by ID in frontmatter (`epic: EPIC-02`). They do not copy epic text.",
+      "In the Deliverables tab of this app, you see outcome, profiles, and how many US are already finished.",
     ],
   },
   {
-    title: "Versão — o release (v0, v1, v2…)",
+    title: "Version — the release (v0, v1, v2...)",
     paragraphs: [
-      "Versão é um pacote de go-live: o que entra junto quando fechamos um marco. Exemplo: v1 = abrir pasta real e ler markdown.",
-      "Cada versão é um arquivo em docs/versions/vX.md — fonte de verdade, sem índice duplicado.",
-      "Sprints (v1-S1, v1-S2…) ficam em docs/sprints/ — organizam o tempo dentro da versão, com lista de US no frontmatter.",
+      "A version is a go-live package: what ships together when we close a milestone. Example: v1 = open a real folder and read markdown.",
+      "Each version is a file in docs/versions/vX.md, the source of truth, with no duplicated index.",
+      "Sprints (v1-S1, v1-S2...) live in docs/sprints/. They organize time within the version, with a US list in frontmatter.",
     ],
     bullets: [
-      "User stories referenciam só `version: v1` — não repetem o plano do release.",
-      "Epics referenciam `versions: [v0, v1]` — em quais releases a capacidade participa.",
-      "IA planeja releases com /create-version; sprints com /plan-sprint.",
+      "User stories reference only `version: v1`. They do not repeat the release plan.",
+      "Epics reference `versions: [v0, v1]`, the releases where the capability participates.",
+      "AI plans releases with /create-version; sprints with /plan-sprint.",
     ],
   },
   {
-    title: "User story — a tarefa executável",
+    title: "User story — the executable task",
     paragraphs: [
-      "A user story (US) é a unidade de trabalho que alguém (ou um agente) implementa. Formato: “Como [persona], quero [ação], para que [benefício]”.",
-      "Cada US é um arquivo em docs/us/ (ex.: US-0017.md). No topo vai frontmatter YAML; o corpo traz aceite e detalhes — sem repetir a definição do epic.",
+      'A user story (US) is the unit of work that someone (or an agent) implements. Format: "As [persona], I want [action], so that [benefit]".',
+      "Each US is a file in docs/us/ (ex.: US-0017.md). YAML frontmatter goes at the top; the body contains Acceptance and details, without repeating the epic definition.",
     ],
     bullets: [
-      "Lista de aceite: checkboxes verificáveis — não marque ✅ sem evidência.",
-      "depends_on: outras US que precisam terminar antes.",
-      "done_when: frase curta que resume quando a US está realmente pronta.",
-      "moscow: Must / Should / Could / Won't — prioridade dentro da versão.",
-      "Implementação técnica e ✅: preenchidos com /complete-us após você revisar o código — não marque done só no chat.",
-      "Seção Testes: Planejado (checkboxes) + Executado (evidência) quando tests: required no frontmatter.",
+      "Acceptance list: verifiable checkboxes. Do not mark ✅ without evidence.",
+      "depends_on: other US that must finish first.",
+      "done_when: short sentence summarizing when the US is truly ready.",
+      "moscow: Must / Should / Could / Won't, priority within the version.",
+      "Technical implementation and ✅: filled with /complete-us after you review the code. Do not mark done only in chat.",
+      "Tests section: Planned (checkboxes) + Executed (evidence) when tests: required in frontmatter.",
     ],
   },
 ]
 
 export const epicAnatomy = {
-  title: "Exemplo: como ler um epic",
+  title: "Example: how to read an epic",
   intro:
-    "Abra docs/epics/EPIC-XX.md. O epic define o quê e o por quê da capacidade; user stories só referenciam o ID (`epic: EPIC-XX`) — nunca colam descrição ou outcome do epic.",
+    "Open docs/epics/EPIC-XX.md. The epic defines the what and why of the capability; user stories only reference the ID (`epic: EPIC-XX`). They never paste the epic description or outcome.",
   fields: [
-    { field: "id", meaning: "Identificador permanente (EPIC-02)" },
-    { field: "title", meaning: "Nome curto da capacidade" },
+    { field: "id", meaning: "Permanent identifier (EPIC-02)" },
+    { field: "title", meaning: "Short capability name" },
     {
       field: "status",
-      meaning: "active · complete · paused — ciclo de vida do epic, não da US",
+      meaning: "active · complete · paused — epic lifecycle, not US lifecycle",
     },
-    { field: "versions", meaning: "Releases onde o epic entra (v0, v1…)" },
+    { field: "versions", meaning: "Releases where the epic is included (v0, v1...)" },
     {
       field: "profiles",
-      meaning: "Tipos de usuário de 03_user_types.md que se beneficiam",
+      meaning: "User types from 03_user_types.md that benefit",
     },
     {
       field: "outcome",
-      meaning: "Done do epic no nível produto — quando marcar complete",
+      meaning: "Epic done condition at product level, when to mark complete",
     },
     {
-      field: "Capacidade",
-      meaning: "Corpo: o que o usuário passa a conseguir",
+      field: "Capability",
+      meaning: "Body: what the user becomes able to do",
     },
     {
-      field: "Fora deste epic",
-      meaning: "Corpo: limites explícitos — evita escopo creep",
+      field: "Out of this epic",
+      meaning: "Body: explicit boundaries, avoids scope creep",
     },
   ],
-  exampleTitle: "EPIC-02 — Monitor de Configuração Inicial",
+  exampleTitle: "EPIC-02 — Initial setup monitor",
   exampleBody:
-    "Outcome: manager abre docs/, vê progresso dos 10 documentos de fase (00–08 e 11) e lê cada .md inline. US-0017 e US-0018 referenciam epic: EPIC-02 sem repetir esse texto.",
+    "Outcome: manager opens docs/, sees progress for the 10 phase documents (00–08 and 11), and reads each .md inline. US-0017 and US-0018 reference epic: EPIC-02 without repeating this text.",
 }
 
 export const versionAnatomy = {
-  title: "Exemplo: como ler uma versão",
+  title: "Example: how to read a version",
   intro:
-    "Abra docs/versions/v1.md. A versão define o release; US e sprints só referenciam o ID (`version: v1`).",
+    "Open docs/versions/v1.md. The version defines the release; US and sprints only reference the ID (`version: v1`).",
   fields: [
-    { field: "id", meaning: "Identificador do release (v0, v1, v2…)" },
-    { field: "title", meaning: "Nome curto (ex.: Folder Monitor MVP)" },
+    { field: "id", meaning: "Release identifier (v0, v1, v2...)" },
+    { field: "title", meaning: "Short name (ex.: Folder Monitor MVP)" },
     {
       field: "status",
-      meaning: "planned · active · complete — ciclo do release",
+      meaning: "planned · active · complete — release lifecycle",
     },
     {
       field: "outcome",
-      meaning: "Done do release no nível produto",
+      meaning: "Release done condition at product level",
     },
-    { field: "Objetivo", meaning: "Corpo: o que este go-live entrega" },
-    { field: "Explicitamente fora", meaning: "Corpo: o que fica para versões futuras" },
+    { field: "Goal", meaning: "Body: what this go-live delivers" },
+    { field: "Explicitly out", meaning: "Body: what stays for future versions" },
   ],
   exampleTitle: "v1 — Folder Monitor MVP",
   exampleBody:
-    "Outcome: usuário abre docs/, abas refletem .md reais. US-0009 a US-0022 usam version: v1. Sprints v1-S1 e v1-S2 em docs/sprints/.",
+    "Outcome: user opens docs/, tabs reflect real .md files. US-0009 to US-0022 use version: v1. Sprints v1-S1 and v1-S2 in docs/sprints/.",
 }
 
 export const userStoryAnatomy = {
-  title: "Exemplo: como ler uma user story",
+  title: "Example: how to read a user story",
   intro:
-    "Abra qualquer arquivo em docs/us/. O topo é metadados; o corpo explica o pedido e os critérios de aceite. O campo epic deve apontar para um arquivo existente em docs/epics/.",
+    "Open any file in docs/us/. The top is metadata; the body explains the request and Acceptance criteria. The epic field must point to an existing file in docs/epics/.",
   fields: [
-    { field: "id", meaning: "Identificador único (US-0017)" },
-    { field: "title", meaning: "Nome curto da tarefa" },
+    { field: "id", meaning: "Unique identifier (US-0017)" },
+    { field: "title", meaning: "Short task name" },
     {
       field: "epic",
       meaning:
-        "Referência por ID ao epic em docs/epics/ (ex.: EPIC-02) — não repita descrição do epic aqui",
+        "Reference by ID to the epic in docs/epics/ (ex.: EPIC-02). Do not repeat the epic description here",
     },
     {
       field: "version",
-      meaning: "Release em docs/versions/ (ex.: v1) — referência por ID",
+      meaning: "Release in docs/versions/ (ex.: v1), reference by ID",
     },
     {
       field: "status",
-      meaning: "✅ concluída · 🔶 parcial (Falta:) · ❌ pendente · 🧊 congelada",
+      meaning: "✅ done · 🔶 partial (Missing:) · ❌ pending · 🧊 frozen",
     },
     {
       field: "tests",
-      meaning: "required = precisa verificação · none = sem testes (tests_status: n/a)",
+      meaning: "required = needs verification · none = no tests (tests_status: n/a)",
     },
     {
       field: "tests_status",
       meaning:
-        "pending / done / n/a — coluna 🧪 no quadro quando pending + tests required",
+        "pending / done / n/a — 🧪 column on the board when pending + tests required",
     },
-    { field: "depends_on", meaning: "US que precisam terminar antes" },
-    { field: "done_when", meaning: "Frase objetiva: pronto quando…" },
+    { field: "depends_on", meaning: "US that must finish first" },
+    { field: "done_when", meaning: "Objective sentence: ready when..." },
     {
       field: "moscow",
-      meaning: "Must = obrigatório na versão; Should/Could = desejável",
+      meaning: "Must = required in the version; Should/Could = desirable",
     },
   ],
-  exampleTitle: "US-0017 — Ler documentos de fase em Markdown",
+  exampleTitle: "US-0017 — Read phase documents in Markdown",
   exampleBody:
-    "Como manager do processo, quero abrir cada documento de fase (00–08 e 11) dentro do app, para revisar escopo e arquitetura sem sair do monitor. Aceite: botão em cada doc, leitura via File System Access API, frontmatter + corpo visíveis.",
+    "As the process manager, I want to open each phase document (00–08 and 11) inside the app, so I can review scope and architecture without leaving the monitor. Acceptance: button on each doc, reading via File System Access API, visible frontmatter + body.",
 }
 
 export const statusGuide = {
-  title: "Status: documentos, entrega e tarefas",
+  title: "Status: documents, delivery, and tasks",
   documentStatuses: [
     {
       label: "draft",
-      meaning: "Rascunho — ainda sendo escrito ou incompleto.",
+      meaning: "Draft, still being written or incomplete.",
     },
     {
       label: "review",
-      meaning: "Pronto para revisão humana — conteúdo completo o suficiente.",
+      meaning: "Ready for human review, content complete enough.",
     },
     {
       label: "approved",
-      meaning: "Aprovado — libera documentos e fases que dependem dele.",
+      meaning: "Approved, unlocks documents and phases that depend on it.",
     },
   ],
   epicStatuses: [
     {
       label: "active",
-      meaning: "Capacidade em andamento — US podem referenciar este epic.",
+      meaning: "Capability in progress, US can reference this epic.",
     },
-    { label: "complete", meaning: "Outcome do epic atingido no nível produto." },
-    { label: "paused", meaning: "Pausado de propósito — fora do fluxo atual." },
+    { label: "complete", meaning: "Epic outcome reached at product level." },
+    { label: "paused", meaning: "Intentionally paused, outside the current flow." },
   ],
   versionStatuses: [
-    { label: "planned", meaning: "Release definido, ainda não em execução." },
-    { label: "active", meaning: "Versão em curso — sprints e US ativas." },
-    { label: "complete", meaning: "Go-live deste release concluído." },
+    { label: "planned", meaning: "Release defined, not running yet." },
+    { label: "active", meaning: "Version in progress, sprints and US active." },
+    { label: "complete", meaning: "Go-live for this release completed." },
   ],
   storyStatuses: [
-    { emoji: "❌", label: "Pendente", meaning: "Ainda não começou ou não terminou." },
+    { emoji: "❌", label: "Pending", meaning: "Not started yet or not finished." },
     {
       emoji: "🔶",
-      label: "Em andamento",
+      label: "In progress",
       meaning:
-        "Parcialmente feita — no aceite deve existir “Falta:” explicando o que falta.",
+        'Partially done. Acceptance must include "Missing:" explaining what is missing.',
     },
     {
       emoji: "✅",
-      label: "Concluída",
-      meaning: "Critérios de aceite e Testes comprovados nos arquivos.",
+      label: "Done",
+      meaning: "Acceptance criteria and Tests proven in the files.",
     },
     {
       emoji: "🧪",
-      label: "Aguardando testes",
-      meaning:
-        "Coluna do quadro quando tests: required e tests_status: pending no YAML.",
+      label: "Waiting for tests",
+      meaning: "Board column when tests: required and tests_status: pending in YAML.",
     },
     {
       emoji: "🧊",
-      label: "Congelada",
-      meaning: "Pausada de propósito — não entra no fluxo agora.",
+      label: "Frozen",
+      meaning: "Intentionally paused, not part of the flow right now.",
     },
   ],
   kanbanNote:
-    "O quadro usa status do YAML e deriva 🧪 de tests_status: pending. board.json inclui tests e tests_status — regenere após mudar US (generate-board-json ou /sync-board).",
+    "The board uses YAML status and derives 🧪 from tests_status: pending. board.json includes tests and tests_status. Regenerate after changing US (generate-board-json or /sync-board).",
 }
 
 export const appIntro = {
-  title: "O que cada aba deste app mostra",
+  title: "What each tab in this app shows",
   paragraphs: [
-    "Depois de abrir a pasta docs/, use as abas para navegar. Elas leem os mesmos arquivos que você edita no Cursor — nada é duplicado em banco de dados.",
+    "After opening the docs/ folder, use the tabs to navigate. They read the same files you edit in Cursor. Nothing is duplicated in a database.",
   ],
 }
 
 export const monitorTabsGuide = [
   {
-    label: "Comece aqui",
-    hint: "O que é o Meridian, pastas, fases e conceitos. Disponível sem pasta aberta.",
+    label: "Start here",
+    hint: "What Meridian is, folders, phases, and concepts. Available without an open folder.",
   },
   {
-    label: "Guia de uso",
-    hint: "Passo a passo com acordeões: documentar, backlog, implementar e fechar US (/complete-us).",
+    label: "Usage guide",
+    hint: "Step by step with accordions: document, backlog, implement, and close US (/complete-us).",
   },
   {
-    label: "Configuração",
-    hint: "Docs 00–08 e 11: fundação → princípios → arquitetura → detalhe técnico.",
+    label: "Setup",
+    hint: "Docs 00–08 and 11: foundation -> principles -> architecture -> technical details.",
   },
   {
-    label: "Entregas",
-    hint: "Lista os arquivos em docs/epics/ e quantas user stories de cada um já estão ✅.",
+    label: "Deliverables",
+    hint: "Lists files in docs/epics/ and how many user stories from each are already ✅.",
   },
   {
-    label: "Quadro",
-    hint: "Kanban das US: ❌, 🔶, ✅, 🧪 (testes pendentes), 🧊. Filtrável por épico.",
+    label: "Board",
+    hint: "US kanban: ❌, 🔶, ✅, 🧪 (pending tests), 🧊. Filterable by epic.",
   },
 ]
 
 export const corePrinciples: ConceptBlock[] = [
   {
     id: "docs-first",
-    title: "Documento antes de código",
+    title: "Documentation before code",
     summary:
-      "Escopo, arquitetura e critérios de aceite vêm primeiro. Código implementa documentação — não o contrário.",
+      "Scope, architecture, and Acceptance criteria come first. Code implements documentation, not the other way around.",
   },
   {
     id: "human-manager",
-    title: "Você aprova, agentes executam",
+    title: "You approve, agents execute",
     summary:
-      "IA pode escrever e revisar, mas mudanças de escopo, status approved e ✅ só com sua validação.",
+      "AI can write and review, but scope changes, approved status, and ✅ only happen with your validation.",
   },
   {
     id: "audit-status",
-    title: "Pronto = evidência",
+    title: "Done = evidence",
     summary:
-      "Compilar não basta. ✅ exige aceite e testes nos arquivos — use /complete-us após revisar. 🔶 exige Falta: explícito.",
+      "Compiling is not enough. ✅ requires Acceptance and tests in the files. Use /complete-us after reviewing. 🔶 requires explicit Missing:.",
   },
   {
     id: "derived-board",
-    title: "Quadro derivado",
+    title: "Derived board",
     summary:
-      "board.json vem das US. Edite docs/us/*.md, não o JSON, como fonte de verdade do status.",
+      "board.json comes from the US files. Edit docs/us/*.md, not the JSON, as the status source of truth.",
   },
 ]
 
 const phaseGroupIntro: Record<string, string> = {
-  "Fase 0":
-    "Fundação sequencial: entenda o projeto, stack, segurança e usuários antes de qualquer entrega.",
-  "Fase 1": "Princípios de código — convenções antes de desenhar o sistema.",
-  "Fase 2": "Arquitetura: apps, módulos, limites.",
-  "Fase 3": "Detalhe técnico: banco, contratos de API e ambientes.",
-  Entrega:
-    "Backlog nas pastas epics/, versions/, sprints/ — só após 05_architecture approved.",
-  Contínuo:
-    "Registro permanente de decisões — sempre que algo relevante mudar, acrescente uma entrada (nunca apague).",
+  "Phase 0":
+    "Sequential foundation: understand the project, stack, security, and users before any delivery.",
+  "Phase 1": "Code principles: conventions before designing the system.",
+  "Phase 2": "Architecture: apps, modules, boundaries.",
+  "Phase 3": "Technical details: database, API contracts, and environments.",
+  Delivery:
+    "Backlog in epics/, versions/, and sprints/ folders, only after 05_architecture is approved.",
+  Continuous:
+    "Permanent decision record. Whenever something relevant changes, add an entry (never delete).",
 }
 
 const phaseDocDescriptions: Record<string, string> = {
-  "00_scope": "Nome, problema, escopo in/out, riscos.",
-  "01_tech_stack": "Stack e justificativa das escolhas.",
-  "02_security": "Ameaças, segredos, OWASP no contexto do projeto.",
-  "03_user_types": "Quem usa e o que cada perfil precisa.",
-  "04_principles": "Convenções de código e qualidade.",
-  "05_architecture": "Apps, módulos, limites.",
-  "06_database": "Modelo de dados e migrações.",
-  "07_api_contracts": "Contratos entre serviços.",
-  "08_environments": "Local, staging, produção.",
-  "11_decisions": "Stub com regras — log em docs/decisions/YYYY-MM-DD.json.",
+  "00_scope": "Name, problem, in/out scope, risks.",
+  "01_tech_stack": "Stack and rationale for choices.",
+  "02_security": "Threats, secrets, OWASP in the project context.",
+  "03_user_types": "Who uses it and what each profile needs.",
+  "04_principles": "Code and quality conventions.",
+  "05_architecture": "Apps, modules, boundaries.",
+  "06_database": "Data model and migrations.",
+  "07_api_contracts": "Contracts between services.",
+  "08_environments": "Local, staging, production.",
+  "11_decisions": "Stub with rules, log in docs/decisions/YYYY-MM-DD.json.",
 }
 
 export const phaseDocuments = PHASE_DOC_IDS.map((id) => ({
@@ -777,9 +779,9 @@ export const phaseDocuments = PHASE_DOC_IDS.map((id) => ({
 }))
 
 export const nextStepsAfterConcepts = {
-  title: "Próximo passo",
+  title: "Next step",
   paragraphs: [
-    "Entendeu pastas, fases e status? Vá para a aba Guia de uso — lá estão os passos, comandos (/init-meridian, /create-us, /complete-us…) e o que fazer em cada situação.",
-    "Abra a pasta docs/ do seu repositório neste app para ver Configuração, Entregas e Quadro com dados reais.",
+    "Understood folders, phases, and status? Go to the Usage guide tab. It has the steps, commands (/init-meridian, /create-us, /complete-us...), and what to do in each situation.",
+    "Open your repository's docs/ folder in this app to see Setup, Deliverables, and Board with real data.",
   ],
 }

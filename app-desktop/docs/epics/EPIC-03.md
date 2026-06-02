@@ -1,23 +1,23 @@
 ---
 id: EPIC-03
-title: Validações Meridian
+title: Meridian Validations
 status: complete
 versions: [v1]
-profiles: [Manager do Processo, Operador Local, Futuro Usuário VSCode]
-outcome: "Violations do protocolo aparecem no app e em validate_meridian.py antes de marcar US como concluída."
+profiles: [Process Manager, Local Operator, Future VSCode User]
+outcome: "Protocol violations appear in the app and in validate_meridian.py before marking a US as done."
 ---
 
-# EPIC-03 — Validações Meridian
+# EPIC-03 — Meridian Validations
 
-## Capacidade
+## Capability
 
-Tornar regras do protocolo visíveis e auditáveis: dependências entre docs de fase, US `🔶` sem `Falta:`, referências de epic inexistentes, divergência board vs arquivos.
+Make protocol rules visible and auditable: dependencies between phase docs, US `🔶` without `Missing:`, references to nonexistent epics, board vs file divergence.
 
-## Resultado esperado
+## Expected outcome
 
-Manager vê alertas acionáveis no monitor; desenvolvedor/agente roda `validate_meridian.py` e obtém lista clara de erros antes de commit.
+Manager sees actionable alerts in the monitor; developer/agent runs `validate_meridian.py` and gets a clear error list before commit.
 
-## Fora deste epic
+## Out of scope for this epic
 
-- UI de edição de docs (EPIC-05).
-- Autofix de board ou docs (futuro).
+- Doc editing UI (EPIC-05).
+- Autofix of board or docs (future).

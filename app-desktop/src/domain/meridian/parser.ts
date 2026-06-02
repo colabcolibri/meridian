@@ -51,7 +51,7 @@ function requireString(
 ): string {
   const value = record[key]
   if (typeof value !== "string" || value.trim() === "") {
-    throw new MeridianParseError(file, `campo "${key}" ausente ou inválido`)
+    throw new MeridianParseError(file, `field "${key}" missing or invalid`)
   }
   return value.trim()
 }
@@ -60,7 +60,7 @@ function parseDocStatus(value: unknown, file: string): DocStatus {
   if (typeof value !== "string" || !DOC_STATUSES.includes(value as DocStatus)) {
     throw new MeridianParseError(
       file,
-      `status deve ser draft, review ou approved (recebido: ${String(value)})`,
+      `status must be draft, review, or approved (got: ${String(value)})`,
     )
   }
   return value as DocStatus
@@ -68,14 +68,14 @@ function parseDocStatus(value: unknown, file: string): DocStatus {
 
 function parseStoryStatus(value: unknown, file: string): StoryStatus {
   if (typeof value !== "string" || !STORY_STATUSES.includes(value as StoryStatus)) {
-    throw new MeridianParseError(file, `status de US inválido: ${String(value)}`)
+    throw new MeridianParseError(file, `invalid user story status: ${String(value)}`)
   }
   return value as StoryStatus
 }
 
 function parseMoscow(value: unknown, file: string): Moscow {
   if (typeof value !== "string" || !MOSCOW_VALUES.includes(value as Moscow)) {
-    throw new MeridianParseError(file, `moscow inválido: ${String(value)}`)
+    throw new MeridianParseError(file, `invalid moscow value: ${String(value)}`)
   }
   return value as Moscow
 }
@@ -87,7 +87,7 @@ function parseTestsRequirement(value: unknown, file: string): TestsRequirement {
   ) {
     throw new MeridianParseError(
       file,
-      `tests deve ser required ou none (recebido: ${String(value)})`,
+      `tests must be required or none (got: ${String(value)})`,
     )
   }
   return value as TestsRequirement
@@ -104,7 +104,7 @@ function parseTestsStatus(
   if (typeof value !== "string" || !TESTS_STATUSES.includes(value as TestsStatus)) {
     throw new MeridianParseError(
       file,
-      `tests_status deve ser pending, done ou n/a (recebido: ${String(value)})`,
+      `tests_status must be pending, done, or n/a (got: ${String(value)})`,
     )
   }
   return value as TestsStatus
@@ -139,7 +139,7 @@ function assertFilenameMatchesId(file: string, filename: string, id: string) {
   if (filename.toLowerCase() !== expectedFilename.toLowerCase()) {
     throw new MeridianParseError(
       file,
-      `id "${id}" não confere com o nome do arquivo (${filename})`,
+      `id "${id}" does not match filename (${filename})`,
     )
   }
 }
@@ -149,7 +149,7 @@ export function parsePhaseDocument(docId: string, raw: string): PhaseDocument {
   const { frontmatter, body } = splitMarkdown(raw)
 
   if (!frontmatter) {
-    throw new MeridianParseError(file, "frontmatter YAML obrigatório")
+    throw new MeridianParseError(file, "YAML frontmatter required")
   }
 
   const record = parseFrontmatterRecord(frontmatter)
@@ -170,7 +170,7 @@ export function parseUserStoryFile(filename: string, raw: string): UserStory {
   const { frontmatter } = splitMarkdown(raw)
 
   if (!frontmatter) {
-    throw new MeridianParseError(file, "frontmatter YAML obrigatório")
+    throw new MeridianParseError(file, "YAML frontmatter required")
   }
 
   const record = parseFrontmatterRecord(frontmatter)
@@ -178,10 +178,7 @@ export function parseUserStoryFile(filename: string, raw: string): UserStory {
   assertFilenameMatchesId(file, filename, id)
 
   if (!/^US-\d{4}$/i.test(id)) {
-    throw new MeridianParseError(
-      file,
-      `id "${id}" deve usar formato US-XXXX (4 dígitos)`,
-    )
+    throw new MeridianParseError(file, `id "${id}" must use US-XXXX format (4 digits)`)
   }
 
   const tests =
@@ -228,7 +225,7 @@ function parseEpicVersions(value: unknown, file: string): string[] {
     return [...value.matchAll(/\bv[\w-]+(?:\.\w+)*/g)].map((match) => match[0])
   }
   if (value !== undefined && value !== null) {
-    throw new MeridianParseError(file, "campo versions inválido")
+    throw new MeridianParseError(file, "invalid versions field")
   }
   return []
 }
@@ -238,7 +235,7 @@ export function parseEpicFile(filename: string, raw: string): Epic {
   const { frontmatter, body } = splitMarkdown(raw)
 
   if (!frontmatter) {
-    throw new MeridianParseError(file, "frontmatter YAML obrigatório")
+    throw new MeridianParseError(file, "YAML frontmatter required")
   }
 
   const record = parseFrontmatterRecord(frontmatter)
@@ -249,9 +246,9 @@ export function parseEpicFile(filename: string, raw: string): Epic {
     id,
     title: requireString(record, "title", file),
     description:
-      extractMarkdownSection(body, "Capacidade") || extractPurposeFromBody(body),
+      extractMarkdownSection(body, "Capability") || extractPurposeFromBody(body),
     outcome: requireString(record, "outcome", file),
-    scopeOut: extractMarkdownSection(body, "Fora deste epic"),
+    scopeOut: extractMarkdownSection(body, "Out of scope for this epic"),
     versions: parseEpicVersions(record.versions, file),
     profiles: parseStringList(record.profiles),
     status: parseEpicStatus(String(record.status ?? "active")),
@@ -263,7 +260,7 @@ export function parseVersionFile(filename: string, raw: string): ProductVersion 
   const { frontmatter, body } = splitMarkdown(raw)
 
   if (!frontmatter) {
-    throw new MeridianParseError(file, "frontmatter YAML obrigatório")
+    throw new MeridianParseError(file, "YAML frontmatter required")
   }
 
   const record = parseFrontmatterRecord(frontmatter)
@@ -271,16 +268,16 @@ export function parseVersionFile(filename: string, raw: string): ProductVersion 
   assertFilenameMatchesId(file, filename, id)
 
   if (!VERSION_ID_PATTERN.test(id)) {
-    throw new MeridianParseError(file, `id "${id}" deve usar formato vX (ex.: v0, v1)`)
+    throw new MeridianParseError(file, `id "${id}" must use vX format (e.g. v0, v1)`)
   }
 
   return {
     id,
     title: requireString(record, "title", file),
     outcome: requireString(record, "outcome", file),
-    objective: extractMarkdownSection(body, "Objetivo"),
-    scopeIn: extractMarkdownSection(body, "Incluído nesta versão"),
-    scopeOut: extractMarkdownSection(body, "Explicitamente fora"),
+    objective: extractMarkdownSection(body, "Objective"),
+    scopeIn: extractMarkdownSection(body, "Included in this version"),
+    scopeOut: extractMarkdownSection(body, "Explicitly out"),
     status: parseReleaseStatus(String(record.status ?? "planned")),
   }
 }
@@ -295,7 +292,7 @@ function parseDecisionEntry(
   index: number,
 ): DecisionEntry {
   if (!value || typeof value !== "object" || Array.isArray(value)) {
-    throw new MeridianParseError(file, `entries[${index}] deve ser um objeto`)
+    throw new MeridianParseError(file, `entries[${index}] must be an object`)
   }
 
   const record = value as Record<string, unknown>
@@ -303,7 +300,7 @@ function parseDecisionEntry(
   const title = requireString(record, "title", file)
 
   if (!DECISION_TIME_PATTERN.test(time)) {
-    throw new MeridianParseError(file, `entries[${index}].time deve usar formato HH:MM`)
+    throw new MeridianParseError(file, `entries[${index}].time must use HH:MM format`)
   }
 
   return {
@@ -321,18 +318,18 @@ export function parseDecisionDayFile(filename: string, raw: string): DecisionDay
   const file = `decisions/${filename}`
 
   if (!DECISION_FILENAME_PATTERN.test(filename)) {
-    throw new MeridianParseError(file, "nome do arquivo deve ser YYYY-MM-DD.json")
+    throw new MeridianParseError(file, "filename must be YYYY-MM-DD.json")
   }
 
   let parsed: unknown
   try {
     parsed = JSON.parse(raw)
   } catch {
-    throw new MeridianParseError(file, "JSON inválido")
+    throw new MeridianParseError(file, "invalid JSON")
   }
 
   if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
-    throw new MeridianParseError(file, "raiz deve ser um objeto com date e entries")
+    throw new MeridianParseError(file, "root must be an object with date and entries")
   }
 
   const record = parsed as Record<string, unknown>
@@ -340,18 +337,18 @@ export function parseDecisionDayFile(filename: string, raw: string): DecisionDay
   const expectedDate = filename.replace(/\.json$/i, "")
 
   if (!DECISION_DATE_PATTERN.test(date)) {
-    throw new MeridianParseError(file, `date "${date}" deve usar formato YYYY-MM-DD`)
+    throw new MeridianParseError(file, `date "${date}" must use YYYY-MM-DD format`)
   }
 
   if (date !== expectedDate) {
     throw new MeridianParseError(
       file,
-      `date "${date}" não confere com o nome do arquivo (${filename})`,
+      `date "${date}" does not match filename (${filename})`,
     )
   }
 
   if (!Array.isArray(record.entries)) {
-    throw new MeridianParseError(file, "campo entries deve ser um array")
+    throw new MeridianParseError(file, "entries field must be an array")
   }
 
   const entries = record.entries.map((entry, index) =>
@@ -370,7 +367,7 @@ export function parseSprintFile(filename: string, raw: string): Sprint {
   const { frontmatter } = splitMarkdown(raw)
 
   if (!frontmatter) {
-    throw new MeridianParseError(file, "frontmatter YAML obrigatório")
+    throw new MeridianParseError(file, "YAML frontmatter required")
   }
 
   const record = parseFrontmatterRecord(frontmatter)
@@ -378,15 +375,12 @@ export function parseSprintFile(filename: string, raw: string): Sprint {
   assertFilenameMatchesId(file, filename, id)
 
   if (!SPRINT_ID_PATTERN.test(id)) {
-    throw new MeridianParseError(
-      file,
-      `id "${id}" deve usar formato vX-SY (ex.: v1-S1)`,
-    )
+    throw new MeridianParseError(file, `id "${id}" must use vX-SY format (e.g. v1-S1)`)
   }
 
   const versionId = requireString(record, "version", file)
   if (!VERSION_ID_PATTERN.test(versionId)) {
-    throw new MeridianParseError(file, `version "${versionId}" deve usar formato vX`)
+    throw new MeridianParseError(file, `version "${versionId}" must use vX format`)
   }
 
   return {

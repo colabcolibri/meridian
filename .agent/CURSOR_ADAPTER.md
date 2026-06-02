@@ -1,23 +1,23 @@
 # Cursor adapter (Meridian kit)
 
-O Cursor **não** indexa `.agent/` automaticamente. A pasta `.cursor/` espelha o kit para o IDE — **gerada localmente**, fora do Git.
+Cursor does **not** index `.agent/` automatically. The `.cursor/` folder mirrors the kit for the IDE — **generated locally**, outside Git.
 
-| Cursor | Fonte canônica |
-| ------ | -------------- |
+| Cursor | Canonical source |
+| ------ | ------------------ |
 | `.cursor/rules/meridian.mdc` | `.agent/rules/meridian.mdc` |
 | `.cursor/skills/` | `.agent/skills/` |
 | `.cursor/agents/` | `.agent/agents/` |
 | `.cursor/commands/` | `.agent/workflows/` |
 
-## Regenerar (obrigatório após clone)
+## Regenerate (required after clone)
 
 ```bash
-chmod +x .agent/scripts/sync_cursor_kit.sh   # uma vez
+chmod +x .agent/scripts/sync_cursor_kit.sh   # once
 ./.agent/scripts/sync_cursor_kit.sh
 ```
 
-Edite sempre em `.agent/` primeiro; depois rode o script.
+Always edit in `.agent/` first; then run the script.
 
 ## Git
 
-`.cursor/` está no `.gitignore` — symlinks locais, não duplicata versionada.
+`.cursor/` is in `.gitignore` — local symlinks, not a versioned duplicate.

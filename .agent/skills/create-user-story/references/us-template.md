@@ -1,95 +1,95 @@
-# Template completo de user story
+# Full user story template
 
 ```md
 ---
 id: US-XXXX
-title: Título curto
+title: Short title
 epic: EPIC-XX
 version: vX
 status: ❌
 moscow: Must
 depends_on: []
-done_when: "Condição objetiva e mensurável."
+done_when: "Objective and measurable condition."
 tests: required
 tests_status: pending
 ---
 
-# US-XXXX — Título curto
+# US-XXXX — Short title
 
-**Como** [tipo de usuário documentado em 03_user_types.md],
-**quero** [ação],
-**para que** [benefício].
+**As** [user type documented in 03_user_types.md],
+**I want** [action],
+**so that** [benefit].
 
-## Aceite
+## Acceptance
 
-- [ ] Critério verificável 1
-- [ ] Critério verificável 2
-- [ ] 🔶 Parcial — Falta: descrição do que falta
+- [ ] Verifiable criterion 1
+- [ ] Verifiable criterion 2
+- [ ] 🔶 Partial — Missing: description of what is missing
 
-## Implementação técnica
+## Technical implementation
 
-> Na **criação**: placeholder abaixo. Ao **concluir** (`✅`): skill `complete-user-story` — substituir pelo registro real (arquivos + camadas).
+> On **creation**: placeholder below. On **completion** (`✅`): skill `complete-user-story` — replace with real record (files + layers).
 
-### Arquivos
+### Files
 
-_(preencher ao concluir a implementação)_
+_(fill in when implementation is complete)_
 
 ### Backend
 
-_(preencher quando aplicável)_
+_(fill in when applicable)_
 
 ### Frontend
 
-_(preencher quando aplicável)_
+_(fill in when applicable)_
 
 ### Scripts / Docs
 
-_(preencher quando aplicável)_
+_(fill in when applicable)_
 
-## Testes
+## Tests
 
-> Na **criação**: preencher **Planejado**. Ao **fechar** (`complete-user-story`): marcar `[x]` e registrar em **Executado**; atualizar `tests_status: done`.
+> On **creation**: fill **Planned**. On **close** (`complete-user-story`): mark `[x]` and record in **Executed**; update `tests_status: done`.
 
-### Planejado
+### Planned
 
-- [ ] **automated** — `pnpm test` — descrever escopo
-- [ ] **manual** — passos e resultado esperado
+- [ ] **automated** — `pnpm test` — describe scope
+- [ ] **manual** — steps and expected result
 
-### Executado
+### Executed
 
-_(pendente)_
+_(pending)_
 
-## Fora de escopo desta story
+## Out of scope for this story
 
-- O que esta US explicitamente NÃO cobre
-- **Não** repita descrição, `outcome` ou escopo do epic — use só `epic: EPIC-XX` no frontmatter
+- What this US explicitly does NOT cover
+- **Do not** repeat description, `outcome` or epic scope — use only `epic: EPIC-XX` in frontmatter
 
-## Notas
+## Notes
 
-- Links, decisões, dependências externas
+- Links, decisions, external dependencies
 ```
 
-## Status permitidos (frontmatter)
+## Allowed statuses (frontmatter)
 
-| Símbolo | Significado |
+| Symbol | Meaning |
 | ------- | ----------- |
-| ❌ | Não iniciado |
-| 🔶 | Parcial (exige `Falta:` no aceite) |
-| ✅ | Concluído (aceite + implementação + testes quando `tests: required`) |
+| ❌ | Not started |
+| 🔶 | Partial (requires `Missing:` in acceptance) |
+| ✅ | Complete (acceptance + implementation + tests when `tests: required`) |
 
-## Campos de teste
+## Test fields
 
-| Campo | Valores | Regra |
+| Field | Values | Rule |
 | ----- | ------- | ----- |
 | `tests` | `required` / `none` | Default `required` |
-| `tests_status` | `pending` / `done` / `n/a` | `n/a` só com `tests: none`; `done` antes de `status: ✅` |
+| `tests_status` | `pending` / `done` / `n/a` | `n/a` only with `tests: none`; `done` before `status: ✅` |
 
-No **quadro do monitor**, coluna `🧪` = `tests_status: pending` — não grave emoji no YAML.
+On the **monitor board**, column `🧪` = `tests_status: pending` — do not write emoji in YAML.
 
 ## MoSCoW
 
 `Must` | `Should` | `Could` | `Won't`
 
-## Fechamento
+## Closure
 
-Após implementação → skill `complete-user-story` ou workflow `/complete-us` (não marcar `✅` na criação).
+After implementation → skill `complete-user-story` or workflow `/complete-us` (do not mark `✅` on creation).

@@ -40,22 +40,22 @@ export function getSetupStepLabel(
 
   if (state === "locked") {
     const unmet = getUnmetDependencies(document, documents)
-    return `Não iniciado — aguardando ${unmet.join(", ")}`
+    return `Not started — waiting for ${unmet.join(", ")}`
   }
 
   if (state === "complete") {
-    return "Pronto"
+    return "Ready"
   }
 
   if (state === "alert") {
-    return "Atenção — aprovado antes das dependências"
+    return "Attention — approved before dependencies"
   }
 
   if (document.status === "review") {
-    return "Em andamento — em revisão"
+    return "In progress — under review"
   }
 
-  return "Em andamento — em elaboração"
+  return "In progress — in draft"
 }
 
 export function countSetupStepsByState(

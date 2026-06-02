@@ -13,7 +13,7 @@ export function isFileSystemAccessSupported(): boolean {
   return typeof window !== "undefined" && "showDirectoryPicker" in window
 }
 
-/** Não exige user activation — use em restore, reload e após o picker. */
+/** Does not require user activation — use on restore, reload, and after the picker. */
 export async function hasReadPermission(
   handle: FileSystemDirectoryHandle,
 ): Promise<boolean> {
@@ -22,7 +22,7 @@ export async function hasReadPermission(
 }
 
 /**
- * Exige user activation (clique). Não chamar em useEffect nem após await longo.
+ * Requires user activation (click). Do not call from useEffect or after a long await.
  */
 export async function requestReadPermissionFromUser(
   handle: FileSystemDirectoryHandle,
@@ -53,13 +53,13 @@ export async function pickMeridianFolder(): Promise<{
 }> {
   if (!isFileSystemAccessSupported()) {
     throw new Error(
-      "Seu navegador não suporta abertura de pasta. Use Chrome ou Edge recente em localhost.",
+      "Your browser does not support folder access. Use a recent Chrome or Edge on localhost.",
     )
   }
 
   if (!window.showDirectoryPicker) {
     throw new Error(
-      "Seu navegador não suporta abertura de pasta. Use Chrome ou Edge recente em localhost.",
+      "Your browser does not support folder access. Use a recent Chrome or Edge on localhost.",
     )
   }
 
@@ -70,7 +70,7 @@ export async function pickMeridianFolder(): Promise<{
   return { handle, granted }
 }
 
-/** Abre snapshot quando já há permissão de leitura. */
+/** Opens snapshot when read permission is already granted. */
 export async function openSnapshotFromHandle(
   handle: FileSystemDirectoryHandle,
 ): Promise<MeridianFolderOpenResult> {
@@ -78,7 +78,7 @@ export async function openSnapshotFromHandle(
   return { snapshot, handle }
 }
 
-/** Restaura handle salvo; não pede permissão (sem user activation). */
+/** Restores saved handle; does not request permission (no user activation). */
 export async function restoreMeridianFolderHandle(): Promise<FileSystemDirectoryHandle | null> {
   if (!isFileSystemAccessSupported()) {
     return null

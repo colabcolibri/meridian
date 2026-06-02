@@ -30,7 +30,7 @@ Own phase documents `01_tech_stack` through `04_principles`, `06_database`, `07_
 00_scope → 01_tech_stack → 02_security → 03_user_types
 → 04_principles → 05_architecture
 → 06_database → 07_api_contracts → 08_environments
-→ docs/epics/, docs/versions/, docs/sprints/ (entrega — pastas)
+→ docs/epics/, docs/versions/, docs/sprints/ (delivery — folders)
 → docs/us/
 ```
 
@@ -61,7 +61,7 @@ blocks: [downstream docs]
 
 ## Epics
 
-For new product capabilities, defer to `@[skills/create-epic]` (ou workflow `/create-epic`) after `05_architecture.md` is `approved`. Each epic is saved in `docs/epics/EPIC-XX.md`.
+For new product capabilities, defer to `@[skills/create-epic]` (or workflow `/create-epic`) after `05_architecture.md` is `approved`. Each epic is saved in `docs/epics/EPIC-XX.md`.
 
 ## User stories
 

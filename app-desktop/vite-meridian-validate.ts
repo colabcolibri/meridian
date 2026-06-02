@@ -75,7 +75,7 @@ async function handleValidateRequest(_req: IncomingMessage, res: ServerResponse)
         errors: [],
         warnings: [],
         output: "",
-        message: "python3 não encontrado. Instale Python 3 e tente novamente.",
+        message: "python3 not found. Install Python 3 and try again.",
       })
       return
     }

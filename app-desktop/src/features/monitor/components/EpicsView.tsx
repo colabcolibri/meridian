@@ -14,9 +14,9 @@ import { typeScale } from "@/features/monitor/monitor-typography"
 import { cn } from "@/lib/utils"
 
 function epicStatusLabel(status: Epic["status"]) {
-  if (status === "complete") return "concluído"
-  if (status === "paused") return "pausado"
-  return "ativo"
+  if (status === "complete") return "complete"
+  if (status === "paused") return "paused"
+  return "active"
 }
 
 function EpicCard({ epic, stories }: { epic: Epic; stories: UserStory[] }) {
@@ -35,7 +35,7 @@ function EpicCard({ epic, stories }: { epic: Epic; stories: UserStory[] }) {
             {paused ? (
               <span className="flex items-center gap-1">
                 <PauseCircle className="h-3 w-3" />
-                pausado
+                paused
               </span>
             ) : (
               epicStatusLabel(epic.status)
@@ -54,7 +54,7 @@ function EpicCard({ epic, stories }: { epic: Epic; stories: UserStory[] }) {
         <p className={typeScale.bodySm}>{epic.description}</p>
         {epic.scopeOut ? (
           <p className={typeScale.bodySm}>
-            <span className="font-medium text-foreground">Fora deste epic: </span>
+            <span className="font-medium text-foreground">Out of scope: </span>
             {epic.scopeOut}
           </p>
         ) : null}
@@ -76,7 +76,7 @@ function EpicCard({ epic, stories }: { epic: Epic; stories: UserStory[] }) {
           <span className="font-medium text-foreground">
             {done}/{total}
           </span>{" "}
-          user stories concluídas neste epic
+          user stories complete in this epic
         </div>
       </CardContent>
     </Card>
@@ -91,12 +91,12 @@ export function EpicsView({ epics, stories }: { epics: Epic[]; stories: UserStor
   return (
     <div className="space-y-6">
       <p className={typeScale.bodySm}>
-        Capacidades de produto lidas de{" "}
+        Product capabilities read from{" "}
         <code className="font-mono text-xs">docs/epics/</code>. Cada card corresponde a
-        um arquivo EPIC-XX.md e mostra quantas user stories estão ligadas.
+        one EPIC-XX.md file and shows how many user stories are linked.
       </p>
       <div>
-        <h2 className={cn(typeScale.sectionTitle, "mb-4")}>Ativos</h2>
+        <h2 className={cn(typeScale.sectionTitle, "mb-4")}>Active</h2>
         <div className="grid gap-4 md:grid-cols-2">
           {active.map((epic) => (
             <EpicCard epic={epic} key={epic.id} stories={stories} />
@@ -105,7 +105,7 @@ export function EpicsView({ epics, stories }: { epics: Epic[]; stories: UserStor
       </div>
       {complete.length > 0 ? (
         <div>
-          <h2 className={cn(typeScale.sectionTitle, "mb-4")}>Concluídos</h2>
+          <h2 className={cn(typeScale.sectionTitle, "mb-4")}>Complete</h2>
           <div className="grid gap-4 md:grid-cols-2">
             {complete.map((epic) => (
               <EpicCard epic={epic} key={epic.id} stories={stories} />
@@ -115,7 +115,7 @@ export function EpicsView({ epics, stories }: { epics: Epic[]; stories: UserStor
       ) : null}
       {paused.length > 0 ? (
         <div>
-          <h2 className={cn(typeScale.sectionTitle, "mb-4")}>Pausados</h2>
+          <h2 className={cn(typeScale.sectionTitle, "mb-4")}>Paused</h2>
           <div className="grid gap-4 md:grid-cols-2">
             {paused.map((epic) => (
               <EpicCard epic={epic} key={epic.id} stories={stories} />

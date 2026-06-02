@@ -16,18 +16,18 @@ import { typeScale } from "@/features/monitor/monitor-typography"
 const steps = [
   {
     icon: FolderTree,
-    title: "Escolha a pasta docs do seu projeto",
-    body: "É a pasta onde ficam escopo, versões, user stories e o quadro — a mesma que você edita com agentes no Cursor.",
+    title: "Choose your project's docs folder",
+    body: "This is where scope, versions, user stories, and the board live — the same folder you edit with agents in Cursor.",
   },
   {
     icon: LayoutDashboard,
-    title: "Acompanhe configuração, entregas e quadro",
-    body: "Três visões: progresso dos documentos iniciais, épicos do produto e status de cada entrega.",
+    title: "Track setup, deliverables, and board",
+    body: "Three views: initial document progress, product epics, and status of each delivery.",
   },
   {
     icon: Sparkles,
-    title: "Use Chrome ou Edge em localhost",
-    body: "O navegador precisa permitir abrir a pasta no seu computador (uma vez por sessão).",
+    title: "Use Chrome or Edge on localhost",
+    body: "The browser must allow opening the folder on your computer (once per session).",
   },
 ]
 
@@ -57,25 +57,24 @@ export function WelcomeScreen() {
         </p>
         <h2 className={cn(typeScale.pageTitle, "mt-2 sm:text-3xl")}>
           {needsPermission
-            ? "Permita a leitura da pasta"
-            : "Gerencie seu projeto pela pasta docs"}
+            ? "Allow folder read access"
+            : "Manage your project through the docs folder"}
         </h2>
         <p className={cn(typeScale.bodySm, "mt-3")}>
           {needsPermission ? (
             <>
-              A pasta{" "}
+              Folder{" "}
               <strong className="font-medium text-foreground">
                 {pendingFolderName}
               </strong>{" "}
-              foi selecionada. O Chrome exige um clique para liberar a leitura dos
-              arquivos.
+              was selected. Chrome requires a click to grant read access to the files.
             </>
           ) : (
             <>
-              Abra a pasta <strong className="font-medium text-foreground">docs</strong>{" "}
-              do projeto (ex.:{" "}
-              <span className="font-mono text-xs">app-desktop/docs</span>) para ver o
-              mesmo conteúdo que seus agentes usam.
+              Open the project's{" "}
+              <strong className="font-medium text-foreground">docs</strong> folder (e.g.{" "}
+              <span className="font-mono text-xs">app-desktop/docs</span>) to see the
+              same content your agents use.
             </>
           )}
         </p>
@@ -115,7 +114,7 @@ export function WelcomeScreen() {
             size="lg"
           >
             <KeyRound className="mr-2 h-5 w-5" />
-            Permitir leitura da pasta
+            Allow folder read access
           </Button>
         ) : (
           <Button
@@ -125,7 +124,7 @@ export function WelcomeScreen() {
             size="lg"
           >
             <FolderOpen className="mr-2 h-5 w-5" />
-            Abrir pasta do projeto
+            Open project folder
           </Button>
         )}
 
@@ -136,13 +135,13 @@ export function WelcomeScreen() {
             size="sm"
             variant="outline"
           >
-            Escolher outra pasta
+            Choose another folder
           </Button>
         ) : null}
 
         {!fsAccessSupported ? (
           <p className="text-center text-xs text-amber-800">
-            Seu navegador não suporta abertura de pasta. Use Chrome ou Edge em
+            Your browser does not support folder access. Use Chrome or Edge on
             localhost.
           </p>
         ) : null}

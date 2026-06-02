@@ -43,16 +43,16 @@ export function ScriptValidationPanel({ folderName }: { folderName?: string }) {
       <CardHeader className="px-2 pt-0">
         <CardTitle className={cn(typeScale.label, "flex items-center gap-2")}>
           <Terminal className="h-4 w-4" />
-          Validação técnica (Python)
+          Technical validation (Python)
         </CardTitle>
         <CardDescription className={typeScale.caption}>
-          Script <code className={inlineCodeClass}>validate_meridian.py</code> em{" "}
-          <strong>pnpm dev</strong> — valida{" "}
-          <code className={inlineCodeClass}>app-desktop/</code> no disco.
+          Script <code className={inlineCodeClass}>validate_meridian.py</code> in{" "}
+          <strong>pnpm dev</strong> — validates{" "}
+          <code className={inlineCodeClass}>app-desktop/</code> on disk.
           {isDev ? (
             <>
               {" "}
-              Use esta URL no navegador:{" "}
+              Use this URL in the browser:{" "}
               <code className={inlineCodeClass}>{window.location.origin}</code>
             </>
           ) : null}
@@ -61,11 +61,11 @@ export function ScriptValidationPanel({ folderName }: { folderName?: string }) {
       <CardContent className="space-y-3 px-2 pb-2">
         {folderName && folderName !== "app-desktop" ? (
           <p className={cn(typeScale.caption, "text-amber-800 dark:text-amber-300")}>
-            Pasta aberta: <strong>{folderName}</strong>. O script no dev valida sempre{" "}
+            Open folder: <strong>{folderName}</strong>. The dev script always validates{" "}
             <code className="rounded bg-amber-100 px-1.5 py-0.5 font-mono text-xs dark:bg-amber-950/50">
               app-desktop/
             </code>{" "}
-            no disco (limitação do browser sem caminho absoluto).
+            on disk (browser limitation without absolute path).
           </p>
         ) : null}
 
@@ -80,29 +80,29 @@ export function ScriptValidationPanel({ folderName }: { folderName?: string }) {
             ) : (
               <Terminal className="mr-2 h-4 w-4" />
             )}
-            Validar pasta
+            Validate folder
           </Button>
           <Button onClick={() => void copyCommand()} size="sm" variant="outline">
             <ClipboardCopy className="mr-2 h-4 w-4" />
-            Copiar comando
+            Copy command
           </Button>
         </div>
 
         {!isDev ? (
           <p className={typeScale.caption}>
-            Build de produção não executa Python. Use{" "}
-            <code className={inlineCodeClass}>{validateScriptCommand}</code> no terminal
-            na raiz do repositório.
+            Production build does not run Python. Use{" "}
+            <code className={inlineCodeClass}>{validateScriptCommand}</code> in the
+            terminal at the repository root.
           </p>
         ) : null}
 
         {result?.pythonMissing ? (
           <p className="text-sm text-destructive">
-            {result.message} Veja pré-requisitos em{" "}
+            {result.message} See prerequisites in{" "}
             <code className="rounded bg-destructive/10 px-1.5 py-0.5 font-mono text-xs">
               08_environments.md
             </code>{" "}
-            (adicione Python 3).
+            (add Python 3).
           </p>
         ) : null}
 
@@ -116,13 +116,13 @@ export function ScriptValidationPanel({ folderName }: { folderName?: string }) {
                     : "bg-destructive text-white"
                 }
               >
-                {result.ok ? "passou" : "falhou"}
+                {result.ok ? "passed" : "failed"}
               </Badge>
               {result.errors.length > 0 ? (
-                <Badge variant="outline">{result.errors.length} erros</Badge>
+                <Badge variant="outline">{result.errors.length} errors</Badge>
               ) : null}
               {result.warnings.length > 0 ? (
-                <Badge variant="outline">{result.warnings.length} avisos</Badge>
+                <Badge variant="outline">{result.warnings.length} warnings</Badge>
               ) : null}
             </div>
             {result.errors.map((item) => (

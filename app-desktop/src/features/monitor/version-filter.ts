@@ -14,7 +14,7 @@ export function versionIdsFromCatalog(versions: ProductVersion[]): string[] {
   return sortVersionsDesc(versions).map((version) => version.id)
 }
 
-/** @deprecated Prefer versionIdsFromCatalog — mantido para contagens derivadas de US. */
+/** @deprecated Prefer versionIdsFromCatalog — kept for counts derived from user stories. */
 export function versionIdsFromStories(stories: UserStory[]): string[] {
   return sortVersionIdsDesc([...new Set(stories.map((story) => story.version))])
 }

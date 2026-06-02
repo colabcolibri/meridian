@@ -1,75 +1,75 @@
 # Meridian skills
 
-> Guia para criar e usar skills no kit `.agent/`.
+> Guide to creating and using skills in the `.agent/` kit.
 
 ---
 
-## Visão geral
+## Overview
 
-Skills empacotam conhecimento especializado com **progressive disclosure**: o agente lê metadados (`name`, `description`) e só carrega o corpo quando a solicitação combina com a descrição.
+Skills package specialized knowledge with **progressive disclosure**: the agent reads metadata (`name`, `description`) and only loads the body when the request matches the description.
 
-Isso evita inflar o contexto com todo o protocolo Meridian em toda mensagem.
+This avoids inflating context with the entire Meridian protocol on every message.
 
 ---
 
-## Estrutura de pasta
+## Folder structure
 
 ```txt
-.agent/skills/nome-da-skill/
-  SKILL.md          # obrigatório — índice + procedimento
-  references/       # opcional — templates, checklists longos
-  scripts/          # opcional — automação
-  assets/           # opcional — imagens, exemplos binários
+.agent/skills/skill-name/
+  SKILL.md          # required — index + procedure
+  references/       # optional — templates, long checklists
+  scripts/          # optional — automation
+  assets/           # optional — images, binary examples
 ```
 
-| Escopo | Caminho |
+| Scope | Path |
 | ------ | ------- |
-| Workspace (projeto Meridian) | `<raiz-do-projeto>/.agent/skills/` |
-| Kit Meridian (este repo) | `meridian/.agent/skills/` |
-| Cursor (espelho local) | `<raiz>/.cursor/` → symlinks para `.agent/` (**gitignored** no kit) |
+| Workspace (Meridian project) | `<project-root>/.agent/skills/` |
+| Meridian kit (this repo) | `meridian/.agent/skills/` |
+| Cursor (local mirror) | `<root>/.cursor/` → symlinks to `.agent/` (**gitignored** in kit) |
 
-Após editar skills em `.agent/`, rode `./.agent/scripts/sync_cursor_kit.sh` para o Cursor indexar.
+After editing skills in `.agent/`, run `./.agent/scripts/sync_cursor_kit.sh` for Cursor to index them.
 
 ---
 
-## Frontmatter de `SKILL.md`
+## `SKILL.md` frontmatter
 
 ```yaml
 ---
-name: minha-skill
-description: Uma linha clara com gatilhos. Use when...
-allowed-tools: Read, Glob, Grep   # opcional — skills só leitura
+name: my-skill
+description: One clear line with triggers. Use when...
+allowed-tools: Read, Glob, Grep   # optional — read-only skills
 ---
 ```
 
-Regras:
+Rules:
 
-- `name` em kebab-case, igual ao nome da pasta.
-- `description` é o principal gatilho de descoberta pelo agente.
-- Corpo do arquivo = **índice**; detalhes longos vão para `references/`.
+- `name` in kebab-case, same as folder name.
+- `description` is the main discovery trigger for the agent.
+- File body = **index**; long details go in `references/`.
 
 ---
 
-## Tabela "quando ler" (padrão obrigatório)
+## "When to read" table (required pattern)
 
-Todo `SKILL.md` com references deve incluir:
+Every `SKILL.md` with references must include:
 
 ```markdown
-| Arquivo | Quando ler |
+| File | When to read |
 | ------- | ---------- |
-| `references/foo.md` | Ao criar X |
+| `references/foo.md` | When creating X |
 ```
 
 ---
 
 ## Agents vs skills
 
-| Camada | Função |
+| Layer | Role |
 | ------ | ------ |
-| **Agent** | Persona, fases, proibições, formato de saída, lista de skills |
-| **Skill** | Procedimento repetível, templates, checklists, scripts |
+| **Agent** | Persona, phases, prohibitions, output format, skill list |
+| **Skill** | Repeatable procedure, templates, checklists, scripts |
 
-O agent referencia skills no frontmatter:
+The agent references skills in frontmatter:
 
 ```yaml
 skills: init-project, update-decisions-log
@@ -79,46 +79,46 @@ skills: init-project, update-decisions-log
 
 ## Scripts
 
-Scripts ficam em `.agent/skills/<skill>/scripts/` ou `.agent/scripts/` global.
+Scripts live in `.agent/skills/<skill>/scripts/` or global `.agent/scripts/`.
 
-Exemplo global deste kit:
+Global example in this kit:
 
 ```bash
-python .agent/scripts/validate_meridian.py /caminho/do/projeto
+python .agent/scripts/validate_meridian.py /path/to/project
 ```
 
-Agents e skills podem invocar scripts quando o procedimento exigir validação objetiva.
+Agents and skills may invoke scripts when the procedure requires objective validation.
 
 ---
 
-## Exemplo mínimo
+## Minimal example
 
 ```markdown
 ---
-name: exemplo
-description: Faz X no fluxo Meridian. Use when user asks for X.
+name: example
+description: Does X in the Meridian flow. Use when user asks for X.
 allowed-tools: Read, Glob, Grep
 ---
 
-# Exemplo
+# Example
 
-## Quando acionar
+## When to trigger
 - ...
 
-## Procedimento
+## Procedure
 1. ...
 
-## Referências
-| Arquivo | Quando ler |
+## References
+| File | When to read |
 | ------- | ---------- |
-| `references/template.md` | Ao gerar arquivo Y |
+| `references/template.md` | When generating file Y |
 ```
 
 ---
 
-## Skills oficiais do kit Meridian
+## Official Meridian kit skills
 
-| Skill | Pasta |
+| Skill | Folder |
 | ----- | ----- |
 | `init-project` | `init-project/` |
 | `create-epic` | `create-epic/` |
@@ -131,4 +131,4 @@ allowed-tools: Read, Glob, Grep
 | `security-review` | `security-review/` |
 | `meridian-routing` | `meridian-routing/` |
 
-Ao adicionar uma skill nova, atualize `.agent/ARCHITECTURE.md` e o `README.md` da raiz.
+When adding a new skill, update `.agent/ARCHITECTURE.md` and the root `README.md`.

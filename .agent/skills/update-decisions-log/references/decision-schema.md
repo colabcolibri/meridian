@@ -1,6 +1,6 @@
 # Schema — `docs/decisions/YYYY-MM-DD.json`
 
-## Arquivo diário
+## Daily file
 
 ```json
 {
@@ -8,44 +8,44 @@
   "entries": [
     {
       "time": "17:30",
-      "title": "Título objetivo",
-      "affected_document": "caminho/do/doc.md",
-      "what_changed": "descrição factual",
-      "why_changed": "contexto e motivação",
-      "impact": "docs afetados; marcar review",
-      "responsible": "papel ou pessoa"
+      "title": "Objective title",
+      "affected_document": "path/to/doc.md",
+      "what_changed": "factual description",
+      "why_changed": "context and motivation",
+      "impact": "affected docs; mark review",
+      "responsible": "role or person"
     }
   ]
 }
 ```
 
-## Regras
+## Rules
 
-| Campo | Obrigatório | Formato |
+| Field | Required | Format |
 | ----- | ----------- | ------- |
-| `date` | sim | `YYYY-MM-DD`, igual ao nome do arquivo |
-| `entries` | sim | array; pode ser vazio só no bootstrap do dia |
-| `entries[].time` | sim | `HH:MM` (24h) |
-| `entries[].title` | sim | string não vazia |
-| `entries[].affected_document` | sim | string |
-| `entries[].what_changed` | sim | string |
-| `entries[].why_changed` | sim | string |
-| `entries[].impact` | sim | string |
-| `entries[].responsible` | sim | string |
+| `date` | yes | `YYYY-MM-DD`, same as filename |
+| `entries` | yes | array; empty only on day bootstrap |
+| `entries[].time` | yes | `HH:MM` (24h) |
+| `entries[].title` | yes | non-empty string |
+| `entries[].affected_document` | yes | string |
+| `entries[].what_changed` | yes | string |
+| `entries[].why_changed` | yes | string |
+| `entries[].impact` | yes | string |
+| `entries[].responsible` | yes | string |
 
-## Ordem
+## Order
 
-- **Prepend:** nova decisão no **início** de `entries` (`entries.unshift(...)`).
-- Dias ordenados pelo nome do arquivo (ISO date).
+- **Prepend:** new decision at the **beginning** of `entries` (`entries.unshift(...)`).
+- Days sorted by filename (ISO date).
 
-## Validação
+## Validation
 
 ```bash
 python3 .agent/scripts/validate_meridian.py <project-root>
 ```
 
-## Relacionados
+## Related
 
-- Stub de regras: `docs/11_decisions.md`
+- Rules stub: `docs/11_decisions.md`
 - Skill: `update-decisions-log`
-- Protocolo: `.agent/MERIDIAN.md` §11.12
+- Protocol: `.agent/MERIDIAN.md` §11.12

@@ -18,7 +18,7 @@ export function AdvancedToolsPanel({ folderName }: { folderName?: string }) {
       >
         <span className={cn(typeScale.label, "inline-flex items-center gap-2")}>
           <Wrench className="h-4 w-4 text-muted-foreground" />
-          Ferramentas avançadas
+          Advanced tools
         </span>
         <ChevronDown
           className={cn(

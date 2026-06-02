@@ -5,33 +5,33 @@ alwaysApply: true
 
 # Meridian (Cursor)
 
-Este workspace usa o protocolo Meridian. A fonte canônica do kit é `.agent/`; o Cursor lê esta regra e os espelhos em `.cursor/`.
+This workspace uses the Meridian protocol. The canonical kit source is `.agent/`; Cursor reads this rule and mirrors under `.cursor/`.
 
-## Leitura obrigatória
+## Required reading
 
-1. `.agent/MERIDIAN.md` — protocolo master
-2. `.agent/rules/MERIDIAN.md` — regras P0 (equivalente a esta regra)
-3. Agent em `.cursor/agents/` ou `.agent/agents/` conforme o pedido
-4. Skills listadas no frontmatter do agent → `.cursor/skills/{name}/SKILL.md`
+1. `.agent/MERIDIAN.md` — master protocol
+2. `.agent/rules/MERIDIAN.md` — P0 rules (equivalent to this rule)
+3. Agent in `.cursor/agents/` or `.agent/agents/` per the request
+4. Skills listed in the agent frontmatter → `.cursor/skills/{name}/SKILL.md`
 
-Prioridade: **P0 rules > P1 agent + MERIDIAN.md > P2 skills**.
+Priority: **P0 rules > P1 agent + MERIDIAN.md > P2 skills**.
 
-## Regras curtas
+## Short rules
 
-- `docs/` do **projeto alvo** é a fonte de verdade (não confundir com `app-desktop/docs/` salvo contexto explícito).
-- Documentação precede código de produto.
-- Não criar US antes de `05_architecture` `approved`.
-- `docs/kanban/board.json` é derivado de `docs/us/*.md`.
-- Nunca `✅` sem evidência; nunca `🔶` sem `Falta:` no aceite.
-- Nunca `✅` sem `## Implementação técnica` preenchida na US (skill `complete-user-story`).
-- `docs/decisions/YYYY-MM-DD.json`: prepend em `entries`; nunca editar entradas antigas.
-- Roteamento: skill `meridian-routing` ou agents especializados.
-- Anuncie: `🤖 Aplicando conhecimento de @[agent-name]...` antes de trabalho especializado.
+- `docs/` of the **target project** is the source of truth (do not confuse with `app-desktop/docs/` unless context is explicit).
+- Documentation precedes product code.
+- Do not create US before `05_architecture` `approved`.
+- `docs/kanban/board.json` is derived from `docs/us/*.md`.
+- Never `✅` without evidence; never `🔶` without `Missing:` in acceptance.
+- Never `✅` without filled `## Technical implementation` on the US (skill `complete-user-story`).
+- `docs/decisions/YYYY-MM-DD.json`: prepend in `entries`; never edit old entries.
+- Routing: skill `meridian-routing` or specialized agents.
+- Announce: `🤖 Applying knowledge from @[agent-name]...` before specialized work.
 
 ## Slash commands (Cursor)
 
-| Comando | Arquivo |
-| ------- | ------- |
+| Command | File |
+| ------- | ---- |
 | `/init-meridian` | `.cursor/commands/init-meridian.md` |
 | `/status` | `.cursor/commands/status.md` |
 | `/plan-sprint` | `.cursor/commands/plan-sprint.md` |
@@ -44,8 +44,8 @@ Prioridade: **P0 rules > P1 agent + MERIDIAN.md > P2 skills**.
 | `/sync-board` | `.cursor/commands/sync-board.md` |
 | `/daily-with-ai` | `.cursor/commands/daily-with-ai.md` |
 
-## Validar projeto
+## Validate project
 
 ```bash
-python3 .agent/scripts/validate_meridian.py <pasta-do-projeto>
+python3 .agent/scripts/validate_meridian.py <project-folder>
 ```

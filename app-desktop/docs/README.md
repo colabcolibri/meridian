@@ -1,94 +1,93 @@
 # Meridian Desktop Docs
 
-Esta pasta é a **fonte de verdade** do desenvolvimento do Meridian Desktop. No dogfooding, abra **esta pasta** (`app-desktop/docs/`) no monitor — não a raiz do repositório nem só `app-desktop/`.
+This folder is the **source of truth** for Meridian Desktop development. In dogfooding, open **this folder** (`app-desktop/docs/`) in the monitor — not the repository root or only `app-desktop/`.
 
-## Repositório (kit Meridian)
+## Repository (Meridian kit)
 
-| Arquivo                                                            | Papel                                  |
-| ------------------------------------------------------------------ | -------------------------------------- |
-| [`../../README.md`](../../README.md)                               | Onboarding do repositório (Git/GitHub) |
-| [`../../meridian.md`](../../meridian.md)                           | Protocolo e produto Meridian           |
-| [`../../.agent/MERIDIAN.md`](../../.agent/MERIDIAN.md)             | Protocolo master para agentes          |
-| [`../../.agent/rules/MERIDIAN.md`](../../.agent/rules/MERIDIAN.md) | Regras globais (`trigger: always_on`)  |
-| [`../../.agent/ARCHITECTURE.md`](../../.agent/ARCHITECTURE.md)     | Mapa de agents, skills e workflows     |
+| File                                                               | Role                                 |
+| ------------------------------------------------------------------ | ------------------------------------ |
+| [`../../README.md`](../../README.md)                               | Repository onboarding (Git/GitHub)   |
+| [`../../.agent/MERIDIAN.md`](../../.agent/MERIDIAN.md)             | Master protocol for agents           |
+| [`../../.agent/rules/MERIDIAN.md`](../../.agent/rules/MERIDIAN.md) | Global rules (`trigger: always_on`)  |
+| [`../../.agent/ARCHITECTURE.md`](../../.agent/ARCHITECTURE.md)     | Map of agents, skills, and workflows |
 
-## Documentos de fase (eixo sistema)
+## Phase documents (system axis)
 
-| Documento                                  | Status   | Propósito                                       |
-| ------------------------------------------ | -------- | ----------------------------------------------- |
-| [00_scope.md](00_scope.md)                 | approved | Escopo do app desktop e limites                 |
-| [01_tech_stack.md](01_tech_stack.md)       | approved | React, TypeScript, Vite, Tailwind, shadcn/ui    |
-| [02_security.md](02_security.md)           | approved | Segurança da versão local                       |
-| [03_user_types.md](03_user_types.md)       | approved | Perfis de uso                                   |
-| [04_principles.md](04_principles.md)       | approved | Princípios de implementação                     |
-| [05_architecture.md](05_architecture.md)   | approved | Arquitetura do app (parser, pasta docs)         |
-| [06_database.md](06_database.md)           | draft    | Fora do escopo inicial                          |
-| [07_api_contracts.md](07_api_contracts.md) | draft    | Fora do escopo inicial                          |
-| [08_environments.md](08_environments.md)   | approved | Comandos locais e Git hooks                     |
-| [11_decisions.md](11_decisions.md)         | approved | Stub — regras do log (entradas em `decisions/`) |
+| Document                                   | Status   | Purpose                                      |
+| ------------------------------------------ | -------- | -------------------------------------------- |
+| [00_scope.md](00_scope.md)                 | approved | Desktop app scope and boundaries             |
+| [01_tech_stack.md](01_tech_stack.md)       | approved | React, TypeScript, Vite, Tailwind, shadcn/ui |
+| [02_security.md](02_security.md)           | approved | Local version security                       |
+| [03_user_types.md](03_user_types.md)       | approved | Usage profiles                               |
+| [04_principles.md](04_principles.md)       | approved | Implementation principles                    |
+| [05_architecture.md](05_architecture.md)   | approved | App architecture (parser, docs folder)       |
+| [06_database.md](06_database.md)           | draft    | Out of initial scope                         |
+| [07_api_contracts.md](07_api_contracts.md) | draft    | Out of initial scope                         |
+| [08_environments.md](08_environments.md)   | approved | Local commands and Git hooks                 |
+| [11_decisions.md](11_decisions.md)         | approved | Stub — log rules (entries in `decisions/`)   |
 
-## Artefatos de entrega (pastas — fonte de verdade)
+## Delivery artifacts (folders — source of truth)
 
-| Artefato        | Caminho                                  | Papel                                          |
-| --------------- | ---------------------------------------- | ---------------------------------------------- |
-| Épicos          | [`epics/`](epics/)                       | Um arquivo por EPIC-XX (capacidade de produto) |
-| Releases        | [`versions/`](versions/)                 | Um arquivo por vX (go-live)                    |
-| Sprints         | [`sprints/`](sprints/)                   | Fatias vX-SY dentro de cada release            |
-| User stories    | [`us/`](us/)                             | Backlog (uma US = um arquivo)                  |
-| Log de decisões | [`decisions/`](decisions/)               | Um JSON por dia (`YYYY-MM-DD.json`)            |
-| Board derivado  | [`kanban/board.json`](kanban/board.json) | Kanban gerado das US — não editar à mão        |
+| Artifact      | Path                                     | Role                                           |
+| ------------- | ---------------------------------------- | ---------------------------------------------- |
+| Epics         | [`epics/`](epics/)                       | One file per EPIC-XX (product capability)      |
+| Releases      | [`versions/`](versions/)                 | One file per vX (go-live)                      |
+| Sprints       | [`sprints/`](sprints/)                   | vX-SY slices within each release               |
+| User stories  | [`us/`](us/)                             | Backlog (one US = one file)                    |
+| Decision log  | [`decisions/`](decisions/)               | One JSON per day (`YYYY-MM-DD.json`)           |
+| Derived board | [`kanban/board.json`](kanban/board.json) | Kanban generated from US — do not edit by hand |
 
-Épicos, versões e sprints vivem **somente** nas pastas acima — sem índice markdown paralelo.
+Epics, versions, and sprints live **only** in the folders above — no parallel markdown index.
 
-## Versão e sprint atuais
+## Current version and sprint
 
-| Sprint              | Status    | US                                  |
-| ------------------- | --------- | ----------------------------------- |
-| v0-S1 Fundação      | ✅        | US-0001–007                         |
-| v0-S2 Monitor shell | ✅        | US-0008                             |
-| v1-S1 Leitura real  | ✅        | US-0009 → US-0017, US-0016          |
-| v1-S2 UX do monitor | ✅        | US-0018 → US-0022 (EPIC-06)         |
-| v1-S6 Decisões JSON | ✅        | US-0039, US-0040                    |
-| **v2**              | planejado | VSCode / escrita em disco (EPIC-05) |
+| Sprint               | Status  | US                             |
+| -------------------- | ------- | ------------------------------ |
+| v0-S1 Foundation     | ✅      | US-0001–007                    |
+| v0-S2 Monitor shell  | ✅      | US-0008                        |
+| v1-S1 Real reading   | ✅      | US-0009 → US-0017, US-0016     |
+| v1-S2 Monitor UX     | ✅      | US-0018 → US-0022 (EPIC-06)    |
+| v1-S6 JSON decisions | ✅      | US-0039, US-0040               |
+| **v2**               | planned | VSCode / disk writes (EPIC-05) |
 
-## Ordem de trabalho
+## Work order
 
-| Fase                | Onde                              | Eixo    |
-| ------------------- | --------------------------------- | ------- |
-| 0 — Fundação        | 11, 00–03                         | Sistema |
-| 1 — Princípios      | 04                                | Sistema |
-| 2 — Arquitetura     | 05                                | Sistema |
-| 3 — Detalhe técnico | 06–08                             | Sistema |
-| Backlog             | `epics/`, `versions/`, `sprints/` | Entrega |
-| Execução            | `us/`, `board.json`               | Entrega |
+| Phase                | Where                             | Axis     |
+| -------------------- | --------------------------------- | -------- |
+| 0 — Foundation       | 11, 00–03                         | System   |
+| 1 — Principles       | 04                                | System   |
+| 2 — Architecture     | 05                                | System   |
+| 3 — Technical detail | 06–08                             | System   |
+| Backlog              | `epics/`, `versions/`, `sprints/` | Delivery |
+| Execution            | `us/`, `board.json`               | Delivery |
 
-Gate de US: `05_architecture` approved + epic/version referenciados existem em `docs/epics/` e `docs/versions/`.
+US gate: `05_architecture` approved + referenced epic/version exist in `docs/epics/` and `docs/versions/`.
 
-## Como agents devem trabalhar
+## How agents should work
 
-Ver também: [fluxo diário com IA](../../.agent/references/daily-ai-workflow.md) e `/daily-with-ai` no Cursor.
+See also: [daily AI workflow](../../.agent/references/daily-ai-workflow.md) and `/daily-with-ai` in Cursor.
 
-### Loop diário (manager + IA)
+### Daily loop (manager + AI)
 
-1. **Orientar** — `/status`; app (Configuração + Quadro); escolher US Must desbloqueada.
-2. **Contextualizar** — cite a US no chat (`US-XXXX` ou `docs/us/US-XXXX.md`).
-3. **Implementar** — agente executa; revisar diff; parcial → `🔶` + `Falta:` no aceite.
-4. **Fechar** — `/complete-us US-XXXX` (implementação técnica + aceite + `✅`); `/sync-board`.
-5. **Revisar** — conferir aba Quadro no app.
+1. **Orient** — `/status`; app (Setup + Board); pick an unblocked Must US.
+2. **Contextualize** — cite the US in chat (`US-XXXX` or `docs/us/US-XXXX.md`).
+3. **Implement** — agent executes; review diff; partial → `🔶` + `Missing:` in acceptance.
+4. **Close** — `/complete-us US-XXXX` (technical implementation + acceptance + `✅`); `/sync-board`.
+5. **Review** — check the Board tab in the app.
 
-### Detalhe por artefato
+### Detail by artifact
 
-1. Escolher US em `docs/sprints/` ou `docs/versions/` (próximo marco: v2 em `versions/v2.md`).
-2. Implementar citando `US-XXXX` no contexto.
-3. Preencher `## Implementação técnica` ao concluir (skill `complete-user-story`).
-4. Atualizar frontmatter da US (`🔶` + `Falta:` ou `✅` com evidência).
-5. Regenerar `board.json` (skill `generate-board-json` ou `/sync-board`).
-6. Decisões relevantes → prepend em `docs/decisions/YYYY-MM-DD.json` (skill `update-decisions-log`).
+1. Pick a US in `docs/sprints/` or `docs/versions/` (next milestone: v2 in `versions/v2.md`).
+2. Implement citing `US-XXXX` in context.
+3. Fill `## Technical implementation` when done (skill `complete-user-story`).
+4. Update US frontmatter (`🔶` + `Missing:` or `✅` with evidence).
+5. Regenerate `board.json` (skill `generate-board-json` or `/sync-board`).
+6. Relevant decisions → prepend in `docs/decisions/YYYY-MM-DD.json` (skill `update-decisions-log`).
 
-## Dogfooding no app
+## Dogfooding in the app
 
 ```bash
 cd app-desktop && pnpm dev
 ```
 
-No monitor: **Abrir pasta docs** → selecionar `app-desktop/docs/`.
+In the monitor: **Open docs folder** → select `app-desktop/docs/`.

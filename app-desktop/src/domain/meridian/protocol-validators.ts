@@ -19,7 +19,7 @@ export function collectDocumentProtocolIssues(
     if (getSetupStepState(document, documents) === "alert") {
       issues.push({
         file: `${document.id}.md`,
-        message: "Documento approved enquanto dependências ainda não estão approved.",
+        message: "Document is approved while dependencies are not yet approved.",
         severity: "error",
         scope: "doc",
         targetId: document.id,
@@ -73,7 +73,7 @@ export function compareBoardWithStories(
     if (!entry) {
       issues.push({
         file: "kanban/board.json",
-        message: `${story.id} existe em us/ mas não no board.json.`,
+        message: `${story.id} exists in us/ but not in board.json.`,
         severity: "warning",
         scope: "board",
         targetId: story.id,
@@ -84,7 +84,7 @@ export function compareBoardWithStories(
     if (entry.status !== story.status) {
       issues.push({
         file: "kanban/board.json",
-        message: `${story.id}: status no board (${entry.status}) difere do arquivo (${story.status}).`,
+        message: `${story.id}: board status (${entry.status}) differs from file (${story.status}).`,
         severity: "error",
         scope: "board",
         targetId: story.id,
@@ -94,7 +94,7 @@ export function compareBoardWithStories(
     if (entry.epic !== story.epic) {
       issues.push({
         file: "kanban/board.json",
-        message: `${story.id}: epic no board (${entry.epic}) difere do arquivo (${story.epic}).`,
+        message: `${story.id}: board epic (${entry.epic}) differs from file (${story.epic}).`,
         severity: "error",
         scope: "board",
         targetId: story.id,
@@ -104,7 +104,7 @@ export function compareBoardWithStories(
     if (entry.tests !== story.tests) {
       issues.push({
         file: "kanban/board.json",
-        message: `${story.id}: tests no board (${entry.tests}) difere do arquivo (${story.tests}).`,
+        message: `${story.id}: board tests (${entry.tests}) differs from file (${story.tests}).`,
         severity: "error",
         scope: "board",
         targetId: story.id,
@@ -114,7 +114,7 @@ export function compareBoardWithStories(
     if (entry.tests_status !== story.testsStatus) {
       issues.push({
         file: "kanban/board.json",
-        message: `${story.id}: tests_status no board (${entry.tests_status}) difere do arquivo (${story.testsStatus}).`,
+        message: `${story.id}: board tests_status (${entry.tests_status}) differs from file (${story.testsStatus}).`,
         severity: "error",
         scope: "board",
         targetId: story.id,
@@ -126,7 +126,7 @@ export function compareBoardWithStories(
     if (!storyById.has(entry.id)) {
       issues.push({
         file: "kanban/board.json",
-        message: `${entry.id} está no board.json sem arquivo em us/.`,
+        message: `${entry.id} is in board.json without a file in us/.`,
         severity: "warning",
         scope: "board",
         targetId: entry.id,
@@ -148,7 +148,7 @@ export function collectEpicProtocolIssues(
     if (!epicIds.has(story.epic)) {
       issues.push({
         file: `us/${story.id}.md`,
-        message: `epic "${story.epic}" não existe em docs/epics/.`,
+        message: `epic "${story.epic}" does not exist in docs/epics/.`,
         severity: "error",
         scope: "us",
         targetId: story.id,
@@ -173,7 +173,7 @@ export function collectVersionProtocolIssues(
     if (versionIds.size > 0 && !versionIds.has(story.version)) {
       issues.push({
         file: `us/${story.id}.md`,
-        message: `version "${story.version}" não existe em docs/versions/.`,
+        message: `version "${story.version}" does not exist in docs/versions/.`,
         severity: "error",
         scope: "us",
         targetId: story.id,
@@ -186,7 +186,7 @@ export function collectVersionProtocolIssues(
       if (versionIds.size > 0 && !versionIds.has(versionRef)) {
         issues.push({
           file: `epics/${epic.id}.md`,
-          message: `versions referencia "${versionRef}" inexistente em docs/versions/.`,
+          message: `versions references "${versionRef}" which does not exist in docs/versions/.`,
           severity: "error",
           scope: "doc",
           targetId: epic.id,
@@ -199,7 +199,7 @@ export function collectVersionProtocolIssues(
     if (versionIds.size > 0 && !versionIds.has(sprint.versionId)) {
       issues.push({
         file: `sprints/${sprint.id}.md`,
-        message: `version "${sprint.versionId}" não existe em docs/versions/.`,
+        message: `version "${sprint.versionId}" does not exist in docs/versions/.`,
         severity: "error",
         scope: "doc",
         targetId: sprint.id,
@@ -210,7 +210,7 @@ export function collectVersionProtocolIssues(
       if (!storyIds.has(storyId)) {
         issues.push({
           file: `sprints/${sprint.id}.md`,
-          message: `stories referencia "${storyId}" sem arquivo em docs/us/.`,
+          message: `stories references "${storyId}" with no file in docs/us/.`,
           severity: "warning",
           scope: "doc",
           targetId: sprint.id,
@@ -236,7 +236,7 @@ export function collectDeliveryGateIssues(
       {
         file: "05_architecture.md",
         message:
-          "User stories existem mas 05_architecture não está approved (gate de entrega).",
+          "User stories exist but 05_architecture is not approved (delivery gate).",
         severity: "error",
         scope: "doc",
         targetId: "05_architecture",
@@ -272,7 +272,7 @@ export function collectProtocolIssues(input: {
       : [
           {
             file: "kanban/board.json",
-            message: "board.json não encontrado ou inválido.",
+            message: "board.json not found or invalid.",
             severity: "warning" as const,
             scope: "board" as const,
           },

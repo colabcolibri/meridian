@@ -1,34 +1,34 @@
-# Contribuindo com o Meridian
+# Contributing to Meridian
 
-Obrigado por considerar contribuir. Este repositório é **experimental** — APIs, UX e convenções podem mudar enquanto o protocolo amadurece.
+Thank you for considering a contribution. This repository is **experimental** — APIs, UX, and conventions may change while the protocol matures.
 
-Ao contribuir, você concorda que suas contribuições serão licenciadas sob a [PolyForm Noncommercial License 1.0.0](LICENSE).
+By contributing, you agree that your contributions will be licensed under the [PolyForm Noncommercial License 1.0.0](LICENSE).
 
-## Antes de começar
+## Before you start
 
-1. Leia [`meridian.md`](meridian.md) para entender o conceito.
-2. Leia [`.agent/MERIDIAN.md`](.agent/MERIDIAN.md) se for alterar comportamento de agentes.
-3. Confirme que sua mudança respeita a regra central: **`docs/` do projeto alvo é a fonte de verdade** (no kit, `app-desktop/docs/`).
+1. Read [`README.md`](README.md) and [`.agent/MERIDIAN.md`](.agent/MERIDIAN.md) to understand the project and protocol.
+2. Read [`.agent/MERIDIAN.md`](.agent/MERIDIAN.md) if you will change agent behavior.
+3. Confirm your change respects the core rule: **`docs/` of the target project is the source of truth** (in this kit, `app-desktop/docs/`).
 
-## Onde editar
+## Where to edit
 
-| O que você quer mudar | Onde editar |
-| ------------------- | ----------- |
-| Agents, skills, workflows, rules | **`.agent/`** (fonte canônica) |
-| Adapter Cursor (symlinks locais) | Rode `./.agent/scripts/sync_cursor_kit.sh` — **não** commite `.cursor/` |
-| App desktop (UI, parser, validações) | `app-desktop/src/` |
-| Documentação de produto do app | `app-desktop/docs/` |
-| Decisões arquiteturais | Prepend em `app-desktop/docs/decisions/YYYY-MM-DD.json` (skill `update-decisions-log`) |
+| What you want to change | Where to edit |
+| ----------------------- | ------------- |
+| Agents, skills, workflows, rules | **`.agent/`** (canonical source) |
+| Cursor adapter (local symlinks) | Run `./.agent/scripts/sync_cursor_kit.sh` — **do not** commit `.cursor/` |
+| Desktop app (UI, parser, validations) | `app-desktop/src/` |
+| App product documentation | `app-desktop/docs/` |
+| Architecture decisions | Prepend in `app-desktop/docs/decisions/YYYY-MM-DD.json` (skill `update-decisions-log`) |
 
-## Ambiente local
+## Local environment
 
-### Kit + validação
+### Kit + validation
 
 ```bash
 python3 .agent/scripts/validate_meridian.py app-desktop
 ```
 
-### App desktop
+### Desktop app
 
 ```bash
 cd app-desktop
@@ -39,42 +39,42 @@ pnpm test
 pnpm build
 ```
 
-### Cursor (opcional)
+### Cursor (optional)
 
-Após clone ou ao adicionar item novo em `.agent/`:
+After clone or when adding a new item under `.agent/`:
 
 ```bash
 chmod +x .agent/scripts/sync_cursor_kit.sh
 ./.agent/scripts/sync_cursor_kit.sh
 ```
 
-## Fluxo de contribuição
+## Contribution flow
 
-1. Abra uma issue descrevendo o problema ou a proposta (opcional, mas recomendado para mudanças grandes).
-2. Crie um branch a partir de `main`.
-3. Faça alterações focadas — evite misturar refatoração ampla com feature ou fix.
-4. Rode validação e testes antes do PR.
-5. Abra pull request com:
-   - **O quê** mudou
-   - **Por quê** (problema ou objetivo)
-   - **Como testar**
-   - Screenshots se houver mudança visual
+1. Open an issue describing the problem or proposal (optional but recommended for large changes).
+2. Create a branch from `main`.
+3. Make focused changes — avoid mixing broad refactors with features or fixes.
+4. Run validation and tests before the PR.
+5. Open a pull request with:
+   - **What** changed
+   - **Why** (problem or goal)
+   - **How to test**
+   - Screenshots if there is a visual change
 
-## Convenções
+## Conventions
 
-- **Commits:** mensagens claras em português ou inglês (seja consistente no PR).
-- **Documentação:** precede código de produto quando a mudança altera protocolo ou governança.
-- **User stories:** só após `05_architecture.md` `approved` e epic/version nas pastas (ver `.agent/MERIDIAN.md`).
-- **Decisões:** mudanças de escopo, stack ou arquitetura → prepend em `docs/decisions/YYYY-MM-DD.json`.
-- **`.cursor/`:** nunca commitar — está no `.gitignore`.
+- **Commits:** clear messages in Portuguese or English (be consistent within the PR).
+- **Documentation:** precedes product code when the change alters protocol or governance.
+- **User stories:** only after `05_architecture.md` `approved` and epic/version in folders (see `.agent/MERIDIAN.md`).
+- **Decisions:** scope, stack, or architecture changes → prepend in `docs/decisions/YYYY-MM-DD.json`.
+- **`.cursor/`:** never commit — it is in `.gitignore`.
 
-## O que não aceitamos (por enquanto)
+## What we do not accept (for now)
 
-- Segredos, tokens ou `.env` com valores reais.
-- Commits de `node_modules/`, `dist/` ou builds.
-- Mudanças que quebrem o princípio “documentação antes de código” sem justificativa registrada.
-- Features de automação autônoma sem revisão humana (fora do escopo do Meridian).
+- Secrets, tokens, or `.env` with real values.
+- Commits of `node_modules/`, `dist/`, or builds.
+- Changes that break “documentation before code” without a recorded justification.
+- Autonomous automation features without human review (out of Meridian scope).
 
-## Dúvidas
+## Questions
 
-Abra uma issue com a tag `question` ou descreva o contexto no PR.
+Open an issue with the `question` tag or describe context in the PR.

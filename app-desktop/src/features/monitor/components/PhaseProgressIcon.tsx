@@ -26,7 +26,7 @@ export function PhaseProgressIcon({
   return (
     <div
       className="relative size-11 shrink-0"
-      aria-label={`${complete} de ${total} documentos prontos nesta fase`}
+      aria-label={`${complete} of ${total} documents ready in this phase`}
       role="img"
     >
       <svg className="size-11 -rotate-90" viewBox="0 0 40 40" aria-hidden>

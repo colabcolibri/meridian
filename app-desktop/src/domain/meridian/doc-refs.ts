@@ -1,4 +1,4 @@
-/** Converte `01_tech_stack.md` → `01_tech_stack`. */
+/** Converts `01_tech_stack.md` → `01_tech_stack`. */
 export function normalizeDocRef(value: string): string {
   return value.replace(/\.md$/i, "").trim()
 }
@@ -14,18 +14,18 @@ export function normalizeDocRefList(values: unknown): string[] {
 
 export function phaseLabelForDocId(id: string): string {
   if (id.startsWith("11")) {
-    return "Contínuo"
+    return "Continuous"
   }
   if (id.startsWith("06") || id.startsWith("07") || id.startsWith("08")) {
-    return "Fase 3"
+    return "Phase 3"
   }
   if (id.startsWith("05")) {
-    return "Fase 2"
+    return "Phase 2"
   }
   if (id.startsWith("04")) {
-    return "Fase 1"
+    return "Phase 1"
   }
-  return "Fase 0"
+  return "Phase 0"
 }
 
 export function extractPurposeFromBody(body: string): string {
@@ -52,7 +52,7 @@ export function extractPurposeFromBody(body: string): string {
   return ""
 }
 
-/** Extrai conteúdo de uma seção `## Título` até a próxima seção ou fim. */
+/** Extracts content from a `## Title` section until the next section or end. */
 export function extractMarkdownSection(body: string, heading: string): string {
   const escaped = heading.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
   const match = body.match(new RegExp(`^##\\s+${escaped}\\s*\\n`, "m"))
