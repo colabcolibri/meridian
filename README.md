@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <a href="LICENSE"><img src="https://img.shields.io/badge/licenca-uso%20gratuito%20sem%20venda-orange" alt="Licenca de uso — sem venda" /></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-PolyForm%20Noncommercial-blue" alt="PolyForm Noncommercial 1.0.0" /></a>
   <a href=".github/workflows/ci.yml"><img src="https://img.shields.io/badge/CI-GitHub%20Actions-2088FF?logo=githubactions&logoColor=white" alt="CI" /></a>
   <img src="https://img.shields.io/badge/status-experimental-orange" alt="Experimental" />
 </p>
@@ -112,13 +112,13 @@ Slash commands:
 | ----- | ----------- |
 | `process-manager` | Governança, status, fase do projeto |
 | `scope-architect` | `00_scope.md`, limites in/out |
-| `documentation-strategist` | Documentos de fase `00–11` |
+| `documentation-strategist` | Documentos de fase `00–08` e `11` |
 | `security-steward` | `02_security.md`, threat model |
-| `architecture-guardian` | `07_architecture.md` |
-| `sprint-planner` | `06_versions.md`, sprints |
+| `architecture-guardian` | `05_architecture.md` |
+| `sprint-planner` | `docs/versions/`, `docs/sprints/` |
 | `board-keeper` | User stories, `board.json` |
 
-### Skills (9)
+### Skills (10)
 
 | Skill | Descrição |
 | ----- | --------- |
@@ -126,13 +126,14 @@ Slash commands:
 | `create-epic` | Epic em `docs/epics/` |
 | `create-version` | Release em `docs/versions/` |
 | `create-sprint` | Sprint em `docs/sprints/` |
-| `create-user-story` | US após epics/versões aprovados |
+| `create-user-story` | US após `05_architecture` approved |
+| `complete-user-story` | Fecha US — implementação técnica, aceite, status |
 | `generate-board-json` | Regenera `docs/kanban/board.json` |
-| `update-decisions-log` | Append em `11_decisions.md` |
+| `update-decisions-log` | Prepend em `docs/decisions/YYYY-MM-DD.json` |
 | `security-review` | Checklist de segurança |
 | `meridian-routing` | Roteamento automático de agents |
 
-### Workflows (9)
+### Workflows (11)
 
 | Comando | Descrição |
 | ------- | --------- |
@@ -142,9 +143,11 @@ Slash commands:
 | `/create-version` | Criar release |
 | `/create-epic` | Criar epic |
 | `/create-us` | Criar user story |
+| `/complete-us` | Fechar US após implementação |
 | `/architecture` | Criar ou revisar arquitetura |
 | `/security-pass` | Revisar segurança |
 | `/sync-board` | Regenerar `board.json` |
+| `/daily-with-ai` | Roteiro diário manager + IA no Cursor |
 
 ## Roadmap
 
@@ -154,7 +157,7 @@ Slash commands:
 | v1 | Folder Monitor MVP | concluída | Leitura real de `docs/`, validações |
 | v2 | Visual Studio Bridge | planejada | Extensão VS Code, escrita em disco |
 
-Detalhes em [`app-desktop/docs/06_versions.md`](app-desktop/docs/06_versions.md).
+Detalhes em [`app-desktop/docs/README.md`](app-desktop/docs/README.md).
 
 ## Hierarquia de autoridade
 
@@ -188,4 +191,4 @@ Leia [`CONTRIBUTING.md`](CONTRIBUTING.md). Para vulnerabilidades, veja [`SECURIT
 
 ## Licença
 
-[Licença de Uso Meridian](LICENSE) (`LicenseRef-Meridian-Use-1.0`) — uso e redistribuição **gratuitos**; **venda proibida** sem autorização escrita. No GitHub, aparece como licença **Other** (não é open source no sentido OSI). Copyright (c) 2026 colabcolibri.
+[PolyForm Noncommercial License 1.0.0](LICENSE) — uso, modificação e redistribuição **gratuitos** para fins **não comerciais** (inclui proibir venda do kit). Reconhecida pelo GitHub; não é open source no sentido OSI. Copyright (c) 2026 colabcolibri.

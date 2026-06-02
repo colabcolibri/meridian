@@ -2,7 +2,7 @@
 
 Obrigado por considerar contribuir. Este repositório é **experimental** — APIs, UX e convenções podem mudar enquanto o protocolo amadurece.
 
-Ao contribuir, você concorda que suas contribuições serão licenciadas sob a [Licença de Uso Meridian](LICENSE) (uso gratuito; venda do Software proibida sem autorização).
+Ao contribuir, você concorda que suas contribuições serão licenciadas sob a [PolyForm Noncommercial License 1.0.0](LICENSE).
 
 ## Antes de começar
 
@@ -18,7 +18,7 @@ Ao contribuir, você concorda que suas contribuições serão licenciadas sob a 
 | Adapter Cursor (symlinks locais) | Rode `./.agent/scripts/sync_cursor_kit.sh` — **não** commite `.cursor/` |
 | App desktop (UI, parser, validações) | `app-desktop/src/` |
 | Documentação de produto do app | `app-desktop/docs/` |
-| Decisões arquiteturais | Append em `app-desktop/docs/11_decisions.md` |
+| Decisões arquiteturais | Prepend em `app-desktop/docs/decisions/YYYY-MM-DD.json` (skill `update-decisions-log`) |
 
 ## Ambiente local
 
@@ -64,8 +64,8 @@ chmod +x .agent/scripts/sync_cursor_kit.sh
 
 - **Commits:** mensagens claras em português ou inglês (seja consistente no PR).
 - **Documentação:** precede código de produto quando a mudança altera protocolo ou governança.
-- **User stories:** só após `04_epics.md` e `06_versions.md` `approved` (ver `.agent/MERIDIAN.md`).
-- **Decisões:** mudanças de escopo, stack ou arquitetura → append em `11_decisions.md`.
+- **User stories:** só após `05_architecture.md` `approved` e epic/version nas pastas (ver `.agent/MERIDIAN.md`).
+- **Decisões:** mudanças de escopo, stack ou arquitetura → prepend em `docs/decisions/YYYY-MM-DD.json`.
 - **`.cursor/`:** nunca commitar — está no `.gitignore`.
 
 ## O que não aceitamos (por enquanto)
