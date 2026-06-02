@@ -1,5 +1,7 @@
 # Meridian — protocolo
 
+> **Projeto experimental** — o protocolo está em evolução. Use com expectativa de mudanças; veja [`README.md`](README.md) para status e roadmap.
+
 > **Este arquivo descreve o protocolo e o produto Meridian.** Ele pode ser copiado para a raiz de qualquer projeto que adote o kit.
 > **Neste repositório**, a home técnica (Git, `.cursor/`, desenvolvimento do app) fica em [`README.md`](README.md).
 
@@ -172,3 +174,9 @@ Próximo foco:
 - kit `.agent/` alinhado ao padrão Antigravity (rules, routing, references, workflows);
 - app desktop: abertura real de pasta Meridian;
 - implementar no app desktop a abertura/monitoramento real de uma pasta Meridian.
+
+---
+
+## Licenciamento do kit
+
+O kit Meridian (`meridian.md`, `.agent/` e apps deste repositório) é distribuído sob a **Licença de Uso Meridian**: uso e redistribuição gratuitos; **venda proibida** sem autorização escrita. Ver [`LICENSE`](LICENSE) na raiz do repositório do kit.

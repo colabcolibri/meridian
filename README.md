@@ -1,68 +1,66 @@
-# Meridian — repositório do kit
+<p align="center">
+  <img src="assets/logo.svg" alt="Meridian" width="320" />
+</p>
 
-> **Este arquivo é a home do repositório no GitHub** (clone, pastas, Cursor, app desktop).
-> Para o que é o protocolo Meridian em si — conceito, governança, fonte de verdade em `docs/` — leia [`meridian.md`](meridian.md).
+<p align="center">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/licença-uso%20gratuito%20·%20sem%20venda-orange" alt="Licença de uso — sem venda" /></a>
+  <a href=".github/workflows/ci.yml"><img src="https://img.shields.io/badge/CI-GitHub%20Actions-2088FF?logo=githubactions&logoColor=white" alt="CI" /></a>
+  <img src="https://img.shields.io/badge/status-experimental-orange" alt="Experimental" />
+</p>
 
-Meridian é um protocolo de desenvolvimento orientado por documentação para trabalho com agentes de IA. Este repo empacota o protocolo (`.agent/`, `meridian.md`) e o app desktop (`app-desktop/`).
+> **Projeto experimental** — Meridian está em desenvolvimento ativo. O protocolo e o kit `.agent/` já são utilizáveis, mas convenções, UX e integrações podem mudar sem aviso prévio. Não recomendado para produção crítica. Veja [roadmap](#roadmap).
+
+# Meridian
+
+**Defina o meridiano antes de escrever o código.**
+
+Meridian é um protocolo de desenvolvimento orientado por documentação para quem trabalha com agentes de IA e quer **permanecer manager do processo** — com escopo explícito, critérios de aceite, decisões registradas e um board derivado da fonte de verdade em `docs/`.
+
+Este repositório empacota:
+
+- o **kit operacional** para agentes (`.agent/`, `meridian.md`);
+- o **app desktop** de monitoramento visual (`app-desktop/`).
+
+Para o conceito completo do protocolo, leia [`meridian.md`](meridian.md).
+
+## Início rápido
+
+```bash
+git clone https://github.com/colabcolibri/meridian.git
+cd meridian
+
+# Se usar Cursor (symlinks locais — não vêm do Git):
+chmod +x .agent/scripts/sync_cursor_kit.sh
+./.agent/scripts/sync_cursor_kit.sh
+
+# App de monitoramento (Chrome ou Edge):
+cd app-desktop
+pnpm install
+pnpm dev
+```
+
+Abra `http://localhost:5173`, escolha a pasta `docs/` de um projeto Meridian e acompanhe documentos, entregas e quadro.
+
+## O que é / o que não é
+
+| É | Não é |
+| - | ----- |
+| Protocolo + kit de agents, skills e workflows | SaaS ou plataforma fechada |
+| Governança mínima: docs → versões → US → código | Malha de agentes autônomos sem revisão |
+| App local que **lê** sua pasta `docs/` | Substituto de Jira, Linear ou GitHub Projects |
+| Compatível com Cursor (adapter) e Antigravity (`.agent/` nativo) | Dependente de uma extensão específica |
 
 ## O que há neste repositório
 
 | Caminho | Descrição |
 | ------- | --------- |
-| `README.md` | Este arquivo — visão do repositório (padrão Git/GitHub) |
-| `meridian.md` | Explicação do protocolo e do produto Meridian |
-| `.agent/` | Kit canônico (Antigravity / distribuição): agents, skills, workflows, rules |
-| `.cursor/` | Adapter **local** para o Cursor (symlinks → `.agent/`, **gitignored**) |
-| `app-desktop/` | App visual de monitoramento (Vite) |
-| `app-visual-studio/` | Extensão/editor (futuro) |
-
-## `.agent` e `.cursor` (importante)
-
-O Meridian mantém **duas pastas** com papéis diferentes. Não renomeie `.agent` para `.cursor`: o padrão Antigravity e o kit portátil dependem de `.agent/`.
-
-| Ferramenta | O que o IDE indexa |
-| ---------- | ------------------ |
-| Antigravity, ag-kit, outros | `.agent/` |
-| Cursor | `.cursor/rules`, `.cursor/skills`, `.cursor/agents`, `.cursor/commands` |
-
-### Fonte de verdade
-
-- **Edite sempre em `.agent/`** (agents, skills, workflows, rules).
-- **`.cursor/`** espelha o kit via **symlinks locais** — gerada pelo script, **não vai para o Git**.
-
-Exemplo:
-
-```txt
-.cursor/skills/init-project  →  .agent/skills/init-project
-.cursor/agents/process-manager.md  →  .agent/agents/process-manager.md
-.cursor/commands/status.md  →  .agent/workflows/status.md
-.cursor/rules/meridian.mdc  →  .agent/rules/meridian.mdc
-```
-
-Alterar um arquivo em `.agent/` reflete no symlink em `.cursor/` (após rodar o script se for item novo).
-
-### Script de vínculo (obrigatório no Cursor)
-
-O vínculo **não** se atualiza sozinho. Rode o script quando:
-
-- **clonar o repo** (`.cursor/` não vem do Git);
-- criar **nova** skill, agent, workflow ou rule em `.agent/`;
-- quiser recriar links quebrados.
-
-```bash
-chmod +x .agent/scripts/sync_cursor_kit.sh   # uma vez
-./.agent/scripts/sync_cursor_kit.sh
-```
-
-Depois, no Cursor: **Reload Window** se rules ou slash commands (`/status`, `/init-meridian`, …) não aparecerem.
-
-| Situação | Precisa rodar o script? |
-| -------- | ------------------------ |
-| Editar texto de skill/agent já linkado | Não |
-| Adicionar pasta/arquivo novo em `.agent/` | Sim |
-| Só usar Antigravity (sem Cursor) | Não — basta `.agent/` |
-
-Detalhes: [`.agent/CURSOR_ADAPTER.md`](.agent/CURSOR_ADAPTER.md).
+| `README.md` | Este arquivo — home do repositório no GitHub |
+| `meridian.md` | Protocolo e produto (copiável para projetos cliente) |
+| `.agent/` | Kit canônico: agents, skills, workflows, rules, scripts |
+| `.cursor/` | Adapter **local** para Cursor (symlinks → `.agent/`, **gitignored**) |
+| `app-desktop/` | Monitor visual (Vite + React) |
+| `assets/` | Logo, ícone e preview para GitHub |
+| `app-visual-studio/` | Extensão VS Code — **planejada** (v2) |
 
 ## Instalação do kit em um projeto
 
@@ -79,11 +77,31 @@ Se o time usa **Cursor**, após clone ou pull com mudanças no kit:
 ./.agent/scripts/sync_cursor_kit.sh
 ```
 
-Commitar **só `.agent/`**. A pasta `.cursor/` está no `.gitignore` — cada dev gera symlinks localmente.
+Commitar **só `.agent/`** e `meridian.md`. A pasta `.cursor/` fica no `.gitignore` — cada dev gera symlinks localmente.
+
+## `.agent` e `.cursor`
+
+O Meridian mantém **duas pastas** com papéis diferentes. Não renomeie `.agent/` para `.cursor/`.
+
+| Ferramenta | O que o IDE indexa |
+| ---------- | ------------------ |
+| Antigravity, ag-kit, outros | `.agent/` |
+| Cursor | `.cursor/rules`, `.cursor/skills`, `.cursor/agents`, `.cursor/commands` |
+
+- **Edite sempre em `.agent/`** (agents, skills, workflows, rules).
+- **`.cursor/`** espelha o kit via symlinks locais — gerada pelo script, **não vai para o Git**.
+
+```txt
+.cursor/skills/init-project       →  .agent/skills/init-project
+.cursor/agents/process-manager.md →  .agent/agents/process-manager.md
+.cursor/commands/status.md        →  .agent/workflows/status.md
+```
+
+Rode `./.agent/scripts/sync_cursor_kit.sh` ao clonar, ao adicionar item novo em `.agent/` ou para recriar links quebrados. Detalhes: [`.agent/CURSOR_ADAPTER.md`](.agent/CURSOR_ADAPTER.md).
 
 ## Uso com agentes
 
-O sistema detecta o domínio e aplica o agente Meridian adequado. Slash commands:
+Slash commands:
 
 - **Cursor:** `.cursor/commands/` (ex.: `/status`, `/init-meridian`)
 - **Antigravity:** `.agent/workflows/`
@@ -92,26 +110,26 @@ O sistema detecta o domínio e aplica o agente Meridian adequado. Slash commands
 
 | Agent | Quando usar |
 | ----- | ----------- |
-| `process-manager` | Governança, status, fase do projeto, o que pode avançar |
-| `scope-architect` | `00_scope.md`, limites in/out, premissas e riscos |
-| `documentation-strategist` | Documentos de fase `00–11`, maturidade |
-| `security-steward` | `02_security.md`, threat model, segredos, OWASP |
-| `architecture-guardian` | `07_architecture.md`, consistência arquitetural |
-| `sprint-planner` | `06_versions.md`, sprints, sequenciamento |
-| `board-keeper` | User stories, dependências, `board.json` |
+| `process-manager` | Governança, status, fase do projeto |
+| `scope-architect` | `00_scope.md`, limites in/out |
+| `documentation-strategist` | Documentos de fase `00–11` |
+| `security-steward` | `02_security.md`, threat model |
+| `architecture-guardian` | `07_architecture.md` |
+| `sprint-planner` | `06_versions.md`, sprints |
+| `board-keeper` | User stories, `board.json` |
 
 ### Skills (9)
 
 | Skill | Descrição |
 | ----- | --------- |
-| `init-project` | Estrutura mínima `docs/` + governança |
-| `create-epic` | Epic em `docs/epics/` após escopo e user types |
+| `init-project` | Estrutura mínima `docs/` |
+| `create-epic` | Epic em `docs/epics/` |
 | `create-version` | Release em `docs/versions/` |
 | `create-sprint` | Sprint em `docs/sprints/` |
-| `create-user-story` | US válida após epics/versões aprovados |
+| `create-user-story` | US após epics/versões aprovados |
 | `generate-board-json` | Regenera `docs/kanban/board.json` |
 | `update-decisions-log` | Append em `11_decisions.md` |
-| `security-review` | Checklist de segurança Meridian |
+| `security-review` | Checklist de segurança |
 | `meridian-routing` | Roteamento automático de agents |
 
 ### Workflows (9)
@@ -120,13 +138,23 @@ O sistema detecta o domínio e aplica o agente Meridian adequado. Slash commands
 | ------- | --------- |
 | `/init-meridian` | Iniciar projeto com estrutura mínima |
 | `/status` | Saúde do projeto e bloqueios |
-| `/plan-sprint` | Planejar sprint em `docs/sprints/` |
-| `/create-version` | Criar release em `docs/versions/` |
-| `/create-epic` | Criar epic em `docs/epics/` |
-| `/create-us` | Criar user story válida |
+| `/plan-sprint` | Planejar sprint |
+| `/create-version` | Criar release |
+| `/create-epic` | Criar epic |
+| `/create-us` | Criar user story |
 | `/architecture` | Criar ou revisar arquitetura |
-| `/security-pass` | Revisar segurança antes de implementar |
+| `/security-pass` | Revisar segurança |
 | `/sync-board` | Regenerar `board.json` |
+
+## Roadmap
+
+| Versão | Nome | Status | Foco |
+| ------ | ---- | ------ | ---- |
+| v0 | Foundation | concluída | Kit `.agent/`, shell do monitor |
+| v1 | Folder Monitor MVP | concluída | Leitura real de `docs/`, validações |
+| v2 | Visual Studio Bridge | planejada | Extensão VS Code, escrita em disco |
+
+Detalhes em [`app-desktop/docs/06_versions.md`](app-desktop/docs/06_versions.md).
 
 ## Hierarquia de autoridade
 
@@ -143,22 +171,21 @@ O sistema detecta o domínio e aplica o agente Meridian adequado. Slash commands
 - Adapter Cursor: [`.agent/CURSOR_ADAPTER.md`](.agent/CURSOR_ADAPTER.md)
 - Como criar skills: [`.agent/skills/doc.md`](.agent/skills/doc.md)
 
-## Validação
+## Validação e testes
 
 ```bash
 python3 .agent/scripts/validate_meridian.py app-desktop
-```
 
-No repo do kit (raiz), o script também avisa se `.cursor/` estiver ausente — rode `sync_cursor_kit.sh` antes.
-
-## Desenvolvimento deste repo
-
-```bash
 cd app-desktop
-npm install
-npm run dev
+pnpm lint
+pnpm test
+pnpm build
 ```
 
-## Estado atual
+## Contribuir
 
-Kit `.agent/` (Antigravity) + adapter `.cursor/` local (symlinks via `sync_cursor_kit.sh`, gitignored). App desktop em evolução para abertura real de pastas Meridian.
+Leia [`CONTRIBUTING.md`](CONTRIBUTING.md). Para vulnerabilidades, veja [`SECURITY.md`](SECURITY.md).
+
+## Licença
+
+[Licença de Uso Meridian](LICENSE) — uso e redistribuição **gratuitos**; **venda proibida** sem autorização escrita. Copyright (c) 2026 colabcolibri.
