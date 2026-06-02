@@ -1,4 +1,7 @@
-# Meridian
+# Meridian — protocolo
+
+> **Este arquivo descreve o protocolo e o produto Meridian.** Ele pode ser copiado para a raiz de qualquer projeto que adote o kit.
+> **Neste repositório**, a home técnica (Git, `.cursor/`, desenvolvimento do app) fica em [`README.md`](README.md).
 
 Meridian é um protocolo e um conjunto de ferramentas para conduzir desenvolvimento
 com agentes de IA sem perder governança, visibilidade e consistência.
@@ -10,21 +13,21 @@ da fonte de verdade.
 
 ---
 
-## O que existe neste repositório
+## O que existe no repositório do kit (referência)
+
+Neste monorepo há também `app-desktop/` e `app-visual-studio/` (futuro). Detalhes de clone e Cursor: [`README.md`](README.md).
+
+Em **qualquer projeto Meridian**, a raiz costuma ter:
 
 ```txt
-README.md            # visão do repositório (padrão Git/GitHub)
-meridian.md          # protocolo e produto Meridian
-.agent/
-app-desktop/
-app-visual-studio/   # futuro
+meridian.md          # este documento (protocolo / produto)
+.agent/              # kit operacional para agentes
+docs/                # fonte de verdade do projeto
 ```
 
-## `README.md` e `meridian.md`
+Opcional no repo do kit no GitHub: `README.md` (convenção Git — não precisa existir em projetos cliente).
 
-`README.md` na raiz segue a convenção Git: onboarding, tabela de agents/skills/workflows e links.
-
-`meridian.md` é a explicação de alto nível do protocolo e do produto Meridian (também copiável para projetos que adotam o kit).
+## O que este arquivo (`meridian.md`) descreve
 
 Ele descreve:
 
@@ -47,6 +50,7 @@ A instrução operacional completa para agentes fica em:
 Ela contém:
 
 - `rules/MERIDIAN.md`: regras globais sempre ativas (`trigger: always_on`);
+- `.cursor/`: adapter para o Cursor IDE (gerado por `sync_cursor_kit.sh`; não substitui `.agent/`);
 - `MERIDIAN.md`: protocolo master para agentes;
 - `ARCHITECTURE.md`: mapa de agents, skills e workflows;
 - `agents/`: personas operacionais (fases, gates, saídas);
@@ -56,7 +60,7 @@ Ela contém:
 - `scripts/`: validações (`validate_meridian.py`);
 - `.shared/`: recursos compartilhados futuros.
 
-Ver também `README.md` na raiz deste repositório (onboarding do kit).
+Neste monorepo, onboarding técnico: [`README.md`](README.md).
 
 O foco final do Meridian é que agentes definidos nessa camada consigam trabalhar
 autonomamente dentro da estrutura Meridian, sempre com documentação, regras,

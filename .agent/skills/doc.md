@@ -26,6 +26,9 @@ Isso evita inflar o contexto com todo o protocolo Meridian em toda mensagem.
 | ------ | ------- |
 | Workspace (projeto Meridian) | `<raiz-do-projeto>/.agent/skills/` |
 | Kit Meridian (este repo) | `meridian/.agent/skills/` |
+| Cursor (espelho) | `<raiz>/.cursor/skills/` → symlink para `.agent/skills/` |
+
+Após editar skills em `.agent/`, rode `./.agent/scripts/sync_cursor_kit.sh` para o Cursor indexar.
 
 ---
 

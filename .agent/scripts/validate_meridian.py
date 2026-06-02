@@ -50,6 +50,19 @@ REQUIRED_AGENTS = [
 ]
 
 
+def validate_cursor_adapter(repo_root: Path, warnings: list[str]) -> None:
+    cursor = repo_root / ".cursor"
+    if not cursor.is_dir():
+        warnings.append("Missing .cursor/ — run .agent/scripts/sync_cursor_kit.sh for Cursor IDE.")
+        return
+    for sub in ("rules", "skills", "agents", "commands"):
+        if not (cursor / sub).is_dir():
+            warnings.append(f"Missing .cursor/{sub}/ — run sync_cursor_kit.sh")
+    rule = cursor / "rules" / "meridian.mdc"
+    if rule.exists() and "alwaysApply: true" not in rule.read_text(encoding="utf-8"):
+        warnings.append(".cursor/rules/meridian.mdc should set alwaysApply: true")
+
+
 def validate_agent_kit(repo_root: Path, errors: list[str], warnings: list[str]) -> None:
     agent_dir = repo_root / ".agent"
     if not agent_dir.is_dir():
@@ -100,6 +113,7 @@ def main() -> int:
         if not (kit_root / "README.md").exists():
             warnings.append("Missing README.md at kit repository root.")
         validate_agent_kit(kit_root, errors, warnings)
+        validate_cursor_adapter(kit_root, warnings)
 
     if not docs.exists():
         errors.append("Missing docs/ directory.")

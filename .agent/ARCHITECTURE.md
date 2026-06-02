@@ -10,33 +10,41 @@
 | ------ | ------- | ------- |
 | Repositório | `README.md` | Humanos (GitHub, onboarding) |
 | Protocolo produto | `meridian.md` | Humanos + cópia em projetos clientes |
-| Regras sempre ativas | `.agent/rules/MERIDIAN.md` | Agentes (`trigger: always_on`) |
-| Protocolo master | `.agent/MERIDIAN.md` | Agentes (governança completa) |
-| Operação | `.agent/agents`, `skills`, `workflows` | Agentes |
+| Kit portátil | `.agent/` | Antigravity, ag-kit, qualquer IDE |
+| Adapter Cursor | `.cursor/` | Cursor IDE (symlinks → `.agent/`) |
+| Regras sempre ativas | `.agent/rules/` + `.cursor/rules/meridian.mdc` | Agentes |
+| Protocolo master | `.agent/MERIDIAN.md` | Governança completa |
+| Operação | `.agent/agents`, `skills`, `workflows` | Personas e procedimentos |
 
 O app desktop (`app-desktop/`) monitora pastas Meridian; não é fonte de verdade.
+
+### Por que `.agent` e `.cursor`?
+
+- **`.agent/`** — convenção Antigravity; copiável para projetos e outras ferramentas.
+- **`.cursor/`** — o que o Cursor indexa: `rules/*.mdc`, `skills/`, `agents/`, `commands/`.
+
+**Edite em `.agent/`** e rode `./.agent/scripts/sync_cursor_kit.sh` para atualizar symlinks em `.cursor/`.
 
 ---
 
 ## Directory structure
 
 ```txt
-.agent/
-  ARCHITECTURE.md      # este arquivo
-  MERIDIAN.md          # protocolo master
-  rules/
-    MERIDIAN.md        # P0 — always_on
-  agents/              # P1 — personas operacionais
-  skills/              # P2 — procedimentos e references
-    doc.md             # guia de skills
-    meridian-routing/
-    init-project/
-      references/
-    ...
-  workflows/           # slash commands
+.agent/                    # fonte canônica (Antigravity / distribuição)
+  MERIDIAN.md
+  rules/MERIDIAN.md
+  agents/
+  skills/
+  workflows/
   scripts/
     validate_meridian.py
-  .shared/             # reservado
+    sync_cursor_kit.sh
+
+.cursor/                   # adapter Cursor (symlinks → .agent)
+  rules/meridian.mdc       # alwaysApply
+  skills/
+  agents/
+  commands/                # workflows como slash commands
 ```
 
 ---

@@ -1,0 +1,46 @@
+---
+description: Meridian protocol — docs before code, human manager, agent routing via .agent and .cursor
+alwaysApply: true
+---
+
+# Meridian (Cursor)
+
+Este workspace usa o protocolo Meridian. A fonte canônica do kit é `.agent/`; o Cursor lê esta regra e os espelhos em `.cursor/`.
+
+## Leitura obrigatória
+
+1. `.agent/MERIDIAN.md` — protocolo master
+2. `.agent/rules/MERIDIAN.md` — regras P0 (equivalente a esta regra)
+3. Agent em `.cursor/agents/` ou `.agent/agents/` conforme o pedido
+4. Skills listadas no frontmatter do agent → `.cursor/skills/{name}/SKILL.md`
+
+Prioridade: **P0 rules > P1 agent + MERIDIAN.md > P2 skills**.
+
+## Regras curtas
+
+- `docs/` do **projeto alvo** é a fonte de verdade (não confundir com `app-desktop/docs/` salvo contexto explícito).
+- Documentação precede código de produto.
+- Não criar US antes de `04_epics` e `06_versions` `approved`.
+- `docs/kanban/board.json` é derivado de `docs/us/*.md`.
+- Nunca `✅` sem evidência; nunca `🔶` sem `Falta:` no aceite.
+- `11_decisions.md` é append-only.
+- Roteamento: skill `meridian-routing` ou agents especializados.
+- Anuncie: `🤖 Aplicando conhecimento de @[agent-name]...` antes de trabalho especializado.
+
+## Slash commands (Cursor)
+
+| Comando | Arquivo |
+| ------- | ------- |
+| `/init-meridian` | `.cursor/commands/init-meridian.md` |
+| `/status` | `.cursor/commands/status.md` |
+| `/plan-sprint` | `.cursor/commands/plan-sprint.md` |
+| `/create-us` | `.cursor/commands/create-us.md` |
+| `/architecture` | `.cursor/commands/architecture.md` |
+| `/security-pass` | `.cursor/commands/security-pass.md` |
+| `/sync-board` | `.cursor/commands/sync-board.md` |
+
+## Validar projeto
+
+```bash
+python3 .agent/scripts/validate_meridian.py <pasta-do-projeto>
+```

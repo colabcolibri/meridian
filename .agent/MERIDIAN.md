@@ -212,13 +212,20 @@ quando quiser dar agentes, skills, workflows, rules e scripts especializados par
     board.json
 ```
 
-### 7.1 Sobre `.agent/`
+### 7.1 Sobre `.agent/` e `.cursor/`
 
-`.agent/` contém a camada operacional para agentes de IA.
+`.agent/` contém a camada operacional portátil para agentes de IA (padrão Antigravity).
 
 Ela é opcional para projetos simples, mas recomendada quando agentes serão usados
 com frequência. A função dela é manter instruções especializadas fora do protocolo
 principal, sem perder governança.
+
+**Cursor IDE:** o Cursor não indexa `.agent/` nativamente. Use `.cursor/` como adapter:
+
+- Edite o kit em `.agent/`.
+- Rode `./.agent/scripts/sync_cursor_kit.sh` na raiz do repositório.
+- Regras always-on no Cursor: `.cursor/rules/meridian.mdc`.
+- Slash commands no Cursor: `.cursor/commands/` (espelho de `.agent/workflows/`).
 
 Estrutura recomendada:
 
