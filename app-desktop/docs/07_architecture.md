@@ -1,7 +1,7 @@
 ---
 title: Arquitetura
-status: draft
-version: 1.0
+status: approved
+version: 1.1
 updated: 2026-06-02
 depends_on:
   [
@@ -35,11 +35,14 @@ meridian/                    # repositório do kit + app
     workflows/               # slash commands
     scripts/validate_meridian.py
   app-desktop/               # este app (Vite)
-    docs/                    # fonte de verdade DESTE app
+    docs/                    # fonte de verdade DESTE app (pasta monitorada no dogfooding)
+      00_scope.md … 11_decisions.md
+      us/
+      kanban/board.json      # derivado das US
     src/
 ```
 
-O app **não** é fonte de verdade do protocolo. Ele monitora uma pasta que segue a mesma estrutura (`meridian.md`, `docs/`, `.agent/` opcional).
+O app **não** é fonte de verdade do protocolo. Ele monitora a pasta **`docs/`** do projeto Meridian (a mesma que agentes editam no Cursor).
 
 ## Camadas
 
@@ -51,21 +54,28 @@ O app **não** é fonte de verdade do protocolo. Ele monitora uma pasta que segu
 | App desktop          | Leitura, validação visual, status, bloqueios    |
 | Futuro VSCode        | Escrita real em disco perto do editor           |
 
-## App desktop (v0)
+## App desktop (v1)
 
-- **Stack:** Vite, React, TypeScript, Tailwind, shadcn/ui.
-- **Estado v0:** dados simulados em `src/domain/meridian/data.ts`.
-- **Validação:** invocar `validate_meridian.py` na pasta alvo (hoje manual).
+- **Stack:** Vite, React, TypeScript, Tailwind, shadcn/ui, `yaml` (frontmatter).
+- **Pasta aberta:** File System Access API → usuário escolhe **`docs/`** (ex.: `app-desktop/docs/`). O handle é a raiz; arquivos `00_scope.md` … `11_decisions.md` ficam na raiz do handle; `us/` e `kanban/` são subpastas.
+- **Carregamento:** `project-loader.ts` lê fases, US, `04_epics.md` e `kanban/board.json`.
+- **Validação TS:** `protocol-validators.ts` (regras P0 na UI).
+- **Validação Python (dev):** `vite-meridian-validate.ts` → `POST /api/meridian/validate` executa `validate_meridian.py` com raiz **`app-desktop/`** (projeto completo com subpasta `docs/`). Build estático não executa Python.
 
-## Pendências (v1)
+## Três visões
 
-- Abertura de pasta via File System Access API ou bridge nativa.
-- Parser de Markdown + frontmatter para `docs/` e `docs/us/`.
-- Sincronizar UI com `board.json` gerado das US.
-- Exibir bloqueios do protocolo (docs não approved, US sem `Falta:`).
-- Detectar kit `.agent/` e resumir agents/workflows disponíveis.
+| Aba                  | Fonte (relativa à pasta `docs/` aberta)  |
+| -------------------- | ---------------------------------------- |
+| Configuração inicial | `00–11/*.md` parseados + leitor inline   |
+| Épicos               | `04_epics.md`                            |
+| Kanban               | `us/*.md` + diff com `kanban/board.json` |
+
+## Pendências (v2)
+
+- Escrita em disco / extensão VSCode.
+- Validar pasta arbitrária via Python sem bridge do dev server (ex.: Tauri).
 
 ## Limites
 
-- Browser não escreve em disco no v0.
+- Browser não **escreve** em disco no v1 (somente leitura).
 - App não substitui roteamento de agents (`meridian-routing` continua no IDE).

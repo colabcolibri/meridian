@@ -15,6 +15,7 @@ blocks: []
 
 - Node.js compatível com Vite.
 - pnpm.
+- Python 3 (para `validate_meridian.py` no dev e no terminal).
 
 ### Setup inicial
 
@@ -31,7 +32,18 @@ pnpm build
 pnpm lint
 pnpm format
 pnpm format:check
+python3 ../.agent/scripts/validate_meridian.py .
 ```
+
+### Validar governança Meridian
+
+Na raiz do repositório (ou em `app-desktop/`):
+
+```bash
+python3 .agent/scripts/validate_meridian.py app-desktop
+```
+
+No app (`pnpm dev`), use o botão **Validar pasta** — chama o mesmo script via API local (`/api/meridian/validate`).
 
 ## Variáveis de ambiente
 

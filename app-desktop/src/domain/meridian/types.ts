@@ -1,6 +1,8 @@
-export type DocStatus = "draft" | "review" | "approved" | "pending"
+export type DocStatus = "draft" | "review" | "approved"
+export type SetupStepState = "locked" | "active" | "complete" | "alert"
 export type StoryStatus = "✅" | "🔶" | "❌" | "🧊"
 export type Moscow = "Must" | "Should" | "Could" | "Won't"
+export type EpicStatus = "active" | "paused" | "complete"
 
 export interface PhaseDocument {
   id: string
@@ -10,6 +12,14 @@ export interface PhaseDocument {
   dependsOn: string[]
   blocks: string[]
   purpose: string
+}
+
+export interface Epic {
+  id: string
+  title: string
+  description: string
+  versions: string[]
+  status: EpicStatus
 }
 
 export interface UserStory {

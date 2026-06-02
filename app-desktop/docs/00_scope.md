@@ -13,7 +13,7 @@ blocks: [01_tech_stack.md, 04_epics.md, 06_versions.md, 07_architecture.md]
 
 Meridian Desktop é o app local de monitoramento visual para projetos que usam o protocolo Meridian. Na raiz do repositório do kit: `../../README.md` (onboarding), `../../meridian.md` (protocolo/produto), `../../.agent/MERIDIAN.md` (protocolo master) e `../../.agent/rules/MERIDIAN.md` (regras sempre ativas para agentes).
 
-O objetivo do app não é substituir o protocolo. O objetivo é abrir uma pasta de projeto, ler `meridian.md`, `docs/`, user stories e `board.json`, e dar visibilidade ao manager do processo.
+O objetivo do app não é substituir o protocolo. O objetivo é abrir a pasta **`docs/`** do projeto Meridian, ler os documentos 00–11, user stories e `board.json`, e dar visibilidade ao manager do processo.
 
 A primeira entrega é um app Vite local em `app-desktop/`. Futuramente, uma extensão em `app-visual-studio/` poderá operar arquivos reais dentro do editor.
 
@@ -41,7 +41,7 @@ Meridian Desktop ajuda a monitorar esse problema. Ele não é a fonte de verdade
 - Regras de bloqueio visual entre documentos.
 - Estrutura base para user stories e `board.json`.
 - Reconhecimento de `README.md`, `meridian.md` e `.agent/` (incl. `meridian-routing`) como kit para agentes.
-- Dados iniciais simulando uma pasta monitorada.
+- Abertura da pasta `docs/` via File System Access (v1) e leitura real dos arquivos.
 
 ## Fora do escopo inicial
 

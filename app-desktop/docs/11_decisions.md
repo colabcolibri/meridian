@@ -104,3 +104,35 @@ blocks: []
 **Por que mudou:** O kit precisa da mesma profundidade operacional do Antigravity (progressive disclosure, roteamento, gates) adaptada à governança documental Meridian, não apenas pastas vazias.
 **Impacto em outros docs:** app-desktop/docs (US-007, README, 00_scope, 06_versions, 07_architecture), board.json e validação do app.
 **Responsável:** Produto/Engenharia
+
+## 2026-06-02 — Modelo de produto do monitor e backlog v1
+
+**Documento afetado:** 04_epics.md, 06_versions.md, docs/us/US-002.md, US-008–US-016, kanban/board.json
+**O que mudou:** Epics EPIC-02/03/04 redefinidos para as três abas (Configuração inicial, Épicos, Kanban + validações). EPIC-01 marcado complete. Criadas US-008 (shell v0) e US-009–US-016 (v1-S1: pasta real, parser, abas, validações, fim do mock). US-002 reaberta como 🔶 até leitura real (US-011). Fonte de verdade permanece Markdown; app passa a ser leitor na v1, não autor. Tasks/Bug/Spike não viram artefatos — trabalho técnico fica em **Implementação técnica** dentro da US.
+**Por que mudou:** Alinhar produto ao uso com agentes (dogfooding em `app-desktop/docs`) sem replicar Jira; eliminar UI confusa (duas colunas status/fluxo).
+**Impacto em outros docs:** 07_architecture.md deve ir para review com parser e File System Access; README docs; agents devem citar US antes de codar v1.
+**Responsável:** Manager do Processo / Produto
+
+## 2026-06-02 — Leitura inline dos docs 00–11 (US-017)
+
+**Documento afetado:** 04_epics.md (EPIC-02), 06_versions.md, US-017.md, US-011.md, board.json
+**O que mudou:** Capacidade de **ler cada `.md` de configuração inicial** no app (botão Ler .md + painel frontmatter/conteúdo). Registrada como **US-017** no epic **EPIC-02**, não como epic separado — é parte do monitor de configuração.
+**Por que mudou:** Manager precisa revisar documentos na mesma ferramenta que monitora o fluxo, sem só ver status agregado.
+**Impacto em outros docs:** US-010 deve reutilizar `splitFrontmatter` / leitor; US-011 foca status da lista a partir do parser.
+**Responsável:** Produto/Engenharia
+
+## 2026-06-02 — Pasta monitorada = `docs/` (não raiz do repositório)
+
+**Documento afetado:** US-009, app-desktop `src/features/folder/`, monitor UI
+**O que mudou:** O File System Access API abre diretamente a pasta **docs/** do projeto (`00_scope.md` na raiz do handle, `us/`, `kanban/`). Validação deixa de exigir subpasta `docs/` dentro da raiz escolhida. Loader e leitor de fase leem arquivos na raiz do handle. Mensagens de issue usam caminhos relativos à pasta docs (`04_epics.md`, `us/US-001.md`).
+**Por que mudou:** Toda a estrutura Meridian que o manager edita com agentes vive em `docs/`; abrir o repositório ou `app-desktop/` era conceito errado para dogfooding.
+**Impacto em outros docs:** `validate_meridian.py` em dev continua recebendo a raiz do app (`app-desktop/`), não só `docs/`. US-015 inalterada nesse ponto.
+**Responsável:** Produto/Engenharia
+
+## 2026-06-02 — Go-live v1-S1 (Folder Monitor MVP)
+
+**Documento afetado:** 06_versions.md, 07_architecture.md, 04_epics.md (EPIC-02), docs/README.md, board.json
+**O que mudou:** v1-S1 marcada concluída com checklist go-live; `07_architecture.md` → `approved` (pasta monitorada = `docs/`); EPIC-02 → `complete`; board regenerado das US.
+**Por que mudou:** Fechar o marco v1 antes de planejar v2 (VSCode / escrita).
+**Impacto em outros docs:** Próximo trabalho de produto entra em `06_versions` seção v2 e novas US sob EPIC-05.
+**Responsável:** Produto/Engenharia
