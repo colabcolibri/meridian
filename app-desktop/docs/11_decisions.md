@@ -176,3 +176,11 @@ blocks: []
 **Por que mudou:** Simetria com épicos/US, clareza para IA (`/create-version`, `/plan-sprint`) e escala do roadmap.
 **Impacto em outros docs:** Workflows `/create-version`, skills novas; sprint-planner e create-user-story atualizados.
 **Responsável:** Produto/Engenharia
+
+## 2026-06-02 — UX v1-S3–S5 e fechamento do EPIC-06
+
+**Documento afetado:** `KanbanView`, `DeliverablesView`, `SetupMonitorView` (estilos), `ConceptsView`, `monitor-ui.tsx`, `EPIC-06.md`, sprints v1-S3–S5
+**O que mudou:** Três sprints de polish visual após o MVP funcional: dados no quadro/entregas (S3), tokens e progresso (S4), Configuração e ferramentas avançadas (S5). EPIC-06 marcado `complete`.
+**Por que mudou:** Manager precisava de interface coerente antes de considerar v1 “presentável”; zinc solto e cards inconsistentes atrapalhavam leitura diária.
+**Impacto em outros docs:** v2 e EPIC-05 permanecem `planned`/`paused`; próximo marco é ponte VSCode, não mais polish de leitura v1.
+**Responsável:** Produto/Engenharia

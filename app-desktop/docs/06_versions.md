@@ -23,14 +23,15 @@ Detalhes de cada release: **`docs/versions/`** · Sprints: **`docs/sprints/`**
 
 ## Sprints
 
-| Sprint | Versão | Status   | Título                      |
-| ------ | ------ | -------- | --------------------------- |
-| v0-S1  | v0     | complete | Fundação técnica e kit      |
-| v0-S2  | v0     | complete | Shell do monitor (3 visões) |
-| v1-S1  | v1     | complete | Leitura real da pasta       |
-| v1-S2  | v1     | complete | Experiência do monitor (UX) |
-| v1-S3  | v1     | complete | Polish Entregas + Quadro    |
-| v1-S4  | v1     | complete | Layout visual do monitor    |
+| Sprint | Versão | Status   | Título                            |
+| ------ | ------ | -------- | --------------------------------- |
+| v0-S1  | v0     | complete | Fundação técnica e kit            |
+| v0-S2  | v0     | complete | Shell do monitor (3 visões)       |
+| v1-S1  | v1     | complete | Leitura real da pasta             |
+| v1-S2  | v1     | complete | Experiência do monitor (UX)       |
+| v1-S3  | v1     | complete | Polish Entregas + Quadro          |
+| v1-S4  | v1     | complete | Layout visual do monitor          |
+| v1-S5  | v1     | complete | Polish Configuração e ferramentas |
 
 ## Regras
 

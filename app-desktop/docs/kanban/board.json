@@ -360,5 +360,42 @@
       "US-0019"
     ],
     "done_when": "Top bar usa favicon; página com gradiente sutil; welcome screen alinhada aos tokens."
+  },
+  {
+    "id": "US-0031",
+    "title": "Configuração com tokens visuais consistentes",
+    "epic": "EPIC-06",
+    "version": "v1",
+    "status": "✅",
+    "moscow": "Must",
+    "depends_on": [
+      "US-0028"
+    ],
+    "done_when": "Estados locked/draft e ícone de fase usam bg-muted e stroke-border; sem zinc-* na aba Configuração."
+  },
+  {
+    "id": "US-0032",
+    "title": "Ferramentas avançadas com painel consistente",
+    "epic": "EPIC-06",
+    "version": "v1",
+    "status": "✅",
+    "moscow": "Should",
+    "depends_on": [
+      "US-0028"
+    ],
+    "done_when": "AdvancedToolsPanel e ScriptValidationPanel usam monitorDashedPanelClass e inlineCodeClass."
+  },
+  {
+    "id": "US-0033",
+    "title": "EPIC-06 concluído — monitor visualmente unificado",
+    "epic": "EPIC-06",
+    "version": "v1",
+    "status": "✅",
+    "moscow": "Must",
+    "depends_on": [
+      "US-0031",
+      "US-0032"
+    ],
+    "done_when": "Nenhum zinc-* em src/features/monitor/; EPIC-06 marcado complete."
   }
 ]

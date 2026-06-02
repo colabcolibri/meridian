@@ -1,7 +1,7 @@
 ---
 id: EPIC-06
 title: Experiência do monitor
-status: active
+status: complete
 versions: [v1]
 profiles: [Manager do Processo, Operador Local]
 outcome: "Manager entende o Meridian pelo guia Comece aqui e opera o app sem jargão técnico."
