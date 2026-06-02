@@ -9,14 +9,14 @@
 </p>
 
 <p align="center">
-  <strong>The project documentation is the project</strong><br />
-  Track what you decided, what is in progress, and what is actually done — while building with AI agents.
+  <strong>Structure the app in docs first — then build with AI without losing the thread</strong><br />
+  Scope, architecture, user stories, acceptance criteria, and decisions live in <code>docs/</code>; agents read the same files you do.
 </p>
 
 <!-- GitHub About → Settings → Description: -->
-<!-- Experimental docs-first workflow for AI-assisted dev — your repo docs track scope, decisions, and progress. -->
+<!-- Docs-first protocol for structuring apps with user stories and AI — scope, decisions, and done-state in Git. -->
 
-> **Very early experiment** — I am testing flows to **document the project for real**, **keep building with integrity**, and **track what is done vs. what only looked done in chat**. Fine alone or in a small group; shapes and rules will change. [Roadmap](#roadmap) · [Protocol](.agent/MERIDIAN.md)
+> **Very early experiment** — I am testing how to **start and grow an application in a documented way** (principles, architecture, user stories, evidence of done) and **use AI without the project dissolving into chat**. Shapes and rules will change. [Roadmap](#roadmap) · [Protocol](.agent/MERIDIAN.md)
 
 # Meridian
 
@@ -31,15 +31,29 @@ Code implements `docs/`; agents operate through `.agent/`; **you** approve matur
 
 **Guides (same as the monitor tabs):** [Start here](.agent/references/start-here.md) · [Usage guide](.agent/references/usage-guide.md) — Markdown for the IDE and GitHub.
 
+## What approach is this?
+
+Meridian is **docs-first** development (also called **documentation-driven** or **spec-in-repo**): you structure the product in Markdown **before** and **while** you code — not in a separate wiki or PM tool.
+
+| Idea | In Meridian |
+| ---- | ------------- |
+| **Documentation-driven** | Phase docs (`00_scope` … `05_architecture`, security, stack, …) unlock what you are allowed to build next. |
+| **User stories + acceptance** | Executable work lives in `docs/us/` with verifiable **Acceptance** criteria (agile-style stories, file-based). |
+| **Decision log** | `docs/decisions/` records *why* scope, stack, or design changed — for you and for the next AI session. |
+| **AI as executor, you as manager** | Agents draft and implement from those files; ✅ and `approved` only with your review and evidence in Git. |
+
+It is not Scrum-in-a-box and not a Jira replacement — it is a **lightweight file protocol** to grow an application with principles, traceability, and AI that can **read and update the same truth** you see in the repo.
+
 ## Who this is for
 
-- **Solo devs** using AI agents (Cursor, Antigravity, or any IDE that reads `.agent/`) who want a clear path from idea to shipped code — with a paper trail in Git.
-- **Founders and PMs** who need to see scope, decisions, and delivery without Jira, Linear, or another SaaS.
-- **Tech leads and builders in small teams** sharing one `docs/` tree — same protocol, same source of truth.
+Anyone who wants to **start or restructure an application in a documented way** and **work seriously with AI** (Cursor, Antigravity, or any IDE that reads `.agent/`):
 
-You stay **manager of the process**: agents can draft, implement, and sync status, but direction and ✅ belong to you, with evidence in the files.
+- Turn an idea into **scope, architecture, and user stories** before drowning in generated code.
+- Keep **acceptance criteria and “done”** in the repository — not only in chat history.
+- Let agents **orient, implement, and close** US files while you stay manager of approvals and quality.
+- Understand **what was decided, what is in progress, and what is actually finished** without opening ten tools.
 
-Not aimed at large org workflow, permissions matrices, or unsupervised agent swarms — at least not in this version.
+You do not need a specific team size — you need a `docs/` folder, the `.agent/` kit, and discipline to treat files as the process.
 
 ## What is in this repository
 
@@ -84,7 +98,7 @@ No login. No cloud. Git holds the history. Agents follow `.agent/`; the desktop 
 | **`.agent/`** = how the flow runs (workflows, agents, gates) | Ad-hoc prompts with no shared rules |
 | Optional **monitor** to see status in the browser | The monitor replacing agents or `docs/` |
 | Process tracked in files (decisions, US, board) | “Done” because the agent said so in chat |
-| Solo or small group; early protocol version | Enterprise PM or unsupervised agent swarms |
+| Docs-first + user stories in Git; early protocol | A PM SaaS, a wiki, or vibe-coding with no spec |
 
 ## Quick start
 

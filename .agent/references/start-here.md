@@ -9,9 +9,9 @@ For actions and slash commands, see **[usage-guide.md](./usage-guide.md)**.
 
 ## Guide for people new to Meridian
 
-Meridian is a way to organize software projects using Markdown files in the `docs/` folder. You write what you will build, approve it, and only then ask for code — manually or with AI agents in your IDE.
+Meridian is a **docs-first** way to structure and build software: Markdown in the `docs/` folder defines scope, architecture, principles, user stories, and acceptance criteria. You approve that material, then implement — manually or with AI agents that read the same files.
 
-It is not Jira, it is not Notion, and it does not require a login. The source of truth is the files in your repository. The optional [desktop monitor](../../app-desktop/) only reads that folder and shows progress visually.
+It is not Jira, it is not Notion, and it does not require a login. The source of truth is Git. The optional [desktop monitor](../../app-desktop/) only reads `docs/` and shows progress visually — the managed process still lives in your IDE via `.agent/`.
 
 **Next:** read [usage-guide.md](./usage-guide.md), then run `/init-meridian` or `/status` in your IDE.
 
