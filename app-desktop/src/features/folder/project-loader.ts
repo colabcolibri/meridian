@@ -4,7 +4,7 @@ import type { MonitorIssue } from "@/domain/meridian/monitor-issues"
 import { PHASE_DOC_IDS } from "@/domain/meridian/phase-doc-files"
 import {
   MeridianParseError,
-  parseEpicsFromMarkdown,
+  parseEpicFile,
   parsePhaseDocument,
   parseUserStoryFile,
 } from "@/domain/meridian/parser"
@@ -93,6 +93,72 @@ async function loadPhaseDocuments(
   return results.filter((doc): doc is PhaseDocument => doc !== null)
 }
 
+async function listEpicFilenames(
+  epicsDir: FileSystemDirectoryHandle,
+): Promise<string[]> {
+  const names: string[] = []
+  for await (const [name, handle] of epicsDir.entries()) {
+    if (handle.kind === "file" && /^EPIC-\d+\.md$/i.test(name)) {
+      names.push(name)
+    }
+  }
+  return names.sort((a, b) => a.localeCompare(b, undefined, { numeric: true }))
+}
+
+async function loadEpics(
+  docsRoot: FileSystemDirectoryHandle,
+  parseIssues: MonitorIssue[],
+): Promise<Epic[]> {
+  const epics: Epic[] = []
+
+  try {
+    const epicsDir = await docsRoot.getDirectoryHandle("epics")
+    const filenames = await listEpicFilenames(epicsDir)
+
+    if (filenames.length === 0) {
+      parseIssues.push({
+        file: "epics/",
+        message: "Nenhum arquivo EPIC-XX.md encontrado em docs/epics/.",
+        severity: "error",
+        scope: "parse",
+      })
+      return epics
+    }
+
+    const parsed = await Promise.all(
+      filenames.map(async (filename) => {
+        try {
+          const raw = await readTextFile(epicsDir, filename)
+          return parseEpicFile(filename, raw)
+        } catch (error) {
+          recordParseIssue(
+            parseIssues,
+            error instanceof MeridianParseError
+              ? error
+              : new MeridianParseError(`epics/${filename}`, String(error)),
+          )
+          return null
+        }
+      }),
+    )
+
+    for (const epic of parsed) {
+      if (epic) {
+        epics.push(epic)
+      }
+    }
+  } catch {
+    parseIssues.push({
+      file: "epics/",
+      message: 'Pasta "epics/" não encontrada. Crie docs/epics/ com EPIC-XX.md.',
+      severity: "error",
+      scope: "parse",
+    })
+  }
+
+  return epics
+}
+
 async function loadUserStories(
   docsRoot: FileSystemDirectoryHandle,
   parseIssues: MonitorIssue[],
@@ -147,23 +213,11 @@ export async function loadMeridianProject(
   const parseIssues: MonitorIssue[] = []
   const storyBodies = new Map<string, string>()
 
-  const [phaseDocuments, userStories] = await Promise.all([
+  const [phaseDocuments, userStories, epics] = await Promise.all([
     loadPhaseDocuments(docsRoot, parseIssues),
     loadUserStories(docsRoot, parseIssues, storyBodies),
+    loadEpics(docsRoot, parseIssues),
   ])
-
-  let epics: Epic[] = []
-  try {
-    const raw = await readTextFile(docsRoot, "04_epics.md")
-    epics = parseEpicsFromMarkdown(raw)
-  } catch (error) {
-    recordParseIssue(
-      parseIssues,
-      error instanceof MeridianParseError
-        ? error
-        : new MeridianParseError("04_epics.md", String(error)),
-    )
-  }
 
   let board: BoardEntry[] | null = null
   try {
@@ -184,6 +238,7 @@ export async function loadMeridianProject(
   const protocolIssues = collectProtocolIssues({
     phaseDocuments,
     userStories,
+    epics,
     storyBodies,
     board,
   })

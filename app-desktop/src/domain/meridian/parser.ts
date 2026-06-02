@@ -118,48 +118,58 @@ export function parseUserStoryFile(filename: string, raw: string): UserStory {
   }
 }
 
-export function parseEpicsFromMarkdown(raw: string): Epic[] {
-  const file = "04_epics.md"
-  const { body } = splitMarkdown(raw)
-  const sections = body.split(/^## (EPIC-\d+)\s*—\s*(.+)$/m)
+function parseStringList(value: unknown): string[] {
+  if (Array.isArray(value)) {
+    return value
+      .filter((item): item is string => typeof item === "string")
+      .map((item) => item.trim())
+      .filter(Boolean)
+  }
+  if (typeof value === "string" && value.trim()) {
+    return [value.trim()]
+  }
+  return []
+}
 
-  if (sections.length < 3) {
-    throw new MeridianParseError(file, "nenhuma seção EPIC-XX encontrada")
+function parseEpicVersions(value: unknown, file: string): string[] {
+  const items = parseStringList(value)
+  if (items.length > 0) {
+    return items
+  }
+  if (typeof value === "string") {
+    return [...value.matchAll(/\bv[\w-]+(?:\.\w+)*/g)].map((match) => match[0])
+  }
+  if (value !== undefined && value !== null) {
+    throw new MeridianParseError(file, "campo versions inválido")
+  }
+  return []
+}
+
+export function parseEpicFile(filename: string, raw: string): Epic {
+  const file = `epics/${filename}`
+  const { frontmatter, body } = splitMarkdown(raw)
+
+  if (!frontmatter) {
+    throw new MeridianParseError(file, "frontmatter YAML obrigatório")
   }
 
-  const epics: Epic[] = []
+  const record = parseFrontmatterRecord(frontmatter)
+  const id = requireString(record, "id", file)
+  const expectedFilename = `${id}.md`
 
-  for (let index = 1; index < sections.length; index += 3) {
-    const epicId = sections[index]?.trim()
-    const epicTitle = sections[index + 1]?.trim()
-    const sectionBody = sections[index + 2] ?? ""
-
-    if (!epicId || !epicTitle) {
-      continue
-    }
-
-    const descriptionMatch = sectionBody.match(
-      /\*\*Descrição:\*\*\s*(.+?)(?=\n- \*\*|\n## |$)/s,
+  if (filename.toLowerCase() !== expectedFilename.toLowerCase()) {
+    throw new MeridianParseError(
+      file,
+      `id "${id}" não confere com o nome do arquivo (${filename})`,
     )
-    const versionsMatch = sectionBody.match(/\*\*Versões:\*\*\s*(.+)/)
-    const statusMatch = sectionBody.match(/\*\*Status:\*\*\s*(\w+)/i)
-
-    const versions = versionsMatch
-      ? [...versionsMatch[1].matchAll(/\bv\d+\b/g)].map((match) => match[0])
-      : []
-
-    epics.push({
-      id: epicId,
-      title: epicTitle,
-      description: descriptionMatch?.[1]?.trim() ?? "",
-      versions,
-      status: parseEpicStatus(statusMatch?.[1] ?? "active"),
-    })
   }
 
-  if (epics.length === 0) {
-    throw new MeridianParseError(file, "nenhum epic parseado")
+  return {
+    id,
+    title: requireString(record, "title", file),
+    description: extractPurposeFromBody(body),
+    versions: parseEpicVersions(record.versions, file),
+    profiles: parseStringList(record.profiles),
+    status: parseEpicStatus(String(record.status ?? "active")),
   }
-
-  return epics
 }

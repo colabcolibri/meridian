@@ -38,6 +38,7 @@ meridian/                    # repositório do kit + app
     docs/                    # fonte de verdade DESTE app (pasta monitorada no dogfooding)
       00_scope.md … 11_decisions.md
       us/
+      epics/
       kanban/board.json      # derivado das US
     src/
 ```
@@ -46,19 +47,19 @@ O app **não** é fonte de verdade do protocolo. Ele monitora a pasta **`docs/`*
 
 ## Camadas
 
-| Camada               | Responsabilidade                                |
-| -------------------- | ----------------------------------------------- |
-| Protocolo            | `meridian.md` + `.agent/MERIDIAN.md`            |
-| Governança always-on | `.agent/rules/MERIDIAN.md`                      |
-| Projeto monitorado   | `docs/00–11`, `docs/us/`, `board.json` derivado |
-| App desktop          | Leitura, validação visual, status, bloqueios    |
-| Futuro VSCode        | Escrita real em disco perto do editor           |
+| Camada               | Responsabilidade                                               |
+| -------------------- | -------------------------------------------------------------- |
+| Protocolo            | `meridian.md` + `.agent/MERIDIAN.md`                           |
+| Governança always-on | `.agent/rules/MERIDIAN.md`                                     |
+| Projeto monitorado   | `docs/00–11`, `docs/epics/`, `docs/us/`, `board.json` derivado |
+| App desktop          | Leitura, validação visual, status, bloqueios                   |
+| Futuro VSCode        | Escrita real em disco perto do editor                          |
 
 ## App desktop (v1)
 
 - **Stack:** Vite, React, TypeScript, Tailwind, shadcn/ui, `yaml` (frontmatter).
 - **Pasta aberta:** File System Access API → usuário escolhe **`docs/`** (ex.: `app-desktop/docs/`). O handle é a raiz; arquivos `00_scope.md` … `11_decisions.md` ficam na raiz do handle; `us/` e `kanban/` são subpastas.
-- **Carregamento:** `project-loader.ts` lê fases, US, `04_epics.md` e `kanban/board.json`.
+- **Carregamento:** `project-loader.ts` lê fases, `docs/epics/*.md`, `docs/us/*.md` e `kanban/board.json`.
 - **Validação TS:** `protocol-validators.ts` (regras P0 na UI).
 - **Validação Python (dev):** `vite-meridian-validate.ts` → `POST /api/meridian/validate` executa `validate_meridian.py` com raiz **`app-desktop/`** (projeto completo com subpasta `docs/`). Build estático não executa Python.
 
@@ -67,7 +68,7 @@ O app **não** é fonte de verdade do protocolo. Ele monitora a pasta **`docs/`*
 | Aba                  | Fonte (relativa à pasta `docs/` aberta)  |
 | -------------------- | ---------------------------------------- |
 | Configuração inicial | `00–11/*.md` parseados + leitor inline   |
-| Épicos               | `04_epics.md`                            |
+| Épicos               | `epics/*.md` (um arquivo por EPIC-XX)    |
 | Kanban               | `us/*.md` + diff com `kanban/board.json` |
 
 ## Pendências (v2)

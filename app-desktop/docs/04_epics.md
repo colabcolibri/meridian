@@ -1,7 +1,7 @@
 ---
 title: Epics
 status: approved
-version: 1.1
+version: 2.0
 updated: 2026-06-02
 depends_on: [00_scope.md, 03_user_types.md]
 blocks: [07_architecture.md]
@@ -9,46 +9,39 @@ blocks: [07_architecture.md]
 
 # 04 — Epics
 
-Epics são **capacidades de produto** para quem gerencia o processo com agentes — não módulos técnicos (`src/…`). Cada epic agrupa user stories em `docs/us/`.
+Epics são **capacidades de produto** — não módulos técnicos (`src/…`). Cada epic agrupa user stories em `docs/us/`.
 
-## EPIC-01 — Estrutura do Projeto
+## Onde ficam os épicos
 
-- **Descrição:** fundação do repositório e do app Vite: separação protocolo (`meridian.md`, `.agent/`) vs `app-desktop/`, qualidade local (Git, lint) e kit operacional para agentes.
-- **Versões:** v0
-- **Perfis envolvidos:** Manager do Processo, Operador Local
-- **Status:** complete
+Cada épico é um arquivo em **`docs/epics/`** (pasta flat, um arquivo por epic), no mesmo espírito de `docs/us/`:
 
-## EPIC-02 — Monitor de Configuração Inicial
+```txt
+docs/
+  epics/
+    EPIC-01.md
+    EPIC-02.md
+    …
+  us/
+    US-001.md
+    …
+```
 
-- **Descrição:** aba **Configuração inicial**: progresso dos `docs/00–11`, um estado legível por etapa, **leitura inline de cada `.md`** (frontmatter + conteúdo) e sincronização com a pasta monitorada (v1).
-- **Versões:** v0 (shell + mock), v1 (leitura real + ler .md inline)
-- **Perfis envolvidos:** Manager do Processo, Operador Local
-- **Status:** complete
+Este documento (`04_epics.md`) é o **índice de fase**: confirma que o catálogo de épicos existe e está aprovado. Detalhes de cada epic ficam nos arquivos individuais.
 
-## EPIC-03 — Validações Meridian
+## Catálogo
 
-- **Descrição:** regras do protocolo visíveis no app e via `validate_meridian.py`: dependências entre docs, US `🔶` sem `Falta:`, inconsistências (ex.: doc `approved` com predecessores abertos).
-- **Versões:** v1
-- **Perfis envolvidos:** Manager do Processo, Operador Local, Futuro Usuário VSCode
-- **Status:** active
+| ID      | Título                          | Status   | Versões |
+| ------- | ------------------------------- | -------- | ------- |
+| EPIC-01 | Estrutura do Projeto            | complete | v0      |
+| EPIC-02 | Monitor de Configuração Inicial | complete | v0, v1  |
+| EPIC-03 | Validações Meridian             | active   | v1      |
+| EPIC-04 | Kanban e User Stories           | active   | v1, v2  |
+| EPIC-05 | Ponte VSCode                    | paused   | v2      |
+| EPIC-06 | Experiência do monitor          | complete | v1-S2   |
 
-## EPIC-04 — Kanban e User Stories
+## Regras
 
-- **Descrição:** aba **Kanban**: colunas por status de US (`❌` `🔶` `✅` `🧊`), filtro por epic, sincronização com `docs/us/*.md` e `docs/kanban/board.json` derivado; aba **Épicos** lê `04_epics.md`.
-- **Versões:** v1 (leitura), v2 (criação/edição no editor)
-- **Perfis envolvidos:** Manager do Processo, Operador Local, Futuro Usuário VSCode
-- **Status:** active
-
-## EPIC-05 — Ponte VSCode
-
-- **Descrição:** extensão no editor para escrita real em Markdown, geração de board e operação da pasta no workspace.
-- **Versões:** v2
-- **Perfis envolvidos:** Futuro Usuário VSCode
-- **Status:** paused
-
-## EPIC-06 — Experiência do monitor
-
-- **Descrição:** interface clara para o manager: onboarding para abrir `docs/`, linguagem não técnica, hierarquia visual (uma ação principal por tela), kanban legível e ferramentas avançadas recolhidas.
-- **Versões:** v1-S2 (polish pós-MVP)
-- **Perfis envolvidos:** Manager do Processo, Operador Local
-- **Status:** complete
+- IDs permanentes: `EPIC-01`, `EPIC-02`, … (nunca reutilizar).
+- User stories referenciam `epic: EPIC-XX` no frontmatter.
+- User stories só podem ser criadas quando **`04_epics.md` e `06_versions.md` estão `approved`**.
+- Epic não é módulo de código — é capacidade entregue ao usuário.

@@ -1,7 +1,7 @@
 import type { BoardEntry } from "@/domain/meridian/board-types"
 import type { MonitorIssue } from "@/domain/meridian/monitor-issues"
 import { validateStoryBody } from "@/domain/meridian/story-body"
-import type { PhaseDocument, UserStory } from "@/domain/meridian/types"
+import type { Epic, PhaseDocument, UserStory } from "@/domain/meridian/types"
 import { getSetupStepState } from "@/domain/meridian/validators"
 
 export function collectDocumentProtocolIssues(
@@ -105,15 +105,39 @@ export function compareBoardWithStories(
   return issues
 }
 
+export function collectEpicProtocolIssues(
+  stories: UserStory[],
+  epics: Epic[],
+): MonitorIssue[] {
+  const epicIds = new Set(epics.map((epic) => epic.id))
+  const issues: MonitorIssue[] = []
+
+  for (const story of stories) {
+    if (!epicIds.has(story.epic)) {
+      issues.push({
+        file: `us/${story.id}.md`,
+        message: `epic "${story.epic}" não existe em docs/epics/.`,
+        severity: "error",
+        scope: "us",
+        targetId: story.id,
+      })
+    }
+  }
+
+  return issues
+}
+
 export function collectProtocolIssues(input: {
   phaseDocuments: PhaseDocument[]
   userStories: UserStory[]
+  epics: Epic[]
   storyBodies: Map<string, string>
   board: BoardEntry[] | null
 }): MonitorIssue[] {
   return [
     ...collectDocumentProtocolIssues(input.phaseDocuments),
     ...collectStoryProtocolIssues(input.userStories, input.storyBodies),
+    ...collectEpicProtocolIssues(input.userStories, input.epics),
     ...(input.board
       ? compareBoardWithStories(input.userStories, input.board)
       : [

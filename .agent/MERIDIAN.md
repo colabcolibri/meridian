@@ -206,6 +206,9 @@ quando quiser dar agentes, skills, workflows, rules e scripts especializados par
 
   /sprints
 
+  /epics
+    EPIC-XX.md
+
   /us
 
   /kanban
@@ -658,18 +661,34 @@ Regra para agentes:
 
 Não avance para banco, API ou autorização antes de entender os perfis.
 
-### 11.5 `04_epics.md` — Epics
+### 11.5 `04_epics.md` — Epics (índice) e `docs/epics/`
 
-Formato:
+`04_epics.md` é o documento de **fase** que cataloga e aprova o conjunto de épicos.
+Cada épico individual vive em **`docs/epics/EPIC-XX.md`** (pasta flat, um arquivo por epic),
+no mesmo espírito de `docs/us/US-XXX.md`.
 
-```md
-## EPIC-XX — Nome
+Formato de cada epic (`docs/epics/EPIC-XX.md`):
 
-- **Descrição:** capacidade entregue ao usuário
-- **Versões:** v0, v1, v2...
-- **Perfis envolvidos:** perfis do 03_user_types.md
-- **Status:** active | complete | paused
+```yaml
+---
+id: EPIC-XX
+title: Nome curto
+status: active | complete | paused
+versions: [v0, v1]
+profiles: [Perfil A, Perfil B]
+---
+
+# EPIC-XX — Nome
+
+Descrição da capacidade de produto entregue ao usuário.
 ```
+
+Regras:
+
+- IDs permanentes: `EPIC-01`, `EPIC-02`, … (nunca reutilizar).
+- Nome do arquivo deve coincidir com `id` (`EPIC-01.md` → `id: EPIC-01`).
+- Não crie subpastas dentro de `docs/epics/`.
+- `04_epics.md` mantém tabela-resumo e regras; detalhes ficam nos arquivos individuais.
 
 Regra para agentes:
 
@@ -866,6 +885,9 @@ docs/us/US-XXX.md
 
 A pasta é flat.
 Não crie subpastas por epic.
+
+Cada US referencia um epic em `docs/epics/` via frontmatter `epic: EPIC-XX`.
+O epic referenciado deve existir como arquivo em `docs/epics/`.
 
 ### 12.1 Regra de criação
 

@@ -144,3 +144,11 @@ blocks: []
 **Por que mudou:** v1 entregou função mas a UI era confusa e pouco amigável ao manager.
 **Impacto em outros docs:** Iterações futuras de UX podem virar v1-S3 ou critérios em v2; não bloqueia EPIC-05.
 **Responsável:** Produto/Engenharia
+
+## 2026-06-02 — Épicos em arquivos individuais (`docs/epics/`)
+
+**Documento afetado:** 04_epics.md, 07_architecture.md, `.agent/MERIDIAN.md`, `validate_meridian.py`, `project-loader.ts`, `parser.ts`, guia Comece aqui
+**O que mudou:** Cada épico passou de seção em `04_epics.md` para arquivo próprio em `docs/epics/EPIC-XX.md` com frontmatter YAML (como user stories). `04_epics.md` virou índice de fase com tabela-resumo. App e validador leem a pasta `epics/`.
+**Por que mudou:** Simetria com `docs/us/`, menos conflito em edição paralela, frontmatter estruturado e escala quando o catálogo crescer.
+**Impacto em outros docs:** Gate de criação de US continua exigindo `04_epics.md` + `06_versions.md` approved; US referenciam `epic:` que deve existir em `docs/epics/`.
+**Responsável:** Produto/Engenharia

@@ -26,7 +26,7 @@ Array ordenado por `id` crescente (`US-001`, `US-002`, ...).
 ## Validações
 
 - ID único, formato `US-\d+`
-- Epic existe em `04_epics.md`
+- Epic existe em `docs/epics/EPIC-XX.md`
 - Versão existe em `06_versions.md`
 - Cada `depends_on` referencia US existente
 - `done_when` não vazio

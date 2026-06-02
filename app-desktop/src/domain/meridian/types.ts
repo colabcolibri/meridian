@@ -19,6 +19,7 @@ export interface Epic {
   title: string
   description: string
   versions: string[]
+  profiles: string[]
   status: EpicStatus
 }
 

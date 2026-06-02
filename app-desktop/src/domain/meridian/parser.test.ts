@@ -1,9 +1,9 @@
-import { readFileSync } from "node:fs"
+import { readFileSync, readdirSync } from "node:fs"
 import { resolve } from "node:path"
 import { describe, expect, it } from "vitest"
 
 import {
-  parseEpicsFromMarkdown,
+  parseEpicFile,
   parsePhaseDocument,
   parseUserStoryFile,
 } from "@/domain/meridian/parser"
@@ -40,12 +40,35 @@ describe("meridian parser", () => {
     expect(story.moscow).toBe("Must")
   })
 
-  it("parseia epics em 04_epics.md", () => {
-    const raw = readFileSync(resolve(docsRoot, "04_epics.md"), "utf8")
-    const epics = parseEpicsFromMarkdown(raw)
+  it("parseia EPIC-02.md em docs/epics/", () => {
+    const raw = readFileSync(resolve(docsRoot, "epics/EPIC-02.md"), "utf8")
+    const epic = parseEpicFile("EPIC-02.md", raw)
 
-    expect(epics.length).toBeGreaterThanOrEqual(5)
-    expect(epics.find((epic) => epic.id === "EPIC-02")?.title).toContain("Configuração")
-    expect(epics.find((epic) => epic.id === "EPIC-05")?.status).toBe("paused")
+    expect(epic.id).toBe("EPIC-02")
+    expect(epic.title).toContain("Configuração")
+    expect(epic.status).toBe("complete")
+    expect(epic.versions).toContain("v0")
+    expect(epic.versions).toContain("v1")
+    expect(epic.profiles.length).toBeGreaterThan(0)
+    expect(epic.description.length).toBeGreaterThan(10)
+  })
+
+  it("parseia todos os epics em docs/epics/", () => {
+    const epicsDir = resolve(docsRoot, "epics")
+    const files = readdirSync(epicsDir).filter((name) => /^EPIC-\d+\.md$/i.test(name))
+
+    expect(files.length).toBeGreaterThanOrEqual(5)
+
+    for (const filename of files) {
+      const raw = readFileSync(resolve(epicsDir, filename), "utf8")
+      const epic = parseEpicFile(filename, raw)
+      expect(epic.id).toBe(filename.replace(/\.md$/i, ""))
+    }
+
+    const epic05 = parseEpicFile(
+      "EPIC-05.md",
+      readFileSync(resolve(epicsDir, "EPIC-05.md"), "utf8"),
+    )
+    expect(epic05.status).toBe("paused")
   })
 })

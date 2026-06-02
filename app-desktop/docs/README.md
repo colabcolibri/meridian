@@ -20,7 +20,7 @@ Esta pasta é a **fonte de verdade** do desenvolvimento do Meridian Desktop. No 
 | [01_tech_stack.md](01_tech_stack.md)       | approved | React, TypeScript, Vite, Tailwind, shadcn/ui |
 | [02_security.md](02_security.md)           | approved | Segurança da versão local                    |
 | [03_user_types.md](03_user_types.md)       | approved | Perfis de uso                                |
-| [04_epics.md](04_epics.md)                 | approved | Capacidades do produto (épicos)              |
+| [04_epics.md](04_epics.md)                 | approved | Índice de épicos (detalhes em `epics/`)      |
 | [05_principles.md](05_principles.md)       | approved | Princípios de implementação                  |
 | [06_versions.md](06_versions.md)           | approved | Versões, sprints e tabela de US              |
 | [07_architecture.md](07_architecture.md)   | approved | Arquitetura do app (parser, pasta docs)      |
@@ -31,10 +31,11 @@ Esta pasta é a **fonte de verdade** do desenvolvimento do Meridian Desktop. No 
 
 ## Artefatos de execução
 
-| Artefato       | Caminho                                  | Papel                                   |
-| -------------- | ---------------------------------------- | --------------------------------------- |
-| User stories   | [`us/`](us/)                             | Backlog (uma US = um arquivo)           |
-| Board derivado | [`kanban/board.json`](kanban/board.json) | Kanban gerado das US — não editar à mão |
+| Artefato       | Caminho                                  | Papel                                          |
+| -------------- | ---------------------------------------- | ---------------------------------------------- |
+| Épicos         | [`epics/`](epics/)                       | Um arquivo por EPIC-XX (capacidade de produto) |
+| User stories   | [`us/`](us/)                             | Backlog (uma US = um arquivo)                  |
+| Board derivado | [`kanban/board.json`](kanban/board.json) | Kanban gerado das US — não editar à mão        |
 
 ## Versão e sprint atuais
 

@@ -128,8 +128,32 @@ def main() -> int:
                 errors.append(f"Missing status frontmatter in docs/{filename}.")
 
     us_dir = docs / "us"
+    epics_dir = docs / "epics"
     board_path = docs / "kanban" / "board.json"
     story_ids: set[str] = set()
+    epic_ids: set[str] = set()
+
+    if epics_dir.exists():
+        for epic_path in sorted(epics_dir.glob("EPIC-*.md")):
+            if not re.match(r"EPIC-\d+\.md$", epic_path.name):
+                errors.append(f"Invalid epic filename: {epic_path.name}")
+                continue
+            frontmatter = read_frontmatter(epic_path)
+            epic_id = frontmatter.get("id")
+            if not epic_id:
+                errors.append(f"Missing id in {epic_path.name}")
+                continue
+            if epic_id in epic_ids:
+                errors.append(f"Duplicate epic id: {epic_id}")
+            epic_ids.add(epic_id)
+            if epic_path.stem != epic_id:
+                errors.append(
+                    f"{epic_path.name}: id {epic_id} não confere com o nome do arquivo"
+                )
+            if "status" not in frontmatter:
+                errors.append(f"Missing status in {epic_path.name}")
+    else:
+        errors.append("Missing docs/epics/ directory.")
 
     if us_dir.exists():
         for story in sorted(us_dir.glob("US-*.md")):
@@ -139,12 +163,17 @@ def main() -> int:
             frontmatter = read_frontmatter(story)
             story_id = frontmatter.get("id")
             status = frontmatter.get("status")
+            epic_ref = frontmatter.get("epic")
             if story_id:
                 if story_id in story_ids:
                     errors.append(f"Duplicate story id: {story_id}")
                 story_ids.add(story_id)
             else:
                 errors.append(f"Missing id in {story}")
+            if epic_ref and epic_ids and epic_ref not in epic_ids:
+                errors.append(
+                    f"{story.name}: epic {epic_ref} não existe em docs/epics/"
+                )
             if status == "🔶" and "Falta:" not in story.read_text(encoding="utf-8"):
                 errors.append(f"{story.name} is 🔶 but has no 'Falta:' in acceptance.")
 

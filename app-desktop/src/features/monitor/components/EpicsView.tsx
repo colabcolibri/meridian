@@ -13,6 +13,12 @@ import { countStoriesByEpic } from "@/domain/meridian/validators"
 import { typeScale } from "@/features/monitor/monitor-typography"
 import { cn } from "@/lib/utils"
 
+function epicStatusLabel(status: Epic["status"]) {
+  if (status === "complete") return "concluído"
+  if (status === "paused") return "pausado"
+  return "ativo"
+}
+
 function EpicCard({ epic, stories }: { epic: Epic; stories: UserStory[] }) {
   const { total, done } = countStoriesByEpic(stories, epic.id)
   const paused = epic.status === "paused"
@@ -32,7 +38,7 @@ function EpicCard({ epic, stories }: { epic: Epic; stories: UserStory[] }) {
                 pausado
               </span>
             ) : (
-              "ativo"
+              epicStatusLabel(epic.status)
             )}
           </Badge>
         </div>
@@ -68,8 +74,9 @@ export function EpicsView({ epics, stories }: { epics: Epic[]; stories: UserStor
   return (
     <div className="space-y-6">
       <p className={typeScale.bodySm}>
-        Grandes entregas do produto. Cada card mostra quantas user stories estão ligadas
-        a essa capacidade.
+        Capacidades de produto lidas de{" "}
+        <code className="font-mono text-xs">docs/epics/</code>. Cada card corresponde a
+        um arquivo EPIC-XX.md e mostra quantas user stories estão ligadas.
       </p>
       <div>
         <h2 className={cn(typeScale.sectionTitle, "mb-4")}>Ativos</h2>
