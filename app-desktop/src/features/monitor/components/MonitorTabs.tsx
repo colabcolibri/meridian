@@ -1,62 +1,72 @@
 import { cn } from "@/lib/utils"
+import { MONITOR_CONTAINER } from "@/features/monitor/monitor-layout"
 
 export type MonitorView = "setup" | "epics" | "kanban"
 
-const tabs: { id: MonitorView; label: string; description: string }[] = [
+const tabs: { id: MonitorView; label: string; hint: string }[] = [
   {
     id: "setup",
-    label: "Configuração inicial",
-    description: "Documentos 00–11 da pasta docs aberta",
+    label: "Configuração",
+    hint: "Progresso dos documentos iniciais do projeto",
   },
   {
     id: "epics",
-    label: "Épicos",
-    description: "Capacidades do produto (04_epics)",
+    label: "Entregas",
+    hint: "Grandes blocos de capacidade do produto",
   },
   {
     id: "kanban",
-    label: "Kanban",
-    description: "User stories por status e epic",
+    label: "Quadro",
+    hint: "Status de cada user story",
   },
 ]
 
 export function MonitorTabs({
   active,
   onChange,
+  disabled,
 }: {
   active: MonitorView
   onChange: (view: MonitorView) => void
+  disabled?: boolean
 }) {
+  const activeTab = tabs.find((tab) => tab.id === active)
+
   return (
-    <nav
-      aria-label="Visões do monitor"
-      className="mx-auto max-w-7xl border-b bg-white px-6"
-    >
-      <div className="flex gap-1 overflow-x-auto py-2">
+    <div className="border-b border-zinc-200/80 bg-white">
+      <nav
+        aria-label="Visões do monitor"
+        className={cn(MONITOR_CONTAINER, "flex gap-1 overflow-x-auto py-2")}
+      >
         {tabs.map((tab) => (
           <button
+            aria-current={active === tab.id ? "page" : undefined}
             className={cn(
-              "min-w-[140px] shrink-0 rounded-md px-4 py-3 text-left transition-colors",
+              "shrink-0 rounded-lg px-4 py-2.5 text-sm font-medium transition-colors",
+              disabled && "pointer-events-none opacity-50",
               active === tab.id
-                ? "bg-teal-50 ring-1 ring-teal-200"
-                : "hover:bg-zinc-50",
+                ? "bg-teal-700 text-white shadow-sm"
+                : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900",
             )}
+            disabled={disabled}
             key={tab.id}
             onClick={() => onChange(tab.id)}
             type="button"
           >
-            <div
-              className={cn(
-                "text-sm font-medium",
-                active === tab.id ? "text-teal-900" : "text-zinc-800",
-              )}
-            >
-              {tab.label}
-            </div>
-            <div className="mt-0.5 text-xs text-zinc-500">{tab.description}</div>
+            {tab.label}
           </button>
         ))}
-      </div>
-    </nav>
+      </nav>
+      {activeTab ? (
+        <p
+          className={cn(
+            MONITOR_CONTAINER,
+            "hidden border-t border-zinc-100 pb-2 pt-2 text-xs text-zinc-500 sm:block",
+          )}
+        >
+          {activeTab.hint}
+        </p>
+      ) : null}
+    </div>
   )
 }

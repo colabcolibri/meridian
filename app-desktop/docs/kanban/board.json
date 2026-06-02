@@ -203,5 +203,65 @@
       "US-009"
     ],
     "done_when": "Na aba Configuração inicial, cada doc 00–11 abre o .md correspondente na raiz da pasta docs aberta."
+  },
+  {
+    "id": "US-018",
+    "title": "Onboarding para abrir pasta docs",
+    "epic": "EPIC-06",
+    "version": "v1",
+    "status": "✅",
+    "moscow": "Must",
+    "depends_on": [
+      "US-009"
+    ],
+    "done_when": "Primeiro uso mostra passos claros e um único CTA principal para abrir a pasta docs, sem mensagens técnicas duplicadas."
+  },
+  {
+    "id": "US-019",
+    "title": "Shell visual consistente do monitor",
+    "epic": "EPIC-06",
+    "version": "v1",
+    "status": "✅",
+    "moscow": "Must",
+    "depends_on": [
+      "US-018"
+    ],
+    "done_when": "Layout usa largura máxima única, espaçamento e fundo consistentes em todas as visões."
+  },
+  {
+    "id": "US-020",
+    "title": "Barra superior simplificada",
+    "epic": "EPIC-06",
+    "version": "v1",
+    "status": "✅",
+    "moscow": "Must",
+    "depends_on": [
+      "US-019"
+    ],
+    "done_when": "Uma única barra combina marca, pasta aberta, contagem de problemas e ações; sem três faixas de mensagens."
+  },
+  {
+    "id": "US-021",
+    "title": "Abas com linguagem de manager",
+    "epic": "EPIC-06",
+    "version": "v1",
+    "status": "✅",
+    "moscow": "Must",
+    "depends_on": [
+      "US-019"
+    ],
+    "done_when": "Abas usam rótulos Configuração, Entregas e Quadro; descrições técnicas só na aba ativa ou em tooltip."
+  },
+  {
+    "id": "US-022",
+    "title": "Kanban com cards enxutos",
+    "epic": "EPIC-06",
+    "version": "v1",
+    "status": "✅",
+    "moscow": "Should",
+    "depends_on": [
+      "US-021"
+    ],
+    "done_when": "Cards mostram título e entrega; detalhes técnicos ficam recolhidos; filtro de epic exibe nome legível."
   }
 ]

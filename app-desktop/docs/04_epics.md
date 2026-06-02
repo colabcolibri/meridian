@@ -45,3 +45,10 @@ Epics são **capacidades de produto** para quem gerencia o processo com agentes 
 - **Versões:** v2
 - **Perfis envolvidos:** Futuro Usuário VSCode
 - **Status:** paused
+
+## EPIC-06 — Experiência do monitor
+
+- **Descrição:** interface clara para o manager: onboarding para abrir `docs/`, linguagem não técnica, hierarquia visual (uma ação principal por tela), kanban legível e ferramentas avançadas recolhidas.
+- **Versões:** v1-S2 (polish pós-MVP)
+- **Perfis envolvidos:** Manager do Processo, Operador Local
+- **Status:** complete

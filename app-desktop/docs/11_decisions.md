@@ -136,3 +136,11 @@ blocks: []
 **Por que mudou:** Fechar o marco v1 antes de planejar v2 (VSCode / escrita).
 **Impacto em outros docs:** Próximo trabalho de produto entra em `06_versions` seção v2 e novas US sob EPIC-05.
 **Responsável:** Produto/Engenharia
+
+## 2026-06-02 — UX v1-S2 (EPIC-06)
+
+**Documento afetado:** 04_epics.md, 06_versions.md, US-018–US-022, `src/features/monitor/`, board.json
+**O que mudou:** Epic **EPIC-06** e sprint **v1-S2** com onboarding (`WelcomeScreen`), barra única (`MonitorTopBar`), abas Configuração/Entregas/Quadro, alertas recolhíveis, kanban enxuto, validação Python em ferramentas avançadas.
+**Por que mudou:** v1 entregou função mas a UI era confusa e pouco amigável ao manager.
+**Impacto em outros docs:** Iterações futuras de UX podem virar v1-S3 ou critérios em v2; não bloqueia EPIC-05.
+**Responsável:** Produto/Engenharia

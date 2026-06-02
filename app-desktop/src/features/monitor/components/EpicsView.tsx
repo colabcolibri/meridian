@@ -66,8 +66,8 @@ export function EpicsView({ epics, stories }: { epics: Epic[]; stories: UserStor
   return (
     <div className="space-y-6">
       <p className="text-sm text-zinc-600">
-        Épicos vêm de <code className="rounded bg-zinc-100 px-1">04_epics.md</code> na
-        pasta docs aberta. Cada card resume quantas US do kanban pertencem ao epic.
+        Grandes entregas do produto. Cada card mostra quantas user stories estão ligadas
+        a essa capacidade.
       </p>
       <div>
         <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-zinc-500">

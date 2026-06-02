@@ -47,22 +47,19 @@ export function ScriptValidationPanel({ folderName }: { folderName?: string }) {
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2 text-base">
+    <Card className="border-0 bg-transparent shadow-none">
+      <CardHeader className="px-2 pt-0">
+        <CardTitle className="flex items-center gap-2 text-sm font-medium">
           <Terminal className="h-4 w-4" />
-          Validação Python (kit Meridian)
+          Validação técnica (Python)
         </CardTitle>
-        <CardDescription>
-          Mesmo script que os agents usam:{" "}
-          <code className="rounded bg-zinc-100 px-1">validate_meridian.py</code>. No
-          browser, disponível em <strong>pnpm dev</strong> para a pasta{" "}
-          <code className="rounded bg-zinc-100 px-1">app-desktop/</code> (projeto com
-          subpasta <code className="rounded bg-zinc-100 px-1">docs/</code>),
-          independente da pasta docs que você abriu no navegador.
+        <CardDescription className="text-xs">
+          Script <code className="rounded bg-zinc-100 px-1">validate_meridian.py</code>{" "}
+          em <strong>pnpm dev</strong> — valida o app no disco, não a pasta aberta no
+          navegador.
         </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-3">
+      <CardContent className="space-y-3 px-2 pb-2">
         {folderName && folderName !== "app-desktop" ? (
           <p className="text-xs text-amber-800">
             Pasta aberta: <strong>{folderName}</strong>. O script no dev valida sempre{" "}

@@ -136,6 +136,22 @@ blocks: [07_architecture.md, 08_database.md]
 - [x] `07_architecture.md` approved (pasta monitorada = `docs/`).
 - [x] `board.json` derivado de `docs/us/`.
 
+## v1-S2 — Experiência do monitor (UX)
+
+**Objetivo:** tornar o app usável por quem gerencia o processo, não só por quem conhece `docs/` e EPICs.
+
+**Critério de Done:** primeiro uso guiado; barra superior enxuta; abas com nomes de manager; kanban com cards legíveis; validação Python em seção avançada recolhida.
+
+**Status:** ✅
+
+| US     | Status | MoSCoW | Depende de | Epic    | Descrição resumida                 |
+| ------ | ------ | ------ | ---------- | ------- | ---------------------------------- |
+| US-018 | ✅     | Must   | US-009     | EPIC-06 | Onboarding para abrir pasta docs   |
+| US-019 | ✅     | Must   | US-018     | EPIC-06 | Shell visual consistente (layout)  |
+| US-020 | ✅     | Must   | US-019     | EPIC-06 | Barra superior simplificada        |
+| US-021 | ✅     | Must   | US-019     | EPIC-06 | Abas com linguagem de manager      |
+| US-022 | ✅     | Should | US-021     | EPIC-06 | Kanban com cards enxutos e filtros |
+
 ## Próximo marco — v2
 
 Planejar extensão VSCode / escrita em disco (EPIC-05). Ver `04_epics.md` e US futuras em `06_versions` quando `04_epics` e esta seção forem atualizados para v2.

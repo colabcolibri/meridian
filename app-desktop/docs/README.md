@@ -43,6 +43,7 @@ Esta pasta é a **fonte de verdade** do desenvolvimento do Meridian Desktop. No 
 | v0-S1 Fundação      | ✅        | US-001–007                          |
 | v0-S2 Monitor shell | ✅        | US-008                              |
 | v1-S1 Leitura real  | ✅        | US-009 → US-017, US-016             |
+| v1-S2 UX do monitor | ✅        | US-018 → US-022 (EPIC-06)           |
 | **v2**              | planejado | VSCode / escrita em disco (EPIC-05) |
 
 ## Como agents devem trabalhar
