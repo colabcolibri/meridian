@@ -1,0 +1,164 @@
+# Meridian
+
+Meridian é um protocolo e um conjunto de ferramentas para conduzir desenvolvimento
+com agentes de IA sem perder governança, visibilidade e consistência.
+
+O objetivo não é "software rápido" a qualquer custo. O objetivo é permitir que uma
+pessoa gerencie o processo enquanto agentes trabalham com contexto explícito,
+documentação viva, decisões registradas, user stories auditáveis e um board derivado
+da fonte de verdade.
+
+---
+
+## O que existe neste repositório
+
+```txt
+meridian.md
+.agent/
+app-desktop/
+app-visual-studio/   # futuro
+```
+
+## `meridian.md`
+
+Este arquivo é a explicação de alto nível do projeto Meridian.
+
+Ele descreve:
+
+- o conceito;
+- a separação entre protocolo e apps;
+- como agentes entram no processo;
+- quais partes do repositório existem;
+- qual é o objetivo final do sistema.
+
+A instrução operacional completa para agentes fica em:
+
+```txt
+.agent/MERIDIAN.md
+```
+
+## `.agent/`
+
+`.agent/` é a camada operacional para agentes de IA.
+
+Ela contém:
+
+- `MERIDIAN.md`: protocolo master para agentes;
+- `ARCHITECTURE.md`: explicação da arquitetura de agentes;
+- `agents/`: trabalhadores especializados;
+- `skills/`: pacotes de conhecimento carregados sob demanda;
+- `workflows/`: procedimentos operacionais;
+- `rules/`: regras globais;
+- `scripts/`: validações e automações;
+- `.shared/`: recursos compartilhados futuros.
+
+O foco final do Meridian é que agentes definidos nessa camada consigam trabalhar
+autonomamente dentro da estrutura Meridian, sempre com documentação, regras,
+decisões e validações.
+
+## `app-desktop/`
+
+`app-desktop/` é o app visual inicial.
+
+Ele não é a fonte de verdade.
+Ele é uma camada de gestão visual que deve abrir uma pasta de projeto e monitorar:
+
+- `meridian.md` ou `.agent/MERIDIAN.md`;
+- `docs/`;
+- documentos de fase;
+- decisões;
+- user stories;
+- `docs/kanban/board.json`;
+- inconsistências;
+- bloqueios;
+- status de maturidade.
+
+## `app-visual-studio/`
+
+Pasta futura para a extensão/app de Visual Studio ou VSCode.
+
+Essa camada deve operar mais perto do editor e dos arquivos reais, mas ainda deve
+respeitar o mesmo princípio: a pasta do projeto é a fonte de verdade.
+
+---
+
+## Ideia central
+
+Meridian separa três coisas:
+
+1. **Protocolo**
+   Define como desenvolvimento com agentes deve ser conduzido.
+
+2. **Camada de agentes**
+   Define os trabalhadores, skills, workflows, regras e scripts que executam o protocolo.
+
+3. **Apps de gestão**
+   Dão visibilidade ao processo e ajudam pessoas a monitorar o que os agentes estão fazendo.
+
+---
+
+## Papel da pessoa
+
+A pessoa continua sendo manager do processo.
+
+Ela decide direção, aprova documentos, aceita entregas, prioriza versões e mantém
+controle sobre o que os agentes fazem.
+
+Agentes podem:
+
+- planejar;
+- revisar;
+- escrever documentação;
+- criar user stories;
+- gerar board JSON;
+- implementar;
+- testar;
+- apontar riscos;
+- sincronizar estado.
+
+Agentes não devem:
+
+- trabalhar sem documentação mínima;
+- esconder decisões;
+- marcar trabalho como concluído sem evidência;
+- exfiltrar segredos;
+- executar comandos destrutivos sem autorização;
+- substituir o julgamento do manager do processo.
+
+---
+
+## Fonte de verdade
+
+Em qualquer projeto Meridian, a fonte de verdade é a pasta do projeto:
+
+```txt
+docs/
+  00_scope.md
+  01_tech_stack.md
+  02_security.md
+  ...
+  11_decisions.md
+  us/
+  kanban/board.json
+```
+
+O app desktop e a futura extensão leem e operam essa estrutura.
+Eles não devem inventar uma fonte paralela.
+
+---
+
+## Estado atual
+
+Este repositório está na fundação:
+
+- protocolo master movido para `.agent/MERIDIAN.md`;
+- camada `.agent/` iniciada;
+- app Vite em `app-desktop/`;
+- documentação interna do app em `app-desktop/docs/`;
+- Git, Prettier, ESLint, Husky e lint-staged configurados.
+
+Próximo foco:
+
+- robustecer agents e skills;
+- criar workflows mais completos;
+- implementar no app desktop a abertura/monitoramento real de uma pasta Meridian.

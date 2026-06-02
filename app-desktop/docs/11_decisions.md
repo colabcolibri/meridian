@@ -1,0 +1,98 @@
+---
+title: Log de Decisões
+status: approved
+version: 1.0
+updated: 2026-06-02
+depends_on: []
+blocks: []
+---
+
+# 11 — Log de Decisões
+
+## 2026-06-02 — Meridian começa seguindo seu próprio fluxo
+
+**Documento afetado:** 00_scope.md
+**O que mudou:** O projeto será desenvolvido usando a própria estrutura Meridian desde o início.
+**Por que mudou:** O produto precisa provar seu fluxo de documentação viva enquanto é construído.
+**Impacto em outros docs:** Criação da pasta `app-desktop/docs` e dos documentos de Fase 0 do app desktop.
+**Responsável:** Produto/Engenharia
+
+## 2026-06-02 — Primeiro app será Vite antes da extensão
+
+**Documento afetado:** 01_tech_stack.md
+**O que mudou:** A primeira entrega será um app Vite local com React, TypeScript e shadcn/ui.
+**Por que mudou:** Um app Vite permite validar a experiência, regras de documentação e estrutura visual antes de investir na extensão VSCode.
+**Impacto em outros docs:** 00_scope.md, 01_tech_stack.md, 04_epics.md, 06_versions.md e 07_architecture.md.
+**Responsável:** Produto/Engenharia
+
+## 2026-06-02 — Board canônico será JSON
+
+**Documento afetado:** meridian.md
+**O que mudou:** O board gerado pelo Meridian passa a ter `board.json` como formato canônico. CSV deixa de fazer parte da estrutura base.
+**Por que mudou:** O app Vite e a futura extensão precisam operar sobre uma estrutura rica e estável; exportações como CSV devem ser derivadas sob demanda, não mantidas como fonte paralela.
+**Impacto em outros docs:** README.md, 06_versions.md e futura documentação de arquitetura.
+**Responsável:** Produto/Engenharia
+
+## 2026-06-02 — Meridian prioriza desenvolvimento consistente
+
+**Documento afetado:** 00_scope.md
+**O que mudou:** O posicionamento foi ampliado para qualquer pessoa, dev, time ou área que queira conduzir desenvolvimento com um fluxo pragmático baseado em SDD.
+**Por que mudou:** Meridian não deve ser tratado como ferramenta apenas para times pequenos nem como uma malha de agentes. O produto existe para dar visibilidade, controle e consistência ao manager do processo.
+**Impacto em outros docs:** 03_user_types.md, 04_epics.md, 06_versions.md e meridian.md.
+**Responsável:** Produto/Engenharia
+
+## 2026-06-02 — Meridian é um fluxo para desenvolvimento com agentes de IA
+
+**Documento afetado:** 00_scope.md
+**O que mudou:** O escopo passou a declarar explicitamente que Meridian é feito para a nova era de trabalho com agentes de IA.
+**Por que mudou:** O ponto central do produto é permitir que pessoas gerenciem desenvolvimento com agentes mantendo contexto, controle, visibilidade e consistência.
+**Impacto em outros docs:** 03_user_types.md, 05_principles.md e futuras telas do app Vite.
+**Responsável:** Produto/Engenharia
+
+## 2026-06-02 — shadcn deve ser instalado pelo CLI oficial
+
+**Documento afetado:** 01_tech_stack.md
+**O que mudou:** A base visual deve usar o instalador oficial do shadcn para gerar componentes.
+**Por que mudou:** O projeto deve seguir o fluxo esperado da biblioteca e evitar componentes shadcn recriados manualmente.
+**Impacto em outros docs:** 05_principles.md e implementação do app Vite.
+**Responsável:** Produto/Engenharia
+
+## 2026-06-02 — Git e qualidade local entram na fundação
+
+**Documento afetado:** 01_tech_stack.md
+**O que mudou:** O projeto passou a usar Git desde a fundação, `.gitignore` para proteger arquivos locais, Prettier, Husky e lint-staged.
+**Por que mudou:** O fluxo Meridian exige consistência e governança antes de acelerar implementação com agentes de IA.
+**Impacto em outros docs:** 02_security.md, 05_principles.md e 10_environments.md.
+**Responsável:** Produto/Engenharia
+
+## 2026-06-02 — Protocolo e app desktop foram separados
+
+**Documento afetado:** 00_scope.md
+**O que mudou:** `meridian.md` passou a ser o protocolo universal para agentes de IA, enquanto o app Vite e sua documentação foram separados em `app-desktop/`.
+**Por que mudou:** O protocolo precisa ser copiável para qualquer projeto, e o app desktop deve ser apenas uma camada visual que abre e monitora uma pasta Meridian.
+**Impacto em outros docs:** README.md, 06_versions.md e tela inicial do app.
+**Responsável:** Produto/Engenharia
+
+## 2026-06-02 — Skills para agentes entram no protocolo
+
+**Documento afetado:** meridian.md
+**O que mudou:** Foi criada a pasta raiz `skills/` com instruções auxiliares para agentes e a seção de segurança do protocolo foi aprofundada.
+**Por que mudou:** Meridian precisa separar gestão visual do app e orientação operacional para agentes. Skills ajudam agentes a executar tarefas recorrentes sem inflar a home do app ou depender de uma ferramenta visual.
+**Impacto em outros docs:** 00_scope.md, 06_versions.md e futuras validações do app desktop.
+**Responsável:** Produto/Engenharia
+
+## 2026-06-02 — Camada operacional de agentes usa `.agent`
+
+**Documento afetado:** meridian.md
+**O que mudou:** A estrutura de agentes foi organizada em `.agent/`, com subpastas para agents, skills, workflows, rules e scripts.
+**Por que mudou:** Meridian precisa de uma camada operacional reutilizável para agentes, separada do app visual e mais estruturada que skills soltas na raiz.
+**Impacto em outros docs:** 00_scope.md, 06_versions.md, skills/README.md e futuras validações do app desktop.
+**Responsável:** Produto/Engenharia
+
+## 2026-06-02 — Pasta `skills/` foi removida
+
+**Documento afetado:** meridian.md
+**O que mudou:** A pasta raiz `skills/` foi removida. Skills passam a existir apenas como pacotes formais em `.agent/skills/{skill}/SKILL.md`.
+**Por que mudou:** A estrutura baseada em `.agent/` é mais completa e permite organizar agents, skills, workflows, rules e scripts em uma única camada operacional para agentes.
+**Impacto em outros docs:** 00_scope.md, 06_versions.md, US-005.md, US-006.md, board.json e `.agent/MERIDIAN.md`.
+**Responsável:** Produto/Engenharia

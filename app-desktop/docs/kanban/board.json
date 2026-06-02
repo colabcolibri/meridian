@@ -1,0 +1,62 @@
+[
+  {
+    "id": "US-001",
+    "title": "Abrir app Meridian localmente",
+    "epic": "EPIC-01",
+    "version": "v0",
+    "status": "✅",
+    "moscow": "Must",
+    "depends_on": [],
+    "done_when": "App roda com pnpm dev e renderiza layout inicial profissional."
+  },
+  {
+    "id": "US-002",
+    "title": "Ver documentos de fase e status",
+    "epic": "EPIC-02",
+    "version": "v0",
+    "status": "✅",
+    "moscow": "Must",
+    "depends_on": ["US-001"],
+    "done_when": "Lista de documentos exibe status, dependências e bloqueios básicos."
+  },
+  {
+    "id": "US-003",
+    "title": "Configurar Git e qualidade local",
+    "epic": "EPIC-01",
+    "version": "v0",
+    "status": "✅",
+    "moscow": "Must",
+    "depends_on": ["US-001"],
+    "done_when": "Git, gitignore, Prettier, Husky e lint-staged estão configurados."
+  },
+  {
+    "id": "US-004",
+    "title": "Separar protocolo universal e app desktop",
+    "epic": "EPIC-01",
+    "version": "v0",
+    "status": "✅",
+    "moscow": "Must",
+    "depends_on": ["US-001"],
+    "done_when": "meridian.md fica na raiz como protocolo universal e o app Vite fica em app-desktop."
+  },
+  {
+    "id": "US-005",
+    "title": "Criar skills iniciais em .agent",
+    "epic": "EPIC-05",
+    "version": "v0",
+    "status": "✅",
+    "moscow": "Must",
+    "depends_on": ["US-004"],
+    "done_when": ".agent/skills contém skills iniciais para agentes usarem junto com .agent/MERIDIAN.md."
+  },
+  {
+    "id": "US-006",
+    "title": "Organizar camada operacional .agent",
+    "epic": "EPIC-05",
+    "version": "v0",
+    "status": "✅",
+    "moscow": "Must",
+    "depends_on": ["US-005"],
+    "done_when": ".agent contém agents, skills, workflows, rules e scripts no padrão Meridian."
+  }
+]
