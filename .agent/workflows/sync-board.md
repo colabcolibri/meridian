@@ -2,29 +2,44 @@
 description: Regenerate docs/kanban/board.json from Meridian user stories.
 ---
 
-# /sync-board
+# /sync-board — sincronizar board
 
-## Goal
+$ARGUMENTS
 
-Keep the board JSON consistent with user story frontmatter.
+---
 
-## Agent
+## Regras críticas
 
-Use `board-keeper` with `generate-board-json`.
+1. Use `board-keeper` + `@[skills/generate-board-json]`
+2. Fonte de verdade: `docs/us/*.md` apenas
+3. Não preservar entradas órfãs no JSON
+4. Reportar US inválidas sem exportar
+5. Opcional: `validate_meridian.py`
 
-## Procedure
+---
 
-1. Read all `docs/us/US-*.md`.
-2. Validate IDs, epics, versions, dependencies and `done_when`.
-3. Check `🔶` acceptance criteria for `Falta:`.
-4. Generate `docs/kanban/board.json`.
-5. Report any invalid story.
+## Task
 
-## Output
+```txt
+CONTEXT:
+- User Request: $ARGUMENTS
+- Mode: SYNC BOARD
+
+RULES:
+1. Glob docs/us/US-*.md
+2. Validate per board-schema reference
+3. Write docs/kanban/board.json sorted by id
+4. List invalid stories and warnings
+```
+
+---
+
+## Saída
 
 ```txt
 Stories read:
-Invalid:
-Board updated:
+Stories exported:
+Invalid stories:
+Board path:
 Warnings:
 ```

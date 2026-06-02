@@ -11,13 +11,13 @@ blocks: [01_tech_stack.md, 04_epics.md, 06_versions.md, 07_architecture.md]
 
 ## Nome e descrição
 
-Meridian Desktop é o app local de monitoramento visual para projetos que usam o protocolo Meridian. A explicação do projeto fica em `../../meridian.md` e o protocolo operacional para agentes fica em `../../.agent/MERIDIAN.md`.
+Meridian Desktop é o app local de monitoramento visual para projetos que usam o protocolo Meridian. Na raiz do repositório do kit: `../../README.md` (onboarding), `../../meridian.md` (protocolo/produto), `../../.agent/MERIDIAN.md` (protocolo master) e `../../.agent/rules/MERIDIAN.md` (regras sempre ativas para agentes).
 
 O objetivo do app não é substituir o protocolo. O objetivo é abrir uma pasta de projeto, ler `meridian.md`, `docs/`, user stories e `board.json`, e dar visibilidade ao manager do processo.
 
 A primeira entrega é um app Vite local em `app-desktop/`. Futuramente, uma extensão em `app-visual-studio/` poderá operar arquivos reais dentro do editor.
 
-Na raiz do repositório, `meridian.md` e `.agent/` formam o kit para agentes de IA. O app desktop é uma camada visual separada que monitora uma pasta Meridian.
+Na raiz do repositório, `README.md`, `meridian.md` e `.agent/` (agents, skills com `references/`, workflows, rules `always_on`, scripts) formam o kit para agentes de IA, no padrão operacional Antigravity adaptado ao Meridian. O app desktop é uma camada visual separada que monitora uma pasta Meridian.
 
 ## Problema que resolve
 
@@ -40,7 +40,7 @@ Meridian Desktop ajuda a monitorar esse problema. Ele não é a fonte de verdade
 - Estados `draft`, `review` e `approved`.
 - Regras de bloqueio visual entre documentos.
 - Estrutura base para user stories e `board.json`.
-- Reconhecimento conceitual de `meridian.md + .agent/` como camada para agentes.
+- Reconhecimento de `README.md`, `meridian.md` e `.agent/` (incl. `meridian-routing`) como kit para agentes.
 - Dados iniciais simulando uma pasta monitorada.
 
 ## Fora do escopo inicial

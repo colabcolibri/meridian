@@ -2,40 +2,66 @@
 description: Plan a Meridian version or sprint without writing implementation code.
 ---
 
-# /plan-sprint
+# /plan-sprint — planejar versão/sprint
 
-## Goal
+$ARGUMENTS
 
-Prepare version/sprint planning from approved Meridian documents.
+---
 
-## Agent
+## Regras críticas
 
-Use `process-manager` and `documentation-strategist`.
+1. **SEM CÓDIGO** — apenas `06_versions.md`, sprints e US (se já aprovado criar US)
+2. Use `sprint-planner`
+3. Exige `04_epics.md` approved
+4. Novas US só se `06_versions` approved
+5. Ao alterar US → `/sync-board`
 
-## Preconditions
+---
 
-- `00_scope.md` approved.
-- `03_user_types.md` approved.
-- `04_epics.md` approved.
-- `06_versions.md` approved or being drafted.
+## Task
 
-## Procedure
+```txt
+CONTEXT:
+- User Request: $ARGUMENTS
+- Mode: PLANNING ONLY
 
-1. Read epics and versions.
-2. Identify target version.
-3. List candidate US.
-4. Check dependencies.
-5. Keep v0 technical only.
-6. Update `06_versions.md`.
-7. Register decisions when scope or version changes.
+RULES:
+1. sprint-planner Phase 0 context check
+2. Update 06_versions.md and docs/sprints/ as needed
+3. MoSCoW per US
+4. Explicit dependency order
+5. Log decisions if scope/version changes
+6. NO app/API/DB implementation files
+```
 
-## Output
+---
+
+## Entregáveis
+
+| Item | Local |
+| ---- | ----- |
+| Versão planejada | `docs/06_versions.md` |
+| Sprint doc | `docs/sprints/` (se aplicável) |
+| US novas | `docs/us/` (somente se pré-condições OK) |
+
+---
+
+## Saída
 
 ```txt
 Version:
 Sprint:
-Included:
-Explicitly out:
-Risks:
-Next US:
+US in scope:
+Dependency order:
+Blocked US:
+Board synced: yes | no
+Human approval needed:
+```
+
+---
+
+## Depois
+
+```txt
+Próximo: revisar 06_versions com manager → /create-us para stories → /sync-board
 ```

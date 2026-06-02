@@ -2,34 +2,51 @@
 description: Report current Meridian project health, blockers and next actions.
 ---
 
-# /status
+# /status — saúde do projeto
 
-## Goal
+$ARGUMENTS
 
-Give the human manager a concise view of the project.
+---
 
-## Agent
+## Regras críticas
 
-Use `process-manager`.
+1. **Somente leitura** — não altere docs sem pedido explícito no `$ARGUMENTS`
+2. Use `process-manager`
+3. Leia `docs/README.md` e frontmatter de `00`–`11`
+4. Opcional: `python .agent/scripts/validate_meridian.py <root>`
 
-## Procedure
+---
 
-1. Read `.agent/MERIDIAN.md` or `meridian.md`.
-2. Read `docs/README.md`.
-3. Read frontmatter of phase docs.
-4. Read `docs/kanban/board.json`.
-5. Check blocked documents.
-6. Check invalid user stories.
-7. Run `.agent/scripts/validate_meridian.py` if available.
-8. Report next actions.
+## Task
 
-## Output
+```txt
+CONTEXT:
+- User Request: $ARGUMENTS
+- Mode: STATUS REPORT
+
+PROCEDURE:
+1. Read meridian.md or .agent/MERIDIAN.md
+2. Read docs/README.md
+3. For each phase doc 00-11: record status from frontmatter
+4. Count US by status from docs/us/ or board.json
+5. List blockers (missing deps, invalid US, immature docs)
+6. Recommend next human decision
+```
+
+---
+
+## Saída
 
 ```txt
 Current phase:
-Approved docs:
-Blocked docs:
-Stories:
-Invalid items:
-Next action:
+Docs:
+  00_scope: [status]
+  ...
+US summary: ❌ n | 🔶 n | ✅ n
+Board in sync: yes | no
+Ready:
+Blocked:
+Next action (human):
+Next action (agent):
+Validation warnings:
 ```

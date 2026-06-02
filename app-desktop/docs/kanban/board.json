@@ -58,5 +58,15 @@
     "moscow": "Must",
     "depends_on": ["US-005"],
     "done_when": ".agent contém agents, skills, workflows, rules e scripts no padrão Meridian."
+  },
+  {
+    "id": "US-007",
+    "title": "Alinhar kit .agent ao padrão Antigravity",
+    "epic": "EPIC-01",
+    "version": "v0",
+    "status": "✅",
+    "moscow": "Must",
+    "depends_on": ["US-006"],
+    "done_when": "README.md na raiz, rules always_on, agents/skills/workflows operacionais e meridian-routing existem no kit."
   }
 ]

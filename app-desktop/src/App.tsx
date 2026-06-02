@@ -78,10 +78,10 @@ function App() {
               Monitore uma pasta Meridian sem perder o controle do processo.
             </h1>
             <p className="mt-3 max-w-2xl text-sm leading-6 text-zinc-600">
-              Este app é a camada visual do protocolo: abre um projeto que contém
-              `meridian.md` e `docs/`, lê documentos, decisões, user stories e
-              `board.json`, reconhece `.agent/` para agentes e mostra o que está pronto,
-              bloqueado ou desalinhado.
+              Este app é a camada visual do protocolo: abre um projeto com `README.md`
+              ou `meridian.md`, pasta `docs/`, kit `.agent/` (rules always_on, agents,
+              skills, workflows) e `board.json` derivado das user stories — e mostra o
+              que está pronto, bloqueado ou desalinhado.
             </p>
           </div>
           <div className="flex flex-wrap gap-2">
@@ -108,7 +108,7 @@ function App() {
           icon={<ShieldCheck className="h-4 w-4" />}
           label="Kit de agentes"
           value=".agent/"
-          detail="Agents, skills, rules e workflows"
+          detail="rules always_on + meridian-routing"
         />
         <MetricCard
           icon={<Activity className="h-4 w-4" />}

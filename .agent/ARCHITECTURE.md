@@ -1,103 +1,130 @@
-# Meridian Agent Architecture
+# Meridian agent architecture
 
-> Agent, skill, workflow, rule and script structure for projects using Meridian.
+> Estrutura de agents, skills, workflows, rules e scripts — padrão Antigravity adaptado ao protocolo Meridian.
 
 ---
 
 ## Purpose
 
-The `.agent/` folder is the operational layer for AI agents.
+| Camada | Arquivo | Público |
+| ------ | ------- | ------- |
+| Repositório | `README.md` | Humanos (GitHub, onboarding) |
+| Protocolo produto | `meridian.md` | Humanos + cópia em projetos clientes |
+| Regras sempre ativas | `.agent/rules/MERIDIAN.md` | Agentes (`trigger: always_on`) |
+| Protocolo master | `.agent/MERIDIAN.md` | Agentes (governança completa) |
+| Operação | `.agent/agents`, `skills`, `workflows` | Agentes |
 
-Root `meridian.md` explains the repository and product.
-`.agent/MERIDIAN.md` is the master protocol for agents.
-`.agent/` gives agents practical roles, skills, workflows, rules and scripts to apply
-the protocol consistently.
-
-The app desktop is separate. It monitors a project folder.
-The `.agent/` folder helps agents work inside that folder.
+O app desktop (`app-desktop/`) monitora pastas Meridian; não é fonte de verdade.
 
 ---
 
-## Directory Structure
+## Directory structure
 
 ```txt
 .agent/
-  ARCHITECTURE.md
-  agents/
-  skills/
-  workflows/
+  ARCHITECTURE.md      # este arquivo
+  MERIDIAN.md          # protocolo master
   rules/
+    MERIDIAN.md        # P0 — always_on
+  agents/              # P1 — personas operacionais
+  skills/              # P2 — procedimentos e references
+    doc.md             # guia de skills
+    meridian-routing/
+    init-project/
+      references/
+    ...
+  workflows/           # slash commands
   scripts/
-  .shared/
+    validate_meridian.py
+  .shared/             # reservado
 ```
+
+---
+
+## Rule priority
+
+```txt
+P0  .agent/rules/MERIDIAN.md
+P1  .agent/MERIDIAN.md + .agent/agents/{agent}.md
+P2  .agent/skills/{skill}/SKILL.md (+ references sob demanda)
+```
+
+Workflows orquestram agents; não substituem o protocolo master.
+
+---
 
 ## Agents
 
-Agents are role definitions. They describe how an AI agent should think and what
-skills it should load.
+| Agent | Purpose | Skills |
+| ----- | ------- | ------ |
+| `process-manager` | Governança, status, gates | init-project, update-decisions-log, generate-board-json, meridian-routing |
+| `scope-architect` | `00_scope.md` | init-project, update-decisions-log, meridian-routing |
+| `documentation-strategist` | Docs de fase `01`–`05`, `08`–`10` | init-project, create-user-story, update-decisions-log, meridian-routing |
+| `security-steward` | `02_security.md` | security-review, update-decisions-log, meridian-routing |
+| `architecture-guardian` | `07_architecture.md` | security-review, update-decisions-log, meridian-routing |
+| `sprint-planner` | `06_versions`, sprints | create-user-story, generate-board-json, update-decisions-log, meridian-routing |
+| `board-keeper` | US + `board.json` | create-user-story, generate-board-json, update-decisions-log, meridian-routing |
 
-| Agent                      | Purpose                                         | Skills                                                |
-| -------------------------- | ----------------------------------------------- | ----------------------------------------------------- |
-| `process-manager`          | Keep the human in control of the Meridian flow. | init-project, update-decisions-log                    |
-| `scope-architect`          | Define scope boundaries before implementation.  | init-project, update-decisions-log                    |
-| `documentation-strategist` | Create and review phase docs.                   | init-project, create-user-story, update-decisions-log |
-| `architecture-guardian`    | Keep architecture aligned with approved docs.   | update-decisions-log, security-review                 |
-| `sprint-planner`           | Plan versions, sprints and execution order.     | create-user-story, generate-board-json                |
-| `security-steward`         | Threat model, secrets, security posture.        | security-review, update-decisions-log                 |
-| `board-keeper`             | Keep user stories and board JSON consistent.    | create-user-story, generate-board-json                |
+Cada agent inclui: fases 0/-1, missão, proibições, formato de saída, delegação.
+
+---
 
 ## Skills
 
-Skills are folder-based packages:
+| Skill | References |
+| ----- | ---------- |
+| `init-project` | `doc-templates.md`, `gitignore-baseline.md` |
+| `create-user-story` | `us-template.md` |
+| `generate-board-json` | `board-schema.md` |
+| `update-decisions-log` | `decision-template.md` |
+| `security-review` | `checklists.md` |
+| `meridian-routing` | — (matriz inline) |
 
-```txt
-.agent/skills/skill-name/
-  SKILL.md
-  references/
-  scripts/
-  assets/
-```
+Ver `.agent/skills/doc.md` para criar novas skills.
 
-Only `SKILL.md` is required.
-References, scripts and assets are optional.
+---
 
 ## Workflows
 
-Workflows are slash-command-like procedures:
+| Workflow | Agent | Modo |
+| -------- | ----- | ---- |
+| `init-meridian` | process-manager | init, sem código |
+| `status` | process-manager | leitura |
+| `plan-sprint` | sprint-planner | planejamento |
+| `create-us` | board-keeper | criar US |
+| `architecture` | architecture-guardian | doc 07 |
+| `security-pass` | security-steward | doc 02 |
+| `sync-board` | board-keeper | derivar JSON |
 
-| Workflow        | Purpose                                       |
-| --------------- | --------------------------------------------- |
-| `init-meridian` | Start a new project with Meridian.            |
-| `plan-sprint`   | Prepare version/sprint planning without code. |
-| `create-us`     | Create a valid user story.                    |
-| `architecture`  | Create or review `07_architecture.md`.        |
-| `security-pass` | Review or deepen project security.            |
-| `sync-board`    | Regenerate `docs/kanban/board.json`.          |
-| `status`        | Report health of the Meridian project.        |
+Todos suportam `$ARGUMENTS` e seção de regras críticas.
 
-## Rules
-
-Rules are global constraints all agents must respect.
-
-Current rules:
-
-- `MERIDIAN.md`: global operating rules for all agents.
+---
 
 ## Scripts
 
-Scripts are optional validation helpers.
+```bash
+python .agent/scripts/validate_meridian.py <project-root>
+```
 
-Current scripts:
-
-- `validate_meridian.py`: static checks for docs, US and board JSON.
+---
 
 ## Authority
 
-If there is a conflict:
+1. User instruction
+2. `.agent/MERIDIAN.md`
+3. `.agent/rules/MERIDIAN.md`
+4. Workflows
+5. Agents
+6. Skills
 
-1. User instruction wins.
-2. `.agent/MERIDIAN.md` wins over other `.agent/` files.
-3. Rules win over workflows.
-4. Workflows win over agents.
-5. Agents choose skills.
-6. Skills guide task execution.
+---
+
+## Diferença vs Antigravity kit
+
+| Antigravity | Meridian |
+| ----------- | -------- |
+| `README.md` + `rules/GEMINI.md` | `README.md` + `meridian.md` + `rules/MERIDIAN.md` |
+| 37 skills de código/stack | 6 skills de governança documental |
+| `intelligent-routing` (domínios técnicos) | `meridian-routing` (fases docs/US) |
+| Plan files `{task-slug}.md` | `docs/` fase `00`–`11` + US |
+| Agents longos para implementação | Agents para documentação e gates antes de código |

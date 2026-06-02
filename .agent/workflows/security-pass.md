@@ -2,32 +2,53 @@
 description: Review and deepen security documentation before architecture or implementation.
 ---
 
-# /security-pass
+# /security-pass — revisão de segurança
 
-## Goal
+$ARGUMENTS
 
-Make project security explicit and actionable.
+---
 
-## Agent
+## Regras críticas
 
-Use `security-steward` with `security-review`.
+1. Use `security-steward` + `@[skills/security-review]`
+2. Ler `references/checklists.md` por completo
+3. Atualizar `02_security.md`
+4. Decisões relevantes → `11_decisions.md`
+5. Bloquear silenciosamente arquitetura `approved` se gaps críticos abertos
 
-## Procedure
+---
 
-1. Read `00_scope.md`, `01_tech_stack.md`, `02_security.md` and `03_user_types.md`.
-2. Identify assets, actors, secrets and attack surfaces.
-3. Review `.gitignore`, `.env.example`, dependencies and lockfiles.
-4. Map OWASP risks to context.
-5. Add AI-agent safety boundaries.
-6. Update `02_security.md`.
-7. Register decisions.
-
-## Output
+## Task
 
 ```txt
-Critical risks:
-High risks:
-Accepted risks:
-Docs updated:
-Next mitigation:
+CONTEXT:
+- User Request: $ARGUMENTS
+- Mode: SECURITY REVIEW
+
+RULES:
+1. security-steward Phase 0
+2. Full checklist pass
+3. Document risks, mitigations, AI-agent rules for project
+4. No weakening controls without logged decision
+5. Report blockers to process-manager if needed
+```
+
+---
+
+## Saída
+
+```txt
+02_security status:
+Critical findings:
+Mitigations proposed:
+Blocked docs/phases:
+Decisions logged:
+```
+
+---
+
+## Depois
+
+```txt
+Próximo: manager aprova 02_security → /architecture quando estável
 ```

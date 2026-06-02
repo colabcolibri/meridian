@@ -1,68 +1,35 @@
 ---
 name: update-decisions-log
 description: Appends relevant project decisions to docs/11_decisions.md. Use when scope, stack, security, architecture, versions or acceptance criteria change.
+allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 ---
 
-# Skill — Atualizar Log de Decisões
+# Update decisions log
 
-Use esta skill sempre que uma mudança relevante acontecer.
+## Selective reading
 
-## Quando registrar decisão
+| Arquivo | Quando ler |
+| ------- | ---------- |
+| `references/decision-template.md` | Ao append de cada nova entrada |
 
-Registre em `docs/11_decisions.md` quando houver mudança em:
+## Quando registrar
 
-- escopo;
-- stack;
-- segurança;
-- tipos de usuário;
-- epics;
-- versões;
-- arquitetura;
-- banco de dados;
-- contratos de API;
-- ambientes;
-- critérios de aceite;
-- política de agentes;
-- governança do projeto.
+Mudança em: escopo, stack, segurança, usuários, epics, versões, arquitetura, banco, API, ambientes, aceite, governança de agents.
 
-## Formato
+## Procedimento
 
-```md
-## YYYY-MM-DD — Título objetivo
+1. Abrir `docs/11_decisions.md`.
+2. Append no final usando `references/decision-template.md`.
+3. Se doc `approved` foi alterado → `status: review` nesse doc + mencionar no impacto.
+4. **Nunca** editar entradas antigas.
 
-**Documento afetado:** arquivo
-**O que mudou:** descrição objetiva
-**Por que mudou:** contexto e motivação
-**Impacto em outros docs:** lista de docs afetados
-**Responsável:** pessoa ou papel
-```
+## Arquivamento (> ~200 linhas)
 
-## Regras
+1. Mover entradas antigas para `11_decisions_YYYY.md`
+2. Manter arquivo atual enxuto
+3. Registrar arquivamento como nova decisão
 
-- O log é append-only.
-- Não edite entradas antigas.
-- Se um documento `approved` mudar, registre decisão e volte o documento para `review`.
-- Seja objetivo, mas não omita motivação.
-- Decisões de segurança devem mencionar impacto e mitigação.
-
-## Campos de qualidade
-
-Uma boa decisão:
-
-- diz exatamente o que mudou;
-- explica por que mudou agora;
-- aponta documentos afetados;
-- identifica impacto em fluxo, segurança ou arquitetura;
-- deixa claro quem assumiu a responsabilidade.
-
-Uma decisão ruim:
-
-- diz apenas "ajustado";
-- não explica motivação;
-- mistura várias decisões independentes;
-- altera documento aprovado sem registrar impacto.
-
-## Formato de resposta
+## Saída
 
 ```txt
 Decision logged:
@@ -70,11 +37,3 @@ Affected document:
 Docs moved to review:
 Follow-up:
 ```
-
-## Arquivamento
-
-Quando `11_decisions.md` passar de aproximadamente 200 linhas:
-
-1. mova entradas antigas para `11_decisions_YYYY.md`;
-2. mantenha o arquivo atual com entradas recentes;
-3. registre o arquivamento como nova decisão.

@@ -174,14 +174,18 @@ Opcionalmente, mantenha uma pasta `.agent/` no mesmo nível de `meridian.md`
 quando quiser dar agentes, skills, workflows, rules e scripts especializados para IA.
 
 ```txt
+/README.md          # opcional no repo do kit; convenção Git
 /meridian.md
 
 /.agent
+  MERIDIAN.md
   ARCHITECTURE.md
   agents/
   skills/
+    doc.md
   workflows/
   rules/
+    MERIDIAN.md    # trigger: always_on
   scripts/
   .shared/
 
@@ -221,20 +225,18 @@ Estrutura recomendada:
 - `agents/`: papéis/personas de agentes;
 - `skills/`: pacotes de conhecimento com `SKILL.md`;
 - `workflows/`: procedimentos acionáveis;
-- `rules/`: regras globais;
+- `rules/MERIDIAN.md`: regras globais sempre ativas (`trigger: always_on`);
 - `scripts/`: validações e automações locais;
 - `.shared/`: recursos compartilhados.
 
-Exemplos de skills:
+Skills oficiais do kit (ver `.agent/skills/doc.md`):
 
-- iniciar projeto;
-- revisar segurança;
-- criar user story;
-- gerar board JSON;
-- atualizar log de decisões;
-- revisar arquitetura;
-- preparar checklist de go-live;
-- validar ambiente.
+- `init-project`
+- `security-review`
+- `create-user-story`
+- `generate-board-json`
+- `update-decisions-log`
+- `meridian-routing`
 
 Regras:
 

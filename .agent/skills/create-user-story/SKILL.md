@@ -1,106 +1,54 @@
 ---
 name: create-user-story
 description: Creates a valid Meridian user story after epics and versions are approved. Use when adding work to docs/us and keeping acceptance criteria concrete.
+allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 ---
 
-# Skill — Criar User Story Meridian
+# Create user story (Meridian)
 
-Use esta skill quando o usuário pedir para criar uma nova user story.
+## Selective reading
 
-## Pré-condições
+| Arquivo | Quando ler |
+| ------- | ---------- |
+| `references/us-template.md` | Ao redigir o arquivo `docs/us/US-XXX.md` |
 
-Antes de criar uma US, confirme:
+## Pré-condições (hard gate)
 
-- `04_epics.md` está `approved`;
-- `06_versions.md` está `approved`;
-- o epic existe;
-- a versão existe;
-- os perfis citados existem em `03_user_types.md`;
-- dependências citadas existem ou serão criadas antes.
+| Doc | Status exigido |
+| --- | -------------- |
+| `04_epics.md` | `approved` |
+| `06_versions.md` | `approved` |
+| Epic citado | existe |
+| Versão citada | existe |
+| Perfil em `03_user_types.md` | existe |
 
-Se alguma pré-condição falhar, não crie a US como válida.
-Explique o bloqueio e proponha o menor documento necessário para avançar.
+Se falhar → **não** salvar US válida; reportar bloqueio e menor doc necessário.
 
-## Entradas esperadas
+## Fase 0 — clarificação
 
-- Capacidade desejada.
-- Perfil de usuário.
-- Epic.
-- Versão.
-- Prioridade MoSCoW.
-- Dependências conhecidas.
-- Critério objetivo de conclusão.
+Pedido vago → perguntas de produto:
 
-Se o usuário pedir uma feature vaga, transforme em pergunta de produto:
+1. Quem usa?
+2. Qual ação?
+3. Qual benefício?
+4. Como saber que terminou (`done_when`)?
 
-- Quem usa?
-- Qual ação quer fazer?
-- Para qual benefício?
-- Como saberemos que terminou?
+## Procedimento
 
-## ID
-
-1. Leia `docs/us/`.
-2. Encontre o maior ID `US-XXX`.
-3. O próximo ID é `max + 1`.
-4. Não reutilize IDs removidos.
-
-## Template
-
-```md
----
-id: US-XXX
-title: Título curto
-epic: EPIC-XX
-version: vX
-status: ❌
-moscow: Must | Should | Could | Won't
-depends_on: []
-done_when: "Condição objetiva e mensurável."
----
-
-# US-XXX — Título curto
-
-**Como** [tipo de usuário],
-**quero** [ação],
-**para que** [benefício].
-
-## Aceite
-
-- Condição objetiva e verificável
-
-## Implementação técnica
-
-### Backend
-
-### Frontend
-
-## Testes
-
-## Fora de escopo desta story
-
-## Notas
-```
-
-## Regras
-
-- `done_when` deve ser curto e mensurável.
-- `🔶` exige `Falta:` no aceite.
-- `✅` exige evidência de aceite.
-- Se depende de outra US, não pode sair de `❌` antes das dependências ficarem `✅`.
-- Atualize `board.json` depois de criar a US.
+1. Listar `docs/us/US-*.md` → próximo ID = max + 1 (não reutilizar IDs removidos).
+2. Preencher template de `references/us-template.md`.
+3. Validar `done_when` mensurável; `🔶` exige `Falta:` no aceite.
+4. Salvar `docs/us/US-XXX.md`.
+5. Invocar `generate-board-json` ou regenerar `board.json`.
+6. Se mudança relevante → `update-decisions-log`.
 
 ## Validações antes de salvar
 
-- ID é novo.
-- Epic existe.
-- Versão existe.
-- Perfil de usuário existe.
-- `done_when` não está vazio.
-- Fora de escopo está preenchido quando houver risco de ambiguidade.
-- Testes ou validações manuais estão declarados.
+- ID novo, formato `US-XXX`
+- Dependências existem e estão `✅` antes de marcar dependente como `✅`
+- Fora de escopo preenchido se houver risco de ambiguidade
 
-## Formato de resposta
+## Saída
 
 ```txt
 US created:

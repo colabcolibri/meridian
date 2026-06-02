@@ -2,45 +2,46 @@
 description: Create or review 07_architecture.md after required Meridian documents are approved.
 ---
 
-# /architecture
+# /architecture — arquitetura
 
-## Goal
+$ARGUMENTS
 
-Create architecture that reflects approved scope, stack, security, users, principles
-and versions.
+---
 
-## Agent
+## Regras críticas
 
-Use `architecture-guardian`.
+1. Use `architecture-guardian`
+2. Pré-requisitos: scope, stack, security, users (mínimo draft)
+3. Alinhar com `02_security` — carregar `security-review` se gaps
+4. Mudança material → `11_decisions.md`
+5. Sem código de produto neste workflow (salvo pedido explícito em $ARGUMENTS)
 
-## Preconditions
+---
 
-- `00_scope.md` approved.
-- `01_tech_stack.md` approved.
-- `02_security.md` approved or explicitly accepted as incomplete risk.
-- `03_user_types.md` approved.
-- `05_principles.md` approved.
-- `06_versions.md` approved.
-
-## Procedure
-
-1. Read prerequisite docs.
-2. Identify current version target.
-3. Define application boundaries.
-4. Define data flow.
-5. Define frontend structure.
-6. Define backend/bridge boundaries, if any.
-7. Define state, cache, parsing and validation strategy.
-8. List integration points.
-9. Record architectural decisions.
-10. Update `07_architecture.md`.
-
-## Output
+## Task
 
 ```txt
-Architecture updated:
-Decisions:
-Risks:
-Blocked by:
-Next document:
+CONTEXT:
+- User Request: $ARGUMENTS
+- Mode: ARCHITECTURE DOC
+
+RULES:
+1. architecture-guardian Phase 0 gate
+2. Read 00, 01, 02, 03, 04, 06 before editing 07
+3. Fill checklist in agent file
+4. Cross-check 08/09 if they exist
+5. Set status draft or review — not approved without human
+```
+
+---
+
+## Saída
+
+```txt
+07_architecture status:
+Aligned with: [docs]
+Drift detected:
+Proposed changes:
+Security follow-ups:
+Ready for review: yes | no
 ```

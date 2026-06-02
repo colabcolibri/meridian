@@ -13,15 +13,18 @@ da fonte de verdade.
 ## O que existe neste repositório
 
 ```txt
-meridian.md
+README.md            # visão do repositório (padrão Git/GitHub)
+meridian.md          # protocolo e produto Meridian
 .agent/
 app-desktop/
 app-visual-studio/   # futuro
 ```
 
-## `meridian.md`
+## `README.md` e `meridian.md`
 
-Este arquivo é a explicação de alto nível do projeto Meridian.
+`README.md` na raiz segue a convenção Git: onboarding, tabela de agents/skills/workflows e links.
+
+`meridian.md` é a explicação de alto nível do protocolo e do produto Meridian (também copiável para projetos que adotam o kit).
 
 Ele descreve:
 
@@ -43,14 +46,17 @@ A instrução operacional completa para agentes fica em:
 
 Ela contém:
 
+- `rules/MERIDIAN.md`: regras globais sempre ativas (`trigger: always_on`);
 - `MERIDIAN.md`: protocolo master para agentes;
-- `ARCHITECTURE.md`: explicação da arquitetura de agentes;
-- `agents/`: trabalhadores especializados;
-- `skills/`: pacotes de conhecimento carregados sob demanda;
-- `workflows/`: procedimentos operacionais;
-- `rules/`: regras globais;
-- `scripts/`: validações e automações;
+- `ARCHITECTURE.md`: mapa de agents, skills e workflows;
+- `agents/`: personas operacionais (fases, gates, saídas);
+- `skills/`: pacotes com `SKILL.md` + `references/` (progressive disclosure);
+- `skills/doc.md`: guia para criar skills;
+- `workflows/`: comandos `/` com `$ARGUMENTS` e contexto para agents;
+- `scripts/`: validações (`validate_meridian.py`);
 - `.shared/`: recursos compartilhados futuros.
+
+Ver também `README.md` na raiz deste repositório (onboarding do kit).
 
 O foco final do Meridian é que agentes definidos nessa camada consigam trabalhar
 autonomamente dentro da estrutura Meridian, sempre com documentação, regras,
@@ -159,6 +165,6 @@ Este repositório está na fundação:
 
 Próximo foco:
 
-- robustecer agents e skills;
-- criar workflows mais completos;
+- kit `.agent/` alinhado ao padrão Antigravity (rules, routing, references, workflows);
+- app desktop: abertura real de pasta Meridian;
 - implementar no app desktop a abertura/monitoramento real de uma pasta Meridian.

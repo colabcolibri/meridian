@@ -1,83 +1,41 @@
 ---
 name: generate-board-json
 description: Generates docs/kanban/board.json from Meridian user story frontmatter. Use after creating or changing user stories.
+allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 ---
 
-# Skill — Gerar Board JSON
+# Generate board JSON
 
-Use esta skill quando precisar atualizar `docs/kanban/board.json`.
+## Selective reading
+
+| Arquivo | Quando ler |
+| ------- | ---------- |
+| `references/board-schema.md` | Validação de campos e divergências |
 
 ## Fonte de verdade
 
-A fonte de verdade são os arquivos:
-
 ```txt
-docs/us/US-XXX.md
+docs/us/US-XXX.md  →  derivado  →  docs/kanban/board.json
 ```
 
-`board.json` é derivado.
-Não edite o board como fonte primária.
-
-## Campos
-
-Extraia do frontmatter:
-
-- `id`
-- `title`
-- `epic`
-- `version`
-- `status`
-- `moscow`
-- `depends_on`
-- `done_when`
-
-## Estrutura
-
-```json
-[
-  {
-    "id": "US-001",
-    "title": "Título curto",
-    "epic": "EPIC-01",
-    "version": "v1",
-    "status": "❌",
-    "moscow": "Must",
-    "depends_on": [],
-    "done_when": "Condição objetiva."
-  }
-]
-```
-
-## Validações
-
-Antes de gravar:
-
-- IDs são únicos.
-- IDs seguem `US-XXX`.
-- Epics existem em `04_epics.md`.
-- Versões existem em `06_versions.md`.
-- Dependências existem.
-- `🔶` tem `Falta:` no aceite da US.
-- `done_when` não está vazio.
-- `board.json` contém todos os US válidos.
-- `board.json` não contém IDs sem arquivo correspondente.
-
-## Ordenação
-
-Ordene por ID crescente.
+Nunca editar o board como fonte primária.
 
 ## Procedimento
 
-1. Ler todos os arquivos `docs/us/US-*.md`.
-2. Extrair frontmatter.
-3. Validar campos obrigatórios.
-4. Validar dependências.
-5. Montar array JSON.
-6. Ordenar por ID.
-7. Escrever `docs/kanban/board.json`.
-8. Reportar divergências.
+1. Glob `docs/us/US-*.md`
+2. Extrair frontmatter: `id`, `title`, `epic`, `version`, `status`, `moscow`, `depends_on`, `done_when`
+3. Validar contra `references/board-schema.md` e `04_epics` / `06_versions`
+4. Ordenar por ID crescente
+5. Escrever `docs/kanban/board.json`
+6. Reportar US inválidas sem incluí-las
 
-## Formato de resposta
+## Validação opcional
+
+```bash
+python .agent/scripts/validate_meridian.py <project-root>
+```
+
+## Saída
 
 ```txt
 Stories read:
@@ -86,8 +44,3 @@ Invalid stories:
 Board path:
 Warnings:
 ```
-
-## Exportações
-
-CSV, planilhas ou outros formatos são exportações derivadas e futuras.
-Não mantenha CSV em paralelo como fonte de verdade.

@@ -1,32 +1,153 @@
-# Meridian Global Agent Rules
+---
+trigger: always_on
+---
 
-These rules apply to every agent working in a Meridian project.
+# MERIDIAN.md — regras globais do kit
 
-## Core Rules
+> Define como o agente se comporta em workspaces que usam Meridian.
 
-1. Read `.agent/MERIDIAN.md` before changing project structure when available; otherwise read `meridian.md`.
-2. Treat `docs/` as the project source of truth.
-3. Do not write implementation code before the relevant docs exist.
-4. Do not create user stories before `04_epics.md` and `06_versions.md` are approved.
-5. Do not edit old entries in `11_decisions.md`.
-6. Do not manually maintain CSV board files.
-7. Generate `docs/kanban/board.json` from user story frontmatter.
-8. Never mark `✅` without evidence.
-9. Never leave `🔶` without `Falta:` in acceptance criteria.
-10. Protect `.env`, `.env.*`, logs, builds, dependencies and caches from Git.
+---
 
-## AI-Agent Safety
+## CRITICAL: protocolo agent + skill (comece aqui)
 
-Agents must not:
+> **OBRIGATÓRIO:** Leia o agent adequado e suas skills ANTES de alterar estrutura, docs ou código do projeto.
 
-- expose secrets;
-- run destructive commands without explicit approval;
-- weaken auth, authorization, validation or logging without a decision;
-- send sensitive project files to external services without permission;
-- operate indefinitely without returning status to the human manager.
+### 1. Carregamento modular de skills
 
-## Decision Rule
+Agent ativado → confira frontmatter `skills:` → leia `SKILL.md` (índice) → leia só arquivos relevantes em `references/`.
 
-If a change affects scope, stack, security, users, epics, versions, architecture,
-database, API contracts, environments, acceptance criteria or agent governance,
-append an entry to `docs/11_decisions.md`.
+- **Leitura seletiva:** NÃO leia todos os arquivos da pasta da skill. Leia `SKILL.md` primeiro; depois só o que a solicitação exige.
+- **Prioridade de regras:** P0 (`rules/MERIDIAN.md`) > P1 (`.agent/MERIDIAN.md` + agent `.md`) > P2 (`SKILL.md`).
+
+### 2. Protocolo de enforcement
+
+1. **Quando um agent for ativado:** leia rules → frontmatter → `SKILL.md` → aplique tudo.
+2. **Proibido:** pular agent/skill e ir direto para implementação.
+
+---
+
+## Classificador de pedido (passo 1)
+
+Antes de qualquer ação, classifique:
+
+| Tipo | Gatilhos | Resultado |
+| ---- | -------- | --------- |
+| **PERGUNTA** | "o que é", "como funciona", "explique" | Resposta textual; não altere docs |
+| **STATUS** | "status", "onde estamos", "bloqueios" | `process-manager` + `/status` |
+| **DOC / FASE** | "escopo", "epic", "versão", "arquitetura", `00_`–`11_` | Agent de documentação conforme matriz |
+| **US / BOARD** | "user story", "US-", "kanban", "board" | `board-keeper` ou `sprint-planner` |
+| **SEGURANÇA** | "security", "OWASP", "secrets", `02_security` | `security-steward` |
+| **INICIAR PROJETO** | "iniciar", "setup meridian", "criar docs" | `process-manager` + `init-project` |
+| **CÓDIGO** | "implementar", "criar app", "fix", "refactor" | Verificar maturidade dos docs ANTES |
+| **SLASH** | `/init-meridian`, `/create-us`, etc. | Fluxo do workflow correspondente |
+
+> Para roteamento automático de agents, siga `@[skills/meridian-routing]`.
+
+---
+
+## Roteamento automático (passo 2)
+
+1. **Analise (silencioso):** domínio Meridian (governança, escopo, doc, segurança, arquitetura, sprint, board).
+2. **Selecione o(s) agent(s).**
+3. **Informe o usuário:**
+
+```markdown
+🤖 **Aplicando conhecimento de `@[agent-name]`...**
+
+[resposta especializada]
+```
+
+4. **Respeite override:** se o usuário citar `@scope-architect`, use esse agent.
+
+### Checklist antes de código ou US
+
+| Passo | Verificação | Se falhar |
+| ----- | ----------- | --------- |
+| 1 | Agent correto para o domínio? | Pare; reclassifique o pedido |
+| 2 | Leu `.agent/agents/{agent}.md`? | Pare; abra o agent |
+| 3 | Anunciou `🤖 Aplicando...`? | Adicione antes da resposta |
+| 4 | Carregou skills do frontmatter? | Leia cada `SKILL.md` listado |
+| 5 | Docs exigidos existem e estão na maturidade certa? | Bloqueie; reporte ao manager |
+
+**Violações:**
+
+- Código sem docs mínimos = **falha de protocolo**
+- US sem `04_epics` + `06_versions` approved = **falha de protocolo**
+- `✅` sem evidência = **falha de protocolo**
+
+---
+
+## TIER 0: regras universais (sempre ativas)
+
+### Fonte de verdade
+
+- `docs/` é a fonte de verdade do **projeto alvo** (não confundir com `app-desktop/docs/` deste repo, salvo contexto explícito).
+- `docs/kanban/board.json` é **derivado** de `docs/us/*.md`.
+- Leia `.agent/MERIDIAN.md` (ou `meridian.md`) antes de mudar estrutura do projeto.
+
+### Documentação precede código
+
+Não escreva código de produto até existirem os docs exigidos pela fase atual (ver `.agent/MERIDIAN.md`).
+
+### Maturidade
+
+- Não marque `approved` sem confirmação humana ou autorização explícita.
+- Não crie US antes de `04_epics.md` e `06_versions.md` estarem `approved`.
+- Não edite entradas antigas em `11_decisions.md` (append-only).
+
+### Aceite e status
+
+- Nunca `✅` sem evidência objetiva.
+- Nunca `🔶` sem `Falta:` nos critérios de aceite.
+
+### Segurança e Git
+
+- Proteja `.env`, `.env.*`, logs, builds, `node_modules`, caches.
+- Não exponha segredos; não execute comandos destrutivos sem aprovação.
+- Mudanças de segurança exigem decisão em `11_decisions.md`.
+
+### Manager humano
+
+A pessoa é manager do processo. Agentes reportam bloqueios, próximo passo e decisões pendentes — não substituem julgamento.
+
+---
+
+## TIER 1: quando escrever ou alterar artefatos
+
+| Artefato | Agent primário | Skill |
+| -------- | -------------- | ----- |
+| Estrutura `docs/` | `process-manager` | `init-project` |
+| `00_scope.md` | `scope-architect` | `init-project` |
+| `01`–`05`, `08`–`10` | `documentation-strategist` | `update-decisions-log` |
+| `02_security.md` | `security-steward` | `security-review` |
+| `07_architecture.md` | `architecture-guardian` | `security-review` |
+| `06_versions.md`, sprints | `sprint-planner` | `create-user-story` |
+| `docs/us/*.md` | `board-keeper` | `create-user-story` |
+| `board.json` | `board-keeper` | `generate-board-json` |
+| `11_decisions.md` | qualquer agent relevante | `update-decisions-log` |
+
+---
+
+## Mapa do kit (leitura de sessão)
+
+| Recurso | Caminho |
+| ------- | ------- |
+| Protocolo master | `.agent/MERIDIAN.md` |
+| Arquitetura do kit | `.agent/ARCHITECTURE.md` |
+| Agents | `.agent/agents/` |
+| Skills | `.agent/skills/` |
+| Workflows | `.agent/workflows/` |
+| Validação | `python .agent/scripts/validate_meridian.py <pasta-projeto>` |
+
+---
+
+## Referência rápida
+
+- **Governança:** `process-manager`
+- **Escopo:** `scope-architect`
+- **Docs de fase:** `documentation-strategist`
+- **Segurança:** `security-steward`
+- **Arquitetura:** `architecture-guardian`
+- **Versões/sprints:** `sprint-planner`
+- **US/board:** `board-keeper`
+- **Roteamento:** `meridian-routing`

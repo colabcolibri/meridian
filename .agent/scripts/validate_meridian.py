@@ -29,6 +29,44 @@ PHASE_DOCS = [
 ]
 
 
+AGENT_KIT_PATHS = [
+    "ARCHITECTURE.md",
+    "MERIDIAN.md",
+    "rules/MERIDIAN.md",
+    "skills/doc.md",
+    "skills/meridian-routing/SKILL.md",
+    "skills/init-project/SKILL.md",
+    "scripts/validate_meridian.py",
+]
+
+REQUIRED_AGENTS = [
+    "process-manager.md",
+    "scope-architect.md",
+    "documentation-strategist.md",
+    "security-steward.md",
+    "architecture-guardian.md",
+    "sprint-planner.md",
+    "board-keeper.md",
+]
+
+
+def validate_agent_kit(repo_root: Path, errors: list[str], warnings: list[str]) -> None:
+    agent_dir = repo_root / ".agent"
+    if not agent_dir.is_dir():
+        return
+    for rel in AGENT_KIT_PATHS:
+        if not (agent_dir / rel).exists():
+            warnings.append(f"Missing .agent/{rel} in kit.")
+    rules = agent_dir / "rules" / "MERIDIAN.md"
+    if rules.exists() and "trigger: always_on" not in rules.read_text(encoding="utf-8"):
+        warnings.append(".agent/rules/MERIDIAN.md missing trigger: always_on")
+    agents_dir = agent_dir / "agents"
+    if agents_dir.is_dir():
+        for name in REQUIRED_AGENTS:
+            if not (agents_dir / name).exists():
+                warnings.append(f"Missing .agent/agents/{name}")
+
+
 def read_frontmatter(path: Path) -> dict[str, str]:
     text = path.read_text(encoding="utf-8")
     if not text.startswith("---\n"):
@@ -46,13 +84,22 @@ def read_frontmatter(path: Path) -> dict[str, str]:
 
 
 def main() -> int:
-    root = Path(sys.argv[1]) if len(sys.argv) > 1 else Path.cwd()
+    root = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else Path.cwd()
     docs = root / "docs"
     errors: list[str] = []
     warnings: list[str] = []
 
-    if not (root / "meridian.md").exists() and not (root.parent / "meridian.md").exists():
-        warnings.append("Missing meridian.md at project root.")
+    kit_root: Path | None = None
+    if (root / "meridian.md").exists():
+        kit_root = root
+    elif (root.parent / "meridian.md").exists():
+        kit_root = root.parent
+    if kit_root is None:
+        warnings.append("Missing meridian.md at project or parent root.")
+    else:
+        if not (kit_root / "README.md").exists():
+            warnings.append("Missing README.md at kit repository root.")
+        validate_agent_kit(kit_root, errors, warnings)
 
     if not docs.exists():
         errors.append("Missing docs/ directory.")

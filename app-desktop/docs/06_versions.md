@@ -30,7 +30,7 @@ blocks: [07_architecture.md, 08_database.md]
 - Layout principal do app.
 - Dados iniciais simulando uma pasta Meridian monitorada.
 - Documentação `app-desktop/docs` inicial.
-- `meridian.md` universal preservado na raiz do repositório.
+- `README.md` e `meridian.md` na raiz; kit `.agent/` alinhado ao padrão Antigravity.
 
 ### Explicitamente fora
 
@@ -65,11 +65,12 @@ blocks: [07_architecture.md, 08_database.md]
 **Done quando:** o app Vite existe, roda localmente, usa shadcn/ui e mostra uma visão inicial de uma pasta Meridian monitorada.
 **Status:** ❌
 
-| US     | Status | MoSCoW | Depende de | Descrição                                                          | Aceite                                                      | Fora de escopo          |
-| ------ | ------ | ------ | ---------- | ------------------------------------------------------------------ | ----------------------------------------------------------- | ----------------------- |
-| US-001 | ✅     | Must   | —          | Como Manager do Processo, quero abrir o app Meridian localmente    | App roda com `pnpm dev` e renderiza layout inicial          | Escrita em disco        |
-| US-002 | ✅     | Must   | US-001     | Como Manager do Processo, quero ver os docs de fase e status       | Lista de docs exibe dependências e bloqueios básicos        | Edição real de Markdown |
-| US-003 | ✅     | Must   | US-001     | Como Manager do Processo, quero Git e qualidade local configurados | Git, gitignore, Prettier, Husky e lint-staged configurados  | CI remoto               |
-| US-004 | ✅     | Must   | US-001     | Como Manager do Processo, quero separar protocolo e app desktop    | `meridian.md` fica na raiz e app Vite em `app-desktop/`     | Abertura real de pasta  |
-| US-005 | ✅     | Must   | US-004     | Como Manager do Processo, quero skills auxiliares para agentes     | `.agent/skills` criado e segurança aprofundada no protocolo | UI de skills            |
-| US-006 | ✅     | Must   | US-005     | Como Manager do Processo, quero camada `.agent` organizada         | Agents, skills, workflows, rules e scripts em `.agent/`     | CLI de instalação       |
+| US     | Status | MoSCoW | Depende de | Descrição                                                          | Aceite                                                        | Fora de escopo          |
+| ------ | ------ | ------ | ---------- | ------------------------------------------------------------------ | ------------------------------------------------------------- | ----------------------- |
+| US-001 | ✅     | Must   | —          | Como Manager do Processo, quero abrir o app Meridian localmente    | App roda com `pnpm dev` e renderiza layout inicial            | Escrita em disco        |
+| US-002 | ✅     | Must   | US-001     | Como Manager do Processo, quero ver os docs de fase e status       | Lista de docs exibe dependências e bloqueios básicos          | Edição real de Markdown |
+| US-003 | ✅     | Must   | US-001     | Como Manager do Processo, quero Git e qualidade local configurados | Git, gitignore, Prettier, Husky e lint-staged configurados    | CI remoto               |
+| US-004 | ✅     | Must   | US-001     | Como Manager do Processo, quero separar protocolo e app desktop    | `meridian.md` fica na raiz e app Vite em `app-desktop/`       | Abertura real de pasta  |
+| US-005 | ✅     | Must   | US-004     | Como Manager do Processo, quero skills auxiliares para agentes     | `.agent/skills` criado e segurança aprofundada no protocolo   | UI de skills            |
+| US-006 | ✅     | Must   | US-005     | Como Manager do Processo, quero camada `.agent` organizada         | Agents, skills, workflows, rules e scripts em `.agent/`       | CLI de instalação       |
+| US-007 | ✅     | Must   | US-006     | Como Manager do Processo, quero kit `.agent` no padrão Antigravity | README, rules always_on, routing, references, workflows ricos | UI de edição do kit     |

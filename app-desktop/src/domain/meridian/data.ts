@@ -182,4 +182,15 @@ export const userStories: UserStory[] = [
     doneWhen:
       ".agent contém agents, skills, workflows, rules e scripts no padrão Meridian.",
   },
+  {
+    id: "US-007",
+    title: "Alinhar kit .agent ao padrão Antigravity",
+    epic: "EPIC-01",
+    version: "v0",
+    status: "✅",
+    moscow: "Must",
+    dependsOn: ["US-006"],
+    doneWhen:
+      "README.md na raiz, rules always_on, meridian-routing e workflows com $ARGUMENTS existem no kit.",
+  },
 ]

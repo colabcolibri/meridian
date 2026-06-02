@@ -96,3 +96,11 @@ blocks: []
 **Por que mudou:** A estrutura baseada em `.agent/` é mais completa e permite organizar agents, skills, workflows, rules e scripts em uma única camada operacional para agentes.
 **Impacto em outros docs:** 00_scope.md, 06_versions.md, US-005.md, US-006.md, board.json e `.agent/MERIDIAN.md`.
 **Responsável:** Produto/Engenharia
+
+## 2026-06-02 — Kit `.agent` alinhado ao padrão Antigravity
+
+**Documento afetado:** README.md (raiz), meridian.md, `.agent/`
+**O que mudou:** Criado `README.md` na raiz do repositório; `rules/MERIDIAN.md` passou a usar `trigger: always_on`; adicionados `meridian-routing`, `skills/doc.md`, `references/` nas skills, agents operacionais com fases, workflows com `$ARGUMENTS` e `ARCHITECTURE.md` atualizado.
+**Por que mudou:** O kit precisa da mesma profundidade operacional do Antigravity (progressive disclosure, roteamento, gates) adaptada à governança documental Meridian, não apenas pastas vazias.
+**Impacto em outros docs:** app-desktop/docs (US-007, README, 00_scope, 06_versions, 07_architecture), board.json e validação do app.
+**Responsável:** Produto/Engenharia
