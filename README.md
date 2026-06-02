@@ -66,11 +66,6 @@ Meridian is **not tied to Cursor**. The kit lives in `.agent/` (Antigravity / ag
 
 Details: [`.agent/CURSOR_ADAPTER.md`](.agent/CURSOR_ADAPTER.md)
 
-<p align="center">
-  <img src="assets/screenshots/monitor-setup.jpg" alt="Meridian Desktop — Setup tab with phase document progress" width="920" />
-</p>
-<p align="center"><em>Optional monitor — Setup tab (the agent flow itself runs via <code>.agent/</code> in your IDE).</em></p>
-
 ## How it works
 
 1. **Document** — Phase docs (`00_scope` … `05_architecture`, security, stack, …) and `docs/decisions/` for why things changed.
@@ -109,67 +104,83 @@ If your IDE already supports `.agent/`, skip the sync script and open the repo t
 
 **New to Meridian?** [Start here](.agent/references/start-here.md) → [Usage guide](.agent/references/usage-guide.md) → `/init-meridian` or `/status`.
 
-1. Open **http://localhost:5173** (optional monitor)
-2. Click **Open docs folder**
-3. Select a Meridian `docs/` directory (try `app-desktop/docs/` in this repo)
+To try the optional monitor locally:
+
+1. `cd app-desktop && pnpm install && pnpm dev`
+2. Open **http://localhost:5173** (Chrome or Edge on localhost for folder access)
+3. Click **Open docs folder** and select a Meridian `docs/` directory (e.g. `app-desktop/docs/` in this repo)
 
 ## Desktop monitor (optional)
 
-The **real Meridian loop runs in your IDE** through `.agent/` (workflows and agents). The desktop app is only a **read-only dashboard** for the same `docs/` files — useful to see what is approved, blocked, or still open, but not required to use the protocol.
+The **real Meridian loop runs in your IDE** through `.agent/` — workflows, agents, and slash commands. The desktop app does **not** replace that; it is a **read-only window** on the same Markdown and JSON you already commit in `docs/`. Use it when you want a quick visual answer: *what is approved, what is blocked, which US is Must, what changed yesterday*.
 
-<details>
-<summary><strong>Start here</strong> — concepts and <code>docs/</code> layout</summary>
+Same guides as the first two tabs also exist as Markdown: [start-here.md](.agent/references/start-here.md) · [usage-guide.md](.agent/references/usage-guide.md).
 
-![Start here](assets/screenshots/monitor-start-here.jpg)
+| Tab | What you see | When it helps |
+| --- | ------------ | ------------- |
+| [Start here](#start-here-tab) | Concepts, `docs/` map, phases | Onboarding yourself or someone else |
+| [Usage guide](#usage-guide-tab) | Daily paths and slash commands | Choosing the next command in a session |
+| [Setup](#setup-tab) | Phase docs 00–11 and gates | Knowing which doc unlocks the next |
+| [Decisions](#decisions-tab) | `docs/decisions/*.json` by day | Auditing *why* scope or stack changed |
+| [Deliverables](#deliverables-tab) | Versions, sprints, epics, coverage | Planning releases without opening every file |
+| [Board](#board-tab) | Kanban from US frontmatter | Execution focus — what is ❌, 🔶, ✅, 🧪 |
+| [Story detail](#story-detail-tab) | One US opened in full | Reviewing Acceptance and implementation evidence |
 
-Explains the Meridian model: phase docs, delivery folders (`epics/`, `versions/`, `sprints/`, `us/`), decision log, and why the board is derived from user stories. Full text: [start-here.md](.agent/references/start-here.md).
+### Start here tab
 
-</details>
+Onboarding inside the app: what Meridian is, what lives under `docs/`, how phase documents chain into architecture, and how epics/versions/sprints/US relate. Mirrors [start-here.md](.agent/references/start-here.md) for reading in the IDE or on GitHub without running the app.
 
-<details>
-<summary><strong>Usage guide</strong> — daily flow and slash commands</summary>
+<p align="center">
+  <img src="assets/screenshots/monitor-start-here.jpg" alt="Meridian monitor — Start here tab with concepts and docs layout" width="920" />
+</p>
 
-![Usage guide](assets/screenshots/monitor-usage-guide.jpg)
+### Usage guide tab
 
-Step-by-step paths (first run, document, backlog, implement, close US) with commands such as `/init-meridian`, `/status`, `/create-us`, and `/complete-us`. Full text: [usage-guide.md](.agent/references/usage-guide.md).
+Action-oriented: *where am I?* → first time, document, build backlog, implement US, close US. Each block ties to slash commands (`/init-meridian`, `/status`, `/create-us`, `/complete-us`, …). Mirrors [usage-guide.md](.agent/references/usage-guide.md).
 
-</details>
+<p align="center">
+  <img src="assets/screenshots/monitor-usage-guide.jpg" alt="Meridian monitor — Usage guide tab with workflow sections and commands" width="920" />
+</p>
 
-<details>
-<summary><strong>Decisions</strong> — <code>docs/decisions/YYYY-MM-DD.json</code></summary>
+### Setup tab
 
-![Decisions](assets/screenshots/monitor-decisions.jpg)
+Reads your project's phase Markdown (`00_scope` through `08_environments`, `11_decisions`) and shows **draft**, **review**, or **approved** per file, plus what is still blocked. This is the visual gate before you create epics or user stories — architecture must be **approved** before backlog work is valid.
 
-Daily JSON log: what changed, why, and which documents were affected. New entries go at the top; history is never deleted.
+<p align="center">
+  <img src="assets/screenshots/monitor-setup.jpg" alt="Meridian monitor — Setup tab with phase document progress and dependencies" width="920" />
+</p>
 
-</details>
+### Decisions tab
 
-<details>
-<summary><strong>Deliverables</strong> — versions, sprints, epics</summary>
+Lists `docs/decisions/YYYY-MM-DD.json` files. Each day is one JSON file; new decisions are **prepended** to `entries` (newest first). You see title, rationale, and which documents were affected — the audit trail agents and humans should update when scope, stack, or security shifts.
 
-![Deliverables](assets/screenshots/monitor-deliverables.jpg)
+<p align="center">
+  <img src="assets/screenshots/monitor-decisions.jpg" alt="Meridian monitor — Decisions tab showing daily decision log entries" width="920" />
+</p>
 
-Release-level view with user story coverage per epic and sprint lists per version.
+### Deliverables tab
 
-</details>
+Release planning view: versions (v0, v1, …), sprints under each version, epics with **user story coverage** (how many US exist vs. planned). Use it to spot gaps before you open individual files in `docs/epics/` or `docs/versions/`.
 
-<details>
-<summary><strong>Board</strong> — kanban from user story status</summary>
+<p align="center">
+  <img src="assets/screenshots/monitor-deliverables.jpg" alt="Meridian monitor — Deliverables tab with versions, sprints, and epic coverage" width="920" />
+</p>
 
-![Board](assets/screenshots/monitor-board.jpg)
+### Board tab
 
-Columns driven by story frontmatter (pending, in progress, tests pending, done, frozen). Filter by version and epic.
+Kanban **generated from** `docs/us/*.md` frontmatter — not edited by hand in `board.json`. Columns reflect status (pending, in progress, waiting for tests, done, frozen). Filter by version and epic when the backlog grows.
 
-</details>
+<p align="center">
+  <img src="assets/screenshots/monitor-board.jpg" alt="Meridian monitor — Board tab with kanban columns from user story status" width="920" />
+</p>
 
-<details>
-<summary><strong>Story detail</strong> — one user story opened</summary>
+### Story detail tab
 
-![Story detail](assets/screenshots/monitor-story-detail.jpg)
+Drill-down on a single user story: narrative, **Acceptance** checkboxes, **Technical implementation** (required before ✅), and **Tests** when `tests: required`. What you verify here should match what `/complete-us` writes back to the file — chat alone is not enough.
 
-Full US view: narrative, acceptance checkboxes, technical implementation notes, and test evidence.
-
-</details>
+<p align="center">
+  <img src="assets/screenshots/monitor-story-detail.jpg" alt="Meridian monitor — Story detail with acceptance, implementation, and tests" width="920" />
+</p>
 
 ## Adopt Meridian in your project
 
