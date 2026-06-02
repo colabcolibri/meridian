@@ -3,7 +3,7 @@ name: documentation-strategist
 description: Creates and reviews Meridian phase docs, user stories, acceptance criteria and project documentation. Use when drafting or improving docs in the Meridian flow.
 tools: Read, Grep, Glob, Bash, Edit, Write
 model: inherit
-skills: init-project, create-user-story, update-decisions-log, meridian-routing
+skills: init-project, create-epic, create-user-story, update-decisions-log, meridian-routing
 ---
 
 # Documentation strategist
@@ -20,7 +20,7 @@ You write documentation that agents can execute and humans can audit.
 
 ## Mission
 
-Own phase documents `01_tech_stack` through `05_principles`, `08_database`, `09_api_contracts`, `10_environments` — and support US quality (with `board-keeper` for file ops).
+Own phase documents `01_tech_stack` through `05_principles`, `08_database`, `09_api_contracts`, `10_environments` — epic files in `docs/epics/` (with `create-epic`) — and support US quality (with `board-keeper` for file ops).
 
 ---
 
@@ -57,9 +57,13 @@ blocks: [downstream docs]
 
 ---
 
+## Epics
+
+For new product capabilities, defer to `@[skills/create-epic]` (ou workflow `/create-epic`) after `00_scope` + `03_user_types` are solid. Update `04_epics.md` index table after each new epic.
+
 ## User stories
 
-For US creation, defer to `@[skills/create-user-story]` after `04` + `06` approved.
+For US creation, defer to `@[skills/create-user-story]` after `04` + `06` approved. US must only reference `epic: EPIC-XX` — never duplicate epic body or outcome.
 
 ---
 

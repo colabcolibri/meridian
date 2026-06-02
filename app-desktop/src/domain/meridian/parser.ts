@@ -1,4 +1,5 @@
 import {
+  extractMarkdownSection,
   extractPurposeFromBody,
   normalizeDocRefList,
   phaseLabelForDocId,
@@ -12,6 +13,10 @@ import type {
   PhaseDocument,
   StoryStatus,
   UserStory,
+  ProductVersion,
+  Sprint,
+  ReleaseStatus,
+  SprintStatus,
 } from "@/domain/meridian/types"
 
 export class MeridianParseError extends Error {
@@ -28,6 +33,10 @@ const DOC_STATUSES: DocStatus[] = ["draft", "review", "approved"]
 const STORY_STATUSES: StoryStatus[] = ["✅", "🔶", "❌", "🧊"]
 const MOSCOW_VALUES: Moscow[] = ["Must", "Should", "Could", "Won't"]
 const EPIC_STATUSES: EpicStatus[] = ["active", "paused", "complete"]
+const RELEASE_STATUSES: ReleaseStatus[] = ["planned", "active", "complete"]
+const SPRINT_STATUSES: SprintStatus[] = ["planned", "active", "complete"]
+const VERSION_ID_PATTERN = /^v\d+$/i
+const SPRINT_ID_PATTERN = /^v\d+-S\d+$/i
 
 function requireString(
   record: Record<string, unknown>,
@@ -73,6 +82,32 @@ function parseEpicStatus(value: string): EpicStatus {
   return "active"
 }
 
+function parseReleaseStatus(value: string): ReleaseStatus {
+  const normalized = value.trim().toLowerCase()
+  if (RELEASE_STATUSES.includes(normalized as ReleaseStatus)) {
+    return normalized as ReleaseStatus
+  }
+  return "planned"
+}
+
+function parseSprintStatus(value: string): SprintStatus {
+  const normalized = value.trim().toLowerCase()
+  if (SPRINT_STATUSES.includes(normalized as SprintStatus)) {
+    return normalized as SprintStatus
+  }
+  return "planned"
+}
+
+function assertFilenameMatchesId(file: string, filename: string, id: string) {
+  const expectedFilename = `${id}.md`
+  if (filename.toLowerCase() !== expectedFilename.toLowerCase()) {
+    throw new MeridianParseError(
+      file,
+      `id "${id}" não confere com o nome do arquivo (${filename})`,
+    )
+  }
+}
+
 export function parsePhaseDocument(docId: string, raw: string): PhaseDocument {
   const file = `${docId}.md`
   const { frontmatter, body } = splitMarkdown(raw)
@@ -103,9 +138,18 @@ export function parseUserStoryFile(filename: string, raw: string): UserStory {
   }
 
   const record = parseFrontmatterRecord(frontmatter)
+  const id = requireString(record, "id", file)
+  assertFilenameMatchesId(file, filename, id)
+
+  if (!/^US-\d{4}$/i.test(id)) {
+    throw new MeridianParseError(
+      file,
+      `id "${id}" deve usar formato US-XXXX (4 dígitos)`,
+    )
+  }
 
   return {
-    id: requireString(record, "id", file),
+    id,
     title: requireString(record, "title", file),
     epic: requireString(record, "epic", file),
     version: requireString(record, "version", file),
@@ -155,21 +199,78 @@ export function parseEpicFile(filename: string, raw: string): Epic {
 
   const record = parseFrontmatterRecord(frontmatter)
   const id = requireString(record, "id", file)
-  const expectedFilename = `${id}.md`
+  assertFilenameMatchesId(file, filename, id)
 
-  if (filename.toLowerCase() !== expectedFilename.toLowerCase()) {
-    throw new MeridianParseError(
-      file,
-      `id "${id}" não confere com o nome do arquivo (${filename})`,
-    )
+  return {
+    id,
+    title: requireString(record, "title", file),
+    description:
+      extractMarkdownSection(body, "Capacidade") || extractPurposeFromBody(body),
+    outcome: requireString(record, "outcome", file),
+    scopeOut: extractMarkdownSection(body, "Fora deste epic"),
+    versions: parseEpicVersions(record.versions, file),
+    profiles: parseStringList(record.profiles),
+    status: parseEpicStatus(String(record.status ?? "active")),
+  }
+}
+
+export function parseVersionFile(filename: string, raw: string): ProductVersion {
+  const file = `versions/${filename}`
+  const { frontmatter, body } = splitMarkdown(raw)
+
+  if (!frontmatter) {
+    throw new MeridianParseError(file, "frontmatter YAML obrigatório")
+  }
+
+  const record = parseFrontmatterRecord(frontmatter)
+  const id = requireString(record, "id", file)
+  assertFilenameMatchesId(file, filename, id)
+
+  if (!VERSION_ID_PATTERN.test(id)) {
+    throw new MeridianParseError(file, `id "${id}" deve usar formato vX (ex.: v0, v1)`)
   }
 
   return {
     id,
     title: requireString(record, "title", file),
-    description: extractPurposeFromBody(body),
-    versions: parseEpicVersions(record.versions, file),
-    profiles: parseStringList(record.profiles),
-    status: parseEpicStatus(String(record.status ?? "active")),
+    outcome: requireString(record, "outcome", file),
+    objective: extractMarkdownSection(body, "Objetivo"),
+    scopeIn: extractMarkdownSection(body, "Incluído nesta versão"),
+    scopeOut: extractMarkdownSection(body, "Explicitamente fora"),
+    status: parseReleaseStatus(String(record.status ?? "planned")),
+  }
+}
+
+export function parseSprintFile(filename: string, raw: string): Sprint {
+  const file = `sprints/${filename}`
+  const { frontmatter } = splitMarkdown(raw)
+
+  if (!frontmatter) {
+    throw new MeridianParseError(file, "frontmatter YAML obrigatório")
+  }
+
+  const record = parseFrontmatterRecord(frontmatter)
+  const id = requireString(record, "id", file)
+  assertFilenameMatchesId(file, filename, id)
+
+  if (!SPRINT_ID_PATTERN.test(id)) {
+    throw new MeridianParseError(
+      file,
+      `id "${id}" deve usar formato vX-SY (ex.: v1-S1)`,
+    )
+  }
+
+  const versionId = requireString(record, "version", file)
+  if (!VERSION_ID_PATTERN.test(versionId)) {
+    throw new MeridianParseError(file, `version "${versionId}" deve usar formato vX`)
+  }
+
+  return {
+    id,
+    versionId,
+    title: requireString(record, "title", file),
+    doneWhen: requireString(record, "done_when", file),
+    status: parseSprintStatus(String(record.status ?? "planned")),
+    storyIds: parseStringList(record.stories),
   }
 }

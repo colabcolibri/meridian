@@ -22,7 +22,7 @@ docs/
     EPIC-02.md
     …
   us/
-    US-001.md
+    US-0001.md
     …
 ```
 
@@ -34,7 +34,7 @@ Este documento (`04_epics.md`) é o **índice de fase**: confirma que o catálog
 | ------- | ------------------------------- | -------- | ------- |
 | EPIC-01 | Estrutura do Projeto            | complete | v0      |
 | EPIC-02 | Monitor de Configuração Inicial | complete | v0, v1  |
-| EPIC-03 | Validações Meridian             | active   | v1      |
+| EPIC-03 | Validações Meridian             | complete | v1      |
 | EPIC-04 | Kanban e User Stories           | active   | v1, v2  |
 | EPIC-05 | Ponte VSCode                    | paused   | v2      |
 | EPIC-06 | Experiência do monitor          | complete | v1-S2   |
@@ -42,6 +42,8 @@ Este documento (`04_epics.md`) é o **índice de fase**: confirma que o catálog
 ## Regras
 
 - IDs permanentes: `EPIC-01`, `EPIC-02`, … (nunca reutilizar).
-- User stories referenciam `epic: EPIC-XX` no frontmatter.
+- Cada epic exige `outcome` no frontmatter e seções **Capacidade** / **Fora deste epic** no corpo.
+- User stories referenciam `epic: EPIC-XX` no frontmatter — **referência por ID**, sem repetir texto do epic.
 - User stories só podem ser criadas quando **`04_epics.md` e `06_versions.md` estão `approved`**.
 - Epic não é módulo de código — é capacidade entregue ao usuário.
+- Novo epic → `/create-epic` ou skill `create-epic` + atualizar tabela acima.

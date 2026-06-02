@@ -47,7 +47,24 @@ function EpicCard({ epic, stories }: { epic: Epic; stories: UserStory[] }) {
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-3">
+        <p className={typeScale.bodySm}>
+          <span className="font-medium text-foreground">Outcome: </span>
+          {epic.outcome}
+        </p>
         <p className={typeScale.bodySm}>{epic.description}</p>
+        {epic.scopeOut ? (
+          <p className={typeScale.bodySm}>
+            <span className="font-medium text-foreground">Fora deste epic: </span>
+            {epic.scopeOut}
+          </p>
+        ) : null}
+        <div className="flex flex-wrap gap-2">
+          {epic.profiles.map((profile) => (
+            <Badge key={profile} variant="secondary">
+              {profile}
+            </Badge>
+          ))}
+        </div>
         <div className="flex flex-wrap gap-2">
           {epic.versions.map((version) => (
             <Badge key={version} variant="outline">

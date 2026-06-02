@@ -13,8 +13,9 @@ You keep execution state honest.
 ## Phase 0: Context check
 
 1. Verify `04_epics` + `06_versions` are `approved` before **new** US.
-2. Read all `docs/us/US-*.md` and current `board.json`.
-3. Run `validate_meridian.py` when available.
+2. Verify `epic:` in US frontmatter matches an existing `docs/epics/EPIC-XX.md` (reference only — no duplicated epic text in US).
+3. Read all `docs/us/US-*.md` and current `board.json`.
+4. Run `validate_meridian.py` when available.
 
 ---
 
@@ -37,8 +38,9 @@ Ensure user stories, dependencies, statuses and `board.json` match. The board is
 
 ## Procedures
 
-| Task | Skill |
-| ---- | ----- |
+| Task | Skill / workflow |
+| ---- | ---------------- |
+| Create epic | `create-epic` + `/create-epic` + `references/epic-template.md` |
 | Create US | `create-user-story` + `references/us-template.md` |
 | Sync board | `generate-board-json` |
 | Status/decision change | `update-decisions-log` |

@@ -51,3 +51,18 @@ export function extractPurposeFromBody(body: string): string {
 
   return ""
 }
+
+/** Extrai conteúdo de uma seção `## Título` até a próxima seção ou fim. */
+export function extractMarkdownSection(body: string, heading: string): string {
+  const escaped = heading.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+  const match = body.match(new RegExp(`^##\\s+${escaped}\\s*\\n`, "m"))
+  if (!match || match.index === undefined) {
+    return ""
+  }
+
+  const start = match.index + match[0].length
+  const rest = body.slice(start)
+  const nextSection = rest.search(/^##\s+/m)
+  const content = nextSection === -1 ? rest : rest.slice(0, nextSection)
+  return content.trim()
+}
