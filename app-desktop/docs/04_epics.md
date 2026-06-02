@@ -37,7 +37,7 @@ Este documento (`04_epics.md`) é o **índice de fase**: confirma que o catálog
 | EPIC-03 | Validações Meridian             | complete | v1      |
 | EPIC-04 | Kanban e User Stories           | active   | v1, v2  |
 | EPIC-05 | Ponte VSCode                    | paused   | v2      |
-| EPIC-06 | Experiência do monitor          | complete | v1-S2   |
+| EPIC-06 | Experiência do monitor          | active   | v1      |
 
 ## Regras
 

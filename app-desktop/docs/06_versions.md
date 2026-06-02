@@ -29,6 +29,8 @@ Detalhes de cada release: **`docs/versions/`** · Sprints: **`docs/sprints/`**
 | v0-S2  | v0     | complete | Shell do monitor (3 visões) |
 | v1-S1  | v1     | complete | Leitura real da pasta       |
 | v1-S2  | v1     | complete | Experiência do monitor (UX) |
+| v1-S3  | v1     | complete | Polish Entregas + Quadro    |
+| v1-S4  | v1     | complete | Layout visual do monitor    |
 
 ## Regras
 

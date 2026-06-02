@@ -324,5 +324,41 @@
       "US-0017"
     ],
     "done_when": "Loader lê docs/versions/ e docs/sprints/; alertas citam arquivo; Entregas mostra sprints por versão."
+  },
+  {
+    "id": "US-0028",
+    "title": "Quadro com tokens visuais consistentes",
+    "epic": "EPIC-06",
+    "version": "v1",
+    "status": "✅",
+    "moscow": "Must",
+    "depends_on": [
+      "US-0023"
+    ],
+    "done_when": "Kanban e banner de issues usam bg-card/border-border; filtros em painel único; sem zinc-* solto."
+  },
+  {
+    "id": "US-0029",
+    "title": "Entregas com cards e barra de progresso",
+    "epic": "EPIC-06",
+    "version": "v1",
+    "status": "✅",
+    "moscow": "Must",
+    "depends_on": [
+      "US-0025"
+    ],
+    "done_when": "Cada versão em card com header destacado, progresso % e barra visual; épicos com mini progresso."
+  },
+  {
+    "id": "US-0030",
+    "title": "Shell do monitor com logo e fundo refinado",
+    "epic": "EPIC-06",
+    "version": "v1",
+    "status": "✅",
+    "moscow": "Should",
+    "depends_on": [
+      "US-0019"
+    ],
+    "done_when": "Top bar usa favicon; página com gradiente sutil; welcome screen alinhada aos tokens."
   }
 ]
