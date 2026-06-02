@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/logo-mark.svg" alt="Meridian" width="64" height="64" />
+  <img src="assets/screenshots/meridian-header.jpg" alt="Meridian — Documentation-Driven Development Protocol for AI Agents" width="100%" />
 </p>
 
 <p align="center">
