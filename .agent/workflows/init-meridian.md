@@ -73,5 +73,6 @@ Informe ao usuário:
 Próximos passos:
 1. Revisar docs/00_scope.md
 2. Preencher 01_tech_stack e 02_security
-3. Aprovar epics/versões antes de /create-us
+3. Definir épicos com /create-epic (docs/epics/)
+4. Aprovar 04_epics + 06_versions antes de /create-us
 ```

@@ -129,9 +129,58 @@ def main() -> int:
 
     us_dir = docs / "us"
     epics_dir = docs / "epics"
+    versions_dir = docs / "versions"
+    sprints_dir = docs / "sprints"
     board_path = docs / "kanban" / "board.json"
     story_ids: set[str] = set()
     epic_ids: set[str] = set()
+    version_ids: set[str] = set()
+
+    if versions_dir.exists():
+        for version_path in sorted(versions_dir.glob("v*.md")):
+            if not re.match(r"v\d+\.md$", version_path.name):
+                errors.append(f"Invalid version filename: {version_path.name}")
+                continue
+            frontmatter = read_frontmatter(version_path)
+            version_id = frontmatter.get("id")
+            if not version_id:
+                errors.append(f"Missing id in {version_path.name}")
+                continue
+            if version_id in version_ids:
+                errors.append(f"Duplicate version id: {version_id}")
+            version_ids.add(version_id)
+            if version_path.stem != version_id:
+                errors.append(
+                    f"{version_path.name}: id {version_id} não confere com o nome do arquivo"
+                )
+            if not re.match(r"^v\d+$", str(version_id)):
+                errors.append(f"{version_path.name}: id deve usar formato vX")
+            if not frontmatter.get("outcome"):
+                errors.append(f"Missing outcome in {version_path.name}")
+            if not frontmatter.get("title"):
+                errors.append(f"Missing title in {version_path.name}")
+    else:
+        errors.append("Missing docs/versions/ directory.")
+
+    if sprints_dir.exists():
+        for sprint_path in sorted(sprints_dir.glob("v*-S*.md")):
+            if not re.match(r"v\d+-S\d+\.md$", sprint_path.name):
+                errors.append(f"Invalid sprint filename: {sprint_path.name}")
+                continue
+            frontmatter = read_frontmatter(sprint_path)
+            sprint_id = frontmatter.get("id")
+            version_ref = frontmatter.get("version")
+            if not sprint_id:
+                errors.append(f"Missing id in {sprint_path.name}")
+                continue
+            if sprint_path.stem != sprint_id:
+                errors.append(
+                    f"{sprint_path.name}: id {sprint_id} não confere com o nome do arquivo"
+                )
+            if version_ref and version_ids and version_ref not in version_ids:
+                errors.append(
+                    f"{sprint_path.name}: version {version_ref} não existe em docs/versions/"
+                )
 
     if epics_dir.exists():
         for epic_path in sorted(epics_dir.glob("EPIC-*.md")):
@@ -152,27 +201,50 @@ def main() -> int:
                 )
             if "status" not in frontmatter:
                 errors.append(f"Missing status in {epic_path.name}")
+            if not frontmatter.get("outcome"):
+                errors.append(f"Missing outcome in {epic_path.name}")
+            if not frontmatter.get("title"):
+                errors.append(f"Missing title in {epic_path.name}")
+            epic_versions = frontmatter.get("versions") or []
+            if isinstance(epic_versions, list):
+                for version_ref in epic_versions:
+                    if version_ids and version_ref not in version_ids:
+                        errors.append(
+                            f"{epic_path.name}: versions referencia {version_ref} inexistente"
+                        )
     else:
         errors.append("Missing docs/epics/ directory.")
 
     if us_dir.exists():
         for story in sorted(us_dir.glob("US-*.md")):
-            match = re.match(r"US-\d{3}\.md$", story.name)
+            match = re.match(r"US-\d{4}\.md$", story.name)
             if not match:
-                errors.append(f"Invalid story filename: {story}")
+                errors.append(f"Invalid story filename: {story.name} (use US-XXXX com 4 dígitos)")
+                continue
             frontmatter = read_frontmatter(story)
             story_id = frontmatter.get("id")
             status = frontmatter.get("status")
             epic_ref = frontmatter.get("epic")
+            version_ref = frontmatter.get("version")
             if story_id:
                 if story_id in story_ids:
                     errors.append(f"Duplicate story id: {story_id}")
                 story_ids.add(story_id)
+                if story.stem != story_id:
+                    errors.append(
+                        f"{story.name}: id {story_id} não confere com o nome do arquivo"
+                    )
+                if not re.match(r"^US-\d{4}$", story_id):
+                    errors.append(f"{story.name}: id deve usar formato US-XXXX (4 dígitos)")
             else:
                 errors.append(f"Missing id in {story}")
             if epic_ref and epic_ids and epic_ref not in epic_ids:
                 errors.append(
                     f"{story.name}: epic {epic_ref} não existe em docs/epics/"
+                )
+            if version_ref and version_ids and version_ref not in version_ids:
+                errors.append(
+                    f"{story.name}: version {version_ref} não existe em docs/versions/"
                 )
             if status == "🔶" and "Falta:" not in story.read_text(encoding="utf-8"):
                 errors.append(f"{story.name} is 🔶 but has no 'Falta:' in acceptance.")

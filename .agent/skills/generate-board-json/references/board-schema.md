@@ -1,11 +1,11 @@
 # Schema `docs/kanban/board.json`
 
-Array ordenado por `id` crescente (`US-001`, `US-002`, ...).
+Array ordenado por `id` crescente (`US-0001`, `US-0002`, ...).
 
 ```json
 [
   {
-    "id": "US-001",
+    "id": "US-0001",
     "title": "Título curto",
     "epic": "EPIC-01",
     "version": "v1",
@@ -21,13 +21,13 @@ Array ordenado por `id` crescente (`US-001`, `US-002`, ...).
 
 | Campo | Fonte |
 | ----- | ----- |
-| Todos | Frontmatter YAML de `docs/us/US-XXX.md` |
+| Todos | Frontmatter YAML de `docs/us/US-XXXX.md` |
 
 ## Validações
 
-- ID único, formato `US-\d+`
+- ID único, formato `US-XXXX` (4 dígitos)
 - Epic existe em `docs/epics/EPIC-XX.md`
-- Versão existe em `06_versions.md`
+- Versão existe em `docs/versions/vX.md`
 - Cada `depends_on` referencia US existente
 - `done_when` não vazio
 - Se `status` é `🔶`, aceite contém `Falta:`

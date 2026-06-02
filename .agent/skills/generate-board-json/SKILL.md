@@ -15,7 +15,7 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 ## Fonte de verdade
 
 ```txt
-docs/us/US-XXX.md  →  derivado  →  docs/kanban/board.json
+docs/us/US-XXXX.md  →  derivado  →  docs/kanban/board.json
 ```
 
 Nunca editar o board como fonte primária.

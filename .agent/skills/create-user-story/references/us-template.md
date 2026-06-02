@@ -2,7 +2,7 @@
 
 ```md
 ---
-id: US-XXX
+id: US-XXXX
 title: Título curto
 epic: EPIC-XX
 version: vX
@@ -12,7 +12,7 @@ depends_on: []
 done_when: "Condição objetiva e mensurável."
 ---
 
-# US-XXX — Título curto
+# US-XXXX — Título curto
 
 **Como** [tipo de usuário documentado em 03_user_types.md],
 **quero** [ação],
@@ -41,6 +41,7 @@ _(preencher quando aplicável)_
 ## Fora de escopo desta story
 
 - O que esta US explicitamente NÃO cobre
+- **Não** repita descrição, `outcome` ou escopo do epic — use só `epic: EPIC-XX` no frontmatter
 
 ## Notas
 

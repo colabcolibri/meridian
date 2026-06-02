@@ -1,6 +1,6 @@
 [
   {
-    "id": "US-001",
+    "id": "US-0001",
     "title": "Abrir app Meridian localmente",
     "epic": "EPIC-01",
     "version": "v0",
@@ -10,257 +10,257 @@
     "done_when": "App roda com pnpm dev e renderiza layout inicial profissional."
   },
   {
-    "id": "US-002",
+    "id": "US-0002",
     "title": "Ver documentos de fase e status",
     "epic": "EPIC-02",
     "version": "v0",
     "status": "✅",
     "moscow": "Must",
     "depends_on": [
-      "US-001"
+      "US-0001"
     ],
     "done_when": "Lista de documentos exibe status, dependências e bloqueios básicos."
   },
   {
-    "id": "US-003",
+    "id": "US-0003",
     "title": "Configurar Git e qualidade local",
     "epic": "EPIC-01",
     "version": "v0",
     "status": "✅",
     "moscow": "Must",
     "depends_on": [
-      "US-001"
+      "US-0001"
     ],
     "done_when": "Git, gitignore, Prettier, Husky e lint-staged estão configurados."
   },
   {
-    "id": "US-004",
+    "id": "US-0004",
     "title": "Separar protocolo universal e app desktop",
     "epic": "EPIC-01",
     "version": "v0",
     "status": "✅",
     "moscow": "Must",
     "depends_on": [
-      "US-001"
+      "US-0001"
     ],
     "done_when": "meridian.md fica na raiz como protocolo universal e o app Vite fica em app-desktop."
   },
   {
-    "id": "US-005",
+    "id": "US-0005",
     "title": "Criar skills iniciais em .agent",
     "epic": "EPIC-05",
     "version": "v0",
     "status": "✅",
     "moscow": "Must",
     "depends_on": [
-      "US-004"
+      "US-0004"
     ],
     "done_when": ".agent/skills contém skills iniciais para agentes usarem junto com .agent/MERIDIAN.md."
   },
   {
-    "id": "US-006",
+    "id": "US-0006",
     "title": "Organizar camada operacional .agent",
     "epic": "EPIC-05",
     "version": "v0",
     "status": "✅",
     "moscow": "Must",
     "depends_on": [
-      "US-005"
+      "US-0005"
     ],
     "done_when": ".agent contém agents, skills, workflows, rules e scripts no padrão Meridian."
   },
   {
-    "id": "US-007",
+    "id": "US-0007",
     "title": "Alinhar kit .agent ao padrão Antigravity",
     "epic": "EPIC-01",
     "version": "v0",
     "status": "✅",
     "moscow": "Must",
     "depends_on": [
-      "US-006"
+      "US-0006"
     ],
     "done_when": "README.md na raiz, rules always_on, agents/skills/workflows operacionais e meridian-routing existem no kit."
   },
   {
-    "id": "US-008",
+    "id": "US-0008",
     "title": "Monitor com três abas de produto",
     "epic": "EPIC-02",
     "version": "v0",
     "status": "✅",
     "moscow": "Must",
     "depends_on": [
-      "US-002"
+      "US-0002"
     ],
     "done_when": "App exibe abas Configuração inicial, Épicos e Kanban com um estado legível por doc/US."
   },
   {
-    "id": "US-009",
+    "id": "US-0009",
     "title": "Abrir pasta Meridian no app",
     "epic": "EPIC-02",
     "version": "v1",
     "status": "✅",
     "moscow": "Must",
     "depends_on": [
-      "US-008"
+      "US-0008"
     ],
     "done_when": "Usuário escolhe a pasta docs/ do projeto e o app persiste o handle da sessão para releitura."
   },
   {
-    "id": "US-010",
+    "id": "US-0010",
     "title": "Parser de Markdown e frontmatter",
     "epic": "EPIC-02",
     "version": "v1",
     "status": "✅",
     "moscow": "Must",
     "depends_on": [
-      "US-009"
+      "US-0009"
     ],
     "done_when": "Módulo de domínio extrai frontmatter YAML de arquivos .md da pasta docs/ sem erros nas US existentes."
   },
   {
-    "id": "US-011",
+    "id": "US-0011",
     "title": "Configuração inicial com docs reais",
     "epic": "EPIC-02",
     "version": "v1",
     "status": "✅",
     "moscow": "Must",
     "depends_on": [
-      "US-010"
+      "US-0010"
     ],
     "done_when": "Aba Configuração inicial reflete docs/00-11 da pasta aberta; progresso e alertas batem com frontmatter."
   },
   {
-    "id": "US-012",
+    "id": "US-0012",
     "title": "Aba Épicos lê 04_epics.md",
     "epic": "EPIC-04",
     "version": "v1",
     "status": "✅",
     "moscow": "Must",
     "depends_on": [
-      "US-010"
+      "US-0010"
     ],
     "done_when": "Aba Épicos lista EPIC-XX da pasta aberta com descrição, versões, status e contagem de US do mesmo projeto."
   },
   {
-    "id": "US-013",
+    "id": "US-0013",
     "title": "Kanban lê user stories e board.json",
     "epic": "EPIC-04",
     "version": "v1",
     "status": "✅",
     "moscow": "Must",
     "depends_on": [
-      "US-010"
+      "US-0010"
     ],
     "done_when": "Aba Kanban exibe US da pasta com colunas por status, filtro por epic e done_when; board.json opcional como cache derivado."
   },
   {
-    "id": "US-014",
+    "id": "US-0014",
     "title": "Validações de protocolo na UI",
     "epic": "EPIC-03",
     "version": "v1",
     "status": "✅",
     "moscow": "Must",
     "depends_on": [
-      "US-011",
-      "US-013"
+      "US-0011",
+      "US-0013"
     ],
     "done_when": "App destaca inconsistências de docs e US conforme regras P0 do MERIDIAN.md na pasta aberta."
   },
   {
-    "id": "US-015",
+    "id": "US-0015",
     "title": "Invocar validate_meridian.py na pasta",
     "epic": "EPIC-03",
     "version": "v1",
     "status": "✅",
     "moscow": "Should",
     "depends_on": [
-      "US-014"
+      "US-0014"
     ],
     "done_when": "App dispara validação do script na pasta aberta e exibe erros/avisos na UI."
   },
   {
-    "id": "US-016",
+    "id": "US-0016",
     "title": "Remover mock data.ts como fonte",
     "epic": "EPIC-02",
     "version": "v1",
     "status": "✅",
     "moscow": "Should",
     "depends_on": [
-      "US-011",
-      "US-012",
-      "US-013"
+      "US-0011",
+      "US-0012",
+      "US-0013"
     ],
     "done_when": "Nenhuma aba do monitor importa phaseDocuments/userStories/epics de data.ts; só dados da pasta ou estado vazio."
   },
   {
-    "id": "US-017",
+    "id": "US-0017",
     "title": "Ler documentos de fase em Markdown no app",
     "epic": "EPIC-02",
     "version": "v1",
     "status": "✅",
     "moscow": "Must",
     "depends_on": [
-      "US-009"
+      "US-0009"
     ],
     "done_when": "Na aba Configuração inicial, cada doc 00–11 abre o .md correspondente na raiz da pasta docs aberta."
   },
   {
-    "id": "US-018",
+    "id": "US-0018",
     "title": "Onboarding para abrir pasta docs",
     "epic": "EPIC-06",
     "version": "v1",
     "status": "✅",
     "moscow": "Must",
     "depends_on": [
-      "US-009"
+      "US-0009"
     ],
     "done_when": "Primeiro uso mostra passos claros e um único CTA principal para abrir a pasta docs, sem mensagens técnicas duplicadas."
   },
   {
-    "id": "US-019",
+    "id": "US-0019",
     "title": "Shell visual consistente do monitor",
     "epic": "EPIC-06",
     "version": "v1",
     "status": "✅",
     "moscow": "Must",
     "depends_on": [
-      "US-018"
+      "US-0018"
     ],
     "done_when": "Layout usa largura máxima única, espaçamento e fundo consistentes em todas as visões."
   },
   {
-    "id": "US-020",
+    "id": "US-0020",
     "title": "Barra superior simplificada",
     "epic": "EPIC-06",
     "version": "v1",
     "status": "✅",
     "moscow": "Must",
     "depends_on": [
-      "US-019"
+      "US-0019"
     ],
     "done_when": "Uma única barra combina marca, pasta aberta, contagem de problemas e ações; sem três faixas de mensagens."
   },
   {
-    "id": "US-021",
+    "id": "US-0021",
     "title": "Abas com linguagem de manager",
     "epic": "EPIC-06",
     "version": "v1",
     "status": "✅",
     "moscow": "Must",
     "depends_on": [
-      "US-019"
+      "US-0019"
     ],
     "done_when": "Abas usam rótulos Configuração, Entregas e Quadro; descrições técnicas só na aba ativa ou em tooltip."
   },
   {
-    "id": "US-022",
+    "id": "US-0022",
     "title": "Kanban com cards enxutos",
     "epic": "EPIC-06",
     "version": "v1",
     "status": "✅",
     "moscow": "Should",
     "depends_on": [
-      "US-021"
+      "US-0021"
     ],
     "done_when": "Cards mostram título e entrega; detalhes técnicos ficam recolhidos; filtro de epic exibe nome legível."
   }
