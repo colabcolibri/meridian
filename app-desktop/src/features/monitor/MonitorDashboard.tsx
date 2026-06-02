@@ -28,6 +28,8 @@ import { WelcomeScreen } from "@/features/monitor/components/WelcomeScreen"
 import { MonitorVersionFilterProvider } from "@/features/monitor/MonitorVersionFilterContext"
 import { MONITOR_CONTAINER } from "@/features/monitor/monitor-layout"
 
+const emptyStoryBodies = new Map<string, string>()
+
 function isGuideView(view: MonitorView): boolean {
   return GUIDE_VIEWS.includes(view)
 }
@@ -43,6 +45,7 @@ function MonitorProjectContent() {
   const versions = data?.versions ?? []
   const sprints = data?.sprints ?? []
   const decisionDays = data?.decisionDays ?? []
+  const storyBodies = data?.storyBodies ?? emptyStoryBodies
 
   return (
     <MonitorVersionFilterProvider stories={userStories} versions={versions}>
@@ -98,6 +101,7 @@ function MonitorProjectContent() {
               epics={epics}
               issues={issues}
               stories={userStories}
+              storyBodies={storyBodies}
               versions={versions}
             />
           ) : null}

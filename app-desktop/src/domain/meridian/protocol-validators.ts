@@ -1,4 +1,3 @@
-import type { BoardEntry } from "@/domain/meridian/board-types"
 import type { MonitorIssue } from "@/domain/meridian/monitor-issues"
 import { validateStoryBody } from "@/domain/meridian/story-body"
 import type {
@@ -9,6 +8,24 @@ import type {
   UserStory,
 } from "@/domain/meridian/types"
 import { getSetupStepState } from "@/domain/meridian/validators"
+
+function severityForStoryMessage(
+  story: UserStory,
+  message: string,
+): MonitorIssue["severity"] {
+  if (message.startsWith("Technical implementation:")) {
+    return story.status === "🔶" ? "warning" : "error"
+  }
+
+  const isError =
+    story.status === "🔶" ||
+    story.status === "✅" ||
+    message.includes("tests_status: done") ||
+    message.includes("tests: none") ||
+    message.includes("tests: required")
+
+  return isError ? "error" : "warning"
+}
 
 export function collectDocumentProtocolIssues(
   documents: PhaseDocument[],
@@ -41,95 +58,12 @@ export function collectStoryProtocolIssues(
     const messages = validateStoryBody(story, body)
 
     for (const message of messages) {
-      const isError =
-        story.status === "🔶" ||
-        story.status === "✅" ||
-        message.includes("tests_status: done") ||
-        message.includes("tests: none") ||
-        message.includes("tests: required")
       issues.push({
         file: `us/${story.id}.md`,
         message,
-        severity: isError ? "error" : "warning",
+        severity: severityForStoryMessage(story, message),
         scope: "us",
         targetId: story.id,
-      })
-    }
-  }
-
-  return issues
-}
-
-export function compareBoardWithStories(
-  stories: UserStory[],
-  board: BoardEntry[],
-): MonitorIssue[] {
-  const issues: MonitorIssue[] = []
-  const storyById = new Map(stories.map((story) => [story.id, story]))
-  const boardById = new Map(board.map((entry) => [entry.id, entry]))
-
-  for (const story of stories) {
-    const entry = boardById.get(story.id)
-    if (!entry) {
-      issues.push({
-        file: "kanban/board.json",
-        message: `${story.id} exists in us/ but not in board.json.`,
-        severity: "warning",
-        scope: "board",
-        targetId: story.id,
-      })
-      continue
-    }
-
-    if (entry.status !== story.status) {
-      issues.push({
-        file: "kanban/board.json",
-        message: `${story.id}: board status (${entry.status}) differs from file (${story.status}).`,
-        severity: "error",
-        scope: "board",
-        targetId: story.id,
-      })
-    }
-
-    if (entry.epic !== story.epic) {
-      issues.push({
-        file: "kanban/board.json",
-        message: `${story.id}: board epic (${entry.epic}) differs from file (${story.epic}).`,
-        severity: "error",
-        scope: "board",
-        targetId: story.id,
-      })
-    }
-
-    if (entry.tests !== story.tests) {
-      issues.push({
-        file: "kanban/board.json",
-        message: `${story.id}: board tests (${entry.tests}) differs from file (${story.tests}).`,
-        severity: "error",
-        scope: "board",
-        targetId: story.id,
-      })
-    }
-
-    if (entry.tests_status !== story.testsStatus) {
-      issues.push({
-        file: "kanban/board.json",
-        message: `${story.id}: board tests_status (${entry.tests_status}) differs from file (${story.testsStatus}).`,
-        severity: "error",
-        scope: "board",
-        targetId: story.id,
-      })
-    }
-  }
-
-  for (const entry of board) {
-    if (!storyById.has(entry.id)) {
-      issues.push({
-        file: "kanban/board.json",
-        message: `${entry.id} is in board.json without a file in us/.`,
-        severity: "warning",
-        scope: "board",
-        targetId: entry.id,
       })
     }
   }
@@ -254,7 +188,6 @@ export function collectProtocolIssues(input: {
   versions: ProductVersion[]
   sprints: Sprint[]
   storyBodies: Map<string, string>
-  board: BoardEntry[] | null
 }): MonitorIssue[] {
   return [
     ...collectDocumentProtocolIssues(input.phaseDocuments),
@@ -267,16 +200,6 @@ export function collectProtocolIssues(input: {
       input.versions,
       input.sprints,
     ),
-    ...(input.board
-      ? compareBoardWithStories(input.userStories, input.board)
-      : [
-          {
-            file: "kanban/board.json",
-            message: "board.json not found or invalid.",
-            severity: "warning" as const,
-            scope: "board" as const,
-          },
-        ]),
   ]
 }
 

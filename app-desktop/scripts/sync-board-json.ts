@@ -1,33 +1,25 @@
 #!/usr/bin/env npx tsx
-/** Regenera docs/kanban/board.json a partir dos frontmatters das US. */
+/** Optional export: writes docs/kanban/board.json from US frontmatter (git snapshot / CSV). */
 import { readFileSync, readdirSync, writeFileSync } from "node:fs"
 import { resolve } from "node:path"
 
+import { deriveBoardFromStories } from "../src/domain/meridian/board-derive.ts"
 import { parseUserStoryFile } from "../src/domain/meridian/parser.ts"
+import { USER_STORY_FILENAME_PATTERN } from "../src/domain/meridian/user-story-id.ts"
 
 const docsUs = resolve(import.meta.dirname, "../docs/us")
 const boardPath = resolve(import.meta.dirname, "../docs/kanban/board.json")
 
 const files = readdirSync(docsUs)
-  .filter((f) => /^US-\d{4}\.md$/.test(f))
+  .filter((f) => USER_STORY_FILENAME_PATTERN.test(f))
   .sort((a, b) => a.localeCompare(b, undefined, { numeric: true }))
 
-const board = files.map((filename) => {
+const stories = files.map((filename) => {
   const raw = readFileSync(resolve(docsUs, filename), "utf8")
-  const story = parseUserStoryFile(filename, raw)
-  return {
-    id: story.id,
-    title: story.title,
-    epic: story.epic,
-    version: story.version,
-    status: story.status,
-    moscow: story.moscow,
-    depends_on: story.dependsOn,
-    done_when: story.doneWhen,
-    tests: story.tests,
-    tests_status: story.testsStatus,
-  }
+  return parseUserStoryFile(filename, raw)
 })
+
+const board = deriveBoardFromStories(stories)
 
 writeFileSync(boardPath, `${JSON.stringify(board, null, 2)}\n`, "utf8")
 console.log(`board.json: ${board.length} entradas`)

@@ -46,7 +46,7 @@ export function VersionFilterBar({ versions }: { versions: ProductVersion[] }) {
           }}
           type="button"
         >
-          Select all
+          All
         </button>
         <button
           className={cn(
@@ -60,7 +60,7 @@ export function VersionFilterBar({ versions }: { versions: ProductVersion[] }) {
           }}
           type="button"
         >
-          Clear all
+          None
         </button>
 
         {sortedVersions.map((version) => {

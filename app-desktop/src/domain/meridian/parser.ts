@@ -5,6 +5,7 @@ import {
   phaseLabelForDocId,
 } from "@/domain/meridian/doc-refs"
 import { parseFrontmatterRecord, splitMarkdown } from "@/domain/meridian/frontmatter"
+import { USER_STORY_ID_PATTERN } from "@/domain/meridian/user-story-id"
 import type {
   DecisionDay,
   DecisionEntry,
@@ -177,8 +178,11 @@ export function parseUserStoryFile(filename: string, raw: string): UserStory {
   const id = requireString(record, "id", file)
   assertFilenameMatchesId(file, filename, id)
 
-  if (!/^US-\d{4}$/i.test(id)) {
-    throw new MeridianParseError(file, `id "${id}" must use US-XXXX format (4 digits)`)
+  if (!USER_STORY_ID_PATTERN.test(id)) {
+    throw new MeridianParseError(
+      file,
+      `id "${id}" must use US-XXXX format (4–5 digits, e.g. US-0001 or US-10000)`,
+    )
   }
 
   const tests =

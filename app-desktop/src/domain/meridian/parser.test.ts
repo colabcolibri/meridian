@@ -49,7 +49,27 @@ describe("meridian parser", () => {
       /US-0001/g,
       "US-001",
     )
-    expect(() => parseUserStoryFile("US-001.md", raw)).toThrow(/4 digits/)
+    expect(() => parseUserStoryFile("US-001.md", raw)).toThrow(/4–5 digits/)
+  })
+
+  it("accepts 5-digit US ids up to US-99999", () => {
+    const raw = `---
+id: US-10000
+title: Large backlog item
+epic: EPIC-01
+version: v0
+status: ❌
+moscow: Must
+depends_on: []
+done_when: Done when shipped.
+tests: none
+tests_status: n/a
+---
+
+# US-10000 — Large backlog item
+`
+    const story = parseUserStoryFile("US-10000.md", raw)
+    expect(story.id).toBe("US-10000")
   })
 
   it("parses EPIC-02.md in docs/epics/", () => {
@@ -83,7 +103,7 @@ describe("meridian parser", () => {
       "EPIC-05.md",
       readFileSync(resolve(epicsDir, "EPIC-05.md"), "utf8"),
     )
-    expect(epic05.status).toBe("paused")
+    expect(epic05.status).toBe("active")
   })
 
   it("parses v1.md in docs/versions/", () => {

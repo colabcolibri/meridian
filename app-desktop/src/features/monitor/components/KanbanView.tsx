@@ -7,7 +7,15 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { Button } from "@/components/ui/button"
 import type { MonitorIssue } from "@/domain/meridian/monitor-issues"
 import type { KanbanColumnId } from "@/domain/meridian/kanban-columns"
-import { groupStoriesForKanban } from "@/domain/meridian/kanban-columns"
+import {
+  countFrozenStories,
+  groupStoriesForKanban,
+  visibleKanbanColumns,
+} from "@/domain/meridian/kanban-columns"
+import {
+  resolveStoryDocumentationBadge,
+  type StoryDocumentationBadge,
+} from "@/domain/meridian/story-body"
 import type { Epic, ProductVersion, UserStory } from "@/domain/meridian/types"
 import { issuesForTarget } from "@/domain/meridian/protocol-validators"
 import { useMonitorVersionFilter } from "@/features/monitor/MonitorVersionFilterContext"
@@ -44,6 +52,11 @@ const columnMeta: Record<KanbanColumnId, { title: string; description: string }>
     title: "Frozen",
     description: "Status 🧊 — paused on purpose; not in the flow now.",
   },
+}
+
+const kanbanGridColsClass: Record<number, string> = {
+  4: "lg:grid-cols-4",
+  5: "lg:grid-cols-5",
 }
 
 function KanbanColumnHeader({
@@ -103,16 +116,46 @@ function epicFilterLabel(epic: Epic) {
   return `${epic.id} · ${short}`
 }
 
+function StoryDocumentationBadge({
+  kind,
+}: {
+  kind: Exclude<StoryDocumentationBadge, null>
+}) {
+  if (kind === "doc") {
+    return (
+      <span
+        aria-label="Implementação técnica registrada no arquivo"
+        className="max-w-full shrink-0 truncate rounded-full bg-meridian-success-muted px-1.5 py-0.5 text-[10px] font-medium text-meridian-success-foreground"
+        title="Implementação técnica registrada no arquivo"
+      >
+        Doc
+      </span>
+    )
+  }
+
+  return (
+    <span
+      aria-label="Implementação técnica ausente ou incompleta no arquivo"
+      className="max-w-full shrink-0 truncate rounded-full bg-amber-500/15 px-1.5 py-0.5 text-[10px] font-medium text-amber-800 dark:text-amber-300"
+      title="Implementação técnica ausente ou incompleta no arquivo"
+    >
+      Sem doc
+    </span>
+  )
+}
+
 function KanbanStoryCard({
   story,
   epicTitle,
   storyIssues,
+  documentationBadge,
   showVersion,
   onSelect,
 }: {
   story: UserStory
   epicTitle: string | undefined
   storyIssues: MonitorIssue[]
+  documentationBadge: StoryDocumentationBadge
   showVersion: boolean
   onSelect: () => void
 }) {
@@ -144,6 +187,9 @@ function KanbanStoryCard({
           <span className="rounded-full bg-muted px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground">
             {story.moscow}
           </span>
+          {documentationBadge ? (
+            <StoryDocumentationBadge kind={documentationBadge} />
+          ) : null}
         </div>
         <div className="flex shrink-0 items-center gap-1">
           {(hasError || hasWarning) && (
@@ -184,15 +230,18 @@ export function KanbanView({
   epics,
   issues,
   versions,
+  storyBodies,
 }: {
   stories: UserStory[]
   epics: Epic[]
   issues: MonitorIssue[]
   versions: ProductVersion[]
+  storyBodies: Map<string, string>
 }) {
   const { selectedVersionIds } = useMonitorVersionFilter()
   const [epicFilter, setEpicFilter] = useState<string | "all">("all")
   const [selectedStory, setSelectedStory] = useState<UserStory | null>(null)
+  const [showFrozen, setShowFrozen] = useState(false)
 
   const epicById = useMemo(
     () => Object.fromEntries(epics.map((epic) => [epic.id, epic])),
@@ -206,6 +255,7 @@ export function KanbanView({
 
   useEffect(() => {
     setEpicFilter("all")
+    setShowFrozen(false)
   }, [selectedVersionIds])
 
   useEffect(() => {
@@ -229,7 +279,20 @@ export function KanbanView({
     })
   }, [epicFilter, selectedVersionIds, stories])
 
-  const columns = groupStoriesForKanban(filtered)
+  const allColumns = useMemo(() => groupStoriesForKanban(filtered), [filtered])
+  const frozenCount = useMemo(() => countFrozenStories(filtered), [filtered])
+  const visibleColumns = useMemo(
+    () => visibleKanbanColumns(allColumns, { showFrozen }),
+    [allColumns, showFrozen],
+  )
+  const gridColumnCount = showFrozen && frozenCount > 0 ? 5 : 4
+
+  useEffect(() => {
+    if (frozenCount === 0) {
+      setShowFrozen(false)
+    }
+  }, [frozenCount])
+
   const totalVisible = filtered.length
   const showVersionOnCards = selectedVersionIds.size !== 1
   const selectedLabel = [...selectedVersionIds]
@@ -285,8 +348,13 @@ export function KanbanView({
           ) : null}
         </div>
 
-        <div className="-mx-px flex overflow-x-auto lg:grid lg:grid-cols-5 lg:overflow-visible">
-          {columns.map(({ columnId, stories: columnStories }) => (
+        <div
+          className={cn(
+            "-mx-px flex overflow-x-auto lg:grid lg:overflow-visible",
+            kanbanGridColsClass[gridColumnCount],
+          )}
+        >
+          {visibleColumns.map(({ columnId, stories: columnStories }) => (
             <section
               className={cn(
                 "flex w-[min(300px,88vw)] shrink-0 flex-col border-r border-border/80 last:border-r-0 lg:w-auto",
@@ -305,6 +373,10 @@ export function KanbanView({
                   ) : (
                     columnStories.map((story) => (
                       <KanbanStoryCard
+                        documentationBadge={resolveStoryDocumentationBadge(
+                          story,
+                          storyBodies.get(story.id) ?? "",
+                        )}
                         epicTitle={epicById[story.epic]?.title}
                         key={story.id}
                         onSelect={() => setSelectedStory(story)}
@@ -319,6 +391,23 @@ export function KanbanView({
             </section>
           ))}
         </div>
+
+        {frozenCount > 0 ? (
+          <div className="border-t border-border/80 px-4 py-3">
+            <button
+              className={cn(
+                filterChipClass(showFrozen),
+                "max-w-full whitespace-normal text-left",
+              )}
+              onClick={() => setShowFrozen((value) => !value)}
+              type="button"
+            >
+              <span aria-hidden>🧊 </span>
+              {frozenCount} congelada{frozenCount === 1 ? "" : "s"} —{" "}
+              {showFrozen ? "ocultar" : "mostrar"}
+            </button>
+          </div>
+        ) : null}
       </div>
 
       <StoryDetailSheet

@@ -1,5 +1,7 @@
-import type { BoardEntry } from "@/domain/meridian/board-types"
+import { deriveBoardFromStories } from "@/domain/meridian/board-derive"
+import { mapWithConcurrency } from "@/domain/meridian/async-batch"
 import { splitMarkdown } from "@/domain/meridian/frontmatter"
+import { USER_STORY_FILENAME_PATTERN } from "@/domain/meridian/user-story-id"
 import type { MonitorIssue } from "@/domain/meridian/monitor-issues"
 import { PHASE_DOC_IDS } from "@/domain/meridian/phase-doc-files"
 import {
@@ -30,10 +32,13 @@ export interface MeridianProjectData {
   versions: ProductVersion[]
   sprints: Sprint[]
   decisionDays: DecisionDay[]
-  board: BoardEntry[] | null
+  /** Derived on load from userStories — never read from kanban/board.json. */
+  board: ReturnType<typeof deriveBoardFromStories>
   storyBodies: Map<string, string>
   issues: MonitorIssue[]
 }
+
+const USER_STORY_LOAD_CONCURRENCY = 32
 
 async function readTextFile(
   directory: FileSystemDirectoryHandle,
@@ -49,7 +54,7 @@ async function listUserStoryFilenames(
 ): Promise<string[]> {
   const names: string[] = []
   for await (const [name, handle] of usDir.entries()) {
-    if (handle.kind === "file" && /^US-\d{4}\.md$/i.test(name)) {
+    if (handle.kind === "file" && USER_STORY_FILENAME_PATTERN.test(name)) {
       names.push(name)
     }
   }
@@ -72,14 +77,6 @@ function recordParseIssue(issues: MonitorIssue[], error: unknown) {
     severity: "error",
     scope: "parse",
   })
-}
-
-function parseBoardJson(raw: string): BoardEntry[] {
-  const parsed = JSON.parse(raw) as unknown
-  if (!Array.isArray(parsed)) {
-    throw new Error("board.json must be an array.")
-  }
-  return parsed as BoardEntry[]
 }
 
 async function loadPhaseDocuments(
@@ -373,8 +370,10 @@ async function loadUserStories(
     const usDir = await docsRoot.getDirectoryHandle("us")
     const filenames = await listUserStoryFilenames(usDir)
 
-    const stories = await Promise.all(
-      filenames.map(async (filename) => {
+    const stories = await mapWithConcurrency(
+      filenames,
+      USER_STORY_LOAD_CONCURRENCY,
+      async (filename) => {
         try {
           const raw = await readTextFile(usDir, filename)
           const story = parseUserStoryFile(filename, raw)
@@ -389,7 +388,7 @@ async function loadUserStories(
           )
           return null
         }
-      }),
+      },
     )
 
     for (const story of stories) {
@@ -409,7 +408,7 @@ async function loadUserStories(
   return userStories
 }
 
-/** Loads phase docs, user stories, epics, and board from the opened docs/ folder (handle root). */
+/** Loads phase docs, user stories, epics, and derived board from the opened docs/ folder. */
 export async function loadMeridianProject(
   docsRoot: FileSystemDirectoryHandle,
 ): Promise<MeridianProjectData> {
@@ -426,19 +425,7 @@ export async function loadMeridianProject(
       loadDecisions(docsRoot, parseIssues),
     ])
 
-  let board: BoardEntry[] | null = null
-  try {
-    const kanbanDir = await docsRoot.getDirectoryHandle("kanban")
-    const raw = await readTextFile(kanbanDir, "board.json")
-    board = parseBoardJson(raw)
-  } catch (error) {
-    parseIssues.push({
-      file: "kanban/board.json",
-      message: error instanceof Error ? error.message : "Failed to read board.json",
-      severity: "warning",
-      scope: "parse",
-    })
-  }
+  const board = deriveBoardFromStories(userStories)
 
   phaseDocuments.sort((a, b) => a.id.localeCompare(b.id))
 
@@ -449,7 +436,6 @@ export async function loadMeridianProject(
     versions,
     sprints,
     storyBodies,
-    board,
   })
 
   return {

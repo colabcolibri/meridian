@@ -45,7 +45,9 @@ export function assertMeridianFolder(
 export function meridianFolderHints(validation: MeridianFolderValidation): string[] {
   const hints: string[] = []
   if (!validation.hasKanban) {
-    hints.push('Folder "kanban/" not found (board.json optional until sync-board).')
+    hints.push(
+      'Folder "kanban/" not found (optional — board is derived from docs/us/ on load).',
+    )
   }
   return hints
 }

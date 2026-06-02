@@ -30,7 +30,7 @@ const emptyData: MeridianProjectData = {
   versions: [],
   sprints: [],
   decisionDays: [],
-  board: null,
+  board: [],
   storyBodies: new Map(),
   issues: [],
 }
