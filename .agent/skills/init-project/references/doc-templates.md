@@ -29,9 +29,10 @@ Breve descrição.
 
 ## Como trabalhar
 
-1. Aprovar docs na ordem de dependência.
-2. Criar US só após epics e versões approved.
-3. Regenerar board após mudanças em US.
+1. Aprovar docs na ordem de dependência: fundação → princípios → arquitetura → detalhe.
+2. Montar backlog em `docs/epics/`, `docs/versions/` e `docs/sprints/`.
+3. Criar US só após `05_architecture` approved e epic/version nas pastas.
+4. Regenerar board após mudanças em US.
 ```
 
 ## `00_scope.md` (rascunho inicial)
@@ -47,16 +48,26 @@ Seções mínimas:
 - Riscos conhecidos
 - Perguntas em aberto
 
-## `11_decisions.md` (primeira entrada)
+## `11_decisions.md` + `docs/decisions/` (primeira entrada)
 
-```markdown
-## YYYY-MM-DD — Projeto iniciado com Meridian
+Criar stub `11_decisions.md` (regras) e pasta `docs/decisions/`.
+No primeiro dia, criar `docs/decisions/YYYY-MM-DD.json`:
 
-**Documento afetado:** docs/
-**O que mudou:** Estrutura Meridian criada.
-**Por que mudou:** Início do projeto com governança documental.
-**Impacto em outros docs:** Todos os docs de fase em draft.
-**Responsável:** [manager]
+```json
+{
+  "date": "YYYY-MM-DD",
+  "entries": [
+    {
+      "time": "HH:MM",
+      "title": "Projeto iniciado com Meridian",
+      "affected_document": "docs/",
+      "what_changed": "Estrutura Meridian criada.",
+      "why_changed": "Início do projeto com governança documental.",
+      "impact": "Todos os docs de fase em draft.",
+      "responsible": "[manager]"
+    }
+  ]
+}
 ```
 
 ## `docs/kanban/board.json`

@@ -1,6 +1,6 @@
 ---
 name: sprint-planner
-description: Plans Meridian versions, sprints and execution order. Use for 06_versions.md, sprint tables, US sequencing, MoSCoW and go-live checklist.
+description: Plans Meridian versions, sprints and execution order. Use for docs/versions/, docs/sprints/, US sequencing, MoSCoW and go-live checklist.
 tools: Read, Grep, Glob, Bash, Edit, Write
 model: inherit
 skills: create-epic, create-version, create-sprint, create-user-story, generate-board-json, update-decisions-log, meridian-routing
@@ -14,15 +14,16 @@ You convert approved product direction into executable, auditable increments.
 
 | Required | Status |
 | -------- | ------ |
-| `04_epics.md` | `approved` |
-| `06_versions.md` | exists (draft ok for planning) |
-| `03_user_types.md` | `approved` or explicit waiver logged |
+| `05_architecture.md` | `approved` |
+| `03_user_types.md` | `approved` ou waiver em `docs/decisions/` |
+
+Rascunhos em `docs/versions/` e `docs/sprints/` podem existir antes de user stories — não crie US sem `05_architecture` approved.
 
 ---
 
 ## Mission
 
-Own `06_versions.md` (índice), arquivos em `docs/versions/` e `docs/sprints/`, sequencing and MoSCoW — without smuggling a hidden MVP past the human manager.
+Own arquivos em `docs/versions/` e `docs/sprints/`, sequencing and MoSCoW — without smuggling a hidden MVP past the human manager.
 
 ---
 
@@ -49,7 +50,7 @@ Own `06_versions.md` (índice), arquivos em `docs/versions/` e `docs/sprints/`, 
 
 ## Forbidden
 
-- New US before epics + versions approved
+- New US before `05_architecture` approved
 - Marking sprint "done" when US still `❌` or `🔶` without `Falta:`
 - Parallel CSV board maintenance
 

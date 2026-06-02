@@ -150,10 +150,10 @@ Se você é um agente de IA lendo este arquivo, siga estas regras:
 1. Não comece escrevendo código.
 2. Primeiro verifique se existe uma pasta `docs/`.
 3. Se `docs/` não existir, crie a estrutura Meridian.
-4. Crie ou atualize `docs/11_decisions.md` antes de tomar decisões relevantes.
+4. Registre decisões relevantes em `docs/decisions/YYYY-MM-DD.json` antes de tomar mudanças cross-cutting.
 5. Crie `docs/00_scope.md` e mantenha-o como primeira fonte de verdade do projeto.
 6. Não avance documentos dependentes para além de `draft` se seus predecessores não estiverem `approved`.
-7. Não crie user stories antes de `04_epics.md` e `06_versions.md` estarem `approved`.
+7. Não crie user stories antes de `05_architecture.md` estar `approved` (gate de entrega).
 8. Não edite `docs/kanban/board.json` como fonte primária; gere-o a partir dos US.
 9. Sempre registre decisões que mudam escopo, stack, arquitetura, segurança, versão ou critérios.
 10. Se um documento `approved` precisar mudar, registre a decisão e volte o documento para `review`.
@@ -195,21 +195,30 @@ quando quiser dar agentes, skills, workflows, rules e scripts especializados par
   01_tech_stack.md
   02_security.md
   03_user_types.md
-  04_epics.md
-  05_principles.md
-  06_versions.md
-  07_architecture.md
-  08_database.md
-  09_api_contracts.md
-  10_environments.md
+  04_principles.md
+  05_architecture.md
+  06_database.md
+  07_api_contracts.md
+  08_environments.md
   11_decisions.md
 
+  /decisions
+    YYYY-MM-DD.json
+
+  /decisions
+    YYYY-MM-DD.md
+
+  /versions
+    vX.md
+
   /sprints
+    vX-SY.md
 
   /epics
     EPIC-XX.md
 
   /us
+    US-XXXX.md
 
   /kanban
     board.json
@@ -248,6 +257,7 @@ Skills oficiais do kit (ver `.agent/skills/doc.md`):
 - `create-sprint`
 - `security-review`
 - `create-user-story`
+- `complete-user-story`
 - `generate-board-json`
 - `update-decisions-log`
 - `meridian-routing`
@@ -260,7 +270,7 @@ Regras:
 - `.agent/agents/` define responsabilidades.
 - `.agent/skills/` detalha tarefas específicas.
 - Se houver conflito entre skill e `meridian.md`, `meridian.md` vence.
-- Se uma skill causar mudança relevante, registre em `11_decisions.md`.
+- Se uma skill causar mudança relevante, registre em `docs/decisions/YYYY-MM-DD.json`.
 
 ### 7.2 Sobre `docs/README.md`
 
@@ -323,59 +333,60 @@ não estiverem `approved`.
 ## 9. Mapa de dependências
 
 ```txt
-11_decisions
-  não depende de nada; começa no dia 1; nunca bloqueia nada
+11_decisions + docs/decisions/
+  stub de regras; entradas em YYYY-MM-DD.md — começa no dia 1; nunca bloqueia nada
 
 00_scope
   desbloqueia todos os outros documentos
 
 01_tech_stack
   depende de 00_scope
-  desbloqueia 02_security, 05_principles, 10_environments
+  desbloqueia 02_security, 04_principles, 08_environments
 
 02_security
   depende de 00_scope, 01_tech_stack
-  desbloqueia 03_user_types, 05_principles
+  desbloqueia 03_user_types, 04_principles
 
 03_user_types
   depende de 02_security
-  desbloqueia 04_epics, 05_principles, 06_versions, 07_architecture,
-  08_database, 09_api_contracts
+  desbloqueia 04_principles, 05_architecture, 06_database, 07_api_contracts
 
-04_epics
-  pode começar após 00_scope
-  só pode ser approved após 03_user_types approved
-  desbloqueia criação de US
-
-05_principles
+04_principles
   depende de 01_tech_stack, 02_security, 03_user_types
-  desbloqueia 07_architecture
+  desbloqueia 05_architecture
 
-06_versions
-  depende de 00_scope, 03_user_types
-  desbloqueia 07_architecture, 08_database e criação de US
+05_architecture
+  depende de 00_scope, 01_tech_stack, 02_security, 03_user_types, 04_principles
+  desbloqueia 06_database, 07_api_contracts, 08_environments
+  desbloqueia criação de user stories (epic/version nas pastas)
 
-07_architecture
-  depende de 00_scope, 01_tech_stack, 02_security, 03_user_types,
-  05_principles, 06_versions
-  desbloqueia 08_database, 09_api_contracts, 10_environments
+06_database
+  depende de 03_user_types, 05_architecture
+  desbloqueia 07_api_contracts
 
-08_database
-  depende de 03_user_types, 06_versions, 07_architecture
-  desbloqueia 09_api_contracts
+07_api_contracts
+  depende de 03_user_types, 05_architecture, 06_database
 
-09_api_contracts
-  depende de 03_user_types, 07_architecture, 08_database
+08_environments
+  depende de 01_tech_stack, 05_architecture
+```
 
-10_environments
-  depende de 01_tech_stack, 07_architecture
+Entrega (pastas — fonte de verdade, sem índice markdown):
+
+```txt
+docs/epics/EPIC-XX.md
+docs/versions/vX.md
+docs/sprints/vX-SY.md
+docs/us/US-XXXX.md
+docs/kanban/board.json   # derivado das US
 ```
 
 User stories só podem ser criadas quando:
 
 ```txt
-04_epics = approved
-06_versions = approved
+05_architecture = approved
+epic referenciado existe em docs/epics/
+version referenciada existe em docs/versions/
 ```
 
 ---
@@ -393,38 +404,43 @@ Sempre sequencial.
 5. `03_user_types.md`
 
 A segurança vem antes da arquitetura.
-Tipos de usuário vêm antes de epics, versões, banco e contratos.
+Tipos de usuário vêm antes de princípios e arquitetura.
+Releases, épicos e sprints vêm depois da arquitetura (eixo de entrega).
 
-### Fase 1 — Planejamento
+### Fase 1 — Princípios
 
-Pode ser parcialmente paralela após a fundação.
+- `04_principles.md`
 
-- `04_epics.md`
-- `05_principles.md`
-- `06_versions.md`
-
-Epics e versões desbloqueiam user stories.
-Princípios e versões orientam arquitetura.
+Convenções de código e qualidade — orientam implementação e arquitetura.
 
 ### Fase 2 — Arquitetura
 
-- `07_architecture.md`
+- `05_architecture.md`
 
-A arquitetura deve refletir escopo, stack, segurança, usuários, princípios e versões.
+A arquitetura reflete escopo, stack, segurança, usuários e princípios.
 
 ### Fase 3 — Detalhamento técnico
 
-- `08_database.md`
-- `09_api_contracts.md`
-- `10_environments.md`
+- `06_database.md`
+- `07_api_contracts.md`
+- `08_environments.md`
 
 Banco vem antes de contratos completos de API.
 Ambientes documentam setup, comandos, variáveis e diferenças entre local/dev/staging/prod.
 
-### Fase 4 — Execução
+### Backlog de entrega (pastas)
+
+- `docs/epics/EPIC-XX.md` — capacidades de produto
+- `docs/versions/vX.md` — releases
+- `docs/sprints/vX-SY.md` — fatias de tempo
+
+Só criar user stories depois de `05_architecture.md` approved.
+Cada US referencia epic e version que já existem nas pastas.
+
+### Execução
 
 - arquivos individuais de US em `docs/us/`;
-- sprints em `06_versions.md` ou `docs/sprints/`;
+- sprints em `docs/sprints/`;
 - código;
 - checklist de go-live;
 - atualização contínua de decisões.
@@ -665,11 +681,10 @@ Regra para agentes:
 
 Não avance para banco, API ou autorização antes de entender os perfis.
 
-### 11.5 `04_epics.md` — Epics (índice) e `docs/epics/`
+### 11.5 `docs/epics/` — Épicos (capacidades de produto)
 
-`04_epics.md` é o documento de **fase** que cataloga e aprova o conjunto de épicos.
-Cada épico individual vive em **`docs/epics/EPIC-XX.md`** (pasta flat, um arquivo por epic),
-no mesmo espírito de `docs/us/US-XXXX.md`.
+Cada épico vive em **`docs/epics/EPIC-XX.md`** (pasta flat, um arquivo por epic),
+no mesmo espírito de `docs/us/US-XXXX.md`. Não há índice markdown duplicado.
 
 Formato de cada epic (`docs/epics/EPIC-XX.md`):
 
@@ -704,14 +719,14 @@ Regras:
 - Nome do arquivo deve coincidir com `id` (`EPIC-01.md` → `id: EPIC-01`).
 - `outcome` é obrigatório no frontmatter (done no nível produto, não implementação).
 - Não crie subpastas dentro de `docs/epics/`.
-- `04_epics.md` mantém tabela-resumo e regras; definição canônica fica nos arquivos individuais.
+- Só criar épicos e user stories depois de `05_architecture.md` `approved`.
 - User stories **referenciam** o epic (`epic: EPIC-XX`) — não repetem descrição, `outcome` nem escopo do epic.
 
 Regra para agentes:
 
 Epic não é módulo técnico. Epic é capacidade de produto. Novo epic → skill `create-epic`.
 
-### 11.6 `05_principles.md` — Princípios de código
+### 11.6 `04_principles.md` — Princípios de código
 
 Deve definir:
 
@@ -732,10 +747,10 @@ Regra para agentes:
 
 Use este documento para evitar que cada agente invente uma estrutura diferente.
 
-### 11.7 `06_versions.md` — Versões (índice), `docs/versions/` e `docs/sprints/`
+### 11.7 `docs/versions/` e `docs/sprints/` — Releases e sprints
 
-`06_versions.md` é o documento de **fase** que cataloga releases e sprints aprovados.
 Cada versão vive em **`docs/versions/vX.md`**; sprints em **`docs/sprints/vX-SY.md`**.
+Não há índice markdown duplicado — a pasta é a fonte de verdade.
 
 Formato de cada versão (`docs/versions/vX.md`):
 
@@ -780,11 +795,11 @@ Regras:
 - IDs de sprint: `v1-S1`, `v2-S1`…
 - User stories referenciam **`version: vX`** — não repetem plano da versão.
 - Epics referenciam **`versions: [v0, v1]`** — releases onde a capacidade entra.
-- Gate de US: `04_epics.md` + `06_versions.md` = `approved`.
+- Gate de US: `05_architecture.md` = `approved` + epic/version existem nas pastas.
 - Novo release → skill `create-version` ou `/create-version`.
 - Nova sprint → skill `create-sprint` ou `/plan-sprint`.
 
-### 11.8 `07_architecture.md` — Arquitetura
+### 11.8 `05_architecture.md` — Arquitetura
 
 Deve cobrir:
 
@@ -803,7 +818,7 @@ Regra para agentes:
 
 Arquitetura deve explicar decisões, não apenas listar pastas.
 
-### 11.9 `08_database.md` — Banco de dados
+### 11.9 `06_database.md` — Banco de dados
 
 Deve cobrir:
 
@@ -831,7 +846,7 @@ deleted_at TIMESTAMPTZ NULL
 created_by UUID REFERENCES users(id)
 ```
 
-### 11.10 `09_api_contracts.md` — Contratos de API
+### 11.10 `07_api_contracts.md` — Contratos de API
 
 Para cada endpoint:
 
@@ -853,7 +868,7 @@ Regra:
 
 Contrato de API completo depende do banco quando o endpoint retorna dados persistidos.
 
-### 11.11 `10_environments.md` — Ambientes
+### 11.11 `08_environments.md` — Ambientes
 
 Deve cobrir:
 
@@ -870,31 +885,42 @@ Regra:
 `.env` e `.env.*` não devem entrar no Git.
 Use `.env.example` como contrato versionado.
 
-### 11.12 `11_decisions.md` — Log de decisões
+### 11.12 `11_decisions.md` + `docs/decisions/` — Log de decisões
 
 Começa no dia 1.
-É append-only.
-Nunca edite uma entrada antiga; adicione uma nova.
+`11_decisions.md` é stub com regras; o log vive em **`docs/decisions/YYYY-MM-DD.json`** — um arquivo por dia.
 
-Formato:
+Novas entradas vão **no início** do array `entries` (prepend no mesmo dia).
+Nunca edite uma entrada antiga; registre uma nova decisão acima das anteriores.
 
-```md
-## YYYY-MM-DD — Título objetivo
+Formato do arquivo diário:
 
-**Documento afetado:** arquivo
-**O que mudou:** descrição objetiva
-**Por que mudou:** contexto e motivação
-**Impacto em outros docs:** lista
-**Responsável:** pessoa ou papel
+```json
+{
+  "date": "2026-06-02",
+  "entries": [
+    {
+      "time": "17:30",
+      "title": "Título objetivo",
+      "affected_document": "caminho/do/doc.md",
+      "what_changed": "descrição objetiva",
+      "why_changed": "contexto e motivação",
+      "impact": "lista de docs afetados",
+      "responsible": "pessoa ou papel"
+    }
+  ]
+}
 ```
 
-Quando ultrapassar aproximadamente 200 linhas, arquive:
+Regras:
 
-```txt
-11_decisions_YYYY.md
-```
+- `date` deve coincidir com o nome do arquivo (`2026-06-02.json`).
+- `time` usa formato `HH:MM` (24h).
+- Novo dia calendário → novo arquivo JSON.
+- Mesmo dia → prepend em `entries[0]`.
 
-e comece um novo `11_decisions.md`.
+Arquivamento: quando um dia acumular dezenas de entradas, mantenha o arquivo do dia;
+dias antigos permanecem como histórico imutável na pasta.
 
 ---
 
@@ -917,8 +943,9 @@ O epic referenciado deve existir como arquivo em `docs/epics/`.
 US só podem ser criadas após:
 
 ```txt
-04_epics.md = approved
-06_versions.md = approved
+05_architecture.md = approved
+epic referenciado em docs/epics/
+version referenciada em docs/versions/
 ```
 
 ### 12.2 Política de IDs
@@ -942,6 +969,8 @@ status: ✅ | 🔶 | ❌ | 🧊
 moscow: Must | Should | Could | Won't
 depends_on: [US-YYYY]
 done_when: "Condição objetiva e mensurável."
+tests: required | none
+tests_status: pending | done | n/a
 ---
 ```
 
@@ -962,11 +991,29 @@ done_when: "Condição objetiva e mensurável."
 
 ## Implementação técnica
 
+> **Criação:** placeholder ou plano preliminar opcional.  
+> **Fechamento (`✅`):** registro real — arquivos tocados, resumo por camada. Skill `complete-user-story`.
+
+### Arquivos
+
 ### Backend
 
 ### Frontend
 
+### Scripts / Docs
+
 ## Testes
+
+> **Criação:** preencher **Planejado**. **Fechamento:** marcar `[x]` e registrar em **Executado**; então `tests_status: done`.
+
+### Planejado
+
+- [ ] **automated** — `pnpm test` — descrever escopo
+- [ ] **manual** — passos e resultado esperado
+
+### Executado
+
+_(pendente)_
 
 ## Fora de escopo desta story
 
@@ -984,10 +1031,19 @@ done_when: "Condição objetiva e mensurável."
 
 Regras:
 
-- `✅` exige evidência.
+- `✅` exige aceite comprovado e, se `tests: required`, `tests_status: done` com **Planejado** `[x]` e **Executado** preenchido.
 - `🔶` exige `Falta:` no aceite.
 - `❌` não deve esconder trabalho parcial.
 - `🧊` exige decisão deliberada, não esquecimento.
+
+**Campos de teste (frontmatter):**
+
+| Campo | Valores | Uso |
+| ----- | ------- | --- |
+| `tests` | `required` / `none` | US precisa de verificação antes de fechar? |
+| `tests_status` | `pending` / `done` / `n/a` | `n/a` só com `tests: none` |
+
+**Coluna derivada no monitor:** `🧪` quando `tests: required` e `tests_status: pending` (não gravar emoji no YAML).
 
 ---
 
@@ -1081,8 +1137,8 @@ Ao receber um projeto novo com este arquivo, execute:
 1. Ler `meridian.md` inteiro.
 2. Verificar se existe `docs/`.
 3. Se não existir, criar estrutura base.
-4. Criar `docs/11_decisions.md`.
-5. Registrar a decisão inicial: "Projeto iniciado com Meridian".
+4. Criar `docs/11_decisions.md` (stub) e `docs/decisions/YYYY-MM-DD.json`.
+5. Registrar a decisão inicial em JSON: "Projeto iniciado com Meridian".
 6. Criar `docs/00_scope.md` em `draft`.
 7. Perguntar ou inferir com cuidado o escopo inicial.
 8. Promover `00_scope.md` para `review` apenas quando estiver completo.
@@ -1091,7 +1147,7 @@ Ao receber um projeto novo com este arquivo, execute:
 11. Criar `docs/kanban/board.json` como array vazio.
 12. Se existir ou for desejado, criar `.agent/` com agents, skills, workflows, rules e scripts.
 13. Garantir `.gitignore` mínimo antes de qualquer segredo ou dependência local.
-14. Não criar US até `04_epics` e `06_versions` estarem `approved`.
+14. Não criar US até `05_architecture` estar `approved` e epic/version existirem nas pastas.
 15. Antes de escrever código, identificar versão, epic e US.
 16. Após implementar, atualizar US, docs afetados e board.
 
@@ -1126,9 +1182,10 @@ Uma entrega só está done quando:
 - código foi implementado;
 - build/lint/test aplicável passou;
 - aceite foi validado;
+- `## Implementação técnica` da US preenchida com arquivos alterados/criados e resumo do que foi feito (sem placeholder);
 - documentação afetada foi atualizada;
 - decisões relevantes foram registradas;
-- US foi atualizada;
+- US foi atualizada (aceite, status, implementação, testes);
 - `board.json` foi regenerado;
 - nada ficou `🔶` sem `Falta:`.
 

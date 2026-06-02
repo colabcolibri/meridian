@@ -13,7 +13,7 @@ $ARGUMENTS
 1. Use `security-steward` + `@[skills/security-review]`
 2. Ler `references/checklists.md` por completo
 3. Atualizar `02_security.md`
-4. Decisões relevantes → `11_decisions.md`
+4. Decisões relevantes → `docs/decisions/YYYY-MM-DD.json`
 5. Bloquear silenciosamente arquitetura `approved` se gaps críticos abertos
 
 ---

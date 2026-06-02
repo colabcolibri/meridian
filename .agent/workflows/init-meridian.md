@@ -14,7 +14,7 @@ $ARGUMENTS
 2. Use o agent `process-manager`, não modo plan genérico do IDE
 3. Siga `@[skills/init-project]` e fases do `process-manager`
 4. Máximo 3 perguntas se intenção do projeto estiver vaga
-5. Registre decisão inicial em `11_decisions.md`
+5. Registre decisão inicial em `docs/decisions/YYYY-MM-DD.json`
 
 ---
 
@@ -33,7 +33,7 @@ RULES:
 2. Run init-project skill procedure
 3. Create docs/ tree per skill
 4. 00_scope.md = draft
-5. 11_decisions.md = first entry approved
+5. `11_decisions.md` stub + primeira entrada JSON em `docs/decisions/`
 6. board.json = []
 7. Validate .gitignore baseline
 8. REPORT exact paths created
@@ -47,7 +47,7 @@ RULES:
 | ---- | ----- |
 | Estrutura docs | `docs/` + subpastas |
 | Escopo inicial | `docs/00_scope.md` |
-| Log de decisões | `docs/11_decisions.md` |
+| Log de decisões | `docs/decisions/YYYY-MM-DD.json` + stub `11_decisions.md` |
 | Board vazio | `docs/kanban/board.json` |
 
 ---
@@ -72,7 +72,8 @@ Informe ao usuário:
 ```txt
 Próximos passos:
 1. Revisar docs/00_scope.md
-2. Preencher 01_tech_stack e 02_security
-3. Definir épicos com /create-epic (docs/epics/)
-4. Aprovar 04_epics + 06_versions antes de /create-us
+2. Preencher 01_tech_stack, 02_security, 03_user_types, 04_principles
+3. Aprovar 05_architecture (+ 08–10 se aplicável)
+4. Planejar entrega: /create-version, /create-epic — planejar epics/versions/sprints nas pastas
+5. /create-us (gate: 04 + 06 approved) → implementar → /complete-us → /sync-board
 ```

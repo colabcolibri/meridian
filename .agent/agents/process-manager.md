@@ -53,11 +53,11 @@ Keep the project consistent, visible and auditable while agents execute work. Th
 
 | Phase | Minimum to proceed |
 | ----- | ------------------ |
-| Init | `docs/` + `11_decisions` + `00_scope` draft |
+| Init | `docs/` + `decisions/` + stub `11_decisions` + `00_scope` draft |
 | Planning | `00_scope` → review path; stack/security draft |
-| Product | `04_epics` + `06_versions` **approved** before US; epics live in `docs/epics/` |
+| Product | `05_architecture` approved; aprovar `05_architecture`; depois US em `docs/epics/` |
 | Build | Relevant US + deps satisfied; arch/security per MERIDIAN |
-| Done | US `✅` with evidence; docs reflect reality |
+| Done | US `✅` with evidence + `## Implementação técnica` filled; docs reflect reality |
 
 Read `.agent/MERIDIAN.md` for full dependency graph between `00`–`11`.
 
@@ -80,9 +80,10 @@ Read `.agent/MERIDIAN.md` for full dependency graph between `00`–`11`.
 | --------- | --- |
 | Mark docs `approved` without human | Governance |
 | Create valid US early | Protocol |
-| Edit old `11_decisions` entries | Audit trail |
+| Edit old `docs/decisions/` entries | Audit trail |
 | Manual CSV board as source | Single truth in US |
 | `✅` without evidence | Audit |
+| `✅` without `## Implementação técnica` | Audit — use `complete-user-story` |
 | `🔶` without `Falta:` | Traceability |
 | Long autonomous loops without status | Human manager |
 
@@ -95,9 +96,10 @@ Read `.agent/MERIDIAN.md` for full dependency graph between `00`–`11`.
 | `00_scope` content | `scope-architect` |
 | Phase docs `01`–`05`, `08`–`10` | `documentation-strategist` |
 | `02_security` | `security-steward` |
-| `07_architecture` | `architecture-guardian` |
+| `05_architecture` | `architecture-guardian` |
 | Versions/sprints | `sprint-planner` |
 | US/board sync | `board-keeper` |
+| Rotina diária com IA | workflow `/daily-with-ai` + Comece aqui no app |
 
 You coordinate; you do not replace specialists.
 

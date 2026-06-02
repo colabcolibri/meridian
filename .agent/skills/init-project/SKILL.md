@@ -37,13 +37,14 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 docs/
   README.md
   00_scope.md … 11_decisions.md
+  decisions/
   kanban/board.json
   sprints/
   us/
 ```
 
 3. Aplicar frontmatter de `references/doc-templates.md` em cada doc (`status: draft`, exceto decisão inicial).
-4. `11_decisions.md`: entrada "Projeto iniciado com Meridian" (`approved` no log).
+4. `11_decisions.md` (stub) + `docs/decisions/YYYY-MM-DD.json` com entrada "Projeto iniciado com Meridian".
 5. `00_scope.md`: rascunho com premissas explícitas se necessário.
 6. `board.json`: `[]`
 7. Validar `.gitignore` com `references/gitignore-baseline.md`.
@@ -53,7 +54,7 @@ docs/
 
 | # | Verificação |
 | - | ----------- |
-| 1 | `docs/`, `us/`, `sprints/`, `board.json`, `11_decisions`, `00_scope` existem |
+| 1 | `docs/`, `decisions/`, `us/`, `sprints/`, `board.json`, `11_decisions`, `00_scope` existem |
 | 2 | `.env*` protegidos no `.gitignore` |
 | 3 | Nenhum código de produto criado |
 

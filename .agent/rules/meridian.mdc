@@ -20,10 +20,11 @@ Prioridade: **P0 rules > P1 agent + MERIDIAN.md > P2 skills**.
 
 - `docs/` do **projeto alvo** é a fonte de verdade (não confundir com `app-desktop/docs/` salvo contexto explícito).
 - Documentação precede código de produto.
-- Não criar US antes de `04_epics` e `06_versions` `approved`.
+- Não criar US antes de `05_architecture` `approved`.
 - `docs/kanban/board.json` é derivado de `docs/us/*.md`.
 - Nunca `✅` sem evidência; nunca `🔶` sem `Falta:` no aceite.
-- `11_decisions.md` é append-only.
+- Nunca `✅` sem `## Implementação técnica` preenchida na US (skill `complete-user-story`).
+- `docs/decisions/YYYY-MM-DD.json`: prepend em `entries`; nunca editar entradas antigas.
 - Roteamento: skill `meridian-routing` ou agents especializados.
 - Anuncie: `🤖 Aplicando conhecimento de @[agent-name]...` antes de trabalho especializado.
 
@@ -37,9 +38,11 @@ Prioridade: **P0 rules > P1 agent + MERIDIAN.md > P2 skills**.
 | `/create-version` | `.cursor/commands/create-version.md` |
 | `/create-epic` | `.cursor/commands/create-epic.md` |
 | `/create-us` | `.cursor/commands/create-us.md` |
+| `/complete-us` | `.cursor/commands/complete-us.md` |
 | `/architecture` | `.cursor/commands/architecture.md` |
 | `/security-pass` | `.cursor/commands/security-pass.md` |
 | `/sync-board` | `.cursor/commands/sync-board.md` |
+| `/daily-with-ai` | `.cursor/commands/daily-with-ai.md` |
 
 ## Validar projeto
 

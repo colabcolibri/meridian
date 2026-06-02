@@ -54,7 +54,7 @@ Use com `02_security.md`. Marque cada seção no doc ou no relatório.
 - [ ] Sem arquivos sensíveis desnecessários no contexto
 - [ ] Sem comandos destrutivos não aprovados
 - [ ] Sem envio de dados privados a serviços externos sem permissão
-- [ ] Mudanças de segurança registradas em `11_decisions.md`
+- [ ] Mudanças de segurança registradas em `docs/decisions/YYYY-MM-DD.json`
 
 ## 8. Dependências
 

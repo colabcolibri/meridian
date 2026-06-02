@@ -69,9 +69,9 @@ Workflows orquestram agents; não substituem o protocolo master.
 | `scope-architect` | `00_scope.md` | init-project, update-decisions-log, meridian-routing |
 | `documentation-strategist` | Docs de fase `01`–`05`, `08`–`10`, `docs/epics/` | init-project, create-epic, create-user-story, update-decisions-log, meridian-routing |
 | `security-steward` | `02_security.md` | security-review, update-decisions-log, meridian-routing |
-| `architecture-guardian` | `07_architecture.md` | security-review, update-decisions-log, meridian-routing |
-| `sprint-planner` | `06_versions` índice, `docs/versions/`, `docs/sprints/` | create-version, create-sprint, create-user-story, … |
-| `board-keeper` | US + `board.json` | create-user-story, generate-board-json, update-decisions-log, meridian-routing |
+| `architecture-guardian` | `05_architecture.md` | security-review, update-decisions-log, meridian-routing |
+| `sprint-planner` | `docs/versions/`, `docs/sprints/` | create-version, create-sprint, create-user-story, … |
+| `board-keeper` | US + `board.json` | create-user-story, complete-user-story, generate-board-json, update-decisions-log, meridian-routing |
 
 Cada agent inclui: fases 0/-1, missão, proibições, formato de saída, delegação.
 
@@ -86,8 +86,9 @@ Cada agent inclui: fases 0/-1, missão, proibições, formato de saída, delega�
 | `create-version` | `version-template.md` |
 | `create-sprint` | `sprint-template.md` |
 | `create-user-story` | `us-template.md` |
+| `complete-user-story` | `implementation-template.md` |
 | `generate-board-json` | `board-schema.md` |
-| `update-decisions-log` | `decision-template.md` |
+| `update-decisions-log` | `decision-template.md`, `decision-schema.md` |
 | `security-review` | `checklists.md` |
 | `meridian-routing` | — (matriz inline) |
 
@@ -104,10 +105,12 @@ Ver `.agent/skills/doc.md` para criar novas skills.
 | `plan-sprint` | sprint-planner | planejamento |
 | `create-version` | sprint-planner | criar release em `docs/versions/` |
 | `create-us` | board-keeper | criar US |
+| `complete-us` | board-keeper | fechar US pós-implementação |
 | `create-epic` | documentation-strategist | criar epic em `docs/epics/` |
 | `architecture` | architecture-guardian | doc 07 |
 | `security-pass` | security-steward | doc 02 |
 | `sync-board` | board-keeper | derivar JSON |
+| `daily-with-ai` | process-manager | roteiro diário manager + IA |
 
 Todos suportam `$ARGUMENTS` e seção de regras críticas.
 
@@ -137,7 +140,7 @@ python .agent/scripts/validate_meridian.py <project-root>
 | Antigravity | Meridian |
 | ----------- | -------- |
 | `README.md` + `rules/GEMINI.md` | `README.md` + `meridian.md` + `rules/MERIDIAN.md` |
-| 37 skills de código/stack | 9 skills de governança documental |
+| 37 skills de código/stack | 10 skills de governança documental |
 | `intelligent-routing` (domínios técnicos) | `meridian-routing` (fases docs/US) |
 | Plan files `{task-slug}.md` | `docs/` fase `00`–`11` + US |
 | Agents longos para implementação | Agents para documentação e gates antes de código |

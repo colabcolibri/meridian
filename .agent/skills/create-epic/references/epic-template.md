@@ -28,7 +28,7 @@ Parágrafo que expande o `outcome` do frontmatter — como o manager sabe que va
 
 ## Notas
 
-- Links, decisões em 11_decisions.md, riscos
+- Links, decisões em `docs/decisions/`, riscos
 ```
 
 ## Status do epic
@@ -47,6 +47,6 @@ Parágrafo que expande o `outcome` do frontmatter — como o manager sabe que va
 
 ## Depois de criar
 
-1. Atualizar tabela em `04_epics.md`.
-2. Só criar US quando `04_epics.md` e `06_versions.md` estiverem `approved` (gate do protocolo).
+1. Validar com `python .agent/scripts/validate_meridian.py <project-root>`.
+2. Só criar US quando `05_architecture.md` estiver `approved` e epic/version existirem nas pastas.
 3. US novas → skill `create-user-story`.

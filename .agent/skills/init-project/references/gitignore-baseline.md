@@ -41,4 +41,4 @@ Regras:
 
 - Nunca commitar valores reais de `.env`.
 - Manter um único lockfile por stack (npm/pnpm/yarn — escolher um).
-- Registrar em `11_decisions.md` se a stack exigir exceções.
+- Registrar em `docs/decisions/YYYY-MM-DD.json` se a stack exigir exceções.

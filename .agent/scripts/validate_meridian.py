@@ -18,13 +18,11 @@ PHASE_DOCS = [
     "01_tech_stack.md",
     "02_security.md",
     "03_user_types.md",
-    "04_epics.md",
-    "05_principles.md",
-    "06_versions.md",
-    "07_architecture.md",
-    "08_database.md",
-    "09_api_contracts.md",
-    "10_environments.md",
+    "04_principles.md",
+    "05_architecture.md",
+    "06_database.md",
+    "07_api_contracts.md",
+    "08_environments.md",
     "11_decisions.md",
 ]
 
@@ -115,6 +113,7 @@ def main() -> int:
         validate_agent_kit(kit_root, errors, warnings)
         validate_cursor_adapter(kit_root, warnings)
 
+    architecture_approved = False
     if not docs.exists():
         errors.append("Missing docs/ directory.")
     else:
@@ -127,10 +126,15 @@ def main() -> int:
             if "status" not in frontmatter:
                 errors.append(f"Missing status frontmatter in docs/{filename}.")
 
+        architecture_path = docs / "05_architecture.md"
+        if architecture_path.exists():
+            architecture_approved = read_frontmatter(architecture_path).get("status") == "approved"
+
     us_dir = docs / "us"
     epics_dir = docs / "epics"
     versions_dir = docs / "versions"
     sprints_dir = docs / "sprints"
+    decisions_dir = docs / "decisions"
     board_path = docs / "kanban" / "board.json"
     story_ids: set[str] = set()
     epic_ids: set[str] = set()
@@ -215,6 +219,62 @@ def main() -> int:
     else:
         errors.append("Missing docs/epics/ directory.")
 
+    if decisions_dir.is_dir():
+        for decision_path in sorted(decisions_dir.glob("*.json")):
+            if not re.match(r"\d{4}-\d{2}-\d{2}\.json$", decision_path.name):
+                errors.append(f"Invalid decision filename: {decision_path.name}")
+                continue
+            try:
+                payload = json.loads(decision_path.read_text(encoding="utf-8"))
+            except json.JSONDecodeError as exc:
+                errors.append(f"Invalid JSON in {decision_path.name}: {exc}")
+                continue
+            if not isinstance(payload, dict):
+                errors.append(f"{decision_path.name}: root must be an object")
+                continue
+            date = payload.get("date")
+            if not date:
+                errors.append(f"Missing date in {decision_path.name}")
+            elif date != decision_path.stem:
+                errors.append(
+                    f"{decision_path.name}: date {date} não confere com o nome do arquivo"
+                )
+            elif not re.match(r"^\d{4}-\d{2}-\d{2}$", str(date)):
+                errors.append(f"{decision_path.name}: date deve usar formato YYYY-MM-DD")
+            entries = payload.get("entries")
+            if not isinstance(entries, list):
+                errors.append(f"{decision_path.name}: entries must be an array")
+                continue
+            if not entries:
+                warnings.append(f"{decision_path.name}: nenhuma entrada em entries")
+            for index, entry in enumerate(entries):
+                if not isinstance(entry, dict):
+                    errors.append(f"{decision_path.name}: entries[{index}] must be an object")
+                    continue
+                time = entry.get("time")
+                title = entry.get("title")
+                if not time or not re.match(r"^\d{2}:\d{2}$", str(time)):
+                    errors.append(
+                        f"{decision_path.name}: entries[{index}].time must be HH:MM"
+                    )
+                if not title:
+                    errors.append(
+                        f"{decision_path.name}: entries[{index}].title is required"
+                    )
+                for field in (
+                    "affected_document",
+                    "what_changed",
+                    "why_changed",
+                    "impact",
+                    "responsible",
+                ):
+                    if field not in entry:
+                        errors.append(
+                            f"{decision_path.name}: entries[{index}] missing {field}"
+                        )
+    else:
+        errors.append("Missing docs/decisions/ directory.")
+
     if us_dir.exists():
         for story in sorted(us_dir.glob("US-*.md")):
             match = re.match(r"US-\d{4}\.md$", story.name)
@@ -246,8 +306,35 @@ def main() -> int:
                 errors.append(
                     f"{story.name}: version {version_ref} não existe em docs/versions/"
                 )
-            if status == "🔶" and "Falta:" not in story.read_text(encoding="utf-8"):
+            story_text = story.read_text(encoding="utf-8")
+            if status == "🔶" and "Falta:" not in story_text:
                 errors.append(f"{story.name} is 🔶 but has no 'Falta:' in acceptance.")
+
+            tests = frontmatter.get("tests")
+            tests_status = frontmatter.get("tests_status")
+            if tests not in (None, "required", "none"):
+                errors.append(f"{story.name}: tests must be required or none.")
+            if tests_status not in (None, "pending", "done", "n/a"):
+                errors.append(f"{story.name}: tests_status must be pending, done or n/a.")
+            effective_tests = tests if tests is not None else "required"
+            effective_status = tests_status
+            if effective_status is None:
+                effective_status = "n/a" if effective_tests == "none" else "pending"
+            if effective_tests == "none" and effective_status != "n/a":
+                errors.append(f"{story.name}: tests none requires tests_status n/a.")
+            if effective_tests == "required" and effective_status == "n/a":
+                errors.append(f"{story.name}: tests required cannot use tests_status n/a.")
+            if status == "✅" and effective_tests == "required" and effective_status == "pending":
+                errors.append(
+                    f"{story.name}: status ✅ requires tests_status done when tests required."
+                )
+            if effective_tests == "required" and "### Planejado" not in story_text:
+                errors.append(f"{story.name}: tests required needs ### Planejado section.")
+
+        if story_ids and not architecture_approved:
+            errors.append(
+                "User stories exist but 05_architecture.md is not approved (gate de entrega)."
+            )
 
     if board_path.exists():
         try:

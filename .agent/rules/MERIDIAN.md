@@ -36,10 +36,11 @@ Antes de qualquer ação, classifique:
 | **STATUS** | "status", "onde estamos", "bloqueios" | `process-manager` + `/status` |
 | **DOC / FASE** | "escopo", "epic", "versão", "arquitetura", `00_`–`11_` | Agent de documentação conforme matriz |
 | **US / BOARD** | "user story", "US-", "kanban", "board" | `board-keeper` ou `sprint-planner` |
+| **FECHAR US** | "concluir US", "marcar done", "implementação técnica", `/complete-us` | `board-keeper` + `complete-user-story` |
 | **SEGURANÇA** | "security", "OWASP", "secrets", `02_security` | `security-steward` |
 | **INICIAR PROJETO** | "iniciar", "setup meridian", "criar docs" | `process-manager` + `init-project` |
 | **CÓDIGO** | "implementar", "criar app", "fix", "refactor" | Verificar maturidade dos docs ANTES |
-| **SLASH** | `/init-meridian`, `/create-epic`, `/create-us`, etc. | Fluxo do workflow correspondente |
+| **SLASH** | `/init-meridian`, `/create-epic`, `/create-us`, `/complete-us`, `/daily-with-ai`, etc. | Fluxo do workflow correspondente |
 
 > Para roteamento automático de agents, siga `@[skills/meridian-routing]`.
 
@@ -72,8 +73,9 @@ Antes de qualquer ação, classifique:
 **Violações:**
 
 - Código sem docs mínimos = **falha de protocolo**
-- US sem `04_epics` + `06_versions` approved = **falha de protocolo**
+- US sem `05_architecture` approved = **falha de protocolo**
 - `✅` sem evidência = **falha de protocolo**
+- `✅` sem `## Implementação técnica` preenchida = **falha de protocolo**
 
 ---
 
@@ -92,8 +94,8 @@ Não escreva código de produto até existirem os docs exigidos pela fase atual 
 ### Maturidade
 
 - Não marque `approved` sem confirmação humana ou autorização explícita.
-- Não crie US antes de `04_epics.md` e `06_versions.md` estarem `approved`.
-- Não edite entradas antigas em `11_decisions.md` (append-only).
+- Não crie US antes de `05_architecture.md` estar `approved`.
+- Não edite entradas antigas em `docs/decisions/`; novas entradas vão **no início** de `entries`.
 
 ### Aceite e status
 
@@ -104,7 +106,7 @@ Não escreva código de produto até existirem os docs exigidos pela fase atual 
 
 - Proteja `.env`, `.env.*`, logs, builds, `node_modules`, caches.
 - Não exponha segredos; não execute comandos destrutivos sem aprovação.
-- Mudanças de segurança exigem decisão em `11_decisions.md`.
+- Mudanças de segurança exigem decisão em `docs/decisions/YYYY-MM-DD.json`.
 
 ### Manager humano
 
@@ -118,13 +120,14 @@ A pessoa é manager do processo. Agentes reportam bloqueios, próximo passo e de
 | -------- | -------------- | ----- |
 | Estrutura `docs/` | `process-manager` | `init-project` |
 | `00_scope.md` | `scope-architect` | `init-project` |
-| `01`–`05`, `08`–`10` | `documentation-strategist` | `update-decisions-log` |
+| `01`–`08`, `11` (fase) | `documentation-strategist` | `update-decisions-log` |
 | `02_security.md` | `security-steward` | `security-review` |
-| `07_architecture.md` | `architecture-guardian` | `security-review` |
-| `06_versions.md`, sprints | `sprint-planner` | `create-user-story` |
-| `docs/us/*.md` | `board-keeper` | `create-user-story` |
+| `05_architecture.md` | `architecture-guardian` | `security-review` |
+| `docs/versions/`, `docs/sprints/` | `sprint-planner` | `create-user-story` |
+| `docs/us/*.md` (criar) | `board-keeper` | `create-user-story` |
+| `docs/us/*.md` (fechar) | `board-keeper` | `complete-user-story` |
 | `board.json` | `board-keeper` | `generate-board-json` |
-| `11_decisions.md` | qualquer agent relevante | `update-decisions-log` |
+| `11_decisions.md` (stub) + `docs/decisions/` | qualquer agent relevante | `update-decisions-log` |
 
 ---
 

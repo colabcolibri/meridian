@@ -1,5 +1,5 @@
 ---
-description: Create or review 07_architecture.md after required Meridian documents are approved.
+description: Create or review 05_architecture.md after required Meridian documents are approved.
 ---
 
 # /architecture — arquitetura
@@ -13,7 +13,7 @@ $ARGUMENTS
 1. Use `architecture-guardian`
 2. Pré-requisitos: scope, stack, security, users (mínimo draft)
 3. Alinhar com `02_security` — carregar `security-review` se gaps
-4. Mudança material → `11_decisions.md`
+4. Mudança material → `docs/decisions/YYYY-MM-DD.json` (skill `update-decisions-log`)
 5. Sem código de produto neste workflow (salvo pedido explícito em $ARGUMENTS)
 
 ---
@@ -38,7 +38,7 @@ RULES:
 ## Saída
 
 ```txt
-07_architecture status:
+05_architecture status:
 Aligned with: [docs]
 Drift detected:
 Proposed changes:

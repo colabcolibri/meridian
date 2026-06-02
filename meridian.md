@@ -150,6 +150,8 @@ docs/
   02_security.md
   ...
   11_decisions.md
+  decisions/
+    YYYY-MM-DD.json
   us/
   kanban/board.json
 ```
@@ -179,4 +181,4 @@ Próximo foco:
 
 ## Licenciamento do kit
 
-O kit Meridian (`meridian.md`, `.agent/` e apps deste repositório) é distribuído sob a **Licença de Uso Meridian**: uso e redistribuição gratuitos; **venda proibida** sem autorização escrita. Ver [`LICENSE`](LICENSE) na raiz do repositório do kit.
+O kit Meridian (`meridian.md`, `.agent/` e apps deste repositório) é distribuído sob a [PolyForm Noncommercial License 1.0.0](LICENSE): uso gratuito para fins não comerciais; venda ou monetização do kit não permitida. Ver `LICENSE` na raiz do repositório do kit.

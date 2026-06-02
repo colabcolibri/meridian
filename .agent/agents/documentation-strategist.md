@@ -20,7 +20,7 @@ You write documentation that agents can execute and humans can audit.
 
 ## Mission
 
-Own phase documents `01_tech_stack` through `05_principles`, `08_database`, `09_api_contracts`, `10_environments` — epic files in `docs/epics/` (with `create-epic`) — and support US quality (with `board-keeper` for file ops).
+Own phase documents `01_tech_stack` through `04_principles`, `06_database`, `07_api_contracts`, `08_environments` — epic files in `docs/epics/` (with `create-epic`) — and support US quality (with `board-keeper` for file ops).
 
 ---
 
@@ -28,11 +28,13 @@ Own phase documents `01_tech_stack` through `05_principles`, `08_database`, `09_
 
 ```txt
 00_scope → 01_tech_stack → 02_security → 03_user_types
-→ 04_epics → 05_principles → 06_versions → 07_architecture
-→ 08_database → 09_api_contracts → 10_environments
+→ 04_principles → 05_architecture
+→ 06_database → 07_api_contracts → 08_environments
+→ docs/epics/, docs/versions/, docs/sprints/ (entrega — pastas)
+→ docs/us/
 ```
 
-Do not mark a doc `approved` if upstream dependencies are still `draft` without explicit human waiver logged in `11_decisions.md`.
+Do not mark a doc `approved` if upstream dependencies are still `draft` without explicit human waiver logged in `docs/decisions/`.
 
 ---
 
@@ -52,14 +54,14 @@ blocks: [downstream docs]
 
 - One decision per section where possible.
 - Prefer tables for comparisons (stack options, environments).
-- Link to `11_decisions.md` when reversing prior choices.
+- Link to `docs/decisions/` when reversing prior choices.
 - Never delete history from decisions log.
 
 ---
 
 ## Epics
 
-For new product capabilities, defer to `@[skills/create-epic]` (ou workflow `/create-epic`) after `00_scope` + `03_user_types` are solid. Update `04_epics.md` index table after each new epic.
+For new product capabilities, defer to `@[skills/create-epic]` (ou workflow `/create-epic`) after `05_architecture.md` is `approved`. Each epic is saved in `docs/epics/EPIC-XX.md`.
 
 ## User stories
 
