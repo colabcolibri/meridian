@@ -5,6 +5,7 @@ import type { MonitorIssue } from "@/domain/meridian/monitor-issues"
 import type { Epic, UserStory } from "@/domain/meridian/types"
 import { issuesForTarget } from "@/domain/meridian/protocol-validators"
 import { groupStoriesByStatus } from "@/domain/meridian/validators"
+import { filterChipClass, monitorPanelClass } from "@/features/monitor/monitor-ui"
 import { typeScale } from "@/features/monitor/monitor-typography"
 import { cn } from "@/lib/utils"
 
@@ -35,12 +36,13 @@ function StoryCard({
   return (
     <article
       className={cn(
-        "rounded-lg border bg-white p-3 shadow-sm",
-        hasError && "border-red-300",
+        monitorPanelClass,
+        "p-3 shadow-none ring-1 ring-border/60",
+        hasError && "border-destructive/40 ring-destructive/30",
       )}
     >
       <div className="flex flex-wrap items-center gap-1.5">
-        <span className="font-mono text-[11px] font-medium text-zinc-700">
+        <span className="font-mono text-[11px] font-semibold text-foreground">
           {story.id}
         </span>
         <Badge className="h-5 text-[10px]" variant="outline">
@@ -51,32 +53,34 @@ function StoryCard({
         </Badge>
       </div>
 
-      <h3 className="mt-1.5 text-sm font-medium leading-snug text-zinc-950">
+      <h3 className="mt-2 text-sm font-medium leading-snug text-foreground">
         {story.title}
       </h3>
 
-      <div className="mt-2 flex flex-wrap items-center gap-1.5">
+      <div className="mt-2.5 flex flex-wrap items-center gap-1.5 border-t border-border/60 pt-2.5">
         <Badge className="font-mono text-[10px]" variant="outline">
           {story.epic}
         </Badge>
         {epic ? (
-          <span className={cn(typeScale.caption, "min-w-0 truncate")}>
+          <span
+            className={cn(typeScale.caption, "min-w-0 truncate text-foreground/80")}
+          >
             {epic.title}
           </span>
         ) : null}
       </div>
 
       {storyIssues.length > 0 ? (
-        <p className="mt-2 text-xs text-red-800">{storyIssues[0]?.message}</p>
+        <p className="mt-2 text-xs text-destructive">{storyIssues[0]?.message}</p>
       ) : null}
 
-      <details className="mt-2 text-xs text-zinc-600">
-        <summary className="cursor-pointer select-none text-zinc-500 hover:text-zinc-800">
+      <details className="mt-2 text-xs text-muted-foreground">
+        <summary className="cursor-pointer select-none font-medium text-muted-foreground hover:text-foreground">
           Detalhes
         </summary>
-        <p className="mt-2 leading-5">{story.doneWhen}</p>
+        <p className="mt-2 leading-5 text-foreground/80">{story.doneWhen}</p>
         {story.dependsOn.length > 0 ? (
-          <p className="mt-1 text-zinc-500">Depende de: {story.dependsOn.join(", ")}</p>
+          <p className="mt-1">Depende de: {story.dependsOn.join(", ")}</p>
         ) : null}
       </details>
     </article>
@@ -120,84 +124,78 @@ export function KanbanView({
 
   const columns = groupStoriesByStatus(filtered)
 
-  const filterButtonClass = (active: boolean) =>
-    cn(
-      "rounded-full px-3 py-1.5 text-xs font-medium transition-colors",
-      active
-        ? "bg-meridian text-meridian-foreground"
-        : "bg-white text-zinc-700 ring-1 ring-zinc-200 hover:bg-zinc-50",
-    )
-
   return (
-    <div className="space-y-4">
-      <div className="space-y-2">
-        <p className={typeScale.caption}>Versão</p>
-        <div className="flex flex-wrap gap-2">
-          <button
-            className={filterButtonClass(versionFilter === "all")}
-            onClick={() => setVersionFilter("all")}
-            type="button"
-          >
-            Todas
-          </button>
-          {versionIds.map((versionId) => (
+    <div className="space-y-5">
+      <div className={cn(monitorPanelClass, "space-y-4 p-4")}>
+        <div className="space-y-2">
+          <p className={typeScale.label}>Versão</p>
+          <div className="flex flex-wrap gap-2">
             <button
-              className={filterButtonClass(versionFilter === versionId)}
-              key={versionId}
-              onClick={() => setVersionFilter(versionId)}
+              className={filterChipClass(versionFilter === "all")}
+              onClick={() => setVersionFilter("all")}
               type="button"
             >
-              {versionId}
+              Todas
             </button>
-          ))}
+            {versionIds.map((versionId) => (
+              <button
+                className={filterChipClass(versionFilter === versionId)}
+                key={versionId}
+                onClick={() => setVersionFilter(versionId)}
+                type="button"
+              >
+                {versionId}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="space-y-2 border-t border-border/60 pt-4">
+          <p className={typeScale.label}>Epic</p>
+          <div className="flex flex-wrap gap-2">
+            <button
+              className={filterChipClass(epicFilter === "all")}
+              onClick={() => setEpicFilter("all")}
+              type="button"
+            >
+              Todos
+            </button>
+            {epics.map((epic) => (
+              <button
+                className={cn(
+                  filterChipClass(epicFilter === epic.id),
+                  "max-w-[240px] truncate",
+                )}
+                key={epic.id}
+                onClick={() => setEpicFilter(epic.id)}
+                title={`${epic.id} — ${epic.title}`}
+                type="button"
+              >
+                {epicFilterLabel(epic)}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
-      <div className="space-y-2">
-        <p className={typeScale.caption}>Epic</p>
-        <div className="flex flex-wrap gap-2">
-          <button
-            className={filterButtonClass(epicFilter === "all")}
-            onClick={() => setEpicFilter("all")}
-            type="button"
-          >
-            Todos
-          </button>
-          {epics.map((epic) => (
-            <button
-              className={cn(
-                filterButtonClass(epicFilter === epic.id),
-                "max-w-[240px] truncate",
-              )}
-              key={epic.id}
-              onClick={() => setEpicFilter(epic.id)}
-              title={`${epic.id} — ${epic.title}`}
-              type="button"
-            >
-              {epicFilterLabel(epic)}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <div className="-mx-4 flex gap-3 overflow-x-auto px-4 pb-2 sm:mx-0 sm:px-0 lg:grid lg:grid-cols-4 lg:overflow-visible">
+      <div className="-mx-4 flex gap-3 overflow-x-auto px-4 pb-2 sm:mx-0 sm:px-0 lg:grid lg:grid-cols-4 lg:gap-4 lg:overflow-visible">
         {columns.map(({ status, stories: columnStories }) => (
           <section
-            className="flex w-[min(280px,85vw)] shrink-0 flex-col rounded-xl border border-zinc-200 bg-zinc-50/80 lg:w-auto"
+            className="flex w-[min(280px,85vw)] shrink-0 flex-col rounded-xl border border-border bg-muted/30 lg:w-auto"
             key={status}
           >
-            <header className="border-b border-zinc-200/80 px-3 py-3">
-              <h2 className="flex items-center gap-2 text-sm font-semibold text-zinc-900">
+            <header className="border-b border-border bg-card/80 px-3 py-3 backdrop-blur-sm">
+              <h2 className="flex items-center gap-2 text-sm font-semibold text-foreground">
                 <span aria-hidden>{status}</span>
                 {columnMeta[status].title}
               </h2>
-              <p className="mt-0.5 text-xs text-zinc-500">
+              <p className={cn(typeScale.caption, "mt-0.5")}>
                 {columnStories.length} item{columnStories.length === 1 ? "" : "s"}
               </p>
             </header>
-            <div className="flex min-h-[120px] flex-1 flex-col gap-2 p-2">
+            <div className="flex min-h-[140px] flex-1 flex-col gap-2.5 p-2.5">
               {columnStories.length === 0 ? (
-                <p className="px-1 py-4 text-center text-xs text-zinc-400">Vazio</p>
+                <p className={cn(typeScale.caption, "px-1 py-6 text-center")}>Vazio</p>
               ) : (
                 columnStories.map((story) => (
                   <StoryCard

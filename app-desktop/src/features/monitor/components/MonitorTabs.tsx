@@ -52,11 +52,11 @@ export function MonitorTabs({
               aria-current={active === tab.id ? "page" : undefined}
               className={cn(
                 typeScale.tab,
-                "shrink-0 rounded-lg px-4 py-2.5 transition-colors",
+                "shrink-0 rounded-lg px-4 py-2.5 transition-all",
                 disabled && "pointer-events-none opacity-50",
                 active === tab.id
                   ? "bg-primary text-primary-foreground shadow-sm"
-                  : "text-muted-foreground hover:bg-muted hover:text-foreground",
+                  : "text-muted-foreground hover:bg-muted/80 hover:text-foreground",
               )}
               disabled={disabled}
               key={tab.id}

@@ -7,8 +7,11 @@ import {
 } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
 import { useProjectFolder } from "@/features/folder/ProjectFolderContext"
 import { MONITOR_CONTAINER } from "@/features/monitor/monitor-layout"
+import { monitorPanelClass } from "@/features/monitor/monitor-ui"
+import { typeScale } from "@/features/monitor/monitor-typography"
 
 const steps = [
   {
@@ -52,22 +55,24 @@ export function WelcomeScreen() {
         <p className="text-sm font-medium text-meridian-muted-foreground">
           Meridian Desktop
         </p>
-        <h2 className="mt-2 text-2xl font-semibold tracking-tight text-zinc-950 sm:text-3xl">
+        <h2 className={cn(typeScale.pageTitle, "mt-2 sm:text-3xl")}>
           {needsPermission
             ? "Permita a leitura da pasta"
             : "Gerencie seu projeto pela pasta docs"}
         </h2>
-        <p className="mt-3 text-sm leading-6 text-zinc-600">
+        <p className={cn(typeScale.bodySm, "mt-3")}>
           {needsPermission ? (
             <>
               A pasta{" "}
-              <strong className="font-medium text-zinc-800">{pendingFolderName}</strong>{" "}
+              <strong className="font-medium text-foreground">
+                {pendingFolderName}
+              </strong>{" "}
               foi selecionada. O Chrome exige um clique para liberar a leitura dos
               arquivos.
             </>
           ) : (
             <>
-              Abra a pasta <strong className="font-medium text-zinc-800">docs</strong>{" "}
+              Abra a pasta <strong className="font-medium text-foreground">docs</strong>{" "}
               do projeto (ex.:{" "}
               <span className="font-mono text-xs">app-desktop/docs</span>) para ver o
               mesmo conteúdo que seus agentes usam.
@@ -82,7 +87,7 @@ export function WelcomeScreen() {
             const Icon = step.icon
             return (
               <li
-                className="flex gap-4 rounded-xl border border-zinc-200/80 bg-white p-4 shadow-sm sm:p-5"
+                className={cn(monitorPanelClass, "flex gap-4 p-4 sm:p-5")}
                 key={step.title}
               >
                 <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-meridian-muted text-sm font-semibold text-meridian-muted-foreground">
@@ -91,11 +96,9 @@ export function WelcomeScreen() {
                 <div className="min-w-0 text-left">
                   <div className="flex items-center gap-2">
                     <Icon className="h-4 w-4 shrink-0 text-meridian" aria-hidden />
-                    <h3 className="text-sm font-semibold text-zinc-950">
-                      {step.title}
-                    </h3>
+                    <h3 className={typeScale.label}>{step.title}</h3>
                   </div>
-                  <p className="mt-1.5 text-sm leading-6 text-zinc-600">{step.body}</p>
+                  <p className={cn(typeScale.bodySm, "mt-1.5")}>{step.body}</p>
                 </div>
               </li>
             )
