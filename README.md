@@ -9,51 +9,55 @@
 </p>
 
 <p align="center">
-  <strong>Structure the app in docs first — then build with AI without losing the thread</strong><br />
-  Scope, architecture, user stories, acceptance criteria, and decisions live in <code>docs/</code>; agents read the same files you do.
+  <strong>Your repo documents what you are building.</strong><br />
+  AI agents read the same files — so “done” means done in Git, not done in chat.
 </p>
 
 <!-- GitHub About → Settings → Description: -->
-<!-- Docs-first protocol for structuring apps with user stories and AI — scope, decisions, and done-state in Git. -->
+<!-- Docs-first protocol: structure your app in Git, work with AI from user stories and acceptance in files. -->
 
-> **Very early experiment** — I am testing how to **start and grow an application in a documented way** (principles, architecture, user stories, evidence of done) and **use AI without the project dissolving into chat**. Shapes and rules will change. [Roadmap](#roadmap) · [Protocol](.agent/MERIDIAN.md)
+> **Very early experiment** — personal project; APIs and rules will change. [Roadmap](#roadmap) · [Protocol](.agent/MERIDIAN.md)
 
 # Meridian
 
 **Set the meridian before you write code.**
 
-Meridian has two layers that work together:
+## The problem
 
-1. **`docs/`** in your repo — the project documentation (scope, architecture, acceptance, decisions, user stories). If it is not written here, it is not part of the process.
-2. **`.agent/`** — the kit that **defines the flow**: which agent runs when, slash workflows, skills, gates, and rules agents must follow. This is not optional; it is how Meridian stays consistent instead of reinventing the process in every chat.
+With AI in the IDE, code appears quickly — but the **project** often does not: decisions stay in chat, scope drifts, and “it’s done” means the model said so five messages ago. A week later you (or the next session) cannot reliably answer:
 
-Code implements `docs/`; agents operate through `.agent/`; **you** approve maturity and completion. Visual tracking in the browser is a separate, optional helper (see below).
+- What are we building, and what is explicitly out of scope?
+- What did we change last Tuesday, and why?
+- Which user story is next, and what counts as finished?
 
-**Guides (same as the monitor tabs):** [Start here](.agent/references/start-here.md) · [Usage guide](.agent/references/usage-guide.md) — Markdown for the IDE and GitHub.
+Meridian treats that gap as a **documentation problem**, not a tooling problem.
 
-## What approach is this?
+## What Meridian gives you
 
-Meridian is **docs-first** development (also called **documentation-driven** or **spec-in-repo**): you structure the product in Markdown **before** and **while** you code — not in a separate wiki or PM tool.
+One place in your repository — the `docs/` folder — to **structure the application** and **run work with AI** without losing continuity:
 
-| Idea | In Meridian |
-| ---- | ------------- |
-| **Documentation-driven** | Phase docs (`00_scope` … `05_architecture`, security, stack, …) unlock what you are allowed to build next. |
-| **User stories + acceptance** | Executable work lives in `docs/us/` with verifiable **Acceptance** criteria (agile-style stories, file-based). |
-| **Decision log** | `docs/decisions/` records *why* scope, stack, or design changed — for you and for the next AI session. |
-| **AI as executor, you as manager** | Agents draft and implement from those files; ✅ and `approved` only with your review and evidence in Git. |
+| You get | What it means in practice |
+| ------- | ------------------------- |
+| **Ordered product docs** | Scope, stack, security, principles, architecture (`00`–`08`, `11`) — each step unlocks the next so you do not code on vibes alone. |
+| **User stories with acceptance** | Work lives in `docs/us/` with checkable criteria; “done” is recorded in the file (`/complete-us`), not implied by a green checkmark in the chat. |
+| **A decision trail** | `docs/decisions/` captures *why* something changed — for you on Monday and for the agent on Tuesday. |
+| **Agents on rails** | `.agent/` supplies workflows, skills, and gates so the IDE does not reinvent the process every prompt. |
+| **Visible progress (optional)** | The desktop monitor reads `docs/` and shows setup, backlog, board, and story detail — read-only, no second source of truth. |
 
-It is not Scrum-in-a-box and not a Jira replacement — it is a **lightweight file protocol** to grow an application with principles, traceability, and AI that can **read and update the same truth** you see in the repo.
+**Docs-first** (documentation-driven) development: the spec lives in Git next to the code. User stories and acceptance criteria follow familiar agile ideas; Meridian is not Scrum-in-a-box and not Jira — it is a **file protocol** for one repo, one truth, AI included.
 
-## Who this is for
+**You** stay manager: agents propose and implement; you approve documents, scope, and ✅ with evidence.
 
-Anyone who wants to **start or restructure an application in a documented way** and **work seriously with AI** (Cursor, Antigravity, or any IDE that reads `.agent/`):
+**Guides:** [Start here](.agent/references/start-here.md) (concepts) · [Usage guide](.agent/references/usage-guide.md) (commands and daily flow).
 
-- Turn an idea into **scope, architecture, and user stories** before drowning in generated code.
-- Keep **acceptance criteria and “done”** in the repository — not only in chat history.
-- Let agents **orient, implement, and close** US files while you stay manager of approvals and quality.
-- Understand **what was decided, what is in progress, and what is actually finished** without opening ten tools.
+## Two pieces in every Meridian project
 
-You do not need a specific team size — you need a `docs/` folder, the `.agent/` kit, and discipline to treat files as the process.
+| Piece | Role |
+| ----- | ---- |
+| **`docs/`** | What is true about the product — if it is not here, it is not part of the process. |
+| **`.agent/`** | How AI sessions run — slash workflows, agents, skills, rules (copy this kit into your repo). |
+
+Code implements `docs/`. Agents follow `.agent/`. Chat is where work happens; **files are what persist.**
 
 ## What is in this repository
 
@@ -90,15 +94,11 @@ Details: [`.agent/CURSOR_ADAPTER.md`](.agent/CURSOR_ADAPTER.md)
 
 No login. No cloud. Git holds the history. Agents follow `.agent/`; the desktop monitor, if you use it, only **reads** `docs/`.
 
-## What it is / what it is not
+## What it is not
 
-| Meridian is | Meridian is not |
-| ----------- | --------------- |
-| **`docs/`** = what is true about the project | A wiki or Notion bolted on the side |
-| **`.agent/`** = how the flow runs (workflows, agents, gates) | Ad-hoc prompts with no shared rules |
-| Optional **monitor** to see status in the browser | The monitor replacing agents or `docs/` |
-| Process tracked in files (decisions, US, board) | “Done” because the agent said so in chat |
-| Docs-first + user stories in Git; early protocol | A PM SaaS, a wiki, or vibe-coding with no spec |
+- Not a PM SaaS, not a wiki you forget to update, not vibe-coding without a spec.
+- Not “the agent said done” — done is in `docs/us/` with acceptance and implementation recorded.
+- Not the monitor running the project — the IDE + `.agent/` + `docs/` do; the app only displays files.
 
 ## Quick start
 
