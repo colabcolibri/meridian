@@ -6,12 +6,16 @@ import {
 } from "@/domain/meridian/doc-refs"
 import { parseFrontmatterRecord, splitMarkdown } from "@/domain/meridian/frontmatter"
 import type {
+  DecisionDay,
+  DecisionEntry,
   DocStatus,
   Epic,
   EpicStatus,
   Moscow,
   PhaseDocument,
   StoryStatus,
+  TestsRequirement,
+  TestsStatus,
   UserStory,
   ProductVersion,
   Sprint,
@@ -31,6 +35,8 @@ export class MeridianParseError extends Error {
 
 const DOC_STATUSES: DocStatus[] = ["draft", "review", "approved"]
 const STORY_STATUSES: StoryStatus[] = ["✅", "🔶", "❌", "🧊"]
+const TESTS_REQUIREMENTS: TestsRequirement[] = ["required", "none"]
+const TESTS_STATUSES: TestsStatus[] = ["pending", "done", "n/a"]
 const MOSCOW_VALUES: Moscow[] = ["Must", "Should", "Could", "Won't"]
 const EPIC_STATUSES: EpicStatus[] = ["active", "paused", "complete"]
 const RELEASE_STATUSES: ReleaseStatus[] = ["planned", "active", "complete"]
@@ -72,6 +78,36 @@ function parseMoscow(value: unknown, file: string): Moscow {
     throw new MeridianParseError(file, `moscow inválido: ${String(value)}`)
   }
   return value as Moscow
+}
+
+function parseTestsRequirement(value: unknown, file: string): TestsRequirement {
+  if (
+    typeof value !== "string" ||
+    !TESTS_REQUIREMENTS.includes(value as TestsRequirement)
+  ) {
+    throw new MeridianParseError(
+      file,
+      `tests deve ser required ou none (recebido: ${String(value)})`,
+    )
+  }
+  return value as TestsRequirement
+}
+
+function parseTestsStatus(
+  value: unknown,
+  tests: TestsRequirement,
+  file: string,
+): TestsStatus {
+  if (value === undefined || value === null || value === "") {
+    return tests === "none" ? "n/a" : "pending"
+  }
+  if (typeof value !== "string" || !TESTS_STATUSES.includes(value as TestsStatus)) {
+    throw new MeridianParseError(
+      file,
+      `tests_status deve ser pending, done ou n/a (recebido: ${String(value)})`,
+    )
+  }
+  return value as TestsStatus
 }
 
 function parseEpicStatus(value: string): EpicStatus {
@@ -148,6 +184,12 @@ export function parseUserStoryFile(filename: string, raw: string): UserStory {
     )
   }
 
+  const tests =
+    record.tests === undefined
+      ? ("required" as TestsRequirement)
+      : parseTestsRequirement(record.tests, file)
+  const testsStatus = parseTestsStatus(record.tests_status, tests, file)
+
   return {
     id,
     title: requireString(record, "title", file),
@@ -159,6 +201,8 @@ export function parseUserStoryFile(filename: string, raw: string): UserStory {
       ? record.depends_on.filter((item): item is string => typeof item === "string")
       : [],
     doneWhen: requireString(record, "done_when", file),
+    tests,
+    testsStatus,
   }
 }
 
@@ -238,6 +282,86 @@ export function parseVersionFile(filename: string, raw: string): ProductVersion 
     scopeIn: extractMarkdownSection(body, "Incluído nesta versão"),
     scopeOut: extractMarkdownSection(body, "Explicitamente fora"),
     status: parseReleaseStatus(String(record.status ?? "planned")),
+  }
+}
+
+const DECISION_DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/
+const DECISION_FILENAME_PATTERN = /^\d{4}-\d{2}-\d{2}\.json$/i
+const DECISION_TIME_PATTERN = /^\d{2}:\d{2}$/
+
+function parseDecisionEntry(
+  value: unknown,
+  file: string,
+  index: number,
+): DecisionEntry {
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    throw new MeridianParseError(file, `entries[${index}] deve ser um objeto`)
+  }
+
+  const record = value as Record<string, unknown>
+  const time = requireString(record, "time", file)
+  const title = requireString(record, "title", file)
+
+  if (!DECISION_TIME_PATTERN.test(time)) {
+    throw new MeridianParseError(file, `entries[${index}].time deve usar formato HH:MM`)
+  }
+
+  return {
+    time,
+    title,
+    affectedDocument: String(record.affected_document ?? "").trim(),
+    whatChanged: String(record.what_changed ?? "").trim(),
+    whyChanged: String(record.why_changed ?? "").trim(),
+    impact: String(record.impact ?? "").trim(),
+    responsible: String(record.responsible ?? "").trim(),
+  }
+}
+
+export function parseDecisionDayFile(filename: string, raw: string): DecisionDay {
+  const file = `decisions/${filename}`
+
+  if (!DECISION_FILENAME_PATTERN.test(filename)) {
+    throw new MeridianParseError(file, "nome do arquivo deve ser YYYY-MM-DD.json")
+  }
+
+  let parsed: unknown
+  try {
+    parsed = JSON.parse(raw)
+  } catch {
+    throw new MeridianParseError(file, "JSON inválido")
+  }
+
+  if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
+    throw new MeridianParseError(file, "raiz deve ser um objeto com date e entries")
+  }
+
+  const record = parsed as Record<string, unknown>
+  const date = requireString(record, "date", file)
+  const expectedDate = filename.replace(/\.json$/i, "")
+
+  if (!DECISION_DATE_PATTERN.test(date)) {
+    throw new MeridianParseError(file, `date "${date}" deve usar formato YYYY-MM-DD`)
+  }
+
+  if (date !== expectedDate) {
+    throw new MeridianParseError(
+      file,
+      `date "${date}" não confere com o nome do arquivo (${filename})`,
+    )
+  }
+
+  if (!Array.isArray(record.entries)) {
+    throw new MeridianParseError(file, "campo entries deve ser um array")
+  }
+
+  const entries = record.entries.map((entry, index) =>
+    parseDecisionEntry(entry, file, index),
+  )
+
+  return {
+    date,
+    filename,
+    entries,
   }
 }
 

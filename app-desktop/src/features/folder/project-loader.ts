@@ -4,6 +4,7 @@ import type { MonitorIssue } from "@/domain/meridian/monitor-issues"
 import { PHASE_DOC_IDS } from "@/domain/meridian/phase-doc-files"
 import {
   MeridianParseError,
+  parseDecisionDayFile,
   parseEpicFile,
   parsePhaseDocument,
   parseSprintFile,
@@ -12,6 +13,7 @@ import {
 } from "@/domain/meridian/parser"
 import { collectProtocolIssues } from "@/domain/meridian/protocol-validators"
 import type {
+  DecisionDay,
   Epic,
   PhaseDocument,
   ProductVersion,
@@ -27,7 +29,9 @@ export interface MeridianProjectData {
   epics: Epic[]
   versions: ProductVersion[]
   sprints: Sprint[]
+  decisionDays: DecisionDay[]
   board: BoardEntry[] | null
+  storyBodies: Map<string, string>
   issues: MonitorIssue[]
 }
 
@@ -291,6 +295,73 @@ async function loadSprints(
   return sprints
 }
 
+async function listDecisionFilenames(
+  decisionsDir: FileSystemDirectoryHandle,
+): Promise<string[]> {
+  const names: string[] = []
+  for await (const [name, handle] of decisionsDir.entries()) {
+    if (handle.kind === "file" && /^\d{4}-\d{2}-\d{2}\.json$/i.test(name)) {
+      names.push(name)
+    }
+  }
+  return names.sort((a, b) => b.localeCompare(a))
+}
+
+async function loadDecisions(
+  docsRoot: FileSystemDirectoryHandle,
+  parseIssues: MonitorIssue[],
+): Promise<DecisionDay[]> {
+  const decisionDays: DecisionDay[] = []
+
+  try {
+    const decisionsDir = await docsRoot.getDirectoryHandle("decisions")
+    const filenames = await listDecisionFilenames(decisionsDir)
+
+    if (filenames.length === 0) {
+      parseIssues.push({
+        file: "decisions/",
+        message: "Nenhum arquivo YYYY-MM-DD.json encontrado em docs/decisions/.",
+        severity: "warning",
+        scope: "parse",
+      })
+      return decisionDays
+    }
+
+    const parsed = await Promise.all(
+      filenames.map(async (filename) => {
+        try {
+          const raw = await readTextFile(decisionsDir, filename)
+          return parseDecisionDayFile(filename, raw)
+        } catch (error) {
+          recordParseIssue(
+            parseIssues,
+            error instanceof MeridianParseError
+              ? error
+              : new MeridianParseError(`decisions/${filename}`, String(error)),
+          )
+          return null
+        }
+      }),
+    )
+
+    for (const day of parsed) {
+      if (day) {
+        decisionDays.push(day)
+      }
+    }
+  } catch {
+    parseIssues.push({
+      file: "decisions/",
+      message:
+        'Pasta "decisions/" não encontrada. Crie docs/decisions/ com YYYY-MM-DD.json.',
+      severity: "error",
+      scope: "parse",
+    })
+  }
+
+  return decisionDays
+}
+
 async function loadUserStories(
   docsRoot: FileSystemDirectoryHandle,
   parseIssues: MonitorIssue[],
@@ -345,13 +416,15 @@ export async function loadMeridianProject(
   const parseIssues: MonitorIssue[] = []
   const storyBodies = new Map<string, string>()
 
-  const [phaseDocuments, userStories, epics, versions, sprints] = await Promise.all([
-    loadPhaseDocuments(docsRoot, parseIssues),
-    loadUserStories(docsRoot, parseIssues, storyBodies),
-    loadEpics(docsRoot, parseIssues),
-    loadVersions(docsRoot, parseIssues),
-    loadSprints(docsRoot, parseIssues),
-  ])
+  const [phaseDocuments, userStories, epics, versions, sprints, decisionDays] =
+    await Promise.all([
+      loadPhaseDocuments(docsRoot, parseIssues),
+      loadUserStories(docsRoot, parseIssues, storyBodies),
+      loadEpics(docsRoot, parseIssues),
+      loadVersions(docsRoot, parseIssues),
+      loadSprints(docsRoot, parseIssues),
+      loadDecisions(docsRoot, parseIssues),
+    ])
 
   let board: BoardEntry[] | null = null
   try {
@@ -385,7 +458,9 @@ export async function loadMeridianProject(
     epics,
     versions,
     sprints,
+    decisionDays,
     board,
+    storyBodies,
     issues: [...parseIssues, ...protocolIssues],
   }
 }

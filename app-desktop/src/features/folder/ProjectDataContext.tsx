@@ -29,7 +29,9 @@ const emptyData: MeridianProjectData = {
   epics: [],
   versions: [],
   sprints: [],
+  decisionDays: [],
   board: null,
+  storyBodies: new Map(),
   issues: [],
 }
 

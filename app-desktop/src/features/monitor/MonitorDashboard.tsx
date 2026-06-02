@@ -12,19 +12,27 @@ import {
 } from "@/features/folder/ProjectFolderContext"
 import { AdvancedToolsPanel } from "@/features/monitor/components/AdvancedToolsPanel"
 import { ConceptsView } from "@/features/monitor/components/ConceptsView"
+import { DecisionsView } from "@/features/monitor/components/DecisionsView"
 import { DeliverablesView } from "@/features/monitor/components/DeliverablesView"
 import { KanbanView } from "@/features/monitor/components/KanbanView"
 import { MonitorIssuesBanner } from "@/features/monitor/components/MonitorIssuesBanner"
 import {
+  GUIDE_VIEWS,
   MonitorTabs,
   type MonitorView,
 } from "@/features/monitor/components/MonitorTabs"
 import { MonitorTopBar } from "@/features/monitor/components/MonitorTopBar"
 import { SetupMonitorView } from "@/features/monitor/components/SetupMonitorView"
+import { UsageGuideView } from "@/features/monitor/components/UsageGuideView"
 import { WelcomeScreen } from "@/features/monitor/components/WelcomeScreen"
-import { MONITOR_CONTAINER, MONITOR_PAGE } from "@/features/monitor/monitor-layout"
+import { MonitorVersionFilterProvider } from "@/features/monitor/MonitorVersionFilterContext"
+import { MONITOR_CONTAINER } from "@/features/monitor/monitor-layout"
 
-function MonitorViews() {
+function isGuideView(view: MonitorView): boolean {
+  return GUIDE_VIEWS.includes(view)
+}
+
+function MonitorProjectContent() {
   const [view, setView] = useState<MonitorView>("concepts")
   const { folder } = useProjectFolder()
   const { loading, data, issues } = useProjectData()
@@ -34,28 +42,29 @@ function MonitorViews() {
   const epics = data?.epics ?? []
   const versions = data?.versions ?? []
   const sprints = data?.sprints ?? []
+  const decisionDays = data?.decisionDays ?? []
 
   return (
-    <div className={MONITOR_PAGE}>
+    <MonitorVersionFilterProvider stories={userStories} versions={versions}>
       <MonitorTopBar />
       <MonitorTabs
         active={view}
-        isTabDisabled={(tab) => !folder && tab !== "concepts"}
+        isTabDisabled={(tab) => !folder && !isGuideView(tab)}
         onChange={setView}
       />
 
-      {!folder && view !== "concepts" ? <WelcomeScreen /> : null}
+      {!folder && !isGuideView(view) ? <WelcomeScreen /> : null}
 
-      {view === "concepts" ? (
+      {isGuideView(view) ? (
         <div className={`${MONITOR_CONTAINER} py-6`}>
-          <ConceptsView />
+          {view === "concepts" ? <ConceptsView /> : null}
+          {view === "usage" ? <UsageGuideView /> : null}
         </div>
       ) : null}
 
-      {folder && view !== "concepts" ? (
+      {folder && !isGuideView(view) ? (
         <div className={`${MONITOR_CONTAINER} space-y-5 py-6`}>
           <MonitorIssuesBanner issues={issues} />
-          <AdvancedToolsPanel folderName={folder.name} />
 
           {loading ? (
             <div className="flex items-center justify-center gap-2 py-16 text-sm text-muted-foreground">
@@ -65,7 +74,14 @@ function MonitorViews() {
           ) : null}
 
           {!loading && view === "setup" ? (
-            <SetupMonitorView documents={phaseDocuments} issues={issues} />
+            <>
+              <AdvancedToolsPanel folderName={folder.name} />
+              <SetupMonitorView documents={phaseDocuments} issues={issues} />
+            </>
+          ) : null}
+
+          {!loading && view === "decisions" ? (
+            <DecisionsView decisionDays={decisionDays} />
           ) : null}
 
           {!loading && view === "epics" ? (
@@ -78,13 +94,18 @@ function MonitorViews() {
           ) : null}
 
           {!loading && view === "kanban" ? (
-            <KanbanView epics={epics} issues={issues} stories={userStories} />
+            <KanbanView
+              epics={epics}
+              issues={issues}
+              stories={userStories}
+              versions={versions}
+            />
           ) : null}
         </div>
       ) : null}
 
       {folder &&
-      view !== "concepts" &&
+      !isGuideView(view) &&
       !loading &&
       view !== "setup" &&
       phaseDocuments.length === 0 ? (
@@ -93,7 +114,7 @@ function MonitorViews() {
           pasta.
         </p>
       ) : null}
-    </div>
+    </MonitorVersionFilterProvider>
   )
 }
 
@@ -102,7 +123,7 @@ export function MonitorDashboard() {
     <main>
       <ProjectFolderProvider>
         <ProjectDataProvider>
-          <MonitorViews />
+          <MonitorProjectContent />
         </ProjectDataProvider>
       </ProjectFolderProvider>
     </main>

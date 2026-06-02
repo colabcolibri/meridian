@@ -2,18 +2,38 @@ import { cn } from "@/lib/utils"
 import { MONITOR_CONTAINER } from "@/features/monitor/monitor-layout"
 import { typeScale } from "@/features/monitor/monitor-typography"
 
-export type MonitorView = "setup" | "epics" | "kanban" | "concepts"
+export type MonitorView =
+  | "concepts"
+  | "usage"
+  | "setup"
+  | "decisions"
+  | "epics"
+  | "kanban"
+
+const GUIDE_VIEWS: MonitorView[] = ["concepts", "usage"]
+
+export { GUIDE_VIEWS }
 
 const tabs: { id: MonitorView; label: string; hint: string }[] = [
   {
     id: "concepts",
     label: "Comece aqui",
-    hint: "Entenda o Meridian e como usar este app",
+    hint: "O que é o Meridian, pastas, fases e conceitos",
+  },
+  {
+    id: "usage",
+    label: "Guia de uso",
+    hint: "Três fases: documentar, backlog, executar.",
   },
   {
     id: "setup",
     label: "Configuração",
     hint: "Progresso dos documentos iniciais do projeto",
+  },
+  {
+    id: "decisions",
+    label: "Decisões",
+    hint: "Histórico por data — docs/decisions/YYYY-MM-DD.json",
   },
   {
     id: "epics",

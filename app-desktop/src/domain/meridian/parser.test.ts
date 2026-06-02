@@ -3,6 +3,7 @@ import { resolve } from "node:path"
 import { describe, expect, it } from "vitest"
 
 import {
+  parseDecisionDayFile,
   parseEpicFile,
   parsePhaseDocument,
   parseSprintFile,
@@ -23,13 +24,14 @@ describe("meridian parser", () => {
     expect(doc.title).toBe("Escopo")
   })
 
-  it("parseia 07_architecture.md com depends_on multilinha", () => {
-    const raw = readFileSync(resolve(docsRoot, "07_architecture.md"), "utf8")
-    const doc = parsePhaseDocument("07_architecture", raw)
+  it("parseia 05_architecture.md com depends_on multilinha", () => {
+    const raw = readFileSync(resolve(docsRoot, "05_architecture.md"), "utf8")
+    const doc = parsePhaseDocument("05_architecture", raw)
 
     expect(doc.status).toBe("approved")
     expect(doc.dependsOn).toContain("00_scope")
-    expect(doc.dependsOn).toContain("06_versions")
+    expect(doc.dependsOn).toContain("04_principles")
+    expect(doc.dependsOn).not.toContain("21_versions")
   })
 
   it("parseia US-0001.md", () => {
@@ -102,5 +104,17 @@ describe("meridian parser", () => {
     expect(sprint.id).toBe("v1-S1")
     expect(sprint.versionId).toBe("v1")
     expect(sprint.storyIds.length).toBeGreaterThan(3)
+  })
+
+  it("parseia decisions/2026-06-02.json", () => {
+    const raw = readFileSync(resolve(docsRoot, "decisions/2026-06-02.json"), "utf8")
+    const day = parseDecisionDayFile("2026-06-02.json", raw)
+
+    expect(day.date).toBe("2026-06-02")
+    expect(day.entries.length).toBeGreaterThanOrEqual(30)
+    expect(day.entries[0].time).toMatch(/^\d{2}:\d{2}$/)
+    expect(day.entries[0].title.length).toBeGreaterThan(5)
+    expect(day.entries[0].whatChanged.length).toBeGreaterThan(3)
+    expect(day.entries[0].affectedDocument.length).toBeGreaterThan(3)
   })
 })
