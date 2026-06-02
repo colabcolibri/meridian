@@ -1,1 +1,0 @@
-../../.agent/agents/sprint-planner.md

@@ -50,7 +50,7 @@ A instrução operacional completa para agentes fica em:
 Ela contém:
 
 - `rules/MERIDIAN.md`: regras globais sempre ativas (`trigger: always_on`);
-- `.cursor/`: adapter para o Cursor IDE (gerado por `sync_cursor_kit.sh`; não substitui `.agent/`);
+- `.cursor/`: adapter para o Cursor IDE (**local**, `sync_cursor_kit.sh`, **gitignored**; fonte em `.agent/`);
 - `MERIDIAN.md`: protocolo master para agentes;
 - `ARCHITECTURE.md`: mapa de agents, skills e workflows;
 - `agents/`: personas operacionais (fases, gates, saídas);

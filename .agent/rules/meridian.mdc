@@ -34,6 +34,8 @@ Prioridade: **P0 rules > P1 agent + MERIDIAN.md > P2 skills**.
 | `/init-meridian` | `.cursor/commands/init-meridian.md` |
 | `/status` | `.cursor/commands/status.md` |
 | `/plan-sprint` | `.cursor/commands/plan-sprint.md` |
+| `/create-version` | `.cursor/commands/create-version.md` |
+| `/create-epic` | `.cursor/commands/create-epic.md` |
 | `/create-us` | `.cursor/commands/create-us.md` |
 | `/architecture` | `.cursor/commands/architecture.md` |
 | `/security-pass` | `.cursor/commands/security-pass.md` |

@@ -49,6 +49,12 @@ for workflow_file in "${AGENT}"/workflows/*.md; do
   link "../../.agent/workflows/${name}" "${CURSOR}/commands/${name}"
 done
 
+# Always-on rule (formato .mdc do Cursor)
+link "../../.agent/rules/meridian.mdc" "${CURSOR}/rules/meridian.mdc"
+
+# README local do adapter
+link "../../.agent/CURSOR_ADAPTER.md" "${CURSOR}/README.md"
+
 echo ""
 echo "Done. Cursor adapter at ${CURSOR}"
-echo "Rule alwaysApply: ${CURSOR}/rules/meridian.mdc (edit manually if needed)"
+echo "Source: .agent/ (commit) → .cursor/ (local symlinks, gitignored)"

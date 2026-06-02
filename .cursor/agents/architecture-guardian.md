@@ -1,1 +1,0 @@
-../../.agent/agents/architecture-guardian.md

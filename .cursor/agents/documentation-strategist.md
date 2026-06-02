@@ -1,1 +1,0 @@
-../../.agent/agents/documentation-strategist.md

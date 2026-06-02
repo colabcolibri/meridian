@@ -42,8 +42,8 @@ test-results/
 **/playwright-report/
 **/test-results/
 
-# Package manager policy
-package-lock.json
+# Cursor adapter (gerado — não commitar)
+.cursor/
 **/package-lock.json
 yarn.lock
 **/yarn.lock

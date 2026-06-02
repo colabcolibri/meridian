@@ -1,1 +1,0 @@
-../../.agent/agents/scope-architect.md
