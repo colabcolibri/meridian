@@ -1,0 +1,1 @@
+../../../.agent/references/templates/board-schema.md

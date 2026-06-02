@@ -1,1 +1,1 @@
-../../../.agent/skills/refine-user-story/references/refine-checklist.md
+../../../.agent/references/templates/refine-checklist.md

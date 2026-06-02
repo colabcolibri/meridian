@@ -90,7 +90,12 @@ export const usageSituations = [
     command: "/create-us",
   },
   {
-    situation: "US created but not refined for code",
+    situation: "US created — want quality audit before refine",
+    section: "Review US",
+    command: "/review-us",
+  },
+  {
+    situation: "US reviewed or draft — ready to deepen for code",
     section: "Refine US",
     command: "/refine-us",
   },
@@ -217,6 +222,31 @@ export const backlogWorkflowSteps: DailyWorkflowStep[] = [
       "After creating or changing US: /sync-board.",
     ],
     commands: ["/create-us", "/refine-us", "/sync-board"],
+  },
+]
+
+export const reviewWorkflowSteps: DailyWorkflowStep[] = [
+  {
+    id: "review-when",
+    title: "Audit without editing",
+    when: "After /create-us, on legacy US, or before /refine-us — read-only.",
+    actions: [
+      "Run /review-us US-XXXX — agent scores review-checklist.md + validate_meridian.py.",
+      "Output: pass/fail table and recommendation. Does not set ready: true.",
+      "Canonical template paths: .agent/references/templates/TEMPLATE_SOURCES.md",
+    ],
+    commands: ["/review-us US-XXXX"],
+  },
+  {
+    id: "review-next",
+    title: "Act on the report",
+    when: "Review found gaps.",
+    actions: [
+      "If failures → /refine-us US-XXXX to fix and set ready.",
+      "If all pass but ready false → still run /refine-us to set ready flag.",
+      "Do not implement until ready: true.",
+    ],
+    commands: ["/refine-us US-XXXX"],
   },
 ]
 
@@ -349,6 +379,12 @@ export const usageGuideSections: UsageGuideSection[] = [
     steps: backlogWorkflowSteps,
   },
   {
+    id: "review",
+    title: "Review US",
+    subtitle: "Read-only audit — report gaps, never sets ready.",
+    steps: reviewWorkflowSteps,
+  },
+  {
     id: "refine",
     title: "Refine US",
     subtitle: "Deepen Context and set ready: true before any product code.",
@@ -377,6 +413,11 @@ export const slashCommandReference: SlashCommandHint[] = [
   { command: "/create-version", when: "New release in docs/versions/" },
   { command: "/plan-sprint", when: "Time slice in docs/sprints/" },
   { command: "/create-us", when: "New task in docs/us/ (gates ok); ready: false" },
+  {
+    command: "/review-us",
+    when: "Audit US quality — report only, no ready flag",
+    example: "/review-us US-0017",
+  },
   {
     command: "/refine-us",
     when: "Deepen Approach, architecture §, tests; set ready: true",

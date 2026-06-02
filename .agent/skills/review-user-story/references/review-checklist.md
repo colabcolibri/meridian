@@ -1,0 +1,66 @@
+# Review checklist — audit US quality (read-only)
+
+Use with skill `review-user-story` and workflow `/review-us`. **Do not edit the US** unless the manager explicitly asks to fix in the same turn.
+
+**Canonical refine gates:** `.agent/skills/refine-user-story/references/refine-checklist.md` (same rows — review reports pass/fail; refine fixes and sets `ready: true`).
+
+**Prose bar:** `.agent/references/templates/writing-guide.md`
+
+**Structure bar:** `.agent/references/templates/section-contracts.md`
+
+---
+
+## Audit rows (mark pass | fail | warn)
+
+| ID | Check | Pass when |
+| -- | ----- | --------- |
+| R1 | Validator | `validate_meridian.py` — 0 errors on this US (warnings listed separately) |
+| R2 | Section contract | All required `##` / `###` present per `section-contracts.md` |
+| R3 | Why this story | 2+ sentences; slice clear; not epic paste |
+| R4 | Where it fits | 2+ sentences; version/deps/unblocks |
+| R5 | Approach | 2+ bullets; each explains intent (not bare paths) |
+| R6 | Architecture refs | Exact `§ heading` from `05_architecture.md` (not `§ TBD` / placeholder) |
+| R7 | API / DB / Security | `_n/a_` with phrase **or** concrete impact |
+| R8 | Acceptance | Each item observable; not vague |
+| R9 | Tests / Planned | Numbered steps or exact commands (if `tests: required`) |
+| R10 | `done_when` | One measurable sentence in frontmatter |
+| R11 | Epic link | `epic:` in frontmatter only — body explains slice |
+| R12 | `ready` flag | `true` only if R3–R9 would all pass (review does not set it) |
+| R13 | Implementation section | Empty or placeholder OK before code; must be filled before ✅ |
+
+---
+
+## Placeholder patterns (automatic fail on R5–R9)
+
+Same list as refine-checklist: `_(fill in`, `§ [section name`, `path/to/…`, `add when implementation scope is known`, Approach bullets under 6 words with no verb.
+
+Legacy `### Implementation hints (preliminary)` → warn: rename to `### Approach` on next `/refine-us`.
+
+---
+
+## Recommendation matrix
+
+| Situation | Next step |
+| --------- | --------- |
+| R3–R9 failures, `ready: false` | `/refine-us US-XXXX` |
+| All R3–R9 pass, `ready: false` | `/refine-us US-XXXX` (to set ready and sync board) |
+| All pass, `ready: true`, status ❌ | Implement (process-manager gate) |
+| Code done, R13 fail | `/complete-us US-XXXX` |
+| Structural errors (R1/R2) | Fix structure first; may need manual edit + re-review |
+
+---
+
+## Output template
+
+```txt
+US review: US-XXXX
+File: docs/us/US-XXXX.md
+Validator: ...
+Checklist: 11/13 pass
+
+| ID | Result | Note |
+| R3 | pass | |
+| R5 | fail | Approach bullet 2 is bare path only |
+
+Recommendation: /refine-us US-XXXX
+```

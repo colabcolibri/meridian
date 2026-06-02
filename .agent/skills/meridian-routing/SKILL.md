@@ -29,6 +29,7 @@ Before responding, classify the request and select the correct Meridian agent. S
 | Decisions / log | "decision", "decisions", "decision log", `docs/decisions/` | skill `update-decisions-log` | yes |
 | User story / board | "user story", "US-", "kanban", "board.json", "acceptance" | `board-keeper` | yes |
 | Refine US | "refine US", "ready for implement", `/refine-us`, "fill context" | `board-keeper` + `refine-user-story` | yes |
+| Review US | "review US", "audit US", `/review-us`, "check story quality" | `board-keeper` + `review-user-story` | yes |
 | Close US | "complete US", "mark done", "technical implementation", `/complete-us`, "close story" | `board-keeper` + `complete-user-story` | yes |
 | US + planning | "plan sprint" + "create US" | `sprint-planner` + `board-keeper` | yes |
 | Implement code | "implement", "build", "create API", "component" | `process-manager` first; US must have `ready: true`; when done → `complete-user-story` | **block** if docs immature or US not refined |

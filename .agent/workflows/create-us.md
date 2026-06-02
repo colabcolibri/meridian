@@ -15,7 +15,7 @@ $ARGUMENTS
 3. **Gate:** `05_architecture` = `approved`; epic + version exist
 4. Write **explanatory** Context: Why this story · Where it fits · Approach (see writing-guide)
 5. `ready: false` — never implement in same turn
-6. Next step always: `/refine-us US-XXXX`
+6. Next step always: `/refine-us US-XXXX` (optional: `/review-us US-XXXX` first for audit)
 
 ---
 
@@ -52,7 +52,7 @@ File:
 Summary (one line):
 Why written: yes | thin — needs refine
 Board updated:
-Next: /refine-us US-XXXX
+Next: /review-us US-XXXX (optional) | /refine-us US-XXXX
 ```
 
 ---

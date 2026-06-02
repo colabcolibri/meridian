@@ -13,6 +13,8 @@ Sprint (sprint-template.md) — optional but recommended
   ↓
 User story create (us-template.md + writing-guide.md) — status ❌, ready: false, Why/Where/Approach prose
   ↓
+/review-us (review-checklist.md) — optional audit; report only; never sets ready
+  ↓
 /refine-us (refine-checklist.md) — deepen Approach bullets, exact architecture §, ready: true
   ↓
 Implement — process-manager gate: ready true + Context filled
@@ -29,6 +31,7 @@ Board sync (board-schema.md)
 | Moment | Template | What changes |
 | ------ | -------- | ------------ |
 | **Create** (`/create-us`) | `us-template.md` + `writing-guide.md` | Why / Where / Approach prose; `ready: false` |
+| **Review** (`/review-us`) | `review-checklist.md` + `writing-guide.md` + `section-contracts.md` | Gap report; **no edits**, **no `ready`** |
 | **Refine** (`/refine-us`) | `refine-checklist.md` | Explanatory Approach + exact § refs; `ready: true` |
 | **Close** (`/complete-us`) | `implementation-template.md` | Replace `## Technical implementation`; `status: ✅` |
 

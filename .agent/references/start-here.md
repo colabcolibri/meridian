@@ -91,6 +91,7 @@ User stories follow a fixed lifecycle before code ships:
 
 ```txt
 /create-us   → Why / Where / Approach prose; ready: false
+/review-us   → audit report (optional); never sets ready
 /refine-us   → deepen Approach, exact architecture §; ready: true
 implement    → blocked if ready ≠ true
 /complete-us → Technical implementation + ✅

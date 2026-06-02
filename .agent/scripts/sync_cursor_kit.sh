@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # Symlink .agent kit into .cursor for Cursor IDE indexing.
+# Also syncs app-desktop/docs/templates/ in this kit repo (human mirror).
 # Run from repository root: ./.agent/scripts/sync_cursor_kit.sh
 
 set -euo pipefail
@@ -7,9 +8,16 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 AGENT="${ROOT}/.agent"
 CURSOR="${ROOT}/.cursor"
+REGISTRY="${AGENT}/references/templates"
+DOCS_TPL="${ROOT}/app-desktop/docs/templates"
 
 if [[ ! -d "${AGENT}" ]]; then
   echo "ERROR: missing .agent at ${AGENT}" >&2
+  exit 1
+fi
+
+if [[ ! -d "${REGISTRY}" ]]; then
+  echo "ERROR: missing template registry at ${REGISTRY}" >&2
   exit 1
 fi
 
@@ -24,11 +32,26 @@ link() {
   echo "link ${linkpath} -> ${target}"
 }
 
-link "../../../.agent/references/templates/INDEX.md" "${CURSOR}/references/templates/INDEX.md"
-link "../../../.agent/references/templates/lifecycle.md" "${CURSOR}/references/templates/lifecycle.md"
-for tpl in us-template epic-template version-template sprint-template implementation-template decision-template doc-templates board-schema refine-checklist section-contracts writing-guide; do
-  link "../../../../.agent/references/templates/${tpl}.md" "${CURSOR}/references/templates/${tpl}.md"
+# All registry templates → .cursor/references/templates/
+# From .cursor/references/templates/ to repo root = ../../../ (3 levels, NOT 4)
+for tpl_file in "${REGISTRY}"/*.md; do
+  [[ -f "${tpl_file}" ]] || continue
+  name="$(basename "${tpl_file}")"
+  link "../../../.agent/references/templates/${name}" "${CURSOR}/references/templates/${name}"
 done
+
+# Same registry → app-desktop/docs/templates/ (kit dogfooding mirror)
+if [[ -d "${ROOT}/app-desktop/docs" ]]; then
+  mkdir -p "${DOCS_TPL}"
+  for tpl_file in "${REGISTRY}"/*.md; do
+    [[ -f "${tpl_file}" ]] || continue
+    name="$(basename "${tpl_file}")"
+    # Skip if real README.md ever lands in registry; keep docs/templates/README.md as human guide
+    [[ "${name}" == "README.md" ]] && continue
+    link "../../../.agent/references/templates/${name}" "${DOCS_TPL}/${name}"
+  done
+  echo "Synced human mirror: ${DOCS_TPL}"
+fi
 
 # Skills (directories with SKILL.md)
 for skill_dir in "${AGENT}"/skills/*/; do
@@ -63,4 +86,5 @@ link "../../.agent/CURSOR_ADAPTER.md" "${CURSOR}/README.md"
 
 echo ""
 echo "Done. Cursor adapter at ${CURSOR}"
+echo "Templates: ${REGISTRY} → .cursor/references/templates/ (+ app-desktop/docs/templates/ when present)"
 echo "Source: .agent/ (commit) → .cursor/ (local symlinks, gitignored)"

@@ -3,7 +3,7 @@ name: board-keeper
 description: Maintains consistency between Meridian user stories and docs/kanban/board.json. Use when creating US, changing US status, validating dependencies or regenerating the board.
 tools: Read, Grep, Glob, Bash, Edit, Write
 model: inherit
-skills: create-user-story, refine-user-story, complete-user-story, generate-board-json, update-decisions-log, meridian-routing
+skills: create-user-story, review-user-story, refine-user-story, complete-user-story, generate-board-json, update-decisions-log, meridian-routing
 ---
 
 # Board keeper
@@ -21,7 +21,7 @@ You keep execution state honest.
 
 ## Template protocol (mandatory)
 
-Before creating or closing delivery artifacts, read `.agent/references/templates/INDEX.md`, then the **full** template file — **before** Write or Edit.
+Before creating or closing delivery artifacts, read `.agent/references/templates/INDEX.md` and **`TEMPLATE_SOURCES.md`** (canonical paths), then the **full** template file — **before** Write or Edit.
 
 **Structural contract:** `.agent/references/templates/section-contracts.md`
 
@@ -30,6 +30,7 @@ Before creating or closing delivery artifacts, read `.agent/references/templates
 | Task | Read first |
 | ---- | ---------- |
 | Create US | `writing-guide.md` + `us-template.md` + skill `create-user-story` |
+| Review US | `review-checklist.md` + `writing-guide.md` + skill `review-user-story` |
 | Refine US | `writing-guide.md` + `refine-checklist.md` + skill `refine-user-story` |
 | Close US | `implementation-template.md` + `us-template.md` + skill `complete-user-story` |
 | Create epic | `epic-template.md` + skill `create-epic` |
@@ -64,6 +65,7 @@ Ensure user stories, dependencies, statuses and `board.json` match. The board is
 | ---- | ---------------- | ---------------------------- |
 | Create epic | `create-epic` + `/create-epic` | `.agent/references/templates/epic-template.md` |
 | Create US | `create-user-story` + `/create-us` | `.agent/references/templates/us-template.md` |
+| Review US | `review-user-story` + `/review-us` | `.agent/references/templates/review-checklist.md` |
 | Refine US | `refine-user-story` + `/refine-us` | `.agent/references/templates/refine-checklist.md` |
 | Complete US | `complete-user-story` + `/complete-us` | `.agent/references/templates/implementation-template.md` |
 | Sync board | `generate-board-json` | `.agent/references/templates/board-schema.md` |

@@ -17,7 +17,7 @@ chmod +x .agent/scripts/sync_cursor_kit.sh   # once
 ./.agent/scripts/sync_cursor_kit.sh
 ```
 
-Always edit in `.agent/` first; then run the script.
+Always edit in `.agent/` first; then run the script (syncs `.cursor/` **and** `app-desktop/docs/templates/` in this kit repo).
 
 ## Git
 

@@ -17,6 +17,7 @@ Concepts (folders, phases, status) live in **[start-here.md](./start-here.md)**.
 | No `docs/` folder yet | [First time](#first-time) | `/init-meridian` |
 | Phase docs incomplete or draft | [Document](#document) | `/status` |
 | Architecture ok, missing epic/version/US | [Build backlog](#build-backlog) | `/create-us` |
+| US created but not reviewed | [Review US](#review-us) | `/review-us` |
 | US selected, time to code | [Refine US](#refine-us) then [Implement US](#implement-us) | `/refine-us` |
 | Code ready, not recorded in files | [Close US](#close-us) | `/complete-us` |
 
@@ -145,6 +146,25 @@ Two axes, three conversations — do not mix document, backlog, and implement in
 
 ---
 
+## Review US
+
+*Auditoria read-only — sem código, sem alterar `ready`.*
+
+### When
+
+**After** `/create-us`, **before** `/refine-us`, or anytime you want a gap report on an existing US.
+
+### Run `/review-us`
+
+- **`/review-us US-XXXX`** — scores `review-checklist.md` + validator; outputs pass/fail table
+- Agent reads `TEMPLATE_SOURCES.md` (paths), `writing-guide.md`, `section-contracts.md`, target US
+- **Does not** edit the file or set `ready: true` unless you explicitly ask to fix in the same turn
+- If gaps → run `/refine-us US-XXXX`
+
+Canonical paths: `.agent/references/templates/TEMPLATE_SOURCES.md`
+
+---
+
 ## Refine US
 
 *Between create and implement — no product code.*
@@ -253,6 +273,7 @@ Project copy (readable in monitor): `docs/templates/README.md`
 | `/create-version` | New release in `docs/versions/` |
 | `/plan-sprint` | Time slice in `docs/sprints/` |
 | `/create-us` | New US (gates OK) |
+| `/review-us` | Audit US quality — report only, no `ready` |
 | `/refine-us` | Refine US — Context, tests, `ready: true` |
 | `/complete-us` | Close US — implementation, Acceptance, status, board |
 | `/sync-board` | Regenerate `docs/kanban/board.json` |

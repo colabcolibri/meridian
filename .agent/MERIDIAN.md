@@ -252,6 +252,7 @@ Official kit skills (see `.agent/skills/doc.md`):
 - `create-version`
 - `create-sprint`
 - `create-user-story`
+- `review-user-story`
 - `refine-user-story`
 - `complete-user-story`
 - `generate-board-json`
@@ -262,6 +263,7 @@ Official kit skills (see `.agent/skills/doc.md`):
 **Delivery templates** (read before Write on epics, versions, US):
 
 - `.agent/references/templates/INDEX.md` — registry
+- `.agent/references/templates/TEMPLATE_SOURCES.md` — **canonical paths** (edit vs read)
 - `.agent/references/templates/writing-guide.md` — **prose quality** (Why / Where / Approach, epic paragraphs)
 - `.agent/references/templates/section-contracts.md` — fixed `##` / `###` structure
 - `.agent/references/templates/lifecycle.md` — create → refine → implement → close
@@ -451,7 +453,7 @@ Each US references an epic and version that already exist in the folders.
 - go-live checklist;
 - continuous update of decisions in `docs/decisions/YYYY-MM-DD.json`.
 
-**US lifecycle:** `/create-us` (Why / Where / Approach prose, `ready: false`) → `/refine-us` (deepen Approach, exact architecture §, `ready: true`) → implement → `/complete-us` → `/sync-board`.
+**US lifecycle:** `/create-us` (Why / Where / Approach prose, `ready: false`) → `/review-us` (optional audit, no `ready`) → `/refine-us` (deepen Approach, exact architecture §, `ready: true`) → implement → `/complete-us` → `/sync-board`.
 
 ---
 

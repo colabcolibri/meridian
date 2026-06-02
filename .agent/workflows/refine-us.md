@@ -15,6 +15,7 @@ $ARGUMENTS
 3. **NO product code** — docs only
 4. Approach bullets must **explain** (full sentences) — not bare paths
 5. `ready: true` only when checklist passes
+6. **Not a review** — for audit-only without edits, use `/review-us` first
 
 ---
 

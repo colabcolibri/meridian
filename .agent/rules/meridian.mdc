@@ -40,6 +40,7 @@ Priority: **P0 rules > P1 agent + MERIDIAN.md > P2 skills**.
 | `/create-version` | `.cursor/commands/create-version.md` |
 | `/create-epic` | `.cursor/commands/create-epic.md` |
 | `/create-us` | `.cursor/commands/create-us.md` |
+| `/review-us` | `.cursor/commands/review-us.md` |
 | `/refine-us` | `.cursor/commands/refine-us.md` |
 | `/complete-us` | `.cursor/commands/complete-us.md` |
 | `/architecture` | `.cursor/commands/architecture.md` |

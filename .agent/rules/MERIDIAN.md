@@ -37,6 +37,7 @@ Before any action, classify:
 | **DOC / PHASE** | "scope", "epic", "version", "architecture", `00_`–`11_` | Documentation agent per matrix |
 | **US / BOARD** | "user story", "US-", "kanban", "board" | `board-keeper` or `sprint-planner` |
 | **REFINE US** | "refine US", `/refine-us`, "ready for implement" | `board-keeper` + `refine-user-story` |
+| **REVIEW US** | "review US", `/review-us`, "audit US", "check story" | `board-keeper` + `review-user-story` |
 | **CLOSE US** | "complete US", "mark done", "technical implementation", `/complete-us` | `board-keeper` + `complete-user-story` |
 | **SECURITY** | "security", "OWASP", "secrets", `02_security` | `security-steward` |
 | **START PROJECT** | "start", "meridian setup", "create docs" | `process-manager` + `init-project` |
@@ -128,6 +129,7 @@ The person is manager of the process. Agents report blockers, next step, and pen
 | `05_architecture.md` | `architecture-guardian` | `security-review` |
 | `docs/versions/`, `docs/sprints/` | `sprint-planner` | `create-user-story` |
 | `docs/us/*.md` (create) | `board-keeper` | `create-user-story` |
+| `docs/us/*.md` (review) | `board-keeper` | `review-user-story` |
 | `docs/us/*.md` (refine) | `board-keeper` | `refine-user-story` |
 | `docs/us/*.md` (close) | `board-keeper` | `complete-user-story` |
 | `board.json` | `board-keeper` | `generate-board-json` |
@@ -141,7 +143,7 @@ The person is manager of the process. Agents report blockers, next step, and pen
 | -------- | ---- |
 | Master protocol | `.agent/MERIDIAN.md` |
 | Kit architecture | `.agent/ARCHITECTURE.md` |
-| **Templates (agents)** | `.agent/references/templates/INDEX.md` + `writing-guide.md` |
+| **Templates (agents)** | `.agent/references/templates/INDEX.md` + `TEMPLATE_SOURCES.md` + `writing-guide.md` |
 | Agents | `.agent/agents/` |
 | Skills | `.agent/skills/` |
 | Workflows | `.agent/workflows/` |
