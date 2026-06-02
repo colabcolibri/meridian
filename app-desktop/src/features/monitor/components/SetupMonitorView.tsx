@@ -15,9 +15,9 @@ const SETUP_PHASE_ORDER = ["Fase 0", "Fase 1", "Fase 2", "Fase 3", "Contínuo"] 
 
 const phaseLabels: Record<string, string> = {
   "Fase 0": "Fundação do projeto",
-  "Fase 1": "Produto e escopo",
-  "Fase 2": "Arquitetura e técnico",
-  "Fase 3": "Operação e ambientes",
+  "Fase 1": "Princípios de código",
+  "Fase 2": "Arquitetura",
+  "Fase 3": "Detalhe técnico",
   Contínuo: "Registro contínuo",
 }
 
@@ -63,7 +63,7 @@ export function SetupMonitorView({
       <div className="rounded-xl border border-dashed border-border bg-card px-6 py-12 text-center">
         <p className={typeScale.label}>Nenhum documento carregado</p>
         <p className={cn(typeScale.bodySm, "mt-2")}>
-          Confira os alertas acima ou se a pasta aberta contém os arquivos 00–11 na
+          Confira os alertas acima ou se a pasta aberta contém os arquivos 00–08 e 11 na
           raiz.
         </p>
       </div>

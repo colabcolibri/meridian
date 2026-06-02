@@ -3,11 +3,11 @@ title: Ambientes
 status: approved
 version: 1.0
 updated: 2026-06-02
-depends_on: [01_tech_stack.md, 07_architecture.md]
+depends_on: [01_tech_stack.md, 05_architecture.md]
 blocks: []
 ---
 
-# 10 — Ambientes
+# 08 — Ambientes
 
 ## Como rodar localmente
 

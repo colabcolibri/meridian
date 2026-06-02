@@ -3,11 +3,11 @@ title: Contratos de API
 status: draft
 version: 1.0
 updated: 2026-06-02
-depends_on: [03_user_types.md, 07_architecture.md, 08_database.md]
+depends_on: [03_user_types.md, 05_architecture.md, 06_database.md]
 blocks: []
 ---
 
-# 09 — Contratos de API
+# 07 — Contratos de API
 
 ## Estado atual
 

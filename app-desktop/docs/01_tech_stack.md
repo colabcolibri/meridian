@@ -4,7 +4,7 @@ status: approved
 version: 1.0
 updated: 2026-06-02
 depends_on: [00_scope.md]
-blocks: [02_security.md, 05_principles.md, 10_environments.md]
+blocks: [02_security.md, 04_principles.md, 08_environments.md]
 ---
 
 # 01 — Tech Stack

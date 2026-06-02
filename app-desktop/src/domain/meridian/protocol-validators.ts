@@ -38,13 +38,19 @@ export function collectStoryProtocolIssues(
 
   for (const story of stories) {
     const body = storyBodies.get(story.id) ?? ""
-    const messages = validateStoryBody(story.status, body)
+    const messages = validateStoryBody(story, body)
 
     for (const message of messages) {
+      const isError =
+        story.status === "🔶" ||
+        story.status === "✅" ||
+        message.includes("tests_status: done") ||
+        message.includes("tests: none") ||
+        message.includes("tests: required")
       issues.push({
         file: `us/${story.id}.md`,
         message,
-        severity: story.status === "🔶" ? "error" : "warning",
+        severity: isError ? "error" : "warning",
         scope: "us",
         targetId: story.id,
       })
@@ -89,6 +95,26 @@ export function compareBoardWithStories(
       issues.push({
         file: "kanban/board.json",
         message: `${story.id}: epic no board (${entry.epic}) difere do arquivo (${story.epic}).`,
+        severity: "error",
+        scope: "board",
+        targetId: story.id,
+      })
+    }
+
+    if (entry.tests !== story.tests) {
+      issues.push({
+        file: "kanban/board.json",
+        message: `${story.id}: tests no board (${entry.tests}) difere do arquivo (${story.tests}).`,
+        severity: "error",
+        scope: "board",
+        targetId: story.id,
+      })
+    }
+
+    if (entry.tests_status !== story.testsStatus) {
+      issues.push({
+        file: "kanban/board.json",
+        message: `${story.id}: tests_status no board (${entry.tests_status}) difere do arquivo (${story.testsStatus}).`,
         severity: "error",
         scope: "board",
         targetId: story.id,
@@ -196,6 +222,31 @@ export function collectVersionProtocolIssues(
   return issues
 }
 
+export function collectDeliveryGateIssues(
+  phaseDocuments: PhaseDocument[],
+  userStories: UserStory[],
+): MonitorIssue[] {
+  if (userStories.length === 0) {
+    return []
+  }
+
+  const architecture = phaseDocuments.find((doc) => doc.id === "05_architecture")
+  if (architecture?.status !== "approved") {
+    return [
+      {
+        file: "05_architecture.md",
+        message:
+          "User stories existem mas 05_architecture não está approved (gate de entrega).",
+        severity: "error",
+        scope: "doc",
+        targetId: "05_architecture",
+      },
+    ]
+  }
+
+  return []
+}
+
 export function collectProtocolIssues(input: {
   phaseDocuments: PhaseDocument[]
   userStories: UserStory[]
@@ -207,6 +258,7 @@ export function collectProtocolIssues(input: {
 }): MonitorIssue[] {
   return [
     ...collectDocumentProtocolIssues(input.phaseDocuments),
+    ...collectDeliveryGateIssues(input.phaseDocuments, input.userStories),
     ...collectStoryProtocolIssues(input.userStories, input.storyBodies),
     ...collectEpicProtocolIssues(input.userStories, input.epics),
     ...collectVersionProtocolIssues(

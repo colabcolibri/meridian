@@ -4,15 +4,7 @@ status: approved
 version: 1.0
 updated: 2026-06-02
 depends_on: [02_security.md]
-blocks:
-  [
-    04_epics.md,
-    05_principles.md,
-    06_versions.md,
-    07_architecture.md,
-    08_database.md,
-    09_api_contracts.md,
-  ]
+blocks: [04_principles.md, 05_architecture.md, 06_database.md, 07_api_contracts.md]
 ---
 
 # 03 — Tipos de Usuário

@@ -12,7 +12,7 @@ describe("protocol validators", () => {
   it("detecta doc approved com dependência aberta", () => {
     const documents: PhaseDocument[] = [
       {
-        id: "07_architecture",
+        id: "05_architecture",
         title: "Arquitetura",
         phase: "Fase 2",
         status: "draft",
@@ -21,24 +21,26 @@ describe("protocol validators", () => {
         purpose: "",
       },
       {
-        id: "10_environments",
+        id: "08_environments",
         title: "Ambientes",
         phase: "Fase 3",
         status: "approved",
-        dependsOn: ["07_architecture"],
+        dependsOn: ["05_architecture"],
         blocks: [],
         purpose: "",
       },
     ]
 
     const issues = collectDocumentProtocolIssues(documents)
-    expect(issues.some((issue) => issue.targetId === "10_environments")).toBe(true)
+    expect(issues.some((issue) => issue.targetId === "08_environments")).toBe(true)
   })
 
   it("exige Falta no aceite quando US é 🔶", () => {
     const body = `## Aceite\n\n- [ ] Critério sem falta\n`
     expect(acceptanceHasFalta(body)).toBe(false)
-    expect(validateStoryBody("🔶", body)).toHaveLength(1)
+    expect(
+      validateStoryBody({ status: "🔶", tests: "none", testsStatus: "n/a" }, body),
+    ).toHaveLength(1)
   })
 
   it("compara board.json com arquivos US", () => {
@@ -52,6 +54,8 @@ describe("protocol validators", () => {
         moscow: "Must",
         dependsOn: [],
         doneWhen: "done",
+        tests: "required",
+        testsStatus: "done",
       },
     ]
     const board: BoardEntry[] = [
@@ -60,6 +64,8 @@ describe("protocol validators", () => {
         depends_on: [],
         done_when: "done",
         status: "❌",
+        tests: "required",
+        tests_status: "done",
       },
     ]
 

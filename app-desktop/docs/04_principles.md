@@ -4,10 +4,10 @@ status: approved
 version: 1.0
 updated: 2026-06-02
 depends_on: [01_tech_stack.md, 02_security.md, 03_user_types.md]
-blocks: [07_architecture.md]
+blocks: [05_architecture.md]
 ---
 
-# 05 — Princípios de Código
+# 04 — Princípios de Código
 
 ## DRY — onde cada tipo de lógica vive
 

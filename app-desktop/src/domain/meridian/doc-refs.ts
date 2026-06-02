@@ -16,13 +16,13 @@ export function phaseLabelForDocId(id: string): string {
   if (id.startsWith("11")) {
     return "Contínuo"
   }
-  if (id.startsWith("07")) {
-    return "Fase 2"
-  }
-  if (id.startsWith("08") || id.startsWith("09") || id.startsWith("10")) {
+  if (id.startsWith("06") || id.startsWith("07") || id.startsWith("08")) {
     return "Fase 3"
   }
-  if (id.startsWith("04") || id.startsWith("05") || id.startsWith("06")) {
+  if (id.startsWith("05")) {
+    return "Fase 2"
+  }
+  if (id.startsWith("04")) {
     return "Fase 1"
   }
   return "Fase 0"

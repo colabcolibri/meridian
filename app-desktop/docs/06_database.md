@@ -3,11 +3,11 @@ title: Banco de Dados
 status: draft
 version: 1.0
 updated: 2026-06-02
-depends_on: [03_user_types.md, 06_versions.md, 07_architecture.md]
-blocks: [09_api_contracts.md]
+depends_on: [03_user_types.md, 05_architecture.md]
+blocks: [07_api_contracts.md]
 ---
 
-# 08 — Banco de Dados
+# 06 — Banco de Dados
 
 ## Estado atual
 

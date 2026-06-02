@@ -4,7 +4,7 @@ status: approved
 version: 1.0
 updated: 2026-06-02
 depends_on: [00_scope.md, 01_tech_stack.md]
-blocks: [03_user_types.md, 05_principles.md]
+blocks: [03_user_types.md, 04_principles.md]
 ---
 
 # 02 — Segurança
@@ -35,7 +35,7 @@ Fora do escopo da primeira versão local.
 
 ## Auditoria e logs
 
-- A primeira versão deve representar o log `11_decisions.md`.
+- A primeira versão deve representar o log em `docs/decisions/` (stub `11_decisions.md` só com regras).
 - Futuramente, edição de documento `approved` deve sugerir ou registrar decisão.
 
 ## Gestão de segredos
