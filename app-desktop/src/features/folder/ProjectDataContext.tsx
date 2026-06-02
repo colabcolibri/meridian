@@ -32,6 +32,8 @@ const emptyData: MeridianProjectData = {
   decisionDays: [],
   board: [],
   storyBodies: new Map(),
+  epicBodies: new Map(),
+  versionBodies: new Map(),
   issues: [],
 }
 

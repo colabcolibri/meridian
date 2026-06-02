@@ -12,6 +12,17 @@ import re
 import sys
 from pathlib import Path
 
+_SCRIPT_DIR = Path(__file__).resolve().parent
+if str(_SCRIPT_DIR) not in sys.path:
+    sys.path.insert(0, str(_SCRIPT_DIR))
+
+from meridian_section_contracts import (  # noqa: E402
+    extract_section_body,
+    validate_epic_structure,
+    validate_us_structure,
+    validate_version_structure,
+)
+
 
 PHASE_DOCS = [
     "00_scope.md",
@@ -78,6 +89,107 @@ def validate_agent_kit(repo_root: Path, errors: list[str], warnings: list[str]) 
                 warnings.append(f"Missing .agent/agents/{name}")
 
 
+CONTEXT_PLACEHOLDER_MARKERS = (
+    "_(fill in",
+    "_(pending)_",
+    "§ [section name",
+    "§ …",
+    "path/to/…",
+    "add when implementation scope is known",
+)
+
+TESTS_GENERIC_MARKERS = (
+    "add when implementation scope is known",
+    "verify acceptance criteria end-to-end",
+)
+
+
+def read_markdown_body(path: Path) -> str:
+    text = path.read_text(encoding="utf-8")
+    if not text.startswith("---\n"):
+        return text
+    end = text.find("\n---", 4)
+    if end == -1:
+        return text
+    return text[end + 4 :].lstrip("\n")
+
+
+def is_mostly_placeholder(section: str, markers: tuple[str, ...] = CONTEXT_PLACEHOLDER_MARKERS) -> bool:
+    lowered = section.lower()
+    substantive = [
+        line.strip()
+        for line in section.splitlines()
+        if line.strip()
+        and not line.strip().startswith("#")
+        and not line.strip().startswith(">")
+        and line.strip() not in ("- _n/a_", "_n/a_")
+    ]
+    if not substantive:
+        return True
+    hits = sum(1 for marker in markers if marker.lower() in lowered)
+    return hits >= max(1, len(substantive) // 2)
+
+
+def validate_us_semantics(
+    story_name: str,
+    status: str | None,
+    frontmatter: dict[str, str],
+    story_text: str,
+    warnings: list[str],
+    legacy_missing_context: list[str],
+) -> None:
+    if status == "✅":
+        tech = extract_section_body(story_text, "Technical implementation")
+        if tech and is_mostly_placeholder(tech):
+            warnings.append(
+                f"{story_name}: status ✅ but ## Technical implementation looks like a placeholder."
+            )
+        return
+
+    if status == "🧊":
+        return
+
+    if status not in ("❌", "🔶"):
+        return
+
+    ready = frontmatter.get("ready", "").lower()
+    has_ready_field = "ready" in frontmatter
+    context = extract_section_body(story_text, "Context & constraints")
+
+    if context is None:
+        if has_ready_field:
+            warnings.append(
+                f"{story_name}: missing ## Context & constraints — run /refine-us before implement."
+            )
+        else:
+            legacy_missing_context.append(story_name)
+    elif is_mostly_placeholder(context):
+        warnings.append(
+            f"{story_name}: ## Context & constraints not filled — run /refine-us before implement."
+        )
+
+    if has_ready_field and ready != "true":
+        warnings.append(
+            f"{story_name}: ready is not true — run /refine-us before implement."
+        )
+
+    planned_match = re.search(
+        r"^### Planned\s*$([\s\S]*?)(?=^### |\Z)",
+        story_text,
+        re.MULTILINE,
+    )
+    planned = planned_match.group(1).strip() if planned_match else None
+    if planned:
+        lowered = planned.lower()
+        if "add when" in lowered or (
+            "verify acceptance criteria end-to-end" in lowered
+            and not re.search(r"^\d+\.", planned, re.MULTILINE)
+        ):
+            warnings.append(
+                f"{story_name}: Tests/Planned still generic — run /refine-us with concrete steps."
+            )
+
+
 def read_frontmatter(path: Path) -> dict[str, str]:
     text = path.read_text(encoding="utf-8")
     if not text.startswith("---\n"):
@@ -95,7 +207,13 @@ def read_frontmatter(path: Path) -> dict[str, str]:
 
 
 def main() -> int:
-    root = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else Path.cwd()
+    argv = sys.argv[1:]
+    json_output = False
+    if "--json" in argv:
+        json_output = True
+        argv = [arg for arg in argv if arg != "--json"]
+
+    root = Path(argv[0]).resolve() if argv else Path.cwd()
     docs = root / "docs"
     errors: list[str] = []
     warnings: list[str] = []
@@ -161,6 +279,12 @@ def main() -> int:
                 errors.append(f"Missing outcome in {version_path.name}")
             if not frontmatter.get("title"):
                 errors.append(f"Missing title in {version_path.name}")
+            validate_version_structure(
+                version_path.name,
+                read_markdown_body(version_path),
+                errors,
+                warnings,
+            )
     else:
         errors.append("Missing docs/versions/ directory.")
 
@@ -214,6 +338,12 @@ def main() -> int:
                         errors.append(
                             f"{epic_path.name}: versions references unknown {version_ref}"
                         )
+            validate_epic_structure(
+                epic_path.name,
+                read_markdown_body(epic_path),
+                errors,
+                warnings,
+            )
     else:
         errors.append("Missing docs/epics/ directory.")
 
@@ -274,6 +404,7 @@ def main() -> int:
         errors.append("Missing docs/decisions/ directory.")
 
     if us_dir.exists():
+        legacy_missing_context: list[str] = []
         for story in sorted(us_dir.glob("US-*.md")):
             match = re.match(r"US-\d{4}\.md$", story.name)
             if not match:
@@ -305,6 +436,13 @@ def main() -> int:
                     f"{story.name}: version {version_ref} does not exist in docs/versions/"
                 )
             story_text = story.read_text(encoding="utf-8")
+            validate_us_structure(
+                story.name,
+                read_markdown_body(story),
+                frontmatter,
+                errors,
+                warnings,
+            )
             if status == "🔶" and "Missing:" not in story_text:
                 errors.append(f"{story.name} is 🔶 but has no 'Missing:' in acceptance.")
 
@@ -329,6 +467,23 @@ def main() -> int:
             if effective_tests == "required" and "### Planned" not in story_text:
                 errors.append(f"{story.name}: tests required needs ### Planned section.")
 
+            validate_us_semantics(
+                story.name,
+                status,
+                frontmatter,
+                story_text,
+                warnings,
+                legacy_missing_context,
+            )
+
+        if legacy_missing_context:
+            sample = ", ".join(legacy_missing_context[:5])
+            suffix = "…" if len(legacy_missing_context) > 5 else ""
+            warnings.append(
+                f"{len(legacy_missing_context)} open US without ## Context & constraints "
+                f"(legacy) — run /refine-us before implement: {sample}{suffix}"
+            )
+
         if story_ids and not architecture_approved:
             errors.append(
                 "User stories exist but 05_architecture.md is not approved (delivery gate)."
@@ -348,6 +503,18 @@ def main() -> int:
             errors.append(f"Invalid board.json: {exc}")
     elif story_ids:
         errors.append("Missing docs/kanban/board.json.")
+
+    if json_output:
+        payload = {
+            "ok": len(errors) == 0,
+            "project": str(root),
+            "errors": errors,
+            "warnings": warnings,
+            "error_count": len(errors),
+            "warning_count": len(warnings),
+        }
+        print(json.dumps(payload, indent=2, ensure_ascii=False))
+        return 1 if errors else 0
 
     for warning in warnings:
         print(f"WARN: {warning}")

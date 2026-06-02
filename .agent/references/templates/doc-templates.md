@@ -1,0 +1,1 @@
+../../skills/init-project/references/doc-templates.md

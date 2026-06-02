@@ -13,6 +13,7 @@ This workspace uses the Meridian protocol. The canonical kit source is `.agent/`
 2. `.agent/rules/MERIDIAN.md` — P0 rules (equivalent to this rule)
 3. Agent in `.cursor/agents/` or `.agent/agents/` per the request
 4. Skills listed in the agent frontmatter → `.cursor/skills/{name}/SKILL.md`
+5. Creating/closing epic, version, sprint, or US → `.agent/references/templates/INDEX.md` + full template + `section-contracts.md` **before** Write
 
 Priority: **P0 rules > P1 agent + MERIDIAN.md > P2 skills**.
 
@@ -25,6 +26,7 @@ Priority: **P0 rules > P1 agent + MERIDIAN.md > P2 skills**.
 - Never `✅` without evidence; never `🔶` without `Missing:` in acceptance.
 - Never `✅` without filled `## Technical implementation` on the US (skill `complete-user-story`).
 - `docs/decisions/YYYY-MM-DD.json`: prepend in `entries`; never edit old entries.
+- Structural contract for US/epic/version: `.agent/references/templates/section-contracts.md` (validated by script + monitor).
 - Routing: skill `meridian-routing` or specialized agents.
 - Announce: `🤖 Applying knowledge from @[agent-name]...` before specialized work.
 
@@ -38,6 +40,7 @@ Priority: **P0 rules > P1 agent + MERIDIAN.md > P2 skills**.
 | `/create-version` | `.cursor/commands/create-version.md` |
 | `/create-epic` | `.cursor/commands/create-epic.md` |
 | `/create-us` | `.cursor/commands/create-us.md` |
+| `/refine-us` | `.cursor/commands/refine-us.md` |
 | `/complete-us` | `.cursor/commands/complete-us.md` |
 | `/architecture` | `.cursor/commands/architecture.md` |
 | `/security-pass` | `.cursor/commands/security-pass.md` |
@@ -48,4 +51,5 @@ Priority: **P0 rules > P1 agent + MERIDIAN.md > P2 skills**.
 
 ```bash
 python3 .agent/scripts/validate_meridian.py <project-folder>
+python3 .agent/scripts/validate_meridian.py <project-folder> --json
 ```

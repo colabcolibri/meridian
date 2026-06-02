@@ -10,7 +10,7 @@ outcome: "When this release is delivered at product level."
 
 # vX — Short release name
 
-## Goal
+## Objective
 
 Clear sentence of what this release delivers to user/manager.
 

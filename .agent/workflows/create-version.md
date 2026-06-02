@@ -12,7 +12,7 @@ $ARGUMENTS
 
 1. Use `sprint-planner` or `documentation-strategist` + `@[skills/create-version]`
 2. **Gate:** `05_architecture.md` `approved`; solid `00_scope.md` + `03_user_types.md`
-3. Template: `references/version-template.md`
+3. **Mandatory read:** `.agent/references/templates/INDEX.md` + `version-template.md` + `section-contracts.md` **before** Write
 4. Version = **release**, not sprint or folder in `src/`
 5. Save in `docs/versions/vX.md` (source of truth)
 6. Sprints → `/plan-sprint` or `create-sprint` later

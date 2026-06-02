@@ -271,3 +271,85 @@ export function validateStoryBody(
 
   return messages
 }
+
+const CONTEXT_PLACEHOLDER_MARKERS = [
+  "_(fill in",
+  "_(pending)_",
+  "§ [section name",
+  "§ …",
+  "path/to/…",
+  "add when implementation scope is known",
+]
+
+function contextSectionIsPlaceholder(body: string): boolean {
+  const context = extractMarkdownSection(body, "Context & constraints")
+  if (!context.trim()) {
+    return true
+  }
+
+  const substantive = sectionContentLines(context).filter(
+    (line) => line !== "_n/a_" && line !== "- _n/a_",
+  )
+
+  if (substantive.length === 0) {
+    return true
+  }
+
+  const lowered = context.toLowerCase()
+  const hits = CONTEXT_PLACEHOLDER_MARKERS.filter((marker) =>
+    lowered.includes(marker.toLowerCase()),
+  ).length
+
+  return hits >= Math.max(1, Math.ceil(substantive.length / 2))
+}
+
+function plannedTestsAreGeneric(body: string): boolean {
+  const planned = extractMarkdownSubsection(
+    extractMarkdownSection(body, "Tests"),
+    "Planned",
+  )
+  if (!planned.trim()) {
+    return false
+  }
+
+  const lowered = planned.toLowerCase()
+  if (lowered.includes("add when implementation scope is known")) {
+    return true
+  }
+
+  return (
+    lowered.includes("verify acceptance criteria end-to-end") &&
+    !/^\d+\./m.test(planned)
+  )
+}
+
+export function validateStoryReadiness(
+  story: Pick<UserStory, "status" | "ready">,
+  body: string,
+): string[] {
+  if (story.status === "✅" || story.status === "🧊") {
+    return []
+  }
+
+  const messages: string[] = []
+
+  if (!extractMarkdownSection(body, "Context & constraints").trim()) {
+    messages.push("Missing ## Context & constraints — run /refine-us before implement.")
+  } else if (contextSectionIsPlaceholder(body)) {
+    messages.push("## Context & constraints still has placeholders — run /refine-us.")
+  }
+
+  if (story.ready === false) {
+    messages.push("ready: false — run /refine-us before implement.")
+  } else if (story.ready !== true) {
+    messages.push(
+      "ready not set to true — run /refine-us before implement (legacy US).",
+    )
+  }
+
+  if (plannedTestsAreGeneric(body)) {
+    messages.push("Tests/Planned still generic — run /refine-us with concrete steps.")
+  }
+
+  return messages
+}

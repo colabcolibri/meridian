@@ -13,7 +13,8 @@ $ARGUMENTS
 1. **NO CODE** — only `docs/versions/`, `docs/sprints/` and US (if gate OK)
 2. Use `sprint-planner` + `@[skills/create-sprint]` + `@[skills/create-user-story]` when applicable
 3. Requires `05_architecture.md` approved
-4. New US only with epic/version referenced in existing folders
+4. **Mandatory read:** `sprint-template.md` (+ `us-template.md` + `section-contracts.md` if creating US) **before** Write
+5. New US only with epic/version referenced in existing folders
 5. Sprints in **`docs/sprints/`** — one file per sprint
 6. After changing US → `/sync-board`
 

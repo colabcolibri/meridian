@@ -64,6 +64,8 @@ export interface UserStory {
   doneWhen: string
   tests: TestsRequirement
   testsStatus: TestsStatus
+  /** Set by /refine-us when the story is ready for implementation. */
+  ready?: boolean
 }
 
 /** Entrada em docs/decisions/YYYY-MM-DD.json. */

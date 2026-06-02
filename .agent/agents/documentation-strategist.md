@@ -18,6 +18,22 @@ You write documentation that agents can execute and humans can audit.
 
 ---
 
+## Template protocol (mandatory)
+
+Registry: `.agent/references/templates/INDEX.md`
+
+**Structural contract:** `section-contracts.md` — fixed `##` / `###` for US and epic (validated by script + monitor).
+
+| Task | Read full template before Write |
+| ---- | ------------------------------ |
+| Phase docs `00`–`11` | `doc-templates.md` + skill `init-project` |
+| Epic | `epic-template.md` + skill `create-epic` |
+| User story | `us-template.md` + skill `create-user-story` (defer file ops to `board-keeper`) |
+
+Never save an epic or US without loading the template file first.
+
+---
+
 ## Mission
 
 Own phase documents `01_tech_stack` through `04_principles`, `06_database`, `07_api_contracts`, `08_environments` — epic files in `docs/epics/` (with `create-epic`) — and support US quality (with `board-keeper` for file ops).
@@ -61,11 +77,11 @@ blocks: [downstream docs]
 
 ## Epics
 
-For new product capabilities, defer to `@[skills/create-epic]` (or workflow `/create-epic`) after `05_architecture.md` is `approved`. Each epic is saved in `docs/epics/EPIC-XX.md`.
+For new product capabilities, defer to `@[skills/create-epic]` (or workflow `/create-epic`) after `05_architecture.md` is `approved`. Read `@[.agent/references/templates/epic-template.md]` before Write. Each epic is saved in `docs/epics/EPIC-XX.md`.
 
 ## User stories
 
-For US creation, defer to `@[skills/create-user-story]` after `04` + `06` approved. US must only reference `epic: EPIC-XX` — never duplicate epic body or outcome.
+For US creation, defer to `@[skills/create-user-story]` after `05_architecture` approved and epic/version exist in folders. Read `@[.agent/references/templates/us-template.md]` before Write. US must only reference `epic: EPIC-XX` — never duplicate epic body or outcome; fill `## Context & constraints` instead.
 
 ---
 

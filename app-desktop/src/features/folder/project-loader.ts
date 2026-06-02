@@ -35,6 +35,8 @@ export interface MeridianProjectData {
   /** Derived on load from userStories — never read from kanban/board.json. */
   board: ReturnType<typeof deriveBoardFromStories>
   storyBodies: Map<string, string>
+  epicBodies: Map<string, string>
+  versionBodies: Map<string, string>
   issues: MonitorIssue[]
 }
 
@@ -119,6 +121,7 @@ async function listEpicFilenames(
 async function loadEpics(
   docsRoot: FileSystemDirectoryHandle,
   parseIssues: MonitorIssue[],
+  epicBodies: Map<string, string>,
 ): Promise<Epic[]> {
   const epics: Epic[] = []
 
@@ -140,7 +143,9 @@ async function loadEpics(
       filenames.map(async (filename) => {
         try {
           const raw = await readTextFile(epicsDir, filename)
-          return parseEpicFile(filename, raw)
+          const epic = parseEpicFile(filename, raw)
+          epicBodies.set(epic.id, splitMarkdown(raw).body)
+          return epic
         } catch (error) {
           recordParseIssue(
             parseIssues,
@@ -185,6 +190,7 @@ async function listVersionFilenames(
 async function loadVersions(
   docsRoot: FileSystemDirectoryHandle,
   parseIssues: MonitorIssue[],
+  versionBodies: Map<string, string>,
 ): Promise<ProductVersion[]> {
   const versions: ProductVersion[] = []
 
@@ -206,7 +212,9 @@ async function loadVersions(
       filenames.map(async (filename) => {
         try {
           const raw = await readTextFile(versionsDir, filename)
-          return parseVersionFile(filename, raw)
+          const version = parseVersionFile(filename, raw)
+          versionBodies.set(version.id, splitMarkdown(raw).body)
+          return version
         } catch (error) {
           recordParseIssue(
             parseIssues,
@@ -414,13 +422,15 @@ export async function loadMeridianProject(
 ): Promise<MeridianProjectData> {
   const parseIssues: MonitorIssue[] = []
   const storyBodies = new Map<string, string>()
+  const epicBodies = new Map<string, string>()
+  const versionBodies = new Map<string, string>()
 
   const [phaseDocuments, userStories, epics, versions, sprints, decisionDays] =
     await Promise.all([
       loadPhaseDocuments(docsRoot, parseIssues),
       loadUserStories(docsRoot, parseIssues, storyBodies),
-      loadEpics(docsRoot, parseIssues),
-      loadVersions(docsRoot, parseIssues),
+      loadEpics(docsRoot, parseIssues, epicBodies),
+      loadVersions(docsRoot, parseIssues, versionBodies),
       loadSprints(docsRoot, parseIssues),
       loadDecisions(docsRoot, parseIssues),
     ])
@@ -436,6 +446,8 @@ export async function loadMeridianProject(
     versions,
     sprints,
     storyBodies,
+    epicBodies,
+    versionBodies,
   })
 
   return {
@@ -447,6 +459,8 @@ export async function loadMeridianProject(
     decisionDays,
     board,
     storyBodies,
+    epicBodies,
+    versionBodies,
     issues: [...parseIssues, ...protocolIssues],
   }
 }

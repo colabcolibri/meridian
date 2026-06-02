@@ -4,9 +4,11 @@ import type { Epic, ProductVersion, UserStory } from "@/domain/meridian/types"
 import {
   allVersionsSelected,
   epicsForVersionFilter,
+  epicsVisibleInVersions,
   filterStoriesByVersions,
   resolveDefaultSelectedVersions,
   sortVersionIdsDesc,
+  versionIdsForEpicInScope,
   versionIdsFromCatalog,
   versionIdsFromStories,
 } from "@/features/monitor/version-filter"
@@ -152,5 +154,21 @@ describe("allVersionsSelected", () => {
       true,
     )
     expect(allVersionsSelected(["v2", "v1", "v0"], new Set(["v1"]))).toBe(false)
+  })
+})
+
+describe("epicsVisibleInVersions", () => {
+  it("returns epics with stories in selected versions", () => {
+    expect(
+      epicsVisibleInVersions(epics, stories, new Set(["v1"])).map((epic) => epic.id),
+    ).toEqual(["EPIC-04"])
+  })
+})
+
+describe("versionIdsForEpicInScope", () => {
+  it("lists versions where epic has scoped stories", () => {
+    expect(versionIdsForEpicInScope(epics[1]!, stories, new Set(["v1", "v0"]))).toEqual(
+      ["v1"],
+    )
   })
 })

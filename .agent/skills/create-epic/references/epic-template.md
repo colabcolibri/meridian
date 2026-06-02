@@ -21,7 +21,7 @@ Describe in product language, not folder or class in `src/`.
 
 Paragraph expanding frontmatter `outcome` — how the manager knows the epic can be marked `complete`.
 
-## Out of this epic
+## Out of scope for this epic
 
 - What belongs to another epic or version
 - What is implementation detail (that goes in US)

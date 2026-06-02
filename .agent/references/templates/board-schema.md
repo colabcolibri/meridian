@@ -1,0 +1,1 @@
+../../skills/generate-board-json/references/board-schema.md

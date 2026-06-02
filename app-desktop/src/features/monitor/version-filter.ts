@@ -68,3 +68,76 @@ export function allVersionsSelected(
 ): boolean {
   return versionIds.length > 0 && versionIds.every((id) => selectedVersionIds.has(id))
 }
+
+export function sortEpicsById(epics: Epic[]): Epic[] {
+  return [...epics].sort((a, b) =>
+    a.id.localeCompare(b.id, undefined, { numeric: true }),
+  )
+}
+
+export function storiesForEpic(
+  stories: UserStory[],
+  epicId: string,
+  selectedVersionIds?: ReadonlySet<string>,
+): UserStory[] {
+  return stories.filter((story) => {
+    if (story.epic !== epicId) {
+      return false
+    }
+    if (!selectedVersionIds || selectedVersionIds.size === 0) {
+      return true
+    }
+    return selectedVersionIds.has(story.version)
+  })
+}
+
+export function versionIdsForEpicInScope(
+  epic: Epic,
+  stories: UserStory[],
+  selectedVersionIds: ReadonlySet<string>,
+): string[] {
+  const fromStories = new Set(
+    storiesForEpic(stories, epic.id, selectedVersionIds).map((story) => story.version),
+  )
+  const fromEpic = epic.versions.filter((versionId) =>
+    selectedVersionIds.has(versionId),
+  )
+  return sortVersionIdsDesc([...new Set([...fromStories, ...fromEpic])])
+}
+
+export function epicsVisibleInVersions(
+  epics: Epic[],
+  stories: UserStory[],
+  selectedVersionIds: ReadonlySet<string>,
+): Epic[] {
+  if (selectedVersionIds.size === 0) {
+    return []
+  }
+
+  const scoped = filterStoriesByVersions(stories, selectedVersionIds)
+  const epicIdsFromStories = new Set(scoped.map((story) => story.epic))
+
+  return sortEpicsById(
+    epics.filter(
+      (epic) =>
+        epicIdsFromStories.has(epic.id) ||
+        epic.versions.some((versionId) => selectedVersionIds.has(versionId)),
+    ),
+  )
+}
+
+export function countStoryProgress(stories: UserStory[]) {
+  const total = stories.length
+  const done = stories.filter((story) => story.status === "✅").length
+  const progress = total > 0 ? Math.round((done / total) * 100) : 0
+
+  return { total, done, progress }
+}
+
+export function groupEpicsByStatus(epics: Epic[]) {
+  return {
+    active: epics.filter((epic) => epic.status === "active"),
+    complete: epics.filter((epic) => epic.status === "complete"),
+    paused: epics.filter((epic) => epic.status === "paused"),
+  }
+}

@@ -1,0 +1,1 @@
+../../../.agent/references/templates/version-template.md

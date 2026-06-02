@@ -1,141 +1,27 @@
 import { useEffect, useMemo, useState } from "react"
 
-import { ChevronDown, ChevronRight, FileText, GitBranch, Layers } from "lucide-react"
+import { ChevronDown, FileText, GitBranch } from "lucide-react"
 
 import { Badge } from "@/components/ui/badge"
 import type { Epic, ProductVersion, Sprint, UserStory } from "@/domain/meridian/types"
-import { countStoriesByEpic, countStoriesByVersion } from "@/domain/meridian/validators"
-import { MarkdownDocSheet } from "@/features/monitor/components/MarkdownDocSheet"
+import { countStoriesByEpic } from "@/domain/meridian/validators"
+import {
+  DeliverableDocSheet,
+  type DeliverableSheetTarget,
+} from "@/features/monitor/components/deliverable-doc-sheet"
+import { EpicDeliverablesPanel } from "@/features/monitor/components/EpicDeliverablesPanel"
+import { VersionFilterBar } from "@/features/monitor/components/VersionFilterBar"
+import { useMonitorVersionFilter } from "@/features/monitor/MonitorVersionFilterContext"
+import { filterChipClass } from "@/features/monitor/monitor-ui"
 import { typeScale } from "@/features/monitor/monitor-typography"
 import {
+  countStoryProgress,
   epicsForVersionFilter,
-  resolveDefaultSelectedVersions,
   sortVersionsDesc,
 } from "@/features/monitor/version-filter"
 import { cn } from "@/lib/utils"
 
-type DeliverableSheetTarget =
-  | { kind: "version"; item: ProductVersion }
-  | { kind: "epic"; item: Epic; versionId: string }
-  | { kind: "sprint"; item: Sprint }
-
-function epicsForVersion(versionId: string, epics: Epic[], stories: UserStory[]) {
-  return epicsForVersionFilter(epics, stories, new Set([versionId]))
-}
-
-function epicProgress(stories: UserStory[], epicId: string, versionId: string) {
-  const inVersion = stories.filter(
-    (story) => story.epic === epicId && story.version === versionId,
-  )
-  const done = inVersion.filter((story) => story.status === "✅").length
-  const total = inVersion.length
-  const progress = total > 0 ? Math.round((done / total) * 100) : 0
-
-  return { done, total, progress }
-}
-
-function DeliverableSheet({
-  target,
-  stories,
-  open,
-  onOpenChange,
-}: {
-  target: DeliverableSheetTarget | null
-  stories: UserStory[]
-  open: boolean
-  onOpenChange: (open: boolean) => void
-}) {
-  if (!target) {
-    return null
-  }
-
-  if (target.kind === "version") {
-    const version = target.item
-    const { total, done } = countStoriesByVersion(stories, version.id)
-    const progress = total > 0 ? Math.round((done / total) * 100) : 0
-
-    return (
-      <MarkdownDocSheet
-        badges={
-          <Badge variant={version.status === "planned" ? "outline" : "secondary"}>
-            {version.status}
-          </Badge>
-        }
-        docPath={`versions/${version.id}.md`}
-        onOpenChange={onOpenChange}
-        open={open}
-        subtitle={version.id}
-        summary={
-          <div className="space-y-3">
-            <p className={typeScale.bodySm}>{version.outcome}</p>
-            <p className={typeScale.caption}>
-              Progress: {done}/{total} stories ({progress}%)
-            </p>
-          </div>
-        }
-        title={`${version.id} — ${version.title}`}
-      />
-    )
-  }
-
-  if (target.kind === "sprint") {
-    const sprint = target.item
-
-    return (
-      <MarkdownDocSheet
-        badges={<Badge variant="outline">{sprint.status}</Badge>}
-        docPath={`sprints/${sprint.id}.md`}
-        onOpenChange={onOpenChange}
-        open={open}
-        subtitle={sprint.versionId}
-        summary={
-          sprint.storyIds.length > 0 ? (
-            <p className={typeScale.bodySm}>US: {sprint.storyIds.join(", ")}</p>
-          ) : undefined
-        }
-        title={`${sprint.id} — ${sprint.title}`}
-      />
-    )
-  }
-
-  const epic = target.item
-  const stats =
-    target.versionId === "—"
-      ? countStoriesByEpic(stories, epic.id)
-      : epicProgress(stories, epic.id, target.versionId)
-  const { done, total } = stats
-  const progress =
-    "progress" in stats
-      ? stats.progress
-      : total > 0
-        ? Math.round((done / total) * 100)
-        : 0
-
-  return (
-    <MarkdownDocSheet
-      badges={
-        <Badge variant={epic.status === "active" ? "default" : "outline"}>
-          {epic.status}
-        </Badge>
-      }
-      docPath={`epics/${epic.id}.md`}
-      onOpenChange={onOpenChange}
-      open={open}
-      subtitle={target.versionId === "—" ? undefined : target.versionId}
-      summary={
-        <div className="space-y-2">
-          <p className={typeScale.bodySm}>{epic.outcome}</p>
-          <p className={typeScale.caption}>
-            {target.versionId === "—"
-              ? `Total: ${done}/${total} stories (${progress}%)`
-              : `In this version: ${done}/${total} stories (${progress}%)`}
-          </p>
-        </div>
-      }
-      title={`${epic.id} — ${epic.title}`}
-    />
-  )
-}
+type DeliverablesLayout = "epic" | "version"
 
 function VersionBlock({
   version,
@@ -158,10 +44,11 @@ function VersionBlock({
   onOpenSprint: (sprint: Sprint) => void
   onOpenEpic: (epic: Epic, versionId: string) => void
 }) {
-  const { total, done } = countStoriesByVersion(stories, version.id)
+  const { done, total, progress } = countStoryProgress(
+    stories.filter((story) => story.version === version.id),
+  )
   const versionSprints = sprints.filter((sprint) => sprint.versionId === version.id)
-  const versionEpics = epicsForVersion(version.id, epics, stories)
-  const progress = total > 0 ? Math.round((done / total) * 100) : 0
+  const versionEpics = epicsForVersionFilter(epics, stories, new Set([version.id]))
 
   return (
     <section
@@ -198,7 +85,6 @@ function VersionBlock({
             </div>
             <p className={cn(typeScale.caption, "mt-1 tabular-nums")}>
               {done}/{total} US · {progress}% · {version.status}
-              {!expanded ? " · collapsed" : null}
             </p>
           </div>
         </button>
@@ -244,11 +130,14 @@ function VersionBlock({
         <div className="px-2 py-2">
           <p className={cn(typeScale.label, "px-2 pb-1")}>Epics</p>
           {versionEpics.map((epic) => {
+            const scoped = stories.filter(
+              (story) => story.epic === epic.id && story.version === version.id,
+            )
             const {
               done: epicDone,
               total: epicTotal,
               progress: epicProgressPct,
-            } = epicProgress(stories, epic.id, version.id)
+            } = countStoryProgress(scoped)
 
             if (epicTotal === 0) {
               return null
@@ -269,18 +158,154 @@ function VersionBlock({
                     {epic.title}
                   </p>
                 </div>
-                <div className="flex shrink-0 items-center gap-2">
-                  <span className={typeScale.caption}>
-                    {epicDone}/{epicTotal} · {epicProgressPct}%
-                  </span>
-                  <ChevronRight className="h-4 w-4 text-muted-foreground" />
-                </div>
+                <span className={typeScale.caption}>
+                  {epicDone}/{epicTotal} · {epicProgressPct}%
+                </span>
               </button>
             )
           })}
         </div>
       ) : null}
     </section>
+  )
+}
+
+function VersionDeliverablesPanel({
+  versions,
+  epics,
+  sprints,
+  stories,
+}: {
+  versions: ProductVersion[]
+  epics: Epic[]
+  sprints: Sprint[]
+  stories: UserStory[]
+}) {
+  const { selectedVersionIds } = useMonitorVersionFilter()
+  const [expandedVersionIds, setExpandedVersionIds] = useState<Set<string>>(
+    () => new Set(selectedVersionIds),
+  )
+  const [sheetTarget, setSheetTarget] = useState<DeliverableSheetTarget | null>(null)
+
+  const filteredVersions = useMemo(
+    () =>
+      sortVersionsDesc(versions).filter((version) =>
+        selectedVersionIds.has(version.id),
+      ),
+    [selectedVersionIds, versions],
+  )
+
+  useEffect(() => {
+    setExpandedVersionIds((previous) => {
+      const pruned = new Set(
+        [...previous].filter((versionId) => selectedVersionIds.has(versionId)),
+      )
+
+      if (pruned.size > 0) {
+        return pruned
+      }
+
+      return new Set(selectedVersionIds)
+    })
+  }, [selectedVersionIds])
+
+  const orphans = epics.filter((epic) => {
+    const { total } = countStoriesByEpic(stories, epic.id)
+    return (
+      total > 0 &&
+      !filteredVersions.some((version) =>
+        stories.some((story) => story.epic === epic.id && story.version === version.id),
+      )
+    )
+  })
+
+  if (selectedVersionIds.size === 0) {
+    return (
+      <p
+        className={cn(
+          typeScale.bodySm,
+          "rounded-xl border border-dashed border-border px-4 py-8 text-center text-muted-foreground",
+        )}
+      >
+        Select at least one version in the filter above.
+      </p>
+    )
+  }
+
+  return (
+    <>
+      <div className="space-y-4">
+        {filteredVersions.map((version) => (
+          <VersionBlock
+            epics={epics}
+            expanded={expandedVersionIds.has(version.id)}
+            key={version.id}
+            onOpenEpic={(epic, versionId) =>
+              setSheetTarget({ kind: "epic", item: epic, versionId })
+            }
+            onOpenSprint={(sprint) => setSheetTarget({ kind: "sprint", item: sprint })}
+            onOpenVersion={(item) => setSheetTarget({ kind: "version", item })}
+            onToggleExpanded={() => {
+              setExpandedVersionIds((previous) => {
+                const next = new Set(previous)
+                if (next.has(version.id)) {
+                  next.delete(version.id)
+                } else {
+                  next.add(version.id)
+                }
+                return next
+              })
+            }}
+            sprints={sprints}
+            stories={stories}
+            version={version}
+          />
+        ))}
+
+        {orphans.length > 0 ? (
+          <section className="rounded-xl border border-border bg-card px-2 py-2">
+            <p className={cn(typeScale.label, "px-2 py-2")}>
+              Epics outside selected versions
+            </p>
+            {orphans.map((epic) => {
+              const { total, done } = countStoriesByEpic(stories, epic.id)
+
+              return (
+                <button
+                  className="flex w-full items-center justify-between gap-3 rounded-lg px-2 py-2.5 text-left hover:bg-muted/40"
+                  key={epic.id}
+                  onClick={() =>
+                    setSheetTarget({ kind: "epic", item: epic, versionId: "—" })
+                  }
+                  type="button"
+                >
+                  <div>
+                    <p className="font-mono text-xs font-semibold text-primary">
+                      {epic.id}
+                    </p>
+                    <p className={typeScale.bodySm}>{epic.title}</p>
+                  </div>
+                  <span className={typeScale.caption}>
+                    {done}/{total} US
+                  </span>
+                </button>
+              )
+            })}
+          </section>
+        ) : null}
+      </div>
+
+      <DeliverableDocSheet
+        onOpenChange={(open) => {
+          if (!open) {
+            setSheetTarget(null)
+          }
+        }}
+        open={sheetTarget !== null}
+        stories={stories}
+        target={sheetTarget}
+      />
+    </>
   )
 }
 
@@ -295,119 +320,62 @@ export function DeliverablesView({
   sprints: Sprint[]
   stories: UserStory[]
 }) {
-  const [expandedVersionIds, setExpandedVersionIds] = useState<Set<string>>(
-    () => new Set(resolveDefaultSelectedVersions(versions, stories)),
-  )
-  const [sheetTarget, setSheetTarget] = useState<DeliverableSheetTarget | null>(null)
-
-  const catalogVersions = useMemo(() => sortVersionsDesc(versions), [versions])
-
-  useEffect(() => {
-    const versionIds = catalogVersions.map((version) => version.id)
-
-    if (versionIds.length === 0) {
-      setExpandedVersionIds(new Set())
-      return
-    }
-
-    setExpandedVersionIds((previous) => {
-      const pruned = new Set(
-        [...previous].filter((versionId) => versionIds.includes(versionId)),
-      )
-
-      if (pruned.size > 0) {
-        return pruned
-      }
-
-      return new Set(resolveDefaultSelectedVersions(versions, stories))
-    })
-  }, [catalogVersions, stories, versions])
-
-  const toggleExpanded = (versionId: string) => {
-    setExpandedVersionIds((previous) => {
-      const next = new Set(previous)
-
-      if (next.has(versionId)) {
-        next.delete(versionId)
-        return next
-      }
-
-      next.add(versionId)
-      return next
-    })
-  }
-
-  const orphans = epics.filter(
-    (epic) =>
-      !versions.some((version) =>
-        epicsForVersion(version.id, [epic], stories).some(
-          (item) => item.id === epic.id,
-        ),
-      ),
-  )
-
-  const openSheet = (target: DeliverableSheetTarget) => setSheetTarget(target)
+  const [layout, setLayout] = useState<DeliverablesLayout>("epic")
 
   return (
-    <div className="space-y-4">
-      {catalogVersions.map((version) => (
-        <VersionBlock
+    <div className="space-y-5">
+      <div className="space-y-4 rounded-xl border border-border bg-card p-4 shadow-sm">
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+          <div className="space-y-1">
+            <h2 className={typeScale.sectionTitle}>Deliverables</h2>
+            <p className={typeScale.bodySm}>
+              Product capabilities from{" "}
+              <code className="font-mono text-xs">docs/epics/</code>, filtered by
+              release. Default view is by epic — switch to by version for release
+              planning.
+            </p>
+          </div>
+          <div
+            aria-label="Deliverables layout"
+            className="flex shrink-0 flex-wrap gap-2"
+            role="group"
+          >
+            <button
+              aria-pressed={layout === "epic"}
+              className={filterChipClass(layout === "epic")}
+              onClick={() => setLayout("epic")}
+              type="button"
+            >
+              By epic
+            </button>
+            <button
+              aria-pressed={layout === "version"}
+              className={filterChipClass(layout === "version")}
+              onClick={() => setLayout("version")}
+              type="button"
+            >
+              By version
+            </button>
+          </div>
+        </div>
+        <VersionFilterBar contextLabel="deliverables" versions={versions} />
+      </div>
+
+      {layout === "epic" ? (
+        <EpicDeliverablesPanel
           epics={epics}
-          expanded={expandedVersionIds.has(version.id)}
-          key={version.id}
-          onOpenEpic={(epic, versionId) =>
-            openSheet({ kind: "epic", item: epic, versionId })
-          }
-          onOpenSprint={(sprint) => openSheet({ kind: "sprint", item: sprint })}
-          onOpenVersion={(item) => openSheet({ kind: "version", item })}
-          onToggleExpanded={() => toggleExpanded(version.id)}
           sprints={sprints}
           stories={stories}
-          version={version}
+          versions={versions}
         />
-      ))}
-
-      {orphans.length > 0 ? (
-        <section className="rounded-xl border border-border bg-card px-2 py-2">
-          <div className="flex items-center gap-2 px-2 py-2">
-            <Layers className="h-4 w-4 text-primary" />
-            <h3 className={typeScale.cardTitle}>Other epics</h3>
-          </div>
-          {orphans.map((epic) => {
-            const { total, done } = countStoriesByEpic(stories, epic.id)
-
-            return (
-              <button
-                className="flex w-full items-center justify-between gap-3 rounded-lg px-2 py-2.5 text-left hover:bg-muted/40"
-                key={epic.id}
-                onClick={() => openSheet({ kind: "epic", item: epic, versionId: "—" })}
-                type="button"
-              >
-                <div>
-                  <p className="font-mono text-xs font-semibold text-primary">
-                    {epic.id}
-                  </p>
-                  <p className={typeScale.bodySm}>{epic.title}</p>
-                </div>
-                <span className={typeScale.caption}>
-                  {done}/{total} US
-                </span>
-              </button>
-            )
-          })}
-        </section>
-      ) : null}
-
-      <DeliverableSheet
-        onOpenChange={(open) => {
-          if (!open) {
-            setSheetTarget(null)
-          }
-        }}
-        open={sheetTarget !== null}
-        stories={stories}
-        target={sheetTarget}
-      />
+      ) : (
+        <VersionDeliverablesPanel
+          epics={epics}
+          sprints={sprints}
+          stories={stories}
+          versions={versions}
+        />
+      )}
     </div>
   )
 }

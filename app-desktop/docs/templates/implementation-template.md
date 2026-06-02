@@ -1,0 +1,1 @@
+../../../.agent/references/templates/implementation-template.md

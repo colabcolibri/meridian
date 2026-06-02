@@ -34,6 +34,7 @@ This folder is the **source of truth** for Meridian Desktop development. In dogf
 | Releases      | [`versions/`](versions/)                 | One file per vX (go-live)                      |
 | Sprints       | [`sprints/`](sprints/)                   | vX-SY slices within each release               |
 | User stories  | [`us/`](us/)                             | Backlog (one US = one file)                    |
+| Templates     | [`templates/`](templates/)               | Human-readable contract mirror (symlinks)      |
 | Decision log  | [`decisions/`](decisions/)               | One JSON per day (`YYYY-MM-DD.json`)           |
 | Derived board | [`kanban/board.json`](kanban/board.json) | Kanban generated from US — do not edit by hand |
 
@@ -83,10 +84,11 @@ See also: [Start here](../../.agent/references/start-here.md) · [Usage guide](.
 ### Daily loop (manager + AI)
 
 1. **Orient** — `/status`; app (Setup + Board); pick an unblocked Must US.
-2. **Contextualize** — cite the US in chat (`US-XXXX` or `docs/us/US-XXXX.md`).
-3. **Implement** — agent executes; review diff; partial → `🔶` + `Missing:` in acceptance.
-4. **Close** — `/complete-us US-XXXX` (technical implementation + acceptance + `✅`); `/sync-board`.
-5. **Review** — check the Board tab in the app.
+2. **Create/refine** — `/create-us` then `/refine-us US-XXXX` until `ready: true`.
+3. **Contextualize** — cite the US in chat (`US-XXXX` or `docs/us/US-XXXX.md`).
+4. **Implement** — agent executes; review diff; partial → `🔶` + `Missing:` in acceptance.
+5. **Close** — `/complete-us US-XXXX` (technical implementation + acceptance + `✅`); `/sync-board`.
+6. **Review** — check the Board tab in the app.
 
 ### Detail by artifact
 

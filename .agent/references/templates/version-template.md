@@ -1,0 +1,1 @@
+../../skills/create-version/references/version-template.md

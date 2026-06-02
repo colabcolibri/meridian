@@ -111,6 +111,22 @@ function parseTestsStatus(
   return value as TestsStatus
 }
 
+function parseOptionalBoolean(value: unknown, file: string): boolean | undefined {
+  if (value === undefined || value === null || value === "") {
+    return undefined
+  }
+  if (value === true || value === "true") {
+    return true
+  }
+  if (value === false || value === "false") {
+    return false
+  }
+  throw new MeridianParseError(
+    file,
+    `ready must be true or false (got: ${String(value)})`,
+  )
+}
+
 function parseEpicStatus(value: string): EpicStatus {
   const normalized = value.trim().toLowerCase()
   if (EPIC_STATUSES.includes(normalized as EpicStatus)) {
@@ -190,6 +206,7 @@ export function parseUserStoryFile(filename: string, raw: string): UserStory {
       ? ("required" as TestsRequirement)
       : parseTestsRequirement(record.tests, file)
   const testsStatus = parseTestsStatus(record.tests_status, tests, file)
+  const ready = parseOptionalBoolean(record.ready, file)
 
   return {
     id,
@@ -204,6 +221,7 @@ export function parseUserStoryFile(filename: string, raw: string): UserStory {
     doneWhen: requireString(record, "done_when", file),
     tests,
     testsStatus,
+    ready,
   }
 }
 

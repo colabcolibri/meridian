@@ -13,7 +13,7 @@ if [[ ! -d "${AGENT}" ]]; then
   exit 1
 fi
 
-mkdir -p "${CURSOR}/rules" "${CURSOR}/skills" "${CURSOR}/agents" "${CURSOR}/commands"
+mkdir -p "${CURSOR}/rules" "${CURSOR}/skills" "${CURSOR}/agents" "${CURSOR}/commands" "${CURSOR}/references/templates"
 
 link() {
   local target="$1"
@@ -23,6 +23,12 @@ link() {
   ln -s "${target}" "${linkpath}"
   echo "link ${linkpath} -> ${target}"
 }
+
+link "../../../.agent/references/templates/INDEX.md" "${CURSOR}/references/templates/INDEX.md"
+link "../../../.agent/references/templates/lifecycle.md" "${CURSOR}/references/templates/lifecycle.md"
+for tpl in us-template epic-template version-template sprint-template implementation-template decision-template doc-templates board-schema refine-checklist section-contracts; do
+  link "../../../../.agent/references/templates/${tpl}.md" "${CURSOR}/references/templates/${tpl}.md"
+done
 
 # Skills (directories with SKILL.md)
 for skill_dir in "${AGENT}"/skills/*/; do

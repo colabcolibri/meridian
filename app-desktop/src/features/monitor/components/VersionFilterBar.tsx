@@ -4,7 +4,13 @@ import { filterChipClass } from "@/features/monitor/monitor-ui"
 import { typeScale } from "@/features/monitor/monitor-typography"
 import { cn } from "@/lib/utils"
 
-export function VersionFilterBar({ versions }: { versions: ProductVersion[] }) {
+export function VersionFilterBar({
+  versions,
+  contextLabel = "board",
+}: {
+  versions: ProductVersion[]
+  contextLabel?: "board" | "deliverables"
+}) {
   const {
     versionIds,
     selectedVersionIds,
@@ -29,7 +35,9 @@ export function VersionFilterBar({ versions }: { versions: ProductVersion[] }) {
           {" · "}
           {selectedCount === 0
             ? "none selected"
-            : `${selectedCount} of ${versionIds.length} on board`}
+            : contextLabel === "deliverables"
+              ? `${selectedCount} of ${versionIds.length} in deliverables`
+              : `${selectedCount} of ${versionIds.length} on board`}
         </span>
       </p>
 

@@ -12,7 +12,7 @@ $ARGUMENTS
 
 1. Use `board-keeper` + `@[skills/complete-user-story]`
 2. **Gate:** implementation delivered; applicable tests passed; `depends_on` at `✅`
-3. Implementation template: `references/implementation-template.md`
+3. **Mandatory read:** `implementation-template.md` + `us-template.md` + `section-contracts.md` + target US **before** editing status
 4. **Do not** mark `✅` with placeholder in `## Technical implementation`
 5. Regenerate `board.json` at the end
 6. `update-decisions-log` only if cross-cutting decision

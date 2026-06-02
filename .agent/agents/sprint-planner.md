@@ -21,6 +21,22 @@ Drafts in `docs/versions/` and `docs/sprints/` may exist before user stories —
 
 ---
 
+## Template protocol (mandatory)
+
+Registry: `.agent/references/templates/INDEX.md`
+
+**Structural contract:** `section-contracts.md` — fixed `##` / `###` for version and US (validated by script + monitor).
+
+| Task | Read full template before Write |
+| ---- | ------------------------------ |
+| Version | `version-template.md` + skill `create-version` |
+| Sprint | `sprint-template.md` + skill `create-sprint` |
+| User story | `us-template.md` + skill `create-user-story` |
+
+See `lifecycle.md` in the same folder for ordering epic → version → sprint → US.
+
+---
+
 ## Mission
 
 Own files in `docs/versions/` and `docs/sprints/`, sequencing and MoSCoW — without smuggling a hidden MVP past the human manager.

@@ -10,8 +10,10 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 
 | File | When to read |
 | ------- | ---------- |
-| `references/implementation-template.md` | When filling `## Technical implementation` |
-| `../create-user-story/references/us-template.md` | Full US structure |
+| `.agent/references/templates/INDEX.md` | Before closing any US |
+| `.agent/references/templates/section-contracts.md` | Verify all `##` / `###` still match contract |
+| `references/implementation-template.md` | **Mandatory** before filling `## Technical implementation` |
+| `../create-user-story/references/us-template.md` | Full US structure (verify all sections) |
 
 ## When to trigger
 
@@ -34,20 +36,21 @@ If anything fails → **do not** mark `✅`; use `🔶` with `Missing:` in accep
 
 ## Procedure
 
-1. Read `docs/us/US-XXXX.md` and identify scope (acceptance + `done_when`).
-2. Inspect what was delivered: `git diff`, changed files, test output.
-3. Replace `## Technical implementation` with the **real record** (see `references/implementation-template.md`):
+1. Read `.agent/references/templates/INDEX.md`, **full** `implementation-template.md`, and target `docs/us/US-XXXX.md`.
+2. Identify scope (acceptance + `done_when` + Context refs).
+3. Inspect what was delivered: `git diff`, changed files, test output.
+4. Replace `## Technical implementation` with the **real record** (see `references/implementation-template.md`):
    - paths relative to repo (not bare filenames);
    - summary per layer (Backend, Frontend, Scripts, Docs);
    - remove placeholders `_(fill in...)_` and prior plans that do not match code.
-4. In `## Tests`:
+5. In `## Tests`:
    - mark `[x]` on **all** **Planned** items;
    - fill **Executed** with command/check + result (date optional);
    - update frontmatter `tests_status: done` (when `tests: required`).
-5. Mark acceptance `[x]` with objective evidence.
-6. Update frontmatter `status: ✅` (or `🔶` if partial + `Missing:`). Only mark `✅` if `tests: none` **or** `tests_status: done`.
-7. Invoke `generate-board-json`.
-8. If relevant cross-cutting change → `update-decisions-log` (local US decisions stay in Technical implementation).
+6. Mark acceptance `[x]` with objective evidence.
+7. Update frontmatter `status: ✅` (or `🔶` if partial + `Missing:`). Only mark `✅` if `tests: none` **or** `tests_status: done`.
+8. Invoke `generate-board-json`.
+9. If relevant cross-cutting change → `update-decisions-log` (local US decisions stay in Technical implementation).
 
 ## Validations before marking `✅`
 

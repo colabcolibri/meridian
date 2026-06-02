@@ -35,6 +35,7 @@ Array sorted by ascending `id` (`US-0001`, `US-0002`, ...).
 - If `status` is `🔶`, acceptance contains `Missing:`
 - `tests`: `required` or `none`
 - `tests_status`: `pending`, `done` or `n/a` (`n/a` only with `tests: none`)
+- `ready`: `true` or `false` (`false` on `/create-us`; `true` after `/refine-us`; required before implement)
 - `status: ✅` with `tests: required` requires `tests_status: done`
 
 ## Common divergences

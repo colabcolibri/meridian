@@ -12,7 +12,8 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 
 | File | When to read |
 | ------- | ---------- |
-| `references/doc-templates.md` | When creating phase files and first decision |
+| `.agent/references/templates/INDEX.md` | Before creating phase docs or pointing manager to templates |
+| `references/doc-templates.md` | **Mandatory** before creating phase files and first decision |
 | `references/gitignore-baseline.md` | Before `npm install` or first commit |
 
 ## When to trigger

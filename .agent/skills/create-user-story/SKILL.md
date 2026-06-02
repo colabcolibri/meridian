@@ -10,7 +10,8 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 
 | File | When to read |
 | ------- | ---------- |
-| `references/us-template.md` | When drafting `docs/us/US-XXXX.md` |
+| `.agent/references/templates/INDEX.md` | Before any US create — confirm agent protocol |
+| `references/us-template.md` | **Mandatory** before drafting `docs/us/US-XXXX.md` — read full template, then Write |
 
 ## Preconditions (hard gate)
 
@@ -36,21 +37,26 @@ Vague request → product questions:
 2. What action?
 3. What benefit?
 4. How to know it is done (`done_when`)?
+5. Which architecture / API / DB sections apply?
+6. What is explicitly out of scope for this slice?
 
 ## Procedure
 
-1. List `docs/us/US-*.md` → next ID = highest number + 1, formatted as `US-XXXX` (4 digits, zero-padded).
-2. Fill template from `references/us-template.md`.
-3. Validate measurable `done_when`; `🔶` requires `Missing:` in acceptance.
-4. Save `docs/us/US-XXXX.md`.
-5. Invoke `generate-board-json` or regenerate `board.json`.
-6. If relevant change → `update-decisions-log`.
+1. Read `.agent/references/templates/INDEX.md` and **full** `references/us-template.md` (or mirrored `.agent/references/templates/us-template.md`).
+2. List `docs/us/US-*.md` → next ID = highest number + 1, formatted as `US-XXXX` (4 digits, zero-padded).
+3. Fill template — every section required; `## Context & constraints` must not be empty placeholders only.
+4. Validate measurable `done_when`; `🔶` requires `Missing:` in acceptance; set `ready: false`.
+5. Save `docs/us/US-XXXX.md`.
+6. Invoke `generate-board-json` or regenerate `board.json`.
+7. If relevant change → `update-decisions-log`.
 
 **Closure:** after implementation, use skill `complete-user-story` (workflow `/complete-us`) — do not mark `✅` in this skill.
 
 ## Validations before saving
 
 - New ID, format `US-XXXX` (4 digits); filename = `{id}.md`
+- **Structure:** every `##` / `###` from `us-template.md` present (see `section-contracts.md`)
+- `ready: false` on creation
 - Dependencies exist and are `✅` before marking dependent as `✅`
 - Out of scope filled if ambiguity risk exists
 

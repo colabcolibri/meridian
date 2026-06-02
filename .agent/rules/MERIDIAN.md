@@ -14,7 +14,7 @@ trigger: always_on
 
 ### 1. Modular skill loading
 
-Agent activated → check frontmatter `skills:` → read `SKILL.md` (index) → read only relevant files in `references/`.
+Agent activated → check frontmatter `skills:` → read `SKILL.md` (index) → read `.agent/references/templates/INDEX.md` when creating/closing delivery artifacts → read the **full template file** listed for that artifact → read `section-contracts.md` for US/epic/version structure → read only other relevant files in `references/`.
 
 - **Selective reading:** Do NOT read every file in the skill folder. Read `SKILL.md` first; then only what the request requires.
 - **Rule priority:** P0 (`rules/MERIDIAN.md`) > P1 (`.agent/MERIDIAN.md` + agent `.md`) > P2 (`SKILL.md`).
@@ -36,6 +36,7 @@ Before any action, classify:
 | **STATUS** | "status", "where are we", "blockers" | `process-manager` + `/status` |
 | **DOC / PHASE** | "scope", "epic", "version", "architecture", `00_`–`11_` | Documentation agent per matrix |
 | **US / BOARD** | "user story", "US-", "kanban", "board" | `board-keeper` or `sprint-planner` |
+| **REFINE US** | "refine US", `/refine-us`, "ready for implement" | `board-keeper` + `refine-user-story` |
 | **CLOSE US** | "complete US", "mark done", "technical implementation", `/complete-us` | `board-keeper` + `complete-user-story` |
 | **SECURITY** | "security", "OWASP", "secrets", `02_security` | `security-steward` |
 | **START PROJECT** | "start", "meridian setup", "create docs" | `process-manager` + `init-project` |
@@ -68,7 +69,9 @@ Before any action, classify:
 | 2 | Read `.agent/agents/{agent}.md`? | Stop; open the agent |
 | 3 | Announced `🤖 Applying...`? | Add before the response |
 | 4 | Loaded skills from frontmatter? | Read each listed `SKILL.md` |
-| 5 | Required docs exist at correct maturity? | Block; report to manager |
+| 5 | Creating/closing epic, version, sprint, or US? | Read `.agent/references/templates/INDEX.md` + full template + `section-contracts.md` **before** Write |
+| 6 | Implementing code for a US? | US `ready: true` + Context filled; else `/refine-us` |
+| 7 | Required docs exist at correct maturity? | Block; report to manager |
 
 **Violations:**
 
@@ -125,6 +128,7 @@ The person is manager of the process. Agents report blockers, next step, and pen
 | `05_architecture.md` | `architecture-guardian` | `security-review` |
 | `docs/versions/`, `docs/sprints/` | `sprint-planner` | `create-user-story` |
 | `docs/us/*.md` (create) | `board-keeper` | `create-user-story` |
+| `docs/us/*.md` (refine) | `board-keeper` | `refine-user-story` |
 | `docs/us/*.md` (close) | `board-keeper` | `complete-user-story` |
 | `board.json` | `board-keeper` | `generate-board-json` |
 | `11_decisions.md` (stub) + `docs/decisions/` | any relevant agent | `update-decisions-log` |
@@ -137,6 +141,7 @@ The person is manager of the process. Agents report blockers, next step, and pen
 | -------- | ---- |
 | Master protocol | `.agent/MERIDIAN.md` |
 | Kit architecture | `.agent/ARCHITECTURE.md` |
+| **Templates (agents)** | `.agent/references/templates/INDEX.md` |
 | Agents | `.agent/agents/` |
 | Skills | `.agent/skills/` |
 | Workflows | `.agent/workflows/` |

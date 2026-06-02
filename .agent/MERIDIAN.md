@@ -963,6 +963,7 @@ version: v1
 status: ✅ | 🔶 | ❌ | 🧊
 moscow: Must | Should | Could | Won't
 depends_on: [US-YYYY]
+ready: false | true
 done_when: "Objective and measurable condition."
 tests: required | none
 tests_status: pending | done | n/a
@@ -983,6 +984,30 @@ tests_status: pending | done | n/a
 - Objective condition
 - Objective condition
 - **Missing:** required when status = 🔶
+
+## Context & constraints
+
+> **Required on creation.** Links US to architecture/API/DB — does not duplicate epic text.
+
+### Architecture refs
+
+- `docs/05_architecture.md` — § …
+
+### API / DB impact
+
+- _n/a_ | …
+
+### Security notes
+
+- _n/a_ | …
+
+### Related decisions
+
+- _n/a_ | …
+
+### Implementation hints (preliminary)
+
+- Likely files + 2–3 bullet approach (plan; replaced on close)
 
 ## Technical implementation
 

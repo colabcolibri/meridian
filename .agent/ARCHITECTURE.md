@@ -70,7 +70,7 @@ Workflows orchestrate agents; they do not replace the master protocol.
 | `security-steward` | `02_security.md` | security-review, update-decisions-log, meridian-routing |
 | `architecture-guardian` | `05_architecture.md` | security-review, update-decisions-log, meridian-routing |
 | `sprint-planner` | `docs/versions/`, `docs/sprints/` | create-version, create-sprint, create-user-story, … |
-| `board-keeper` | US + `board.json` | create-user-story, complete-user-story, generate-board-json, update-decisions-log, meridian-routing |
+| `board-keeper` | US + `board.json` | create-user-story, refine-user-story, complete-user-story, generate-board-json, update-decisions-log, meridian-routing |
 
 Each agent includes: phases 0/-1, mission, prohibitions, output format, delegation.
 
@@ -85,11 +85,14 @@ Each agent includes: phases 0/-1, mission, prohibitions, output format, delegati
 | `create-version` | `version-template.md` |
 | `create-sprint` | `sprint-template.md` |
 | `create-user-story` | `us-template.md` |
+| `refine-user-story` | `refine-checklist.md` |
 | `complete-user-story` | `implementation-template.md` |
 | `generate-board-json` | `board-schema.md` |
 | `update-decisions-log` | `decision-template.md`, `decision-schema.md` |
 | `security-review` | `checklists.md` |
 | `meridian-routing` | — (inline matrix) |
+
+**Agent mirror:** all delivery templates are symlinked under `.agent/references/templates/` with registry `INDEX.md`. Agents must read INDEX + full template before Write — see each agent's **Template protocol** section.
 
 See `.agent/skills/doc.md` to create new skills.
 
@@ -104,6 +107,7 @@ See `.agent/skills/doc.md` to create new skills.
 | `plan-sprint` | sprint-planner | planning |
 | `create-version` | sprint-planner | create release in `docs/versions/` |
 | `create-us` | board-keeper | create US |
+| `refine-us` | board-keeper | refine US before implement |
 | `complete-us` | board-keeper | close US after implementation |
 | `create-epic` | documentation-strategist | create epic in `docs/epics/` |
 | `architecture` | architecture-guardian | doc 07 |

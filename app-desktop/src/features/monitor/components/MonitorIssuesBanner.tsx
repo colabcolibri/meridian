@@ -1,11 +1,18 @@
 import { AlertCircle, AlertTriangle, ChevronDown } from "lucide-react"
-import { useState } from "react"
+import { useMemo, useState } from "react"
 
 import type { MonitorIssue } from "@/domain/meridian/monitor-issues"
 import { countIssuesBySeverity } from "@/domain/meridian/protocol-validators"
 import { monitorPanelClass } from "@/features/monitor/monitor-ui"
 import { typeScale } from "@/features/monitor/monitor-typography"
 import { cn } from "@/lib/utils"
+
+const SCOPE_LABELS: Record<MonitorIssue["scope"], string> = {
+  parse: "Parse",
+  doc: "Documents",
+  us: "User stories",
+  board: "Board",
+}
 
 function IssueList({
   items,
@@ -41,16 +48,34 @@ function IssueList({
   )
 }
 
+function groupedIssues(issues: MonitorIssue[]) {
+  const groups = new Map<MonitorIssue["scope"], MonitorIssue[]>()
+
+  for (const issue of issues) {
+    const bucket = groups.get(issue.scope) ?? []
+    bucket.push(issue)
+    groups.set(issue.scope, bucket)
+  }
+
+  return [...groups.entries()].sort(([a], [b]) => a.localeCompare(b))
+}
+
 export function MonitorIssuesBanner({ issues }: { issues: MonitorIssue[] }) {
   const { errors, warnings } = countIssuesBySeverity(issues)
   const [open, setOpen] = useState(() => errors > 0)
 
+  const errorsList = useMemo(
+    () => issues.filter((issue) => issue.severity === "error"),
+    [issues],
+  )
+  const warningsList = useMemo(
+    () => issues.filter((issue) => issue.severity === "warning"),
+    [issues],
+  )
+
   if (issues.length === 0) {
     return null
   }
-
-  const errorsList = issues.filter((issue) => issue.severity === "error")
-  const warningsList = issues.filter((issue) => issue.severity === "warning")
 
   return (
     <div className={cn(monitorPanelClass, "overflow-hidden")}>
@@ -89,21 +114,35 @@ export function MonitorIssuesBanner({ issues }: { issues: MonitorIssue[] }) {
         <div className="max-h-[min(50vh,420px)] overflow-y-auto overscroll-contain border-t border-border">
           <div className="space-y-4 px-4 py-3">
             {errorsList.length > 0 ? (
-              <div className="space-y-2">
+              <div className="space-y-3">
                 <p className={cn(typeScale.label, "text-destructive")}>
                   Issues ({errorsList.length})
                 </p>
-                <IssueList items={errorsList} tone="error" />
+                {groupedIssues(errorsList).map(([scope, scopeIssues]) => (
+                  <div className="space-y-2" key={`error-${scope}`}>
+                    <p className="text-[10px] font-semibold tracking-wide text-destructive/80 uppercase">
+                      {SCOPE_LABELS[scope]}
+                    </p>
+                    <IssueList items={scopeIssues} tone="error" />
+                  </div>
+                ))}
               </div>
             ) : null}
             {warningsList.length > 0 ? (
-              <div className="space-y-2">
+              <div className="space-y-3">
                 <p
                   className={cn(typeScale.label, "text-amber-800 dark:text-amber-300")}
                 >
                   Warnings ({warningsList.length})
                 </p>
-                <IssueList items={warningsList} tone="warning" />
+                {groupedIssues(warningsList).map(([scope, scopeIssues]) => (
+                  <div className="space-y-2" key={`warn-${scope}`}>
+                    <p className="text-[10px] font-semibold tracking-wide text-amber-800/80 uppercase dark:text-amber-300/80">
+                      {SCOPE_LABELS[scope]}
+                    </p>
+                    <IssueList items={scopeIssues} tone="warning" />
+                  </div>
+                ))}
               </div>
             ) : null}
           </div>

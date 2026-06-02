@@ -1,5 +1,10 @@
 import type { MonitorIssue } from "@/domain/meridian/monitor-issues"
-import { validateStoryBody } from "@/domain/meridian/story-body"
+import {
+  validateEpicStructure,
+  validateUserStoryStructure,
+  validateVersionStructure,
+} from "@/domain/meridian/section-contracts"
+import { validateStoryBody, validateStoryReadiness } from "@/domain/meridian/story-body"
 import type {
   Epic,
   PhaseDocument,
@@ -55,6 +60,24 @@ export function collectStoryProtocolIssues(
 
   for (const story of stories) {
     const body = storyBodies.get(story.id) ?? ""
+    const strict = story.ready !== undefined
+
+    for (const message of validateUserStoryStructure(
+      story.id,
+      body,
+      strict,
+      story.status,
+    )) {
+      const isRecommendedOnly = message.includes("(recommended")
+      issues.push({
+        file: `us/${story.id}.md`,
+        message,
+        severity: isRecommendedOnly ? "warning" : "error",
+        scope: "us",
+        targetId: story.id,
+      })
+    }
+
     const messages = validateStoryBody(story, body)
 
     for (const message of messages) {
@@ -64,6 +87,60 @@ export function collectStoryProtocolIssues(
         severity: severityForStoryMessage(story, message),
         scope: "us",
         targetId: story.id,
+      })
+    }
+
+    for (const message of validateStoryReadiness(story, body)) {
+      issues.push({
+        file: `us/${story.id}.md`,
+        message,
+        severity: story.status === "🔶" ? "warning" : "warning",
+        scope: "us",
+        targetId: story.id,
+      })
+    }
+  }
+
+  return issues
+}
+
+export function collectEpicStructureIssues(
+  epics: Epic[],
+  epicBodies: Map<string, string>,
+): MonitorIssue[] {
+  const issues: MonitorIssue[] = []
+
+  for (const epic of epics) {
+    const body = epicBodies.get(epic.id) ?? ""
+    for (const message of validateEpicStructure(epic.id, body)) {
+      issues.push({
+        file: `epics/${epic.id}.md`,
+        message,
+        severity: "error",
+        scope: "doc",
+        targetId: epic.id,
+      })
+    }
+  }
+
+  return issues
+}
+
+export function collectVersionStructureIssues(
+  versions: ProductVersion[],
+  versionBodies: Map<string, string>,
+): MonitorIssue[] {
+  const issues: MonitorIssue[] = []
+
+  for (const version of versions) {
+    const body = versionBodies.get(version.id) ?? ""
+    for (const message of validateVersionStructure(version.id, body)) {
+      issues.push({
+        file: `versions/${version.id}.md`,
+        message,
+        severity: "error",
+        scope: "doc",
+        targetId: version.id,
       })
     }
   }
@@ -188,10 +265,14 @@ export function collectProtocolIssues(input: {
   versions: ProductVersion[]
   sprints: Sprint[]
   storyBodies: Map<string, string>
+  epicBodies: Map<string, string>
+  versionBodies: Map<string, string>
 }): MonitorIssue[] {
   return [
     ...collectDocumentProtocolIssues(input.phaseDocuments),
     ...collectDeliveryGateIssues(input.phaseDocuments, input.userStories),
+    ...collectEpicStructureIssues(input.epics, input.epicBodies),
+    ...collectVersionStructureIssues(input.versions, input.versionBodies),
     ...collectStoryProtocolIssues(input.userStories, input.storyBodies),
     ...collectEpicProtocolIssues(input.userStories, input.epics),
     ...collectVersionProtocolIssues(

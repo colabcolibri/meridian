@@ -17,7 +17,7 @@ Concepts (folders, phases, status) live in **[start-here.md](./start-here.md)**.
 | No `docs/` folder yet | [First time](#first-time) | `/init-meridian` |
 | Phase docs incomplete or draft | [Document](#document) | `/status` |
 | Architecture ok, missing epic/version/US | [Build backlog](#build-backlog) | `/create-us` |
-| US selected, time to code | [Implement US](#implement-us) | — |
+| US selected, time to code | [Refine US](#refine-us) then [Implement US](#implement-us) | `/refine-us` |
 | Code ready, not recorded in files | [Close US](#close-us) | `/complete-us` |
 
 Shortcut for the full session loop: `/daily-with-ai` (agent workflow: [daily-with-ai.md](../workflows/daily-with-ai.md)).
@@ -137,9 +137,31 @@ Two axes, three conversations — do not mix document, backlog, and implement in
 
 **When:** epic and version exist in `docs/epics/` and `docs/versions/`.
 
-- **`/create-us`** — verifiable Acceptance, `epic` and `version` in frontmatter
+- **`/create-us`** — verifiable Acceptance, `epic` and `version` in frontmatter; `ready: false`; agent reads `us-template.md` first
+- **`/refine-us US-XXXX`** — Context, tests and hints; sets `ready: true` when checklist passes
 - Check coverage (monitor **Deliverables** / **Board** if you use it)
 - After US changes: **`/sync-board`**
+
+---
+
+## Refine US
+
+*Between create and implement — no product code.*
+
+### When
+
+**After** `/create-us`, **before** asking the agent to implement.
+
+### Run `/refine-us`
+
+- **`/refine-us US-XXXX`** — fills `## Context & constraints`, concrete Tests/Planned, implementation hints
+- Agent reads `refine-checklist.md` + `us-template.md`
+- Sets `ready: true` only when every checklist item passes
+- Validate: `python3 .agent/scripts/validate_meridian.py <project-folder>` (semantic warnings)
+
+### Human templates
+
+Project copy (readable in monitor): `docs/templates/README.md`
 
 ---
 
@@ -160,8 +182,9 @@ Two axes, three conversations — do not mix document, backlog, and implement in
 **When:** US selected; focused thread.
 
 - Cite `US-0017` or `docs/us/US-0017.md`
+- Agent reads **full** `.agent/references/templates/us-template.md` + target US before code
+- **Block** if `ready` is not `true` or Context is placeholder-only → run `/refine-us` first
 - Implement per **Acceptance**; do not mark ✅ only in chat
-- Agent reads US, architecture, dependencies first
 
 *Example: “Implement docs/us/US-0017.md per Acceptance. Update files, not only this chat.”*
 
@@ -228,6 +251,7 @@ Two axes, three conversations — do not mix document, backlog, and implement in
 | `/create-version` | New release in `docs/versions/` |
 | `/plan-sprint` | Time slice in `docs/sprints/` |
 | `/create-us` | New US (gates OK) |
+| `/refine-us` | Refine US — Context, tests, `ready: true` |
 | `/complete-us` | Close US — implementation, Acceptance, status, board |
 | `/sync-board` | Regenerate `docs/kanban/board.json` |
 | `/daily-with-ai` | Full session loop (when you know the basics) |

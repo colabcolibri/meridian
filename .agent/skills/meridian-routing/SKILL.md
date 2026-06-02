@@ -28,17 +28,19 @@ Before responding, classify the request and select the correct Meridian agent. S
 | Version / sprint | "version", "sprint", "roadmap", `/create-version`, `docs/versions/`, `docs/sprints/` | `sprint-planner` + skill `create-version` / `create-sprint` | yes |
 | Decisions / log | "decision", "decisions", "decision log", `docs/decisions/` | skill `update-decisions-log` | yes |
 | User story / board | "user story", "US-", "kanban", "board.json", "acceptance" | `board-keeper` | yes |
+| Refine US | "refine US", "ready for implement", `/refine-us`, "fill context" | `board-keeper` + `refine-user-story` | yes |
 | Close US | "complete US", "mark done", "technical implementation", `/complete-us`, "close story" | `board-keeper` + `complete-user-story` | yes |
 | US + planning | "plan sprint" + "create US" | `sprint-planner` + `board-keeper` | yes |
-| Implement code | "implement", "build", "create API", "component" | `process-manager` first; when done → `complete-user-story` | **block** if docs immature |
+| Implement code | "implement", "build", "create API", "component" | `process-manager` first; US must have `ready: true`; when done → `complete-user-story` | **block** if docs immature or US not refined |
 
 ## Decision flow
 
 ```txt
 1. Conceptual question? → Answer without changing files
-2. Slash command? → Open .agent/workflows/{cmd}.md
-3. Code? → process-manager validates maturity → then domain technical agent (outside kit) only if docs OK
-4. Otherwise → one row from matrix above
+2. Slash command? → Open .agent/workflows/{cmd}.md → read template from .agent/references/templates/ before Write
+3. Code? → process-manager validates maturity + US Context & constraints → read Architecture refs → then implement
+4. Create/close epic, version, sprint, US? → INDEX.md + full template + `section-contracts.md` mandatory before Write
+5. Otherwise → one row from matrix above
 ```
 
 ## Response format (required)

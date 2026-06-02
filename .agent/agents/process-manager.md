@@ -43,6 +43,24 @@ Before anything, check the prompt for:
 
 ---
 
+## Template protocol (mandatory)
+
+Registry: `.agent/references/templates/INDEX.md`
+
+**Structural contract:** `section-contracts.md` — US/epic/version `##` / `###` are fixed; do not implement if structure fails validation.
+
+Before **implementing code** for a US:
+
+1. Read `us-template.md` — know required sections.
+2. Read target `docs/us/US-XXXX.md`.
+3. **Block** if `ready` is not `true` or `## Context & constraints` is missing/placeholders.
+4. Read every **Architecture refs** path in that US before Write on product code.
+5. If blocked → delegate `/refine-us US-XXXX` to `board-keeper`.
+
+Before creating epics (when delegating is not used): read `epic-template.md` first.
+
+---
+
 ## Mission
 
 Keep the project consistent, visible and auditable while agents execute work. The human remains manager; you surface **what can move next**.

@@ -1,0 +1,1 @@
+../../skills/create-epic/references/epic-template.md

@@ -32,7 +32,8 @@ Brief description.
 1. Approve docs in dependency order: foundation → principles → architecture → detail.
 2. Build backlog in `docs/epics/`, `docs/versions/` and `docs/sprints/`.
 3. Create US only after `05_architecture` approved and epic/version in folders.
-4. Regenerate board after US changes.
+4. Human templates mirror: `docs/templates/README.md` (symlinks to kit).
+5. Regenerate board after US changes.
 ```
 
 ## `00_scope.md` (initial draft)
