@@ -1,0 +1,69 @@
+Licença de Uso Meridian (Meridian Use License) — versão 1.0
+
+Copyright (c) 2026 colabcolibri. Todos os direitos reservados.
+
+Este documento regula o uso do repositório Meridian, incluindo o protocolo,
+meridian.md, .agent/, app-desktop/ e demais arquivos associados (o "Software").
+
+---
+
+## 1. Concessão de uso
+
+É concedida, gratuitamente, a qualquer pessoa que obtenha uma cópia deste
+Software, permissão para:
+
+- usar o Software, no todo ou em parte;
+- estudar, adaptar e modificar o Software para uso próprio ou de sua equipe;
+- incorporar o kit (meridian.md, .agent/) em projetos seus;
+- redistribuir cópias **gratuitamente**, desde que respeitadas as condições
+  desta licença.
+
+## 2. Uso permitido
+
+Você pode:
+
+- usar o Meridian em projetos pessoais, educacionais ou profissionais;
+- compartilhar o repositório ou trechos do kit sem cobrar por isso;
+- publicar forks ou derivados **sem fins comerciais de venda do Software**;
+- construir produtos seus usando o protocolo — o código e a documentação
+  **do seu projeto** permanecem seus; esta licença rege o **kit Meridian**,
+  não o software que você desenvolve com ele.
+
+## 3. Uso proibido (sem autorização escrita)
+
+Você **não** pode, sem permissão expressa por escrito do titular dos direitos:
+
+- **vender** o Software, o kit, forks ou qualquer derivado;
+- **cobrar** por acesso, download, distribuição ou sublicenciamento do Software;
+- oferecer o Software (ou substancialmente baseado nele) como **produto pago**,
+  **SaaS pago**, curso pago, template pago ou serviço comercial cujo valor
+  principal seja o próprio kit/protocolo Meridian;
+- remover ou alterar avisos de copyright e desta licença em redistribuições.
+
+Consultas comerciais: abra uma issue no repositório ou contate o mantenedor.
+
+## 4. Redistribuição
+
+Ao redistribuir o Software ou um derivado, você deve:
+
+- incluir esta licença na íntegra;
+- manter os avisos de copyright;
+- deixar claro que o Software é **experimental** e fornecido "como está";
+- **não** cobrar pelo Software em si (doações voluntárias não configuram venda
+  do Software, desde que o acesso permaneça gratuito).
+
+## 5. Isenção de garantia
+
+O SOFTWARE É FORNECIDO "COMO ESTÁ", SEM GARANTIAS DE QUALQUER TIPO, EXPRESSAS
+OU IMPLÍCITAS, INCLUINDO, SEM LIMITAÇÃO, GARANTIAS DE COMERCIALIZAÇÃO,
+ADEQUAÇÃO A UM PROPÓSITO ESPECÍFICO E NÃO VIOLAÇÃO.
+
+## 6. Limitação de responsabilidade
+
+EM NENHUMA HIPÓTESE O TITULAR DOS DIREITOS AUTORAIS SERÁ RESPONSÁVEL POR
+DANOS, PERDAS OU OUTRAS REIVINDICAÇÕES DECORRENTES DO USO OU DA IMPOSSIBILIDADE
+DE USO DO SOFTWARE.
+
+---
+
+Meridian Use License v1.0 — use livremente; não venda sem autorização.
