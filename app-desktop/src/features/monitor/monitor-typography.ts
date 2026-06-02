@@ -13,10 +13,12 @@ export const typeScale = {
   cardTitle: "font-heading text-lg font-semibold leading-snug text-foreground",
   /** Código do doc (00_scope) */
   docId: "font-mono text-xs font-medium uppercase tracking-wider text-muted-foreground",
-  /** Corpo principal */
-  body: "text-base leading-relaxed text-muted-foreground",
+  /** Corpo principal — largura total do container */
+  body: "w-full max-w-none text-base leading-relaxed text-muted-foreground",
   /** Corpo secundário */
-  bodySm: "text-sm leading-relaxed text-muted-foreground",
+  bodySm: "w-full max-w-none text-sm leading-relaxed text-muted-foreground",
+  /** Prose em painéis (markdown, conceitos) */
+  prose: "w-full max-w-none text-base leading-relaxed text-foreground",
   /** Rótulos e ênfase curta */
   label: "text-sm font-medium text-foreground",
   /** Metadados, contadores, hints */

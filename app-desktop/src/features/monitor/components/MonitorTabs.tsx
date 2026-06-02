@@ -2,9 +2,14 @@ import { cn } from "@/lib/utils"
 import { MONITOR_CONTAINER } from "@/features/monitor/monitor-layout"
 import { typeScale } from "@/features/monitor/monitor-typography"
 
-export type MonitorView = "setup" | "epics" | "kanban"
+export type MonitorView = "setup" | "epics" | "kanban" | "concepts"
 
 const tabs: { id: MonitorView; label: string; hint: string }[] = [
+  {
+    id: "concepts",
+    label: "Comece aqui",
+    hint: "Entenda o Meridian e como usar este app",
+  },
   {
     id: "setup",
     label: "Configuração",
@@ -25,11 +30,11 @@ const tabs: { id: MonitorView; label: string; hint: string }[] = [
 export function MonitorTabs({
   active,
   onChange,
-  disabled,
+  isTabDisabled,
 }: {
   active: MonitorView
   onChange: (view: MonitorView) => void
-  disabled?: boolean
+  isTabDisabled?: (view: MonitorView) => boolean
 }) {
   const activeTab = tabs.find((tab) => tab.id === active)
 
@@ -39,25 +44,29 @@ export function MonitorTabs({
         aria-label="Visões do monitor"
         className={cn(MONITOR_CONTAINER, "flex gap-2 overflow-x-auto py-3")}
       >
-        {tabs.map((tab) => (
-          <button
-            aria-current={active === tab.id ? "page" : undefined}
-            className={cn(
-              typeScale.tab,
-              "shrink-0 rounded-lg px-4 py-2.5 transition-colors",
-              disabled && "pointer-events-none opacity-50",
-              active === tab.id
-                ? "bg-primary text-primary-foreground shadow-sm"
-                : "text-muted-foreground hover:bg-muted hover:text-foreground",
-            )}
-            disabled={disabled}
-            key={tab.id}
-            onClick={() => onChange(tab.id)}
-            type="button"
-          >
-            {tab.label}
-          </button>
-        ))}
+        {tabs.map((tab) => {
+          const disabled = isTabDisabled?.(tab.id) ?? false
+
+          return (
+            <button
+              aria-current={active === tab.id ? "page" : undefined}
+              className={cn(
+                typeScale.tab,
+                "shrink-0 rounded-lg px-4 py-2.5 transition-colors",
+                disabled && "pointer-events-none opacity-50",
+                active === tab.id
+                  ? "bg-primary text-primary-foreground shadow-sm"
+                  : "text-muted-foreground hover:bg-muted hover:text-foreground",
+              )}
+              disabled={disabled}
+              key={tab.id}
+              onClick={() => onChange(tab.id)}
+              type="button"
+            >
+              {tab.label}
+            </button>
+          )
+        })}
       </nav>
       {activeTab ? (
         <p

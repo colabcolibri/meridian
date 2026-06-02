@@ -11,6 +11,7 @@ import {
   useProjectFolder,
 } from "@/features/folder/ProjectFolderContext"
 import { AdvancedToolsPanel } from "@/features/monitor/components/AdvancedToolsPanel"
+import { ConceptsView } from "@/features/monitor/components/ConceptsView"
 import { EpicsView } from "@/features/monitor/components/EpicsView"
 import { KanbanView } from "@/features/monitor/components/KanbanView"
 import { MonitorIssuesBanner } from "@/features/monitor/components/MonitorIssuesBanner"
@@ -24,7 +25,7 @@ import { WelcomeScreen } from "@/features/monitor/components/WelcomeScreen"
 import { MONITOR_CONTAINER, MONITOR_PAGE } from "@/features/monitor/monitor-layout"
 
 function MonitorViews() {
-  const [view, setView] = useState<MonitorView>("setup")
+  const [view, setView] = useState<MonitorView>("concepts")
   const { folder } = useProjectFolder()
   const { loading, data, issues } = useProjectData()
 
@@ -35,11 +36,21 @@ function MonitorViews() {
   return (
     <div className={MONITOR_PAGE}>
       <MonitorTopBar />
-      <MonitorTabs active={view} disabled={!folder} onChange={setView} />
+      <MonitorTabs
+        active={view}
+        isTabDisabled={(tab) => !folder && tab !== "concepts"}
+        onChange={setView}
+      />
 
-      {!folder ? <WelcomeScreen /> : null}
+      {!folder && view !== "concepts" ? <WelcomeScreen /> : null}
 
-      {folder ? (
+      {view === "concepts" ? (
+        <div className={`${MONITOR_CONTAINER} py-6`}>
+          <ConceptsView />
+        </div>
+      ) : null}
+
+      {folder && view !== "concepts" ? (
         <div className={`${MONITOR_CONTAINER} space-y-5 py-6`}>
           <MonitorIssuesBanner issues={issues} />
           <AdvancedToolsPanel folderName={folder.name} />
@@ -65,7 +76,11 @@ function MonitorViews() {
         </div>
       ) : null}
 
-      {folder && !loading && view !== "setup" && phaseDocuments.length === 0 ? (
+      {folder &&
+      view !== "concepts" &&
+      !loading &&
+      view !== "setup" &&
+      phaseDocuments.length === 0 ? (
         <p className={`${MONITOR_CONTAINER} py-8 text-sm text-zinc-600`}>
           Não foi possível ler os documentos. Volte à aba Configuração ou troque a
           pasta.

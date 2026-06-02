@@ -75,12 +75,10 @@ function PhaseDocReaderBody({ document }: { document: PhaseDocument }) {
 
   return (
     <>
-      <SheetHeader className="min-w-0 shrink-0">
-        <div className="flex min-w-0 flex-wrap items-center gap-2">
+      <SheetHeader className="shrink-0">
+        <div className="flex flex-wrap items-center gap-2">
           <FileText className="size-5 shrink-0 text-primary" aria-hidden />
-          <SheetTitle className={cn(typeScale.panelTitle, "min-w-0 break-words")}>
-            {document.title}
-          </SheetTitle>
+          <SheetTitle className={typeScale.panelTitle}>{document.title}</SheetTitle>
           <span
             className={cn(
               "inline-flex rounded-md px-2.5 py-1",
@@ -91,13 +89,13 @@ function PhaseDocReaderBody({ document }: { document: PhaseDocument }) {
             {docStatus.label}
           </span>
         </div>
-        <SheetDescription className={cn(typeScale.caption, "break-all font-mono")}>
+        <SheetDescription className={cn(typeScale.caption, "font-mono")}>
           {content?.filename ?? `${document.id}.md`}
           {folder ? ` · ${folder.name}` : null}
         </SheetDescription>
       </SheetHeader>
 
-      <ScrollArea className="min-h-0 min-w-0 flex-1">
+      <ScrollArea className="min-h-0 w-full flex-1">
         {loading ? (
           <div className="flex items-center justify-center gap-2 py-20 text-muted-foreground">
             <Loader2 className="size-5 animate-spin" />
@@ -110,18 +108,18 @@ function PhaseDocReaderBody({ document }: { document: PhaseDocument }) {
         ) : null}
 
         {content && !loading && !error ? (
-          <div className="min-w-0 max-w-full pb-8">
+          <div className="w-full pb-8">
             {content.frontmatter ? (
-              <section className="min-w-0 border-b bg-muted/40 px-6 py-4">
+              <section className="w-full border-b bg-muted/40 px-6 py-4">
                 <h3 className={cn(typeScale.label, "mb-2 uppercase tracking-wide")}>
                   Metadados
                 </h3>
-                <pre className="max-w-full overflow-x-auto rounded-lg border bg-background p-3 font-mono text-sm leading-relaxed text-foreground">
+                <pre className="w-full overflow-x-auto rounded-lg border bg-background p-3 font-mono text-sm leading-relaxed whitespace-pre-wrap text-foreground">
                   {content.frontmatter}
                 </pre>
               </section>
             ) : null}
-            <article className="min-w-0 max-w-full px-6 py-5">
+            <article className="w-full px-6 py-5">
               <h3 className={cn(typeScale.label, "mb-3 uppercase tracking-wide")}>
                 Conteúdo
               </h3>

@@ -94,6 +94,25 @@
     font-family: var(--font-sans);
   }
 
+  /* Texto corrido: preenche a largura disponível; quebra só entre palavras */
+  :where(p, li, blockquote, dd) {
+    width: 100%;
+    max-width: none;
+    text-wrap: wrap;
+    word-break: normal;
+    overflow-wrap: break-word;
+  }
+
+  :where(pre) {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  :where(code:not(pre code)) {
+    overflow-wrap: break-word;
+    word-break: normal;
+  }
+
   .theme {
     --font-sans: "Geist Variable", sans-serif;
     --font-heading: "Geist Variable", sans-serif;
