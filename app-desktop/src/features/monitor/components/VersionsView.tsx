@@ -64,8 +64,8 @@ function VersionCard({
             ))}
           </div>
         ) : null}
-        <div className="rounded-md border bg-zinc-50 px-3 py-2 text-xs text-zinc-600">
-          <span className="font-medium text-zinc-800">
+        <div className="rounded-md border border-border bg-muted/40 px-3 py-2 text-xs text-muted-foreground">
+          <span className="font-medium text-foreground">
             {done}/{total}
           </span>{" "}
           user stories nesta versão

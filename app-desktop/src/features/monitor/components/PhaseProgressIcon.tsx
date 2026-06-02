@@ -21,7 +21,7 @@ export function PhaseProgressIcon({
     ? "stroke-meridian-success"
     : ratio > 0
       ? "stroke-meridian"
-      : "stroke-zinc-300"
+      : "stroke-border"
 
   return (
     <div

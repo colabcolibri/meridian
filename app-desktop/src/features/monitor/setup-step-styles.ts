@@ -9,9 +9,9 @@ export const setupStepStyles: Record<
   }
 > = {
   locked: {
-    tile: "bg-zinc-100 text-zinc-500",
-    statusText: "text-zinc-600",
-    legendDot: "bg-zinc-400",
+    tile: "bg-muted text-muted-foreground",
+    statusText: "text-muted-foreground",
+    legendDot: "bg-muted-foreground/50",
   },
   active: {
     tile: "bg-meridian-muted text-meridian",
@@ -32,7 +32,7 @@ export const setupStepStyles: Record<
 
 export const docStatusStyles: Record<DocStatus, { label: string; className: string }> =
   {
-    draft: { label: "Rascunho", className: "bg-zinc-100 text-zinc-700" },
+    draft: { label: "Rascunho", className: "bg-muted text-muted-foreground" },
     review: { label: "Em revisão", className: "bg-amber-50 text-amber-900" },
     approved: {
       label: "Aprovado",

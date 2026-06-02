@@ -35,6 +35,7 @@ import {
   type GuideSubsection,
   type JourneyPhase,
 } from "@/features/monitor/content/meridian-concepts"
+import { monitorPanelClass } from "@/features/monitor/monitor-ui"
 import { typeScale } from "@/features/monitor/monitor-typography"
 import { cn } from "@/lib/utils"
 
@@ -81,7 +82,7 @@ function ConceptCard({
 
 function GuideBlock({ section }: { section: GuideSubsection }) {
   return (
-    <article className="rounded-xl border border-border bg-card p-5 sm:p-6">
+    <article className={cn(monitorPanelClass, "p-5 sm:p-6")}>
       <h4 className={typeScale.cardTitle}>{section.title}</h4>
       <div className="mt-3 space-y-3">
         {section.paragraphs.map((p) => (
@@ -103,7 +104,7 @@ function GuideBlock({ section }: { section: GuideSubsection }) {
 
 function JourneyCard({ phase }: { phase: JourneyPhase }) {
   return (
-    <article className="relative rounded-xl border border-border bg-card p-5 sm:p-6">
+    <article className={cn(monitorPanelClass, "relative p-5 sm:p-6")}>
       <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
         <h4 className={typeScale.cardTitle}>{phase.label}</h4>
         <span className={typeScale.caption}>— {phase.subtitle}</span>

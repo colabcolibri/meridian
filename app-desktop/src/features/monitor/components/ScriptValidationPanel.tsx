@@ -16,6 +16,9 @@ import {
   validateScriptCommand,
   type ScriptValidationResult,
 } from "@/features/folder/run-validate-script"
+import { inlineCodeClass, monitorPanelClass } from "@/features/monitor/monitor-ui"
+import { typeScale } from "@/features/monitor/monitor-typography"
+import { cn } from "@/lib/utils"
 
 const isDev = import.meta.env.DEV
 
@@ -38,29 +41,31 @@ export function ScriptValidationPanel({ folderName }: { folderName?: string }) {
   return (
     <Card className="border-0 bg-transparent shadow-none">
       <CardHeader className="px-2 pt-0">
-        <CardTitle className="flex items-center gap-2 text-sm font-medium">
+        <CardTitle className={cn(typeScale.label, "flex items-center gap-2")}>
           <Terminal className="h-4 w-4" />
           Validação técnica (Python)
         </CardTitle>
-        <CardDescription className="text-xs">
-          Script <code className="rounded bg-zinc-100 px-1">validate_meridian.py</code>{" "}
-          em <strong>pnpm dev</strong> — valida{" "}
-          <code className="rounded bg-zinc-100 px-1">app-desktop/</code> no disco.
+        <CardDescription className={typeScale.caption}>
+          Script <code className={inlineCodeClass}>validate_meridian.py</code> em{" "}
+          <strong>pnpm dev</strong> — valida{" "}
+          <code className={inlineCodeClass}>app-desktop/</code> no disco.
           {isDev ? (
             <>
               {" "}
               Use esta URL no navegador:{" "}
-              <code className="rounded bg-zinc-100 px-1">{window.location.origin}</code>
+              <code className={inlineCodeClass}>{window.location.origin}</code>
             </>
           ) : null}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-3 px-2 pb-2">
         {folderName && folderName !== "app-desktop" ? (
-          <p className="text-xs text-amber-800">
+          <p className={cn(typeScale.caption, "text-amber-800 dark:text-amber-300")}>
             Pasta aberta: <strong>{folderName}</strong>. O script no dev valida sempre{" "}
-            <code className="rounded bg-amber-100 px-1">app-desktop/</code> no disco
-            (limitação do browser sem caminho absoluto).
+            <code className="rounded bg-amber-100 px-1.5 py-0.5 font-mono text-xs dark:bg-amber-950/50">
+              app-desktop/
+            </code>{" "}
+            no disco (limitação do browser sem caminho absoluto).
           </p>
         ) : null}
 
@@ -84,23 +89,25 @@ export function ScriptValidationPanel({ folderName }: { folderName?: string }) {
         </div>
 
         {!isDev ? (
-          <p className="text-xs text-zinc-600">
+          <p className={typeScale.caption}>
             Build de produção não executa Python. Use{" "}
-            <code className="rounded bg-zinc-100 px-1">{validateScriptCommand}</code> no
-            terminal na raiz do repositório.
+            <code className={inlineCodeClass}>{validateScriptCommand}</code> no terminal
+            na raiz do repositório.
           </p>
         ) : null}
 
         {result?.pythonMissing ? (
-          <p className="text-sm text-red-800">
+          <p className="text-sm text-destructive">
             {result.message} Veja pré-requisitos em{" "}
-            <code className="rounded bg-red-100 px-1">10_environments.md</code>{" "}
+            <code className="rounded bg-destructive/10 px-1.5 py-0.5 font-mono text-xs">
+              10_environments.md
+            </code>{" "}
             (adicione Python 3).
           </p>
         ) : null}
 
         {result && !result.pythonMissing ? (
-          <div className="space-y-2 rounded-md border bg-zinc-50 p-3 text-sm">
+          <div className={cn(monitorPanelClass, "space-y-2 p-3 text-sm shadow-none")}>
             <div className="flex flex-wrap gap-2">
               <Badge
                 className={
@@ -119,17 +126,17 @@ export function ScriptValidationPanel({ folderName }: { folderName?: string }) {
               ) : null}
             </div>
             {result.errors.map((item) => (
-              <p className="text-xs text-red-800" key={item}>
+              <p className="text-xs text-destructive" key={item}>
                 ERROR: {item}
               </p>
             ))}
             {result.warnings.map((item) => (
-              <p className="text-xs text-amber-800" key={item}>
+              <p className="text-xs text-amber-800 dark:text-amber-300" key={item}>
                 WARN: {item}
               </p>
             ))}
             {result.output ? (
-              <pre className="max-h-40 overflow-auto rounded border bg-white p-2 font-mono text-xs text-zinc-700">
+              <pre className="max-h-40 overflow-auto rounded-md border border-border bg-muted/40 p-2 font-mono text-xs text-foreground">
                 {result.output.trim()}
               </pre>
             ) : null}
@@ -137,7 +144,7 @@ export function ScriptValidationPanel({ folderName }: { folderName?: string }) {
         ) : null}
 
         {result?.message && !result.pythonMissing && !result.ok ? (
-          <p className="text-sm text-red-800" role="alert">
+          <p className="text-sm text-destructive" role="alert">
             {result.message}
           </p>
         ) : null}
