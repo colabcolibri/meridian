@@ -18,7 +18,7 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 
 - Criar ou revisar `02_security.md`
 - Pedido de threat model, segredos, OWASP, supply chain
-- Antes de `07_architecture.md` ir para `approved`
+- Antes de `05_architecture.md` ir para `approved`
 - Suspeita de violação por agente (comando destrutivo, vazamento)
 
 ## Procedimento

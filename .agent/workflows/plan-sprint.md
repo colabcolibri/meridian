@@ -10,11 +10,11 @@ $ARGUMENTS
 
 ## Regras críticas
 
-1. **SEM CÓDIGO** — apenas `06_versions.md`, sprints e US (se já aprovado criar US)
+1. **SEM CÓDIGO** — apenas `docs/versions/`, `docs/sprints/` e US (se gate OK)
 2. Use `sprint-planner` + `@[skills/create-sprint]` + `@[skills/create-user-story]` quando aplicável
-3. Exige `04_epics.md` approved e catálogo em `docs/versions/`
-4. Novas US só se `06_versions` approved
-5. Sprints em **`docs/sprints/`** — atualizar índice em `06_versions.md`
+3. Exige `05_architecture.md` approved
+4. Novas US só com epic/version referenciados existentes nas pastas
+5. Sprints em **`docs/sprints/`** — um arquivo por sprint
 6. Ao alterar US → `/sync-board`
 
 ---
@@ -28,7 +28,7 @@ CONTEXT:
 
 RULES:
 1. sprint-planner Phase 0 context check
-2. Update 06_versions.md and docs/sprints/ as needed
+2. Update docs/versions/ and docs/sprints/ as needed
 3. MoSCoW per US
 4. Explicit dependency order
 5. Log decisions if scope/version changes
@@ -41,7 +41,7 @@ RULES:
 
 | Item | Local |
 | ---- | ----- |
-| Versão planejada | `docs/versions/vX.md` + índice `06_versions.md` |
+| Versão planejada | `docs/versions/vX.md` |
 | Sprint doc | `docs/sprints/vX-SY.md` |
 | US novas | `docs/us/` (somente se pré-condições OK) |
 
@@ -64,5 +64,5 @@ Human approval needed:
 ## Depois
 
 ```txt
-Próximo: revisar 06_versions com manager → /create-us para stories → /sync-board
+Próximo: revisar release com manager → /create-us para stories → /sync-board
 ```

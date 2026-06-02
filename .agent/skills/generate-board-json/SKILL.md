@@ -23,8 +23,8 @@ Nunca editar o board como fonte primária.
 ## Procedimento
 
 1. Glob `docs/us/US-*.md`
-2. Extrair frontmatter: `id`, `title`, `epic`, `version`, `status`, `moscow`, `depends_on`, `done_when`
-3. Validar contra `references/board-schema.md` e `04_epics` / `06_versions`
+2. Extrair frontmatter: `id`, `title`, `epic`, `version`, `status`, `moscow`, `depends_on`, `done_when`, `tests`, `tests_status`
+3. Validar contra `references/board-schema.md` e pastas epics/versions
 4. Ordenar por ID crescente
 5. Escrever `docs/kanban/board.json`
 6. Reportar US inválidas sem incluí-las

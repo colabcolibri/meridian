@@ -27,7 +27,7 @@ CONTEXT:
 PROCEDURE:
 1. Read meridian.md or .agent/MERIDIAN.md
 2. Read docs/README.md
-3. For each phase doc 00-11: record status from frontmatter
+3. For each phase doc 00–08 and 11: record status from frontmatter
 4. Count US by status from docs/us/ or board.json
 5. List blockers (missing deps, invalid US, immature docs)
 6. Recommend next human decision

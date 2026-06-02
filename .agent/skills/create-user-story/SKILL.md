@@ -16,8 +16,8 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 
 | Doc | Status exigido |
 | --- | -------------- |
-| `04_epics.md` | `approved` |
-| `06_versions.md` | `approved` |
+| `05_architecture.md` | `approved` |
+| epic/version nas pastas | existem |
 | Epic citado | arquivo `docs/epics/EPIC-XX.md` existe |
 | Versão citada | arquivo `docs/versions/vX.md` existe |
 | Perfil em `03_user_types.md` | existe |
@@ -45,6 +45,8 @@ Pedido vago → perguntas de produto:
 4. Salvar `docs/us/US-XXXX.md`.
 5. Invocar `generate-board-json` ou regenerar `board.json`.
 6. Se mudança relevante → `update-decisions-log`.
+
+**Fechamento:** após implementação, usar skill `complete-user-story` (workflow `/complete-us`) — não marcar `✅` nesta skill.
 
 ## Validações antes de salvar
 

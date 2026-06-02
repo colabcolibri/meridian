@@ -11,10 +11,11 @@ $ARGUMENTS
 ## Regras críticas
 
 1. Use `board-keeper` + `@[skills/create-user-story]`
-2. **Gate:** `04_epics` + `06_versions` = `approved`; epic referenciado deve existir em `docs/epics/` (senão → `/create-epic` primeiro)
+2. **Gate:** `05_architecture` = `approved`; epic referenciado deve existir em `docs/epics/` (senão → `/create-epic` primeiro)
 3. Template: `references/us-template.md`
 4. Regenerar `board.json` ao final
 5. Não marcar `✅` na criação — nasce `❌`
+6. Fechamento pós-implementação → `/complete-us` + skill `complete-user-story`
 
 ---
 

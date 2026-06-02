@@ -1,6 +1,6 @@
 ---
 name: create-epic
-description: Creates a Meridian epic file in docs/epics after scope and user types exist. Use when defining a new product capability block before user stories.
+description: Creates a Meridian epic file in docs/epics after architecture is approved. Use when defining a new product capability block before user stories.
 allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 ---
 
@@ -12,12 +12,14 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 | ------- | ---------- |
 | `references/epic-template.md` | Ao redigir `docs/epics/EPIC-XX.md` |
 | `docs/03_user_types.md` | Validar perfis em `profiles` |
-| `docs/04_epics.md` | Atualizar tabela do índice após novo epic |
+| `docs/epics/` | Arquivos existentes (IDs, duplicação) |
+| `docs/versions/` | Validar `versions:` no frontmatter |
 
 ## Pré-condições
 
 | Doc | Status exigido |
 | --- | -------------- |
+| `05_architecture.md` | `approved` |
 | `00_scope.md` | `approved` ou explícito no escopo |
 | `03_user_types.md` | `approved` (perfis do epic devem existir aqui) |
 
@@ -39,14 +41,14 @@ User stories **referenciam** o epic (`epic: EPIC-XX` no frontmatter da US). A US
 1. Listar `docs/epics/EPIC-*.md` → próximo ID = maior número + 1 (IDs permanentes).
 2. Preencher `references/epic-template.md`.
 3. Validar cada item de `profiles` contra `03_user_types.md`.
-4. Salvar `docs/epics/EPIC-XX.md` (nome do arquivo = `id`).
-5. Atualizar tabela em `docs/04_epics.md` (índice de fase).
+4. Validar cada item de `versions` contra arquivos em `docs/versions/`.
+5. Salvar `docs/epics/EPIC-XX.md` (nome do arquivo = `id`).
 6. Se mudança relevante → `update-decisions-log`.
 
 ## Validações antes de salvar
 
 - `outcome` mensurável no nível produto
-- `versions` referenciam releases em `06_versions.md` (quando existir)
+- `versions` referenciam releases em `docs/versions/` (quando informado)
 - Não duplicar capacidade já coberta por outro epic
 - Nome do arquivo = `id` (`EPIC-07.md` → `id: EPIC-07`)
 
@@ -64,6 +66,6 @@ File: docs/epics/EPIC-XX.md
 Outcome:
 Versions:
 Profiles:
-04_epics index updated: yes | no
+epic file saved: yes | no
 Open questions:
 ```

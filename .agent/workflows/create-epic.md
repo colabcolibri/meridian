@@ -1,5 +1,5 @@
 ---
-description: Create a Meridian epic file in docs/epics and update the 04_epics index.
+description: Create a Meridian epic file in docs/epics.
 ---
 
 # /create-epic — criar epic
@@ -11,11 +11,11 @@ $ARGUMENTS
 ## Regras críticas
 
 1. Use `documentation-strategist` + `@[skills/create-epic]`
-2. **Gate:** `00_scope.md` + `03_user_types.md` sólidos (`03` preferencialmente `approved`)
+2. **Gate:** `05_architecture.md` `approved`; `03_user_types.md` `approved` para perfis do epic
 3. Template: `references/epic-template.md`
 4. Epic = **capacidade de produto**, não módulo em `src/`
-5. Atualizar tabela em `04_epics.md` após salvar o arquivo
-6. **Não** cria user story — US vem depois com `/create-us` (exige `04_epics` + `06_versions` approved)
+5. Salvar `docs/epics/EPIC-XX.md` (fonte de verdade)
+6. **Não** cria user story — US vem depois com `/create-us` (exige `05_architecture` approved)
 7. Rodar `validate_meridian.py` quando possível
 
 ---
@@ -34,7 +34,7 @@ RULES:
 4. Fill epic-template.md: outcome (produto), Capacidade, Fora deste epic
 5. Validate profiles against 03_user_types.md
 6. Save docs/epics/EPIC-XX.md (filename = id)
-7. Update 04_epics.md catalog table
+7. Save epic file in docs/epics/
 8. update-decisions-log if catalog or product boundaries change
 9. validate_meridian.py <project-root>
 ```
@@ -49,10 +49,10 @@ File: docs/epics/EPIC-XX.md
 Outcome:
 Versions:
 Profiles:
-04_epics index updated: yes | no
+epic file saved: yes | no
 Validation: passed | warnings | blocked
 Open questions:
-Next step: /create-us (after 04_epics + 06_versions approved)
+Next step: /create-us (after 05_architecture approved)
 ```
 
 ---

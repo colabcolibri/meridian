@@ -125,6 +125,7 @@ allowed-tools: Read, Glob, Grep
 | `create-version` | `create-version/` |
 | `create-sprint` | `create-sprint/` |
 | `create-user-story` | `create-user-story/` |
+| `complete-user-story` | `complete-user-story/` |
 | `generate-board-json` | `generate-board-json/` |
 | `update-decisions-log` | `update-decisions-log/` |
 | `security-review` | `security-review/` |
