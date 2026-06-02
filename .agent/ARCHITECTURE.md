@@ -37,7 +37,10 @@ The desktop app (`app-desktop/`) monitors Meridian folders; it is not the source
   workflows/
   scripts/
     validate_meridian.py
+    migrate_us_writing_format.py
+    migrate_legacy_us_context.py
     sync_cursor_kit.sh
+  references/templates/      # delivery templates (INDEX, writing-guide, section-contracts, …)
 
 .cursor/                   # Cursor adapter (local, gitignored — sync_cursor_kit.sh)
   rules/meridian.mdc       # alwaysApply
@@ -81,11 +84,11 @@ Each agent includes: phases 0/-1, mission, prohibitions, output format, delegati
 | Skill | References |
 | ----- | ---------- |
 | `init-project` | `doc-templates.md`, `gitignore-baseline.md` |
-| `create-epic` | `epic-template.md` |
-| `create-version` | `version-template.md` |
+| `create-epic` | `epic-template.md`, `writing-guide.md` |
+| `create-version` | `version-template.md`, `writing-guide.md` |
 | `create-sprint` | `sprint-template.md` |
-| `create-user-story` | `us-template.md` |
-| `refine-user-story` | `refine-checklist.md` |
+| `create-user-story` | `us-template.md`, `writing-guide.md` |
+| `refine-user-story` | `refine-checklist.md`, `writing-guide.md` |
 | `complete-user-story` | `implementation-template.md` |
 | `generate-board-json` | `board-schema.md` |
 | `update-decisions-log` | `decision-template.md`, `decision-schema.md` |
@@ -110,7 +113,7 @@ See `.agent/skills/doc.md` to create new skills.
 | `refine-us` | board-keeper | refine US before implement |
 | `complete-us` | board-keeper | close US after implementation |
 | `create-epic` | documentation-strategist | create epic in `docs/epics/` |
-| `architecture` | architecture-guardian | doc 07 |
+| `architecture` | architecture-guardian | doc 05 |
 | `security-pass` | security-steward | doc 02 |
 | `sync-board` | board-keeper | derive JSON |
 | `daily-with-ai` | process-manager | daily manager + AI routine |
@@ -122,7 +125,16 @@ All support `$ARGUMENTS` and a critical rules section.
 ## Scripts
 
 ```bash
-python .agent/scripts/validate_meridian.py <project-root>
+# Structure + semantic validation (US Context, epic prose, board sync hints)
+python3 .agent/scripts/validate_meridian.py <project-root>
+python3 .agent/scripts/validate_meridian.py <project-root> --json   # CI
+
+# One-time migrations (legacy US format → Why/Where/Approach)
+python3 .agent/scripts/migrate_legacy_us_context.py <project-root>
+python3 .agent/scripts/migrate_us_writing_format.py <project-root>    # --force to re-run
+
+# Cursor adapter (after clone or kit changes)
+./.agent/scripts/sync_cursor_kit.sh
 ```
 
 ---

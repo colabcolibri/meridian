@@ -47,4 +47,4 @@ ready: true    # só após /refine-us passar no checklist
 
 Implementação de código exige `ready: true` e Context com **Why this story**, **Where it fits**, **Approach** (bullets explicativos).
 
-Validar: `python3 ../../.agent/scripts/validate_meridian.py app-desktop`
+Validar: `python3 ../../.agent/scripts/validate_meridian.py app-desktop` (append `--json` para CI)

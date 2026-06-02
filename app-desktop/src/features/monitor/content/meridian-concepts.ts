@@ -90,7 +90,12 @@ export const usageSituations = [
     command: "/create-us",
   },
   {
-    situation: "US selected, time to code",
+    situation: "US created but not refined for code",
+    section: "Refine US",
+    command: "/refine-us",
+  },
+  {
+    situation: "US refined (ready: true), time to code",
     section: "Implement US",
     command: undefined,
   },
@@ -206,11 +211,36 @@ export const backlogWorkflowSteps: DailyWorkflowStep[] = [
     title: "Create executable user stories",
     when: "Epic and version already exist in docs/epics/ and docs/versions/.",
     actions: [
-      "/create-us — Acceptance with verifiable checkboxes, epic and version in frontmatter.",
+      "/create-us — Why / Where / Approach prose, Acceptance, epic and version in frontmatter; ready: false.",
+      "/refine-us US-XXXX — deepens Approach, architecture §, Tests/Planned; sets ready: true.",
       "Check the Deliverables tab (coverage) and Board tab (position and deps).",
       "After creating or changing US: /sync-board.",
     ],
-    commands: ["/create-us", "/sync-board"],
+    commands: ["/create-us", "/refine-us", "/sync-board"],
+  },
+]
+
+export const refineWorkflowSteps: DailyWorkflowStep[] = [
+  {
+    id: "refine-when",
+    title: "Refine before implement",
+    when: "After /create-us or when Context is still placeholder — no product code yet.",
+    actions: [
+      "Run /refine-us US-XXXX in a focused conversation.",
+      "Agent reads writing-guide.md + refine-checklist.md + target US.",
+      "Deepens Approach bullets, exact architecture § headings, and Tests/Planned.",
+    ],
+    commands: ["/refine-us US-XXXX"],
+  },
+  {
+    id: "refine-ready",
+    title: "Set ready: true only when checklist passes",
+    when: "Context has Why this story, Where it fits, and explanatory Approach.",
+    actions: [
+      "Frontmatter ready: true unlocks implementation.",
+      "Optional: python3 .agent/scripts/validate_meridian.py <project-folder> (append --json for CI).",
+      "Human templates mirror: docs/templates/README.md.",
+    ],
   },
 ]
 
@@ -232,6 +262,7 @@ export const implementWorkflowSteps: DailyWorkflowStep[] = [
     when: "US selected, new conversation or focused thread.",
     actions: [
       "Mention the ID and file: US-0017 or docs/us/US-0017.md.",
+      "Block if ready is not true — run /refine-us first.",
       "Be clear: implement according to Acceptance; do not mark ✅ only in chat.",
       "AI reads the US, architecture, and dependencies before coding.",
     ],
@@ -318,6 +349,12 @@ export const usageGuideSections: UsageGuideSection[] = [
     steps: backlogWorkflowSteps,
   },
   {
+    id: "refine",
+    title: "Refine US",
+    subtitle: "Deepen Context and set ready: true before any product code.",
+    steps: refineWorkflowSteps,
+  },
+  {
     id: "implement",
     title: "Implement US",
     subtitle: "Choose US, ask for code anchored in Acceptance, review diff.",
@@ -339,7 +376,12 @@ export const slashCommandReference: SlashCommandHint[] = [
   { command: "/create-epic", when: "New capability in docs/epics/" },
   { command: "/create-version", when: "New release in docs/versions/" },
   { command: "/plan-sprint", when: "Time slice in docs/sprints/" },
-  { command: "/create-us", when: "New task in docs/us/ (gates ok)" },
+  { command: "/create-us", when: "New task in docs/us/ (gates ok); ready: false" },
+  {
+    command: "/refine-us",
+    when: "Deepen Approach, architecture §, tests; set ready: true",
+    example: "/refine-us US-0017",
+  },
   {
     command: "/complete-us",
     when: "Close US, Technical implementation, Acceptance, status, board",
@@ -356,7 +398,7 @@ export const slashCommandReference: SlashCommandHint[] = [
 ]
 
 export const usageAntiPatterns = [
-  "Asking for code without a US or without 05_architecture approved.",
+  "Asking for code without a US, with ready: false, or without 05_architecture approved.",
   "Marking ✅ in chat without /complete-us in the files.",
   "Editing board.json by hand. Use /sync-board.",
   "Mixing documentation, backlog, and implementation in the same conversation.",
@@ -367,7 +409,7 @@ export const usageAntiPatterns = [
 export const validateProjectHint = {
   title: "Validate Meridian structure",
   command: "python3 .agent/scripts/validate_meridian.py <project-folder>",
-  note: "Run it at the target repository root. Fix errors before creating US or marking docs approved.",
+  note: "Run at the target repository root. Append --json for CI. Fix errors before creating US or marking docs approved.",
 }
 
 export const folderStructure = {
@@ -411,6 +453,12 @@ export const folderStructure = {
       label: "Decision log (JSON per day)",
       description:
         "One JSON file per calendar day. entries array with time, title, affected_document, what_changed, why_changed, impact, responsible, newest first.",
+    },
+    {
+      path: "docs/templates/",
+      label: "Delivery templates",
+      description:
+        "Human-readable mirror of kit templates (symlinks). Agents read .agent/references/templates/.",
     },
     {
       path: "docs/kanban/board.json",
@@ -482,7 +530,7 @@ export const journeyPhases: JourneyPhase[] = [
     label: "Execution",
     subtitle: "Implement and reflect in the files",
     purpose:
-      "Implement user stories, mark status in frontmatter, and let the kanban board derive progress.",
+      "User story lifecycle: /create-us (ready: false) → /refine-us (ready: true) → implement → /complete-us → /sync-board.",
     documents: [
       "docs/us/US-0001.md... — one task per file",
       "docs/kanban/board.json — consolidated view (generated)",
@@ -495,13 +543,13 @@ export const epicsVersionsStories: GuideSubsection[] = [
     title: "Epic — the large product block",
     paragraphs: [
       'An epic groups a whole product capability. Example: EPIC-02 "Initial setup monitor" covers opening a folder, reading phase documents and delivery folders, and showing progress.',
-      "Each epic is a file in docs/epics/EPIC-XX.md: frontmatter with id, title, status, versions, profiles, and outcome (done at product level); body with Capability, Expected result, and Out of this epic.",
+      "Each epic is a file in docs/epics/EPIC-XX.md: frontmatter with id, title, status, versions, profiles, and outcome; body with Capability and Expected outcome as explanatory prose (see writing-guide.md).",
       "There is no duplicated markdown index. The docs/epics/ folder is the source of truth. Create epics only after 05_architecture is approved.",
     ],
     bullets: [
       "Epic status: active, complete, or paused (different from draft/review/approved in phase docs).",
       "User stories reference the epic only by ID in frontmatter (`epic: EPIC-02`). They do not copy epic text.",
-      "In the Deliverables tab of this app, you see outcome, profiles, and how many US are already finished.",
+      "In the Deliverables tab, epics are grouped by capability with a version toggle; you see how many US are finished per epic.",
     ],
   },
   {
@@ -521,9 +569,10 @@ export const epicsVersionsStories: GuideSubsection[] = [
     title: "User story — the executable task",
     paragraphs: [
       'A user story (US) is the unit of work that someone (or an agent) implements. Format: "As [persona], I want [action], so that [benefit]".',
-      "Each US is a file in docs/us/ (ex.: US-0017.md). YAML frontmatter goes at the top; the body contains Acceptance and details, without repeating the epic definition.",
+      "Each US is a file in docs/us/ (ex.: US-0017.md). YAML frontmatter at the top; body has ## Context & constraints (Why this story, Where it fits, Approach), Acceptance, and Tests when required.",
     ],
     bullets: [
+      "ready: false after /create-us; ready: true after /refine-us — gate before product code.",
       "Acceptance list: verifiable checkboxes. Do not mark ✅ without evidence.",
       "depends_on: other US that must finish first.",
       "done_when: short sentence summarizing when the US is truly ready.",
@@ -610,6 +659,11 @@ export const userStoryAnatomy = {
     {
       field: "status",
       meaning: "✅ done · 🔶 partial (Missing:) · ❌ pending · 🧊 frozen",
+    },
+    {
+      field: "ready",
+      meaning:
+        "false after /create-us; true after /refine-us — required before implementing code",
     },
     {
       field: "tests",
@@ -711,7 +765,7 @@ export const monitorTabsGuide = [
   },
   {
     label: "Deliverables",
-    hint: "Lists files in docs/epics/ and how many user stories from each are already ✅.",
+    hint: "Epic-centric view: each epic shows US coverage; toggle version to filter the release you are planning.",
   },
   {
     label: "Board",
@@ -737,6 +791,12 @@ export const corePrinciples: ConceptBlock[] = [
     title: "Done = evidence",
     summary:
       "Compiling is not enough. ✅ requires Acceptance and tests in the files. Use /complete-us after reviewing. 🔶 requires explicit Missing:.",
+  },
+  {
+    id: "refine-before-code",
+    title: "Refine before code",
+    summary:
+      "/create-us writes Why / Where / Approach (ready: false). /refine-us deepens Approach and sets ready: true. No product code until then.",
   },
   {
     id: "derived-board",
@@ -781,7 +841,7 @@ export const phaseDocuments = PHASE_DOC_IDS.map((id) => ({
 export const nextStepsAfterConcepts = {
   title: "Next step",
   paragraphs: [
-    "Understood folders, phases, and status? Go to the Usage guide tab for steps and commands (/init-meridian, /create-us, /complete-us…).",
+    "Understood folders, phases, and status? Go to the Usage guide tab for steps and commands (/init-meridian, /create-us, /refine-us, /complete-us…).",
     "The same guides live in the kit repo: .agent/references/start-here.md and .agent/references/usage-guide.md (for IDE and GitHub without this app).",
     "Open your repository's docs/ folder in this app to see Setup, Deliverables, and Board with real data.",
   ],

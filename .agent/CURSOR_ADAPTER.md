@@ -8,6 +8,7 @@ Cursor does **not** index `.agent/` automatically. The `.cursor/` folder mirrors
 | `.cursor/skills/` | `.agent/skills/` |
 | `.cursor/agents/` | `.agent/agents/` |
 | `.cursor/commands/` | `.agent/workflows/` |
+| `.cursor/references/templates/` | `.agent/references/templates/` (writing-guide, section-contracts, lifecycle, …) |
 
 ## Regenerate (required after clone)
 

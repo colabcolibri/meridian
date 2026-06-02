@@ -19,13 +19,14 @@ Change in: scope, stack, security, users, epics, versions, architecture, databas
 
 ## Procedure
 
-1. Determine today's date (`YYYY-MM-DD`).
-2. Open or create `docs/decisions/YYYY-MM-DD.json`.
-3. Insert **at the beginning** of `entries` using `references/decision-template.md`.
-4. Ensure `date` in JSON matches filename.
-5. Old entries remain **below**, intact.
-6. If `approved` doc was changed → `status: review` on that doc + mention in impact.
-7. **Never** edit or reorder old entries.
+1. Determine today's date (`YYYY-MM-DD`) — `date +"%Y-%m-%d"` at project root.
+2. **Capture real clock time** — run `date +"%H:%M"` (24h, local). Use that value for `entries[].time`. Do **not** round to :00/:15/:30/:45 or invent a time.
+3. Open or create `docs/decisions/YYYY-MM-DD.json`.
+4. Insert **at the beginning** of `entries` using `references/decision-template.md`.
+5. Ensure `date` in JSON matches filename.
+6. Old entries remain **below**, intact.
+7. If `approved` doc was changed → `status: review` on that doc + mention in impact.
+8. **Never** edit or reorder old entries.
 
 ## Archiving
 

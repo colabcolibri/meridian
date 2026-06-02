@@ -25,7 +25,7 @@
 | ----- | ----------- | ------- |
 | `date` | yes | `YYYY-MM-DD`, same as filename |
 | `entries` | yes | array; empty only on day bootstrap |
-| `entries[].time` | yes | `HH:MM` (24h) |
+| `entries[].time` | yes | `HH:MM` (24h) — **real clock** at log time (`date +"%H:%M"`). Not rounded or synthetic. |
 | `entries[].title` | yes | non-empty string |
 | `entries[].affected_document` | yes | string |
 | `entries[].what_changed` | yes | string |

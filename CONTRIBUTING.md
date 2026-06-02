@@ -26,6 +26,7 @@ By contributing, you agree that your contributions will be licensed under the [P
 
 ```bash
 python3 .agent/scripts/validate_meridian.py app-desktop
+python3 .agent/scripts/validate_meridian.py app-desktop --json   # CI
 ```
 
 ### Desktop app

@@ -44,6 +44,7 @@ Two axes, three conversations — do not mix document, backlog, and implement in
 
 **Docs:** `us/US-XXXX`, `board.json`  
 **Monitor:** Board  
+**Gate:** `ready: true` (after `/refine-us`)  
 **Closure:** `/complete-us`, `/sync-board`  
 
 ---
@@ -154,10 +155,11 @@ Two axes, three conversations — do not mix document, backlog, and implement in
 
 ### Run `/refine-us`
 
-- **`/refine-us US-XXXX`** — fills `## Context & constraints`, concrete Tests/Planned, implementation hints
-- Agent reads `refine-checklist.md` + `us-template.md`
+- **`/refine-us US-XXXX`** — deepens **Approach**, architecture § refs, Tests/Planned; sets `ready: true` when checklist passes
+- Agent reads `writing-guide.md` + `refine-checklist.md` + target US
 - Sets `ready: true` only when every checklist item passes
-- Validate: `python3 .agent/scripts/validate_meridian.py <project-folder>` (semantic warnings)
+- Validate: `python3 .agent/scripts/validate_meridian.py <project-folder>` (structure + semantic warnings)
+- CI: append `--json` for machine-readable output
 
 ### Human templates
 
@@ -271,6 +273,7 @@ Workflow files: `.agent/workflows/` · Cursor: `.cursor/commands/` after `sync_c
 
 ```bash
 python3 .agent/scripts/validate_meridian.py <project-folder>
+python3 .agent/scripts/validate_meridian.py <project-folder> --json   # CI
 ```
 
 Run at the target repo root. Fix errors before creating US or marking docs `approved`.

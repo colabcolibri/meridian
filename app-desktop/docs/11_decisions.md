@@ -33,6 +33,7 @@ Decisions live in **`docs/decisions/YYYY-MM-DD.json`** — one JSON file per cal
 - `date` must match the file name
 - `entries`: most recent at the **start** of the array (prepend on the same day)
 - New day → new file `YYYY-MM-DD.json`
+- `time` on each entry = real clock when logged (`date +"%H:%M"`). Entries migrated from the old monolithic markdown log may show synthetic 15-minute spacing — that is ordering only, not real timestamps; do not edit old entries to “fix” them.
 
 ## Where to view
 

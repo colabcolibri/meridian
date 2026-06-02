@@ -12,9 +12,11 @@ If daily file does not exist, create:
 
 New entry (prepend — first item in array):
 
+**Before writing:** run `date +"%H:%M"` and paste the result into `time`. Must be the actual moment of logging (24h, local timezone). Never use placeholder intervals (:00, :15, :30, :45) unless that is the real clock reading.
+
 ```json
 {
-  "time": "HH:MM",
+  "time": "20:58",
   "title": "Objective decision title",
   "affected_document": "path/to/doc.md",
   "what_changed": "factual description of delta",

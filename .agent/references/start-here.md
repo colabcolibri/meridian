@@ -23,6 +23,7 @@ It is not Jira, it is not Notion, and it does not require a login. The source of
 | **You approve, agents execute** | AI can write and review, but scope changes, `approved` status, and ✅ only happen with your validation. |
 | **Done = evidence** | Compiling is not enough. ✅ requires Acceptance and tests in the files. Use `/complete-us` after reviewing. 🔶 requires explicit `Missing:`. |
 | **Derived board** | `board.json` comes from the US files. Edit `docs/us/*.md`, not the JSON, as the status source of truth. |
+| **Refine before code** | `/create-us` writes Why / Where / Approach (`ready: false`). `/refine-us` deepens Approach and sets `ready: true`. No product code until then. |
 
 ## What is inside `docs/`
 
@@ -37,6 +38,7 @@ Every Meridian project has a `docs/` folder at the repository root. Content spli
 | `docs/us/US-XXXX.md` | User stories | One file per task. Only after `05_architecture` is approved and epic/version exist. |
 | `docs/decisions/YYYY-MM-DD.json` | Decision log | One JSON file per day. `entries` array (newest first). |
 | `docs/kanban/board.json` | Kanban (generated) | Status summary from all US. **Never edit by hand** — built from `docs/us/`. |
+| `docs/templates/` | Delivery templates | Human-readable mirror of kit templates (symlinks). Agents read `.agent/references/templates/`. |
 
 ### Dependencies between phase docs
 
@@ -85,7 +87,15 @@ Usual creation order: epic → version → sprint → US. US gate: `05_architect
 
 ### Execution
 
-Implement user stories; status in frontmatter; kanban derives progress.
+User stories follow a fixed lifecycle before code ships:
+
+```txt
+/create-us   → Why / Where / Approach prose; ready: false
+/refine-us   → deepen Approach, exact architecture §; ready: true
+implement    → blocked if ready ≠ true
+/complete-us → Technical implementation + ✅
+/sync-board  → regenerate board.json
+```
 
 - `docs/us/US-0001.md` …
 - `docs/kanban/board.json` (generated)
@@ -96,7 +106,7 @@ Implement user stories; status in frontmatter; kanban derives progress.
 
 An epic groups a whole product capability. Example: **EPIC-02** “Initial setup monitor” covers opening a folder, reading phase documents, and showing progress.
 
-- File: `docs/epics/EPIC-XX.md` — frontmatter: `id`, `title`, `status`, `versions`, `profiles`, `outcome`; body: **Capability**, **Expected outcome**, **Out of scope for this epic**.
+- File: `docs/epics/EPIC-XX.md` — frontmatter: `id`, `title`, `status`, `versions`, `profiles`, `outcome`; body: **Capability** and **Expected outcome** as explanatory prose (not bullet lists — see `writing-guide.md`).
 - Epic status: `active` · `complete` · `paused` (not the same as phase doc `draft`/`review`/`approved`).
 - US reference epic by ID only (`epic: EPIC-02`) — never copy epic text into the US.
 
@@ -112,9 +122,10 @@ A version is a go-live package. File: `docs/versions/vX.md`. Sprints in `docs/sp
 
 Format: **As** [persona], **I want** [action], **so that** [benefit].
 
-- File: `docs/us/US-XXXX.md` — Acceptance, **Technical implementation**, **Tests** (Planned / Executed) when `tests: required`.
-- `depends_on`, `done_when`, `moscow` (Must / Should / Could / Won't).
+- File: `docs/us/US-XXXX.md` — `## Context & constraints` with **Why this story**, **Where it fits**, **Approach**; Acceptance; **Technical implementation**; **Tests** when `tests: required`.
+- `depends_on`, `done_when`, `moscow` (Must / Should / Could / Won't), `ready` (`false` after create, `true` after refine).
 - ✅ and **Technical implementation** via `/complete-us` after you review — not only in chat.
+- Do not implement until `ready: true` — run `/refine-us` first.
 
 ### How to read an epic (fields)
 
@@ -143,8 +154,10 @@ Format: **As** [persona], **I want** [action], **so that** [benefit].
 | Field | Meaning |
 | ----- | ------- |
 | `status` | ✅ done · 🔶 partial (`Missing:`) · ❌ pending · 🧊 frozen |
+| `ready` | `false` after `/create-us`; `true` after `/refine-us` — gate before code |
 | `tests` / `tests_status` | `required` + `pending`/`done`/`n/a` — board may show 🧪 |
 | `epic` / `version` | Reference by ID only |
+| **Why / Where / Approach** | Body: narrative for this slice — do not paste epic text |
 
 ## Status reference
 
@@ -178,11 +191,18 @@ If you run `app-desktop`, tabs map to these Markdown guides and live data:
 | **Usage guide** | [usage-guide.md](./usage-guide.md) (actions and commands) |
 | **Setup** | Phase docs 00–11 and approval progress |
 | **Decisions** | `docs/decisions/*.json` |
-| **Deliverables** | Epics, versions, coverage |
+| **Deliverables** | Epics grouped by capability; version toggle; US coverage per epic |
 | **Board** | US kanban, filters |
 
 ## Next step
 
-Understood folders, phases, and status? Open **[usage-guide.md](./usage-guide.md)** for `/init-meridian`, `/create-us`, `/complete-us`, and the daily paths.
+Validate structure (optional):
+
+```bash
+python3 .agent/scripts/validate_meridian.py <project-folder>
+python3 .agent/scripts/validate_meridian.py <project-folder> --json   # CI / machine output
+```
+
+Understood folders, phases, and status? Open **[usage-guide.md](./usage-guide.md)** for `/init-meridian`, `/create-us`, `/refine-us`, `/complete-us`, and the daily paths.
 
 Optionally run the [desktop monitor](../../app-desktop/), click **Open docs folder**, and select your project's `docs/` (e.g. `app-desktop/docs` in this repo) to see Setup, Deliverables, and Board with real data.

@@ -200,8 +200,8 @@ workflows, rules, and scripts for AI.
   /decisions
     YYYY-MM-DD.json
 
-  /decisions
-    YYYY-MM-DD.md
+  /templates
+    README.md              # human guide + symlinks to kit templates
 
   /versions
     vX.md
@@ -230,7 +230,8 @@ without losing governance.
 **Cursor IDE:** Cursor does not natively index `.agent/`. Use `.cursor/` as a **local** adapter:
 
 - Edit the kit in `.agent/` (versioned source).
-- Run `./.agent/scripts/sync_cursor_kit.sh` after clone or when adding a skill/agent/workflow.
+- Run `./.agent/scripts/sync_cursor_kit.sh` after clone or when adding a skill/agent/workflow/template.
+- Sync also creates `.cursor/references/templates/` (writing-guide, section-contracts, lifecycle, …).
 - **Do not commit `.cursor/`** — local symlinks (`.gitignore` at the kit root).
 - Always-on rule: `.agent/rules/meridian.mdc` → mirrored in `.cursor/rules/meridian.mdc`.
 - Slash commands: `.cursor/commands/` mirrors `.agent/workflows/`.
@@ -250,12 +251,22 @@ Official kit skills (see `.agent/skills/doc.md`):
 - `create-epic`
 - `create-version`
 - `create-sprint`
-- `security-review`
 - `create-user-story`
+- `refine-user-story`
 - `complete-user-story`
 - `generate-board-json`
 - `update-decisions-log`
+- `security-review`
 - `meridian-routing`
+
+**Delivery templates** (read before Write on epics, versions, US):
+
+- `.agent/references/templates/INDEX.md` — registry
+- `.agent/references/templates/writing-guide.md` — **prose quality** (Why / Where / Approach, epic paragraphs)
+- `.agent/references/templates/section-contracts.md` — fixed `##` / `###` structure
+- `.agent/references/templates/lifecycle.md` — create → refine → implement → close
+
+Human mirror in target projects: `docs/templates/` (symlinks to kit).
 
 Rules:
 
@@ -329,7 +340,7 @@ are not `approved`.
 
 ```txt
 11_decisions + docs/decisions/
-  rules stub; entries in YYYY-MM-DD.md — starts on day 1; never blocks anything
+  rules stub; entries in `docs/decisions/YYYY-MM-DD.json` — starts on day 1; never blocks anything
 
 00_scope
   unblocks all other documents
@@ -434,11 +445,13 @@ Each US references an epic and version that already exist in the folders.
 
 ### Execution
 
-- individual US files in `docs/us/`;
+- individual US files in `docs/us/` — create with `/create-us`, refine with `/refine-us`, implement only when `ready: true`;
 - sprints in `docs/sprints/`;
 - code;
 - go-live checklist;
-- continuous update of decisions.
+- continuous update of decisions in `docs/decisions/YYYY-MM-DD.json`.
+
+**US lifecycle:** `/create-us` (Why / Where / Approach prose, `ready: false`) → `/refine-us` (deepen Approach, exact architecture §, `ready: true`) → implement → `/complete-us` → `/sync-board`.
 
 ---
 
@@ -697,11 +710,11 @@ outcome: "Epic done at product level — objective sentence."
 
 ## Capability
 
-What the user is now able to do (product language).
+Two short paragraphs: (1) user problem today (2) product behavior after the epic. See `writing-guide.md`.
 
 ## Expected outcome
 
-How the manager knows the epic can move to `complete`.
+One paragraph — observable signal that the epic is done (not only “all US ✅”).
 
 ## Out of scope for this epic
 
@@ -910,7 +923,7 @@ Format of the daily file:
 Rules:
 
 - `date` must match the filename (`2026-06-02.json`).
-- `time` uses `HH:MM` format (24h).
+- `time` uses `HH:MM` format (24h) — **the real clock when the entry is written** (`date +"%H:%M"` at log time). Do not use rounded or invented times.
 - New calendar day → new JSON file.
 - Same day → prepend at `entries[0]`.
 
@@ -1097,7 +1110,10 @@ Structure:
     "status": "❌",
     "moscow": "Must",
     "depends_on": ["US-0002"],
-    "done_when": "Objective completion condition."
+    "ready": false,
+    "done_when": "Objective completion condition.",
+    "tests": "required",
+    "tests_status": "pending"
   }
 ]
 ```
@@ -1109,6 +1125,24 @@ Rules for agents:
 - Generate `board.json` afterwards.
 - If there is a divergence between a US and the board, the US wins.
 - CSV is a future export, not a source of truth.
+
+### Validation scripts
+
+Run at the target project root (kit repo example: `app-desktop`):
+
+```bash
+python3 .agent/scripts/validate_meridian.py <project-folder>
+python3 .agent/scripts/validate_meridian.py <project-folder> --json   # CI / machine output
+```
+
+The validator checks frontmatter, section contracts (`section-contracts.md`), board sync hints, and prose gates (Why / Where / Approach on US, epic paragraphs). Legacy Context headings warn until migrated.
+
+One-time migrations for older US files:
+
+```bash
+python3 .agent/scripts/migrate_legacy_us_context.py <project-folder>
+python3 .agent/scripts/migrate_us_writing_format.py <project-folder>   # --force to re-run
+```
 
 ---
 

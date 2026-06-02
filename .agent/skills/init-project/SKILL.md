@@ -39,9 +39,12 @@ docs/
   README.md
   00_scope.md … 11_decisions.md
   decisions/
-  kanban/board.json
+  epics/
+  versions/
   sprints/
   us/
+  templates/          # symlinks to kit delivery templates (recommended)
+  kanban/board.json
 ```
 
 3. Apply frontmatter from `references/doc-templates.md` on each doc (`status: draft`, except initial decision).
@@ -55,7 +58,7 @@ docs/
 
 | # | Check |
 | - | ----------- |
-| 1 | `docs/`, `decisions/`, `us/`, `sprints/`, `board.json`, `11_decisions`, `00_scope` exist |
+| 1 | `docs/`, `decisions/`, `epics/`, `versions/`, `us/`, `sprints/`, `board.json`, `11_decisions`, `00_scope` exist |
 | 2 | `.env*` protected in `.gitignore` |
 | 3 | No product code created |
 

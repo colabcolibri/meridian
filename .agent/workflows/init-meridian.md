@@ -49,6 +49,7 @@ RULES:
 | Initial scope | `docs/00_scope.md` |
 | Decision log | `docs/decisions/YYYY-MM-DD.json` + stub `11_decisions.md` |
 | Empty board | `docs/kanban/board.json` |
+| Templates mirror | `docs/templates/` (symlinks to kit; optional but recommended) |
 
 ---
 
@@ -73,7 +74,7 @@ Tell the user:
 Next steps:
 1. Review docs/00_scope.md
 2. Fill in 01_tech_stack, 02_security, 03_user_types, 04_principles
-3. Approve 05_architecture (+ 08–10 if applicable)
+3. Approve 05_architecture (+ 06–08 if applicable)
 4. Plan delivery: /create-version, /create-epic — plan epics/versions/sprints in folders
-5. /create-us (gate: 04 + 06 approved) → implement → /complete-us → /sync-board
+5. /create-us (gate: 05 approved + epic/version exist) → /refine-us → implement → /complete-us → /sync-board
 ```

@@ -77,6 +77,10 @@ Epics, versions, and sprints live **only** in the folders above — no parallel 
 
 US gate: `05_architecture` approved + referenced epic/version exist in `docs/epics/` and `docs/versions/`.
 
+**US lifecycle:** `/create-us` (Why / Where / Approach, `ready: false`) → `/refine-us` (`ready: true`) → implement → `/complete-us` → `/sync-board`.
+
+Validate: `python3 ../../.agent/scripts/validate_meridian.py app-desktop` (`--json` for CI).
+
 ## How agents should work
 
 See also: [Start here](../../.agent/references/start-here.md) · [Usage guide](../../.agent/references/usage-guide.md) · `/daily-with-ai` in Cursor.

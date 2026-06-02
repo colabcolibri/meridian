@@ -141,11 +141,11 @@ The person is manager of the process. Agents report blockers, next step, and pen
 | -------- | ---- |
 | Master protocol | `.agent/MERIDIAN.md` |
 | Kit architecture | `.agent/ARCHITECTURE.md` |
-| **Templates (agents)** | `.agent/references/templates/INDEX.md` |
+| **Templates (agents)** | `.agent/references/templates/INDEX.md` + `writing-guide.md` |
 | Agents | `.agent/agents/` |
 | Skills | `.agent/skills/` |
 | Workflows | `.agent/workflows/` |
-| Validation | `python .agent/scripts/validate_meridian.py <project-folder>` |
+| Validation | `python3 .agent/scripts/validate_meridian.py <project-folder>` (`--json` for CI) |
 
 ---
 

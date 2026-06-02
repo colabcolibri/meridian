@@ -39,7 +39,7 @@ One place in your repository — the `docs/` folder — to **structure the appli
 | You get | What it means in practice |
 | ------- | ------------------------- |
 | **Ordered product docs** | Scope, stack, security, principles, architecture (`00`–`08`, `11`) — each step unlocks the next so you do not code on vibes alone. |
-| **User stories with acceptance** | Work lives in `docs/us/` with checkable criteria; “done” is recorded in the file (`/complete-us`), not implied by a green checkmark in the chat. |
+| **User stories with acceptance** | Work lives in `docs/us/` with Why / Where / Approach, checkable criteria, and `ready: true` before code; “done” is recorded in the file (`/complete-us`), not implied by a green checkmark in the chat. |
 | **A decision trail** | `docs/decisions/` captures *why* something changed — for you on Monday and for the agent on Tuesday. |
 | **Agents on rails** | `.agent/` supplies workflows, skills, and gates so the IDE does not reinvent the process every prompt. |
 | **Visible progress (optional)** | The desktop monitor reads `docs/` and shows setup, backlog, board, and story detail — read-only, no second source of truth. |
@@ -88,7 +88,8 @@ Details: [`.agent/CURSOR_ADAPTER.md`](.agent/CURSOR_ADAPTER.md)
 
 1. **Document** — Phase docs (`00_scope` … `05_architecture`, security, stack, …) and `docs/decisions/` for why things changed.
 2. **Plan** — Epics, versions, sprints, and user stories after architecture is approved enough to commit.
-3. **Execute** — Work from a US file; record evidence; `/complete-us` when it is really done.
+3. **Refine** — `/refine-us` deepens Approach and sets `ready: true` before any product code.
+4. **Execute** — Work from a US file; record evidence; `/complete-us` when it is really done.
 
 **Rule of thumb:** if it is not in `docs/`, it is not part of the managed process — chat does not count.
 
@@ -174,7 +175,7 @@ Lists `docs/decisions/YYYY-MM-DD.json` files. Each day is one JSON file; new dec
 
 ### Deliverables tab
 
-Release planning view: versions (v0, v1, …), sprints under each version, epics with **user story coverage** (how many US exist vs. planned). Use it to spot gaps before you open individual files in `docs/epics/` or `docs/versions/`.
+Epic-centric planning view: each epic shows user story coverage; toggle **version** to filter which release you are planning. Versions and sprints still live in `docs/versions/` and `docs/sprints/` — use this tab to spot gaps before opening every file in `docs/epics/`.
 
 <p align="center">
   <img src="assets/screenshots/monitor-deliverables.jpg" alt="Meridian monitor — Deliverables tab with versions, sprints, and epic coverage" width="920" />
@@ -220,7 +221,7 @@ cp -R path/to/meridian/.agent ./your-project/
 | Where | Agents | Commands |
 | ----- | ------ | -------- |
 | `.agent/` (all IDEs) | `process-manager`, `scope-architect`, `documentation-strategist`, `security-steward`, `architecture-guardian`, `sprint-planner`, `board-keeper` | Workflows in `.agent/workflows/` (e.g. `init-meridian`, `status`, `complete-us`) |
-| `.cursor/` (Cursor) | Same personas (symlinked) | Slash commands: `/init-meridian`, `/status`, `/create-us`, `/complete-us`, `/sync-board`, `/daily-with-ai`, … |
+| `.cursor/` (Cursor) | Same personas (symlinked) | Slash commands: `/init-meridian`, `/status`, `/create-us`, `/refine-us`, `/complete-us`, `/sync-board`, `/daily-with-ai`, … |
 
 Full map: [`.agent/ARCHITECTURE.md`](.agent/ARCHITECTURE.md).
 
@@ -249,6 +250,7 @@ More detail: [`app-desktop/docs/README.md`](app-desktop/docs/README.md).
 
 ```bash
 python3 .agent/scripts/validate_meridian.py app-desktop
+python3 .agent/scripts/validate_meridian.py app-desktop --json   # CI / machine output
 cd app-desktop && pnpm lint && pnpm test && pnpm build
 ```
 
