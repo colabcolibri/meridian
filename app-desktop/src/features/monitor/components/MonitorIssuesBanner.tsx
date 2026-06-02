@@ -4,7 +4,42 @@ import { useState } from "react"
 import type { MonitorIssue } from "@/domain/meridian/monitor-issues"
 import { countIssuesBySeverity } from "@/domain/meridian/protocol-validators"
 import { monitorPanelClass } from "@/features/monitor/monitor-ui"
+import { typeScale } from "@/features/monitor/monitor-typography"
 import { cn } from "@/lib/utils"
+
+function IssueList({
+  items,
+  tone,
+}: {
+  items: MonitorIssue[]
+  tone: "error" | "warning"
+}) {
+  if (items.length === 0) {
+    return null
+  }
+
+  return (
+    <ul
+      className={cn(
+        "space-y-2 text-xs",
+        tone === "error" ? "text-destructive" : "text-amber-800 dark:text-amber-300",
+      )}
+    >
+      {items.map((issue, index) => (
+        <li
+          className="leading-5 break-words"
+          key={`${issue.file}-${issue.targetId ?? "—"}-${index}`}
+        >
+          <span className="font-mono text-[10px] opacity-80">{issue.file}</span>
+          {" · "}
+          <span className="font-medium">{issue.targetId ?? "—"}</span>
+          {" — "}
+          {issue.message}
+        </li>
+      ))}
+    </ul>
+  )
+}
 
 export function MonitorIssuesBanner({ issues }: { issues: MonitorIssue[] }) {
   const { errors, warnings } = countIssuesBySeverity(issues)
@@ -18,7 +53,7 @@ export function MonitorIssuesBanner({ issues }: { issues: MonitorIssue[] }) {
   const warningsList = issues.filter((issue) => issue.severity === "warning")
 
   return (
-    <div className={monitorPanelClass}>
+    <div className={cn(monitorPanelClass, "overflow-hidden")}>
       <button
         className="flex w-full items-center justify-between gap-3 px-4 py-3 text-left text-sm"
         onClick={() => setOpen((value) => !value)}
@@ -51,33 +86,27 @@ export function MonitorIssuesBanner({ issues }: { issues: MonitorIssue[] }) {
       </button>
 
       {open ? (
-        <div className="space-y-3 border-t border-border px-4 py-3">
-          {errorsList.length > 0 ? (
-            <ul className="space-y-2 text-xs text-destructive">
-              {errorsList.slice(0, 8).map((issue) => (
-                <li className="leading-5" key={`${issue.file}-${issue.message}`}>
-                  <span className="font-mono text-[10px] opacity-80">{issue.file}</span>
-                  {" · "}
-                  <span className="font-medium">{issue.targetId ?? "—"}</span>
-                  {" — "}
-                  {issue.message}
-                </li>
-              ))}
-            </ul>
-          ) : null}
-          {warningsList.length > 0 ? (
-            <ul className="space-y-2 text-xs text-amber-800 dark:text-amber-300">
-              {warningsList.slice(0, 6).map((issue) => (
-                <li className="leading-5" key={`${issue.file}-${issue.message}`}>
-                  <span className="font-mono text-[10px] opacity-80">{issue.file}</span>
-                  {" · "}
-                  <span className="font-medium">{issue.targetId ?? "—"}</span>
-                  {" — "}
-                  {issue.message}
-                </li>
-              ))}
-            </ul>
-          ) : null}
+        <div className="max-h-[min(50vh,420px)] overflow-y-auto overscroll-contain border-t border-border">
+          <div className="space-y-4 px-4 py-3">
+            {errorsList.length > 0 ? (
+              <div className="space-y-2">
+                <p className={cn(typeScale.label, "text-destructive")}>
+                  Problemas ({errorsList.length})
+                </p>
+                <IssueList items={errorsList} tone="error" />
+              </div>
+            ) : null}
+            {warningsList.length > 0 ? (
+              <div className="space-y-2">
+                <p
+                  className={cn(typeScale.label, "text-amber-800 dark:text-amber-300")}
+                >
+                  Avisos ({warningsList.length})
+                </p>
+                <IssueList items={warningsList} tone="warning" />
+              </div>
+            ) : null}
+          </div>
         </div>
       ) : null}
     </div>

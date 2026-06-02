@@ -1,4 +1,9 @@
-import type { Moscow, StoryStatus } from "@/domain/meridian/types"
+import type {
+  Moscow,
+  StoryStatus,
+  TestsRequirement,
+  TestsStatus,
+} from "@/domain/meridian/types"
 
 export interface BoardEntry {
   id: string
@@ -9,4 +14,6 @@ export interface BoardEntry {
   moscow: Moscow
   depends_on: string[]
   done_when: string
+  tests: TestsRequirement
+  tests_status: TestsStatus
 }

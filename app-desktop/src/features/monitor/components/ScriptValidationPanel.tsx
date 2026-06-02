@@ -100,7 +100,7 @@ export function ScriptValidationPanel({ folderName }: { folderName?: string }) {
           <p className="text-sm text-destructive">
             {result.message} Veja pré-requisitos em{" "}
             <code className="rounded bg-destructive/10 px-1.5 py-0.5 font-mono text-xs">
-              10_environments.md
+              08_environments.md
             </code>{" "}
             (adicione Python 3).
           </p>

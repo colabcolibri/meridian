@@ -1,89 +1,181 @@
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 
-import { Badge } from "@/components/ui/badge"
+import { AlertCircle, ChevronRight, Info } from "lucide-react"
+import { Popover } from "radix-ui"
+
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { Button } from "@/components/ui/button"
 import type { MonitorIssue } from "@/domain/meridian/monitor-issues"
-import type { Epic, UserStory } from "@/domain/meridian/types"
+import type { KanbanColumnId } from "@/domain/meridian/kanban-columns"
+import { groupStoriesForKanban } from "@/domain/meridian/kanban-columns"
+import type { Epic, ProductVersion, UserStory } from "@/domain/meridian/types"
 import { issuesForTarget } from "@/domain/meridian/protocol-validators"
-import { groupStoriesByStatus } from "@/domain/meridian/validators"
-import { filterChipClass, monitorPanelClass } from "@/features/monitor/monitor-ui"
+import { useMonitorVersionFilter } from "@/features/monitor/MonitorVersionFilterContext"
+import { StoryDetailSheet } from "@/features/monitor/components/StoryDetailSheet"
+import { VersionFilterBar } from "@/features/monitor/components/VersionFilterBar"
+import { filterChipClass } from "@/features/monitor/monitor-ui"
 import { typeScale } from "@/features/monitor/monitor-typography"
+import {
+  epicsForVersionFilter,
+  filterStoriesByVersions,
+} from "@/features/monitor/version-filter"
 import { cn } from "@/lib/utils"
 
-const columnMeta: Record<UserStory["status"], { title: string }> = {
-  "❌": { title: "Pendente" },
-  "🔶": { title: "Em andamento" },
-  "✅": { title: "Concluída" },
-  "🧊": { title: "Congelada" },
+const columnMeta: Record<KanbanColumnId, { title: string; description: string }> = {
+  "❌": {
+    title: "Pendente",
+    description: "Status ❌ no frontmatter — ainda não iniciada ou não concluída.",
+  },
+  "🔶": {
+    title: "Em andamento",
+    description:
+      "Status 🔶 — parcialmente feita; o aceite deve incluir “Falta:” explicando o que falta.",
+  },
+  "🧪": {
+    title: "Aguardando testes",
+    description:
+      "Coluna derivada: status ✅ no frontmatter, mas tests_status ainda pending (ou Testes sem evidência).",
+  },
+  "✅": {
+    title: "Concluída",
+    description: "Status ✅ com critérios de aceite e testes comprovados nos arquivos.",
+  },
+  "🧊": {
+    title: "Congelada",
+    description: "Status 🧊 — pausada de propósito; não entra no fluxo agora.",
+  },
+}
+
+function KanbanColumnHeader({
+  columnId,
+  count,
+}: {
+  columnId: KanbanColumnId
+  count: number
+}) {
+  const meta = columnMeta[columnId]
+
+  return (
+    <header className="shrink-0 border-b border-border/80 bg-muted/40 px-3 py-3">
+      <div className="flex items-center gap-1.5">
+        <h2 className="flex min-w-0 flex-1 items-center gap-2 text-sm font-semibold text-foreground">
+          <span aria-hidden>{columnId}</span>
+          <span className="truncate">{meta.title}</span>
+        </h2>
+        <Popover.Root>
+          <Popover.Trigger asChild>
+            <Button
+              aria-label={`Sobre a coluna ${meta.title}`}
+              className="size-7 shrink-0 text-muted-foreground hover:text-foreground"
+              size="icon-sm"
+              type="button"
+              variant="ghost"
+            >
+              <Info aria-hidden className="size-3.5" />
+            </Button>
+          </Popover.Trigger>
+          <Popover.Portal>
+            <Popover.Content
+              align="start"
+              className={cn(
+                "z-50 w-[min(280px,calc(100vw-2rem))] rounded-lg border border-border bg-popover p-3 text-popover-foreground shadow-md",
+                "data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0",
+              )}
+              side="bottom"
+              sideOffset={6}
+            >
+              <p className={typeScale.label}>{meta.title}</p>
+              <p className={cn(typeScale.bodySm, "mt-1.5 text-muted-foreground")}>
+                {meta.description}
+              </p>
+            </Popover.Content>
+          </Popover.Portal>
+        </Popover.Root>
+      </div>
+      <p className={cn(typeScale.caption, "mt-1 text-muted-foreground")}>{count} US</p>
+    </header>
+  )
 }
 
 function epicFilterLabel(epic: Epic) {
   const short =
-    epic.title.length > 28 ? `${epic.title.slice(0, 25).trim()}…` : epic.title
+    epic.title.length > 24 ? `${epic.title.slice(0, 21).trim()}…` : epic.title
   return `${epic.id} · ${short}`
 }
 
-function StoryCard({
+function KanbanStoryCard({
   story,
-  epic,
+  epicTitle,
   storyIssues,
+  showVersion,
+  onSelect,
 }: {
   story: UserStory
-  epic: Epic | undefined
+  epicTitle: string | undefined
   storyIssues: MonitorIssue[]
+  showVersion: boolean
+  onSelect: () => void
 }) {
   const hasError = storyIssues.some((issue) => issue.severity === "error")
+  const hasWarning = storyIssues.some((issue) => issue.severity === "warning")
 
   return (
-    <article
+    <button
       className={cn(
-        monitorPanelClass,
-        "p-3 shadow-none ring-1 ring-border/60",
-        hasError && "border-destructive/40 ring-destructive/30",
+        "group flex w-full flex-col gap-2.5 rounded-xl border border-border/80 bg-background p-3 text-left shadow-sm transition-all",
+        "hover:border-meridian-border hover:bg-muted/20 hover:shadow-md",
+        "focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
+        hasError && "border-destructive/60",
+        hasWarning && !hasError && "border-amber-500/50",
       )}
+      onClick={onSelect}
+      type="button"
     >
-      <div className="flex flex-wrap items-center gap-1.5">
-        <span className="font-mono text-[11px] font-semibold text-foreground">
-          {story.id}
-        </span>
-        <Badge className="h-5 text-[10px]" variant="outline">
-          {story.version}
-        </Badge>
-        <Badge className="h-5 text-[10px]" variant="secondary">
-          {story.moscow}
-        </Badge>
-      </div>
-
-      <h3 className="mt-2 text-sm font-medium leading-snug text-foreground">
-        {story.title}
-      </h3>
-
-      <div className="mt-2.5 flex flex-wrap items-center gap-1.5 border-t border-border/60 pt-2.5">
-        <Badge className="font-mono text-[10px]" variant="outline">
-          {story.epic}
-        </Badge>
-        {epic ? (
-          <span
-            className={cn(typeScale.caption, "min-w-0 truncate text-foreground/80")}
-          >
-            {epic.title}
+      <div className="flex items-start justify-between gap-2">
+        <div className="flex min-w-0 flex-wrap items-center gap-1.5">
+          <span className="font-mono text-xs font-semibold text-primary">
+            {story.id}
           </span>
-        ) : null}
+          {showVersion ? (
+            <span className="rounded-full bg-muted px-1.5 py-0.5 font-mono text-[10px] font-medium text-foreground">
+              {story.version}
+            </span>
+          ) : null}
+          <span className="rounded-full bg-muted px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground">
+            {story.moscow}
+          </span>
+        </div>
+        <div className="flex shrink-0 items-center gap-1">
+          {(hasError || hasWarning) && (
+            <AlertCircle
+              className={cn(
+                "size-4",
+                hasError ? "text-destructive" : "text-amber-600 dark:text-amber-400",
+              )}
+              aria-hidden
+            />
+          )}
+          <ChevronRight
+            className="size-4 opacity-40 transition-opacity group-hover:opacity-100"
+            aria-hidden
+          />
+        </div>
       </div>
 
-      {storyIssues.length > 0 ? (
-        <p className="mt-2 text-xs text-destructive">{storyIssues[0]?.message}</p>
-      ) : null}
+      <div className="min-w-0 space-y-1.5">
+        <p className="line-clamp-2 text-sm font-medium leading-snug text-foreground">
+          {story.title}
+        </p>
+        <p className="line-clamp-2 text-xs leading-relaxed text-muted-foreground">
+          {story.doneWhen}
+        </p>
+      </div>
 
-      <details className="mt-2 text-xs text-muted-foreground">
-        <summary className="cursor-pointer select-none font-medium text-muted-foreground hover:text-foreground">
-          Detalhes
-        </summary>
-        <p className="mt-2 leading-5 text-foreground/80">{story.doneWhen}</p>
-        {story.dependsOn.length > 0 ? (
-          <p className="mt-1">Depende de: {story.dependsOn.join(", ")}</p>
-        ) : null}
-      </details>
-    </article>
+      <p className={cn(typeScale.caption, "truncate border-t border-border/60 pt-2")}>
+        <span className="font-mono font-medium text-foreground/90">{story.epic}</span>
+        {epicTitle ? ` · ${epicTitle}` : null}
+      </p>
+    </button>
   )
 }
 
@@ -91,67 +183,78 @@ export function KanbanView({
   stories,
   epics,
   issues,
+  versions,
 }: {
   stories: UserStory[]
   epics: Epic[]
   issues: MonitorIssue[]
+  versions: ProductVersion[]
 }) {
+  const { selectedVersionIds } = useMonitorVersionFilter()
   const [epicFilter, setEpicFilter] = useState<string | "all">("all")
-  const [versionFilter, setVersionFilter] = useState<string | "all">("all")
+  const [selectedStory, setSelectedStory] = useState<UserStory | null>(null)
 
   const epicById = useMemo(
     () => Object.fromEntries(epics.map((epic) => [epic.id, epic])),
     [epics],
   )
 
-  const versionIds = useMemo(
-    () =>
-      [...new Set(stories.map((story) => story.version))].sort((a, b) =>
-        a.localeCompare(b, undefined, { numeric: true }),
-      ),
-    [stories],
+  const availableEpics = useMemo(
+    () => epicsForVersionFilter(epics, stories, selectedVersionIds),
+    [epics, selectedVersionIds, stories],
   )
 
-  const filtered = stories.filter((story) => {
-    if (epicFilter !== "all" && story.epic !== epicFilter) {
-      return false
-    }
-    if (versionFilter !== "all" && story.version !== versionFilter) {
-      return false
-    }
-    return true
-  })
+  useEffect(() => {
+    setEpicFilter("all")
+  }, [selectedVersionIds])
 
-  const columns = groupStoriesByStatus(filtered)
+  useEffect(() => {
+    if (
+      epicFilter !== "all" &&
+      !availableEpics.some((epic) => epic.id === epicFilter)
+    ) {
+      setEpicFilter("all")
+    }
+  }, [availableEpics, epicFilter])
+
+  const filtered = useMemo(() => {
+    const byVersion = filterStoriesByVersions(stories, selectedVersionIds)
+
+    return byVersion.filter((story) => {
+      if (epicFilter !== "all" && story.epic !== epicFilter) {
+        return false
+      }
+
+      return true
+    })
+  }, [epicFilter, selectedVersionIds, stories])
+
+  const columns = groupStoriesForKanban(filtered)
+  const totalVisible = filtered.length
+  const showVersionOnCards = selectedVersionIds.size !== 1
+  const selectedLabel = [...selectedVersionIds]
+    .sort((a, b) => b.localeCompare(a, undefined, { numeric: true }))
+    .join(", ")
 
   return (
-    <div className="space-y-5">
-      <div className={cn(monitorPanelClass, "space-y-4 p-4")}>
-        <div className="space-y-2">
-          <p className={typeScale.label}>Versão</p>
-          <div className="flex flex-wrap gap-2">
-            <button
-              className={filterChipClass(versionFilter === "all")}
-              onClick={() => setVersionFilter("all")}
-              type="button"
-            >
-              Todas
-            </button>
-            {versionIds.map((versionId) => (
-              <button
-                className={filterChipClass(versionFilter === versionId)}
-                key={versionId}
-                onClick={() => setVersionFilter(versionId)}
-                type="button"
-              >
-                {versionId}
-              </button>
-            ))}
-          </div>
+    <div className="space-y-4">
+      {versions.length > 0 ? (
+        <div className="rounded-xl border border-border bg-card px-4 py-3">
+          <VersionFilterBar versions={versions} />
         </div>
+      ) : null}
 
-        <div className="space-y-2 border-t border-border/60 pt-4">
-          <p className={typeScale.label}>Epic</p>
+      <div className="overflow-hidden rounded-xl border border-border bg-card">
+        <div className="space-y-3 border-b border-border/80 px-4 py-3">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <p className={typeScale.label}>Filtrar por epic</p>
+            <p className={typeScale.caption}>
+              {totalVisible} US visíve{totalVisible === 1 ? "l" : "is"}
+              {selectedVersionIds.size > 0
+                ? ` · ${selectedLabel}`
+                : " · nenhuma versão"}
+            </p>
+          </div>
           <div className="flex flex-wrap gap-2">
             <button
               className={filterChipClass(epicFilter === "all")}
@@ -160,11 +263,11 @@ export function KanbanView({
             >
               Todos
             </button>
-            {epics.map((epic) => (
+            {availableEpics.map((epic) => (
               <button
                 className={cn(
                   filterChipClass(epicFilter === epic.id),
-                  "max-w-[240px] truncate",
+                  "max-w-[220px] truncate",
                 )}
                 key={epic.id}
                 onClick={() => setEpicFilter(epic.id)}
@@ -175,41 +278,60 @@ export function KanbanView({
               </button>
             ))}
           </div>
+          {selectedVersionIds.size === 0 ? (
+            <p className={cn(typeScale.caption, "text-destructive")}>
+              Selecione ao menos uma versão acima.
+            </p>
+          ) : null}
+        </div>
+
+        <div className="-mx-px flex overflow-x-auto lg:grid lg:grid-cols-5 lg:overflow-visible">
+          {columns.map(({ columnId, stories: columnStories }) => (
+            <section
+              className={cn(
+                "flex w-[min(300px,88vw)] shrink-0 flex-col border-r border-border/80 last:border-r-0 lg:w-auto",
+                columnStories.length === 0 ? "min-h-[180px]" : "min-h-[260px]",
+              )}
+              key={columnId}
+            >
+              <KanbanColumnHeader columnId={columnId} count={columnStories.length} />
+
+              <ScrollArea className="min-h-0 flex-1 lg:max-h-[min(70vh,680px)]">
+                <div className="flex flex-col gap-3 p-3">
+                  {columnStories.length === 0 ? (
+                    <p className={cn(typeScale.caption, "px-1 py-10 text-center")}>
+                      Nenhuma US nesta coluna
+                    </p>
+                  ) : (
+                    columnStories.map((story) => (
+                      <KanbanStoryCard
+                        epicTitle={epicById[story.epic]?.title}
+                        key={story.id}
+                        onSelect={() => setSelectedStory(story)}
+                        showVersion={showVersionOnCards}
+                        story={story}
+                        storyIssues={issuesForTarget(issues, story.id)}
+                      />
+                    ))
+                  )}
+                </div>
+              </ScrollArea>
+            </section>
+          ))}
         </div>
       </div>
 
-      <div className="-mx-4 flex gap-3 overflow-x-auto px-4 pb-2 sm:mx-0 sm:px-0 lg:grid lg:grid-cols-4 lg:gap-4 lg:overflow-visible">
-        {columns.map(({ status, stories: columnStories }) => (
-          <section
-            className="flex w-[min(280px,85vw)] shrink-0 flex-col rounded-xl border border-border bg-muted/30 lg:w-auto"
-            key={status}
-          >
-            <header className="border-b border-border bg-card/80 px-3 py-3 backdrop-blur-sm">
-              <h2 className="flex items-center gap-2 text-sm font-semibold text-foreground">
-                <span aria-hidden>{status}</span>
-                {columnMeta[status].title}
-              </h2>
-              <p className={cn(typeScale.caption, "mt-0.5")}>
-                {columnStories.length} item{columnStories.length === 1 ? "" : "s"}
-              </p>
-            </header>
-            <div className="flex min-h-[140px] flex-1 flex-col gap-2.5 p-2.5">
-              {columnStories.length === 0 ? (
-                <p className={cn(typeScale.caption, "px-1 py-6 text-center")}>Vazio</p>
-              ) : (
-                columnStories.map((story) => (
-                  <StoryCard
-                    epic={epicById[story.epic]}
-                    key={story.id}
-                    story={story}
-                    storyIssues={issuesForTarget(issues, story.id)}
-                  />
-                ))
-              )}
-            </div>
-          </section>
-        ))}
-      </div>
+      <StoryDetailSheet
+        epic={selectedStory ? epicById[selectedStory.epic] : undefined}
+        onOpenChange={(open) => {
+          if (!open) {
+            setSelectedStory(null)
+          }
+        }}
+        open={selectedStory !== null}
+        story={selectedStory}
+        storyIssues={selectedStory ? issuesForTarget(issues, selectedStory.id) : []}
+      />
     </div>
   )
 }
