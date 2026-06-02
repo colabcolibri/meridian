@@ -51,7 +51,19 @@ export const folderStructure = {
         "Um arquivo por épico, com frontmatter YAML — igual às user stories. Ex.: EPIC-02.md descreve o monitor de configuração.",
     },
     {
-      path: "docs/us/US-XXX.md",
+      path: "docs/versions/vX.md",
+      label: "Versões (releases)",
+      description:
+        "Um arquivo por release (v0, v1, v2…). Objetivo, outcome, escopo e checklist de go-live.",
+    },
+    {
+      path: "docs/sprints/vX-SY.md",
+      label: "Sprints",
+      description:
+        "Fatias de tempo dentro de uma versão. Lista de US planejadas (`stories` no frontmatter).",
+    },
+    {
+      path: "docs/us/US-XXXX.md",
       label: "User stories (tarefas)",
       description:
         "Um arquivo por tarefa de desenvolvimento. Só existem depois que o índice 04_epics e 06_versions estão aprovados.",
@@ -89,9 +101,9 @@ export const journeyPhases: JourneyPhase[] = [
     documents: [
       "04_epics.md — índice aprovado do catálogo de épicos",
       "05_principles.md — regras de código e qualidade",
-      "06_versions.md — v0, v1, v2… o que entra em cada release",
+      "06_versions.md — índice aprovado de releases e sprints",
     ],
-    note: "04_epics.md (índice) e 06_versions.md precisam estar approved antes de criar qualquer US. Detalhes de cada épico ficam em docs/epics/.",
+    note: "04_epics.md e 06_versions.md precisam estar approved antes de criar US. Detalhes: docs/epics/, docs/versions/, docs/sprints/.",
   },
   {
     id: "fase-2",
@@ -116,8 +128,10 @@ export const journeyPhases: JourneyPhase[] = [
     purpose:
       "Com a documentação base aprovada, você cria user stories em docs/us/, implementa, marca status nos arquivos e o quadro kanban reflete o andamento.",
     documents: [
-      "docs/epics/EPIC-01.md, EPIC-02.md… — um arquivo por capacidade de produto",
-      "docs/us/US-001.md, US-002.md… — uma tarefa por arquivo",
+      "docs/versions/v0.md, v1.md… — um arquivo por release",
+      "docs/sprints/v1-S1.md… — sprints dentro da versão",
+      "docs/epics/EPIC-01.md… — capacidades de produto",
+      "docs/us/US-0001.md, US-0002.md… — uma tarefa por arquivo",
       "docs/kanban/board.json — visão consolidada (gerada)",
     ],
   },
@@ -128,31 +142,33 @@ export const epicsVersionsStories: GuideSubsection[] = [
     title: "Épico — o bloco grande de produto",
     paragraphs: [
       "Um épico agrupa uma capacidade inteira do produto. Exemplo: EPIC-02 “Monitor de Configuração Inicial” engloba abrir pasta, ler arquivos 00–11, mostrar progresso.",
-      "Cada épico é um arquivo em docs/epics/EPIC-XX.md com frontmatter (id, title, status, versions, profiles) e corpo com a descrição.",
+      "Cada épico é um arquivo em docs/epics/EPIC-XX.md: frontmatter com id, title, status, versions, profiles e outcome (done no nível produto); corpo com Capacidade, Resultado esperado e Fora deste epic.",
       "O arquivo 04_epics.md é só o índice de fase — tabela-resumo que confirma que o catálogo foi aprovado.",
     ],
     bullets: [
       "Status do épico: active, complete ou paused (diferente de draft/review/approved dos docs de fase).",
-      "Várias user stories referenciam o mesmo épico no frontmatter (`epic: EPIC-02`).",
-      "Na aba Entregas deste app você vê cada arquivo de docs/epics/ e quantas US já terminaram.",
+      "User stories referenciam o epic só pelo ID no frontmatter (`epic: EPIC-02`) — não copiam texto do epic.",
+      "Na aba Entregas deste app você vê outcome, perfis e quantas US já terminaram.",
     ],
   },
   {
     title: "Versão — o release (v0, v1, v2…)",
     paragraphs: [
-      "Versão é um pacote de entrega: o que vai ao ar junto. Exemplo: v1 = “abrir pasta real e ler markdown”; v2 = “extensão VS Code”.",
-      "Versões ficam em 06_versions.md com objetivo, critério de done, o que entra e o que fica de fora.",
+      "Versão é um pacote de go-live: o que entra junto quando fechamos um marco. Exemplo: v1 = abrir pasta real e ler markdown.",
+      "Cada versão é um arquivo em docs/versions/vX.md (objetivo, outcome, incluído/fora, checklist). O 06_versions.md é só o índice de fase.",
+      "Sprints (v1-S1, v1-S2…) ficam em docs/sprints/ — organizam o tempo dentro da versão, com lista de US no frontmatter.",
     ],
     bullets: [
-      "Cada user story referencia uma versão (ex.: version: v1).",
-      "Não crie US antes de 04_epics.md (índice) e 06_versions.md estarem approved.",
+      "User stories referenciam só `version: v1` — não repetem o plano do release.",
+      "Epics referenciam `versions: [v0, v1]` — em quais releases a capacidade participa.",
+      "IA planeja releases com /create-version; sprints com /plan-sprint ou create-sprint.",
     ],
   },
   {
     title: "User story — a tarefa executável",
     paragraphs: [
       "A user story (US) é a unidade de trabalho que alguém (ou um agente) implementa. Formato: “Como [persona], quero [ação], para que [benefício]”.",
-      "Cada US é um arquivo em docs/us/ (ex.: US-017.md). No topo vai um frontmatter YAML com id, título, épico, versão, status, dependências e critério de conclusão.",
+      "Cada US é um arquivo em docs/us/ (ex.: US-0017.md). No topo vai frontmatter YAML; o corpo traz aceite e detalhes — sem repetir a definição do epic.",
     ],
     bullets: [
       "Lista de aceite: checkboxes verificáveis — não marque ✅ sem evidência.",
@@ -163,19 +179,79 @@ export const epicsVersionsStories: GuideSubsection[] = [
   },
 ]
 
+export const epicAnatomy = {
+  title: "Exemplo: como ler um epic",
+  intro:
+    "Abra docs/epics/EPIC-XX.md. O epic define o quê e o por quê da capacidade; user stories só referenciam o ID (`epic: EPIC-XX`) — nunca colam descrição ou outcome do epic.",
+  fields: [
+    { field: "id", meaning: "Identificador permanente (EPIC-02)" },
+    { field: "title", meaning: "Nome curto da capacidade" },
+    {
+      field: "status",
+      meaning: "active · complete · paused — ciclo de vida do epic, não da US",
+    },
+    { field: "versions", meaning: "Releases onde o epic entra (v0, v1…)" },
+    {
+      field: "profiles",
+      meaning: "Tipos de usuário de 03_user_types.md que se beneficiam",
+    },
+    {
+      field: "outcome",
+      meaning: "Done do epic no nível produto — quando marcar complete",
+    },
+    {
+      field: "Capacidade",
+      meaning: "Corpo: o que o usuário passa a conseguir",
+    },
+    {
+      field: "Fora deste epic",
+      meaning: "Corpo: limites explícitos — evita escopo creep",
+    },
+  ],
+  exampleTitle: "EPIC-02 — Monitor de Configuração Inicial",
+  exampleBody:
+    "Outcome: manager abre docs/, vê progresso dos 12 documentos e lê cada .md inline. US-0017 e US-0018 referenciam epic: EPIC-02 sem repetir esse texto.",
+}
+
+export const versionAnatomy = {
+  title: "Exemplo: como ler uma versão",
+  intro:
+    "Abra docs/versions/v1.md. A versão define o release; US e sprints só referenciam o ID (`version: v1`).",
+  fields: [
+    { field: "id", meaning: "Identificador do release (v0, v1, v2…)" },
+    { field: "title", meaning: "Nome curto (ex.: Folder Monitor MVP)" },
+    {
+      field: "status",
+      meaning: "planned · active · complete — ciclo do release",
+    },
+    {
+      field: "outcome",
+      meaning: "Done do release no nível produto",
+    },
+    { field: "Objetivo", meaning: "Corpo: o que este go-live entrega" },
+    { field: "Explicitamente fora", meaning: "Corpo: o que fica para versões futuras" },
+  ],
+  exampleTitle: "v1 — Folder Monitor MVP",
+  exampleBody:
+    "Outcome: usuário abre docs/, abas refletem .md reais. US-0009 a US-0022 usam version: v1. Sprints v1-S1 e v1-S2 em docs/sprints/.",
+}
+
 export const userStoryAnatomy = {
   title: "Exemplo: como ler uma user story",
   intro:
     "Abra qualquer arquivo em docs/us/. O topo é metadados; o corpo explica o pedido e os critérios de aceite. O campo epic deve apontar para um arquivo existente em docs/epics/.",
   fields: [
-    { field: "id", meaning: "Identificador único (US-017)" },
+    { field: "id", meaning: "Identificador único (US-0017)" },
     { field: "title", meaning: "Nome curto da tarefa" },
     {
       field: "epic",
       meaning:
-        "A qual bloco de produto pertence — deve existir em docs/epics/ (ex.: EPIC-02)",
+        "Referência por ID ao epic em docs/epics/ (ex.: EPIC-02) — não repita descrição do epic aqui",
     },
-    { field: "version", meaning: "Em qual release entra (v1)" },
+    {
+      field: "version",
+      meaning: "Release em docs/versions/ (ex.: v1) — referência por ID",
+    },
     {
       field: "status",
       meaning:
@@ -188,7 +264,7 @@ export const userStoryAnatomy = {
       meaning: "Must = obrigatório na versão; Should/Could = desejável",
     },
   ],
-  exampleTitle: "US-017 — Ler documentos de fase em Markdown",
+  exampleTitle: "US-0017 — Ler documentos de fase em Markdown",
   exampleBody:
     "Como manager do processo, quero abrir cada doc 00–11 dentro do app, para revisar escopo e arquitetura sem sair do monitor. Aceite: botão em cada doc, leitura via File System Access API, frontmatter + corpo visíveis.",
 }
@@ -303,7 +379,8 @@ const phaseDocDescriptions: Record<string, string> = {
   "03_user_types": "Quem usa e o que cada perfil precisa.",
   "04_epics": "Índice aprovado do catálogo de épicos (detalhes em docs/epics/).",
   "05_principles": "Convenções de código e qualidade.",
-  "06_versions": "Releases v0, v1, v2… e sprints.",
+  "06_versions":
+    "Índice de releases e sprints (detalhes em docs/versions/ e docs/sprints/).",
   "07_architecture": "Apps, módulos, limites.",
   "08_database": "Modelo de dados e migrações.",
   "09_api_contracts": "Contratos entre serviços.",

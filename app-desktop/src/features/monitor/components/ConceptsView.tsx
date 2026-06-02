@@ -21,6 +21,8 @@ import {
   appIntro,
   corePrinciples,
   epicsVersionsStories,
+  epicAnatomy,
+  versionAnatomy,
   firstSteps,
   folderStructure,
   journeyPhases,
@@ -243,6 +245,64 @@ export function ConceptsView() {
           {epicsVersionsStories.map((section) => (
             <GuideBlock key={section.title} section={section} />
           ))}
+        </div>
+      </section>
+
+      <section className="space-y-4">
+        <h3 className={typeScale.sectionTitle}>{epicAnatomy.title}</h3>
+        <p className={typeScale.body}>{epicAnatomy.intro}</p>
+        <div className="overflow-x-auto rounded-xl border border-border">
+          <table className="w-full min-w-[320px] border-collapse text-sm">
+            <thead>
+              <tr className="border-b bg-muted/50 text-left">
+                <th className="px-4 py-3 font-medium">Campo</th>
+                <th className="px-4 py-3 font-medium">Significado</th>
+              </tr>
+            </thead>
+            <tbody>
+              {epicAnatomy.fields.map((row) => (
+                <tr className="border-b last:border-0" key={row.field}>
+                  <td className="px-4 py-3 font-mono text-xs">{row.field}</td>
+                  <td className={cn(typeScale.bodySm, "px-4 py-3 text-foreground")}>
+                    {row.meaning}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div className="rounded-xl border border-meridian-border bg-meridian-muted/20 p-5">
+          <p className={typeScale.label}>{epicAnatomy.exampleTitle}</p>
+          <p className={cn(typeScale.bodySm, "mt-2")}>{epicAnatomy.exampleBody}</p>
+        </div>
+      </section>
+
+      <section className="space-y-4">
+        <h3 className={typeScale.sectionTitle}>{versionAnatomy.title}</h3>
+        <p className={typeScale.body}>{versionAnatomy.intro}</p>
+        <div className="overflow-x-auto rounded-xl border border-border">
+          <table className="w-full min-w-[320px] border-collapse text-sm">
+            <thead>
+              <tr className="border-b bg-muted/50 text-left">
+                <th className="px-4 py-3 font-medium">Campo</th>
+                <th className="px-4 py-3 font-medium">Significado</th>
+              </tr>
+            </thead>
+            <tbody>
+              {versionAnatomy.fields.map((row) => (
+                <tr className="border-b last:border-0" key={row.field}>
+                  <td className="px-4 py-3 font-mono text-xs">{row.field}</td>
+                  <td className={cn(typeScale.bodySm, "px-4 py-3 text-foreground")}>
+                    {row.meaning}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div className="rounded-xl border border-meridian-border bg-meridian-muted/20 p-5">
+          <p className={typeScale.label}>{versionAnatomy.exampleTitle}</p>
+          <p className={cn(typeScale.bodySm, "mt-2")}>{versionAnatomy.exampleBody}</p>
         </div>
       </section>
 

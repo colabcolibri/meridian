@@ -27,6 +27,8 @@ const emptyData: MeridianProjectData = {
   phaseDocuments: [],
   userStories: [],
   epics: [],
+  versions: [],
+  sprints: [],
   board: null,
   issues: [],
 }

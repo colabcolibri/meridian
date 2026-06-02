@@ -1,7 +1,13 @@
 import type { BoardEntry } from "@/domain/meridian/board-types"
 import type { MonitorIssue } from "@/domain/meridian/monitor-issues"
 import { validateStoryBody } from "@/domain/meridian/story-body"
-import type { Epic, PhaseDocument, UserStory } from "@/domain/meridian/types"
+import type {
+  Epic,
+  PhaseDocument,
+  ProductVersion,
+  Sprint,
+  UserStory,
+} from "@/domain/meridian/types"
 import { getSetupStepState } from "@/domain/meridian/validators"
 
 export function collectDocumentProtocolIssues(
@@ -127,10 +133,75 @@ export function collectEpicProtocolIssues(
   return issues
 }
 
+export function collectVersionProtocolIssues(
+  stories: UserStory[],
+  epics: Epic[],
+  versions: ProductVersion[],
+  sprints: Sprint[],
+): MonitorIssue[] {
+  const versionIds = new Set(versions.map((version) => version.id))
+  const storyIds = new Set(stories.map((story) => story.id))
+  const issues: MonitorIssue[] = []
+
+  for (const story of stories) {
+    if (versionIds.size > 0 && !versionIds.has(story.version)) {
+      issues.push({
+        file: `us/${story.id}.md`,
+        message: `version "${story.version}" não existe em docs/versions/.`,
+        severity: "error",
+        scope: "us",
+        targetId: story.id,
+      })
+    }
+  }
+
+  for (const epic of epics) {
+    for (const versionRef of epic.versions) {
+      if (versionIds.size > 0 && !versionIds.has(versionRef)) {
+        issues.push({
+          file: `epics/${epic.id}.md`,
+          message: `versions referencia "${versionRef}" inexistente em docs/versions/.`,
+          severity: "error",
+          scope: "doc",
+          targetId: epic.id,
+        })
+      }
+    }
+  }
+
+  for (const sprint of sprints) {
+    if (versionIds.size > 0 && !versionIds.has(sprint.versionId)) {
+      issues.push({
+        file: `sprints/${sprint.id}.md`,
+        message: `version "${sprint.versionId}" não existe em docs/versions/.`,
+        severity: "error",
+        scope: "doc",
+        targetId: sprint.id,
+      })
+    }
+
+    for (const storyId of sprint.storyIds) {
+      if (!storyIds.has(storyId)) {
+        issues.push({
+          file: `sprints/${sprint.id}.md`,
+          message: `stories referencia "${storyId}" sem arquivo em docs/us/.`,
+          severity: "warning",
+          scope: "doc",
+          targetId: sprint.id,
+        })
+      }
+    }
+  }
+
+  return issues
+}
+
 export function collectProtocolIssues(input: {
   phaseDocuments: PhaseDocument[]
   userStories: UserStory[]
   epics: Epic[]
+  versions: ProductVersion[]
+  sprints: Sprint[]
   storyBodies: Map<string, string>
   board: BoardEntry[] | null
 }): MonitorIssue[] {
@@ -138,6 +209,12 @@ export function collectProtocolIssues(input: {
     ...collectDocumentProtocolIssues(input.phaseDocuments),
     ...collectStoryProtocolIssues(input.userStories, input.storyBodies),
     ...collectEpicProtocolIssues(input.userStories, input.epics),
+    ...collectVersionProtocolIssues(
+      input.userStories,
+      input.epics,
+      input.versions,
+      input.sprints,
+    ),
     ...(input.board
       ? compareBoardWithStories(input.userStories, input.board)
       : [

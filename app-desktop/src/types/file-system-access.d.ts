@@ -1,4 +1,4 @@
-/** File System Access API (Chromium) — usado em US-009. */
+/** File System Access API (Chromium) — usado em US-0009. */
 
 type FileSystemPermissionMode = "read" | "readwrite"
 

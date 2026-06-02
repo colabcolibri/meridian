@@ -3,6 +3,8 @@ export type SetupStepState = "locked" | "active" | "complete" | "alert"
 export type StoryStatus = "✅" | "🔶" | "❌" | "🧊"
 export type Moscow = "Must" | "Should" | "Could" | "Won't"
 export type EpicStatus = "active" | "paused" | "complete"
+export type ReleaseStatus = "planned" | "active" | "complete"
+export type SprintStatus = "planned" | "active" | "complete"
 
 export interface PhaseDocument {
   id: string
@@ -17,10 +19,36 @@ export interface PhaseDocument {
 export interface Epic {
   id: string
   title: string
+  /** O que esta capacidade entrega ao usuário (seção Capacidade). */
   description: string
+  /** Quando consideramos o epic concluído no nível produto (frontmatter). */
+  outcome: string
+  /** Limites explícitos — o que não pertence a este epic. */
+  scopeOut: string
   versions: string[]
   profiles: string[]
   status: EpicStatus
+}
+
+/** Release de produto (docs/versions/vX.md). */
+export interface ProductVersion {
+  id: string
+  title: string
+  outcome: string
+  objective: string
+  scopeIn: string
+  scopeOut: string
+  status: ReleaseStatus
+}
+
+/** Sprint dentro de uma versão (docs/sprints/vX-SY.md). */
+export interface Sprint {
+  id: string
+  versionId: string
+  title: string
+  doneWhen: string
+  status: SprintStatus
+  storyIds: string[]
 }
 
 export interface UserStory {

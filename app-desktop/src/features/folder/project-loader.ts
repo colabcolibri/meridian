@@ -6,10 +6,18 @@ import {
   MeridianParseError,
   parseEpicFile,
   parsePhaseDocument,
+  parseSprintFile,
   parseUserStoryFile,
+  parseVersionFile,
 } from "@/domain/meridian/parser"
 import { collectProtocolIssues } from "@/domain/meridian/protocol-validators"
-import type { Epic, PhaseDocument, UserStory } from "@/domain/meridian/types"
+import type {
+  Epic,
+  PhaseDocument,
+  ProductVersion,
+  Sprint,
+  UserStory,
+} from "@/domain/meridian/types"
 
 export type { MonitorIssue }
 
@@ -17,6 +25,8 @@ export interface MeridianProjectData {
   phaseDocuments: PhaseDocument[]
   userStories: UserStory[]
   epics: Epic[]
+  versions: ProductVersion[]
+  sprints: Sprint[]
   board: BoardEntry[] | null
   issues: MonitorIssue[]
 }
@@ -35,7 +45,7 @@ async function listUserStoryFilenames(
 ): Promise<string[]> {
   const names: string[] = []
   for await (const [name, handle] of usDir.entries()) {
-    if (handle.kind === "file" && /^US-\d+\.md$/i.test(name)) {
+    if (handle.kind === "file" && /^US-\d{4}\.md$/i.test(name)) {
       names.push(name)
     }
   }
@@ -159,6 +169,128 @@ async function loadEpics(
   return epics
 }
 
+async function listVersionFilenames(
+  versionsDir: FileSystemDirectoryHandle,
+): Promise<string[]> {
+  const names: string[] = []
+  for await (const [name, handle] of versionsDir.entries()) {
+    if (handle.kind === "file" && /^v\d+\.md$/i.test(name)) {
+      names.push(name)
+    }
+  }
+  return names.sort((a, b) => a.localeCompare(b, undefined, { numeric: true }))
+}
+
+async function loadVersions(
+  docsRoot: FileSystemDirectoryHandle,
+  parseIssues: MonitorIssue[],
+): Promise<ProductVersion[]> {
+  const versions: ProductVersion[] = []
+
+  try {
+    const versionsDir = await docsRoot.getDirectoryHandle("versions")
+    const filenames = await listVersionFilenames(versionsDir)
+
+    if (filenames.length === 0) {
+      parseIssues.push({
+        file: "versions/",
+        message: "Nenhum arquivo vX.md encontrado em docs/versions/.",
+        severity: "error",
+        scope: "parse",
+      })
+      return versions
+    }
+
+    const parsed = await Promise.all(
+      filenames.map(async (filename) => {
+        try {
+          const raw = await readTextFile(versionsDir, filename)
+          return parseVersionFile(filename, raw)
+        } catch (error) {
+          recordParseIssue(
+            parseIssues,
+            error instanceof MeridianParseError
+              ? error
+              : new MeridianParseError(`versions/${filename}`, String(error)),
+          )
+          return null
+        }
+      }),
+    )
+
+    for (const version of parsed) {
+      if (version) {
+        versions.push(version)
+      }
+    }
+  } catch {
+    parseIssues.push({
+      file: "versions/",
+      message: 'Pasta "versions/" não encontrada. Crie docs/versions/ com vX.md.',
+      severity: "error",
+      scope: "parse",
+    })
+  }
+
+  return versions
+}
+
+async function listSprintFilenames(
+  sprintsDir: FileSystemDirectoryHandle,
+): Promise<string[]> {
+  const names: string[] = []
+  for await (const [name, handle] of sprintsDir.entries()) {
+    if (handle.kind === "file" && /^v\d+-S\d+\.md$/i.test(name)) {
+      names.push(name)
+    }
+  }
+  return names.sort((a, b) => a.localeCompare(b, undefined, { numeric: true }))
+}
+
+async function loadSprints(
+  docsRoot: FileSystemDirectoryHandle,
+  parseIssues: MonitorIssue[],
+): Promise<Sprint[]> {
+  const sprints: Sprint[] = []
+
+  try {
+    const sprintsDir = await docsRoot.getDirectoryHandle("sprints")
+    const filenames = await listSprintFilenames(sprintsDir)
+
+    const parsed = await Promise.all(
+      filenames.map(async (filename) => {
+        try {
+          const raw = await readTextFile(sprintsDir, filename)
+          return parseSprintFile(filename, raw)
+        } catch (error) {
+          recordParseIssue(
+            parseIssues,
+            error instanceof MeridianParseError
+              ? error
+              : new MeridianParseError(`sprints/${filename}`, String(error)),
+          )
+          return null
+        }
+      }),
+    )
+
+    for (const sprint of parsed) {
+      if (sprint) {
+        sprints.push(sprint)
+      }
+    }
+  } catch {
+    parseIssues.push({
+      file: "sprints/",
+      message: 'Pasta "sprints/" não encontrada (opcional até primeira sprint).',
+      severity: "warning",
+      scope: "parse",
+    })
+  }
+
+  return sprints
+}
+
 async function loadUserStories(
   docsRoot: FileSystemDirectoryHandle,
   parseIssues: MonitorIssue[],
@@ -213,10 +345,12 @@ export async function loadMeridianProject(
   const parseIssues: MonitorIssue[] = []
   const storyBodies = new Map<string, string>()
 
-  const [phaseDocuments, userStories, epics] = await Promise.all([
+  const [phaseDocuments, userStories, epics, versions, sprints] = await Promise.all([
     loadPhaseDocuments(docsRoot, parseIssues),
     loadUserStories(docsRoot, parseIssues, storyBodies),
     loadEpics(docsRoot, parseIssues),
+    loadVersions(docsRoot, parseIssues),
+    loadSprints(docsRoot, parseIssues),
   ])
 
   let board: BoardEntry[] | null = null
@@ -239,6 +373,8 @@ export async function loadMeridianProject(
     phaseDocuments,
     userStories,
     epics,
+    versions,
+    sprints,
     storyBodies,
     board,
   })
@@ -247,6 +383,8 @@ export async function loadMeridianProject(
     phaseDocuments,
     userStories,
     epics,
+    versions,
+    sprints,
     board,
     issues: [...parseIssues, ...protocolIssues],
   }

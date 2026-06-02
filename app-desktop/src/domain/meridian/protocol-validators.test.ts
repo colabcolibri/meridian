@@ -44,7 +44,7 @@ describe("protocol validators", () => {
   it("compara board.json com arquivos US", () => {
     const stories: UserStory[] = [
       {
-        id: "US-001",
+        id: "US-0001",
         title: "A",
         epic: "EPIC-01",
         version: "v0",
