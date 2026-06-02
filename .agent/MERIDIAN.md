@@ -223,12 +223,13 @@ Ela é opcional para projetos simples, mas recomendada quando agentes serão usa
 com frequência. A função dela é manter instruções especializadas fora do protocolo
 principal, sem perder governança.
 
-**Cursor IDE:** o Cursor não indexa `.agent/` nativamente. Use `.cursor/` como adapter:
+**Cursor IDE:** o Cursor não indexa `.agent/` nativamente. Use `.cursor/` como adapter **local**:
 
-- Edite o kit em `.agent/`.
-- Rode `./.agent/scripts/sync_cursor_kit.sh` na raiz do repositório.
-- Regras always-on no Cursor: `.cursor/rules/meridian.mdc`.
-- Slash commands no Cursor: `.cursor/commands/` (espelho de `.agent/workflows/`).
+- Edite o kit em `.agent/` (fonte versionada).
+- Rode `./.agent/scripts/sync_cursor_kit.sh` após clone ou ao adicionar skill/agent/workflow.
+- **Não commitar `.cursor/`** — symlinks locais (`.gitignore` na raiz do kit).
+- Regra always-on: `.agent/rules/meridian.mdc` → espelhada em `.cursor/rules/meridian.mdc`.
+- Slash commands: `.cursor/commands/` espelha `.agent/workflows/`.
 
 Estrutura recomendada:
 
@@ -242,6 +243,9 @@ Estrutura recomendada:
 Skills oficiais do kit (ver `.agent/skills/doc.md`):
 
 - `init-project`
+- `create-epic`
+- `create-version`
+- `create-sprint`
 - `security-review`
 - `create-user-story`
 - `generate-board-json`
@@ -665,7 +669,7 @@ Não avance para banco, API ou autorização antes de entender os perfis.
 
 `04_epics.md` é o documento de **fase** que cataloga e aprova o conjunto de épicos.
 Cada épico individual vive em **`docs/epics/EPIC-XX.md`** (pasta flat, um arquivo por epic),
-no mesmo espírito de `docs/us/US-XXX.md`.
+no mesmo espírito de `docs/us/US-XXXX.md`.
 
 Formato de cada epic (`docs/epics/EPIC-XX.md`):
 
@@ -676,23 +680,36 @@ title: Nome curto
 status: active | complete | paused
 versions: [v0, v1]
 profiles: [Perfil A, Perfil B]
+outcome: "Done do epic no nível produto — frase objetiva."
 ---
 
 # EPIC-XX — Nome
 
-Descrição da capacidade de produto entregue ao usuário.
+## Capacidade
+
+O que o usuário passa a conseguir (linguagem de produto).
+
+## Resultado esperado
+
+Como o manager sabe que o epic pode ir para `complete`.
+
+## Fora deste epic
+
+Limites — o que pertence a outro epic ou versão.
 ```
 
 Regras:
 
 - IDs permanentes: `EPIC-01`, `EPIC-02`, … (nunca reutilizar).
 - Nome do arquivo deve coincidir com `id` (`EPIC-01.md` → `id: EPIC-01`).
+- `outcome` é obrigatório no frontmatter (done no nível produto, não implementação).
 - Não crie subpastas dentro de `docs/epics/`.
-- `04_epics.md` mantém tabela-resumo e regras; detalhes ficam nos arquivos individuais.
+- `04_epics.md` mantém tabela-resumo e regras; definição canônica fica nos arquivos individuais.
+- User stories **referenciam** o epic (`epic: EPIC-XX`) — não repetem descrição, `outcome` nem escopo do epic.
 
 Regra para agentes:
 
-Epic não é módulo técnico. Epic é capacidade de produto.
+Epic não é módulo técnico. Epic é capacidade de produto. Novo epic → skill `create-epic`.
 
 ### 11.6 `05_principles.md` — Princípios de código
 
@@ -715,51 +732,57 @@ Regra para agentes:
 
 Use este documento para evitar que cada agente invente uma estrutura diferente.
 
-### 11.7 `06_versions.md` — Versões e sprints
+### 11.7 `06_versions.md` — Versões (índice), `docs/versions/` e `docs/sprints/`
 
-Modelo de versões:
+`06_versions.md` é o documento de **fase** que cataloga releases e sprints aprovados.
+Cada versão vive em **`docs/versions/vX.md`**; sprints em **`docs/sprints/vX-SY.md`**.
 
-```md
-| Versão | Nome          | Foco                                         |
-| ------ | ------------- | -------------------------------------------- |
-| v0     | Foundation    | Setup técnico e base sem features de produto |
-| v1     | MVP           | Fluxo principal completo                     |
-| v2     | Consolidation | Estabilidade e features secundárias          |
-| v3+    | Scale         | Integrações e automações                     |
+Formato de cada versão (`docs/versions/vX.md`):
+
+```yaml
+---
+id: v1
+title: Nome curto do release
+status: planned | active | complete
+outcome: "Done do release no nível produto."
+---
+
+# v1 — Nome
+
+## Objetivo
+## Critério de Done
+## Incluído nesta versão
+## Explicitamente fora
+## Checklist go-live
+## Sprints
 ```
 
-Regra:
+Formato de cada sprint (`docs/sprints/v1-S1.md`):
 
-`v0` nunca deve ser vendida como produto. `v0` é fundação técnica.
+```yaml
+---
+id: v1-S1
+version: v1
+title: Nome da sprint
+status: planned | active | complete
+done_when: "Condição objetiva."
+stories: [US-0001, US-0002]
+---
 
-Para cada versão:
+# v1-S1 — Nome
 
-```md
-## vX — Nome
-
-**Objetivo:** frase clara
-**Critério de Done:** condição objetiva
-**Estimativa:** X sprints / semanas
-
-### Incluído nesta versão
-
-### Explicitamente fora
-
-### Riscos
-
-### Checklist go-live
+(tabela opcional de US no corpo)
 ```
 
-### Sprints
+Regras:
 
-Por padrão, sprints ficam em `06_versions.md`.
-
-Migre para `docs/sprints/` quando:
-
-- `06_versions.md` passar de aproximadamente 150 linhas; ou
-- houver mais de 3 sprints ativas simultaneamente.
-
-Não misture formatos.
+- IDs de versão: `v0`, `v1`, `v2`… (`v0.md` → `id: v0`). `v0` é fundação técnica — não vender como produto.
+- IDs de sprint: `v1-S1`, `v2-S1`…
+- User stories referenciam **`version: vX`** — não repetem plano da versão.
+- Epics referenciam **`versions: [v0, v1]`** — releases onde a capacidade entra.
+- Gate de US: `04_epics.md` + `06_versions.md` = `approved`.
+- Novo release → skill `create-version` ou `/create-version`.
+- Nova sprint → skill `create-sprint` ou `/plan-sprint`.
 
 ### 11.8 `07_architecture.md` — Arquitetura
 
@@ -880,7 +903,7 @@ e comece um novo `11_decisions.md`.
 Cada US é um arquivo individual em:
 
 ```txt
-docs/us/US-XXX.md
+docs/us/US-XXXX.md
 ```
 
 A pasta é flat.
@@ -902,21 +925,22 @@ US só podem ser criadas após:
 
 - IDs são permanentes.
 - IDs nunca são reutilizados.
-- Sequência global: `US-001`, `US-002`, `US-003`.
+- Formato fixo: **`US-XXXX`** — quatro dígitos com zero à esquerda (`US-0001`, `US-0017`, `US-0123`).
+- Nome do arquivo deve coincidir com `id` (`US-0001.md` → `id: US-0001`).
 - Buracos são aceitáveis.
-- Próximo ID = maior ID existente + 1.
+- Próximo ID = maior número existente + 1, sempre com 4 dígitos.
 
 ### 12.3 Frontmatter de US
 
 ```yaml
 ---
-id: US-XXX
+id: US-XXXX
 title: Título curto
 epic: EPIC-XX
 version: v1
 status: ✅ | 🔶 | ❌ | 🧊
 moscow: Must | Should | Could | Won't
-depends_on: [US-YYY]
+depends_on: [US-YYYY]
 done_when: "Condição objetiva e mensurável."
 ---
 ```
@@ -924,7 +948,7 @@ done_when: "Condição objetiva e mensurável."
 ### 12.4 Corpo de US
 
 ```md
-# US-XXX — Título curto
+# US-XXXX — Título curto
 
 **Como** [tipo de usuário],
 **quero** [ação],
@@ -975,20 +999,20 @@ O board canônico é:
 docs/kanban/board.json
 ```
 
-Ele é gerado a partir dos frontmatters dos arquivos `docs/us/US-XXX.md`.
+Ele é gerado a partir dos frontmatters dos arquivos `docs/us/US-XXXX.md`.
 
 Estrutura:
 
 ```json
 [
   {
-    "id": "US-001",
+    "id": "US-0001",
     "title": "Título curto",
     "epic": "EPIC-01",
     "version": "v1",
     "status": "❌",
     "moscow": "Must",
-    "depends_on": ["US-002"],
+    "depends_on": ["US-0002"],
     "done_when": "Condição objetiva de conclusão."
   }
 ]

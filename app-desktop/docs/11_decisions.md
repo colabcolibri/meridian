@@ -152,3 +152,27 @@ blocks: []
 **Por que mudou:** Simetria com `docs/us/`, menos conflito em edição paralela, frontmatter estruturado e escala quando o catálogo crescer.
 **Impacto em outros docs:** Gate de criação de US continua exigindo `04_epics.md` + `06_versions.md` approved; US referenciam `epic:` que deve existir em `docs/epics/`.
 **Responsável:** Produto/Engenharia
+
+## 2026-06-02 — Modelo enriquecido de epic (`outcome`, anatomia)
+
+**Documento afetado:** `docs/epics/EPIC-*.md`, `04_epics.md`, `.agent/MERIDIAN.md` §11.5, `.agent/skills/create-epic/`, `parser.ts`, `EpicsView.tsx`, guia Comece aqui, agents/skills
+**O que mudou:** Epic passou a exigir `outcome` no frontmatter e seções estruturadas (Capacidade, Resultado esperado, Fora deste epic). US referencia epic só por `epic: EPIC-XX` — fonte canônica do epic é `docs/epics/`. Nova skill `create-epic`.
+**Por que mudou:** Separar conceito de capacidade de produto (epic) da tarefa executável (US) e dar critério claro de “done” no nível produto.
+**Impacto em outros docs:** Validador Python e parser TS exigem `outcome`; agents documentation-strategist, sprint-planner, process-manager e board-keeper atualizados.
+**Responsável:** Produto/Engenharia
+
+## 2026-06-02 — IDs de user story com 4 dígitos (`US-XXXX`)
+
+**Documento afetado:** `docs/us/US-*.md`, `docs/kanban/board.json`, `06_versions.md`, `.agent/MERIDIAN.md` §12.2, `validate_meridian.py`, `parser.ts`, skills/templates
+**O que mudou:** Formato de ID fixo `US-XXXX` (quatro dígitos, zero à esquerda). Arquivos renomeados (`US-001.md` → `US-0001.md`). Nome do arquivo deve coincidir com `id` no frontmatter.
+**Por que mudou:** Escala do catálogo — evita colisão visual e mantém ordenação lexicográfica alinhada à numérica até US-9999.
+**Impacto em outros docs:** Entradas históricas neste log mantêm nomenclatura antiga onde citadas; referências operacionais usam o novo formato.
+**Responsável:** Produto/Engenharia
+
+## 2026-06-02 — Versões e sprints em arquivos (`docs/versions/`, `docs/sprints/`)
+
+**Documento afetado:** `06_versions.md`, `docs/versions/v*.md`, `docs/sprints/*.md`, `parser.ts`, `project-loader.ts`, `validate_meridian.py`, skills `create-version`/`create-sprint`, guia Comece aqui, aba Entregas
+**O que mudou:** Releases migraram de seções monolíticas em `06_versions.md` para `docs/versions/vX.md`; sprints para `docs/sprints/vX-SY.md`. `06_versions.md` virou índice de fase. US referencia `version: vX`; validador exige arquivo correspondente.
+**Por que mudou:** Simetria com épicos/US, clareza para IA (`/create-version`, `/plan-sprint`) e escala do roadmap.
+**Impacto em outros docs:** Workflows `/create-version`, skills novas; sprint-planner e create-user-story atualizados.
+**Responsável:** Produto/Engenharia

@@ -39,7 +39,7 @@ Antes de qualquer ação, classifique:
 | **SEGURANÇA** | "security", "OWASP", "secrets", `02_security` | `security-steward` |
 | **INICIAR PROJETO** | "iniciar", "setup meridian", "criar docs" | `process-manager` + `init-project` |
 | **CÓDIGO** | "implementar", "criar app", "fix", "refactor" | Verificar maturidade dos docs ANTES |
-| **SLASH** | `/init-meridian`, `/create-us`, etc. | Fluxo do workflow correspondente |
+| **SLASH** | `/init-meridian`, `/create-epic`, `/create-us`, etc. | Fluxo do workflow correspondente |
 
 > Para roteamento automático de agents, siga `@[skills/meridian-routing]`.
 

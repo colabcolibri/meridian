@@ -26,7 +26,7 @@ Isso evita inflar o contexto com todo o protocolo Meridian em toda mensagem.
 | ------ | ------- |
 | Workspace (projeto Meridian) | `<raiz-do-projeto>/.agent/skills/` |
 | Kit Meridian (este repo) | `meridian/.agent/skills/` |
-| Cursor (espelho) | `<raiz>/.cursor/skills/` → symlink para `.agent/skills/` |
+| Cursor (espelho local) | `<raiz>/.cursor/` → symlinks para `.agent/` (**gitignored** no kit) |
 
 Após editar skills em `.agent/`, rode `./.agent/scripts/sync_cursor_kit.sh` para o Cursor indexar.
 
@@ -121,6 +121,9 @@ allowed-tools: Read, Glob, Grep
 | Skill | Pasta |
 | ----- | ----- |
 | `init-project` | `init-project/` |
+| `create-epic` | `create-epic/` |
+| `create-version` | `create-version/` |
+| `create-sprint` | `create-sprint/` |
 | `create-user-story` | `create-user-story/` |
 | `generate-board-json` | `generate-board-json/` |
 | `update-decisions-log` | `update-decisions-log/` |

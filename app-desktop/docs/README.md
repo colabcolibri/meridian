@@ -22,7 +22,7 @@ Esta pasta é a **fonte de verdade** do desenvolvimento do Meridian Desktop. No 
 | [03_user_types.md](03_user_types.md)       | approved | Perfis de uso                                |
 | [04_epics.md](04_epics.md)                 | approved | Índice de épicos (detalhes em `epics/`)      |
 | [05_principles.md](05_principles.md)       | approved | Princípios de implementação                  |
-| [06_versions.md](06_versions.md)           | approved | Versões, sprints e tabela de US              |
+| [06_versions.md](06_versions.md)           | approved | Índice de releases e sprints                 |
 | [07_architecture.md](07_architecture.md)   | approved | Arquitetura do app (parser, pasta docs)      |
 | [08_database.md](08_database.md)           | draft    | Fora do escopo inicial                       |
 | [09_api_contracts.md](09_api_contracts.md) | draft    | Fora do escopo inicial                       |
@@ -33,6 +33,8 @@ Esta pasta é a **fonte de verdade** do desenvolvimento do Meridian Desktop. No 
 
 | Artefato       | Caminho                                  | Papel                                          |
 | -------------- | ---------------------------------------- | ---------------------------------------------- |
+| Releases       | [`versions/`](versions/)                 | Um arquivo por vX (go-live)                    |
+| Sprints        | [`sprints/`](sprints/)                   | Fatias vX-SY dentro de cada release            |
 | Épicos         | [`epics/`](epics/)                       | Um arquivo por EPIC-XX (capacidade de produto) |
 | User stories   | [`us/`](us/)                             | Backlog (uma US = um arquivo)                  |
 | Board derivado | [`kanban/board.json`](kanban/board.json) | Kanban gerado das US — não editar à mão        |
@@ -41,16 +43,16 @@ Esta pasta é a **fonte de verdade** do desenvolvimento do Meridian Desktop. No 
 
 | Sprint              | Status    | US                                  |
 | ------------------- | --------- | ----------------------------------- |
-| v0-S1 Fundação      | ✅        | US-001–007                          |
-| v0-S2 Monitor shell | ✅        | US-008                              |
-| v1-S1 Leitura real  | ✅        | US-009 → US-017, US-016             |
-| v1-S2 UX do monitor | ✅        | US-018 → US-022 (EPIC-06)           |
+| v0-S1 Fundação      | ✅        | US-0001–007                         |
+| v0-S2 Monitor shell | ✅        | US-0008                             |
+| v1-S1 Leitura real  | ✅        | US-0009 → US-0017, US-0016          |
+| v1-S2 UX do monitor | ✅        | US-0018 → US-0022 (EPIC-06)         |
 | **v2**              | planejado | VSCode / escrita em disco (EPIC-05) |
 
 ## Como agents devem trabalhar
 
-1. Escolher US em `06_versions.md` (próximo marco: v2 quando definido).
-2. Implementar citando `US-XXX` no contexto.
+1. Escolher US em `docs/sprints/` ou `docs/versions/` (próximo marco: v2 em `versions/v2.md`).
+2. Implementar citando `US-XXXX` no contexto.
 3. Atualizar frontmatter da US (`🔶` + `Falta:` ou `✅` com evidência).
 4. Regenerar `board.json` (skill `generate-board-json` ou script).
 5. Decisões relevantes → append em `11_decisions.md`.

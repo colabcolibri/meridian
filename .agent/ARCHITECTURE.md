@@ -11,8 +11,8 @@
 | Repositório | `README.md` | Humanos (GitHub, onboarding) |
 | Protocolo produto | `meridian.md` | Humanos + cópia em projetos clientes |
 | Kit portátil | `.agent/` | Antigravity, ag-kit, qualquer IDE |
-| Adapter Cursor | `.cursor/` | Cursor IDE (symlinks → `.agent/`) |
-| Regras sempre ativas | `.agent/rules/` + `.cursor/rules/meridian.mdc` | Agentes |
+| Adapter Cursor | `.cursor/` (local, gitignored) | Cursor IDE (symlinks → `.agent/`) |
+| Regras always ativas | `.agent/rules/meridian.mdc` + `.agent/rules/MERIDIAN.md` | Agentes |
 | Protocolo master | `.agent/MERIDIAN.md` | Governança completa |
 | Operação | `.agent/agents`, `skills`, `workflows` | Personas e procedimentos |
 
@@ -21,9 +21,9 @@ O app desktop (`app-desktop/`) monitora pastas Meridian; não é fonte de verdad
 ### Por que `.agent` e `.cursor`?
 
 - **`.agent/`** — convenção Antigravity; copiável para projetos e outras ferramentas.
-- **`.cursor/`** — o que o Cursor indexa: `rules/*.mdc`, `skills/`, `agents/`, `commands/`.
+- **`.cursor/`** — adapter **local** (symlinks gerados; **não commitar**).
 
-**Edite em `.agent/`** e rode `./.agent/scripts/sync_cursor_kit.sh` para atualizar symlinks em `.cursor/`.
+**Edite em `.agent/`** e rode `./.agent/scripts/sync_cursor_kit.sh` para recriar symlinks em `.cursor/` (obrigatório após clone no Cursor).
 
 ---
 
@@ -40,7 +40,7 @@ O app desktop (`app-desktop/`) monitora pastas Meridian; não é fonte de verdad
     validate_meridian.py
     sync_cursor_kit.sh
 
-.cursor/                   # adapter Cursor (symlinks → .agent)
+.cursor/                   # adapter Cursor (local, gitignored — sync_cursor_kit.sh)
   rules/meridian.mdc       # alwaysApply
   skills/
   agents/
@@ -67,10 +67,10 @@ Workflows orquestram agents; não substituem o protocolo master.
 | ----- | ------- | ------ |
 | `process-manager` | Governança, status, gates | init-project, update-decisions-log, generate-board-json, meridian-routing |
 | `scope-architect` | `00_scope.md` | init-project, update-decisions-log, meridian-routing |
-| `documentation-strategist` | Docs de fase `01`–`05`, `08`–`10` | init-project, create-user-story, update-decisions-log, meridian-routing |
+| `documentation-strategist` | Docs de fase `01`–`05`, `08`–`10`, `docs/epics/` | init-project, create-epic, create-user-story, update-decisions-log, meridian-routing |
 | `security-steward` | `02_security.md` | security-review, update-decisions-log, meridian-routing |
 | `architecture-guardian` | `07_architecture.md` | security-review, update-decisions-log, meridian-routing |
-| `sprint-planner` | `06_versions`, sprints | create-user-story, generate-board-json, update-decisions-log, meridian-routing |
+| `sprint-planner` | `06_versions` índice, `docs/versions/`, `docs/sprints/` | create-version, create-sprint, create-user-story, … |
 | `board-keeper` | US + `board.json` | create-user-story, generate-board-json, update-decisions-log, meridian-routing |
 
 Cada agent inclui: fases 0/-1, missão, proibições, formato de saída, delegação.
@@ -82,6 +82,9 @@ Cada agent inclui: fases 0/-1, missão, proibições, formato de saída, delega�
 | Skill | References |
 | ----- | ---------- |
 | `init-project` | `doc-templates.md`, `gitignore-baseline.md` |
+| `create-epic` | `epic-template.md` |
+| `create-version` | `version-template.md` |
+| `create-sprint` | `sprint-template.md` |
 | `create-user-story` | `us-template.md` |
 | `generate-board-json` | `board-schema.md` |
 | `update-decisions-log` | `decision-template.md` |
@@ -99,7 +102,9 @@ Ver `.agent/skills/doc.md` para criar novas skills.
 | `init-meridian` | process-manager | init, sem código |
 | `status` | process-manager | leitura |
 | `plan-sprint` | sprint-planner | planejamento |
+| `create-version` | sprint-planner | criar release em `docs/versions/` |
 | `create-us` | board-keeper | criar US |
+| `create-epic` | documentation-strategist | criar epic em `docs/epics/` |
 | `architecture` | architecture-guardian | doc 07 |
 | `security-pass` | security-steward | doc 02 |
 | `sync-board` | board-keeper | derivar JSON |
@@ -132,7 +137,7 @@ python .agent/scripts/validate_meridian.py <project-root>
 | Antigravity | Meridian |
 | ----------- | -------- |
 | `README.md` + `rules/GEMINI.md` | `README.md` + `meridian.md` + `rules/MERIDIAN.md` |
-| 37 skills de código/stack | 6 skills de governança documental |
+| 37 skills de código/stack | 9 skills de governança documental |
 | `intelligent-routing` (domínios técnicos) | `meridian-routing` (fases docs/US) |
 | Plan files `{task-slug}.md` | `docs/` fase `00`–`11` + US |
 | Agents longos para implementação | Agents para documentação e gates antes de código |

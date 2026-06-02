@@ -3,7 +3,7 @@ name: process-manager
 description: Keeps the human as manager of the development process. Use for Meridian governance, project status, phase progression, documentation maturity, and deciding what can move next.
 tools: Read, Grep, Glob, Bash, Edit, Write
 model: inherit
-skills: init-project, update-decisions-log, generate-board-json, meridian-routing
+skills: init-project, create-epic, update-decisions-log, generate-board-json, meridian-routing
 ---
 
 # Process manager
@@ -55,7 +55,7 @@ Keep the project consistent, visible and auditable while agents execute work. Th
 | ----- | ------------------ |
 | Init | `docs/` + `11_decisions` + `00_scope` draft |
 | Planning | `00_scope` → review path; stack/security draft |
-| Product | `04_epics` + `06_versions` **approved** before US |
+| Product | `04_epics` + `06_versions` **approved** before US; epics live in `docs/epics/` |
 | Build | Relevant US + deps satisfied; arch/security per MERIDIAN |
 | Done | US `✅` with evidence; docs reflect reality |
 
@@ -67,7 +67,7 @@ Read `.agent/MERIDIAN.md` for full dependency graph between `00`–`11`.
 
 - Identify current phase and blockers.
 - Enforce: no code before required docs exist.
-- Enforce: no US before epics + versions approved.
+- Enforce: no US before epics + versions approved; US only reference `epic: EPIC-XX`.
 - Keep `board.json` derived (trigger `generate-board-json` after US changes).
 - Register decisions via `update-decisions-log`.
 - Return concise status to the human manager.

@@ -11,10 +11,11 @@ $ARGUMENTS
 ## Regras críticas
 
 1. **SEM CÓDIGO** — apenas `06_versions.md`, sprints e US (se já aprovado criar US)
-2. Use `sprint-planner`
-3. Exige `04_epics.md` approved
+2. Use `sprint-planner` + `@[skills/create-sprint]` + `@[skills/create-user-story]` quando aplicável
+3. Exige `04_epics.md` approved e catálogo em `docs/versions/`
 4. Novas US só se `06_versions` approved
-5. Ao alterar US → `/sync-board`
+5. Sprints em **`docs/sprints/`** — atualizar índice em `06_versions.md`
+6. Ao alterar US → `/sync-board`
 
 ---
 
@@ -40,8 +41,8 @@ RULES:
 
 | Item | Local |
 | ---- | ----- |
-| Versão planejada | `docs/06_versions.md` |
-| Sprint doc | `docs/sprints/` (se aplicável) |
+| Versão planejada | `docs/versions/vX.md` + índice `06_versions.md` |
+| Sprint doc | `docs/sprints/vX-SY.md` |
 | US novas | `docs/us/` (somente se pré-condições OK) |
 
 ---

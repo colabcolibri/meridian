@@ -20,10 +20,11 @@ Antes de responder, classifique o pedido e selecione o agent Meridian correto. I
 | Iniciar / estrutura | "iniciar", "setup", "criar docs", "init meridian" | `process-manager` | sim |
 | Status / governança | "status", "fase", "bloqueio", "pode avançar" | `process-manager` | sim |
 | Escopo | "escopo", "scope", "in scope", "out of scope", `00_scope` | `scope-architect` | sim |
-| Documentos de fase | "tech stack", "epic", "princípio", "ambiente", `01_`–`05_`, `08`–`10` | `documentation-strategist` | sim |
+| Documentos de fase | "tech stack", "princípio", "ambiente", `01_`–`05_`, `08`–`10` | `documentation-strategist` | sim |
+| Epic (capacidade) | "criar epic", "novo epic", `/create-epic`, `docs/epics/`, `EPIC-` | `documentation-strategist` + skill `create-epic` | sim |
 | Segurança | "security", "OWASP", "secrets", "threat", `02_security` | `security-steward` | sim |
 | Arquitetura | "architecture", "arquitetura", `07_architecture` | `architecture-guardian` | sim |
-| Versão / sprint | "versão", "sprint", "roadmap", `06_versions` | `sprint-planner` | sim |
+| Versão / sprint | "versão", "sprint", "roadmap", `/create-version`, `06_versions`, `docs/versions/` | `sprint-planner` + skill `create-version` / `create-sprint` | sim |
 | User story / board | "user story", "US-", "kanban", "board.json", "aceite" | `board-keeper` | sim |
 | US + planejamento | "planejar sprint" + "criar US" | `sprint-planner` + `board-keeper` | sim |
 | Implementar código | "implementar", "build", "criar API", "componente" | `process-manager` primeiro | **bloquear** se docs imaturos |
