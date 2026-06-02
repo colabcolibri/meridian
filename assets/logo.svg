@@ -1,10 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 64" fill="none" role="img" aria-label="Meridian">
-  <title>Meridian</title>
-  <!-- mark: meridian line -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 64" fill="none" role="img" aria-labelledby="logo-title">
+  <title id="logo-title">Meridian</title>
   <rect x="8" y="8" width="48" height="48" rx="12" fill="#18181b"/>
   <line x1="32" y1="16" x2="32" y2="48" stroke="#fafafa" stroke-width="2" stroke-linecap="round"/>
   <circle cx="32" cy="28" r="4" fill="#3b82f6"/>
   <circle cx="32" cy="40" r="2" fill="#71717a"/>
-  <!-- wordmark -->
-  <text x="72" y="42" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" font-size="28" font-weight="600" fill="#09090b" letter-spacing="-0.02em">Meridian</text>
 </svg>

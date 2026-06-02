@@ -1,9 +1,9 @@
 <p align="center">
-  <img src="assets/logo.svg" alt="Meridian" width="320" />
+  <img src="assets/logo-mark.svg" alt="Meridian" width="64" height="64" />
 </p>
 
 <p align="center">
-  <a href="LICENSE"><img src="https://img.shields.io/badge/licença-uso%20gratuito%20·%20sem%20venda-orange" alt="Licença de uso — sem venda" /></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/licenca-uso%20gratuito%20sem%20venda-orange" alt="Licenca de uso — sem venda" /></a>
   <a href=".github/workflows/ci.yml"><img src="https://img.shields.io/badge/CI-GitHub%20Actions-2088FF?logo=githubactions&logoColor=white" alt="CI" /></a>
   <img src="https://img.shields.io/badge/status-experimental-orange" alt="Experimental" />
 </p>
@@ -188,4 +188,4 @@ Leia [`CONTRIBUTING.md`](CONTRIBUTING.md). Para vulnerabilidades, veja [`SECURIT
 
 ## Licença
 
-[Licença de Uso Meridian](LICENSE) — uso e redistribuição **gratuitos**; **venda proibida** sem autorização escrita. Copyright (c) 2026 colabcolibri.
+[Licença de Uso Meridian](LICENSE) (`LicenseRef-Meridian-Use-1.0`) — uso e redistribuição **gratuitos**; **venda proibida** sem autorização escrita. No GitHub, aparece como licença **Other** (não é open source no sentido OSI). Copyright (c) 2026 colabcolibri.
