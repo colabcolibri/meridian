@@ -5,6 +5,7 @@ import { countIssuesBySeverity } from "@/domain/meridian/protocol-validators"
 import { useProjectData } from "@/features/folder/ProjectDataContext"
 import { useProjectFolder } from "@/features/folder/ProjectFolderContext"
 import { MONITOR_CONTAINER } from "@/features/monitor/monitor-layout"
+import { typeScale } from "@/features/monitor/monitor-typography"
 import { cn } from "@/lib/utils"
 
 export function MonitorTopBar() {
@@ -16,7 +17,7 @@ export function MonitorTopBar() {
   const problemCount = errors + warnings
 
   return (
-    <header className="sticky top-0 z-10 border-b border-zinc-200/80 bg-white/95 backdrop-blur-sm">
+    <header className="sticky top-0 z-10 border-b border-border bg-card/95 backdrop-blur-sm">
       <div
         className={cn(
           MONITOR_CONTAINER,
@@ -24,18 +25,18 @@ export function MonitorTopBar() {
         )}
       >
         <div className="flex min-w-0 items-center gap-3">
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-teal-700 text-white">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-meridian text-meridian-foreground">
             <Blocks className="h-4 w-4" aria-hidden />
           </div>
           <div className="min-w-0">
-            <p className="text-sm font-semibold text-zinc-950">Meridian</p>
+            <p className={typeScale.label}>Meridian</p>
             {folder ? (
-              <p className="truncate text-xs text-zinc-500">
+              <p className={cn(typeScale.caption, "truncate")}>
                 Projeto:{" "}
-                <span className="font-medium text-zinc-700">{folder.name}</span>
+                <span className="font-medium text-foreground">{folder.name}</span>
               </p>
             ) : (
-              <p className="text-xs text-zinc-500">Nenhum projeto aberto</p>
+              <p className={typeScale.caption}>Nenhum projeto aberto</p>
             )}
           </div>
           {folder && problemCount > 0 ? (

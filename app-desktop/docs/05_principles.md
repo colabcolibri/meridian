@@ -50,3 +50,16 @@ Na primeira versão, erros serão representados como validações e alertas visu
 - Tabs para alternar visões.
 - Scroll area para listas longas.
 - Ícones lucide para ações e sinais visuais.
+
+### Identidade Meridian Desktop
+
+Tokens em `app-desktop/src/index.css` (`--meridian*`) e classes Tailwind `meridian`, `meridian-success`, etc. Uma única fonte de estados de fluxo em `src/features/monitor/setup-step-styles.ts`.
+
+| Estado (fluxo) | Cor semântica      | Uso                                  |
+| -------------- | ------------------ | ------------------------------------ |
+| Pronto         | `meridian-success` | Documento aprovado e dependências ok |
+| Em andamento   | `meridian` (marca) | Pode editar/revisar agora            |
+| Não iniciado   | zinc neutro        | Bloqueado por dependências           |
+| Atenção        | `destructive`      | Inconsistência no protocolo          |
+
+Progresso da fase no anel do acordeão (`complete/total`). Cards em grade compacta (até 4 colunas): ícone de estado, id, título, clique abre leitura. Cor em tint no ícone do card, sem barras laterais nem botão “ler” dedicado. Não usar `teal`/`emerald` soltos; estender tokens se precisar de nova cor.

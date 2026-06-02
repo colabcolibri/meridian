@@ -1,32 +1,49 @@
-import { FileText, Loader2, X } from "lucide-react"
+import { FileText, Loader2 } from "lucide-react"
 import { useCallback, useEffect, useState } from "react"
 
-import { Button } from "@/components/ui/button"
+import { ScrollArea } from "@/components/ui/scroll-area"
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet"
 import type { PhaseDocument } from "@/domain/meridian/types"
 import { useProjectFolder } from "@/features/folder/ProjectFolderContext"
 import {
   readPhaseDocFromFolder,
   type PhaseDocContent,
 } from "@/features/folder/read-phase-doc"
+import { MarkdownContent } from "@/features/monitor/components/MarkdownContent"
+import { typeScale } from "@/features/monitor/monitor-typography"
+import { docStatusStyles } from "@/features/monitor/setup-step-styles"
+import { cn } from "@/lib/utils"
 
-export function PhaseDocReader({
+export function PhaseDocReaderSheet({
   document,
-  onClose,
+  open,
+  onOpenChange,
 }: {
-  document: PhaseDocument
-  onClose: () => void
+  document: PhaseDocument | null
+  open: boolean
+  onOpenChange: (open: boolean) => void
 }) {
+  return (
+    <Sheet onOpenChange={onOpenChange} open={open}>
+      <SheetContent className="flex h-full flex-col p-0" side="right">
+        {document ? <PhaseDocReaderBody document={document} /> : null}
+      </SheetContent>
+    </Sheet>
+  )
+}
+
+function PhaseDocReaderBody({ document }: { document: PhaseDocument }) {
   const { folder, getHandle } = useProjectFolder()
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [content, setContent] = useState<PhaseDocContent | null>(null)
+  const docStatus = docStatusStyles[document.status]
 
   const load = useCallback(async () => {
     setLoading(true)
@@ -35,7 +52,7 @@ export function PhaseDocReader({
 
     const handle = await getHandle()
     if (!handle) {
-      setError("Abra a pasta docs do projeto para ler os arquivos .md.")
+      setError("Abra a pasta docs do projeto para ler os arquivos.")
       setLoading(false)
       return
     }
@@ -45,7 +62,7 @@ export function PhaseDocReader({
       setContent(result)
     } catch {
       setError(
-        `Não foi possível ler ${document.id}.md. Confirme que o arquivo existe na pasta docs aberta.`,
+        `Não foi possível ler ${document.id}.md. Confirme que o arquivo existe na pasta aberta.`,
       )
     } finally {
       setLoading(false)
@@ -57,107 +74,60 @@ export function PhaseDocReader({
   }, [load])
 
   return (
-    <Card className="overflow-hidden border-teal-200 shadow-md">
-      <CardHeader className="flex flex-row items-start justify-between gap-4 space-y-0 border-b bg-teal-50/50">
-        <div className="min-w-0">
-          <div className="flex items-center gap-2 text-teal-800">
-            <FileText className="h-4 w-4 shrink-0" />
-            <CardTitle className="text-base">
-              {document.id} — {document.title}
-            </CardTitle>
-          </div>
-          <CardDescription className="mt-1">
-            {content?.filename ?? `${document.id}.md`}
-            {folder ? ` · pasta ${folder.name}` : null}
-          </CardDescription>
+    <>
+      <SheetHeader>
+        <div className="flex flex-wrap items-center gap-2">
+          <FileText className="size-5 shrink-0 text-primary" aria-hidden />
+          <SheetTitle className={typeScale.panelTitle}>{document.title}</SheetTitle>
+          <span
+            className={cn(
+              "inline-flex rounded-md px-2.5 py-1",
+              typeScale.badge,
+              docStatus.className,
+            )}
+          >
+            {docStatus.label}
+          </span>
         </div>
-        <Button aria-label="Fechar leitor" onClick={onClose} size="sm" variant="ghost">
-          <X className="h-4 w-4" />
-        </Button>
-      </CardHeader>
-      <CardContent className="max-h-[min(70vh,640px)] overflow-y-auto p-0">
+        <SheetDescription className={cn(typeScale.caption, "font-mono")}>
+          {content?.filename ?? `${document.id}.md`}
+          {folder ? ` · ${folder.name}` : null}
+        </SheetDescription>
+      </SheetHeader>
+
+      <ScrollArea className="min-h-0 flex-1">
         {loading ? (
-          <div className="flex items-center justify-center gap-2 py-12 text-sm text-zinc-500">
-            <Loader2 className="h-4 w-4 animate-spin" />
-            Carregando markdown…
+          <div className="flex items-center justify-center gap-2 py-20 text-muted-foreground">
+            <Loader2 className="size-5 animate-spin" />
+            <span className={typeScale.bodySm}>Carregando documento…</span>
           </div>
         ) : null}
 
-        {error ? <p className="px-6 py-8 text-sm text-red-800">{error}</p> : null}
+        {error ? (
+          <p className={cn(typeScale.body, "px-6 py-10 text-destructive")}>{error}</p>
+        ) : null}
 
         {content && !loading && !error ? (
-          <div className="space-y-0">
+          <div className="pb-8">
             {content.frontmatter ? (
-              <section className="border-b bg-zinc-50 px-6 py-4">
-                <h3 className="mb-2 text-xs font-semibold uppercase tracking-wide text-zinc-500">
-                  Frontmatter
+              <section className="border-b bg-muted/40 px-6 py-4">
+                <h3 className={cn(typeScale.label, "mb-2 uppercase tracking-wide")}>
+                  Metadados
                 </h3>
-                <pre className="overflow-x-auto rounded-md border bg-white p-3 font-mono text-xs leading-5 text-zinc-700">
+                <pre className="max-w-full overflow-x-auto rounded-lg border bg-background p-3 font-mono text-sm leading-relaxed text-foreground">
                   {content.frontmatter}
                 </pre>
               </section>
             ) : null}
             <article className="px-6 py-5">
-              <h3 className="mb-3 text-xs font-semibold uppercase tracking-wide text-zinc-500">
+              <h3 className={cn(typeScale.label, "mb-3 uppercase tracking-wide")}>
                 Conteúdo
               </h3>
-              <div className="prose prose-zinc max-w-none prose-headings:font-semibold prose-p:leading-relaxed prose-pre:overflow-x-auto prose-pre:text-sm">
-                <MarkdownPlain body={content.body} />
-              </div>
+              <MarkdownContent body={content.body} />
             </article>
           </div>
         ) : null}
-      </CardContent>
-    </Card>
-  )
-}
-
-/** Renderização leve de markdown até US-010 centralizar o parser. */
-function MarkdownPlain({ body }: { body: string }) {
-  const lines = body.split("\n")
-  return (
-    <div className="space-y-2 text-sm text-zinc-800">
-      {lines.map((line, index) => {
-        if (line.startsWith("# ")) {
-          return (
-            <h1 className="mt-4 text-xl font-semibold text-zinc-950" key={index}>
-              {line.slice(2)}
-            </h1>
-          )
-        }
-        if (line.startsWith("## ")) {
-          return (
-            <h2 className="mt-3 text-lg font-semibold text-zinc-950" key={index}>
-              {line.slice(3)}
-            </h2>
-          )
-        }
-        if (line.startsWith("### ")) {
-          return (
-            <h3 className="mt-2 text-base font-semibold text-zinc-900" key={index}>
-              {line.slice(4)}
-            </h3>
-          )
-        }
-        if (line.startsWith("- ")) {
-          return (
-            <li className="ml-4 list-disc" key={index}>
-              {line.slice(2)}
-            </li>
-          )
-        }
-        if (line.trim() === "") {
-          return <div className="h-2" key={index} />
-        }
-        if (line.startsWith("```")) {
-          return null
-        }
-        return (
-          <p className="leading-6" key={index}>
-            {line}
-          </p>
-        )
-      })}
-    </div>
+      </ScrollArea>
+    </>
   )
 }

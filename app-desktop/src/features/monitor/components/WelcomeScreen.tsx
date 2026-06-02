@@ -34,7 +34,9 @@ export function WelcomeScreen() {
   return (
     <section className={`${MONITOR_CONTAINER} py-10 sm:py-14`}>
       <div className="mx-auto max-w-xl text-center">
-        <p className="text-sm font-medium text-teal-800">Meridian Desktop</p>
+        <p className="text-sm font-medium text-meridian-muted-foreground">
+          Meridian Desktop
+        </p>
         <h2 className="mt-2 text-2xl font-semibold tracking-tight text-zinc-950 sm:text-3xl">
           Gerencie seu projeto pela pasta docs
         </h2>
@@ -53,12 +55,12 @@ export function WelcomeScreen() {
               className="flex gap-4 rounded-xl border border-zinc-200/80 bg-white p-4 shadow-sm sm:p-5"
               key={step.title}
             >
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-teal-100 text-sm font-semibold text-teal-900">
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-meridian-muted text-sm font-semibold text-meridian-muted-foreground">
                 {index + 1}
               </div>
               <div className="min-w-0 text-left">
                 <div className="flex items-center gap-2">
-                  <Icon className="h-4 w-4 shrink-0 text-teal-700" aria-hidden />
+                  <Icon className="h-4 w-4 shrink-0 text-meridian" aria-hidden />
                   <h3 className="text-sm font-semibold text-zinc-950">{step.title}</h3>
                 </div>
                 <p className="mt-1.5 text-sm leading-6 text-zinc-600">{step.body}</p>

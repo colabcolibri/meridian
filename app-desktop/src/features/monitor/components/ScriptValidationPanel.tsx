@@ -26,20 +26,9 @@ export function ScriptValidationPanel({ folderName }: { folderName?: string }) {
   async function handleValidate() {
     setLoading(true)
     setResult(null)
-    try {
-      const payload = await runValidateMeridianScript()
-      setResult(payload)
-    } catch {
-      setResult({
-        ok: false,
-        errors: [],
-        warnings: [],
-        output: "",
-        message: "Não foi possível contactar o servidor de validação. Rode `pnpm dev`.",
-      })
-    } finally {
-      setLoading(false)
-    }
+    const payload = await runValidateMeridianScript()
+    setResult(payload)
+    setLoading(false)
   }
 
   async function copyCommand() {
@@ -55,8 +44,15 @@ export function ScriptValidationPanel({ folderName }: { folderName?: string }) {
         </CardTitle>
         <CardDescription className="text-xs">
           Script <code className="rounded bg-zinc-100 px-1">validate_meridian.py</code>{" "}
-          em <strong>pnpm dev</strong> — valida o app no disco, não a pasta aberta no
-          navegador.
+          em <strong>pnpm dev</strong> — valida{" "}
+          <code className="rounded bg-zinc-100 px-1">app-desktop/</code> no disco.
+          {isDev ? (
+            <>
+              {" "}
+              Use esta URL no navegador:{" "}
+              <code className="rounded bg-zinc-100 px-1">{window.location.origin}</code>
+            </>
+          ) : null}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-3 px-2 pb-2">
@@ -108,7 +104,9 @@ export function ScriptValidationPanel({ folderName }: { folderName?: string }) {
             <div className="flex flex-wrap gap-2">
               <Badge
                 className={
-                  result.ok ? "bg-emerald-700 text-white" : "bg-red-700 text-white"
+                  result.ok
+                    ? "bg-meridian-success text-white"
+                    : "bg-destructive text-white"
                 }
               >
                 {result.ok ? "passou" : "falhou"}
@@ -138,8 +136,10 @@ export function ScriptValidationPanel({ folderName }: { folderName?: string }) {
           </div>
         ) : null}
 
-        {result?.message && !result.pythonMissing ? (
-          <p className="text-sm text-red-800">{result.message}</p>
+        {result?.message && !result.pythonMissing && !result.ok ? (
+          <p className="text-sm text-red-800" role="alert">
+            {result.message}
+          </p>
         ) : null}
       </CardContent>
     </Card>

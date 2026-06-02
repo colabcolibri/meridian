@@ -96,7 +96,7 @@ export function KanbanView({
           className={cn(
             "rounded-full px-3 py-1.5 text-xs font-medium transition-colors",
             epicFilter === "all"
-              ? "bg-teal-700 text-white"
+              ? "bg-meridian text-meridian-foreground"
               : "bg-white text-zinc-700 ring-1 ring-zinc-200 hover:bg-zinc-50",
           )}
           onClick={() => setEpicFilter("all")}
@@ -109,7 +109,7 @@ export function KanbanView({
             className={cn(
               "max-w-[200px] truncate rounded-full px-3 py-1.5 text-xs font-medium transition-colors",
               epicFilter === epic.id
-                ? "bg-teal-700 text-white"
+                ? "bg-meridian text-meridian-foreground"
                 : "bg-white text-zinc-700 ring-1 ring-zinc-200 hover:bg-zinc-50",
             )}
             key={epic.id}

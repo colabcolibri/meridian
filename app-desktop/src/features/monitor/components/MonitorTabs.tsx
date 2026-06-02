@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils"
 import { MONITOR_CONTAINER } from "@/features/monitor/monitor-layout"
+import { typeScale } from "@/features/monitor/monitor-typography"
 
 export type MonitorView = "setup" | "epics" | "kanban"
 
@@ -33,20 +34,21 @@ export function MonitorTabs({
   const activeTab = tabs.find((tab) => tab.id === active)
 
   return (
-    <div className="border-b border-zinc-200/80 bg-white">
+    <div className="border-b border-border bg-card">
       <nav
         aria-label="Visões do monitor"
-        className={cn(MONITOR_CONTAINER, "flex gap-1 overflow-x-auto py-2")}
+        className={cn(MONITOR_CONTAINER, "flex gap-2 overflow-x-auto py-3")}
       >
         {tabs.map((tab) => (
           <button
             aria-current={active === tab.id ? "page" : undefined}
             className={cn(
-              "shrink-0 rounded-lg px-4 py-2.5 text-sm font-medium transition-colors",
+              typeScale.tab,
+              "shrink-0 rounded-lg px-4 py-2.5 transition-colors",
               disabled && "pointer-events-none opacity-50",
               active === tab.id
-                ? "bg-teal-700 text-white shadow-sm"
-                : "text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900",
+                ? "bg-primary text-primary-foreground shadow-sm"
+                : "text-muted-foreground hover:bg-muted hover:text-foreground",
             )}
             disabled={disabled}
             key={tab.id}
@@ -61,7 +63,8 @@ export function MonitorTabs({
         <p
           className={cn(
             MONITOR_CONTAINER,
-            "hidden border-t border-zinc-100 pb-2 pt-2 text-xs text-zinc-500 sm:block",
+            typeScale.caption,
+            "hidden border-t py-2.5 sm:block",
           )}
         >
           {activeTab.hint}

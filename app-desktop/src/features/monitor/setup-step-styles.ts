@@ -1,27 +1,41 @@
-import type { SetupStepState } from "@/domain/meridian/types"
+import type { DocStatus, SetupStepState } from "@/domain/meridian/types"
 
 export const setupStepStyles: Record<
   SetupStepState,
-  { ring: string; badge: string; dot: string }
+  {
+    tile: string
+    statusText: string
+    legendDot: string
+  }
 > = {
   locked: {
-    ring: "border-zinc-200 bg-zinc-50",
-    badge: "bg-zinc-100 text-zinc-600",
-    dot: "bg-zinc-300",
+    tile: "bg-zinc-100 text-zinc-500",
+    statusText: "text-zinc-600",
+    legendDot: "bg-zinc-400",
   },
   active: {
-    ring: "border-teal-200 bg-teal-50/50",
-    badge: "bg-teal-700 text-white",
-    dot: "bg-teal-600",
+    tile: "bg-meridian-muted text-meridian",
+    statusText: "text-meridian",
+    legendDot: "bg-meridian",
   },
   complete: {
-    ring: "border-emerald-200 bg-emerald-50/40",
-    badge: "bg-emerald-700 text-white",
-    dot: "bg-emerald-600",
+    tile: "bg-meridian-success-muted text-meridian-success",
+    statusText: "text-meridian-success-foreground",
+    legendDot: "bg-meridian-success",
   },
   alert: {
-    ring: "border-red-200 bg-red-50/50",
-    badge: "bg-red-700 text-white",
-    dot: "bg-red-600",
+    tile: "bg-red-50 text-destructive",
+    statusText: "text-destructive",
+    legendDot: "bg-destructive",
   },
 }
+
+export const docStatusStyles: Record<DocStatus, { label: string; className: string }> =
+  {
+    draft: { label: "Rascunho", className: "bg-zinc-100 text-zinc-700" },
+    review: { label: "Em revisão", className: "bg-amber-50 text-amber-900" },
+    approved: {
+      label: "Aprovado",
+      className: "bg-meridian-success-muted text-meridian-success-foreground",
+    },
+  }

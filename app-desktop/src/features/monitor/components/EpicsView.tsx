@@ -10,6 +10,8 @@ import {
 } from "@/components/ui/card"
 import type { Epic, UserStory } from "@/domain/meridian/types"
 import { countStoriesByEpic } from "@/domain/meridian/validators"
+import { typeScale } from "@/features/monitor/monitor-typography"
+import { cn } from "@/lib/utils"
 
 function EpicCard({ epic, stories }: { epic: Epic; stories: UserStory[] }) {
   const { total, done } = countStoriesByEpic(stories, epic.id)
@@ -20,8 +22,8 @@ function EpicCard({ epic, stories }: { epic: Epic; stories: UserStory[] }) {
       <CardHeader>
         <div className="flex items-start justify-between gap-3">
           <div className="flex items-center gap-2">
-            <Layers className="h-4 w-4 text-teal-700" />
-            <CardTitle className="text-base">{epic.id}</CardTitle>
+            <Layers className="h-4 w-4 text-meridian" />
+            <CardTitle className={typeScale.cardTitle}>{epic.id}</CardTitle>
           </div>
           <Badge variant={paused ? "outline" : "default"}>
             {paused ? (
@@ -34,12 +36,12 @@ function EpicCard({ epic, stories }: { epic: Epic; stories: UserStory[] }) {
             )}
           </Badge>
         </div>
-        <CardDescription className="text-sm font-medium text-zinc-800">
+        <CardDescription className={cn(typeScale.label, "text-foreground")}>
           {epic.title}
         </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-3 text-sm">
-        <p className="leading-6 text-zinc-600">{epic.description}</p>
+      <CardContent className="space-y-3">
+        <p className={typeScale.bodySm}>{epic.description}</p>
         <div className="flex flex-wrap gap-2">
           {epic.versions.map((version) => (
             <Badge key={version} variant="outline">
@@ -65,14 +67,12 @@ export function EpicsView({ epics, stories }: { epics: Epic[]; stories: UserStor
 
   return (
     <div className="space-y-6">
-      <p className="text-sm text-zinc-600">
+      <p className={typeScale.bodySm}>
         Grandes entregas do produto. Cada card mostra quantas user stories estão ligadas
         a essa capacidade.
       </p>
       <div>
-        <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-zinc-500">
-          Ativos
-        </h2>
+        <h2 className={cn(typeScale.sectionTitle, "mb-4")}>Ativos</h2>
         <div className="grid gap-4 md:grid-cols-2">
           {active.map((epic) => (
             <EpicCard epic={epic} key={epic.id} stories={stories} />
@@ -81,9 +81,7 @@ export function EpicsView({ epics, stories }: { epics: Epic[]; stories: UserStor
       </div>
       {complete.length > 0 ? (
         <div>
-          <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-zinc-500">
-            Concluídos
-          </h2>
+          <h2 className={cn(typeScale.sectionTitle, "mb-4")}>Concluídos</h2>
           <div className="grid gap-4 md:grid-cols-2">
             {complete.map((epic) => (
               <EpicCard epic={epic} key={epic.id} stories={stories} />
@@ -93,9 +91,7 @@ export function EpicsView({ epics, stories }: { epics: Epic[]; stories: UserStor
       ) : null}
       {paused.length > 0 ? (
         <div>
-          <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-zinc-500">
-            Pausados
-          </h2>
+          <h2 className={cn(typeScale.sectionTitle, "mb-4")}>Pausados</h2>
           <div className="grid gap-4 md:grid-cols-2">
             {paused.map((epic) => (
               <EpicCard epic={epic} key={epic.id} stories={stories} />

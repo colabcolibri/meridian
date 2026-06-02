@@ -6,7 +6,11 @@ import { defineConfig } from "vite"
 import { meridianValidateApi } from "./vite-meridian-validate"
 
 export default defineConfig({
-  plugins: [react(), tailwindcss(), meridianValidateApi()],
+  plugins: [meridianValidateApi(), react(), tailwindcss()],
+  server: {
+    port: 5173,
+    strictPort: false,
+  },
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),

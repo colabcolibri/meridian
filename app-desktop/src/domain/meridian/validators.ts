@@ -40,22 +40,57 @@ export function getSetupStepLabel(
 
   if (state === "locked") {
     const unmet = getUnmetDependencies(document, documents)
-    return `Aguardando ${unmet.join(", ")}`
+    return `Não iniciado — aguardando ${unmet.join(", ")}`
   }
 
   if (state === "complete") {
-    return "Concluído"
+    return "Pronto"
   }
 
   if (state === "alert") {
-    return "Requer correção — approved antes das dependências"
+    return "Atenção — aprovado antes das dependências"
   }
 
   if (document.status === "review") {
-    return "Em revisão — pronto para aprovar"
+    return "Em andamento — em revisão"
   }
 
-  return "Em elaboração"
+  return "Em andamento — em elaboração"
+}
+
+export function countSetupStepsByState(
+  documents: PhaseDocument[],
+  allDocuments: PhaseDocument[],
+): Record<SetupStepState, number> {
+  const counts: Record<SetupStepState, number> = {
+    locked: 0,
+    active: 0,
+    complete: 0,
+    alert: 0,
+  }
+
+  for (const document of documents) {
+    counts[getSetupStepState(document, allDocuments)] += 1
+  }
+
+  return counts
+}
+
+export function getPhaseGroupAccent(
+  documents: PhaseDocument[],
+  allDocuments: PhaseDocument[],
+): SetupStepState {
+  const counts = countSetupStepsByState(documents, allDocuments)
+  if (counts.alert > 0) {
+    return "alert"
+  }
+  if (counts.active > 0) {
+    return "active"
+  }
+  if (counts.complete === documents.length && documents.length > 0) {
+    return "complete"
+  }
+  return "locked"
 }
 
 export function getApprovedCount(documents: PhaseDocument[]) {
