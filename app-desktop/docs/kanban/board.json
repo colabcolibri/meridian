@@ -263,5 +263,66 @@
       "US-0021"
     ],
     "done_when": "Cards mostram título e entrega; detalhes técnicos ficam recolhidos; filtro de epic exibe nome legível."
+  },
+  {
+    "id": "US-0023",
+    "title": "Kanban exibe EPIC-XX e título do epic",
+    "epic": "EPIC-04",
+    "version": "v1",
+    "status": "✅",
+    "moscow": "Must",
+    "depends_on": [
+      "US-0022"
+    ],
+    "done_when": "Cards e filtros mostram EPIC-XX junto ao título abreviado do epic."
+  },
+  {
+    "id": "US-0024",
+    "title": "Kanban com badge de versão e filtro",
+    "epic": "EPIC-04",
+    "version": "v1",
+    "status": "✅",
+    "moscow": "Must",
+    "depends_on": [
+      "US-0022"
+    ],
+    "done_when": "Cada card mostra badge da versão; quadro filtra por v0/v1/v2."
+  },
+  {
+    "id": "US-0025",
+    "title": "Entregas com hierarquia versão → epic",
+    "epic": "EPIC-04",
+    "version": "v1",
+    "status": "✅",
+    "moscow": "Must",
+    "depends_on": [
+      "US-0012"
+    ],
+    "done_when": "Aba Entregas agrupa por versão, lista épicos com contagem de US e sprints da versão."
+  },
+  {
+    "id": "US-0026",
+    "title": "Quadro ordena US por ID",
+    "epic": "EPIC-04",
+    "version": "v1",
+    "status": "✅",
+    "moscow": "Should",
+    "depends_on": [
+      "US-0022"
+    ],
+    "done_when": "Colunas do kanban listam US em ordem numérica crescente (US-0001, US-0002…)."
+  },
+  {
+    "id": "US-0027",
+    "title": "Validar e expor versions e sprints na UI",
+    "epic": "EPIC-03",
+    "version": "v1",
+    "status": "✅",
+    "moscow": "Must",
+    "depends_on": [
+      "US-0014",
+      "US-0017"
+    ],
+    "done_when": "Loader lê docs/versions/ e docs/sprints/; alertas citam arquivo; Entregas mostra sprints por versão."
   }
 ]

@@ -12,7 +12,7 @@ import {
 } from "@/features/folder/ProjectFolderContext"
 import { AdvancedToolsPanel } from "@/features/monitor/components/AdvancedToolsPanel"
 import { ConceptsView } from "@/features/monitor/components/ConceptsView"
-import { EpicsView } from "@/features/monitor/components/EpicsView"
+import { DeliverablesView } from "@/features/monitor/components/DeliverablesView"
 import { KanbanView } from "@/features/monitor/components/KanbanView"
 import { MonitorIssuesBanner } from "@/features/monitor/components/MonitorIssuesBanner"
 import {
@@ -32,6 +32,8 @@ function MonitorViews() {
   const phaseDocuments = data?.phaseDocuments ?? []
   const userStories = data?.userStories ?? []
   const epics = data?.epics ?? []
+  const versions = data?.versions ?? []
+  const sprints = data?.sprints ?? []
 
   return (
     <div className={MONITOR_PAGE}>
@@ -67,7 +69,12 @@ function MonitorViews() {
           ) : null}
 
           {!loading && view === "epics" ? (
-            <EpicsView epics={epics} stories={userStories} />
+            <DeliverablesView
+              epics={epics}
+              sprints={sprints}
+              stories={userStories}
+              versions={versions}
+            />
           ) : null}
 
           {!loading && view === "kanban" ? (

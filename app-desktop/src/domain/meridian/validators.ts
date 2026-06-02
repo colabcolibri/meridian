@@ -111,11 +111,17 @@ export function canStartStory(story: UserStory, stories: UserStory[]) {
   })
 }
 
+export function sortStoriesById(stories: UserStory[]) {
+  return [...stories].sort((a, b) =>
+    a.id.localeCompare(b.id, undefined, { numeric: true }),
+  )
+}
+
 export function groupStoriesByStatus(stories: UserStory[]) {
   const order: UserStory["status"][] = ["❌", "🔶", "✅", "🧊"]
   return order.map((status) => ({
     status,
-    stories: stories.filter((story) => story.status === status),
+    stories: sortStoriesById(stories.filter((story) => story.status === status)),
   }))
 }
 
@@ -124,5 +130,13 @@ export function countStoriesByEpic(stories: UserStory[], epicId: string) {
   return {
     total: epicStories.length,
     done: epicStories.filter((story) => story.status === "✅").length,
+  }
+}
+
+export function countStoriesByVersion(stories: UserStory[], versionId: string) {
+  const versionStories = stories.filter((story) => story.version === versionId)
+  return {
+    total: versionStories.length,
+    done: versionStories.filter((story) => story.status === "✅").length,
   }
 }

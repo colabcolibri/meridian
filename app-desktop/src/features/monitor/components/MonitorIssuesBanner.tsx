@@ -55,7 +55,11 @@ export function MonitorIssuesBanner({ issues }: { issues: MonitorIssue[] }) {
             <ul className="space-y-2 text-xs text-red-950">
               {errorsList.slice(0, 8).map((issue) => (
                 <li className="leading-5" key={`${issue.file}-${issue.message}`}>
-                  <span className="font-medium">{issue.targetId ?? issue.file}</span>
+                  <span className="font-mono text-[10px] text-red-800/80">
+                    {issue.file}
+                  </span>
+                  {" · "}
+                  <span className="font-medium">{issue.targetId ?? "—"}</span>
                   {" — "}
                   {issue.message}
                 </li>
@@ -66,7 +70,11 @@ export function MonitorIssuesBanner({ issues }: { issues: MonitorIssue[] }) {
             <ul className="space-y-2 text-xs text-amber-950">
               {warningsList.slice(0, 6).map((issue) => (
                 <li className="leading-5" key={`${issue.file}-${issue.message}`}>
-                  <span className="font-medium">{issue.targetId ?? issue.file}</span>
+                  <span className="font-mono text-[10px] text-amber-900/80">
+                    {issue.file}
+                  </span>
+                  {" · "}
+                  <span className="font-medium">{issue.targetId ?? "—"}</span>
                   {" — "}
                   {issue.message}
                 </li>
