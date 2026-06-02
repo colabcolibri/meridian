@@ -4,7 +4,7 @@ import {
   collectDocumentProtocolIssues,
   collectStoryProtocolIssues,
 } from "@/domain/meridian/protocol-validators"
-import { acceptanceHasFalta, validateStoryBody } from "@/domain/meridian/story-body"
+import { acceptanceHasMissing, validateStoryBody } from "@/domain/meridian/story-body"
 import type { PhaseDocument, UserStory } from "@/domain/meridian/types"
 
 describe("protocol validators", () => {
@@ -36,13 +36,13 @@ describe("protocol validators", () => {
 
   it("requires Missing in Acceptance when US is 🔶", () => {
     const body = `## Acceptance\n\n- [ ] Criterion without missing note\n`
-    expect(acceptanceHasFalta(body)).toBe(false)
+    expect(acceptanceHasMissing(body)).toBe(false)
     expect(
       validateStoryBody({ status: "🔶", tests: "none", testsStatus: "n/a" }, body),
     ).toEqual(
       expect.arrayContaining([
         'Status 🔶 requires "Missing:" in the Acceptance section.',
-        "Technical implementation: partial US has no implementation record yet (fill on close).",
+        "Technical implementation: partial US missing touched-files record (fill in via /complete-us).",
       ]),
     )
   })

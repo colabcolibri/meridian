@@ -116,30 +116,30 @@ function epicFilterLabel(epic: Epic) {
   return `${epic.id} · ${short}`
 }
 
-function StoryDocumentationBadge({
+function StoryImplementationBadge({
   kind,
 }: {
   kind: Exclude<StoryDocumentationBadge, null>
 }) {
-  if (kind === "doc") {
+  if (kind === "impl-ok") {
     return (
       <span
-        aria-label="Implementação técnica registrada no arquivo"
+        aria-label="Technical implementation recorded in the US"
         className="max-w-full shrink-0 truncate rounded-full bg-meridian-success-muted px-1.5 py-0.5 text-[10px] font-medium text-meridian-success-foreground"
-        title="Implementação técnica registrada no arquivo"
+        title="## Technical implementation filled with ### Files and paths (/complete-us)"
       >
-        Doc
+        Impl. OK
       </span>
     )
   }
 
   return (
     <span
-      aria-label="Implementação técnica ausente ou incompleta no arquivo"
+      aria-label="Missing technical implementation record in the US"
       className="max-w-full shrink-0 truncate rounded-full bg-amber-500/15 px-1.5 py-0.5 text-[10px] font-medium text-amber-800 dark:text-amber-300"
-      title="Implementação técnica ausente ou incompleta no arquivo"
+      title="Missing ## Technical implementation with ### Files and real paths — use /complete-us when closing the US"
     >
-      Sem doc
+      Missing impl.
     </span>
   )
 }
@@ -188,7 +188,7 @@ function KanbanStoryCard({
             {story.moscow}
           </span>
           {documentationBadge ? (
-            <StoryDocumentationBadge kind={documentationBadge} />
+            <StoryImplementationBadge kind={documentationBadge} />
           ) : null}
         </div>
         <div className="flex shrink-0 items-center gap-1">
@@ -403,8 +403,7 @@ export function KanbanView({
               type="button"
             >
               <span aria-hidden>🧊 </span>
-              {frozenCount} congelada{frozenCount === 1 ? "" : "s"} —{" "}
-              {showFrozen ? "ocultar" : "mostrar"}
+              {frozenCount} frozen — {showFrozen ? "hide" : "show"}
             </button>
           </div>
         ) : null}

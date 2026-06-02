@@ -16,6 +16,17 @@ const baseStory: Pick<UserStory, "status" | "tests" | "testsStatus"> = {
   testsStatus: "done",
 }
 
+const documentedBody = `## Technical implementation
+
+### Files
+
+- \`src/features/monitor/KanbanView.tsx\` — compact cards
+
+### Backend
+
+- _n/a_
+`
+
 describe("story-body tests", () => {
   it("lists items in ### Planned", () => {
     const body = `## Tests
@@ -66,11 +77,7 @@ _(pending)_
   })
 
   it("accepts complete closure", () => {
-    const body = `## Technical implementation
-
-### Frontend
-
-- \`src/App.tsx\` — shell
+    const body = `${documentedBody}
 
 ## Tests
 
@@ -105,26 +112,12 @@ _(pending)_
 ### Files
 
 _(fill in when implementation is complete)_
-
-### Backend
-
-_(fill in when applicable)_
 `
     expect(getTechnicalImplementationStatus(body)).toBe("placeholder")
   })
 
-  it("detects documented technical implementation with file paths", () => {
-    const body = `## Technical implementation
-
-### Files
-
-- \`src/features/monitor/KanbanView.tsx\` — compact cards
-
-### Backend
-
-- _n/a_
-`
-    expect(getTechnicalImplementationStatus(body)).toBe("documented")
+  it("detects documented technical implementation with ### Files paths", () => {
+    expect(getTechnicalImplementationStatus(documentedBody)).toBe("documented")
   })
 
   it("detects documented table-style technical implementation", () => {
@@ -132,12 +125,22 @@ _(fill in when applicable)_
 
 | Layer | Files |
 | ----- | ----- |
-| UI | \`DecisionsView.tsx\`, \`MonitorDashboard.tsx\` |
+| UI | \`src/DecisionsView.tsx\`, \`src/MonitorDashboard.tsx\` |
 `
     expect(getTechnicalImplementationStatus(body)).toBe("documented")
   })
 
-  it("requires technical implementation for status ✅", () => {
+  it("marks legacy ### Frontend-only sections as incomplete", () => {
+    const body = `## Technical implementation
+
+### Frontend
+
+- \`collectProtocolIssues\`, \`MonitorIssuesBanner\`.
+`
+    expect(getTechnicalImplementationStatus(body)).toBe("incomplete")
+  })
+
+  it("requires ### Files paths for status ✅", () => {
     const body = `## Tests
 
 ### Planned
@@ -153,7 +156,7 @@ _(fill in when applicable)_
       body,
     )
     expect(messages).toContain(
-      "Technical implementation: status ✅ requires ## Technical implementation filled (files + layers).",
+      "Technical implementation: status ✅ requires ## Technical implementation with ### Files and real paths (/complete-us).",
     )
   })
 
@@ -173,7 +176,7 @@ _(fill in when applicable)_
       body,
     )
     expect(messages).toContain(
-      "Technical implementation: partial US has no implementation record yet (fill on close).",
+      "Technical implementation: partial US missing touched-files record (fill in via /complete-us).",
     )
   })
 
@@ -187,23 +190,19 @@ _(fill in when applicable)_
     ).toBe(false)
   })
 
-  it("resolves documentation badge for kanban cards", () => {
-    const documentedBody = `## Technical implementation
-
-### Files
-
-- \`src/App.tsx\` — shell
-`
-    expect(resolveStoryDocumentationBadge({ status: "✅" }, documentedBody)).toBe("doc")
+  it("resolves implementation badge for kanban cards", () => {
+    expect(resolveStoryDocumentationBadge({ status: "✅" }, documentedBody)).toBe(
+      "impl-ok",
+    )
     expect(resolveStoryDocumentationBadge({ status: "❌" }, documentedBody)).toBe(null)
     expect(
       resolveStoryDocumentationBadge({ status: "✅" }, "## Acceptance\n\n- [x] ok\n"),
-    ).toBe("sem-doc")
+    ).toBe("impl-missing")
     expect(
       resolveStoryDocumentationBadge(
-        { status: "🔶" },
-        "## Technical implementation\n\n_(fill in when applicable)_\n",
+        { status: "✅" },
+        "## Technical implementation\n\n### Frontend\n\n- only prose\n",
       ),
-    ).toBe("sem-doc")
+    ).toBe("impl-missing")
   })
 })

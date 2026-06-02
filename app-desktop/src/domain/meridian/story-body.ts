@@ -1,8 +1,12 @@
 import type { UserStory } from "@/domain/meridian/types"
 
-export type TechnicalImplementationStatus = "documented" | "placeholder" | "missing"
+export type TechnicalImplementationStatus =
+  | "documented"
+  | "incomplete"
+  | "placeholder"
+  | "missing"
 
-export type StoryDocumentationBadge = "doc" | "sem-doc" | null
+export type StoryDocumentationBadge = "impl-ok" | "impl-missing" | null
 
 const PLACEHOLDER_LINE = /^_\([^)]*\)_\s*$/i
 
@@ -33,28 +37,35 @@ function sectionContentLines(content: string): string[] {
     )
 }
 
-function hasPathEvidence(text: string): boolean {
+function hasFilePathEvidence(text: string): boolean {
   if (!text.trim()) {
     return false
   }
 
   return sectionContentLines(text).some(
-    (line) => !lineIsPlaceholder(line) && /`[^`\n]+`/.test(line),
+    (line) => !lineIsPlaceholder(line) && lineHasFilePathBacktick(line),
   )
+}
+
+function lineHasFilePathBacktick(line: string): boolean {
+  const matches = line.match(/`([^`\n]+)`/g)
+  if (!matches) {
+    return false
+  }
+
+  return matches.some((token) => {
+    const inner = token.slice(1, -1).trim()
+    if (!inner || inner === "_n/a_") {
+      return false
+    }
+    return inner.includes("/") || /\.(tsx?|jsx?|py|md|json|css|mjs|cjs)$/i.test(inner)
+  })
 }
 
 function hasSubstantiveText(text: string): boolean {
   return sectionContentLines(text).some(
     (line) => !lineIsPlaceholder(line) && line !== "_n/a_",
   )
-}
-
-function subsectionNames(section: string): string[] {
-  const matches = section.match(/^### (.+)$/gm)
-  if (!matches) {
-    return []
-  }
-  return matches.map((heading) => heading.replace(/^###\s+/, "").trim())
 }
 
 export function getTechnicalImplementationStatus(
@@ -75,37 +86,21 @@ export function getTechnicalImplementationStatus(
   }
 
   const files = extractMarkdownSubsection(section, "Files")
-  if (hasPathEvidence(files)) {
+  const hasFilesHeading = /^### Files\s*$/m.test(section)
+
+  if (hasFilePathEvidence(files)) {
     return "documented"
   }
 
-  for (const name of subsectionNames(section)) {
-    const subsection = extractMarkdownSubsection(section, name)
-    if (name === "Files") {
-      continue
-    }
-    if (hasPathEvidence(subsection) || hasSubstantiveText(subsection)) {
-      return "documented"
-    }
-  }
-
-  if (hasPathEvidence(section) || hasSubstantiveText(section)) {
+  if (!hasFilesHeading && hasFilePathEvidence(section)) {
     return "documented"
   }
 
-  const subsections = subsectionNames(section).map((name) =>
-    extractMarkdownSubsection(section, name),
-  )
-  if (
-    subsections.length > 0 &&
-    subsections.every(
-      (subsection) => !hasSubstantiveText(subsection) && !hasPathEvidence(subsection),
-    )
-  ) {
-    return "placeholder"
+  if (hasFilesHeading || hasSubstantiveText(section)) {
+    return "incomplete"
   }
 
-  return "missing"
+  return "placeholder"
 }
 
 export function resolveStoryDocumentationBadge(
@@ -116,13 +111,12 @@ export function resolveStoryDocumentationBadge(
     return null
   }
 
-  const implStatus = getTechnicalImplementationStatus(body)
-  if (implStatus === "documented") {
-    return "doc"
+  if (getTechnicalImplementationStatus(body) === "documented") {
+    return "impl-ok"
   }
 
   if (story.status === "✅" || story.status === "🔶") {
-    return "sem-doc"
+    return "impl-missing"
   }
 
   return null
@@ -158,7 +152,7 @@ export function extractMarkdownSubsection(section: string, heading: string): str
   return content.trim()
 }
 
-export function acceptanceHasFalta(body: string): boolean {
+export function acceptanceHasMissing(body: string): boolean {
   const acceptance = extractMarkdownSection(body, "Acceptance")
   return /\*\*Missing:\*\*|^-\s+\[[ x]\]\s+.*Missing:/im.test(acceptance)
 }
@@ -216,14 +210,14 @@ function appendTechnicalImplementationMessages(
 
   if (story.status === "✅") {
     messages.push(
-      "Technical implementation: status ✅ requires ## Technical implementation filled (files + layers).",
+      "Technical implementation: status ✅ requires ## Technical implementation with ### Files and real paths (/complete-us).",
     )
     return
   }
 
   if (story.status === "🔶") {
     messages.push(
-      "Technical implementation: partial US has no implementation record yet (fill on close).",
+      "Technical implementation: partial US missing touched-files record (fill in via /complete-us).",
     )
   }
 }
@@ -234,7 +228,7 @@ export function validateStoryBody(
 ): string[] {
   const messages: string[] = []
 
-  if (story.status === "🔶" && !acceptanceHasFalta(body)) {
+  if (story.status === "🔶" && !acceptanceHasMissing(body)) {
     messages.push('Status 🔶 requires "Missing:" in the Acceptance section.')
   }
 
