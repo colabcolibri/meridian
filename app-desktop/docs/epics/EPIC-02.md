@@ -11,7 +11,7 @@ outcome: "Manager abre docs/, vê progresso dos 12 documentos de fase e lê cada
 
 ## Capacidade
 
-Aba **Configuração**: progresso dos documentos `00–11`, estado legível por etapa, leitura inline de cada `.md` (frontmatter + corpo) e sincronização com a pasta monitorada.
+Aba **Configuração**: progresso dos documentos de fase (00–08 e 11), estado legível por etapa, leitura inline de cada `.md` (frontmatter + corpo) e sincronização com a pasta monitorada.
 
 ## Resultado esperado
 

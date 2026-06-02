@@ -7,7 +7,9 @@
     "status": "✅",
     "moscow": "Must",
     "depends_on": [],
-    "done_when": "App roda com pnpm dev e renderiza layout inicial profissional."
+    "done_when": "App roda com pnpm dev e renderiza layout inicial profissional.",
+    "tests": "required",
+    "tests_status": "done"
   },
   {
     "id": "US-0002",
@@ -19,7 +21,9 @@
     "depends_on": [
       "US-0001"
     ],
-    "done_when": "Lista de documentos exibe status, dependências e bloqueios básicos."
+    "done_when": "Lista de documentos exibe status, dependências e bloqueios básicos.",
+    "tests": "required",
+    "tests_status": "done"
   },
   {
     "id": "US-0003",
@@ -31,7 +35,9 @@
     "depends_on": [
       "US-0001"
     ],
-    "done_when": "Git, gitignore, Prettier, Husky e lint-staged estão configurados."
+    "done_when": "Git, gitignore, Prettier, Husky e lint-staged estão configurados.",
+    "tests": "required",
+    "tests_status": "done"
   },
   {
     "id": "US-0004",
@@ -43,7 +49,9 @@
     "depends_on": [
       "US-0001"
     ],
-    "done_when": "meridian.md fica na raiz como protocolo universal e o app Vite fica em app-desktop."
+    "done_when": "meridian.md fica na raiz como protocolo universal e o app Vite fica em app-desktop.",
+    "tests": "required",
+    "tests_status": "done"
   },
   {
     "id": "US-0005",
@@ -55,7 +63,9 @@
     "depends_on": [
       "US-0004"
     ],
-    "done_when": ".agent/skills contém skills iniciais para agentes usarem junto com .agent/MERIDIAN.md."
+    "done_when": ".agent/skills contém skills iniciais para agentes usarem junto com .agent/MERIDIAN.md.",
+    "tests": "required",
+    "tests_status": "done"
   },
   {
     "id": "US-0006",
@@ -67,7 +77,9 @@
     "depends_on": [
       "US-0005"
     ],
-    "done_when": ".agent contém agents, skills, workflows, rules e scripts no padrão Meridian."
+    "done_when": ".agent contém agents, skills, workflows, rules e scripts no padrão Meridian.",
+    "tests": "required",
+    "tests_status": "done"
   },
   {
     "id": "US-0007",
@@ -79,7 +91,9 @@
     "depends_on": [
       "US-0006"
     ],
-    "done_when": "README.md na raiz, rules always_on, agents/skills/workflows operacionais e meridian-routing existem no kit."
+    "done_when": "README.md na raiz, rules always_on, agents/skills/workflows operacionais e meridian-routing existem no kit.",
+    "tests": "required",
+    "tests_status": "done"
   },
   {
     "id": "US-0008",
@@ -91,7 +105,9 @@
     "depends_on": [
       "US-0002"
     ],
-    "done_when": "App exibe abas Configuração inicial, Épicos e Kanban com um estado legível por doc/US."
+    "done_when": "App exibe abas Configuração inicial, Épicos e Kanban com um estado legível por doc/US.",
+    "tests": "required",
+    "tests_status": "done"
   },
   {
     "id": "US-0009",
@@ -103,7 +119,9 @@
     "depends_on": [
       "US-0008"
     ],
-    "done_when": "Usuário escolhe a pasta docs/ do projeto e o app persiste o handle da sessão para releitura."
+    "done_when": "Usuário escolhe a pasta docs/ do projeto e o app persiste o handle da sessão para releitura.",
+    "tests": "required",
+    "tests_status": "done"
   },
   {
     "id": "US-0010",
@@ -115,7 +133,9 @@
     "depends_on": [
       "US-0009"
     ],
-    "done_when": "Módulo de domínio extrai frontmatter YAML de arquivos .md da pasta docs/ sem erros nas US existentes."
+    "done_when": "Módulo de domínio extrai frontmatter YAML de arquivos .md da pasta docs/ sem erros nas US existentes.",
+    "tests": "required",
+    "tests_status": "done"
   },
   {
     "id": "US-0011",
@@ -127,11 +147,13 @@
     "depends_on": [
       "US-0010"
     ],
-    "done_when": "Aba Configuração inicial reflete docs/00-11 da pasta aberta; progresso e alertas batem com frontmatter."
+    "done_when": "Aba Configuração reflete documentos de fase da pasta aberta; progresso e alertas batem com frontmatter.",
+    "tests": "required",
+    "tests_status": "done"
   },
   {
     "id": "US-0012",
-    "title": "Aba Épicos lê 04_epics.md",
+    "title": "Aba Entregas lê docs/epics/",
     "epic": "EPIC-04",
     "version": "v1",
     "status": "✅",
@@ -139,7 +161,9 @@
     "depends_on": [
       "US-0010"
     ],
-    "done_when": "Aba Épicos lista EPIC-XX da pasta aberta com descrição, versões, status e contagem de US do mesmo projeto."
+    "done_when": "Aba Entregas lista EPIC-XX da pasta aberta com descrição, versões, status e contagem de US do mesmo projeto.",
+    "tests": "required",
+    "tests_status": "done"
   },
   {
     "id": "US-0013",
@@ -151,7 +175,9 @@
     "depends_on": [
       "US-0010"
     ],
-    "done_when": "Aba Kanban exibe US da pasta com colunas por status, filtro por epic e done_when; board.json opcional como cache derivado."
+    "done_when": "Aba Kanban exibe US da pasta com colunas por status, filtro por epic e done_when; board.json opcional como cache derivado.",
+    "tests": "required",
+    "tests_status": "done"
   },
   {
     "id": "US-0014",
@@ -164,7 +190,9 @@
       "US-0011",
       "US-0013"
     ],
-    "done_when": "App destaca inconsistências de docs e US conforme regras P0 do MERIDIAN.md na pasta aberta."
+    "done_when": "App destaca inconsistências de docs e US conforme regras P0 do MERIDIAN.md na pasta aberta.",
+    "tests": "required",
+    "tests_status": "done"
   },
   {
     "id": "US-0015",
@@ -176,7 +204,9 @@
     "depends_on": [
       "US-0014"
     ],
-    "done_when": "App dispara validação do script na pasta aberta e exibe erros/avisos na UI."
+    "done_when": "App dispara validação do script na pasta aberta e exibe erros/avisos na UI.",
+    "tests": "required",
+    "tests_status": "done"
   },
   {
     "id": "US-0016",
@@ -190,7 +220,9 @@
       "US-0012",
       "US-0013"
     ],
-    "done_when": "Nenhuma aba do monitor importa phaseDocuments/userStories/epics de data.ts; só dados da pasta ou estado vazio."
+    "done_when": "Nenhuma aba do monitor importa phaseDocuments/userStories/epics de data.ts; só dados da pasta ou estado vazio.",
+    "tests": "required",
+    "tests_status": "done"
   },
   {
     "id": "US-0017",
@@ -202,7 +234,9 @@
     "depends_on": [
       "US-0009"
     ],
-    "done_when": "Na aba Configuração inicial, cada doc 00–11 abre o .md correspondente na raiz da pasta docs aberta."
+    "done_when": "Na aba Configuração, cada documento de fase (00–08 e 11) abre o .md correspondente na raiz da pasta docs aberta.",
+    "tests": "required",
+    "tests_status": "done"
   },
   {
     "id": "US-0018",
@@ -214,7 +248,9 @@
     "depends_on": [
       "US-0009"
     ],
-    "done_when": "Primeiro uso mostra passos claros e um único CTA principal para abrir a pasta docs, sem mensagens técnicas duplicadas."
+    "done_when": "Primeiro uso mostra passos claros e um único CTA principal para abrir a pasta docs, sem mensagens técnicas duplicadas.",
+    "tests": "required",
+    "tests_status": "done"
   },
   {
     "id": "US-0019",
@@ -226,7 +262,9 @@
     "depends_on": [
       "US-0018"
     ],
-    "done_when": "Layout usa largura máxima única, espaçamento e fundo consistentes em todas as visões."
+    "done_when": "Layout usa largura máxima única, espaçamento e fundo consistentes em todas as visões.",
+    "tests": "required",
+    "tests_status": "done"
   },
   {
     "id": "US-0020",
@@ -238,7 +276,9 @@
     "depends_on": [
       "US-0019"
     ],
-    "done_when": "Uma única barra combina marca, pasta aberta, contagem de problemas e ações; sem três faixas de mensagens."
+    "done_when": "Uma única barra combina marca, pasta aberta, contagem de problemas e ações; sem três faixas de mensagens.",
+    "tests": "required",
+    "tests_status": "done"
   },
   {
     "id": "US-0021",
@@ -250,7 +290,9 @@
     "depends_on": [
       "US-0019"
     ],
-    "done_when": "Abas usam rótulos Configuração, Entregas e Quadro; descrições técnicas só na aba ativa ou em tooltip."
+    "done_when": "Abas usam rótulos Configuração, Entregas e Quadro; descrições técnicas só na aba ativa ou em tooltip.",
+    "tests": "required",
+    "tests_status": "done"
   },
   {
     "id": "US-0022",
@@ -262,7 +304,9 @@
     "depends_on": [
       "US-0021"
     ],
-    "done_when": "Cards mostram título e entrega; detalhes técnicos ficam recolhidos; filtro de epic exibe nome legível."
+    "done_when": "Cards mostram título e entrega; detalhes técnicos ficam recolhidos; filtro de epic exibe nome legível.",
+    "tests": "required",
+    "tests_status": "done"
   },
   {
     "id": "US-0023",
@@ -274,7 +318,9 @@
     "depends_on": [
       "US-0022"
     ],
-    "done_when": "Cards e filtros mostram EPIC-XX junto ao título abreviado do epic."
+    "done_when": "Cards e filtros mostram EPIC-XX junto ao título abreviado do epic.",
+    "tests": "required",
+    "tests_status": "done"
   },
   {
     "id": "US-0024",
@@ -286,7 +332,9 @@
     "depends_on": [
       "US-0022"
     ],
-    "done_when": "Cada card mostra badge da versão; quadro filtra por v0/v1/v2."
+    "done_when": "Cada card mostra badge da versão; quadro filtra por v0/v1/v2.",
+    "tests": "required",
+    "tests_status": "done"
   },
   {
     "id": "US-0025",
@@ -298,7 +346,9 @@
     "depends_on": [
       "US-0012"
     ],
-    "done_when": "Aba Entregas agrupa por versão, lista épicos com contagem de US e sprints da versão."
+    "done_when": "Aba Entregas agrupa por versão, lista épicos com contagem de US e sprints da versão.",
+    "tests": "required",
+    "tests_status": "done"
   },
   {
     "id": "US-0026",
@@ -310,7 +360,9 @@
     "depends_on": [
       "US-0022"
     ],
-    "done_when": "Colunas do kanban listam US em ordem numérica crescente (US-0001, US-0002…)."
+    "done_when": "Colunas do kanban listam US em ordem numérica crescente (US-0001, US-0002…).",
+    "tests": "required",
+    "tests_status": "done"
   },
   {
     "id": "US-0027",
@@ -323,7 +375,9 @@
       "US-0014",
       "US-0017"
     ],
-    "done_when": "Loader lê docs/versions/ e docs/sprints/; alertas citam arquivo; Entregas mostra sprints por versão."
+    "done_when": "Loader lê docs/versions/ e docs/sprints/; alertas citam arquivo; Entregas mostra sprints por versão.",
+    "tests": "required",
+    "tests_status": "done"
   },
   {
     "id": "US-0028",
@@ -335,7 +389,9 @@
     "depends_on": [
       "US-0023"
     ],
-    "done_when": "Kanban e banner de issues usam bg-card/border-border; filtros em painel único; sem zinc-* solto."
+    "done_when": "Kanban e banner de issues usam bg-card/border-border; filtros em painel único; sem zinc-* solto.",
+    "tests": "required",
+    "tests_status": "done"
   },
   {
     "id": "US-0029",
@@ -347,7 +403,9 @@
     "depends_on": [
       "US-0025"
     ],
-    "done_when": "Cada versão em card com header destacado, progresso % e barra visual; épicos com mini progresso."
+    "done_when": "Cada versão em card com header destacado, progresso % e barra visual; épicos com mini progresso.",
+    "tests": "required",
+    "tests_status": "done"
   },
   {
     "id": "US-0030",
@@ -359,7 +417,9 @@
     "depends_on": [
       "US-0019"
     ],
-    "done_when": "Top bar usa favicon; página com gradiente sutil; welcome screen alinhada aos tokens."
+    "done_when": "Top bar usa favicon; página com gradiente sutil; welcome screen alinhada aos tokens.",
+    "tests": "required",
+    "tests_status": "done"
   },
   {
     "id": "US-0031",
@@ -371,7 +431,9 @@
     "depends_on": [
       "US-0028"
     ],
-    "done_when": "Estados locked/draft e ícone de fase usam bg-muted e stroke-border; sem zinc-* na aba Configuração."
+    "done_when": "Estados locked/draft e ícone de fase usam bg-muted e stroke-border; sem zinc-* na aba Configuração.",
+    "tests": "required",
+    "tests_status": "done"
   },
   {
     "id": "US-0032",
@@ -383,7 +445,9 @@
     "depends_on": [
       "US-0028"
     ],
-    "done_when": "AdvancedToolsPanel e ScriptValidationPanel usam monitorDashedPanelClass e inlineCodeClass."
+    "done_when": "AdvancedToolsPanel e ScriptValidationPanel usam monitorDashedPanelClass e inlineCodeClass.",
+    "tests": "required",
+    "tests_status": "done"
   },
   {
     "id": "US-0033",
@@ -396,6 +460,107 @@
       "US-0031",
       "US-0032"
     ],
-    "done_when": "Nenhum zinc-* em src/features/monitor/; EPIC-06 marcado complete."
+    "done_when": "Nenhum zinc-* em src/features/monitor/; EPIC-06 marcado complete.",
+    "tests": "required",
+    "tests_status": "done"
+  },
+  {
+    "id": "US-0034",
+    "title": "Filtro de versão global no monitor",
+    "epic": "EPIC-04",
+    "version": "v1",
+    "status": "✅",
+    "moscow": "Must",
+    "depends_on": [
+      "US-0024",
+      "US-0025"
+    ],
+    "done_when": "Entregas e Quadro compartilham o mesmo filtro de versão; default na versão ativa ou última com US.",
+    "tests": "required",
+    "tests_status": "done"
+  },
+  {
+    "id": "US-0035",
+    "title": "Filtro de epic cascateado pela versão",
+    "epic": "EPIC-04",
+    "version": "v1",
+    "status": "✅",
+    "moscow": "Must",
+    "depends_on": [
+      "US-0034"
+    ],
+    "done_when": "Chips de epic no Quadro listam só épicos com US na versão selecionada; epic reseta ao mudar versão.",
+    "tests": "required",
+    "tests_status": "done"
+  },
+  {
+    "id": "US-0036",
+    "title": "Entregas focada com layout plano",
+    "epic": "EPIC-04",
+    "version": "v1",
+    "status": "✅",
+    "moscow": "Must",
+    "depends_on": [
+      "US-0034"
+    ],
+    "done_when": "Entregas destaca versão do filtro global; outras versões ficam recolhidas; épicos em linhas planas.",
+    "tests": "required",
+    "tests_status": "done"
+  },
+  {
+    "id": "US-0037",
+    "title": "Quadro compacto com detalhes em sheet",
+    "epic": "EPIC-04",
+    "version": "v1",
+    "status": "✅",
+    "moscow": "Must",
+    "depends_on": [
+      "US-0035"
+    ],
+    "done_when": "Cards do kanban são linhas compactas; done_when e deps abrem em sheet; colunas vazias ocultas ao filtrar versão.",
+    "tests": "required",
+    "tests_status": "done"
+  },
+  {
+    "id": "US-0038",
+    "title": "Ferramentas avançadas só na Configuração",
+    "epic": "EPIC-06",
+    "version": "v1",
+    "status": "✅",
+    "moscow": "Should",
+    "depends_on": [
+      "US-0032"
+    ],
+    "done_when": "AdvancedToolsPanel aparece apenas na aba Configuração; Entregas e Quadro sem painel tracejado acima.",
+    "tests": "required",
+    "tests_status": "done"
+  },
+  {
+    "id": "US-0039",
+    "title": "Log de decisões JSON por dia",
+    "epic": "EPIC-03",
+    "version": "v1",
+    "status": "✅",
+    "moscow": "Must",
+    "depends_on": [
+      "US-0014"
+    ],
+    "done_when": "docs/decisions/YYYY-MM-DD.json é fonte do log; validate_meridian.py valida schema; kit .agent documenta prepend em entries.",
+    "tests": "required",
+    "tests_status": "done"
+  },
+  {
+    "id": "US-0040",
+    "title": "Aba Decisões no monitor",
+    "epic": "EPIC-06",
+    "version": "v1",
+    "status": "✅",
+    "moscow": "Must",
+    "depends_on": [
+      "US-0039"
+    ],
+    "done_when": "Aba Decisões lista dias e entradas da pasta docs/decisions/ com detalhe estruturado em sheet lateral.",
+    "tests": "required",
+    "tests_status": "done"
   }
 ]
