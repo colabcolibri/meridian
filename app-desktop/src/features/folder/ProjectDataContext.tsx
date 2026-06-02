@@ -4,6 +4,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
   type ReactNode,
 } from "react"
@@ -30,25 +31,37 @@ const emptyData: MeridianProjectData = {
   issues: [],
 }
 
+const EMPTY_ISSUES: MonitorIssue[] = []
+
 const ProjectDataContext = createContext<ProjectDataContextValue | null>(null)
 
 export function ProjectDataProvider({ children }: { children: ReactNode }) {
-  const { folder, status: folderStatus, getHandle } = useProjectFolder()
+  const { folderKey, status: folderStatus, getHandle } = useProjectFolder()
   const [loading, setLoading] = useState(false)
   const [data, setData] = useState<MeridianProjectData | null>(null)
+  const loadGenerationRef = useRef(0)
 
   const reload = useCallback(async () => {
     const handle = await getHandle()
     if (!handle) {
       setData(null)
+      setLoading(false)
       return
     }
 
+    const generation = ++loadGenerationRef.current
     setLoading(true)
+
     try {
       const loaded = await loadMeridianProject(handle)
+      if (generation !== loadGenerationRef.current) {
+        return
+      }
       setData(loaded)
     } catch (error) {
+      if (generation !== loadGenerationRef.current) {
+        return
+      }
       setData({
         ...emptyData,
         issues: [
@@ -62,21 +75,26 @@ export function ProjectDataProvider({ children }: { children: ReactNode }) {
         ],
       })
     } finally {
-      setLoading(false)
+      if (generation === loadGenerationRef.current) {
+        setLoading(false)
+      }
     }
   }, [getHandle])
 
   useEffect(() => {
-    if (folderStatus === "open" && folder) {
-      void reload()
+    if (folderStatus !== "open" || !folderKey) {
+      if (folderStatus === "none" || folderStatus === "error") {
+        loadGenerationRef.current += 1
+        setData(null)
+        setLoading(false)
+      }
       return
     }
-    if (folderStatus === "none" || folderStatus === "error") {
-      setData(null)
-    }
-  }, [folder, folderStatus, reload])
 
-  const issues = data?.issues ?? []
+    void reload()
+  }, [folderKey, folderStatus, reload])
+
+  const issues = data?.issues ?? EMPTY_ISSUES
 
   const value = useMemo(
     () => ({

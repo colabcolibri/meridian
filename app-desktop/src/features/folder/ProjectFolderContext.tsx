@@ -4,15 +4,16 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
   type ReactNode,
 } from "react"
 
 import {
-  getActiveFolderHandle,
   isFileSystemAccessSupported,
   meridianFolderHints,
   pickMeridianFolder,
+  requestReadPermission,
   restoreMeridianFolder,
 } from "@/features/folder/folder-access"
 import { clearFolderHandle } from "@/features/folder/folder-handle-store"
@@ -25,6 +26,7 @@ import type {
 interface ProjectFolderContextValue {
   status: ProjectFolderStatus
   folder: MeridianFolderSnapshot | null
+  folderKey: string | null
   hints: string[]
   error: string | null
   fsAccessSupported: boolean
@@ -38,22 +40,34 @@ const ProjectFolderContext = createContext<ProjectFolderContextValue | null>(nul
 export function ProjectFolderProvider({ children }: { children: ReactNode }) {
   const [status, setStatus] = useState<ProjectFolderStatus>("none")
   const [folder, setFolder] = useState<MeridianFolderSnapshot | null>(null)
+  const [folderKey, setFolderKey] = useState<string | null>(null)
   const [hints, setHints] = useState<string[]>([])
   const [error, setError] = useState<string | null>(null)
 
+  const handleRef = useRef<FileSystemDirectoryHandle | null>(null)
+  const restoreGenerationRef = useRef(0)
+  const userOpenGenerationRef = useRef(0)
+
   const fsAccessSupported = isFileSystemAccessSupported()
 
-  const applySnapshot = useCallback((snapshot: MeridianFolderSnapshot | null) => {
-    if (!snapshot) {
-      setFolder(null)
-      setHints([])
-      setStatus("none")
-      return
-    }
-    setFolder(snapshot)
-    setHints(meridianFolderHints(snapshot.validation))
-    setStatus("open")
-    setError(null)
+  const bindFolder = useCallback(
+    (snapshot: MeridianFolderSnapshot, handle: FileSystemDirectoryHandle) => {
+      handleRef.current = handle
+      setFolder(snapshot)
+      setFolderKey(`${handle.name}-${Date.now()}`)
+      setHints(meridianFolderHints(snapshot.validation))
+      setStatus("open")
+      setError(null)
+    },
+    [],
+  )
+
+  const clearBoundFolder = useCallback(() => {
+    handleRef.current = null
+    setFolder(null)
+    setFolderKey(null)
+    setHints([])
+    setStatus("none")
   }, [])
 
   useEffect(() => {
@@ -61,23 +75,24 @@ export function ProjectFolderProvider({ children }: { children: ReactNode }) {
       return
     }
 
+    const generation = ++restoreGenerationRef.current
     let cancelled = false
 
     async function restore() {
-      setStatus("opening")
-      try {
-        const snapshot = await restoreMeridianFolder()
-        if (!cancelled) {
-          applySnapshot(snapshot)
-          if (!snapshot) {
-            setStatus("none")
-          }
-        }
-      } catch {
-        if (!cancelled) {
-          setStatus("none")
-        }
+      const hasSaved = await restoreMeridianFolder()
+      if (cancelled || generation !== restoreGenerationRef.current) {
+        return
       }
+      if (userOpenGenerationRef.current > 0) {
+        return
+      }
+
+      if (!hasSaved) {
+        setStatus("none")
+        return
+      }
+
+      bindFolder(hasSaved.snapshot, hasSaved.handle)
     }
 
     void restore()
@@ -85,34 +100,52 @@ export function ProjectFolderProvider({ children }: { children: ReactNode }) {
     return () => {
       cancelled = true
     }
-  }, [applySnapshot, fsAccessSupported])
+  }, [bindFolder, fsAccessSupported])
 
   const openFolder = useCallback(async () => {
+    userOpenGenerationRef.current += 1
+    restoreGenerationRef.current += 1
     setError(null)
     setStatus("opening")
+
     try {
-      const snapshot = await pickMeridianFolder()
-      applySnapshot(snapshot)
+      const opened = await pickMeridianFolder()
+      bindFolder(opened.snapshot, opened.handle)
     } catch (cause) {
+      if (cause instanceof DOMException && cause.name === "AbortError") {
+        setStatus(handleRef.current ? "open" : "none")
+        return
+      }
+
       const message =
         cause instanceof Error ? cause.message : "Não foi possível abrir a pasta."
       setError(message)
-      setStatus(folder ? "open" : "error")
+      setStatus(handleRef.current ? "open" : "error")
     }
-  }, [applySnapshot, folder])
+  }, [bindFolder])
 
   const clearFolder = useCallback(async () => {
+    restoreGenerationRef.current += 1
+    userOpenGenerationRef.current += 1
     await clearFolderHandle()
-    applySnapshot(null)
+    clearBoundFolder()
     setError(null)
-  }, [applySnapshot])
+  }, [clearBoundFolder])
 
-  const getHandle = useCallback(() => getActiveFolderHandle(), [])
+  const getHandle = useCallback(async () => {
+    const cached = handleRef.current
+    if (!cached) {
+      return null
+    }
+    const granted = await requestReadPermission(cached)
+    return granted ? cached : null
+  }, [])
 
   const value = useMemo<ProjectFolderContextValue>(
     () => ({
       status,
       folder,
+      folderKey,
       hints,
       error,
       fsAccessSupported,
@@ -123,6 +156,7 @@ export function ProjectFolderProvider({ children }: { children: ReactNode }) {
     [
       status,
       folder,
+      folderKey,
       hints,
       error,
       fsAccessSupported,

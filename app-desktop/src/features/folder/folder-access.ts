@@ -26,7 +26,23 @@ export async function requestReadPermission(
   return next === "granted"
 }
 
-export async function pickMeridianFolder(): Promise<MeridianFolderSnapshot> {
+export interface MeridianFolderOpenResult {
+  snapshot: MeridianFolderSnapshot
+  handle: FileSystemDirectoryHandle
+}
+
+async function snapshotFromHandle(
+  handle: FileSystemDirectoryHandle,
+): Promise<MeridianFolderSnapshot> {
+  const validation = await validateMeridianFolder(handle)
+  const invalidMessage = assertMeridianFolder(validation)
+  if (invalidMessage) {
+    throw new Error(invalidMessage)
+  }
+  return { name: handle.name, validation }
+}
+
+export async function pickMeridianFolder(): Promise<MeridianFolderOpenResult> {
   if (!isFileSystemAccessSupported()) {
     throw new Error(
       "Seu navegador não suporta abertura de pasta. Use Chrome ou Edge recente em localhost.",
@@ -39,24 +55,21 @@ export async function pickMeridianFolder(): Promise<MeridianFolderSnapshot> {
       "Seu navegador não suporta abertura de pasta. Use Chrome ou Edge recente em localhost.",
     )
   }
+
   const handle = await picker.call(window, { mode: "read" })
   const granted = await requestReadPermission(handle)
   if (!granted) {
     throw new Error("Permissão de leitura da pasta foi negada.")
   }
 
-  const validation = await validateMeridianFolder(handle)
-  const invalidMessage = assertMeridianFolder(validation)
-  if (invalidMessage) {
-    throw new Error(invalidMessage)
-  }
-
+  const snapshot = await snapshotFromHandle(handle)
   await saveFolderHandle(handle)
 
-  return { name: handle.name, validation }
+  return { snapshot, handle }
 }
 
-export async function restoreMeridianFolder(): Promise<MeridianFolderSnapshot | null> {
+/** Restaura pasta salva no IndexedDB (sem abrir o seletor). */
+export async function restoreMeridianFolder(): Promise<MeridianFolderOpenResult | null> {
   if (!isFileSystemAccessSupported()) {
     return null
   }
@@ -72,14 +85,13 @@ export async function restoreMeridianFolder(): Promise<MeridianFolderSnapshot | 
     return null
   }
 
-  const validation = await validateMeridianFolder(handle)
-  const invalidMessage = assertMeridianFolder(validation)
-  if (invalidMessage) {
+  try {
+    const snapshot = await snapshotFromHandle(handle)
+    return { snapshot, handle }
+  } catch {
     await clearFolderHandle()
     return null
   }
-
-  return { name: handle.name, validation }
 }
 
 export async function getActiveFolderHandle(): Promise<FileSystemDirectoryHandle | null> {

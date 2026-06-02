@@ -68,46 +68,64 @@ function parseBoardJson(raw: string): BoardEntry[] {
   return parsed as BoardEntry[]
 }
 
-/** Carrega fases, US, épicos e board a partir da pasta docs/ aberta (raiz do handle). */
-export async function loadMeridianProject(
+async function loadPhaseDocuments(
   docsRoot: FileSystemDirectoryHandle,
-): Promise<MeridianProjectData> {
-  const parseIssues: MonitorIssue[] = []
-  const storyBodies = new Map<string, string>()
-
-  const phaseDocuments: PhaseDocument[] = []
-  for (const docId of PHASE_DOC_IDS) {
-    const filename = `${docId}.md`
-    try {
-      const raw = await readTextFile(docsRoot, filename)
-      phaseDocuments.push(parsePhaseDocument(docId, raw))
-    } catch (error) {
-      recordParseIssue(
-        parseIssues,
-        error instanceof MeridianParseError
-          ? error
-          : new MeridianParseError(filename, String(error)),
-      )
-    }
-  }
-
-  const userStories: UserStory[] = []
-  try {
-    const usDir = await docsRoot.getDirectoryHandle("us")
-    const filenames = await listUserStoryFilenames(usDir)
-    for (const filename of filenames) {
+  parseIssues: MonitorIssue[],
+): Promise<PhaseDocument[]> {
+  const results = await Promise.all(
+    PHASE_DOC_IDS.map(async (docId) => {
+      const filename = `${docId}.md`
       try {
-        const raw = await readTextFile(usDir, filename)
-        const story = parseUserStoryFile(filename, raw)
-        userStories.push(story)
-        storyBodies.set(story.id, splitMarkdown(raw).body)
+        const raw = await readTextFile(docsRoot, filename)
+        return parsePhaseDocument(docId, raw)
       } catch (error) {
         recordParseIssue(
           parseIssues,
           error instanceof MeridianParseError
             ? error
-            : new MeridianParseError(`us/${filename}`, String(error)),
+            : new MeridianParseError(filename, String(error)),
         )
+        return null
+      }
+    }),
+  )
+
+  return results.filter((doc): doc is PhaseDocument => doc !== null)
+}
+
+async function loadUserStories(
+  docsRoot: FileSystemDirectoryHandle,
+  parseIssues: MonitorIssue[],
+  storyBodies: Map<string, string>,
+): Promise<UserStory[]> {
+  const userStories: UserStory[] = []
+
+  try {
+    const usDir = await docsRoot.getDirectoryHandle("us")
+    const filenames = await listUserStoryFilenames(usDir)
+
+    const stories = await Promise.all(
+      filenames.map(async (filename) => {
+        try {
+          const raw = await readTextFile(usDir, filename)
+          const story = parseUserStoryFile(filename, raw)
+          storyBodies.set(story.id, splitMarkdown(raw).body)
+          return story
+        } catch (error) {
+          recordParseIssue(
+            parseIssues,
+            error instanceof MeridianParseError
+              ? error
+              : new MeridianParseError(`us/${filename}`, String(error)),
+          )
+          return null
+        }
+      }),
+    )
+
+    for (const story of stories) {
+      if (story) {
+        userStories.push(story)
       }
     }
   } catch {
@@ -118,6 +136,21 @@ export async function loadMeridianProject(
       scope: "parse",
     })
   }
+
+  return userStories
+}
+
+/** Carrega fases, US, épicos e board a partir da pasta docs/ aberta (raiz do handle). */
+export async function loadMeridianProject(
+  docsRoot: FileSystemDirectoryHandle,
+): Promise<MeridianProjectData> {
+  const parseIssues: MonitorIssue[] = []
+  const storyBodies = new Map<string, string>()
+
+  const [phaseDocuments, userStories] = await Promise.all([
+    loadPhaseDocuments(docsRoot, parseIssues),
+    loadUserStories(docsRoot, parseIssues, storyBodies),
+  ])
 
   let epics: Epic[] = []
   try {

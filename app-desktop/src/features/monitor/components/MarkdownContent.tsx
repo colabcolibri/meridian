@@ -16,7 +16,7 @@ const markdownComponents: Components = {
     <h3 className="font-heading text-lg font-semibold text-foreground">{children}</h3>
   ),
   p: ({ children }) => (
-    <p className={cn(typeScale.body, "text-foreground")}>{children}</p>
+    <p className={cn(typeScale.body, "break-words text-foreground")}>{children}</p>
   ),
   ul: ({ children }) => (
     <ul className={cn(typeScale.body, "list-disc space-y-1 pl-5 text-foreground")}>
@@ -28,7 +28,7 @@ const markdownComponents: Components = {
       {children}
     </ol>
   ),
-  li: ({ children }) => <li className="leading-relaxed">{children}</li>,
+  li: ({ children }) => <li className="break-words leading-relaxed">{children}</li>,
   a: ({ href, children }) => (
     <a
       className="font-medium text-meridian underline-offset-2 hover:underline"
@@ -45,7 +45,7 @@ const markdownComponents: Components = {
     </blockquote>
   ),
   pre: ({ children }) => (
-    <pre className="overflow-x-auto rounded-lg border bg-muted/50 p-3 font-mono text-sm leading-relaxed">
+    <pre className="max-w-full overflow-x-auto rounded-lg border bg-muted/50 p-3 font-mono text-sm leading-relaxed whitespace-pre-wrap break-words">
       {children}
     </pre>
   ),
@@ -55,14 +55,14 @@ const markdownComponents: Components = {
       return <code className={className}>{children}</code>
     }
     return (
-      <code className="rounded bg-muted px-1.5 py-0.5 font-mono text-sm">
+      <code className="break-all rounded bg-muted px-1.5 py-0.5 font-mono text-sm">
         {children}
       </code>
     )
   },
   table: ({ children }) => (
-    <div className="my-4 w-full overflow-x-auto rounded-lg border border-border">
-      <table className="w-full min-w-[280px] border-collapse text-sm">{children}</table>
+    <div className="my-4 max-w-full overflow-x-auto rounded-lg border border-border">
+      <table className="w-full border-collapse text-sm">{children}</table>
     </div>
   ),
   thead: ({ children }) => <thead className="bg-muted/60">{children}</thead>,
@@ -71,17 +71,19 @@ const markdownComponents: Components = {
     <tr className="border-b border-border last:border-0">{children}</tr>
   ),
   th: ({ children }) => (
-    <th className="px-3 py-2 text-left font-medium text-foreground">{children}</th>
+    <th className="px-3 py-2 text-left font-medium break-words text-foreground">
+      {children}
+    </th>
   ),
   td: ({ children }) => (
-    <td className="px-3 py-2 align-top text-foreground">{children}</td>
+    <td className="px-3 py-2 align-top break-words text-foreground">{children}</td>
   ),
   hr: () => <hr className="my-6 border-border" />,
 }
 
 export function MarkdownContent({ body }: { body: string }) {
   return (
-    <div className="space-y-4 break-words">
+    <div className="min-w-0 max-w-full space-y-4 break-words [overflow-wrap:anywhere]">
       <ReactMarkdown components={markdownComponents} remarkPlugins={[remarkGfm]}>
         {body}
       </ReactMarkdown>
