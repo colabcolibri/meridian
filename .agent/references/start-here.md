@@ -1,209 +1,251 @@
-# Start here
+# What is Meridian
 
-Concepts and `docs/` layout — same content as the **Start here** tab in the [desktop monitor](../../app-desktop/).  
-For actions and slash commands, see **[usage-guide.md](./usage-guide.md)**.
+Meridian is a protocol for building software with AI. The core idea is simple: **documentation comes before code**. You define what the product is, who it is for, and how it should work — then the AI implements it, guided by those files.
 
-**Related:** [usage-guide.md](./usage-guide.md) · [MERIDIAN.md](../MERIDIAN.md) · [README.md](../../README.md)
+Without this, AI agents hallucinate scope, repeat decisions already made, and produce code that does not match what the team actually agreed on. Meridian solves that by making documentation the source of truth that both humans and agents read.
 
 ---
 
-## Guide for people new to Meridian
+## New project or existing codebase?
 
-Meridian is a **docs-first** way to structure and build software: Markdown in the `docs/` folder defines scope, architecture, principles, user stories, and acceptance criteria. You approve that material, then implement — manually or with AI agents that read the same files.
+**New project:** run `/init-meridian`. The agent asks up to 5 questions about the product and creates the foundation documents from your answers.
 
-It is not Jira, it is not Notion, and it does not require a login. The source of truth is Git. The optional [desktop monitor](../../app-desktop/) only reads `docs/` and shows progress visually — the managed process still lives in your IDE via `.agent/`.
+**Existing codebase:** run `/init-meridian` with your project open. The agent reads the code first — package files, folder structure, README, any existing docs. Then it asks only what it could not determine. It populates the phase documents from what it observed, marking every inference as an assumption for you to review and approve.
 
-**Next:** read [usage-guide.md](./usage-guide.md), then run `/init-meridian` or `/status` in your IDE.
+Either way, the result is the same: a `docs/` folder with the structure below, ready to complete and approve.
 
-## Core principles
+---
 
-| Principle | Summary |
-| --------- | ------- |
-| **Documentation before code** | Scope, architecture, and Acceptance criteria come first. Code implements documentation, not the other way around. |
-| **You approve, agents execute** | AI can write and review, but scope changes, `approved` status, and ✅ only happen with your validation. |
-| **Done = evidence** | Compiling is not enough. ✅ requires Acceptance and tests in the files. Use `/complete-us` after reviewing. 🔶 requires explicit `Missing:`. |
-| **Derived board** | `board.json` comes from the US files. Edit `docs/us/*.md`, not the JSON, as the status source of truth. |
-| **Refine before code** | `/create-us` fills Intent + Plan draft (`ready: false`). `/refine-us` deepens Plan and sets `ready: true`. No product code until then. |
+## The four phases
 
-## What is inside `docs/`
+Every project goes through these four phases in order. Each one unlocks the next — you cannot skip.
 
-Every Meridian project has a `docs/` folder at the repository root. Content splits between **phase documents** at the root of `docs/` and **delivery folders**:
+### Phase 1 — Project definition
 
-| Path | Label | Description |
-| ---- | ----- | ----------- |
-| `docs/*.md` | 10 phase documents | Files 00–08 and 11: foundation (00–03), principles (04), architecture (05), detail (06–08). Delivery lives in `epics/`, `versions/`, `sprints/`, `us/`. |
-| `docs/epics/EPIC-XX.md` | Epics | One file per epic, YAML frontmatter. Example: `EPIC-02.md` describes a product capability. |
-| `docs/versions/vX.md` | Versions | One file per release (v0, v1, v2…). Goal, outcome, scope, go-live checklist. |
-| `docs/sprints/vX-SY.md` | Sprints | Time slices within a version. Planned US in frontmatter `stories`. |
-| `docs/us/US-XXXX.md` | User stories | One file per task. Only after `05_architecture` is approved and epic/version exist. |
-| `docs/decisions/YYYY-MM-DD.json` | Decision log | One JSON file per day. `entries` array (newest first). |
-| `docs/kanban/board.json` | Kanban (generated) | Status summary from all US. **Never edit by hand** — built from `docs/us/`. |
-| `docs/templates/` | Delivery templates | Human-readable mirror of kit templates (symlinks). Agents read `.agent/references/templates/`. |
+Define what the project is before anything technical. This is about identity, purpose, and audience — not code.
 
-### Dependencies between phase docs
+You answer: *What problem does this product solve? Who uses it? What is explicitly out of scope?*
 
-`00`–`03` in sequence; `04_principles` before `05_architecture`; `06`–`08` after `05` (`06` before `07`). Decision log in `docs/decisions/` from day one. Epics, versions, and US only after `05_architecture` is **approved**.
+Documents produced:
+- `00_scope.md` — what the product is and is not
+- `03_user_types.md` — who uses it and how they relate to each other
 
-## Journey phases
+**Gate:** `00_scope.md` approved → unlocks Phase 2.
 
-### Phase 0 — Foundation
+### Phase 2 — Structure definition
 
-**Understand the project.** Sequential: one document unlocks the next.
+Once you know what the product is, define how it is built.
 
-- `11_decisions.md` — log rules (stub)
-- `docs/decisions/YYYY-MM-DD.json` — structured log by day
-- `00_scope.md` — problem, scope, in/out
-- `01_tech_stack.md` — languages, frameworks, tools
-- `02_security.md` — threats, sensitive data, rules
-- `03_user_types.md` — who uses the product
+Documents produced:
+- `01_tech_stack.md` — languages, frameworks, infrastructure
+- `02_security.md` — threats, sensitive data, auth model, compliance posture
+- `04_principles.md` — code quality and design conventions
+- `05_architecture.md` — how the system is divided into modules and services
+- `06_database.md` — data model and migrations
+- `07_api_contracts.md` — API definitions
+- `08_environments.md` — dev, staging, production
 
-### Phase 1 — Principles
+**Gate:** `05_architecture.md` approved → unlocks Phase 3.
 
-**Code and quality rules** — conventions before designing modules and boundaries.
+### Phase 3 — Backlog definition
 
-- `04_principles.md`
+With the architecture approved, define what will be built and in what order.
 
-### Phase 2 — Architecture
+Artifacts created in this phase:
+- **Epic** — a large product capability (e.g. "User authentication")
+- **Version** — a go-live release that groups epics (v1, v2, …)
+- **Sprint** — a time-boxed unit within a version with a single goal
+- **User story** — an executable task: one slice of one epic
 
-**How the system is divided** — apps, modules, integrations, boundaries.
+**Gate:** epic and version exist → user stories can be created.
 
-- `05_architecture.md`
+### Phase 4 — Execution
 
-### Phase 3 — Technical details
+The AI implements each user story, guided by the files from Phase 3. You review the code, then close the story with evidence.
 
-**Database, APIs, environments.**
-
-- `06_database.md` · `07_api_contracts.md` · `08_environments.md`
-
-### Phase 4 — Delivery backlog
-
-**Only after architecture:** releases, capabilities, executable tasks.
-
-- `docs/epics/EPIC-XX.md` — product capability (outcome)
-- `docs/versions/vX.md` — release goal and scope
-- `docs/sprints/vX-SY.md` — time slices within the version
-
-Usual creation order: epic → version → sprint → US. US gate: `05_architecture` approved + epic/version exist in folders.
-
-### Execution
-
-User stories follow a fixed lifecycle before code ships:
-
-```txt
-/create-us   → Intent + Plan draft; ready: false
-/review-us   → audit report (optional); never sets ready
-/refine-us   → deepen Plan; ready: true
-implement    → blocked if ready ≠ true
-/complete-us → Record + ✅
-/sync-board  → regenerate board.json
+```
+/create-us  →  /refine-us  →  implement  →  /complete-us  →  /sync-board
 ```
 
-- `docs/us/US-0001.md` …
-- `docs/kanban/board.json` (generated)
+**No code without `ready: true`.** No `✅` without evidence in the Record.
 
-## Epics, versions, and user stories
+---
 
-### Epic — the large product block
+## The document structure
 
-An epic groups a whole product capability. Example: **EPIC-02** “Initial setup monitor” covers opening a folder, reading phase documents, and showing progress.
+```
+docs/
+  00_scope.md              Phase 1 — what the product is
+  01_tech_stack.md         Phase 2 — technology choices
+  02_security.md           Phase 2 — security model
+  03_user_types.md         Phase 1 — who uses the product
+  04_principles.md         Phase 2 — code and quality conventions
+  05_architecture.md       Phase 2 — system structure (gate for backlog)
+  06_database.md           Phase 2 — data model
+  07_api_contracts.md      Phase 2 — API definitions
+  08_environments.md       Phase 2 — dev, staging, production
+  11_decisions.md          Always on — decision log index
+  decisions/               One JSON file per day of decisions
+  epics/EPIC-XX.md         Phase 3 — product capabilities
+  versions/vX.md           Phase 3 — releases
+  sprints/vX-SY.md         Phase 3 — time-boxed delivery units
+  us/US-XXXX.md            Phase 3+4 — executable tasks
+  kanban/board.json        Generated — never edit by hand
+```
 
-- File: `docs/epics/EPIC-XX.md` — frontmatter: `id`, `title`, `status`, `versions`, `profiles`, `outcome`; body: **Capability** and **Expected outcome** as explanatory prose (not bullet lists — see `writing-guide.md`).
-- Epic status: `active` · `complete` · `paused` (not the same as phase doc `draft`/`review`/`approved`).
-- US reference epic by ID only (`epic: EPIC-02`) — never copy epic text into the US.
+---
 
-### Version — the release (v0, v1, v2…)
+## How the delivery artifacts work
 
-A version is a go-live package. File: `docs/versions/vX.md`. Sprints in `docs/sprints/`.
+### Epic → Version → Sprint → User Story
 
-- US reference `version: v1` only.
-- Epics reference `versions: [v0, v1]`.
-- Plan with `/create-version`; sprints with `/plan-sprint`.
+Each artifact answers a different question:
 
-### User story — the executable task
+- **Epic** — *What capability are we building?* A product capability in user language. May span multiple versions.
+- **Version** — *What goes live in this release?* A go-live package that groups epics and stories.
+- **Sprint** — *What do we complete this week?* A time box with a single goal and a small set of stories.
+- **User story** — *What is the smallest executable slice?* One task, one epic, one version.
 
-Format: **As** [persona], **I want** [action], **so that** [benefit].
+```
+Epic ──── Version ──── Sprint ──── User Story
+│                                  │
+└── product capability             └── executable task
+```
 
-- File: `docs/us/US-XXXX.md` — schema v2: **Intent** (Acceptance, Why, Where), **Plan** (refs + Planned), **Record** (delivery), **Boundaries**. See `section-contracts.md`.
-- `depends_on`, `done_when`, `moscow` (Must / Should / Could / Won't), `ready` (`false` after create, `true` after refine).
-- ✅ and **Record** via `/complete-us` after you review — not only in chat.
-- Do not implement until `ready: true` — run `/refine-us` first.
+A story references its epic and version in frontmatter only (`epic: EPIC-02`, `version: v1`). The story body explains its own slice in its own words — never copies from the epic.
 
-### How to read an epic (fields)
+### How user stories move
 
-| Field | Meaning |
-| ----- | ------- |
-| `id` | Permanent ID (EPIC-02) |
-| `title` | Short capability name |
-| `status` | `active` · `complete` · `paused` |
-| `versions` | Releases where the epic ships |
-| `profiles` | User types from `03_user_types.md` |
-| `outcome` | Product-level done for the epic |
-| **Capability** | Body: what the user can do |
-| **Out of scope for this epic** | Body: explicit boundaries |
+A user story is not a ticket. It is a document with a full lifecycle:
 
-### How to read a version (fields)
+| State | What it means |
+| ----- | ------------- |
+| `ready: false` | Created — Intent written, Plan drafted. Not ready to implement. |
+| `ready: true` | Refined — Plan complete, Approach written, tests concrete. Ready to implement. |
+| `status: ✅` | Complete — Record filled, acceptance evidenced, tests done. |
 
-| Field | Meaning |
-| ----- | ------- |
-| `id` | `v0`, `v1`, `v2`… |
-| `status` | `planned` · `active` · `complete` |
-| `outcome` | Release-level done |
-| **Objective** / **Explicitly out** | Body: in scope vs later |
+The story has four sections:
 
-### How to read a user story (fields)
+- **Intent** — why this slice exists, what the user can do after it, where it sits in the release
+- **Plan** — how it will be implemented: Approach bullets, architecture refs, API/DB impact, security notes, test plan
+- **Record** — what was actually done: files changed, layers touched, tests executed (filled on close)
+- **Boundaries** — what is explicitly out of scope for this story
 
-| Field | Meaning |
-| ----- | ------- |
-| `status` | ✅ done · 🔶 partial (`Missing:`) · ❌ pending · 🧊 frozen |
-| `ready` | `false` after `/create-us`; `true` after `/refine-us` — gate before code |
-| `tests` / `tests_status` | `required` + `pending`/`done`/`n/a` — board may show 🧪 |
-| `epic` / `version` | Reference by ID only |
-| **Why / Where / Approach** | Body: narrative for this slice — do not paste epic text |
+The **Approach** (inside Plan) is the technical direction for the agent. It is optional at create, but required before `ready: true`. Minimum 2 bullets explaining what changes, where in the codebase, and why.
 
-## Status reference
+---
 
-### Phase documents
+## Document maturity
+
+Phase documents (`00`–`08`, `11`) follow a maturity path. **Only you set `approved`** — the agent sets `draft` or `review`, never `approved`.
 
 | Status | Meaning |
 | ------ | ------- |
-| `draft` | Still being written |
-| `review` | Ready for human review |
-| `approved` | Unlocks dependents |
+| `draft` | Being written — not yet ready for human review |
+| `review` | Ready for human review — agent proposes, you decide |
+| `approved` | Human has reviewed and approved — unlocks dependents |
 
-### User stories (board)
+---
 
-| | Label | Meaning |
-| --- | ----- | ------- |
-| ❌ | Pending | Not started or not finished |
-| 🔶 | In progress | Partial — `Missing:` required in Acceptance |
-| ✅ | Done | Acceptance and tests evidenced in files |
-| 🧪 | Waiting for tests | `tests: required` + `tests_status: pending` |
-| 🧊 | Frozen | Intentionally paused |
+## What Meridian does not do
 
-Regenerate board after US changes: `/sync-board` or skill `generate-board-json`.
+- Does not write code without a `ready: true` user story
+- Does not mark work done without evidence in the Record
+- Does not make scope decisions — you do
+- Does not approve its own documents — you do
+- Does not manage deploys or CI — those are referenced in docs, not run by Meridian
 
-## Optional desktop monitor — tabs
+---
 
-If you run `app-desktop`, tabs map to these Markdown guides and live data:
+## Anatomy of each artifact
 
-| Tab | Markdown / purpose |
-| --- | ------------------ |
-| **Start here** | [start-here.md](./start-here.md) (this file) |
-| **Usage guide** | [usage-guide.md](./usage-guide.md) (actions and commands) |
-| **Setup** | Phase docs 00–11 and approval progress |
-| **Decisions** | `docs/decisions/*.json` |
-| **Deliverables** | Epics grouped by capability; version toggle; US coverage per epic |
-| **Board** | US kanban, filters |
+Reference section — open when you need the detail on a specific file's fields and sections.
 
-## Next step
+### User Story (US-XXXX)
 
-Validate structure (optional):
+**Frontmatter:**
 
-```bash
-python3 .agent/scripts/validate_meridian.py <project-folder>
-python3 .agent/scripts/validate_meridian.py <project-folder> --json   # CI / machine output
-```
+| Field | What it is |
+| ----- | ---------- |
+| `id` | Permanent identifier — `US-0001`. Never changes. |
+| `title` | What it delivers, not how. |
+| `epic` | Parent epic id (`EPIC-02`). Frontmatter only — no epic text in the body. |
+| `version` | Which release this ships in (`v1`). |
+| `status` | `❌` not started · `🔶` partial · `✅` done · `🧊` frozen |
+| `moscow` | `Must` · `Should` · `Could` · `Won't` |
+| `depends_on` | US ids that must be `✅` before this one. |
+| `ready` | `false` at create · `true` after refine. Gate for implementation. |
+| `done_when` | One measurable sentence — the observable done condition. |
+| `tests` | `required` — must pass · `none` — explicitly skipped (document why) |
+| `tests_status` | `pending` · `done` · `n/a` |
 
-Understood folders, phases, and status? Open **[usage-guide.md](./usage-guide.md)** for `/init-meridian`, `/create-us`, `/refine-us`, `/complete-us`, and the daily paths.
+**Body sections:**
 
-Optionally run the [desktop monitor](../../app-desktop/), click **Open docs folder**, and select your project's `docs/` (e.g. `app-desktop/docs` in this repo) to see Setup, Deliverables, and Board with real data.
+`## Intent` → `### Acceptance` (verifiable checklist), `### Why` (problem + before/after), `### Where` (position in release, deps, what it unblocks)
+
+`## Plan` → `### Approach` (required at refine — 2+ bullets: what, where in codebase, why), `### Architecture refs`, `### API / DB impact`, `### Security notes`, `### Planned` (numbered test steps)
+
+`## Record` → `### Files` (real paths), `### Backend / Frontend / Scripts / Docs` (layer summary), `### Executed` (actual test output)
+
+`## Boundaries` → `### Out of scope for this story`, `### Notes`
+
+---
+
+### Epic (EPIC-XX)
+
+**Frontmatter:**
+
+| Field | What it is |
+| ----- | ---------- |
+| `id` | `EPIC-01`, `EPIC-02` — permanent. |
+| `title` | Short capability name in user language. |
+| `status` | `active` · `complete` · `paused` |
+| `versions` | Releases this epic ships across (`[v1, v2]`). |
+| `profiles` | User types from `03_user_types.md` this epic serves. |
+| `outcome` | One sentence — what is true at product level when done. |
+
+**Body:** `## Capability` (two paragraphs: user problem today → what the product offers after), `## Expected outcome` (observable done signal — not "all US ✅"), `## Out of scope for this epic` (bullets with rationale), `## Notes` (optional)
+
+---
+
+### Version (vX)
+
+**Frontmatter:**
+
+| Field | What it is |
+| ----- | ---------- |
+| `id` | `v0`, `v1`, `v2` — sequential. |
+| `title` | Short release name. |
+| `status` | `planned` · `active` · `complete` |
+| `outcome` | One sentence — what is true at product level when this ships. |
+
+**Body:** `## Objective` (release theme — not a ticket list), `## Done criteria` (observable close condition), `## Included in this version` (epics/US by id + one line why), `## Explicitly out` (with rationale), `## Go-live checklist`, `## Sprints`
+
+---
+
+### Sprint (vX-SY)
+
+**Frontmatter:**
+
+| Field | What it is |
+| ----- | ---------- |
+| `id` | `v1-S1` — must match filename. |
+| `version` | Parent version — must exist in `docs/versions/`. |
+| `goal` | One sentence — what this sprint proves or delivers. |
+| `done_when` | Observable close condition. |
+| `stories` | Canonical US id list (used by validation). |
+| `status` | `planned` · `active` · `complete` |
+
+**Body:** `## Goal` (why this sprint, why now), `## Scope` (table of US), `## Out of scope for this sprint`, `## Retrospective` (mandatory on close — even one line each)
+
+---
+
+### Decision log (decisions/YYYY-MM-DD.json)
+
+Append-only. Every significant decision — technology choice, architecture change, scope adjustment, security posture — goes here. Entries are prepended (newest first), never edited.
+
+Each entry: `date`, `title`, `context` (why the decision was needed), `decision` (what was decided), `consequences` (what changes as a result).
+
+---
+
+For commands and step-by-step instructions, open **[usage-guide.md](./usage-guide.md)**.

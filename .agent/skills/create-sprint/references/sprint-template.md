@@ -1,26 +1,60 @@
 # Sprint template
 
+> A sprint is a time-boxed delivery unit within a version. It has a clear goal, a defined scope, and a done condition. Do not use it as a task list — use it to communicate intent and measure delivery.
+
 ```md
 ---
 id: v1-S1
 version: v1
 title: Short sprint name
 status: planned
-done_when: "Objective sprint closure condition."
+goal: "One sentence: what this sprint proves or delivers."
+done_when: "Observable condition to close the sprint — not 'all US done'."
 stories: [US-0023, US-0024]
 ---
 
 # v1-S1 — Short sprint name
 
-Sprint for version **v1**.
+## Goal
 
-| US      | Status | MoSCoW | Depends on | Epic    | Description |
-| ------- | ------ | ------ | ---------- | ------- | --------- |
-| US-0023 | ❌     | Must   | —          | EPIC-03 | …         |
+One or two sentences. Why this sprint, why now. What changes for the user or the system by the end of it — not a list of tickets.
+
+## Scope
+
+| US      | Status | MoSCoW | Depends on | Epic    | Description                  |
+| ------- | ------ | ------ | ---------- | ------- | ---------------------------- |
+| US-0023 | ❌     | Must   | —          | EPIC-03 | Short description of the US  |
+| US-0024 | ❌     | Must   | US-0023    | EPIC-03 | Short description of the US  |
+
+## Out of scope for this sprint
+
+What is explicitly deferred — and why (capacity, dependency, priority).
+
+- …
+
+## Retrospective
+
+_(fill at sprint close)_
+
+- What worked:
+- What to improve:
+- Decisions to log:
 ```
 
 ## Rules
 
 - `id` must match filename (`v1-S1.md`).
 - `version` must exist in `docs/versions/`.
-- `stories` in frontmatter is canonical list for validation; body table is optional (readability).
+- `goal` is one measurable sentence — not a copy of the version objective.
+- `stories` in frontmatter is the canonical list used by validation; body table is for human readability.
+- `status`: `planned` → `active` → `complete`.
+- **Retrospective** is mandatory on close — even one line each. Decisions go to `docs/decisions/YYYY-MM-DD.json`.
+- Do not start a sprint without at least one `ready: true` US.
+
+## Sprint status
+
+| Value | Meaning |
+| ----- | ------- |
+| `planned` | Defined, not yet started |
+| `active` | In progress — one sprint active per version at a time |
+| `complete` | Done when closed — Retrospective filled |

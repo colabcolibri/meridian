@@ -1,19 +1,14 @@
-import { useState } from "react"
+import { useCallback, useRef, useState } from "react"
 
-import { AlertTriangle, BookOpen, ChevronDown, Compass } from "lucide-react"
+import { AlertTriangle, BookOpen, ChevronRight, Compass, Terminal } from "lucide-react"
 
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible"
 import {
   GuideAccordionSection,
   OpenFolderCallout,
-  SlashCommandsTable,
+  SlashCommandGroupedTable,
 } from "@/features/monitor/components/guide-components"
 import {
-  slashCommandReference,
+  slashCommandGroups,
   usageAntiPatterns,
   usageGuideIntro,
   usageGuideSections,
@@ -25,11 +20,28 @@ import { typeScale } from "@/features/monitor/monitor-typography"
 import { cn } from "@/lib/utils"
 
 export function UsageGuideView() {
-  const [referenceOpen, setReferenceOpen] = useState(false)
-  const [cautionsOpen, setCautionsOpen] = useState(false)
+  // Track which accordion sections are open, keyed by section id
+  const [openSections, setOpenSections] = useState<Record<string, boolean>>(() =>
+    Object.fromEntries(usageGuideSections.map((s) => [s.id, s.defaultOpen ?? false])),
+  )
+
+  // Refs to each accordion wrapper for scrolling
+  const sectionRefs = useRef<Record<string, HTMLDivElement | null>>({})
+
+  const openAndScrollTo = useCallback((sectionId: string) => {
+    setOpenSections((prev) => ({ ...prev, [sectionId]: true }))
+    // Slight delay so the accordion has time to open before scroll
+    setTimeout(() => {
+      sectionRefs.current[sectionId]?.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      })
+    }, 80)
+  }, [])
 
   return (
-    <div className="w-full max-w-none space-y-8">
+    <div className="w-full max-w-none space-y-10">
+      {/* ── 1. Header ────────────────────────────────────────────── */}
       <header className="space-y-3">
         <div className="flex items-center gap-2">
           <BookOpen className="h-5 w-5 text-meridian" aria-hidden />
@@ -47,110 +59,125 @@ export function UsageGuideView() {
         </div>
       </header>
 
-      <section className={cn(monitorPanelClass, "p-4 sm:p-5")}>
+      {/* ── 2. Where am I? — clickable navigation ────────────────── */}
+      <section className={cn(monitorPanelClass, "p-5 sm:p-6")}>
         <div className="flex items-center gap-2">
           <Compass className="h-5 w-5 text-meridian" aria-hidden />
           <h3 className={typeScale.sectionTitle}>Where am I?</h3>
         </div>
-        <p className={cn(typeScale.bodySm, "mt-2 text-muted-foreground")}>
-          Open the section that matches your situation — you do not need to read
-          everything.
+        <p className={cn(typeScale.bodySm, "mt-2")}>
+          Click your situation — the right section will open below.
         </p>
         <ul className="mt-4 space-y-2">
           {usageSituations.map((item) => (
-            <li
-              className="flex flex-col gap-1 rounded-lg border border-border bg-muted/20 px-3 py-2.5 sm:flex-row sm:items-center sm:justify-between"
-              key={item.situation}
-            >
-              <span className={typeScale.body}>{item.situation}</span>
-              <span className="flex shrink-0 flex-wrap items-center gap-2">
-                <span className={cn(typeScale.label, "text-meridian")}>
-                  → {item.section}
+            <li key={item.situation}>
+              <button
+                className={cn(
+                  "group w-full rounded-lg border border-border bg-muted/20 px-4 py-3",
+                  "flex flex-col gap-1.5 text-left transition-colors",
+                  "hover:border-meridian/40 hover:bg-meridian-muted/20",
+                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-meridian/50",
+                  "sm:flex-row sm:items-center sm:justify-between",
+                )}
+                onClick={() => openAndScrollTo(item.sectionId)}
+                type="button"
+              >
+                <span className={typeScale.body}>{item.situation}</span>
+                <span className="flex shrink-0 flex-wrap items-center gap-2">
+                  <span
+                    className={cn(
+                      typeScale.label,
+                      "text-meridian group-hover:underline",
+                    )}
+                  >
+                    {item.section}
+                  </span>
+                  {item.command ? (
+                    <code className="rounded border border-border bg-background px-2 py-0.5 font-mono text-xs">
+                      {item.command}
+                    </code>
+                  ) : null}
+                  <ChevronRight
+                    className="h-3.5 w-3.5 text-meridian opacity-60 group-hover:opacity-100"
+                    aria-hidden
+                  />
                 </span>
-                {item.command ? (
-                  <code className="rounded border border-border bg-background px-2 py-0.5 font-mono text-xs">
-                    {item.command}
-                  </code>
-                ) : null}
-              </span>
+              </button>
             </li>
           ))}
         </ul>
       </section>
 
-      <div className="space-y-3">
-        {usageGuideSections.map((section) => (
-          <GuideAccordionSection key={section.id} section={section} />
-        ))}
-      </div>
+      {/* ── 3. Command reference — grouped, always visible ───────── */}
+      <section className="space-y-4">
+        <div className="flex items-center gap-2">
+          <Terminal className="h-5 w-5 text-meridian" aria-hidden />
+          <h3 className={typeScale.sectionTitle}>Command reference</h3>
+        </div>
+        <p className={typeScale.bodySm}>
+          Run these in your IDE chat. Commands are order-dependent — the gates in each
+          section below tell you when each applies.
+        </p>
+        <SlashCommandGroupedTable groups={slashCommandGroups} />
+      </section>
 
-      <Collapsible
-        className="overflow-hidden rounded-xl border border-border bg-card shadow-sm"
-        onOpenChange={setReferenceOpen}
-        open={referenceOpen}
-      >
-        <CollapsibleTrigger
-          className={cn(
-            "group flex w-full items-center gap-4 px-4 py-3.5 text-left transition-colors sm:px-5",
-            "hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
-            "data-[state=open]:border-b data-[state=open]:border-border",
-          )}
-        >
-          <div className="min-w-0 flex-1">
-            <h3 className={typeScale.sectionTitle}>Command reference</h3>
-            <p className={cn(typeScale.caption, "mt-0.5")}>
-              Slash commands in the Cursor chat
-            </p>
-          </div>
-          <ChevronDown
-            className="size-5 shrink-0 text-muted-foreground transition-transform duration-200 group-data-[state=open]:rotate-180"
-            aria-hidden
-          />
-        </CollapsibleTrigger>
-        <CollapsibleContent className="p-4 sm:p-5">
-          <SlashCommandsTable commands={slashCommandReference} />
-        </CollapsibleContent>
-      </Collapsible>
+      {/* ── 4. Workflow sections — controlled accordions ──────────── */}
+      <section className="space-y-3">
+        <h3 className={typeScale.sectionTitle}>Step by step</h3>
+        <p className={typeScale.bodySm}>
+          Open the section that matches your current situation — or click your situation
+          above.
+        </p>
+        <div className="space-y-3">
+          {usageGuideSections.map((section) => (
+            <div
+              key={section.id}
+              ref={(el) => {
+                sectionRefs.current[section.id] = el
+              }}
+            >
+              <GuideAccordionSection
+                open={openSections[section.id] ?? false}
+                onOpenChange={(open) =>
+                  setOpenSections((prev) => ({ ...prev, [section.id]: open }))
+                }
+                section={section}
+              />
+            </div>
+          ))}
+        </div>
+      </section>
 
-      <Collapsible
-        className="overflow-hidden rounded-xl border border-border bg-card shadow-sm"
-        onOpenChange={setCautionsOpen}
-        open={cautionsOpen}
-      >
-        <CollapsibleTrigger
-          className={cn(
-            "group flex w-full items-center gap-4 px-4 py-3.5 text-left transition-colors sm:px-5",
-            "hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50",
-            "data-[state=open]:border-b data-[state=open]:border-border",
-          )}
-        >
+      {/* ── 5. Common mistakes — visible warning block ────────────── */}
+      <section className="space-y-4 rounded-xl border border-amber-200 bg-amber-50/50 p-5 sm:p-6">
+        <div className="flex items-center gap-2">
           <AlertTriangle className="h-5 w-5 shrink-0 text-amber-600" aria-hidden />
-          <div className="min-w-0 flex-1">
-            <h3 className={typeScale.sectionTitle}>Validate and avoid mistakes</h3>
-            <p className={cn(typeScale.caption, "mt-0.5")}>
-              Validation script and common anti-patterns
-            </p>
-          </div>
-          <ChevronDown
-            className="size-5 shrink-0 text-muted-foreground transition-transform duration-200 group-data-[state=open]:rotate-180"
-            aria-hidden
-          />
-        </CollapsibleTrigger>
-        <CollapsibleContent className="space-y-4 p-4 sm:p-5">
-          <div>
-            <p className={typeScale.label}>{validateProjectHint.title}</p>
-            <code className="mt-2 block overflow-x-auto rounded-lg border border-border bg-muted/40 px-4 py-3 font-mono text-sm">
-              {validateProjectHint.command}
-            </code>
-            <p className={cn(typeScale.bodySm, "mt-2")}>{validateProjectHint.note}</p>
-          </div>
-          <ul className={cn(typeScale.body, "list-disc space-y-2 pl-5")}>
-            {usageAntiPatterns.map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
-        </CollapsibleContent>
-      </Collapsible>
+          <h3 className={cn(typeScale.sectionTitle, "text-amber-900")}>
+            Common mistakes to avoid
+          </h3>
+        </div>
+        <ul className="space-y-2">
+          {usageAntiPatterns.map((item) => (
+            <li className="flex gap-2" key={item}>
+              <span aria-hidden className="shrink-0 text-amber-600">
+                ✕
+              </span>
+              <span className={cn(typeScale.bodySm, "text-amber-900")}>{item}</span>
+            </li>
+          ))}
+        </ul>
+        <div className="border-t border-amber-200 pt-4">
+          <p className={cn(typeScale.label, "text-amber-900")}>
+            {validateProjectHint.title}
+          </p>
+          <code className="mt-2 block overflow-x-auto rounded-lg border border-amber-200 bg-white px-4 py-3 font-mono text-sm text-foreground">
+            {validateProjectHint.command}
+          </code>
+          <p className={cn(typeScale.bodySm, "mt-2 text-amber-800")}>
+            {validateProjectHint.note}
+          </p>
+        </div>
+      </section>
 
       <OpenFolderCallout />
     </div>

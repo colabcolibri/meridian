@@ -12,7 +12,7 @@ Read `writing-guide.md` for tone: Approach bullets must **explain**, not telegra
 | - | ----- | --------- |
 | 1 | Intent / `### Why` | 2+ sentences; explains slice, before/after; not epic paste |
 | 2 | Intent / `### Where` | 2+ sentences; release position, deps, unblocks; US ids ok |
-| 3 | Plan / `### Approach` | optional — 2+ explanatory bullets if present |
+| 3 | Plan / `### Approach` | **required** — minimum 2 explanatory bullets; no placeholders |
 | 4 | Plan / Architecture refs | Real `docs/05_architecture.md` — § **exact heading** |
 | 5 | Plan / API / DB impact | `_n/a_` with short phrase **or** named endpoint/table/migration |
 | 6 | Intent / Acceptance | Each item observable; not vague intent |

@@ -14,6 +14,7 @@ import {
   type ConceptBlock,
   type DailyWorkflowStep,
   type GuideSubsection,
+  type SlashCommandGroup,
   type SlashCommandHint,
   type UsageGuideSection,
 } from "@/features/monitor/content/meridian-concepts"
@@ -181,10 +182,26 @@ export function AnatomyCard({ guide }: { guide: AnatomyGuide }) {
           </div>
         ))}
       </dl>
-      <div className="mt-4 rounded-lg border border-meridian-border bg-meridian-muted/20 px-3 py-3">
-        <p className={typeScale.label}>{guide.exampleTitle}</p>
-        <p className={cn(typeScale.bodySm, "mt-1.5")}>{guide.exampleBody}</p>
-      </div>
+      {guide.sections && guide.sections.length > 0 ? (
+        <dl className="mt-4 space-y-2 border-t border-border pt-4">
+          {guide.sections.map((s) => (
+            <div className="grid gap-1 sm:grid-cols-[12rem_1fr]" key={s.heading}>
+              <dt>
+                <code className="font-mono text-xs text-meridian">{s.heading}</code>
+              </dt>
+              <dd className={typeScale.bodySm}>{s.description}</dd>
+            </div>
+          ))}
+        </dl>
+      ) : null}
+      {guide.exampleTitle ? (
+        <div className="mt-4 rounded-lg border border-meridian-border bg-meridian-muted/20 px-3 py-3">
+          <p className={typeScale.label}>{guide.exampleTitle}</p>
+          {guide.exampleBody ? (
+            <p className={cn(typeScale.bodySm, "mt-1.5")}>{guide.exampleBody}</p>
+          ) : null}
+        </div>
+      ) : null}
     </article>
   )
 }
@@ -192,17 +209,23 @@ export function AnatomyCard({ guide }: { guide: AnatomyGuide }) {
 export function GuideAccordionSection({
   section,
   stepCount,
+  open: controlledOpen,
+  onOpenChange,
 }: {
   section: UsageGuideSection
   stepCount?: number
+  open?: boolean
+  onOpenChange?: (open: boolean) => void
 }) {
-  const [open, setOpen] = useState(section.defaultOpen ?? false)
+  const [internalOpen, setInternalOpen] = useState(section.defaultOpen ?? false)
+  const open = controlledOpen !== undefined ? controlledOpen : internalOpen
+  const handleChange = onOpenChange ?? setInternalOpen
   const count = stepCount ?? section.steps.length
 
   return (
     <Collapsible
       className="overflow-hidden rounded-xl border border-border bg-card shadow-sm"
-      onOpenChange={setOpen}
+      onOpenChange={handleChange}
       open={open}
     >
       <CollapsibleTrigger
@@ -239,10 +262,49 @@ export function GuideAccordionSection({
   )
 }
 
+export function SlashCommandGroupedTable({ groups }: { groups: SlashCommandGroup[] }) {
+  return (
+    <div className="space-y-3">
+      {groups.map((group) => (
+        <div
+          key={group.group}
+          className="overflow-hidden rounded-xl border border-border"
+        >
+          <div className="border-b border-border bg-muted/30 px-4 py-2.5 flex items-baseline gap-3">
+            <span className={typeScale.label}>{group.group}</span>
+            <span className={typeScale.caption}>{group.description}</span>
+          </div>
+          <table className="w-full min-w-md text-left text-sm">
+            <tbody>
+              {group.commands.map((item) => (
+                <tr className="border-b border-border last:border-0" key={item.command}>
+                  <td className="px-4 py-3 align-top w-52 shrink-0">
+                    <code className="font-mono text-meridian">{item.command}</code>
+                    {item.example ? (
+                      <p
+                        className={cn(typeScale.caption, "mt-1 text-muted-foreground")}
+                      >
+                        e.g. <code className="font-mono text-xs">{item.example}</code>
+                      </p>
+                    ) : null}
+                  </td>
+                  <td className={cn(typeScale.body, "px-4 py-3 align-top")}>
+                    {item.when}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      ))}
+    </div>
+  )
+}
+
 export function SlashCommandsTable({ commands }: { commands: SlashCommandHint[] }) {
   return (
     <div className="overflow-x-auto rounded-xl border border-border">
-      <table className="w-full min-w-[28rem] text-left text-sm">
+      <table className="w-full min-w-md text-left text-sm">
         <thead>
           <tr className="border-b border-border bg-muted/30">
             <th className={cn(typeScale.label, "px-4 py-3")}>Command</th>

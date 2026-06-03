@@ -155,7 +155,7 @@ US body uses **four phase groups** (validated by script + monitor):
 
 ```txt
 ## Intent       → Acceptance, Why, Where
-## Plan         → Approach (optional), Architecture refs, API/DB, Security, Related decisions, Planned
+## Plan         → Approach (optional at create, **required at refine**), Architecture refs, API/DB, Security, Related decisions, Planned
 ## Record       → Files, Backend, Frontend, Scripts/Docs, Executed
 ## Boundaries   → Out of scope for this story, Notes
 ```
@@ -186,7 +186,7 @@ Strict US also require `ready: true | false`.
 ```txt
 /create-us     → Intent + Plan draft, ready: false
 /review-us     → optional audit (no edits, no ready)
-/refine-us     → deepen Plan, ready: true
+/refine-us     → deepen Plan + Approach (required), ready: true
 implement      → process-manager gate: ready + Plan filled
 /complete-us   → Record + status ✅
 /sync-board    → regenerate board.json
@@ -239,13 +239,19 @@ If documentation is missing, report: what blocks, why, smallest fix, offer draft
 
 ---
 
-## 10. Bootstrap (new project)
+## 10. Bootstrap
 
-Use workflow `/init-meridian` and skill `init-project`. Summary:
+Use workflow `/init-meridian` and skill `init-project`. Two modes:
+
+**Mode A — New project:** agent interviews user (up to 5 questions), creates `docs/` from answers.
+
+**Mode B — Existing codebase:** agent reads code first, infers scope and tech, asks only what is unclear, populates phase docs from observations. All inferences marked as assumptions for human review.
+
+Both modes:
 
 1. Create `docs/` tree + `docs/decisions/YYYY-MM-DD.json`
 2. Stub `11_decisions.md`; initial decision entry
-3. Draft `00_scope.md`; advance only with human approval path
+3. Draft `00_scope.md`; populated, not blank
 4. Follow dependency order for remaining phase docs
 5. Empty `board.json`; add epics/versions after architecture approved
 6. `.gitignore` before secrets or dependencies land

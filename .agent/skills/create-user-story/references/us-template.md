@@ -44,7 +44,7 @@ Verifiable checklist only — observable outcomes, not plans.
 
 ## Plan
 
-### Approach _(optional — add on `/refine-us` if helpful)_
+### Approach _(optional at `/create-us` — **required** at `/refine-us`)_
 
 Bullets allowed — **each bullet is a full thought** (one or two sentences): intent, likely area of the codebase, constraint or non-goal. Not required at create.
 
@@ -110,8 +110,8 @@ Full rules: `section-contracts.md`. Golden examples: `writing-guide.md`.
 
 | Phase | Writing expectation |
 | ----- | ------------------- |
-| `/create-us` | Intent (Why + Where) filled with prose; Plan refs may be TBD; `ready: false` |
-| `/refine-us` | Optional Approach; real architecture §; concrete Planned tests; `ready: true` |
+| `/create-us` | Intent (Why + Where) filled with prose; Plan refs may be TBD; Approach empty; `ready: false` |
+| `/refine-us` | **Approach required** (2+ bullets); real architecture §; concrete Planned tests; `ready: true` |
 | `/complete-us` | Record (Files + layers + Executed); `status: ✅` |
 
 ## Allowed statuses (frontmatter)
