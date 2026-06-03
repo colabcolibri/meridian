@@ -2,6 +2,24 @@
   "date": "2026-06-03",
   "entries": [
     {
+      "time": "11:57",
+      "title": "Open folder — deterministic session reset (US-0084)",
+      "affected_document": "docs/us/US-0084.md, ProjectFolderContext.tsx, ProjectDataContext.tsx, folder-open-session.ts",
+      "what_changed": "Refined US-0084: every Open folder runs beginFolderOpen() (clear binding + generation guards) before picker; bind failure never restores status open; AbortError rolls back prior session; enrichment errors surface in issues banner; Vitest for state helpers.",
+      "why_changed": "Dogfooding hit silent half-open state when openFolder catch reused folderKeyRef and ProjectDataContext swallowed enrichment errors — managers re-opened folder repeatedly.",
+      "impact": "Implement via US-0084 before US-0051/0059; no architecture doc version bump until code lands.",
+      "responsible": "Product/Engineering"
+    },
+    {
+      "time": "12:30",
+      "title": "Deliverables — nested Story Detail sheet over sprint sheet",
+      "affected_document": "docs/us/US-0083.md, deliverable-doc-sheet.tsx, StoryDetailSheet.tsx, MarkdownDocSheet.tsx, sheet.tsx",
+      "what_changed": "US-0083 defines stacked sheets: sprint deliverable stays open (base layer) while StoryDetailSheet opens on nested layer; closing story returns to sprint only.",
+      "why_changed": "Sprint panel listed US as plain text; managers lost sprint context when drilling into a story via Board.",
+      "impact": "Deliverables sprint review is self-contained; version/epic drill-down deferred.",
+      "responsible": "Product/Engineering"
+    },
+    {
       "time": "11:49",
       "title": "Roadmap realignment — v2 kanban, v3 complete, VS Code → v4",
       "affected_document": "docs/versions/v2.md–v8.md, docs/epics/EPIC-04.md, EPIC-05.md, EPIC-07–10.md, docs/sprints/v2-S4..v8, docs/us/US-0041..0072 (version frontmatter), docs/README.md, docs/kanban/board.json",

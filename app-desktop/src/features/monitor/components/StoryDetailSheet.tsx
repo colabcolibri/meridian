@@ -2,6 +2,7 @@ import { Badge } from "@/components/ui/badge"
 import type { MonitorIssue } from "@/domain/meridian/monitor-issues"
 import type { Epic, UserStory } from "@/domain/meridian/types"
 import { MarkdownDocSheet } from "@/features/monitor/components/MarkdownDocSheet"
+import type { SheetStackLayer } from "@/components/ui/sheet"
 import { typeScale } from "@/features/monitor/monitor-typography"
 
 export function StoryDetailSheet({
@@ -10,12 +11,14 @@ export function StoryDetailSheet({
   storyIssues,
   open,
   onOpenChange,
+  stackLayer = "base",
 }: {
   story: UserStory | null
   epic: Epic | undefined
   storyIssues: MonitorIssue[]
   open: boolean
   onOpenChange: (open: boolean) => void
+  stackLayer?: SheetStackLayer
 }) {
   if (!story) {
     return null
@@ -34,6 +37,7 @@ export function StoryDetailSheet({
       docPath={`us/${story.id}.md`}
       onOpenChange={onOpenChange}
       open={open}
+      stackLayer={stackLayer}
       subtitle={story.epic}
       summary={
         <div className="space-y-4">

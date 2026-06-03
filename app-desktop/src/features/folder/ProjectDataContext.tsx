@@ -84,11 +84,21 @@ export function ProjectDataProvider({ children }: { children: ReactNode }) {
             setBodyIssues(enrichment.bodyIssues)
             setDocumentationBadges(enrichment.documentationBadges)
           })
-          .catch(() => {
+          .catch((enrichError) => {
             if (enrichGeneration !== enrichGenerationRef.current) {
               return
             }
-            setBodyIssues([])
+            setBodyIssues([
+              {
+                file: "docs/us/",
+                message:
+                  enrichError instanceof Error
+                    ? `Story validation could not complete: ${enrichError.message}`
+                    : "Story validation could not complete.",
+                severity: "error",
+                scope: "parse",
+              },
+            ])
           })
           .finally(() => {
             if (enrichGeneration === enrichGenerationRef.current) {

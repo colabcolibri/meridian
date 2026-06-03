@@ -1,9 +1,15 @@
+import { useEffect, useMemo, useState } from "react"
+
 import { Badge } from "@/components/ui/badge"
+import type { MonitorIssue } from "@/domain/meridian/monitor-issues"
+import { issuesForTarget } from "@/domain/meridian/protocol-validators"
 import type { Epic, ProductVersion, Sprint, UserStory } from "@/domain/meridian/types"
 import { countStoriesByEpic } from "@/domain/meridian/validators"
 import { MarkdownDocSheet } from "@/features/monitor/components/MarkdownDocSheet"
+import { StoryDetailSheet } from "@/features/monitor/components/StoryDetailSheet"
 import { typeScale } from "@/features/monitor/monitor-typography"
 import { countStoryProgress } from "@/features/monitor/version-filter"
+import { cn } from "@/lib/utils"
 
 export type DeliverableSheetTarget =
   | { kind: "version"; item: ProductVersion }
@@ -20,17 +26,102 @@ function epicProgressInVersion(
   )
 }
 
+function SprintStoriesSummary({
+  storyIds,
+  stories,
+  onSelectStory,
+}: {
+  storyIds: string[]
+  stories: UserStory[]
+  onSelectStory: (story: UserStory) => void
+}) {
+  const storyById = useMemo(
+    () => new Map(stories.map((story) => [story.id, story])),
+    [stories],
+  )
+
+  if (storyIds.length === 0) {
+    return null
+  }
+
+  return (
+    <div className="space-y-2">
+      <p className={typeScale.label}>User stories</p>
+      <ul className="space-y-1.5">
+        {storyIds.map((storyId) => {
+          const story = storyById.get(storyId)
+
+          return (
+            <li key={storyId}>
+              <button
+                className={cn(
+                  "w-full rounded-lg border border-border/80 px-3 py-2 text-left transition-colors",
+                  story
+                    ? "hover:border-primary/40 hover:bg-background"
+                    : "cursor-not-allowed opacity-60",
+                )}
+                disabled={!story}
+                onClick={() => {
+                  if (story) {
+                    onSelectStory(story)
+                  }
+                }}
+                type="button"
+              >
+                <span className="font-mono text-xs font-semibold text-primary">
+                  {storyId}
+                </span>
+                {story ? (
+                  <span className={cn(typeScale.bodySm, "mt-0.5 block")}>
+                    {story.title}
+                  </span>
+                ) : (
+                  <span
+                    className={cn(
+                      typeScale.caption,
+                      "mt-0.5 block text-muted-foreground",
+                    )}
+                  >
+                    Story not loaded in monitor
+                  </span>
+                )}
+              </button>
+            </li>
+          )
+        })}
+      </ul>
+    </div>
+  )
+}
+
 export function DeliverableDocSheet({
   target,
   stories,
+  epics,
+  issues,
   open,
   onOpenChange,
 }: {
   target: DeliverableSheetTarget | null
   stories: UserStory[]
+  epics: Epic[]
+  issues: MonitorIssue[]
   open: boolean
   onOpenChange: (open: boolean) => void
 }) {
+  const [nestedStory, setNestedStory] = useState<UserStory | null>(null)
+
+  const epicById = useMemo(
+    () => Object.fromEntries(epics.map((epic) => [epic.id, epic])),
+    [epics],
+  )
+
+  useEffect(() => {
+    if (!open || target?.kind !== "sprint") {
+      setNestedStory(null)
+    }
+  }, [open, target?.kind])
+
   if (!target) {
     return null
   }
@@ -69,19 +160,36 @@ export function DeliverableDocSheet({
     const sprint = target.item
 
     return (
-      <MarkdownDocSheet
-        badges={<Badge variant="outline">{sprint.status}</Badge>}
-        docPath={`sprints/${sprint.id}.md`}
-        onOpenChange={onOpenChange}
-        open={open}
-        subtitle={sprint.versionId}
-        summary={
-          sprint.storyIds.length > 0 ? (
-            <p className={typeScale.bodySm}>US: {sprint.storyIds.join(", ")}</p>
-          ) : undefined
-        }
-        title={`${sprint.id} — ${sprint.title}`}
-      />
+      <>
+        <MarkdownDocSheet
+          badges={<Badge variant="outline">{sprint.status}</Badge>}
+          docPath={`sprints/${sprint.id}.md`}
+          onOpenChange={onOpenChange}
+          open={open}
+          subtitle={sprint.versionId}
+          summary={
+            <SprintStoriesSummary
+              onSelectStory={setNestedStory}
+              stories={stories}
+              storyIds={sprint.storyIds}
+            />
+          }
+          title={`${sprint.id} — ${sprint.title}`}
+        />
+
+        <StoryDetailSheet
+          epic={nestedStory ? epicById[nestedStory.epic] : undefined}
+          onOpenChange={(nextOpen) => {
+            if (!nextOpen) {
+              setNestedStory(null)
+            }
+          }}
+          open={nestedStory !== null}
+          stackLayer="nested"
+          story={nestedStory}
+          storyIssues={nestedStory ? issuesForTarget(issues, nestedStory.id) : []}
+        />
+      </>
     )
   }
 

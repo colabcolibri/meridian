@@ -3,6 +3,7 @@ import { useMemo, useState } from "react"
 import { ChevronDown, FileText, Layers, PauseCircle } from "lucide-react"
 
 import { Badge } from "@/components/ui/badge"
+import type { MonitorIssue } from "@/domain/meridian/monitor-issues"
 import type { Epic, ProductVersion, Sprint, UserStory } from "@/domain/meridian/types"
 import {
   DeliverableDocSheet,
@@ -256,11 +257,13 @@ export function EpicDeliverablesPanel({
   sprints,
   stories,
   versions,
+  issues,
 }: {
   epics: Epic[]
   sprints: Sprint[]
   stories: UserStory[]
   versions: ProductVersion[]
+  issues: MonitorIssue[]
 }) {
   const { selectedVersionIds } = useMonitorVersionFilter()
   const [expandedEpicIds, setExpandedEpicIds] = useState<Set<string>>(() => new Set())
@@ -340,6 +343,8 @@ export function EpicDeliverablesPanel({
       </div>
 
       <DeliverableDocSheet
+        epics={epics}
+        issues={issues}
         onOpenChange={(open) => {
           if (!open) {
             setSheetTarget(null)

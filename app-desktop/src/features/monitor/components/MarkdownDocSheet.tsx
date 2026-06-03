@@ -8,6 +8,7 @@ import {
   SheetDescription,
   SheetHeader,
   SheetTitle,
+  type SheetStackLayer,
 } from "@/components/ui/sheet"
 import { readMarkdownDocFromFolder } from "@/features/folder/read-markdown-doc"
 import { useProjectFolder } from "@/features/folder/ProjectFolderContext"
@@ -24,6 +25,7 @@ export function MarkdownDocSheet({
   badges,
   summary,
   hideFrontmatter = false,
+  stackLayer = "base",
 }: {
   docPath: string | null
   open: boolean
@@ -33,10 +35,15 @@ export function MarkdownDocSheet({
   badges?: ReactNode
   summary?: ReactNode
   hideFrontmatter?: boolean
+  stackLayer?: SheetStackLayer
 }) {
   return (
-    <Sheet onOpenChange={onOpenChange} open={open}>
-      <SheetContent className="flex h-full flex-col p-0" side="right">
+    <Sheet modal={stackLayer === "base"} onOpenChange={onOpenChange} open={open}>
+      <SheetContent
+        className="flex h-full flex-col p-0"
+        side="right"
+        stackLayer={stackLayer}
+      >
         {docPath ? (
           <MarkdownDocSheetBody
             badges={badges}

@@ -3,6 +3,7 @@ import { useEffect, useMemo, useState } from "react"
 import { ChevronDown, FileText, GitBranch } from "lucide-react"
 
 import { Badge } from "@/components/ui/badge"
+import type { MonitorIssue } from "@/domain/meridian/monitor-issues"
 import type { Epic, ProductVersion, Sprint, UserStory } from "@/domain/meridian/types"
 import { countStoriesByEpic } from "@/domain/meridian/validators"
 import {
@@ -211,11 +212,13 @@ function VersionDeliverablesPanel({
   epics,
   sprints,
   stories,
+  issues,
 }: {
   versions: ProductVersion[]
   epics: Epic[]
   sprints: Sprint[]
   stories: UserStory[]
+  issues: MonitorIssue[]
 }) {
   const { selectedVersionIds } = useMonitorVersionFilter()
   const [expandedVersionIds, setExpandedVersionIds] = useState<Set<string>>(
@@ -332,6 +335,8 @@ function VersionDeliverablesPanel({
       </div>
 
       <DeliverableDocSheet
+        epics={epics}
+        issues={issues}
         onOpenChange={(open) => {
           if (!open) {
             setSheetTarget(null)
@@ -350,11 +355,13 @@ export function DeliverablesView({
   epics,
   sprints,
   stories,
+  issues,
 }: {
   versions: ProductVersion[]
   epics: Epic[]
   sprints: Sprint[]
   stories: UserStory[]
+  issues: MonitorIssue[]
 }) {
   const [layout, setLayout] = useState<DeliverablesLayout>("epic")
 
@@ -400,6 +407,7 @@ export function DeliverablesView({
       {layout === "epic" ? (
         <EpicDeliverablesPanel
           epics={epics}
+          issues={issues}
           sprints={sprints}
           stories={stories}
           versions={versions}
@@ -407,6 +415,7 @@ export function DeliverablesView({
       ) : (
         <VersionDeliverablesPanel
           epics={epics}
+          issues={issues}
           sprints={sprints}
           stories={stories}
           versions={versions}

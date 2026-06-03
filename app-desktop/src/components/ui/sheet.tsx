@@ -22,15 +22,31 @@ function SheetPortal({ ...props }: React.ComponentProps<typeof SheetPrimitive.Po
   return <SheetPrimitive.Portal data-slot="sheet-portal" {...props} />
 }
 
+export type SheetStackLayer = "base" | "nested"
+
+const sheetStackOverlayClass: Record<SheetStackLayer, string> = {
+  base: "z-50 bg-black/40",
+  nested: "z-[60] bg-black/25",
+}
+
+const sheetStackContentClass: Record<SheetStackLayer, string> = {
+  base: "z-50",
+  nested: "z-[60]",
+}
+
 function SheetOverlay({
   className,
+  stackLayer = "base",
   ...props
-}: React.ComponentProps<typeof SheetPrimitive.Overlay>) {
+}: React.ComponentProps<typeof SheetPrimitive.Overlay> & {
+  stackLayer?: SheetStackLayer
+}) {
   return (
     <SheetPrimitive.Overlay
       data-slot="sheet-overlay"
       className={cn(
-        "fixed inset-0 z-50 bg-black/40 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0",
+        "fixed inset-0 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:animate-in data-[state=open]:fade-in-0",
+        sheetStackOverlayClass[stackLayer],
         className,
       )}
       {...props}
@@ -43,18 +59,21 @@ function SheetContent({
   children,
   side = "right",
   showCloseButton = true,
+  stackLayer = "base",
   ...props
 }: React.ComponentProps<typeof SheetPrimitive.Content> & {
   side?: "top" | "right" | "bottom" | "left"
   showCloseButton?: boolean
+  stackLayer?: SheetStackLayer
 }) {
   return (
     <SheetPortal>
-      <SheetOverlay />
+      <SheetOverlay stackLayer={stackLayer} />
       <SheetPrimitive.Content
         data-slot="sheet-content"
         className={cn(
-          "fixed z-50 flex min-w-0 flex-col gap-0 overflow-hidden bg-background shadow-xl transition ease-in-out data-[state=closed]:duration-300 data-[state=open]:duration-500 data-[state=closed]:animate-out data-[state=open]:animate-in",
+          "fixed flex min-w-0 flex-col gap-0 overflow-hidden bg-background shadow-xl transition ease-in-out data-[state=closed]:duration-300 data-[state=open]:duration-500 data-[state=closed]:animate-out data-[state=open]:animate-in",
+          sheetStackContentClass[stackLayer],
           side === "right" &&
             "inset-y-0 right-0 h-full w-full border-l data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right sm:max-w-xl md:max-w-2xl",
           side === "left" &&

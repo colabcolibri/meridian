@@ -108,6 +108,7 @@ function MonitorProjectContent() {
               ) : null}
               <DeliverablesView
                 epics={epics}
+                issues={issues}
                 sprints={sprints}
                 stories={userStories}
                 versions={versions}
