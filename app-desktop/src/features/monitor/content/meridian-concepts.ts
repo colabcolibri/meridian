@@ -154,7 +154,7 @@ export const journeyPhases: JourneyPhase[] = [
       "docs/us/US-XXXX.md — one executable task per file",
       "docs/kanban/board.json — generated status summary (never edit by hand)",
     ],
-    note: "/create-us → /refine-us → implement → /complete-us → /sync-board. No code without ready: true. No ✅ without evidence in the Record.",
+    note: "/create-us → /refine-us → implement → /complete-us → /sync-board → commit (you). No code without ready: true. No ✅ without evidence in the Record. Agents suggest commit message on close; they do not commit unless you ask.",
   },
 ]
 
@@ -286,7 +286,7 @@ export const userStoryAnatomy: AnatomyGuide = {
     {
       heading: "## Record — what was actually done",
       description:
-        "Filled only on close (/complete-us). Files: real paths changed. Backend / Frontend / Scripts / Docs: summary by layer. Executed: actual test output or confirmation — not 'tests passed'.",
+        "Filled only on close (/complete-us). Files: real paths changed. Backend / Frontend / Scripts / Docs: summary by layer. Executed: test output, suggested commit on close, optional git commit line (SHA + message) after you commit — omit git commit until then.",
     },
     {
       heading: "## Boundaries — scope control",
@@ -566,6 +566,7 @@ export const usageGuideIntro = {
   paragraphs: [
     "For concepts (what is an epic, how phases work, what ready means), read Start here first.",
     "Run /status at any point to get blockers, current state, and the suggested next action.",
+    "After you close a US in the files (/complete-us + /sync-board), commit in git (one commit per US) before starting the next story — unless you batch commits on purpose.",
   ],
 }
 
@@ -605,6 +606,12 @@ export const usageSituations = [
     section: "Close a user story",
     sectionId: "complete-us",
     command: "/complete-us",
+  },
+  {
+    situation: "US is ✅ in docs — confirm /sync-board, then git commit",
+    section: "Close a user story",
+    sectionId: "complete-us",
+    command: "/sync-board",
   },
 ]
 
@@ -817,6 +824,19 @@ export const completeUsWorkflowSteps: DailyWorkflowStep[] = [
     ],
     commands: ["/sync-board"],
   },
+  {
+    id: "complete-commit",
+    title: "Commit to git (you)",
+    when: "After /complete-us and /sync-board for this US — before the next story.",
+    actions: [
+      "Review git diff: scope must match ### Files in the Record (one US per commit).",
+      "Use suggested commit from ### Executed if the agent wrote it, or feat(app-desktop): summary (US-XXXX).",
+      "Pre-commit must pass (lint-staged). Run validate_meridian.py if docs/ changed.",
+      "Ask the agent to commit only if you explicitly want it — default is you run git commit.",
+      "After commit, add under ### Executed: git commit: <sha> — <subject> (optional but recommended; US stays ✅ without it).",
+    ],
+    tip: "Meridian ✅ closes the story in docs; git commit is the repository snapshot of the same slice.",
+  },
 ]
 
 export const usageGuideSections: UsageGuideSection[] = [
@@ -849,7 +869,7 @@ export const usageGuideSections: UsageGuideSection[] = [
   {
     id: "complete-us",
     title: "Close a user story",
-    subtitle: "Record delivery in files. /complete-us + board sync.",
+    subtitle: "Record delivery in files, sync board, then commit (you).",
     steps: completeUsWorkflowSteps,
   },
 ]
@@ -927,7 +947,7 @@ export const slashCommandGroups: SlashCommandGroup[] = [
       },
       {
         command: "/complete-us",
-        when: "Close story — fills Record, marks ✅",
+        when: "Close story — fills Record, marks ✅; then you commit (see Close section)",
         example: "/complete-us US-0017",
       },
       {
@@ -942,7 +962,7 @@ export const slashCommandGroups: SlashCommandGroup[] = [
     commands: [
       {
         command: "/daily-with-ai",
-        when: "Guided session loop — status, pick story, work, close",
+        when: "Guided session — status, refine, implement, close, sync board, commit (you)",
       },
     ],
   },
@@ -963,6 +983,8 @@ export const usageAntiPatterns = [
   "Mixing document work, backlog work, and implementation in one conversation.",
   "Setting approved on a document you did not read.",
   "Using status: ✅ without a filled ## Record.",
+  "Closing a US with /complete-us and starting the next story without committing the closed slice (unless you batch commits intentionally).",
+  "Letting the agent git commit without your explicit request.",
 ]
 
 // ─── Validate hint ────────────────────────────────────────────────────────────
@@ -989,7 +1011,7 @@ export const monitorTabsGuide = [
   },
   {
     label: "Usage guide",
-    hint: "Step-by-step for each situation: getting started, phase documents, backlog, implement, close.",
+    hint: "Step-by-step per situation: getting started, phase docs, backlog, implement, close, commit.",
   },
   {
     label: "Setup",

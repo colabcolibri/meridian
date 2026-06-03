@@ -190,6 +190,7 @@ Strict US also require `ready: true | false`.
 implement      → process-manager gate: ready + Plan filled
 /complete-us   → Record + status ✅
 /sync-board    → regenerate board.json
+commit (human) → after close + board sync; one commit per US — see commit-after-us-close.md
 ```
 
 Agent: `board-keeper`. Skills: `create-user-story`, `review-user-story`, `refine-user-story`, `complete-user-story`, `generate-board-json`.
@@ -287,6 +288,8 @@ Delivery is done when:
 - `status: ✅` in frontmatter
 - `board.json` regenerated
 - Cross-cutting changes in decision log
+
+**Repository (human, after the above):** one git commit per closed US — code + `docs/us/US-XXXX.md` + board/decisions in scope. Agents suggest message on close; they do not commit unless the manager explicitly asks. See `.agent/references/commit-after-us-close.md`.
 
 ---
 

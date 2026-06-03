@@ -12,7 +12,7 @@ const tabs: { id: MonitorView; label: string; hint: string }[] = [
   {
     id: "usage",
     label: "Usage guide",
-    hint: "Three phases: document, backlog, execute.",
+    hint: "Step-by-step: document, backlog, implement, close, commit.",
   },
   {
     id: "setup",

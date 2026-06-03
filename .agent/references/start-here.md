@@ -154,6 +154,7 @@ Phase documents (`00`–`08`, `11`) follow a maturity path. **Only you set `appr
 - Does not make scope decisions — you do
 - Does not approve its own documents — you do
 - Does not manage deploys or CI — those are referenced in docs, not run by Meridian
+- Does not `git commit` on its own — after you close a US in docs, you commit (or explicitly ask the agent to). See `commit-after-us-close.md`
 
 ---
 

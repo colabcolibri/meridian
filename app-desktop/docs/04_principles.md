@@ -36,6 +36,8 @@ blocks: [05_architecture.md]
 - shadcn/ui components must be added via the official shadcn installer, incrementally, as the interface actually needs them.
 - Code must pass ESLint and Prettier before commit.
 - Commits must pass the pre-commit hook with lint-staged.
+- After `/complete-us` and `/sync-board` for a US, the manager commits **one git commit per closed US** (code + `docs/us/US-XXXX.md` + `docs/kanban/board.json` and decisions in scope). Meridian ✅ does not replace this step.
+- Commit messages: conventional `type(scope): summary (US-XXXX)` (e.g. `feat(app-desktop): … (US-0085)`). Agents may suggest the line in `### Executed`; they commit only when explicitly asked.
 - The project uses `pnpm`; do not version npm or yarn lockfiles.
 
 ## Error handling

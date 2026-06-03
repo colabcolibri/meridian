@@ -67,7 +67,7 @@ Ensure user stories, dependencies, statuses and `board.json` match. The board is
 | Create US | `create-user-story` + `/create-us` | `.agent/references/templates/us-template.md` |
 | Review US | `review-user-story` + `/review-us` | `.agent/references/templates/review-checklist.md` |
 | Refine US | `refine-user-story` + `/refine-us` | `.agent/references/templates/refine-checklist.md` |
-| Complete US | `complete-user-story` + `/complete-us` | `.agent/references/templates/implementation-template.md` |
+| Complete US | `complete-user-story` + `/complete-us` | `.agent/references/templates/implementation-template.md` + `commit-after-us-close.md` (suggest commit; human commits after) |
 | Sync board | `generate-board-json` | `.agent/references/templates/board-schema.md` |
 | Status/decision change | `update-decisions-log` |
 

@@ -13,6 +13,7 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 | `.agent/references/templates/INDEX.md` | Before closing any US |
 | `.agent/references/templates/section-contracts.md` | Verify all `##` / `###` still match contract |
 | `references/implementation-template.md` | **Mandatory** before filling `## Record` |
+| `.agent/references/commit-after-us-close.md` | Commit timing and message — suggest only on close |
 | `../create-user-story/references/us-template.md` | Full US structure (verify all sections) |
 
 ## When to trigger
@@ -46,6 +47,8 @@ If anything fails → **do not** mark `✅`; use `🔶` with `Missing:` in accep
 5. In `## Plan` / `### Planned` and `## Record` / `### Executed`:
    - mark `[x]` on **all** **Planned** items;
    - fill **Executed** with command/check + result (date optional);
+   - add **suggested commit:** line per `commit-after-us-close.md` (do not run `git commit` unless manager explicitly asked);
+   - **git commit:** line only if the manager already committed in this session or pastes SHA + message — otherwise omit (manager may add after commit);
    - update frontmatter `tests_status: done` (when `tests: required`).
 6. Mark acceptance `[x]` with objective evidence.
 7. Update frontmatter `status: ✅` (or `🔶` if partial + `Missing:`). Only mark `✅` if `tests: none` **or** `tests_status: done`.
@@ -71,5 +74,7 @@ Files touched: (count)
 Tests run:
 Board updated:
 Decisions logged: yes | no
+Suggested commit: (line for manager — human commits after close)
+Next (human): git commit per commit-after-us-close.md
 Open items:
 ```

@@ -2,6 +2,15 @@
   "date": "2026-06-03",
   "entries": [
     {
+      "time": "13:31",
+      "title": "Git commit after US close — protocol step",
+      "affected_document": ".agent/references/commit-after-us-close.md, usage-guide.md, daily-with-ai.md, complete-user-story, app-desktop/docs/04_principles.md",
+      "what_changed": "Formalized flow: /complete-us + /sync-board then human commit (one US per commit). Agents add suggested commit in Record Executed; no auto-commit on ✅ unless manager asks.",
+      "why_changed": "US could be ✅ in docs while git stayed dirty; commit was outside the documented Meridian loop.",
+      "impact": "Managers and agents follow the same close → commit sequence; aligns with US-0071 (last commit on docs/us) and existing conventional commits.",
+      "responsible": "Product/Engineering"
+    },
+    {
       "time": "13:28",
       "title": "Story Detail — depends_on drill-down shipped (US-0085)",
       "affected_document": "docs/us/US-0085.md, linked-stories-list.tsx, StoryDetailSheet.tsx, story-detail-summary.tsx, deliverable-doc-sheet.tsx, KanbanView.tsx",

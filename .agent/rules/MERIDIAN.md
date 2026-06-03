@@ -111,6 +111,7 @@ Do not write product code until required docs for the current phase exist (see `
 - Protect `.env`, `.env.*`, logs, builds, `node_modules`, caches.
 - Do not expose secrets; do not run destructive commands without approval.
 - Security changes require a decision in `docs/decisions/YYYY-MM-DD.json`.
+- After `/complete-us` + `/sync-board`, the **manager** commits (one US per commit by default). Agents may suggest a message in `### Executed`; they do not `git commit` unless explicitly asked. See `.agent/references/commit-after-us-close.md`.
 
 ### Human manager
 

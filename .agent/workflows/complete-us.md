@@ -16,6 +16,7 @@ $ARGUMENTS
 4. **Do not** mark `✅` with placeholder in `## Record`
 5. Regenerate `board.json` at the end
 6. `update-decisions-log` only if cross-cutting decision
+7. Add **suggested commit** in `### Executed` — do **not** `git commit` unless manager explicitly asks (see `commit-after-us-close.md`)
 
 ---
 
@@ -34,6 +35,7 @@ RULES:
 5. Set status ✅ (or 🔶 + Missing: if partial) — only ✅ if tests: none or tests_status: done
 6. generate-board-json
 7. update-decisions-log if protocol/architecture changed
+8. suggested commit line in ### Executed; remind manager: commit after /sync-board (human)
 ```
 
 ---
@@ -49,6 +51,8 @@ Files touched:
 Tests run:
 Board updated:
 Decisions logged:
+Suggested commit:
+Next (human): commit per commit-after-us-close.md
 Open items:
 ```
 

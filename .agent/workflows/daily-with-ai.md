@@ -16,6 +16,7 @@ $ARGUMENTS
 4. **Refine before implement** — `/refine-us` after `/create-us`; never skip to code with `ready: false`.
 5. Always close with `complete-user-story` or `/complete-us` — never ✅ in chat only.
 6. `board.json` is derived — use `/sync-board` after changing US.
+7. **Commit after close** — human step after `/complete-us` + `/sync-board`; one commit per US. See `commit-after-us-close.md`. Agents suggest message only unless you explicitly ask them to commit.
 
 ---
 
@@ -81,10 +82,23 @@ Then: /sync-board
 - Intent/Acceptance `[x]`, status `✅`, tests documented.
 - Cross-cutting decision → skill `update-decisions-log` (`docs/decisions/YYYY-MM-DD.json`).
 
-### 5. Review
+### 5. Commit (human)
+
+```txt
+After: /complete-us + /sync-board for US-XXXX
+Reference: .agent/references/commit-after-us-close.md
+```
+
+- Review diff vs `## Record` / `### Files` — one US per commit.
+- Use **suggested commit** from `### Executed` if present, or `type(scope): summary (US-XXXX)`.
+- Run pre-commit (lint-staged); fix failures before committing.
+- Agent commits **only** if you explicitly request it in this step.
+
+### 6. Review
 
 - App: Board tab — US in correct column?
 - Record consistent with what was tested?
+- Optional later: monitor US-0071 — last commit touching `docs/us/`
 
 ---
 
@@ -111,6 +125,8 @@ Then: /sync-board
 - Editing `board.json` by hand.
 - Single conversation mixing many features.
 - `approved` on phase doc without human review.
+- ✅ in US with uncommitted git changes left indefinitely.
+- Agent auto-commit on `/complete-us` without explicit manager request.
 
 ---
 
@@ -121,6 +137,8 @@ Session:
 US worked:
 Final status:
 Board updated: yes | no
+Commit: done | pending (human)
+Suggested commit: (from Record if any)
 Remaining blockers:
 Suggested next US:
 ```

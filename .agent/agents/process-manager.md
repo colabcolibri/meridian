@@ -103,6 +103,7 @@ Read `.agent/MERIDIAN.md` for full dependency graph between `00`–`11`.
 | `✅` without evidence | Audit |
 | `✅` without `## Record` | Audit — use `complete-user-story` |
 | `🔶` without `Missing:` | Traceability |
+| `git commit` without explicit manager request | Git snapshot is human unless asked |
 | Long autonomous loops without status | Human manager |
 
 ---
@@ -134,6 +135,8 @@ Blocked:
 Next action (human):
 Next action (agent):
 ```
+
+When a US was just closed (`✅`), include under **Next action (human):** commit one slice per `commit-after-us-close.md` (after `/sync-board`), unless the manager batches commits intentionally.
 
 If initializing:
 

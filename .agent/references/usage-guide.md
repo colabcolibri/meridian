@@ -165,6 +165,22 @@ Run: **`/complete-us US-XXXX`**
 **After closing:**
 - Run **`/sync-board`** to regenerate the board
 - Verify the story appears in the correct column in the monitor
+- Go to [Commit after close](#commit-after-close) — human step; not part of `/complete-us`
+
+---
+
+## Commit after close
+
+Full rules: **`commit-after-us-close.md`** in this folder.
+
+After **`/complete-us`** and **`/sync-board`** for one US:
+
+1. Review `git diff` — scope must match `## Record` / `### Files` (one US only).
+2. Confirm lint/build and `validate_meridian.py` if `docs/` changed.
+3. **You** run `git add` + `git commit` (or ask the agent explicitly: “commita com a mensagem sugerida”).
+4. Message: `type(scope): summary (US-XXXX)` — the agent may have written **suggested commit** under `### Executed`.
+
+Agents do **not** commit when marking ✅. Partial work (`🔶`) — no delivery commit until close.
 
 ---
 
@@ -175,7 +191,9 @@ For experienced users, **`/daily-with-ai`** runs a guided session: checks status
 If you prefer to drive manually:
 1. `/status` — what is blocked, what is next
 2. One focused conversation per concern (document, backlog, implement — not mixed)
-3. `/sync-board` after any US change
+3. `/complete-us` + `/sync-board` when a slice is done
+4. **Commit** — one commit per closed US (see [Commit after close](#commit-after-close))
+5. `/sync-board` after any US change that did not already sync on close
 
 ---
 
@@ -220,3 +238,5 @@ Run at the project root. Fix errors before creating US or marking docs `approved
 - Mixing document work, backlog work, and implementation in one conversation
 - Setting `approved` on a document you did not read
 - Using `status: ✅` without a filled `## Record`
+- Marking ✅ and moving to the next US without committing the closed slice (unless you batch commits intentionally)
+- Letting the agent `git commit` without your explicit request

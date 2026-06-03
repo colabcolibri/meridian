@@ -22,6 +22,8 @@ Implement — process-manager gate: ready true + Plan filled
 User story close (implementation-template.md) — Record + status ✅
   ↓
 Board sync (board-schema.md)
+  ↓
+Commit (human) — one commit per closed US; see commit-after-us-close.md
 ```
 
 ---
