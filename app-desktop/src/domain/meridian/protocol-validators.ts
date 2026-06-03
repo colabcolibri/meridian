@@ -259,6 +259,26 @@ export function collectDeliveryGateIssues(
   return []
 }
 
+export function collectIndexProtocolIssues(input: {
+  phaseDocuments: PhaseDocument[]
+  userStories: UserStory[]
+  epics: Epic[]
+  versions: ProductVersion[]
+  sprints: Sprint[]
+}): MonitorIssue[] {
+  return [
+    ...collectDocumentProtocolIssues(input.phaseDocuments),
+    ...collectDeliveryGateIssues(input.phaseDocuments, input.userStories),
+    ...collectEpicProtocolIssues(input.userStories, input.epics),
+    ...collectVersionProtocolIssues(
+      input.userStories,
+      input.epics,
+      input.versions,
+      input.sprints,
+    ),
+  ]
+}
+
 export function collectProtocolIssues(input: {
   phaseDocuments: PhaseDocument[]
   userStories: UserStory[]

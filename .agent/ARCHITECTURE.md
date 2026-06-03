@@ -37,8 +37,7 @@ The desktop app (`app-desktop/`) monitors Meridian folders; it is not the source
   workflows/
   scripts/
     validate_meridian.py
-    migrate_us_writing_format.py
-    migrate_legacy_us_context.py
+    migrate_us_v2_structure.py
     sync_cursor_kit.sh
   references/templates/      # delivery templates (INDEX, writing-guide, section-contracts, …)
 
@@ -127,13 +126,13 @@ All support `$ARGUMENTS` and a critical rules section.
 ## Scripts
 
 ```bash
-# Structure + semantic validation (US Context, epic prose, board sync hints)
+# Structure + semantic validation (US Plan/Record, epic prose, board sync hints)
 python3 .agent/scripts/validate_meridian.py <project-root>
 python3 .agent/scripts/validate_meridian.py <project-root> --json   # CI
 
-# One-time migrations (legacy US format → Why/Where/Approach)
-python3 .agent/scripts/migrate_legacy_us_context.py <project-root>
-python3 .agent/scripts/migrate_us_writing_format.py <project-root>    # --force to re-run
+# One-time US schema migration (flat sections → Intent/Plan/Record/Boundaries)
+python3 .agent/scripts/migrate_us_v2_structure.py <project-root>
+python3 .agent/scripts/migrate_us_v2_structure.py <project-root> --restore-preamble
 
 # Cursor adapter (after clone or kit changes)
 ./.agent/scripts/sync_cursor_kit.sh

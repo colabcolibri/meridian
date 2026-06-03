@@ -39,7 +39,7 @@ Before responding, classify the request and select the correct Meridian agent. S
 ```txt
 1. Conceptual question? → Answer without changing files
 2. Slash command? → Open .agent/workflows/{cmd}.md → read template from .agent/references/templates/ before Write
-3. Code? → process-manager validates maturity + US Context & constraints → read Architecture refs → then implement
+3. Code? → process-manager validates maturity + US Plan filled → read Architecture refs → then implement
 4. Create/close epic, version, sprint, US? → INDEX.md + full template + `section-contracts.md` mandatory before Write
 5. Otherwise → one row from matrix above
 ```

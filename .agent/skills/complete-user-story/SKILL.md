@@ -1,6 +1,6 @@
 ---
 name: complete-user-story
-description: Closes a Meridian user story after implementation — fills Technical implementation, acceptance, status and board. Use when marking US done, completing US-XXXX, or after implementing a user story.
+description: Closes a Meridian user story after implementation — fills Record, acceptance, status and board. Use when marking US done, completing US-XXXX, or after implementing a user story.
 allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 ---
 

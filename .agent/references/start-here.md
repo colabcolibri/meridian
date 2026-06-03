@@ -23,7 +23,7 @@ It is not Jira, it is not Notion, and it does not require a login. The source of
 | **You approve, agents execute** | AI can write and review, but scope changes, `approved` status, and ✅ only happen with your validation. |
 | **Done = evidence** | Compiling is not enough. ✅ requires Acceptance and tests in the files. Use `/complete-us` after reviewing. 🔶 requires explicit `Missing:`. |
 | **Derived board** | `board.json` comes from the US files. Edit `docs/us/*.md`, not the JSON, as the status source of truth. |
-| **Refine before code** | `/create-us` writes Why / Where / Approach (`ready: false`). `/refine-us` deepens Approach and sets `ready: true`. No product code until then. |
+| **Refine before code** | `/create-us` fills Intent + Plan draft (`ready: false`). `/refine-us` deepens Plan and sets `ready: true`. No product code until then. |
 
 ## What is inside `docs/`
 
@@ -90,11 +90,11 @@ Usual creation order: epic → version → sprint → US. US gate: `05_architect
 User stories follow a fixed lifecycle before code ships:
 
 ```txt
-/create-us   → Why / Where / Approach prose; ready: false
+/create-us   → Intent + Plan draft; ready: false
 /review-us   → audit report (optional); never sets ready
-/refine-us   → deepen Approach, exact architecture §; ready: true
+/refine-us   → deepen Plan; ready: true
 implement    → blocked if ready ≠ true
-/complete-us → Technical implementation + ✅
+/complete-us → Record + ✅
 /sync-board  → regenerate board.json
 ```
 
@@ -123,9 +123,9 @@ A version is a go-live package. File: `docs/versions/vX.md`. Sprints in `docs/sp
 
 Format: **As** [persona], **I want** [action], **so that** [benefit].
 
-- File: `docs/us/US-XXXX.md` — `## Context & constraints` with **Why** and **Where**; optional **Approach** on refine; Acceptance; **Technical implementation**; **Tests** when `tests: required`.
+- File: `docs/us/US-XXXX.md` — schema v2: **Intent** (Acceptance, Why, Where), **Plan** (refs + Planned), **Record** (delivery), **Boundaries**. See `section-contracts.md`.
 - `depends_on`, `done_when`, `moscow` (Must / Should / Could / Won't), `ready` (`false` after create, `true` after refine).
-- ✅ and **Technical implementation** via `/complete-us` after you review — not only in chat.
+- ✅ and **Record** via `/complete-us` after you review — not only in chat.
 - Do not implement until `ready: true` — run `/refine-us` first.
 
 ### How to read an epic (fields)

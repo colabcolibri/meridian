@@ -175,7 +175,7 @@ Canonical paths: `.agent/references/templates/TEMPLATE_SOURCES.md`
 
 ### Run `/refine-us`
 
-- **`/refine-us US-XXXX`** — deepens **Approach**, architecture § refs, Tests/Planned; sets `ready: true` when checklist passes
+- **`/refine-us US-XXXX`** — deepens Plan (Approach, architecture § refs, Planned); sets `ready: true` when checklist passes
 - Agent reads `writing-guide.md` + `refine-checklist.md` + target US
 - Sets `ready: true` only when every checklist item passes
 - Validate: `python3 .agent/scripts/validate_meridian.py <project-folder>` (structure + semantic warnings)
@@ -205,7 +205,7 @@ Project copy (readable in monitor): `docs/templates/README.md`
 
 - Cite `US-0017` or `docs/us/US-0017.md`
 - Agent reads **full** `.agent/references/templates/us-template.md` + target US before code
-- **Block** if `ready` is not `true` or Context is placeholder-only → run `/refine-us` first
+- **Block** if `ready` is not `true` or Plan is placeholder-only → run `/refine-us` first
 - Implement per **Acceptance**; do not mark ✅ only in chat
 
 *Example: “Implement docs/us/US-0017.md per Acceptance. Update files, not only this chat.”*
@@ -246,8 +246,8 @@ Project copy (readable in monitor): `docs/templates/README.md`
 
 **When:** during `/complete-us`.
 
-- **`## Technical implementation`** — real paths, layer summary (no placeholders)
-- Acceptance `[x]`; **Tests** Planned/Executed if required
+- **`## Record`** — real paths, layer summary, Executed tests (no placeholders)
+- Intent/Acceptance `[x]`; Plan/Planned + Record/Executed if required
 - Frontmatter: `status: ✅` (or 🔶 + `Missing:`); `tests_status: done` when appropriate
 - Cross-cutting change → prepend `docs/decisions/YYYY-MM-DD.json`
 
@@ -257,7 +257,7 @@ Project copy (readable in monitor): `docs/templates/README.md`
 
 - Regenerate board (`generate-board-json`); confirm with **`/sync-board`**
 - US in correct column (✅, 🔶, 🧪)
-- **Technical implementation** matches what you tested
+- **Record** matches what you tested
 
 ---
 
@@ -274,8 +274,8 @@ Project copy (readable in monitor): `docs/templates/README.md`
 | `/plan-sprint` | Time slice in `docs/sprints/` |
 | `/create-us` | New US (gates OK) |
 | `/review-us` | Audit US quality — report only, no `ready` |
-| `/refine-us` | Refine US — Context, tests, `ready: true` |
-| `/complete-us` | Close US — implementation, Acceptance, status, board |
+| `/refine-us` | Refine US — Plan, tests, `ready: true` |
+| `/complete-us` | Close US — Record, Acceptance, status, board |
 | `/sync-board` | Regenerate `docs/kanban/board.json` |
 | `/daily-with-ai` | Full session loop (when you know the basics) |
 
@@ -287,7 +287,7 @@ Workflow files: `.agent/workflows/` · Cursor: `.cursor/commands/` after `sync_c
 - ✅ in chat without `/complete-us` in files
 - Editing `board.json` by hand
 - Mixing document + backlog + implement in one conversation
-- Manual `status: ✅` without **Technical implementation**
+- Manual `status: ✅` without **Record**
 - `approved` on a phase doc you did not read
 
 ## Validate structure

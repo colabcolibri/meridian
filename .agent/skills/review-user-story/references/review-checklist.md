@@ -22,19 +22,17 @@ Use with skill `review-user-story` and workflow `/review-us`. **Do not edit the 
 | R6 | Architecture refs | Exact `§ heading` from `05_architecture.md` (not `§ TBD` / placeholder) |
 | R7 | API / DB / Security | `_n/a_` with phrase **or** concrete impact |
 | R8 | Acceptance | Each item observable; not vague |
-| R9 | Tests / Planned | Numbered steps or exact commands (if `tests: required`) |
+| R9 | Plan / Planned | Numbered steps or exact commands (if `tests: required`) |
 | R10 | `done_when` | One measurable sentence in frontmatter |
 | R11 | Epic link | `epic:` in frontmatter only — body explains slice |
 | R12 | `ready` flag | `true` only if R3–R9 would all pass (review does not set it) |
-| R13 | Implementation section | Empty or placeholder OK before code; must be filled before ✅ |
+| R13 | Record section | Empty or placeholder OK before code; must be filled before ✅ |
 
 ---
 
 ## Placeholder patterns (automatic fail on R5–R9)
 
 Same list as refine-checklist: `_(fill in`, `§ [section name`, `path/to/…`, `add when implementation scope is known`, Approach bullets under 6 words with no verb.
-
-Legacy `### Implementation hints (preliminary)` → warn: rename to `### Approach` on next `/refine-us`.
 
 ---
 

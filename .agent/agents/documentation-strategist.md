@@ -81,7 +81,7 @@ For new product capabilities, defer to `@[skills/create-epic]` (or workflow `/cr
 
 ## User stories
 
-For US creation, defer to `@[skills/create-user-story]` after `05_architecture` approved and epic/version exist in folders. Read `@[.agent/references/templates/us-template.md]` before Write. US must only reference `epic: EPIC-XX` — never duplicate epic body or outcome; fill `## Context & constraints` instead.
+For US creation, defer to `@[skills/create-user-story]` after `05_architecture` approved and epic/version exist in folders. Read `@[.agent/references/templates/us-template.md]` before Write. US must only reference `epic: EPIC-XX` — never duplicate epic body; explain the slice in Intent (Why / Where).
 
 ---
 

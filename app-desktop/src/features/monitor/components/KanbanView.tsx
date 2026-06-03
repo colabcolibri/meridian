@@ -12,10 +12,7 @@ import {
   groupStoriesForKanban,
   visibleKanbanColumns,
 } from "@/domain/meridian/kanban-columns"
-import {
-  resolveStoryDocumentationBadge,
-  type StoryDocumentationBadge,
-} from "@/domain/meridian/story-body"
+import { type StoryDocumentationBadge } from "@/domain/meridian/story-body"
 import type { Epic, ProductVersion, UserStory } from "@/domain/meridian/types"
 import { issuesForTarget } from "@/domain/meridian/protocol-validators"
 import { useMonitorVersionFilter } from "@/features/monitor/MonitorVersionFilterContext"
@@ -230,13 +227,13 @@ export function KanbanView({
   epics,
   issues,
   versions,
-  storyBodies,
+  documentationBadges,
 }: {
   stories: UserStory[]
   epics: Epic[]
   issues: MonitorIssue[]
   versions: ProductVersion[]
-  storyBodies: Map<string, string>
+  documentationBadges: ReadonlyMap<string, StoryDocumentationBadge | null>
 }) {
   const { selectedVersionIds } = useMonitorVersionFilter()
   const [epicFilter, setEpicFilter] = useState<string | "all">("all")
@@ -373,10 +370,7 @@ export function KanbanView({
                   ) : (
                     columnStories.map((story) => (
                       <KanbanStoryCard
-                        documentationBadge={resolveStoryDocumentationBadge(
-                          story,
-                          storyBodies.get(story.id) ?? "",
-                        )}
+                        documentationBadge={documentationBadges.get(story.id) ?? null}
                         epicTitle={epicById[story.epic]?.title}
                         key={story.id}
                         onSelect={() => setSelectedStory(story)}

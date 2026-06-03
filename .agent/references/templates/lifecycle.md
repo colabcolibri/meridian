@@ -11,31 +11,31 @@ Version (version-template.md)
   ↓
 Sprint (sprint-template.md) — optional but recommended
   ↓
-User story create (us-template.md + writing-guide.md) — status ❌, ready: false, Why/Where/Approach prose
+User story create (us-template.md + writing-guide.md) — status ❌, ready: false, Intent filled
   ↓
 /review-us (review-checklist.md) — optional audit; report only; never sets ready
   ↓
-/refine-us (refine-checklist.md) — deepen Approach bullets, exact architecture §, ready: true
+/refine-us (refine-checklist.md) — deepen Plan; ready: true
   ↓
-Implement — process-manager gate: ready true + Context filled
+Implement — process-manager gate: ready true + Plan filled
   ↓
-User story close (implementation-template.md) — status ✅
+User story close (implementation-template.md) — Record + status ✅
   ↓
 Board sync (board-schema.md)
 ```
 
 ---
 
-## User story — two templates, two moments
+## User story — templates by moment
 
 | Moment | Template | What changes |
 | ------ | -------- | ------------ |
-| **Create** (`/create-us`) | `us-template.md` + `writing-guide.md` | Why / Where / Approach prose; `ready: false` |
-| **Review** (`/review-us`) | `review-checklist.md` + `writing-guide.md` + `section-contracts.md` | Gap report; **no edits**, **no `ready`** |
-| **Refine** (`/refine-us`) | `refine-checklist.md` | Explanatory Approach + exact § refs; `ready: true` |
-| **Close** (`/complete-us`) | `implementation-template.md` | Replace `## Technical implementation`; `status: ✅` |
+| **Create** (`/create-us`) | `us-template.md` + `writing-guide.md` | Intent (Why/Where) + Plan draft; `ready: false` |
+| **Review** (`/review-us`) | `review-checklist.md` + `section-contracts.md` | Gap report; **no edits**, **no `ready`** |
+| **Refine** (`/refine-us`) | `refine-checklist.md` | Plan concrete; `ready: true` |
+| **Close** (`/complete-us`) | `implementation-template.md` | `## Record` filled; `status: ✅` |
 
-Between create and close, the US file is the **contract for implementation**. Structure is enforced by `section-contracts.md` (Python + monitor). If Context or Tests/Planned are still generic placeholders, the agent must **not** implement — refine the US first.
+Between create and close, the US file is the **contract for implementation**. Structure is enforced by `section-contracts.md` (Python + monitor). If Plan or Planned tests are still generic placeholders, the agent must **not** implement — run `/refine-us` first.
 
 ---
 
@@ -44,6 +44,6 @@ Between create and close, the US file is the **contract for implementation**. St
 | Layer | Template | Contains |
 | ----- | -------- | -------- |
 | Epic | `epic-template.md` | Product capability, outcome, boundaries |
-| US | `us-template.md` | Executable slice, acceptance, context refs, tests |
+| US | `us-template.md` | Executable slice — Intent, Plan, Record, Boundaries |
 
-US references epic by `epic: EPIC-XX` only — do not paste epic body into US. Fill the gap with **`## Context & constraints`**, not by copying the epic.
+US references epic by `epic: EPIC-XX` only — do not paste epic body. Explain the slice in Intent (Why / Where).

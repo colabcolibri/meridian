@@ -191,7 +191,7 @@ Kanban **generated from** `docs/us/*.md` frontmatter — not edited by hand in `
 
 ### Story detail tab
 
-Drill-down on a single user story: narrative, **Acceptance** checkboxes, **Technical implementation** (required before ✅), and **Tests** when `tests: required`. What you verify here should match what `/complete-us` writes back to the file — chat alone is not enough.
+Drill-down on a single user story: narrative, **Intent** (Acceptance), **Plan**, **Record** (required before ✅), and **Boundaries**. What you verify here should match what `/complete-us` writes back to the file — chat alone is not enough.
 
 <p align="center">
   <img src="assets/screenshots/monitor-story-detail.jpg" alt="Meridian monitor — Story detail with acceptance, implementation, and tests" width="920" />

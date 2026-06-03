@@ -41,7 +41,7 @@ CANONICAL (edit here)          REGISTRY (agents read)              HUMAN / CURSO
 | File | Purpose |
 | ---- | ------- |
 | `.agent/references/templates/INDEX.md` | Registry table artifact → template → agent → workflow |
-| `.agent/references/templates/writing-guide.md` | Prose quality — Why / Where / Approach, epic paragraphs |
+| `.agent/references/templates/writing-guide.md` | Prose quality — Intent, Plan, epic paragraphs |
 | `.agent/references/templates/section-contracts.md` | Fixed headings — validated by Python + monitor |
 | `.agent/references/templates/lifecycle.md` | create → review → refine → implement → close |
 | `.agent/references/templates/TEMPLATE_SOURCES.md` | This file — canonical paths |

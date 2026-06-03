@@ -30,7 +30,7 @@ RULES:
 1. Read US, depends_on US, cited architecture sections
 2. Deepen ### Approach — each bullet: what + where + why
 3. Fix ### Architecture refs — exact § heading from 05_architecture.md
-4. Concrete Tests/Planned — numbered manual steps or commands
+4. Concrete Plan/Planned — numbered manual steps or commands
 5. Fix Why/Where only if create left real gaps
 6. ready: true iff checklist passes
 7. generate-board-json

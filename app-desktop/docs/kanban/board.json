@@ -1065,5 +1065,21 @@
     "done_when": "Board shows only columns with at least one visible US by default; frozen column hidden when empty and expandable via control when frozen US exist.",
     "tests": "required",
     "tests_status": "done"
+  },
+  {
+    "id": "US-0076",
+    "title": "Lightweight project index on folder open",
+    "epic": "EPIC-04",
+    "version": "v2",
+    "status": "✅",
+    "moscow": "Must",
+    "depends_on": [
+      "US-0009",
+      "US-0016",
+      "US-0014"
+    ],
+    "done_when": "Opening docs/ builds a frontmatter-only project index; monitor tabs use the index; full markdown bodies load from disk only when a reader or sheet opens.",
+    "tests": "required",
+    "tests_status": "done"
   }
 ]

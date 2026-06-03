@@ -53,8 +53,8 @@ Before **implementing code** for a US:
 
 1. Read `us-template.md` — know required sections.
 2. Read target `docs/us/US-XXXX.md`.
-3. **Block** if `ready` is not `true` or `## Context & constraints` is missing/placeholders.
-4. Read every **Architecture refs** path in that US before Write on product code.
+3. **Block** if `ready` is not `true` or `## Plan` is missing/placeholders.
+4. Read every **Architecture refs** path under Plan in that US before Write on product code.
 5. If blocked → delegate `/refine-us US-XXXX` to `board-keeper`.
 
 Before creating epics (when delegating is not used): read `epic-template.md` first.
@@ -75,7 +75,7 @@ Keep the project consistent, visible and auditable while agents execute work. Th
 | Planning | `00_scope` → review path; stack/security draft |
 | Product | `05_architecture` approved; approve `05_architecture`; then US in `docs/epics/` |
 | Build | Relevant US + deps satisfied; arch/security per MERIDIAN |
-| Done | US `✅` with evidence + `## Technical implementation` filled; docs reflect reality |
+| Done | US `✅` with evidence + `## Record` filled; docs reflect reality |
 
 Read `.agent/MERIDIAN.md` for full dependency graph between `00`–`11`.
 
@@ -101,7 +101,7 @@ Read `.agent/MERIDIAN.md` for full dependency graph between `00`–`11`.
 | Edit old `docs/decisions/` entries | Audit trail |
 | Manual CSV board as source | Single truth in US |
 | `✅` without evidence | Audit |
-| `✅` without `## Technical implementation` | Audit — use `complete-user-story` |
+| `✅` without `## Record` | Audit — use `complete-user-story` |
 | `🔶` without `Missing:` | Traceability |
 | Long autonomous loops without status | Human manager |
 

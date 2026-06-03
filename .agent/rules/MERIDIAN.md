@@ -38,7 +38,7 @@ Before any action, classify:
 | **US / BOARD** | "user story", "US-", "kanban", "board" | `board-keeper` or `sprint-planner` |
 | **REFINE US** | "refine US", `/refine-us`, "ready for implement" | `board-keeper` + `refine-user-story` |
 | **REVIEW US** | "review US", `/review-us`, "audit US", "check story" | `board-keeper` + `review-user-story` |
-| **CLOSE US** | "complete US", "mark done", "technical implementation", `/complete-us` | `board-keeper` + `complete-user-story` |
+| **CLOSE US** | "complete US", "mark done", "record", `/complete-us` | `board-keeper` + `complete-user-story` |
 | **SECURITY** | "security", "OWASP", "secrets", `02_security` | `security-steward` |
 | **START PROJECT** | "start", "meridian setup", "create docs" | `process-manager` + `init-project` |
 | **CODE** | "implement", "create app", "fix", "refactor" | Verify doc maturity FIRST |
@@ -71,7 +71,7 @@ Before any action, classify:
 | 3 | Announced `🤖 Applying...`? | Add before the response |
 | 4 | Loaded skills from frontmatter? | Read each listed `SKILL.md` |
 | 5 | Creating/closing epic, version, sprint, or US? | Read `.agent/references/templates/INDEX.md` + full template + `section-contracts.md` **before** Write |
-| 6 | Implementing code for a US? | US `ready: true` + Context filled; else `/refine-us` |
+| 6 | Implementing code for a US? | US `ready: true` + Plan filled; else `/refine-us` |
 | 7 | Required docs exist at correct maturity? | Block; report to manager |
 
 **Violations:**
@@ -79,7 +79,7 @@ Before any action, classify:
 - Code without minimum docs = **protocol failure**
 - US without `05_architecture` approved = **protocol failure**
 - `✅` without evidence = **protocol failure**
-- `✅` without filled `## Technical implementation` = **protocol failure**
+- `✅` without filled `## Record` on the US (skill `complete-user-story`) = **protocol failure**
 
 ---
 

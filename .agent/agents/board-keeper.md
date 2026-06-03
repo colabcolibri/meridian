@@ -53,7 +53,7 @@ Ensure user stories, dependencies, statuses and `board.json` match. The board is
 | From | To | Requirement |
 | ---- | -- | ----------- |
 | ❌ | 🔶 | Partial work + `Missing:` in acceptance |
-| 🔶 | ✅ | All `Missing:` resolved + evidence + `## Technical implementation` filled + `tests_status: done` if `tests: required` |
+| 🔶 | ✅ | All `Missing:` resolved + evidence + `## Record` filled + `tests_status: done` if `tests: required` |
 | ❌ | ✅ | Allowed only if no partial state; full evidence + implementation summary |
 | any | ✅ | All `depends_on` US are ✅ |
 
@@ -86,16 +86,16 @@ Report circular or missing dependencies immediately.
 
 ---
 
-## Gate: Technical implementation
+## Gate: Record
 
-Before `✅`, verify `## Technical implementation`:
+Before `✅`, verify `## Record`:
 
-- [ ] Section exists and is not placeholder (`_(fill in...)_`, empty headings only).
+- [ ] Section exists and is not placeholder (`_(fill on close)_`, empty headings only).
 - [ ] `### Files` lists real paths touched, or `_n/a_` with explicit reason.
 - [ ] Layers (Backend, Frontend, Scripts/Docs) reflect what was delivered.
-- [ ] Matches acceptance and `## Tests` (**Planned** `[x]` + **Executed** + `tests_status: done` when required).
+- [ ] Matches Intent/Acceptance and Plan/Planned + Record/Executed (`tests_status: done` when required).
 
-If implementation exists but section is empty → run `complete-user-story` before status change.
+If implementation exists but Record is empty → run `complete-user-story` before status change.
 
 ---
 
@@ -103,7 +103,7 @@ If implementation exists but section is empty → run `complete-user-story` befo
 
 - Editing `board.json` without regenerating from US files
 - `✅` without evidence in US body or linked proof
-- `✅` without filled `## Technical implementation`
+- `✅` without filled `## Record`
 - Orphan US IDs in board
 
 ---

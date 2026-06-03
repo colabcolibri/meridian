@@ -58,8 +58,8 @@ Skill: refine-user-story
 Command: /refine-us US-XXXX
 ```
 
-- After `/create-us` or when Context is still placeholder.
-- Deepens **Approach**, exact architecture §, Tests/Planned.
+- After `/create-us` or when Plan is still placeholder.
+- Deepens **Approach**, exact architecture §, Plan/Planned.
 - Sets `ready: true` only when refine checklist passes.
 
 ### 3. Implement
@@ -77,14 +77,14 @@ Command: /complete-us US-XXXX
 Then: /sync-board
 ```
 
-- Fill `## Technical implementation` (files + layers).
-- Acceptance `[x]`, status `✅`, tests documented.
+- Fill `## Record` (Files + layers + Executed).
+- Intent/Acceptance `[x]`, status `✅`, tests documented.
 - Cross-cutting decision → skill `update-decisions-log` (`docs/decisions/YYYY-MM-DD.json`).
 
 ### 5. Review
 
 - App: Board tab — US in correct column?
-- Technical implementation consistent with what was tested?
+- Record consistent with what was tested?
 
 ---
 

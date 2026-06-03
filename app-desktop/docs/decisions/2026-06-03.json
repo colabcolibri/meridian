@@ -1,0 +1,14 @@
+{
+  "date": "2026-06-03",
+  "entries": [
+    {
+      "time": "10:02",
+      "title": "Monitor loading — frontmatter index instead of full snapshot",
+      "affected_document": "docs/05_architecture.md, docs/us/US-0076.md, docs/sprints/v2-S6.md, docs/versions/v2.md, project-loader.ts, ProjectDataContext.tsx",
+      "what_changed": "Planned US-0076 (v2-S6): on folder open, build a lightweight index (list + frontmatter parse) instead of loading all markdown bodies into React state. Full files read on demand via FileSystemDirectoryHandle when opening sheets/readers. Sprint v2-S6 added to v2.",
+      "why_changed": "Monolithic loadMeridianProject caused slow open and indefinite loading spinner on dogfood docs/ (75+ US); disk is already source of truth — mirroring entire tree in memory is the wrong model for browser v1 monitor.",
+      "impact": "05_architecture.md v1.2 documents current vs index-first target under Loading. Implementation via /refine-us US-0076 then code. US-0059 watcher can refresh index only later.",
+      "responsible": "Product/Engineering"
+    }
+  ]
+}

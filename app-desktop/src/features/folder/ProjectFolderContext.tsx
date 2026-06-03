@@ -111,6 +111,8 @@ export function ProjectFolderProvider({ children }: { children: ReactNode }) {
     const generation = ++restoreGenerationRef.current
     let cancelled = false
 
+    setStatus("opening")
+
     async function restore() {
       const handle = await restoreMeridianFolderHandle()
       if (cancelled || generation !== restoreGenerationRef.current) {

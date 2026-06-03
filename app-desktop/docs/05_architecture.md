@@ -1,8 +1,8 @@
 ---
 title: Architecture
 status: approved
-version: 1.1
-updated: 2026-06-02
+version: 1.2
+updated: 2026-06-03
 depends_on:
   [00_scope.md, 01_tech_stack.md, 02_security.md, 03_user_types.md, 04_principles.md]
 blocks: [06_database.md, 07_api_contracts.md, 08_environments.md]
@@ -55,7 +55,7 @@ The app is **not** the source of truth for the protocol. It monitors the project
 
 - **Stack:** Vite, React, TypeScript, Tailwind, shadcn/ui, `yaml` (frontmatter).
 - **Opened folder:** File System Access API → user selects **`docs/`** (e.g. `app-desktop/docs/`). The handle is the root; phase docs at root; subfolders `decisions/`, `us/`, `epics/`, `versions/`, `sprints/`, `kanban/`.
-- **Loading:** `project-loader.ts` reads phases, `decisions/*.json`, `epics/`, `versions/`, `sprints/`, `us/`, and `kanban/board.json`.
+- **Loading:** **Index-first (US-0076)** — on open, list directories and parse US **frontmatter only** (prefix read up to 8KB); phase docs, epics, versions, sprints, and decisions load metadata needed for tabs. `FileSystemDirectoryHandle` stays the mirror; full markdown loads in sheets via `readMarkdownDocFromFolder`. Body-dependent protocol checks and kanban doc badges run in background after the index is ready (`enrichUserStoryValidation`).
 - **TS validation:** `protocol-validators.ts` (P0 rules in the UI).
 - **Python validation (dev):** `vite-meridian-validate.ts` → `POST /api/meridian/validate` runs `validate_meridian.py` with root **`app-desktop/`** (full project with `docs/` subfolder). Static build does not run Python.
 
