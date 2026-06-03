@@ -13,7 +13,7 @@ $ARGUMENTS
 1. Use `board-keeper` + `@[skills/create-user-story]`
 2. **Mandatory read:** `writing-guide.md` + `us-template.md` **before** Write
 3. **Gate:** `05_architecture` = `approved`; epic + version exist
-4. Write **explanatory** Context: Why this story · Where it fits · Approach (see writing-guide)
+4. Write **explanatory** Context: **Why** · **Where** (see writing-guide)
 5. `ready: false` — never implement in same turn
 6. Next step always: `/refine-us US-XXXX` (optional: `/review-us US-XXXX` first for audit)
 
@@ -33,9 +33,9 @@ RULES:
 4. Write:
    - As / I want / so that — concrete user benefit
    - Acceptance — 2–4 observable criteria
-   - Why this story — 2–4 sentences (before/after this slice)
-   - Where it fits — 2–4 sentences (version, deps, unblocks)
-   - Approach — 2+ bullets, each a full explanatory thought
+   - Why — 2–4 sentences (before/after this slice)
+   - Where — 2–4 sentences (version, deps, unblocks)
+   - Approach — optional at create; refine may add bullets
    - Architecture refs — ok with § TBD until refine
 5. ready: false
 6. generate-board-json

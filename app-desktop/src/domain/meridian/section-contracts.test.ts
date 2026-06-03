@@ -7,18 +7,18 @@ import {
 } from "@/domain/meridian/section-contracts"
 
 const minimalUsBody = `
-## Acceptance
+## Intent
+
+### Acceptance
 - [ ] criterion
 
-## Context & constraints
-### Why this story
+### Why
 Problem before and outcome after this slice.
 
-### Where it fits
+### Where
 Part of v1; depends on US-0022.
 
-### Approach
-- Update KanbanView to filter by version so planning sessions stay focused.
+## Plan
 
 ### Architecture refs
 - docs/05_architecture.md — Monitor
@@ -32,7 +32,11 @@ Part of v1; depends on US-0022.
 ### Related decisions
 - _n/a_
 
-## Technical implementation
+### Planned
+- [ ] manual — step 1
+
+## Record
+
 ### Files
 _(pending)_
 
@@ -45,32 +49,27 @@ _n/a_
 ### Scripts / Docs
 _n/a_
 
-## Tests
-### Planned
-- [ ] manual — step 1
-
 ### Executed
 _(pending)_
 
-## Out of scope for this story
+## Boundaries
+
+### Out of scope for this story
 - none
 
-## Notes
+### Notes
 - none
 `
 
 describe("validateUserStoryStructure", () => {
-  it("passes strict US with canonical Context subsections", () => {
+  it("passes strict US with v2 grouped sections", () => {
     expect(validateUserStoryStructure("US-0099", minimalUsBody, true, "❌")).toEqual([])
   })
 
-  it("warns on legacy Context subsections", () => {
-    const legacy = minimalUsBody.replace(
-      "### Why this story\nProblem before and outcome after this slice.\n\n### Where it fits\nPart of v1; depends on US-0022.\n\n### Approach\n- Update KanbanView to filter by version so planning sessions stay focused.\n\n",
-      "### Implementation hints (preliminary)\n- src/foo.ts\n\n",
-    )
-    const messages = validateUserStoryStructure("US-0099", legacy, true, "❌")
-    expect(messages.some((m) => m.includes("legacy subsections"))).toBe(true)
+  it("requires all four phase H2 sections", () => {
+    const incomplete = minimalUsBody.replace("## Boundaries", "## Missing")
+    const messages = validateUserStoryStructure("US-0099", incomplete, true, "❌")
+    expect(messages.some((m) => m.includes("## Boundaries"))).toBe(true)
   })
 })
 

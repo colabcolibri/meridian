@@ -338,8 +338,8 @@ export const completeUsWorkflowSteps: DailyWorkflowStep[] = [
     title: "What AI records in the file",
     when: "During /complete-us.",
     actions: [
-      "Fills ## Technical implementation — real paths, summary by layer (no placeholder).",
-      "Marks Acceptance [x]; updates ## Tests (Planned + Executed) if tests: required.",
+      "Fills ## Record — real paths, summary by layer (no placeholder).",
+      "Marks Intent/Acceptance [x]; updates Plan/Planned and Record/Executed if tests: required.",
       "Frontmatter: status ✅ (or 🔶 + Missing: if partial); tests_status: done when appropriate.",
       "Cross-cutting decision -> prepend to docs/decisions/YYYY-MM-DD.json.",
     ],
@@ -351,7 +351,7 @@ export const completeUsWorkflowSteps: DailyWorkflowStep[] = [
     actions: [
       "AI runs generate-board-json; you can confirm with /sync-board.",
       "Board tab: US in the right column (✅, 🔶, or 🧪 if tests are pending).",
-      "Does Technical implementation match what you tested? If not, fix it before continuing.",
+      "Does Record match what you tested? If not, fix it before continuing.",
     ],
     commands: ["/sync-board", "/status"],
   },
@@ -425,7 +425,7 @@ export const slashCommandReference: SlashCommandHint[] = [
   },
   {
     command: "/complete-us",
-    when: "Close US, Technical implementation, Acceptance, status, board",
+    when: "Close US, Record, Acceptance, status, board",
     example: "/complete-us US-0017",
   },
   {
@@ -443,7 +443,7 @@ export const usageAntiPatterns = [
   "Marking ✅ in chat without /complete-us in the files.",
   "Editing board.json by hand. Use /sync-board.",
   "Mixing documentation, backlog, and implementation in the same conversation.",
-  "Skipping /complete-us and manually editing status without Technical implementation.",
+  "Skipping /complete-us and manually editing status without Record.",
   "approved in a phase doc without you having read the content.",
 ]
 
@@ -610,7 +610,7 @@ export const epicsVersionsStories: GuideSubsection[] = [
     title: "User story — the executable task",
     paragraphs: [
       'A user story (US) is the unit of work that someone (or an agent) implements. Format: "As [persona], I want [action], so that [benefit]".',
-      "Each US is a file in docs/us/ (ex.: US-0017.md). YAML frontmatter at the top; body has ## Context & constraints (Why this story, Where it fits, Approach), Acceptance, and Tests when required.",
+      "Each US is a file in docs/us/ (ex.: US-0017.md). YAML frontmatter at the top; body has ## Intent (Acceptance, Why, Where), ## Plan, ## Record, and ## Boundaries.",
     ],
     bullets: [
       "ready: false after /create-us; ready: true after /refine-us — gate before product code.",
@@ -618,7 +618,7 @@ export const epicsVersionsStories: GuideSubsection[] = [
       "depends_on: other US that must finish first.",
       "done_when: short sentence summarizing when the US is truly ready.",
       "moscow: Must / Should / Could / Won't, priority within the version.",
-      "Technical implementation and ✅: filled with /complete-us after you review the code. Do not mark done only in chat.",
+      "Record and ✅: filled with /complete-us after you review the code. Do not mark done only in chat.",
       "Tests section: Planned (checkboxes) + Executed (evidence) when tests: required in frontmatter.",
     ],
   },

@@ -35,19 +35,24 @@ describe("protocol validators", () => {
   })
 
   it("requires Missing in Acceptance when US is 🔶", () => {
-    const body = `## Acceptance\n\n- [ ] Criterion without missing note\n`
+    const body = `## Intent
+
+### Acceptance
+
+- [ ] Criterion without missing note
+`
     expect(acceptanceHasMissing(body)).toBe(false)
     expect(
       validateStoryBody({ status: "🔶", tests: "none", testsStatus: "n/a" }, body),
     ).toEqual(
       expect.arrayContaining([
         'Status 🔶 requires "Missing:" in the Acceptance section.',
-        "Technical implementation: partial US missing touched-files record (fill in via /complete-us).",
+        "Record: partial US missing touched-files record (fill in via /complete-us).",
       ]),
     )
   })
 
-  it("emits warning severity for partial US without technical implementation", () => {
+  it("emits warning severity for partial US without record", () => {
     const stories: UserStory[] = [
       {
         id: "US-0099",
@@ -63,19 +68,25 @@ describe("protocol validators", () => {
       },
     ]
     const bodies = new Map([
-      ["US-0099", `## Acceptance\n\n- [ ] Partial — Missing: doc\n`],
+      [
+        "US-0099",
+        `## Intent
+
+### Acceptance
+
+- [ ] Partial — Missing: doc
+`,
+      ],
     ])
 
     const issues = collectStoryProtocolIssues(stories, bodies)
-    const implIssue = issues.find((issue) =>
-      issue.message.startsWith("Technical implementation:"),
-    )
+    const implIssue = issues.find((issue) => issue.message.startsWith("Record:"))
     expect(implIssue?.severity).toBe("warning")
     expect(implIssue?.file).toBe("us/US-0099.md")
     expect(implIssue?.targetId).toBe("US-0099")
   })
 
-  it("emits error severity for complete US without technical implementation", () => {
+  it("emits error severity for complete US without record", () => {
     const stories: UserStory[] = [
       {
         id: "US-0100",
@@ -90,12 +101,20 @@ describe("protocol validators", () => {
         testsStatus: "n/a",
       },
     ]
-    const bodies = new Map([["US-0100", "## Acceptance\n\n- [x] ok\n"]])
+    const bodies = new Map([
+      [
+        "US-0100",
+        `## Intent
+
+### Acceptance
+
+- [x] ok
+`,
+      ],
+    ])
 
     const issues = collectStoryProtocolIssues(stories, bodies)
-    const implIssue = issues.find((issue) =>
-      issue.message.startsWith("Technical implementation:"),
-    )
+    const implIssue = issues.find((issue) => issue.message.startsWith("Record:"))
     expect(implIssue?.severity).toBe("error")
   })
 })

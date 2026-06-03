@@ -18,7 +18,7 @@ function severityForStoryMessage(
   story: UserStory,
   message: string,
 ): MonitorIssue["severity"] {
-  if (message.startsWith("Technical implementation:")) {
+  if (message.startsWith("Record:")) {
     return story.status === "🔶" ? "warning" : "error"
   }
 

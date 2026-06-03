@@ -16,7 +16,7 @@ const baseStory: Pick<UserStory, "status" | "tests" | "testsStatus"> = {
   testsStatus: "done",
 }
 
-const documentedBody = `## Technical implementation
+const documentedBody = `## Record
 
 ### Files
 
@@ -25,11 +25,19 @@ const documentedBody = `## Technical implementation
 ### Backend
 
 - _n/a_
+
+### Frontend
+
+- _n/a_
+
+### Scripts / Docs
+
+- _n/a_
 `
 
 describe("story-body tests", () => {
-  it("lists items in ### Planned", () => {
-    const body = `## Tests
+  it("lists items in ### Planned under ## Plan", () => {
+    const body = `## Plan
 
 ### Planned
 
@@ -40,11 +48,13 @@ describe("story-body tests", () => {
   })
 
   it("blocks status ✅ with tests_status pending", () => {
-    const body = `## Tests
+    const body = `## Plan
 
 ### Planned
 
 - [ ] **build** — \`pnpm build\`
+
+## Record
 
 ### Executed
 
@@ -58,11 +68,13 @@ _(pending)_
   })
 
   it("requires planned [x] and executed when tests_status done", () => {
-    const body = `## Tests
+    const body = `## Plan
 
 ### Planned
 
 - [ ] **build** — \`pnpm build\`
+
+## Record
 
 ### Executed
 
@@ -71,7 +83,7 @@ _(pending)_
     expect(validateStoryBody({ ...baseStory, testsStatus: "done" }, body)).toEqual(
       expect.arrayContaining([
         expect.stringContaining("Planned marked [x]"),
-        expect.stringContaining("Executed filled"),
+        expect.stringContaining("Executed"),
       ]),
     )
   })
@@ -79,15 +91,15 @@ _(pending)_
   it("accepts complete closure", () => {
     const body = `${documentedBody}
 
-## Tests
+### Executed
+
+- \`pnpm build\` — ok
+
+## Plan
 
 ### Planned
 
 - [x] **build** — \`pnpm build\`
-
-### Executed
-
-- \`pnpm build\` — ok
 `
     expect(allPlannedTestsChecked(body)).toBe(true)
     expect(executadoHasEvidence(body)).toBe(true)
@@ -100,14 +112,14 @@ _(pending)_
     ).toContain("tests: none requires tests_status: n/a.")
   })
 
-  it("detects missing technical implementation section", () => {
-    expect(getTechnicalImplementationStatus("## Acceptance\n\n- [x] ok\n")).toBe(
-      "missing",
-    )
+  it("detects missing record section", () => {
+    expect(
+      getTechnicalImplementationStatus("## Intent\n\n### Acceptance\n\n- [x] ok\n"),
+    ).toBe("missing")
   })
 
-  it("detects placeholder technical implementation", () => {
-    const body = `## Technical implementation
+  it("detects placeholder record", () => {
+    const body = `## Record
 
 ### Files
 
@@ -116,12 +128,12 @@ _(fill in when implementation is complete)_
     expect(getTechnicalImplementationStatus(body)).toBe("placeholder")
   })
 
-  it("detects documented technical implementation with ### Files paths", () => {
+  it("detects documented record with ### Files paths", () => {
     expect(getTechnicalImplementationStatus(documentedBody)).toBe("documented")
   })
 
-  it("detects documented table-style technical implementation", () => {
-    const body = `## Technical implementation
+  it("detects documented table-style record", () => {
+    const body = `## Record
 
 | Layer | Files |
 | ----- | ----- |
@@ -130,8 +142,8 @@ _(fill in when implementation is complete)_
     expect(getTechnicalImplementationStatus(body)).toBe("documented")
   })
 
-  it("marks legacy ### Frontend-only sections as incomplete", () => {
-    const body = `## Technical implementation
+  it("marks frontend-only record as incomplete", () => {
+    const body = `## Record
 
 ### Frontend
 
@@ -141,11 +153,13 @@ _(fill in when implementation is complete)_
   })
 
   it("requires ### Files paths for status ✅", () => {
-    const body = `## Tests
+    const body = `## Plan
 
 ### Planned
 
 - [x] **manual** — ok
+
+## Record
 
 ### Executed
 
@@ -156,16 +170,18 @@ _(fill in when implementation is complete)_
       body,
     )
     expect(messages).toContain(
-      "Technical implementation: status ✅ requires ## Technical implementation with ### Files and real paths (/complete-us).",
+      "Record: status ✅ requires ## Record with ### Files and real paths (/complete-us).",
     )
   })
 
-  it("warns on partial US without technical implementation", () => {
-    const body = `## Acceptance
+  it("warns on partial US without record", () => {
+    const body = `## Intent
+
+### Acceptance
 
 - [ ] Partial — Missing: tests
 
-## Tests
+## Plan
 
 ### Planned
 
@@ -176,18 +192,16 @@ _(fill in when implementation is complete)_
       body,
     )
     expect(messages).toContain(
-      "Technical implementation: partial US missing touched-files record (fill in via /complete-us).",
+      "Record: partial US missing touched-files record (fill in via /complete-us).",
     )
   })
 
-  it("does not alert technical implementation for status ❌", () => {
+  it("does not alert record for status ❌", () => {
     const messages = validateStoryBody(
       { status: "❌", tests: "required", testsStatus: "pending" },
       "",
     )
-    expect(
-      messages.some((message) => message.startsWith("Technical implementation:")),
-    ).toBe(false)
+    expect(messages.some((message) => message.startsWith("Record:"))).toBe(false)
   })
 
   it("resolves implementation badge for kanban cards", () => {
@@ -196,12 +210,15 @@ _(fill in when implementation is complete)_
     )
     expect(resolveStoryDocumentationBadge({ status: "❌" }, documentedBody)).toBe(null)
     expect(
-      resolveStoryDocumentationBadge({ status: "✅" }, "## Acceptance\n\n- [x] ok\n"),
+      resolveStoryDocumentationBadge(
+        { status: "✅" },
+        "## Intent\n\n### Acceptance\n\n- [x] ok\n",
+      ),
     ).toBe("impl-missing")
     expect(
       resolveStoryDocumentationBadge(
         { status: "✅" },
-        "## Technical implementation\n\n### Frontend\n\n- only prose\n",
+        "## Record\n\n### Frontend\n\n- only prose\n",
       ),
     ).toBe("impl-missing")
   })

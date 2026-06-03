@@ -4,36 +4,30 @@ import {
 } from "@/domain/meridian/story-body"
 import type { UserStory } from "@/domain/meridian/types"
 
-export const US_H2_SECTIONS = [
-  "Acceptance",
-  "Context & constraints",
-  "Technical implementation",
-  "Tests",
-  "Out of scope for this story",
-  "Notes",
-] as const
+/** US schema v2 — grouped by delivery phase. */
+export const US_H2_SECTIONS = ["Intent", "Plan", "Record", "Boundaries"] as const
 
-export const US_CONTEXT_H3 = [
-  "Why this story",
-  "Where it fits",
-  "Approach",
+export const US_INTENT_H3 = ["Acceptance", "Why", "Where"] as const
+
+export const US_PLAN_H3 = [
   "Architecture refs",
   "API / DB impact",
   "Security notes",
   "Related decisions",
+  "Planned",
 ] as const
 
-export const US_CONTEXT_H3_LEGACY = [
-  "Architecture refs",
-  "API / DB impact",
-  "Security notes",
-  "Related decisions",
-  "Implementation hints (preliminary)",
+export const US_PLAN_H3_OPTIONAL = ["Approach"] as const
+
+export const US_RECORD_H3 = [
+  "Files",
+  "Backend",
+  "Frontend",
+  "Scripts / Docs",
+  "Executed",
 ] as const
 
-export const US_TECH_H3 = ["Files", "Backend", "Frontend", "Scripts / Docs"] as const
-
-export const US_TESTS_H3 = ["Planned", "Executed"] as const
+export const US_BOUNDARIES_H3 = ["Out of scope for this story", "Notes"] as const
 
 export const US_FRONTMATTER_REQUIRED = [
   "id",
@@ -89,6 +83,10 @@ function listH3InSection(body: string, h2Heading: string): string[] {
   return matches ? matches.map((line) => line.replace(/^### /, "").trim()) : []
 }
 
+function subsectionHeading(name: string): string {
+  return name.replace(/ \(optional\)$/i, "").trim()
+}
+
 export function validateUserStoryStructure(
   storyId: string,
   body: string,
@@ -98,71 +96,49 @@ export function validateUserStoryStructure(
   const messages: string[] = []
   const h2Present = listH2Sections(body)
 
-  if (strict) {
-    for (const section of US_H2_SECTIONS) {
-      if (!h2Present.includes(section)) {
-        messages.push(
-          `${storyId}: missing required ## ${section} (strict US with ready).`,
-        )
-      }
-    }
-
-    const contextH3 = listH3InSection(body, "Context & constraints")
-    const hasNewContext = US_CONTEXT_H3.every((name) => contextH3.includes(name))
-    const hasLegacyContext = US_CONTEXT_H3_LEGACY.every((name) =>
-      contextH3.includes(name),
-    )
-
-    if (hasNewContext) {
-      // canonical Context subsections
-    } else if (hasLegacyContext) {
-      messages.push(
-        `${storyId}: Context uses legacy subsections — run /refine-us to add Why this story, Where it fits, and Approach.`,
-      )
-    } else {
-      for (const subsection of US_CONTEXT_H3) {
-        if (!contextH3.includes(subsection)) {
-          messages.push(
-            `${storyId}: missing ### ${subsection} under ## Context & constraints.`,
-          )
-        }
-      }
-    }
-
-    for (const subsection of US_TECH_H3) {
-      if (!listH3InSection(body, "Technical implementation").includes(subsection)) {
-        messages.push(
-          `${storyId}: missing ### ${subsection} under ## Technical implementation.`,
-        )
-      }
-    }
-
-    for (const subsection of US_TESTS_H3) {
-      if (!listH3InSection(body, "Tests").includes(subsection)) {
-        messages.push(`${storyId}: missing ### ${subsection} under ## Tests.`)
-      }
-    }
-  } else {
-    if (!h2Present.includes("Context & constraints")) {
-      messages.push(
-        `${storyId}: missing ## Context & constraints (legacy — run /refine-us).`,
-      )
-    }
-    for (const section of ["Out of scope for this story", "Notes"] as const) {
-      if (!h2Present.includes(section)) {
-        messages.push(`${storyId}: missing ## ${section} (recommended by template).`)
-      }
-    }
-  }
-
-  for (const section of ["Acceptance", "Tests", "Technical implementation"] as const) {
+  for (const section of US_H2_SECTIONS) {
     if (!h2Present.includes(section)) {
       messages.push(`${storyId}: missing required ## ${section} (see us-template.md).`)
     }
   }
 
-  if (status === "✅" && !h2Present.includes("Technical implementation")) {
-    messages.push(`${storyId}: status ✅ requires ## Technical implementation section.`)
+  if (strict) {
+    for (const subsection of US_INTENT_H3) {
+      if (!listH3InSection(body, "Intent").includes(subsection)) {
+        messages.push(`${storyId}: missing ### ${subsection} under ## Intent.`)
+      }
+    }
+
+    const planH3 = listH3InSection(body, "Plan").map(subsectionHeading)
+    for (const subsection of US_PLAN_H3) {
+      if (!planH3.includes(subsection)) {
+        messages.push(`${storyId}: missing ### ${subsection} under ## Plan.`)
+      }
+    }
+
+    for (const subsection of US_RECORD_H3) {
+      if (!listH3InSection(body, "Record").includes(subsection)) {
+        messages.push(`${storyId}: missing ### ${subsection} under ## Record.`)
+      }
+    }
+
+    for (const subsection of US_BOUNDARIES_H3) {
+      if (!listH3InSection(body, "Boundaries").includes(subsection)) {
+        messages.push(`${storyId}: missing ### ${subsection} under ## Boundaries.`)
+      }
+    }
+  } else {
+    for (const subsection of ["Out of scope for this story", "Notes"] as const) {
+      if (!listH3InSection(body, "Boundaries").includes(subsection)) {
+        messages.push(
+          `${storyId}: missing ### ${subsection} under ## Boundaries (recommended).`,
+        )
+      }
+    }
+  }
+
+  if (status === "✅" && !h2Present.includes("Record")) {
+    messages.push(`${storyId}: status ✅ requires ## Record with delivery evidence.`)
   }
 
   return messages
@@ -208,6 +184,6 @@ export function validateVersionStructure(versionId: string, body: string): strin
 }
 
 export function plannedSectionFromBody(body: string): string {
-  const tests = extractMarkdownSection(body, "Tests")
-  return extractMarkdownSubsection(tests, "Planned")
+  const plan = extractMarkdownSection(body, "Plan")
+  return extractMarkdownSubsection(plan, "Planned")
 }

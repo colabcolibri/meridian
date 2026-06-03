@@ -123,7 +123,7 @@ A version is a go-live package. File: `docs/versions/vX.md`. Sprints in `docs/sp
 
 Format: **As** [persona], **I want** [action], **so that** [benefit].
 
-- File: `docs/us/US-XXXX.md` — `## Context & constraints` with **Why this story**, **Where it fits**, **Approach**; Acceptance; **Technical implementation**; **Tests** when `tests: required`.
+- File: `docs/us/US-XXXX.md` — `## Context & constraints` with **Why** and **Where**; optional **Approach** on refine; Acceptance; **Technical implementation**; **Tests** when `tests: required`.
 - `depends_on`, `done_when`, `moscow` (Must / Should / Could / Won't), `ready` (`false` after create, `true` after refine).
 - ✅ and **Technical implementation** via `/complete-us` after you review — not only in chat.
 - Do not implement until `ready: true` — run `/refine-us` first.

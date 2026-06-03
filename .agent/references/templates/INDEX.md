@@ -46,8 +46,8 @@ If the request is **implement code** for a US (`process-manager` gate):
 
 1. Read `us-template.md` to know required sections.
 2. Read the target `docs/us/US-XXXX.md`.
-3. Block if `## Context & constraints` is empty or only placeholders.
-4. Read every path listed under **Architecture refs** in that US before writing code.
+3. Block if `## Plan` is empty or only placeholders.
+4. Read every path listed under Plan / **Architecture refs** in that US before writing code.
 
 ---
 

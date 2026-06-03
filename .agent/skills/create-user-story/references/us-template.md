@@ -23,7 +23,9 @@ tests_status: pending
 **I want** [concrete action],
 **so that** [benefit the user feels — not internal implementation].
 
-## Acceptance
+## Intent
+
+### Acceptance
 
 Verifiable checklist only — observable outcomes, not plans.
 
@@ -32,26 +34,19 @@ Verifiable checklist only — observable outcomes, not plans.
 - [ ] Third when scope warrants it
 - [ ] 🔶 Partial — Missing: … (only when status 🔶)
 
-## Context & constraints
-
-Explain **this slice** in plain language. Frontmatter already links `epic:` and `version:` — do not repeat epic/outcome text; describe what **this US** adds and how it differs from sibling stories.
-
-### Why this story
+### Why
 
 2–4 sentences: what problem this slice solves, what exists before, what the user can do after **this US alone** (not the whole epic).
 
-### Where it fits
+### Where
 
 2–4 sentences: position in the release, what `depends_on` delivered, what this unblocks next. Name other US ids when relevant — no need to quote epic files.
 
-### Approach
+## Plan
 
-Bullets allowed — **each bullet is a full thought** (one or two sentences): intent, likely area of the codebase, constraint or non-goal.
+### Approach _(optional — add on `/refine-us` if helpful)_
 
-- Example: “Introduce shared filter state in monitor so Board and Deliverables stay aligned; avoid a second filter implementation in US-0025.”
-- Example: “Touch `KanbanView.tsx` and a small helper in `version-filter.ts`; no changes to project loader or parser.”
-
-Not a repetition of acceptance. Not bare file paths without explanation.
+Bullets allowed — **each bullet is a full thought** (one or two sentences): intent, likely area of the codebase, constraint or non-goal. Not required at create.
 
 ### Architecture refs
 
@@ -69,7 +64,12 @@ Not a repetition of acceptance. Not bare file paths without explanation.
 
 - _n/a_ | `docs/decisions/YYYY-MM-DD.json` — entry title when relevant
 
-## Technical implementation
+### Planned
+
+- [ ] **manual** — numbered steps + expected result (no “verify acceptance end-to-end” alone)
+- [ ] **automated** — exact command + scope when applicable
+
+## Record
 
 > **Creation:** placeholders. **Close (`/complete-us`):** real delivery record — skill `complete-user-story`.
 
@@ -89,22 +89,17 @@ _(fill on close or _n/a_)_
 
 _(fill on close or _n/a_)_
 
-## Tests
-
-### Planned
-
-- [ ] **manual** — numbered steps + expected result (no “verify acceptance end-to-end” alone)
-- [ ] **automated** — exact command + scope when applicable
-
 ### Executed
 
 _(pending until close)_
 
-## Out of scope for this story
+## Boundaries
+
+### Out of scope for this story
 
 What this US explicitly does **not** do — prevents scope creep in implementation.
 
-## Notes
+### Notes
 
 Optional: links, risks, follow-ups — not a dump of epic text.
 ```
@@ -115,9 +110,9 @@ Full rules: `section-contracts.md`. Golden examples: `writing-guide.md`.
 
 | Phase | Writing expectation |
 | ----- | ------------------- |
-| `/create-us` | Why + Where + Approach filled with prose; Architecture § may be TBD; `ready: false` |
-| `/refine-us` | Deepen Approach; real architecture §; concrete Tests; `ready: true` |
-| `/complete-us` | Technical implementation + Executed tests; `status: ✅` |
+| `/create-us` | Intent (Why + Where) filled with prose; Plan refs may be TBD; `ready: false` |
+| `/refine-us` | Optional Approach; real architecture §; concrete Planned tests; `ready: true` |
+| `/complete-us` | Record (Files + layers + Executed); `status: ✅` |
 
 ## Allowed statuses (frontmatter)
 
@@ -125,7 +120,7 @@ Full rules: `section-contracts.md`. Golden examples: `writing-guide.md`.
 | ------- | ----------- |
 | ❌ | Not started |
 | 🔶 | Partial (requires `Missing:` in acceptance) |
-| ✅ | Complete (acceptance + implementation + tests when `tests: required`) |
+| ✅ | Complete (acceptance + record + tests when `tests: required`) |
 
 ## Test fields
 
@@ -139,7 +134,7 @@ Full rules: `section-contracts.md`. Golden examples: `writing-guide.md`.
 | Value | Meaning |
 | ----- | ------- |
 | `false` | Default on `/create-us` — narrative draft; implement blocked |
-| `true` | After `/refine-us` — approach and tests concrete enough to code |
+| `true` | After `/refine-us` — plan and tests concrete enough to code |
 
 ## Closure
 

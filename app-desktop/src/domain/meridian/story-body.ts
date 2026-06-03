@@ -68,10 +68,52 @@ function hasSubstantiveText(text: string): boolean {
   )
 }
 
+export function extractMarkdownSection(body: string, heading: string): string {
+  const start = body.search(new RegExp(`^## ${heading}\\s*$`, "m"))
+  if (start === -1) {
+    return ""
+  }
+  const afterHeading = body.indexOf("\n", start)
+  if (afterHeading === -1) {
+    return ""
+  }
+  const rest = body.slice(afterHeading + 1)
+  const nextSection = rest.search(/^## /m)
+  const content = nextSection === -1 ? rest : rest.slice(0, nextSection)
+  return content.trim()
+}
+
+export function extractMarkdownSubsection(section: string, heading: string): string {
+  const start = section.search(new RegExp(`^### ${heading}\\s*$`, "m"))
+  if (start === -1) {
+    return ""
+  }
+  const afterHeading = section.indexOf("\n", start)
+  if (afterHeading === -1) {
+    return ""
+  }
+  const rest = section.slice(afterHeading + 1)
+  const nextSection = rest.search(/^### /m)
+  const content = nextSection === -1 ? rest : rest.slice(0, nextSection)
+  return content.trim()
+}
+
+function recordSection(body: string): string {
+  return extractMarkdownSection(body, "Record")
+}
+
+function planSection(body: string): string {
+  return extractMarkdownSection(body, "Plan")
+}
+
+function intentSection(body: string): string {
+  return extractMarkdownSection(body, "Intent")
+}
+
 export function getTechnicalImplementationStatus(
   body: string,
 ): TechnicalImplementationStatus {
-  const section = extractMarkdownSection(body, "Technical implementation")
+  const section = recordSection(body)
   if (!section) {
     return "missing"
   }
@@ -122,46 +164,15 @@ export function resolveStoryDocumentationBadge(
   return null
 }
 
-export function extractMarkdownSection(body: string, heading: string): string {
-  const start = body.search(new RegExp(`^## ${heading}\\s*$`, "m"))
-  if (start === -1) {
-    return ""
-  }
-  const afterHeading = body.indexOf("\n", start)
-  if (afterHeading === -1) {
-    return ""
-  }
-  const rest = body.slice(afterHeading + 1)
-  const nextSection = rest.search(/^## /m)
-  const content = nextSection === -1 ? rest : rest.slice(0, nextSection)
-  return content.trim()
-}
-
-export function extractMarkdownSubsection(section: string, heading: string): string {
-  const start = section.search(new RegExp(`^### ${heading}\\s*$`, "m"))
-  if (start === -1) {
-    return ""
-  }
-  const afterHeading = section.indexOf("\n", start)
-  if (afterHeading === -1) {
-    return ""
-  }
-  const rest = section.slice(afterHeading + 1)
-  const nextSection = rest.search(/^### /m)
-  const content = nextSection === -1 ? rest : rest.slice(0, nextSection)
-  return content.trim()
-}
-
 export function acceptanceHasMissing(body: string): boolean {
-  const acceptance = extractMarkdownSection(body, "Acceptance")
+  const acceptance = extractMarkdownSubsection(intentSection(body), "Acceptance")
   return /\*\*Missing:\*\*|^-\s+\[[ x]\]\s+.*Missing:/im.test(acceptance)
 }
 
 const PLANNED_TEST_LINE = /^-\s*\[( |x|X)\]\s+/i
 
 export function getPlannedTestLines(body: string): string[] {
-  const tests = extractMarkdownSection(body, "Tests")
-  const planned = extractMarkdownSubsection(tests, "Planned")
+  const planned = extractMarkdownSubsection(planSection(body), "Planned")
   if (!planned) {
     return []
   }
@@ -180,8 +191,7 @@ export function allPlannedTestsChecked(body: string): boolean {
 }
 
 export function executadoHasEvidence(body: string): boolean {
-  const tests = extractMarkdownSection(body, "Tests")
-  const executado = extractMarkdownSubsection(tests, "Executed")
+  const executado = extractMarkdownSubsection(recordSection(body), "Executed")
   if (!executado) {
     return false
   }
@@ -210,14 +220,14 @@ function appendTechnicalImplementationMessages(
 
   if (story.status === "✅") {
     messages.push(
-      "Technical implementation: status ✅ requires ## Technical implementation with ### Files and real paths (/complete-us).",
+      "Record: status ✅ requires ## Record with ### Files and real paths (/complete-us).",
     )
     return
   }
 
   if (story.status === "🔶") {
     messages.push(
-      "Technical implementation: partial US missing touched-files record (fill in via /complete-us).",
+      "Record: partial US missing touched-files record (fill in via /complete-us).",
     )
   }
 }
@@ -246,7 +256,9 @@ export function validateStoryBody(
 
   const planned = getPlannedTestLines(body)
   if (planned.length === 0) {
-    messages.push("tests: required requires ### Planned with `- [ ]` items.")
+    messages.push(
+      "tests: required requires ### Planned under ## Plan with `- [ ]` items.",
+    )
   }
 
   if (story.testsStatus === "done") {
@@ -254,7 +266,9 @@ export function validateStoryBody(
       messages.push("tests_status: done requires all items in ### Planned marked [x].")
     }
     if (!executadoHasEvidence(body)) {
-      messages.push("tests_status: done requires ### Executed filled in.")
+      messages.push(
+        "tests_status: done requires ### Executed under ## Record filled in.",
+      )
     }
   }
 
@@ -272,7 +286,7 @@ export function validateStoryBody(
   return messages
 }
 
-const CONTEXT_PLACEHOLDER_MARKERS = [
+const PLAN_PLACEHOLDER_MARKERS = [
   "_(fill in",
   "_(pending)_",
   "§ [section name",
@@ -281,13 +295,13 @@ const CONTEXT_PLACEHOLDER_MARKERS = [
   "add when implementation scope is known",
 ]
 
-function contextSectionIsPlaceholder(body: string): boolean {
-  const context = extractMarkdownSection(body, "Context & constraints")
-  if (!context.trim()) {
+function planSectionIsPlaceholder(body: string): boolean {
+  const plan = planSection(body)
+  if (!plan.trim()) {
     return true
   }
 
-  const substantive = sectionContentLines(context).filter(
+  const substantive = sectionContentLines(plan).filter(
     (line) => line !== "_n/a_" && line !== "- _n/a_",
   )
 
@@ -295,8 +309,8 @@ function contextSectionIsPlaceholder(body: string): boolean {
     return true
   }
 
-  const lowered = context.toLowerCase()
-  const hits = CONTEXT_PLACEHOLDER_MARKERS.filter((marker) =>
+  const lowered = plan.toLowerCase()
+  const hits = PLAN_PLACEHOLDER_MARKERS.filter((marker) =>
     lowered.includes(marker.toLowerCase()),
   ).length
 
@@ -304,10 +318,7 @@ function contextSectionIsPlaceholder(body: string): boolean {
 }
 
 function plannedTestsAreGeneric(body: string): boolean {
-  const planned = extractMarkdownSubsection(
-    extractMarkdownSection(body, "Tests"),
-    "Planned",
-  )
+  const planned = extractMarkdownSubsection(planSection(body), "Planned")
   if (!planned.trim()) {
     return false
   }
@@ -333,22 +344,20 @@ export function validateStoryReadiness(
 
   const messages: string[] = []
 
-  if (!extractMarkdownSection(body, "Context & constraints").trim()) {
-    messages.push("Missing ## Context & constraints — run /refine-us before implement.")
-  } else if (contextSectionIsPlaceholder(body)) {
-    messages.push("## Context & constraints still has placeholders — run /refine-us.")
+  if (!planSection(body).trim()) {
+    messages.push("Missing ## Plan — run /refine-us before implement.")
+  } else if (planSectionIsPlaceholder(body)) {
+    messages.push("## Plan still has placeholders — run /refine-us.")
   }
 
   if (story.ready === false) {
     messages.push("ready: false — run /refine-us before implement.")
   } else if (story.ready !== true) {
-    messages.push(
-      "ready not set to true — run /refine-us before implement (legacy US).",
-    )
+    messages.push("ready not set to true — run /refine-us before implement.")
   }
 
   if (plannedTestsAreGeneric(body)) {
-    messages.push("Tests/Planned still generic — run /refine-us with concrete steps.")
+    messages.push("Plan/Planned still generic — run /refine-us with concrete steps.")
   }
 
   return messages

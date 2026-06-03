@@ -27,8 +27,8 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 ## Procedure
 
 1. Read `writing-guide.md`, checklist, target US, architecture sections.
-2. **Deepen `### Why this story` / `### Where it fits`** only if create left gaps — do not bloat; fix clarity.
-3. **Expand `### Approach`** — bullets stay, but each must explain:
+2. **Deepen `### Why` / `### Where`** only if create left gaps — do not bloat; fix clarity.
+3. **Optionally add or expand `### Approach`** — bullets explain what, where in codebase, constraint.
    - what changes,
    - where in codebase (paths ok **inside** explanatory bullet),
    - constraint or non-goal.

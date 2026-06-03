@@ -11,41 +11,27 @@ from typing import Literal
 
 Severity = Literal["error", "warning"]
 
-US_H2_SECTIONS: tuple[str, ...] = (
-    "Acceptance",
-    "Context & constraints",
-    "Technical implementation",
-    "Tests",
-    "Out of scope for this story",
-    "Notes",
-)
+US_H2_SECTIONS: tuple[str, ...] = ("Intent", "Plan", "Record", "Boundaries")
 
-US_CONTEXT_H3: tuple[str, ...] = (
-    "Why this story",
-    "Where it fits",
-    "Approach",
+US_INTENT_H3: tuple[str, ...] = ("Acceptance", "Why", "Where")
+
+US_PLAN_H3: tuple[str, ...] = (
     "Architecture refs",
     "API / DB impact",
     "Security notes",
     "Related decisions",
+    "Planned",
 )
 
-US_CONTEXT_H3_LEGACY: tuple[str, ...] = (
-    "Architecture refs",
-    "API / DB impact",
-    "Security notes",
-    "Related decisions",
-    "Implementation hints (preliminary)",
-)
-
-US_TECH_H3: tuple[str, ...] = (
+US_RECORD_H3: tuple[str, ...] = (
     "Files",
     "Backend",
     "Frontend",
     "Scripts / Docs",
+    "Executed",
 )
 
-US_TESTS_H3: tuple[str, ...] = ("Planned", "Executed")
+US_BOUNDARIES_H3: tuple[str, ...] = ("Out of scope for this story", "Notes")
 
 US_FRONTMATTER_REQUIRED: tuple[str, ...] = (
     "id",
@@ -103,9 +89,16 @@ def extract_section_body(text: str, heading: str) -> str | None:
     return text[start:end].strip()
 
 
-def missing_sections(required: tuple[str, ...], present: list[str]) -> list[str]:
-    present_set = set(present)
-    return [name for name in required if name not in present_set]
+def extract_subsection_body(section: str, heading: str) -> str | None:
+    pattern = re.compile(rf"^### {re.escape(heading)}\s*$", re.MULTILINE)
+    match = pattern.search(section)
+    if not match:
+        return None
+    start = match.end()
+    rest = section[start:]
+    next_heading = re.search(r"^### ", rest, re.MULTILINE)
+    end = start + next_heading.start() if next_heading else len(section)
+    return section[start:end].strip()
 
 
 def validate_us_structure(
@@ -132,56 +125,39 @@ def validate_us_structure(
             else:
                 warnings.append(message)
 
-    core_h2 = ("Acceptance", "Tests", "Technical implementation")
-    for section in core_h2:
+    for section in US_H2_SECTIONS:
         if section not in h2_present:
             errors.append(f"{story_name}: missing required ## {section} (see us-template.md).")
 
     if strict:
-        for section in US_H2_SECTIONS:
-            if section not in h2_present:
-                errors.append(f"{story_name}: missing required ## {section} (strict US with `ready`).")
+        for subsection in US_INTENT_H3:
+            if subsection not in list_h3_in_section(body, "Intent"):
+                errors.append(f"{story_name}: missing ### {subsection} under ## Intent.")
 
-        context_h3 = list_h3_in_section(body, "Context & constraints")
-        has_new_context = all(name in context_h3 for name in US_CONTEXT_H3)
-        has_legacy_context = all(name in context_h3 for name in US_CONTEXT_H3_LEGACY)
+        plan_h3 = [
+            name.replace(" (optional)", "").strip()
+            for name in list_h3_in_section(body, "Plan")
+        ]
+        for subsection in US_PLAN_H3:
+            if subsection not in plan_h3:
+                errors.append(f"{story_name}: missing ### {subsection} under ## Plan.")
 
-        if has_new_context:
-            pass
-        elif has_legacy_context:
-            warnings.append(
-                f"{story_name}: Context uses legacy subsections — run /refine-us to add "
-                "Why this story, Where it fits, and Approach."
-            )
-        else:
-            for subsection in US_CONTEXT_H3:
-                if subsection not in context_h3:
-                    errors.append(
-                        f"{story_name}: missing ### {subsection} under ## Context & constraints."
-                    )
+        for subsection in US_RECORD_H3:
+            if subsection not in list_h3_in_section(body, "Record"):
+                errors.append(f"{story_name}: missing ### {subsection} under ## Record.")
 
-        for subsection in US_TECH_H3:
-            if subsection not in list_h3_in_section(body, "Technical implementation"):
-                errors.append(
-                    f"{story_name}: missing ### {subsection} under ## Technical implementation."
+        for subsection in US_BOUNDARIES_H3:
+            if subsection not in list_h3_in_section(body, "Boundaries"):
+                errors.append(f"{story_name}: missing ### {subsection} under ## Boundaries.")
+    else:
+        for subsection in US_BOUNDARIES_H3:
+            if subsection not in list_h3_in_section(body, "Boundaries"):
+                warnings.append(
+                    f"{story_name}: missing ### {subsection} under ## Boundaries (recommended)."
                 )
 
-        for subsection in US_TESTS_H3:
-            if subsection not in list_h3_in_section(body, "Tests"):
-                errors.append(f"{story_name}: missing ### {subsection} under ## Tests.")
-    else:
-        if "Context & constraints" not in h2_present:
-            warnings.append(
-                f"{story_name}: missing ## Context & constraints (legacy — run /refine-us)."
-            )
-        for section in ("Out of scope for this story", "Notes"):
-            if section not in h2_present:
-                warnings.append(f"{story_name}: missing ## {section} (recommended by template).")
-
-    if status == "✅" and "Technical implementation" not in h2_present:
-        errors.append(
-            f"{story_name}: status ✅ requires ## Technical implementation section."
-        )
+    if status == "✅" and "Record" not in h2_present:
+        errors.append(f"{story_name}: status ✅ requires ## Record with delivery evidence.")
 
 
 def has_h2_match(present: list[str], canonical: str, aliases: tuple[str, ...] | None = None) -> bool:

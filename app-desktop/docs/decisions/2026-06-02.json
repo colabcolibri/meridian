@@ -2,6 +2,15 @@
   "date": "2026-06-02",
   "entries": [
     {
+      "time": "21:18",
+      "title": "US schema v2 — Intent / Plan / Record / Boundaries",
+      "affected_document": "section-contracts.md, us-template.md, writing-guide.md, 75× docs/us/, app-desktop validators, migrate_us_v2_structure.py",
+      "what_changed": "Replaced flat US sections (Acceptance, Context & constraints, Technical implementation, Tests, Out of scope, Notes) with four phase groups: Intent (Acceptance, Why, Where), Plan (refs + Planned), Record (Files/layers + Executed), Boundaries. Migrated all 75 US; validators and monitor protocol updated; legacy aliases removed.",
+      "why_changed": "Flat H2 siblings mixed create/refine/close content; migration prose piled up; IA and agents could not distinguish intent from delivery record.",
+      "impact": "All new/refined US must use v2 structure. /complete-us fills ## Record. /refine-us gates on ## Plan. Old headings no longer validated.",
+      "responsible": "Product/Engineering"
+    },
+    {
       "time": "20:00",
       "title": "v2-S5 — board documentation UX (US-0073–0075)",
       "affected_document": "docs/us/US-0073.md–0075.md, docs/sprints/v2-S5.md, docs/versions/v2.md, docs/epics/EPIC-03.md, docs/kanban/board.json",

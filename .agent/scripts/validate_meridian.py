@@ -139,10 +139,10 @@ def validate_us_semantics(
     legacy_missing_context: list[str],
 ) -> None:
     if status == "✅":
-        tech = extract_section_body(story_text, "Technical implementation")
-        if tech and is_mostly_placeholder(tech):
+        record = extract_section_body(story_text, "Record")
+        if record and is_mostly_placeholder(record):
             warnings.append(
-                f"{story_name}: status ✅ but ## Technical implementation looks like a placeholder."
+                f"{story_name}: status ✅ but ## Record looks like a placeholder."
             )
         return
 
@@ -154,18 +154,18 @@ def validate_us_semantics(
 
     ready = frontmatter.get("ready", "").lower()
     has_ready_field = "ready" in frontmatter
-    context = extract_section_body(story_text, "Context & constraints")
+    plan = extract_section_body(story_text, "Plan")
 
-    if context is None:
+    if plan is None:
         if has_ready_field:
             warnings.append(
-                f"{story_name}: missing ## Context & constraints — run /refine-us before implement."
+                f"{story_name}: missing ## Plan — run /refine-us before implement."
             )
         else:
             legacy_missing_context.append(story_name)
-    elif is_mostly_placeholder(context):
+    elif is_mostly_placeholder(plan):
         warnings.append(
-            f"{story_name}: ## Context & constraints not filled — run /refine-us before implement."
+            f"{story_name}: ## Plan not filled — run /refine-us before implement."
         )
 
     if has_ready_field and ready != "true":
@@ -480,7 +480,7 @@ def main() -> int:
             sample = ", ".join(legacy_missing_context[:5])
             suffix = "…" if len(legacy_missing_context) > 5 else ""
             warnings.append(
-                f"{len(legacy_missing_context)} open US without ## Context & constraints "
+                f"{len(legacy_missing_context)} open US without ## Plan "
                 f"(legacy) — run /refine-us before implement: {sample}{suffix}"
             )
 

@@ -7,10 +7,10 @@
 ## Principles
 
 1. **Explain, don't reference-by-default** — `epic: EPIC-XX` in frontmatter is enough. Do not paste epic text into US. Instead, explain this slice in its own words.
-2. **Prose first where it matters** — Epic Capability, US “Why / Where / Approach”, version Objective: write in full sentences.
+2. **Prose first where it matters** — Epic Capability, US **Why / Where**, version Objective: write in full sentences.
 3. **Bullets with substance** — each bullet can be one or two sentences. Forbidden: telegraphic stubs (`src/foo.ts`, `see epic`, `TBD`).
 4. **Observable acceptance** — checklist items must be verifiable; narrative sections must not repeat acceptance verbatim.
-5. **Create vs refine** — `/create-us` writes the story (clarity). `/refine-us` deepens approach, architecture § headings, and tests before code.
+5. **Create vs refine** — `/create-us` writes the story (clarity). `/refine-us` deepens Plan and tests before code.
 
 ---
 
@@ -44,27 +44,23 @@ In a single planning session the manager answers “what is still open in v1?”
 **I want** to filter the board by product version,
 **so that** I only see user stories for the release I am planning.
 
-## Acceptance
+## Intent
+
+### Acceptance
 
 - [ ] Version filter above kanban columns (All + each distinct `version` from US).
 - [ ] Each card shows a `vX` badge at the top, visible without expanding details.
 - [ ] Filter combines with existing epic filter without resetting the other.
 
-## Context & constraints
-
-### Why this story
+### Why
 
 v1 and v0 US mix on the same board today, which makes sprint review noisy. This story adds version filtering only — it does not change how stories are loaded or how board.json is generated. When done, the manager selects v1 and the columns show only v1 cards.
 
-### Where it fits
+### Where
 
 Part of v1 / EPIC-04. Depends on US-0022 (kanban reads from `docs/us/`). Unblocks US-0025 (deliverables using the same version focus). No VS Code or write path — read-only monitor change.
 
-### Approach
-
-- Add shared version state so Board and Deliverables can reuse the same selection later — start in monitor feature folder, not duplicated per tab.
-- Read distinct `version` values from loaded user stories; default to active version from `docs/versions/` when present.
-- Render badge on `StoryCard` from frontmatter; keep filter state when switching monitor tabs.
+## Plan
 
 ### Architecture refs
 
@@ -81,17 +77,23 @@ Part of v1 / EPIC-04. Depends on US-0022 (kanban reads from `docs/us/`). Unblock
 ### Related decisions
 
 - _n/a_
+
+### Planned
+
+- [ ] **manual** — numbered steps + expected result
 ```
 
-**Anti-pattern:** Context that only lists `docs/epics/EPIC-04.md — boundaries` and repeats acceptance bullets under “hints”.
+**Anti-pattern:** Intent that only lists `docs/epics/EPIC-04.md — boundaries` and repeats acceptance bullets under Approach.
 
 ---
 
 ## User story — refine (same story, deeper)
 
-Refine **expands** Approach bullets and makes Architecture refs and Tests executable:
+Refine **expands** optional Approach and makes Architecture refs and Planned tests executable:
 
 ```md
+## Plan
+
 ### Approach
 
 - Implement `MonitorVersionFilterContext` in `src/features/monitor/` holding `selectedVersionId` and `setSelectedVersionId`; wrap `MonitorDashboard` so Board and Deliverables mount under the same provider (avoids diverging filters in US-0025).
@@ -102,9 +104,7 @@ Refine **expands** Approach bullets and makes Architecture refs and Tests execut
 
 - `docs/05_architecture.md` — § Monitor (KanbanView, derived board)
 
-### Tests
-
-#### Planned
+### Planned
 
 - [ ] **manual** — 1. Load project with v0 and v1 US. 2. Open Board, select v1 in filter. 3. Confirm v0 cards disappear from all columns. 4. Switch to Deliverables tab — same v1 still selected.
 - [ ] **build** — `cd app-desktop && pnpm build` exits 0.
@@ -132,5 +132,5 @@ v2 is `complete` when the extension loads in Extension Development Host, at leas
 | -------- | ------------ |
 | Epic | Would a new PM understand the user problem and “done” without reading US files? |
 | Version | Is the release theme clear in prose, not only a bullet list of US ids? |
-| US create | Can someone explain this slice in one minute using only Why + Where + Approach? |
-| US refine | Could an AI implement without guessing file names or test steps? |
+| US create | Can someone explain this slice in one minute using only Why + Where? |
+| US refine | Could an AI implement without guessing file names or test steps? (optional ### Approach helps) |

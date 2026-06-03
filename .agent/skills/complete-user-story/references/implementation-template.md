@@ -1,34 +1,38 @@
-# Template — Technical implementation (fill in on completion)
+# Template — Record (fill in on completion)
 
-> **US creation:** placeholder or preliminary plan optional.  
+> **US creation:** placeholders under `## Record`.  
 > **Closure (`✅`):** replace with real record of what was delivered.
 
 ## Placeholder on creation (status `❌`)
 
 ```md
-## Technical implementation
+## Record
 
 ### Files
 
-_(fill in when implementation is complete)_
+_(fill on close)_
 
 ### Backend
 
-_(fill in when applicable)_
+_(fill on close or _n/a_)_
 
 ### Frontend
 
-_(fill in when applicable)_
+_(fill on close or _n/a_)_
 
 ### Scripts / Docs
 
-_(fill in when applicable)_
+_(fill on close or _n/a_)_
+
+### Executed
+
+_(pending until close)_
 ```
 
 ## Record on completion (status `✅`)
 
 ```md
-## Technical implementation
+## Record
 
 ### Files
 
@@ -49,6 +53,11 @@ _(fill in when applicable)_
 ### Scripts / Docs
 
 - _n/a_
+
+### Executed
+
+- `pnpm build` — passed
+- manual — filter persists across tabs
 ```
 
 ## Rules
@@ -60,11 +69,11 @@ _(fill in when applicable)_
 | Empty layers | `_n/a_` — do not omit heading |
 | Plan vs delivery | On completion, remove bullets describing unimplemented intent |
 | Global decisions | Register in `docs/decisions/YYYY-MM-DD.json`; local US record stays here |
-| Git | Optional commit/PR in `## Notes`; US is the readable index |
+| Git | Optional commit/PR in Boundaries/Notes; US is the readable index |
 
 ## Anti-patterns (block `✅`)
 
-- `_(fill in when applicable)_` still present
+- `_(fill on close)_` still present
 - Only "No functional change" without listing files when there was a change
-- Acceptance `[x]` without match in Technical implementation or Tests
+- Acceptance `[x]` without match in Record or Executed
 - Generic list without paths ("monitor components updated")

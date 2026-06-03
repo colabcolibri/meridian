@@ -42,9 +42,9 @@ Read linked epic and dependency US **for understanding** — write in your own w
 
 | Section | Rule |
 | ------- | ---- |
-| **Why this story** | 2–4 sentences: problem, before/after for this slice |
-| **Where it fits** | 2–4 sentences: version, deps, next US — cite ids, not epic body |
-| **Approach** | 2+ bullets; each bullet explains intent (full sentence(s)) |
+| **Why** | 2–4 sentences: problem, before/after for this slice |
+| **Where** | 2–4 sentences: version, deps, next US — cite ids, not epic body |
+| **Approach** | optional at create; add on refine if bullets help |
 | **Acceptance** | 2–4 observable checklist items — not a copy of Approach |
 | **Architecture refs** | May use `§ TBD` at create; `/refine-us` fills exact heading |
 

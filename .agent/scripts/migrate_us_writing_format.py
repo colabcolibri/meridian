@@ -193,10 +193,10 @@ def build_context_section(fm: dict[str, str], body: str, old_context: str | None
         [
             "## Context & constraints",
             "",
-            "### Why this story",
+            "### Why",
             build_why(fm, body, acceptance),
             "",
-            "### Where it fits",
+            "### Where",
             build_where(fm, body, raw_fm),
             "",
             "### Approach",
@@ -244,7 +244,9 @@ def needs_upgrade(body: str) -> bool:
     if not context:
         return True
     h3 = re.findall(r"^### (.+)$", context, re.MULTILINE)
-    return not all(name in h3 for name in ("Why this story", "Where it fits", "Approach"))
+    has_why = any(x in h3 for x in ("Why", "Why this story"))
+    has_where = any(x in h3 for x in ("Where", "Where it fits"))
+    return not (has_why and has_where)
 
 
 def migrate_file(path: Path, force: bool = False) -> bool:

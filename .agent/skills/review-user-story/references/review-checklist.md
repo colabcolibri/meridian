@@ -16,9 +16,9 @@ Use with skill `review-user-story` and workflow `/review-us`. **Do not edit the 
 | -- | ----- | --------- |
 | R1 | Validator | `validate_meridian.py` — 0 errors on this US (warnings listed separately) |
 | R2 | Section contract | All required `##` / `###` present per `section-contracts.md` |
-| R3 | Why this story | 2+ sentences; slice clear; not epic paste |
-| R4 | Where it fits | 2+ sentences; version/deps/unblocks |
-| R5 | Approach | 2+ bullets; each explains intent (not bare paths) |
+| R3 | Why | 2+ sentences; slice clear; not epic paste |
+| R4 | Where | 2+ sentences; version/deps/unblocks |
+| R5 | Approach | optional — if present, bullets must explain (not bare paths) |
 | R6 | Architecture refs | Exact `§ heading` from `05_architecture.md` (not `§ TBD` / placeholder) |
 | R7 | API / DB / Security | `_n/a_` with phrase **or** concrete impact |
 | R8 | Acceptance | Each item observable; not vague |

@@ -1004,17 +1004,15 @@ tests_status: pending | done | n/a
 
 Explain this slice — frontmatter already has `epic:`. Do not paste epic text.
 
-### Why this story
+### Why
 
 2–4 sentences: before/after **this US**.
 
-### Where it fits
+### Where
 
 2–4 sentences: version, dependencies, what this unblocks.
 
-### Approach
-
-Explanatory bullets (full thoughts, not bare paths).
+### Approach _(optional at create; refine may add)_
 
 ### Architecture refs
 

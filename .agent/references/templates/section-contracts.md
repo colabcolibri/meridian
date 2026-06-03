@@ -4,7 +4,9 @@
 
 ---
 
-## User story (`us-template.md`)
+## User story (`us-template.md`) — schema v2
+
+Four phase groups replace flat H2 siblings. No legacy aliases.
 
 ### Frontmatter
 
@@ -16,34 +18,30 @@
 
 ### `##` sections (fixed order)
 
-| # | Section | Create | Refine | Close |
-| - | ------- | ------ | ------ | ----- |
-| 1 | Acceptance | required | tighten | mark `[x]` |
-| 2 | Context & constraints | Why/Where/Approach prose | deepen + real § refs | unchanged |
-| 3 | Technical implementation | placeholders | unchanged | real record |
-| 4 | Tests | Planned draft | concrete steps | `[x]` + Executed |
-| 5 | Out of scope for this story | required | optional | optional |
-| 6 | Notes | optional | optional | optional |
+| # | Section | Phase | Create | Refine | Close |
+| - | ------- | ----- | ------ | ------ | ----- |
+| 1 | Intent | Why we do this | Acceptance + Why + Where | tighten | mark `[x]` |
+| 2 | Plan | How we will do it | Architecture refs + Planned draft | optional Approach + concrete tests | unchanged |
+| 3 | Record | What shipped | placeholders | unchanged | Files + layers + Executed |
+| 4 | Boundaries | What we skip | Out of scope | optional | optional |
 
-### `###` under Context & constraints (canonical)
+### `###` under Intent
 
-1. Why this story  
-2. Where it fits  
-3. Approach  
-4. Architecture refs  
-5. API / DB impact  
-6. Security notes  
-7. Related decisions  
+Acceptance · Why · Where
 
-**Legacy (warn, migrate on refine):** `Implementation hints (preliminary)` → rename to `Approach`.
+### `###` under Plan
 
-### `###` under Technical implementation
+Architecture refs · API / DB impact · Security notes · Related decisions · Planned
 
-Files · Backend · Frontend · Scripts / Docs
+**Optional:** Approach — add on `/refine-us`; not required for validation.
 
-### `###` under Tests
+### `###` under Record
 
-Planned · Executed
+Files · Backend · Frontend · Scripts / Docs · Executed
+
+### `###` under Boundaries
+
+Out of scope for this story · Notes
 
 ---
 

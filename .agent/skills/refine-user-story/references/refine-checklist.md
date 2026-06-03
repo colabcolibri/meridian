@@ -10,13 +10,13 @@ Read `writing-guide.md` for tone: Approach bullets must **explain**, not telegra
 
 | # | Check | Pass when |
 | - | ----- | --------- |
-| 1 | `### Why this story` | 2+ sentences; explains slice, before/after; not epic paste |
-| 2 | `### Where it fits` | 2+ sentences; release position, deps, unblocks; US ids ok |
-| 3 | `### Approach` | 2+ bullets; **each bullet explains** intent + area (not bare paths) |
-| 4 | Architecture refs | Real `docs/05_architecture.md` — § **exact heading** (not `§ [section name]`) |
-| 5 | API / DB impact | `_n/a_` with short phrase **or** named endpoint/table/migration |
-| 6 | Acceptance | Each item observable; not vague intent |
-| 7 | Tests / Planned | Numbered manual steps and/or exact commands; no “add when known” |
+| 1 | Intent / `### Why` | 2+ sentences; explains slice, before/after; not epic paste |
+| 2 | Intent / `### Where` | 2+ sentences; release position, deps, unblocks; US ids ok |
+| 3 | Plan / `### Approach` | optional — 2+ explanatory bullets if present |
+| 4 | Plan / Architecture refs | Real `docs/05_architecture.md` — § **exact heading** |
+| 5 | Plan / API / DB impact | `_n/a_` with short phrase **or** named endpoint/table/migration |
+| 6 | Intent / Acceptance | Each item observable; not vague intent |
+| 7 | Plan / Planned | Numbered manual steps and/or exact commands; no “add when known” |
 | 8 | `done_when` | One measurable sentence in frontmatter |
 | 9 | Epic link | `epic: EPIC-XX` in frontmatter only — body explains slice in own words |
 
@@ -48,12 +48,10 @@ ready: false   # /create-us — narrative draft
 ready: true    # /refine-us — implement allowed
 ```
 
-Legacy `### Implementation hints (preliminary)` — rename to `### Approach` on refine.
-
 ---
 
 ## What refine does **not** do
 
-- Does not fill `## Technical implementation` (that's `/complete-us`)
+- Does not fill `## Record` (that's `/complete-us`)
 - Does not mark acceptance `[x]` or `status: ✅`
 - Does not write product code
