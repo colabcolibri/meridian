@@ -23,9 +23,13 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible"
 import type { MonitorIssue } from "@/domain/meridian/monitor-issues"
-import type { KanbanColumnId } from "@/domain/meridian/kanban-columns"
+import type {
+  KanbanColumnCount,
+  KanbanColumnId,
+} from "@/domain/meridian/kanban-columns"
 import {
   countFrozenStories,
+  countKanbanColumns,
   frozenCountByVersion,
   groupStoriesForKanban,
   visibleKanbanColumns,
@@ -100,6 +104,36 @@ const columnMeta: Record<
 const kanbanGridColsClass: Record<number, string> = {
   4: "lg:grid-cols-4",
   5: "lg:grid-cols-5",
+}
+
+function EpicKanbanStatusSummary({ counts }: { counts: KanbanColumnCount[] }) {
+  if (counts.length === 0) {
+    return null
+  }
+
+  return (
+    <div className="flex w-full min-w-0 basis-full flex-wrap items-center gap-1.5 sm:w-auto sm:flex-1 sm:basis-auto sm:justify-end">
+      {counts.map(({ columnId, count }) => {
+        const meta = columnMeta[columnId]
+        const Icon = meta.icon
+
+        return (
+          <span
+            className={cn(
+              typeScale.caption,
+              "inline-flex max-w-full shrink-0 items-center gap-1 rounded-md bg-muted/60 px-1.5 py-0.5 tabular-nums text-muted-foreground",
+            )}
+            key={columnId}
+            title={`${meta.title}: ${count}`}
+          >
+            <Icon aria-hidden className={cn("size-3 shrink-0", meta.iconClass)} />
+            <span className="hidden truncate sm:inline">{meta.title}</span>
+            <span className="font-medium text-foreground/80">{count}</span>
+          </span>
+        )
+      })}
+    </div>
+  )
 }
 
 function KanbanColumnHeader({
@@ -257,6 +291,10 @@ function EpicKanbanGroup({
     [stories, epic.id],
   )
   const { done, total } = useMemo(() => countStoryProgress(epicStories), [epicStories])
+  const columnCounts = useMemo(
+    () => countKanbanColumns(epicStories, { showFrozen }),
+    [epicStories, showFrozen],
+  )
   const allDone = total > 0 && done === total
   const [open, setOpen] = useState(!allDone)
 
@@ -266,16 +304,22 @@ function EpicKanbanGroup({
       onOpenChange={setOpen}
       open={open}
     >
-      <CollapsibleTrigger className="group flex w-full items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-muted/40 data-[state=open]:border-b data-[state=open]:border-border/80">
+      <CollapsibleTrigger className="group flex w-full flex-wrap items-center gap-x-3 gap-y-2 px-4 py-3 text-left transition-colors hover:bg-muted/40 data-[state=open]:border-b data-[state=open]:border-border/80">
         <ChevronDown
           aria-hidden
           className="size-4 shrink-0 text-muted-foreground transition-transform duration-200 group-data-[state=open]:rotate-0 group-data-[state=closed]:-rotate-90"
         />
         <span className="font-mono text-xs font-semibold text-primary">{epic.id}</span>
-        <span className={cn(typeScale.label, "min-w-0 flex-1 truncate")}>
+        <span
+          className={cn(
+            typeScale.label,
+            "min-w-0 flex-1 basis-0 truncate sm:basis-auto",
+          )}
+        >
           {epic.title}
         </span>
-        <span className={cn(typeScale.caption, "shrink-0 tabular-nums")}>
+        <EpicKanbanStatusSummary counts={columnCounts} />
+        <span className={cn(typeScale.caption, "ms-auto shrink-0 tabular-nums")}>
           {done}/{total}
         </span>
         {allDone ? (
@@ -608,7 +652,7 @@ export function KanbanView({
             stories={filtered}
           />
         ) : (
-          <div className="space-y-2 p-3 pt-0">
+          <div className="space-y-2 p-3">
             {availableEpics.length === 0 ? (
               <p
                 className={cn(
@@ -638,13 +682,16 @@ export function KanbanView({
       </div>
 
       <StoryDetailSheet
+        epics={epics}
         epic={selectedStory ? epicById[selectedStory.epic] : undefined}
-        onOpenChange={(open) => {
-          if (!open) {
+        issues={issues}
+        onOpenChange={(nextOpen) => {
+          if (!nextOpen) {
             setSelectedStory(null)
           }
         }}
         open={selectedStory !== null}
+        stories={stories}
         story={selectedStory}
         storyIssues={selectedStory ? issuesForTarget(issues, selectedStory.id) : []}
       />

@@ -1026,5 +1026,19 @@
     "done_when": "Every Open folder runs a single deterministic session reset with generation-guarded async work; no code path leaves status open without a successful bind; all failures surface in UI or issues banner (zero silent catch).",
     "tests": "required",
     "tests_status": "done"
+  },
+  {
+    "id": "US-0086",
+    "title": "By-epic board spacing and status summary on epic rows",
+    "epic": "EPIC-11",
+    "version": "v3",
+    "status": "✅",
+    "moscow": "Should",
+    "depends_on": [
+      "US-0082"
+    ],
+    "done_when": "In Board By epic layout, the epic accordion list has top spacing aligned with the column view, and each collapsed epic row shows per-column US counts (Pending, In progress, Awaiting tests, Complete, Frozen only when > 0) derived from the same kanban rules as the inner grid.",
+    "tests": "required",
+    "tests_status": "done"
   }
 ]

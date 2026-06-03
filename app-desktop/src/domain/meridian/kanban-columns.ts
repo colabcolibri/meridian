@@ -62,3 +62,22 @@ export function visibleKanbanColumns(
     return true
   })
 }
+
+export type KanbanColumnCount = {
+  columnId: KanbanColumnId
+  count: number
+}
+
+/** Per-column US counts using the same visibility rules as the board grid. */
+export function countKanbanColumns(
+  stories: UserStory[],
+  options: { showFrozen: boolean },
+): KanbanColumnCount[] {
+  const grouped = groupStoriesForKanban(stories)
+  return visibleKanbanColumns(grouped, options)
+    .map(({ columnId, stories: columnStories }) => ({
+      columnId,
+      count: columnStories.length,
+    }))
+    .filter(({ count }) => count > 0)
+}
