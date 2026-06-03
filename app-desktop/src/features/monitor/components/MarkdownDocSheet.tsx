@@ -23,6 +23,7 @@ export function MarkdownDocSheet({
   subtitle,
   badges,
   summary,
+  hideFrontmatter = false,
 }: {
   docPath: string | null
   open: boolean
@@ -31,6 +32,7 @@ export function MarkdownDocSheet({
   subtitle?: string
   badges?: ReactNode
   summary?: ReactNode
+  hideFrontmatter?: boolean
 }) {
   return (
     <Sheet onOpenChange={onOpenChange} open={open}>
@@ -39,6 +41,7 @@ export function MarkdownDocSheet({
           <MarkdownDocSheetBody
             badges={badges}
             docPath={docPath}
+            hideFrontmatter={hideFrontmatter}
             subtitle={subtitle}
             summary={summary}
             title={title}
@@ -55,12 +58,14 @@ function MarkdownDocSheetBody({
   subtitle,
   badges,
   summary,
+  hideFrontmatter,
 }: {
   docPath: string
   title: string
   subtitle?: string
   badges?: ReactNode
   summary?: ReactNode
+  hideFrontmatter: boolean
 }) {
   const { folder, getDocsRoot } = useProjectFolder()
   const [loading, setLoading] = useState(true)
@@ -128,7 +133,7 @@ function MarkdownDocSheetBody({
 
         {content && !loading && !error ? (
           <div className="w-full pb-8">
-            {content.frontmatter ? (
+            {!hideFrontmatter && content.frontmatter ? (
               <section className="w-full border-b bg-muted/40 px-6 py-4">
                 <h3 className={cn(typeScale.label, "mb-2 uppercase tracking-wide")}>
                   Metadata
@@ -139,9 +144,6 @@ function MarkdownDocSheetBody({
               </section>
             ) : null}
             <article className="w-full px-6 py-5">
-              <h3 className={cn(typeScale.label, "mb-3 uppercase tracking-wide")}>
-                Content
-              </h3>
               <MarkdownContent body={content.body} />
             </article>
           </div>

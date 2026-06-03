@@ -1,14 +1,32 @@
-import { useEffect, useMemo, useState } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 
-import { AlertCircle, ChevronRight, Info } from "lucide-react"
+import {
+  AlertCircle,
+  AlertTriangle,
+  CheckCircle2,
+  ChevronDown,
+  ChevronRight,
+  CircleX,
+  FlaskConical,
+  Info,
+  Layers,
+  LayoutGrid,
+  Snowflake,
+} from "lucide-react"
 import { Popover } from "radix-ui"
 
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Button } from "@/components/ui/button"
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible"
 import type { MonitorIssue } from "@/domain/meridian/monitor-issues"
 import type { KanbanColumnId } from "@/domain/meridian/kanban-columns"
 import {
   countFrozenStories,
+  frozenCountByVersion,
   groupStoriesForKanban,
   visibleKanbanColumns,
 } from "@/domain/meridian/kanban-columns"
@@ -21,33 +39,61 @@ import { VersionFilterBar } from "@/features/monitor/components/VersionFilterBar
 import { filterChipClass } from "@/features/monitor/monitor-ui"
 import { typeScale } from "@/features/monitor/monitor-typography"
 import {
+  countStoryProgress,
   epicsForVersionFilter,
   filterStoriesByVersions,
+  sortVersionIdsDesc,
 } from "@/features/monitor/version-filter"
 import { cn } from "@/lib/utils"
 
-const columnMeta: Record<KanbanColumnId, { title: string; description: string }> = {
+type BoardLayout = "columns" | "byEpic"
+
+const columnMeta: Record<
+  KanbanColumnId,
+  {
+    title: string
+    description: string
+    emptyHint: string
+    icon: React.ElementType
+    iconClass: string
+  }
+> = {
   "❌": {
     title: "Pending",
     description: "Status ❌ in frontmatter — not started or not complete.",
+    emptyHint: "No pending stories — all work is in progress or done.",
+    icon: CircleX,
+    iconClass: "text-muted-foreground",
   },
   "🔶": {
     title: "In progress",
     description:
       'Status 🔶 — partially done; Acceptance must include "Missing:" explaining what is left.',
+    emptyHint: "No stories in progress right now.",
+    icon: AlertTriangle,
+    iconClass: "text-amber-500",
   },
   "🧪": {
     title: "Awaiting tests",
     description:
-      "Derived column: status ✅ in frontmatter, but tests_status still pending (or Tests without evidence).",
+      "Derived column: status ✅ in frontmatter, but tests_status still pending.",
+    emptyHint: "No stories awaiting test verification.",
+    icon: FlaskConical,
+    iconClass: "text-blue-500",
   },
   "✅": {
     title: "Complete",
     description: "Status ✅ with acceptance criteria and tests verified in the files.",
+    emptyHint: "No completed stories yet — keep going.",
+    icon: CheckCircle2,
+    iconClass: "text-meridian-success",
   },
   "🧊": {
     title: "Frozen",
     description: "Status 🧊 — paused on purpose; not in the flow now.",
+    emptyHint: "No frozen stories in this view.",
+    icon: Snowflake,
+    iconClass: "text-sky-400",
   },
 }
 
@@ -64,12 +110,13 @@ function KanbanColumnHeader({
   count: number
 }) {
   const meta = columnMeta[columnId]
+  const Icon = meta.icon
 
   return (
     <header className="shrink-0 border-b border-border/80 bg-muted/40 px-3 py-3">
       <div className="flex items-center gap-1.5">
         <h2 className="flex min-w-0 flex-1 items-center gap-2 text-sm font-semibold text-foreground">
-          <span aria-hidden>{columnId}</span>
+          <Icon aria-hidden className={cn("size-4 shrink-0", meta.iconClass)} />
           <span className="truncate">{meta.title}</span>
         </h2>
         <Popover.Root>
@@ -104,6 +151,149 @@ function KanbanColumnHeader({
       </div>
       <p className={cn(typeScale.caption, "mt-1 text-muted-foreground")}>{count} US</p>
     </header>
+  )
+}
+
+function EmptyColumnState({ columnId }: { columnId: KanbanColumnId }) {
+  const meta = columnMeta[columnId]
+  const Icon = meta.icon
+  return (
+    <div className="flex flex-col items-center gap-2 px-2 py-10 text-center">
+      <Icon aria-hidden className={cn("size-5 opacity-30", meta.iconClass)} />
+      <p className={cn(typeScale.caption, "text-muted-foreground/60")}>
+        {meta.emptyHint}
+      </p>
+    </div>
+  )
+}
+
+function KanbanColumnsGrid({
+  stories,
+  issues,
+  documentationBadges,
+  epicById,
+  showVersion,
+  showFrozen,
+  onSelectStory,
+}: {
+  stories: UserStory[]
+  issues: MonitorIssue[]
+  documentationBadges: ReadonlyMap<string, StoryDocumentationBadge | null>
+  epicById: Record<string, Epic>
+  showVersion: boolean
+  showFrozen: boolean
+  onSelectStory: (story: UserStory) => void
+}) {
+  const allColumns = useMemo(() => groupStoriesForKanban(stories), [stories])
+  const frozenCount = useMemo(() => countFrozenStories(stories), [stories])
+  const visibleColumns = useMemo(
+    () => visibleKanbanColumns(allColumns, { showFrozen }),
+    [allColumns, showFrozen],
+  )
+  const gridColumnCount = showFrozen && frozenCount > 0 ? 5 : 4
+
+  return (
+    <div
+      className={cn(
+        "-mx-px flex overflow-x-auto lg:grid lg:overflow-visible",
+        kanbanGridColsClass[gridColumnCount],
+      )}
+    >
+      {visibleColumns.map(({ columnId, stories: columnStories }) => (
+        <section
+          className={cn(
+            "flex w-[min(300px,88vw)] shrink-0 flex-col border-r border-border/80 last:border-r-0 lg:w-auto",
+            columnStories.length === 0 ? "min-h-[180px]" : "min-h-[260px]",
+          )}
+          key={columnId}
+        >
+          <KanbanColumnHeader columnId={columnId} count={columnStories.length} />
+          <ScrollArea className="min-h-0 flex-1 lg:max-h-[min(70vh,680px)]">
+            <div className="flex flex-col gap-3 p-3">
+              {columnStories.length === 0 ? (
+                <EmptyColumnState columnId={columnId} />
+              ) : (
+                columnStories.map((story) => (
+                  <KanbanStoryCard
+                    documentationBadge={documentationBadges.get(story.id) ?? null}
+                    epicTitle={epicById[story.epic]?.title}
+                    key={story.id}
+                    onSelect={() => onSelectStory(story)}
+                    showVersion={showVersion}
+                    story={story}
+                    storyIssues={issuesForTarget(issues, story.id)}
+                  />
+                ))
+              )}
+            </div>
+          </ScrollArea>
+        </section>
+      ))}
+    </div>
+  )
+}
+
+function EpicKanbanGroup({
+  epic,
+  stories,
+  issues,
+  documentationBadges,
+  epicById,
+  showVersion,
+  showFrozen,
+  onSelectStory,
+}: {
+  epic: Epic
+  stories: UserStory[]
+  issues: MonitorIssue[]
+  documentationBadges: ReadonlyMap<string, StoryDocumentationBadge | null>
+  epicById: Record<string, Epic>
+  showVersion: boolean
+  showFrozen: boolean
+  onSelectStory: (story: UserStory) => void
+}) {
+  const epicStories = useMemo(
+    () => stories.filter((s) => s.epic === epic.id),
+    [stories, epic.id],
+  )
+  const { done, total } = useMemo(() => countStoryProgress(epicStories), [epicStories])
+  const allDone = total > 0 && done === total
+  const [open, setOpen] = useState(!allDone)
+
+  return (
+    <Collapsible
+      className="overflow-hidden rounded-xl border border-border bg-card"
+      onOpenChange={setOpen}
+      open={open}
+    >
+      <CollapsibleTrigger className="group flex w-full items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-muted/40 data-[state=open]:border-b data-[state=open]:border-border/80">
+        <ChevronDown
+          aria-hidden
+          className="size-4 shrink-0 text-muted-foreground transition-transform duration-200 group-data-[state=open]:rotate-0 group-data-[state=closed]:-rotate-90"
+        />
+        <span className="font-mono text-xs font-semibold text-primary">{epic.id}</span>
+        <span className={cn(typeScale.label, "min-w-0 flex-1 truncate")}>
+          {epic.title}
+        </span>
+        <span className={cn(typeScale.caption, "shrink-0 tabular-nums")}>
+          {done}/{total}
+        </span>
+        {allDone ? (
+          <CheckCircle2 aria-hidden className="size-4 shrink-0 text-meridian-success" />
+        ) : null}
+      </CollapsibleTrigger>
+      <CollapsibleContent>
+        <KanbanColumnsGrid
+          documentationBadges={documentationBadges}
+          epicById={epicById}
+          issues={issues}
+          onSelectStory={onSelectStory}
+          showFrozen={showFrozen}
+          showVersion={showVersion}
+          stories={epicStories}
+        />
+      </CollapsibleContent>
+    </Collapsible>
   )
 }
 
@@ -235,7 +425,8 @@ export function KanbanView({
   versions: ProductVersion[]
   documentationBadges: ReadonlyMap<string, StoryDocumentationBadge | null>
 }) {
-  const { selectedVersionIds } = useMonitorVersionFilter()
+  const { selectedVersionIds, toggleVersion } = useMonitorVersionFilter()
+  const [boardLayout, setBoardLayout] = useState<BoardLayout>("columns")
   const [epicFilter, setEpicFilter] = useState<string | "all">("all")
   const [selectedStory, setSelectedStory] = useState<UserStory | null>(null)
   const [showFrozen, setShowFrozen] = useState(false)
@@ -276,13 +467,20 @@ export function KanbanView({
     })
   }, [epicFilter, selectedVersionIds, stories])
 
-  const allColumns = useMemo(() => groupStoriesForKanban(filtered), [filtered])
   const frozenCount = useMemo(() => countFrozenStories(filtered), [filtered])
-  const visibleColumns = useMemo(
-    () => visibleKanbanColumns(allColumns, { showFrozen }),
-    [allColumns, showFrozen],
+  const frozenInSelectedVersions = useMemo(
+    () => countFrozenStories(filterStoriesByVersions(stories, selectedVersionIds)),
+    [selectedVersionIds, stories],
   )
-  const gridColumnCount = showFrozen && frozenCount > 0 ? 5 : 4
+  const hiddenFrozenVersions = useMemo(() => {
+    const byVersion = frozenCountByVersion(stories)
+    return sortVersionIdsDesc(
+      [...byVersion.keys()].filter((versionId) => !selectedVersionIds.has(versionId)),
+    ).map((versionId) => ({
+      versionId,
+      count: byVersion.get(versionId) ?? 0,
+    }))
+  }, [selectedVersionIds, stories])
 
   useEffect(() => {
     if (frozenCount === 0) {
@@ -298,109 +496,145 @@ export function KanbanView({
 
   return (
     <div className="space-y-4">
-      {versions.length > 0 ? (
-        <div className="rounded-xl border border-border bg-card px-4 py-3">
-          <VersionFilterBar versions={versions} />
-        </div>
-      ) : null}
-
       <div className="overflow-hidden rounded-xl border border-border bg-card">
-        <div className="space-y-3 border-b border-border/80 px-4 py-3">
-          <div className="flex flex-wrap items-center justify-between gap-2">
-            <p className={typeScale.label}>Filter by epic</p>
-            <p className={typeScale.caption}>
-              {totalVisible} visible stor{totalVisible === 1 ? "y" : "ies"}
-              {selectedVersionIds.size > 0
-                ? ` · ${selectedLabel}`
-                : " · no version selected"}
-            </p>
+        {versions.length > 0 ? (
+          <div className="border-b border-border/80 px-4 py-3">
+            <VersionFilterBar versions={versions} />
           </div>
-          <div className="flex flex-wrap gap-2">
-            <button
-              className={filterChipClass(epicFilter === "all")}
-              onClick={() => setEpicFilter("all")}
-              type="button"
-            >
-              All
-            </button>
-            {availableEpics.map((epic) => (
+        ) : null}
+
+        <div className="flex flex-wrap items-center gap-2 border-b border-border/80 px-4 py-2.5">
+          <button
+            className={cn(
+              filterChipClass(boardLayout === "columns"),
+              "shrink-0 whitespace-nowrap",
+            )}
+            onClick={() => setBoardLayout("columns")}
+            type="button"
+          >
+            <LayoutGrid className="mr-1 inline size-3.5" aria-hidden />
+            Columns
+          </button>
+          <button
+            className={cn(
+              filterChipClass(boardLayout === "byEpic"),
+              "shrink-0 whitespace-nowrap",
+            )}
+            onClick={() => setBoardLayout("byEpic")}
+            type="button"
+          >
+            <Layers className="mr-1 inline size-3.5" aria-hidden />
+            By epic
+          </button>
+
+          {boardLayout === "columns" ? (
+            <>
+              <span
+                aria-hidden
+                className="hidden h-4 w-px shrink-0 bg-border sm:block"
+              />
               <button
-                className={cn(
-                  filterChipClass(epicFilter === epic.id),
-                  "max-w-[220px] truncate",
-                )}
-                key={epic.id}
-                onClick={() => setEpicFilter(epic.id)}
-                title={`${epic.id} — ${epic.title}`}
+                className={cn(filterChipClass(epicFilter === "all"), "shrink-0")}
+                onClick={() => setEpicFilter("all")}
                 type="button"
               >
-                {epicFilterLabel(epic)}
+                All
               </button>
-            ))}
-          </div>
-          {selectedVersionIds.size === 0 ? (
-            <p className={cn(typeScale.caption, "text-destructive")}>
-              Select at least one version above.
-            </p>
-          ) : null}
-        </div>
-
-        <div
-          className={cn(
-            "-mx-px flex overflow-x-auto lg:grid lg:overflow-visible",
-            kanbanGridColsClass[gridColumnCount],
-          )}
-        >
-          {visibleColumns.map(({ columnId, stories: columnStories }) => (
-            <section
-              className={cn(
-                "flex w-[min(300px,88vw)] shrink-0 flex-col border-r border-border/80 last:border-r-0 lg:w-auto",
-                columnStories.length === 0 ? "min-h-[180px]" : "min-h-[260px]",
-              )}
-              key={columnId}
-            >
-              <KanbanColumnHeader columnId={columnId} count={columnStories.length} />
-
-              <ScrollArea className="min-h-0 flex-1 lg:max-h-[min(70vh,680px)]">
-                <div className="flex flex-col gap-3 p-3">
-                  {columnStories.length === 0 ? (
-                    <p className={cn(typeScale.caption, "px-1 py-10 text-center")}>
-                      No stories in this column
-                    </p>
-                  ) : (
-                    columnStories.map((story) => (
-                      <KanbanStoryCard
-                        documentationBadge={documentationBadges.get(story.id) ?? null}
-                        epicTitle={epicById[story.epic]?.title}
-                        key={story.id}
-                        onSelect={() => setSelectedStory(story)}
-                        showVersion={showVersionOnCards}
-                        story={story}
-                        storyIssues={issuesForTarget(issues, story.id)}
-                      />
-                    ))
+              {availableEpics.map((epic) => (
+                <button
+                  className={cn(
+                    filterChipClass(epicFilter === epic.id),
+                    "max-w-[200px] shrink-0 truncate",
                   )}
-                </div>
-              </ScrollArea>
-            </section>
-          ))}
-        </div>
+                  key={epic.id}
+                  onClick={() => setEpicFilter(epic.id)}
+                  title={`${epic.id} — ${epic.title}`}
+                  type="button"
+                >
+                  {epicFilterLabel(epic)}
+                </button>
+              ))}
+            </>
+          ) : null}
 
-        {frozenCount > 0 ? (
-          <div className="border-t border-border/80 px-4 py-3">
+          {frozenInSelectedVersions > 0 ? (
             <button
-              className={cn(
-                filterChipClass(showFrozen),
-                "max-w-full whitespace-normal text-left",
-              )}
+              className={cn(filterChipClass(showFrozen), "shrink-0 whitespace-nowrap")}
               onClick={() => setShowFrozen((value) => !value)}
               type="button"
             >
-              <span aria-hidden>🧊 </span>
-              {frozenCount} frozen — {showFrozen ? "hide" : "show"}
+              <Snowflake className="mr-1 inline size-3.5 text-sky-500" aria-hidden />
+              {frozenCount} frozen · {showFrozen ? "hide" : "show"}
             </button>
-          </div>
+          ) : null}
+          {hiddenFrozenVersions.map(({ versionId, count }) => (
+            <button
+              className={cn(filterChipClass(false), "shrink-0 whitespace-nowrap")}
+              key={versionId}
+              onClick={() => toggleVersion(versionId)}
+              title={`Include ${versionId} — ${count} frozen stor${count === 1 ? "y" : "ies"}`}
+              type="button"
+            >
+              <Snowflake className="mr-1 inline size-3.5 opacity-60" aria-hidden />
+              <span className="font-mono">{versionId}</span> ({count})
+            </button>
+          ))}
+
+          <p
+            className={cn(
+              typeScale.caption,
+              "ms-auto min-w-0 shrink-0 text-muted-foreground",
+            )}
+          >
+            {totalVisible} stor{totalVisible === 1 ? "y" : "ies"}
+            {selectedVersionIds.size > 0 ? ` · ${selectedLabel}` : ""}
+          </p>
+        </div>
+
+        {selectedVersionIds.size === 0 ? (
+          <p className={cn(typeScale.caption, "px-4 py-2 text-destructive")}>
+            Select at least one version above.
+          </p>
         ) : null}
+
+        {boardLayout === "columns" ? (
+          <KanbanColumnsGrid
+            documentationBadges={documentationBadges}
+            epicById={epicById}
+            issues={issues}
+            onSelectStory={setSelectedStory}
+            showFrozen={showFrozen}
+            showVersion={showVersionOnCards}
+            stories={filtered}
+          />
+        ) : (
+          <div className="space-y-2 p-3 pt-0">
+            {availableEpics.length === 0 ? (
+              <p
+                className={cn(
+                  typeScale.caption,
+                  "py-8 text-center text-muted-foreground/60",
+                )}
+              >
+                No epics visible for the current filter.
+              </p>
+            ) : (
+              availableEpics.map((epic) => (
+                <EpicKanbanGroup
+                  documentationBadges={documentationBadges}
+                  epic={epic}
+                  epicById={epicById}
+                  issues={issues}
+                  key={epic.id}
+                  onSelectStory={setSelectedStory}
+                  showFrozen={showFrozen}
+                  showVersion={showVersionOnCards}
+                  stories={filtered}
+                />
+              ))
+            )}
+          </div>
+        )}
       </div>
 
       <StoryDetailSheet

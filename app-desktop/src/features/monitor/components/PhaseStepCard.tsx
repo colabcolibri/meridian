@@ -64,11 +64,9 @@ export function PhaseStepCard({
         {document.title}
       </p>
 
-      {state !== "complete" ? (
-        <p className={cn("mt-1.5 text-[11px] font-medium", styles.statusText)}>
-          {setupStepMeta[state].shortLabel}
-        </p>
-      ) : null}
+      <p className={cn("mt-1.5 text-[11px] font-medium", styles.statusText)}>
+        {setupStepMeta[state].shortLabel}
+      </p>
 
       {hasIssues ? (
         <p className="mt-1 line-clamp-1 text-[10px] text-destructive">Alert</p>

@@ -6,10 +6,34 @@ import { countIssuesBySeverity } from "@/domain/meridian/protocol-validators"
 import { useProjectData } from "@/features/folder/ProjectDataContext"
 import { useProjectFolder } from "@/features/folder/ProjectFolderContext"
 import { MONITOR_CONTAINER } from "@/features/monitor/monitor-layout"
-import { typeScale } from "@/features/monitor/monitor-typography"
 import { cn } from "@/lib/utils"
 
-export function MonitorTopBar() {
+export type MonitorView =
+  | "concepts"
+  | "usage"
+  | "setup"
+  | "decisions"
+  | "epics"
+  | "kanban"
+
+const tabs: { id: MonitorView; label: string }[] = [
+  { id: "concepts", label: "Start here" },
+  { id: "usage", label: "Usage guide" },
+  { id: "setup", label: "Setup" },
+  { id: "decisions", label: "Decisions" },
+  { id: "epics", label: "Deliverables" },
+  { id: "kanban", label: "Board" },
+]
+
+export function MonitorHeader({
+  active,
+  onChange,
+  isTabDisabled,
+}: {
+  active: MonitorView
+  onChange: (view: MonitorView) => void
+  isTabDisabled?: (view: MonitorView) => boolean
+}) {
   const {
     status,
     folder,
@@ -25,24 +49,25 @@ export function MonitorTopBar() {
   const problemCount = errors + warnings
 
   return (
-    <div className="sticky top-0 z-10 border-b border-border bg-card/95 backdrop-blur-sm">
-      {/* Identity + actions row */}
+    <header className="sticky top-0 z-10 border-b border-border bg-card/95 backdrop-blur-sm">
+      {/* Top row: identity + actions */}
       <div
         className={cn(
           MONITOR_CONTAINER,
-          "flex items-center justify-between gap-3 py-2.5",
+          "flex items-center justify-between gap-3 py-2",
         )}
       >
-        <div className="flex min-w-0 items-center gap-3">
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-md bg-meridian-muted ring-1 ring-meridian-border">
-            <img alt="" className="h-5 w-5" height={20} src="/favicon.svg" width={20} />
+        {/* Left: logo + breadcrumb */}
+        <div className="flex min-w-0 items-center gap-2.5">
+          <div className="flex h-7 w-7 shrink-0 items-center justify-center overflow-hidden rounded-md bg-meridian-muted ring-1 ring-meridian-border">
+            <img alt="" className="h-4 w-4" height={16} src="/favicon.svg" width={16} />
           </div>
-          <div className="flex min-w-0 items-baseline gap-2">
-            <span className="text-xs text-muted-foreground shrink-0">Meridian</span>
+          <div className="flex min-w-0 items-center gap-1.5 text-sm">
+            <span className="shrink-0 text-muted-foreground">Meridian</span>
             {folder ? (
               <>
-                <span className="text-muted-foreground text-xs">/</span>
-                <span className={cn(typeScale.label, "truncate font-semibold")}>
+                <span className="text-muted-foreground/50">/</span>
+                <span className="truncate font-semibold text-foreground">
                   {folder.name}
                 </span>
                 {isDemoActive ? (
@@ -52,9 +77,7 @@ export function MonitorTopBar() {
                   </Badge>
                 ) : null}
               </>
-            ) : (
-              <span className={typeScale.caption}>No project open</span>
-            )}
+            ) : null}
           </div>
           {folder && problemCount > 0 ? (
             <span
@@ -69,6 +92,7 @@ export function MonitorTopBar() {
           ) : null}
         </div>
 
+        {/* Right: actions */}
         <div className="flex shrink-0 items-center gap-1.5">
           <Button
             disabled={isOpening || !fsAccessSupported}
@@ -77,9 +101,9 @@ export function MonitorTopBar() {
             variant={folder ? "outline" : "default"}
           >
             {isOpening ? (
-              <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" />
+              <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />
             ) : (
-              <FolderOpen className="mr-2 h-3.5 w-3.5" />
+              <FolderOpen className="mr-1.5 h-3.5 w-3.5" />
             )}
             {folder
               ? isDemoActive
@@ -101,11 +125,12 @@ export function MonitorTopBar() {
         </div>
       </div>
 
+      {/* Error banner */}
       {error ? (
         <div
           className={cn(
             MONITOR_CONTAINER,
-            "flex items-start gap-2 border-t border-red-100 bg-red-50/80 py-2 text-sm text-red-900",
+            "flex items-start gap-2 border-t border-red-100 bg-red-50/80 py-1.5 text-sm text-red-900",
           )}
           role="alert"
         >
@@ -113,6 +138,37 @@ export function MonitorTopBar() {
           <span>{error}</span>
         </div>
       ) : null}
-    </div>
+
+      {/* Tab row */}
+      <nav
+        aria-label="Monitor views"
+        className={cn(
+          MONITOR_CONTAINER,
+          "flex gap-0 overflow-x-auto border-t border-border/50",
+        )}
+      >
+        {tabs.map((tab) => {
+          const disabled = isTabDisabled?.(tab.id) ?? false
+          return (
+            <button
+              aria-current={active === tab.id ? "page" : undefined}
+              className={cn(
+                "shrink-0 rounded-none border-b-2 px-4 py-2 text-sm font-medium transition-colors",
+                disabled && "pointer-events-none opacity-40",
+                active === tab.id
+                  ? "border-primary text-foreground"
+                  : "border-transparent text-muted-foreground hover:border-muted-foreground/30 hover:text-foreground",
+              )}
+              disabled={disabled}
+              key={tab.id}
+              onClick={() => onChange(tab.id)}
+              type="button"
+            >
+              {tab.label}
+            </button>
+          )
+        })}
+      </nav>
+    </header>
   )
 }

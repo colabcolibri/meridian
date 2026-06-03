@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Symlink .agent kit into .cursor for Cursor IDE indexing.
+# Symlink .agent kit into .cursor (Cursor IDE) and .claude (Claude Code).
 # Also syncs app-desktop/docs/templates/ in this kit repo (human mirror).
 # Run from repository root: ./.agent/scripts/sync_cursor_kit.sh
 
@@ -8,6 +8,7 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
 AGENT="${ROOT}/.agent"
 CURSOR="${ROOT}/.cursor"
+CLAUDE="${ROOT}/.claude"
 REGISTRY="${AGENT}/references/templates"
 DOCS_TPL="${ROOT}/app-desktop/docs/templates"
 
@@ -22,6 +23,7 @@ if [[ ! -d "${REGISTRY}" ]]; then
 fi
 
 mkdir -p "${CURSOR}/rules" "${CURSOR}/skills" "${CURSOR}/agents" "${CURSOR}/commands" "${CURSOR}/references/templates"
+mkdir -p "${CLAUDE}/commands" "${CLAUDE}/agents"
 
 link() {
   local target="$1"
@@ -84,7 +86,23 @@ link "../../.agent/rules/meridian.mdc" "${CURSOR}/rules/meridian.mdc"
 # README local do adapter
 link "../../.agent/CURSOR_ADAPTER.md" "${CURSOR}/README.md"
 
+# ── Claude Code adapter ────────────────────────────────────────────────────────
+# Workflows -> Claude Code slash commands
+for workflow_file in "${AGENT}"/workflows/*.md; do
+  [[ -f "${workflow_file}" ]] || continue
+  name="$(basename "${workflow_file}")"
+  link "../../.agent/workflows/${name}" "${CLAUDE}/commands/${name}"
+done
+
+# Agents
+for agent_file in "${AGENT}"/agents/*.md; do
+  [[ -f "${agent_file}" ]] || continue
+  name="$(basename "${agent_file}")"
+  link "../../.agent/agents/${name}" "${CLAUDE}/agents/${name}"
+done
+
 echo ""
 echo "Done. Cursor adapter at ${CURSOR}"
+echo "Claude Code adapter at ${CLAUDE}"
 echo "Templates: ${REGISTRY} → .cursor/references/templates/ (+ app-desktop/docs/templates/ when present)"
-echo "Source: .agent/ (commit) → .cursor/ (local symlinks, gitignored)"
+echo "Source: .agent/ (commit) → .cursor/ and .claude/ (local symlinks, gitignored)"

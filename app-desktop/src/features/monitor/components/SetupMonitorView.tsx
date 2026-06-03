@@ -5,7 +5,6 @@ import { getSetupStepState } from "@/domain/meridian/validators"
 import { PhaseDocReaderSheet } from "@/features/monitor/components/PhaseDocReader"
 import { PhaseSection } from "@/features/monitor/components/PhaseSection"
 import { SetupProgressHeader } from "@/features/monitor/components/SetupProgressHeader"
-import { SetupStateLegend } from "@/features/monitor/components/SetupStateLegend"
 import type { MonitorIssue } from "@/domain/meridian/monitor-issues"
 import { useProjectFolder } from "@/features/folder/ProjectFolderContext"
 import { typeScale } from "@/features/monitor/monitor-typography"
@@ -79,8 +78,6 @@ export function SetupMonitorView({
   return (
     <div className="space-y-6">
       <SetupProgressHeader documents={documents} nextStep={nextStep} />
-
-      <SetupStateLegend />
 
       <div className="space-y-4">
         {groups.map(({ phase, subtitle, documents: phaseDocs }) => (

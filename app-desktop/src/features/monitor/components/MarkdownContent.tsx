@@ -7,19 +7,22 @@ import { cn } from "@/lib/utils"
 
 const markdownComponents: Components = {
   h1: ({ children }) => (
-    <h1 className="w-full font-heading text-2xl font-semibold text-foreground">
+    <h1 className="w-full font-heading text-xl font-semibold text-foreground">
       {children}
     </h1>
   ),
   h2: ({ children }) => (
-    <h2 className="w-full font-heading text-xl font-semibold text-foreground">
+    <h2 className="w-full border-t border-border bg-muted/40 -mx-6 px-6 py-2.5 font-heading text-base font-semibold text-foreground">
       {children}
     </h2>
   ),
   h3: ({ children }) => (
-    <h3 className="w-full font-heading text-lg font-semibold text-foreground">
+    <h3 className="w-full text-xs font-semibold uppercase tracking-widest text-muted-foreground">
       {children}
     </h3>
+  ),
+  h4: ({ children }) => (
+    <h4 className="w-full text-xs font-medium text-muted-foreground/70">{children}</h4>
   ),
   p: ({ children }) => <p className={typeScale.prose}>{children}</p>,
   ul: ({ children }) => (

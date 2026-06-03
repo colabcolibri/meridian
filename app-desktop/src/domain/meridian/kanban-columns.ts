@@ -37,6 +37,20 @@ export function countFrozenStories(stories: UserStory[]): number {
   return stories.filter((story) => resolveKanbanColumn(story) === "🧊").length
 }
 
+/** Frozen US count per version id (only versions that have at least one 🧊). */
+export function frozenCountByVersion(stories: UserStory[]): Map<string, number> {
+  const counts = new Map<string, number>()
+
+  for (const story of stories) {
+    if (resolveKanbanColumn(story) !== "🧊") {
+      continue
+    }
+    counts.set(story.version, (counts.get(story.version) ?? 0) + 1)
+  }
+
+  return counts
+}
+
 export function visibleKanbanColumns(
   columns: KanbanColumnGroup[],
   options: { showFrozen: boolean },

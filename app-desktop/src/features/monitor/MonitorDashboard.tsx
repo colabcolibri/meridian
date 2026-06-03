@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useCallback, useState } from "react"
 
 import { Loader2 } from "lucide-react"
 
@@ -15,25 +15,34 @@ import { ConceptsView } from "@/features/monitor/components/ConceptsView"
 import { DecisionsView } from "@/features/monitor/components/DecisionsView"
 import { DeliverablesView } from "@/features/monitor/components/DeliverablesView"
 import { KanbanView } from "@/features/monitor/components/KanbanView"
-import { MonitorIssuesBanner } from "@/features/monitor/components/MonitorIssuesBanner"
 import {
   GUIDE_VIEWS,
-  MonitorTabs,
+  MonitorHeader,
   type MonitorView,
-} from "@/features/monitor/components/MonitorTabs"
-import { MonitorTopBar } from "@/features/monitor/components/MonitorTopBar"
+} from "@/features/monitor/components/MonitorHeader"
+import { MonitorIssuesBanner } from "@/features/monitor/components/MonitorIssuesBanner"
 import { SetupMonitorView } from "@/features/monitor/components/SetupMonitorView"
 import { UsageGuideView } from "@/features/monitor/components/UsageGuideView"
 import { WelcomeScreen } from "@/features/monitor/components/WelcomeScreen"
 import { MonitorVersionFilterProvider } from "@/features/monitor/MonitorVersionFilterContext"
 import { MONITOR_CONTAINER } from "@/features/monitor/monitor-layout"
+import {
+  readStoredMonitorView,
+  writeStoredMonitorView,
+} from "@/features/monitor/monitor-view-storage"
 
 function isGuideView(view: MonitorView): boolean {
   return GUIDE_VIEWS.includes(view)
 }
 
 function MonitorProjectContent() {
-  const [view, setView] = useState<MonitorView>("concepts")
+  const [view, setView] = useState<MonitorView>(
+    () => readStoredMonitorView() ?? "concepts",
+  )
+  const changeView = useCallback((next: MonitorView) => {
+    setView(next)
+    writeStoredMonitorView(next)
+  }, [])
   const { folder, status: folderStatus, isDemoActive } = useProjectFolder()
   const { loading, loadingSupplement, data, issues, documentationBadges } =
     useProjectData()
@@ -47,11 +56,10 @@ function MonitorProjectContent() {
 
   return (
     <MonitorVersionFilterProvider stories={userStories} versions={versions}>
-      <MonitorTopBar />
-      <MonitorTabs
+      <MonitorHeader
         active={view}
         isTabDisabled={(tab) => !folder && !isGuideView(tab)}
-        onChange={setView}
+        onChange={changeView}
       />
 
       {!folder && folderStatus !== "opening" && !isGuideView(view) ? (

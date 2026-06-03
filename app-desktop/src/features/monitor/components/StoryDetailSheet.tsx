@@ -23,6 +23,7 @@ export function StoryDetailSheet({
 
   return (
     <MarkdownDocSheet
+      hideFrontmatter
       badges={
         <>
           <Badge variant="outline">{story.version}</Badge>

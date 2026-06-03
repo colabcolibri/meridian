@@ -62,7 +62,7 @@ function groupedIssues(issues: MonitorIssue[]) {
 
 export function MonitorIssuesBanner({ issues }: { issues: MonitorIssue[] }) {
   const { errors, warnings } = countIssuesBySeverity(issues)
-  const [open, setOpen] = useState(() => errors > 0)
+  const [open, setOpen] = useState(false)
 
   const errorsList = useMemo(
     () => issues.filter((issue) => issue.severity === "error"),

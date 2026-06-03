@@ -62,7 +62,7 @@ export function MonitorTabs({
     <div className="border-b border-border bg-card">
       <nav
         aria-label="Monitor views"
-        className={cn(MONITOR_CONTAINER, "flex gap-2 overflow-x-auto py-3")}
+        className={cn(MONITOR_CONTAINER, "flex gap-0 overflow-x-auto")}
       >
         {tabs.map((tab) => {
           const disabled = isTabDisabled?.(tab.id) ?? false
@@ -71,12 +71,11 @@ export function MonitorTabs({
             <button
               aria-current={active === tab.id ? "page" : undefined}
               className={cn(
-                typeScale.tab,
-                "shrink-0 rounded-lg px-4 py-2.5 transition-all",
-                disabled && "pointer-events-none opacity-50",
+                "shrink-0 rounded-none border-b-2 px-4 py-2.5 text-sm font-medium transition-colors",
+                disabled && "pointer-events-none opacity-40",
                 active === tab.id
-                  ? "bg-primary text-primary-foreground shadow-sm"
-                  : "text-muted-foreground hover:bg-muted/80 hover:text-foreground",
+                  ? "border-primary text-foreground"
+                  : "border-transparent text-muted-foreground hover:border-muted-foreground/30 hover:text-foreground",
               )}
               disabled={disabled}
               key={tab.id}
@@ -89,13 +88,7 @@ export function MonitorTabs({
         })}
       </nav>
       {activeTab ? (
-        <p
-          className={cn(
-            MONITOR_CONTAINER,
-            typeScale.caption,
-            "hidden border-t py-2.5 sm:block",
-          )}
-        >
+        <p className={cn(MONITOR_CONTAINER, typeScale.caption, "py-1.5")}>
           {activeTab.hint}
         </p>
       ) : null}

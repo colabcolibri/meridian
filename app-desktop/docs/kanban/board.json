@@ -18,9 +18,7 @@
     "version": "v0",
     "status": "✅",
     "moscow": "Must",
-    "depends_on": [
-      "US-0001"
-    ],
+    "depends_on": [],
     "done_when": "Document list shows status, dependencies, and basic blockers.",
     "tests": "required",
     "tests_status": "done"
@@ -32,9 +30,7 @@
     "version": "v0",
     "status": "✅",
     "moscow": "Must",
-    "depends_on": [
-      "US-0001"
-    ],
+    "depends_on": [],
     "done_when": "Git, gitignore, Prettier, Husky, and lint-staged are configured.",
     "tests": "required",
     "tests_status": "done"
@@ -46,9 +42,7 @@
     "version": "v0",
     "status": "✅",
     "moscow": "Must",
-    "depends_on": [
-      "US-0001"
-    ],
+    "depends_on": [],
     "done_when": "meridian.md stays at root as universal protocol and Vite app stays in app-desktop.",
     "tests": "required",
     "tests_status": "done"
@@ -60,9 +54,7 @@
     "version": "v0",
     "status": "✅",
     "moscow": "Must",
-    "depends_on": [
-      "US-0004"
-    ],
+    "depends_on": [],
     "done_when": ".agent/skills contains initial skills for agents to use with .agent/MERIDIAN.md.",
     "tests": "required",
     "tests_status": "done"
@@ -74,9 +66,7 @@
     "version": "v0",
     "status": "✅",
     "moscow": "Must",
-    "depends_on": [
-      "US-0005"
-    ],
+    "depends_on": [],
     "done_when": ".agent contains agents, skills, workflows, rules, and scripts in Meridian standard.",
     "tests": "required",
     "tests_status": "done"
@@ -88,9 +78,7 @@
     "version": "v0",
     "status": "✅",
     "moscow": "Must",
-    "depends_on": [
-      "US-0006"
-    ],
+    "depends_on": [],
     "done_when": "Root README.md, always_on rules, operational agents/skills/workflows, and meridian-routing exist in the kit.",
     "tests": "required",
     "tests_status": "done"
@@ -102,9 +90,7 @@
     "version": "v0",
     "status": "✅",
     "moscow": "Must",
-    "depends_on": [
-      "US-0002"
-    ],
+    "depends_on": [],
     "done_when": "App shows Initial Setup, Epics, and Kanban tabs with readable state per doc/US.",
     "tests": "required",
     "tests_status": "done"
@@ -116,9 +102,7 @@
     "version": "v1",
     "status": "✅",
     "moscow": "Must",
-    "depends_on": [
-      "US-0008"
-    ],
+    "depends_on": [],
     "done_when": "User selects the project's docs/ folder and the app persists the session handle for re-reading.",
     "tests": "required",
     "tests_status": "done"
@@ -130,9 +114,7 @@
     "version": "v1",
     "status": "✅",
     "moscow": "Must",
-    "depends_on": [
-      "US-0009"
-    ],
+    "depends_on": [],
     "done_when": "Domain module extracts YAML frontmatter from .md files in docs/ without errors on existing US.",
     "tests": "required",
     "tests_status": "done"
@@ -144,9 +126,7 @@
     "version": "v1",
     "status": "✅",
     "moscow": "Must",
-    "depends_on": [
-      "US-0010"
-    ],
+    "depends_on": [],
     "done_when": "Setup tab reflects phase documents from opened folder; progress and alerts match frontmatter.",
     "tests": "required",
     "tests_status": "done"
@@ -158,9 +138,7 @@
     "version": "v1",
     "status": "✅",
     "moscow": "Must",
-    "depends_on": [
-      "US-0010"
-    ],
+    "depends_on": [],
     "done_when": "Deliverables tab lists EPIC-XX from opened folder with description, versions, status, and US count from same project.",
     "tests": "required",
     "tests_status": "done"
@@ -172,9 +150,7 @@
     "version": "v1",
     "status": "✅",
     "moscow": "Must",
-    "depends_on": [
-      "US-0010"
-    ],
+    "depends_on": [],
     "done_when": "Kanban tab shows US from folder with status columns, epic filter, and done_when; board.json optional as derived cache.",
     "tests": "required",
     "tests_status": "done"
@@ -186,10 +162,7 @@
     "version": "v1",
     "status": "✅",
     "moscow": "Must",
-    "depends_on": [
-      "US-0011",
-      "US-0013"
-    ],
+    "depends_on": [],
     "done_when": "App highlights doc and US inconsistencies per P0 MERIDIAN.md rules in opened folder.",
     "tests": "required",
     "tests_status": "done"
@@ -201,9 +174,7 @@
     "version": "v1",
     "status": "✅",
     "moscow": "Should",
-    "depends_on": [
-      "US-0014"
-    ],
+    "depends_on": [],
     "done_when": "App triggers script validation on opened folder and shows errors/warnings in UI.",
     "tests": "required",
     "tests_status": "done"
@@ -215,11 +186,7 @@
     "version": "v1",
     "status": "✅",
     "moscow": "Should",
-    "depends_on": [
-      "US-0011",
-      "US-0012",
-      "US-0013"
-    ],
+    "depends_on": [],
     "done_when": "No monitor tab imports phaseDocuments/userStories/epics from data.ts; only folder data or empty state.",
     "tests": "required",
     "tests_status": "done"
@@ -231,9 +198,7 @@
     "version": "v1",
     "status": "✅",
     "moscow": "Must",
-    "depends_on": [
-      "US-0009"
-    ],
+    "depends_on": [],
     "done_when": "On Setup tab, each phase document (00–08 and 11) opens the corresponding .md at root of opened docs folder.",
     "tests": "required",
     "tests_status": "done"
@@ -245,9 +210,7 @@
     "version": "v1",
     "status": "✅",
     "moscow": "Must",
-    "depends_on": [
-      "US-0009"
-    ],
+    "depends_on": [],
     "done_when": "First use shows clear steps and a single primary CTA to open docs folder, without duplicated technical messages.",
     "tests": "required",
     "tests_status": "done"
@@ -259,9 +222,7 @@
     "version": "v1",
     "status": "✅",
     "moscow": "Must",
-    "depends_on": [
-      "US-0018"
-    ],
+    "depends_on": [],
     "done_when": "Layout uses single max width, spacing, and background consistent across all views.",
     "tests": "required",
     "tests_status": "done"
@@ -273,9 +234,7 @@
     "version": "v1",
     "status": "✅",
     "moscow": "Must",
-    "depends_on": [
-      "US-0019"
-    ],
+    "depends_on": [],
     "done_when": "Single bar combines brand, opened folder, issue count, and actions; no three message bands.",
     "tests": "required",
     "tests_status": "done"
@@ -287,9 +246,7 @@
     "version": "v1",
     "status": "✅",
     "moscow": "Must",
-    "depends_on": [
-      "US-0019"
-    ],
+    "depends_on": [],
     "done_when": "Tabs use labels Setup, Deliverables, and Board; technical descriptions only on active tab or in tooltip.",
     "tests": "required",
     "tests_status": "done"
@@ -301,9 +258,7 @@
     "version": "v1",
     "status": "✅",
     "moscow": "Should",
-    "depends_on": [
-      "US-0021"
-    ],
+    "depends_on": [],
     "done_when": "Cards show title and delivery; technical details collapsed; epic filter shows readable name.",
     "tests": "required",
     "tests_status": "done"
@@ -315,9 +270,7 @@
     "version": "v1",
     "status": "✅",
     "moscow": "Must",
-    "depends_on": [
-      "US-0022"
-    ],
+    "depends_on": [],
     "done_when": "Cards and filters show EPIC-XX alongside abbreviated epic title.",
     "tests": "required",
     "tests_status": "done"
@@ -329,9 +282,7 @@
     "version": "v1",
     "status": "✅",
     "moscow": "Must",
-    "depends_on": [
-      "US-0022"
-    ],
+    "depends_on": [],
     "done_when": "Each card shows version badge; board filters by v0/v1/v2.",
     "tests": "required",
     "tests_status": "done"
@@ -343,9 +294,7 @@
     "version": "v1",
     "status": "✅",
     "moscow": "Must",
-    "depends_on": [
-      "US-0012"
-    ],
+    "depends_on": [],
     "done_when": "Deliverables tab groups by version, lists epics with US count and version sprints.",
     "tests": "required",
     "tests_status": "done"
@@ -357,9 +306,7 @@
     "version": "v1",
     "status": "✅",
     "moscow": "Should",
-    "depends_on": [
-      "US-0022"
-    ],
+    "depends_on": [],
     "done_when": "Kanban columns list US in ascending numeric order (US-0001, US-0002…).",
     "tests": "required",
     "tests_status": "done"
@@ -371,10 +318,7 @@
     "version": "v1",
     "status": "✅",
     "moscow": "Must",
-    "depends_on": [
-      "US-0014",
-      "US-0017"
-    ],
+    "depends_on": [],
     "done_when": "Loader reads docs/versions/ and docs/sprints/; alerts cite file; Deliverables shows sprints per version.",
     "tests": "required",
     "tests_status": "done"
@@ -386,9 +330,7 @@
     "version": "v1",
     "status": "✅",
     "moscow": "Must",
-    "depends_on": [
-      "US-0023"
-    ],
+    "depends_on": [],
     "done_when": "Kanban and issue banner use bg-card/border-border; filters in single panel; no loose zinc-*.",
     "tests": "required",
     "tests_status": "done"
@@ -400,9 +342,7 @@
     "version": "v1",
     "status": "✅",
     "moscow": "Must",
-    "depends_on": [
-      "US-0025"
-    ],
+    "depends_on": [],
     "done_when": "Each version in card with highlighted header, progress % and visual bar; epics with mini progress.",
     "tests": "required",
     "tests_status": "done"
@@ -414,9 +354,7 @@
     "version": "v1",
     "status": "✅",
     "moscow": "Should",
-    "depends_on": [
-      "US-0019"
-    ],
+    "depends_on": [],
     "done_when": "Top bar uses favicon; page with subtle gradient; welcome screen aligned to tokens.",
     "tests": "required",
     "tests_status": "done"
@@ -428,9 +366,7 @@
     "version": "v1",
     "status": "✅",
     "moscow": "Must",
-    "depends_on": [
-      "US-0028"
-    ],
+    "depends_on": [],
     "done_when": "Locked/draft states and phase icon use bg-muted and stroke-border; no zinc-* on Setup tab.",
     "tests": "required",
     "tests_status": "done"
@@ -442,9 +378,7 @@
     "version": "v1",
     "status": "✅",
     "moscow": "Should",
-    "depends_on": [
-      "US-0028"
-    ],
+    "depends_on": [],
     "done_when": "AdvancedToolsPanel and ScriptValidationPanel use monitorDashedPanelClass and inlineCodeClass.",
     "tests": "required",
     "tests_status": "done"
@@ -456,10 +390,7 @@
     "version": "v1",
     "status": "✅",
     "moscow": "Must",
-    "depends_on": [
-      "US-0031",
-      "US-0032"
-    ],
+    "depends_on": [],
     "done_when": "No zinc-* in src/features/monitor/; EPIC-06 marked complete.",
     "tests": "required",
     "tests_status": "done"
@@ -471,10 +402,7 @@
     "version": "v1",
     "status": "✅",
     "moscow": "Must",
-    "depends_on": [
-      "US-0024",
-      "US-0025"
-    ],
+    "depends_on": [],
     "done_when": "Deliverables and Board share same version filter; default to active version or last with US.",
     "tests": "required",
     "tests_status": "done"
@@ -486,9 +414,7 @@
     "version": "v1",
     "status": "✅",
     "moscow": "Must",
-    "depends_on": [
-      "US-0034"
-    ],
+    "depends_on": [],
     "done_when": "Epic chips on Board list only epics with US in selected version; epic resets when version changes.",
     "tests": "required",
     "tests_status": "done"
@@ -500,9 +426,7 @@
     "version": "v1",
     "status": "✅",
     "moscow": "Must",
-    "depends_on": [
-      "US-0034"
-    ],
+    "depends_on": [],
     "done_when": "Deliverables highlights global filter version; other versions collapsed; epics in flat rows.",
     "tests": "required",
     "tests_status": "done"
@@ -514,9 +438,7 @@
     "version": "v1",
     "status": "✅",
     "moscow": "Must",
-    "depends_on": [
-      "US-0035"
-    ],
+    "depends_on": [],
     "done_when": "Kanban cards are compact rows; done_when and deps open in sheet; empty columns hidden when filtering version.",
     "tests": "required",
     "tests_status": "done"
@@ -528,9 +450,7 @@
     "version": "v1",
     "status": "✅",
     "moscow": "Should",
-    "depends_on": [
-      "US-0032"
-    ],
+    "depends_on": [],
     "done_when": "AdvancedToolsPanel appears only on Setup tab; Deliverables and Board without dashed panel above.",
     "tests": "required",
     "tests_status": "done"
@@ -542,9 +462,7 @@
     "version": "v1",
     "status": "✅",
     "moscow": "Must",
-    "depends_on": [
-      "US-0014"
-    ],
+    "depends_on": [],
     "done_when": "docs/decisions/YYYY-MM-DD.json is log source; validate_meridian.py validates schema; .agent kit documents prepend in entries.",
     "tests": "required",
     "tests_status": "done"
@@ -556,9 +474,7 @@
     "version": "v1",
     "status": "✅",
     "moscow": "Must",
-    "depends_on": [
-      "US-0039"
-    ],
+    "depends_on": [],
     "done_when": "Decisions tab lists days and entries from docs/decisions/ folder with structured detail in side sheet.",
     "tests": "required",
     "tests_status": "done"
@@ -570,9 +486,7 @@
     "version": "v2",
     "status": "❌",
     "moscow": "Must",
-    "depends_on": [
-      "US-0040"
-    ],
+    "depends_on": [],
     "done_when": "app-visual-studio/ loads in Extension Development Host with pnpm dev/build scripts documented.",
     "tests": "required",
     "tests_status": "pending"
@@ -584,9 +498,7 @@
     "version": "v2",
     "status": "❌",
     "moscow": "Must",
-    "depends_on": [
-      "US-0041"
-    ],
+    "depends_on": [],
     "done_when": "Extension detects .agent/MERIDIAN.md and docs/ folder and exposes status in the status bar.",
     "tests": "required",
     "tests_status": "pending"
@@ -598,9 +510,7 @@
     "version": "v2",
     "status": "❌",
     "moscow": "Must",
-    "depends_on": [
-      "US-0041"
-    ],
+    "depends_on": [],
     "done_when": "05_architecture, 01_tech_stack, 02_security, and 08_environments describe app-visual-studio/ layer and commands.",
     "tests": "required",
     "tests_status": "pending"
@@ -612,10 +522,7 @@
     "version": "v2",
     "status": "❌",
     "moscow": "Must",
-    "depends_on": [
-      "US-0042",
-      "US-0043"
-    ],
+    "depends_on": [],
     "done_when": ".agent/scripts/generate_board.py reads docs/us/ and writes docs/kanban/board.json matching board-schema.",
     "tests": "required",
     "tests_status": "pending"
@@ -627,9 +534,7 @@
     "version": "v2",
     "status": "❌",
     "moscow": "Must",
-    "depends_on": [
-      "US-0044"
-    ],
+    "depends_on": [],
     "done_when": "Command Meridian Sync Board runs generate_board.py and shows success or errors in the editor.",
     "tests": "required",
     "tests_status": "pending"
@@ -641,9 +546,7 @@
     "version": "v2",
     "status": "❌",
     "moscow": "Must",
-    "depends_on": [
-      "US-0044"
-    ],
+    "depends_on": [],
     "done_when": "Command Meridian Validate Project runs validate_meridian.py and lists errors and warnings in the editor.",
     "tests": "required",
     "tests_status": "pending"
@@ -655,10 +558,7 @@
     "version": "v2",
     "status": "❌",
     "moscow": "Must",
-    "depends_on": [
-      "US-0045",
-      "US-0046"
-    ],
+    "depends_on": [],
     "done_when": "Command creates a new US-XXXX.md in docs/us/ from kit template with epic and version picker.",
     "tests": "required",
     "tests_status": "pending"
@@ -670,9 +570,7 @@
     "version": "v2",
     "status": "❌",
     "moscow": "Must",
-    "depends_on": [
-      "US-0047"
-    ],
+    "depends_on": [],
     "done_when": "New US command rejects invalid epic, version, depends_on, or empty done_when before writing file.",
     "tests": "required",
     "tests_status": "pending"
@@ -684,10 +582,7 @@
     "version": "v2",
     "status": "❌",
     "moscow": "Must",
-    "depends_on": [
-      "US-0047",
-      "US-0045"
-    ],
+    "depends_on": [],
     "done_when": "After creating or saving a US under docs/us/, board.json regenerates without a separate manual fragile step.",
     "tests": "required",
     "tests_status": "pending"
@@ -699,9 +594,7 @@
     "version": "v2",
     "status": "❌",
     "moscow": "Should",
-    "depends_on": [
-      "US-0049"
-    ],
+    "depends_on": [],
     "done_when": "Commands create or open epic and version files from kit templates under docs/epics/ and docs/versions/.",
     "tests": "required",
     "tests_status": "pending"
@@ -713,9 +606,7 @@
     "version": "v2",
     "status": "❌",
     "moscow": "Should",
-    "depends_on": [
-      "US-0045"
-    ],
+    "depends_on": [],
     "done_when": "Monitor shows warning when board.json frontmatter differs from parsed docs/us/ files.",
     "tests": "required",
     "tests_status": "pending"
@@ -727,9 +618,7 @@
     "version": "v2",
     "status": "❌",
     "moscow": "Should",
-    "depends_on": [
-      "US-0046"
-    ],
+    "depends_on": [],
     "done_when": "Kit documents extension workflow and GitHub Actions runs extension compile/lint on PR.",
     "tests": "required",
     "tests_status": "pending"
@@ -741,10 +630,7 @@
     "version": "v2",
     "status": "❌",
     "moscow": "Must",
-    "depends_on": [
-      "US-0049",
-      "US-0052"
-    ],
+    "depends_on": [],
     "done_when": "versions/v2.md go-live checklist checked; EPIC-05 status complete; v2 status complete.",
     "tests": "required",
     "tests_status": "pending"
@@ -754,11 +640,9 @@
     "title": "Tauri architecture decision",
     "epic": "EPIC-07",
     "version": "v3",
-    "status": "❌",
+    "status": "🧊",
     "moscow": "Must",
-    "depends_on": [
-      "US-0053"
-    ],
+    "depends_on": [],
     "done_when": "05_architecture documents Tauri choice, folder layout, and script invocation with decision log entry.",
     "tests": "required",
     "tests_status": "pending"
@@ -768,11 +652,9 @@
     "title": "Scaffold Tauri desktop shell",
     "epic": "EPIC-07",
     "version": "v3",
-    "status": "❌",
+    "status": "🧊",
     "moscow": "Must",
-    "depends_on": [
-      "US-0054"
-    ],
+    "depends_on": [],
     "done_when": "Tauri dev loads existing Vite monitor UI inside native window on macOS.",
     "tests": "required",
     "tests_status": "pending"
@@ -782,11 +664,9 @@
     "title": "Native desktop CI and build matrix",
     "epic": "EPIC-07",
     "version": "v3",
-    "status": "❌",
+    "status": "🧊",
     "moscow": "Must",
-    "depends_on": [
-      "US-0055"
-    ],
+    "depends_on": [],
     "done_when": "CI produces Tauri build artifact on tag; platform scope documented.",
     "tests": "required",
     "tests_status": "pending"
@@ -796,12 +676,9 @@
     "title": "Native validate and sync board",
     "epic": "EPIC-07",
     "version": "v3",
-    "status": "❌",
+    "status": "🧊",
     "moscow": "Must",
-    "depends_on": [
-      "US-0056",
-      "US-0044"
-    ],
+    "depends_on": [],
     "done_when": "Production Tauri build runs validate_meridian.py and generate_board.py without Vite dev API.",
     "tests": "required",
     "tests_status": "pending"
@@ -811,11 +688,9 @@
     "title": "Persist last opened docs folder",
     "epic": "EPIC-07",
     "version": "v3",
-    "status": "❌",
+    "status": "🧊",
     "moscow": "Must",
-    "depends_on": [
-      "US-0057"
-    ],
+    "depends_on": [],
     "done_when": "Native app restores last docs/ path on relaunch when still accessible.",
     "tests": "required",
     "tests_status": "pending"
@@ -825,12 +700,9 @@
     "title": "File watcher refreshes monitor",
     "epic": "EPIC-07",
     "version": "v3",
-    "status": "❌",
+    "status": "🧊",
     "moscow": "Should",
-    "depends_on": [
-      "US-0058",
-      "US-0051"
-    ],
+    "depends_on": [],
     "done_when": "Changing us/*.md or board.json on disk refreshes loaded project data without manual re-open.",
     "tests": "required",
     "tests_status": "pending"
@@ -840,12 +712,9 @@
     "title": "v3 go-live and EPIC-07 complete",
     "epic": "EPIC-07",
     "version": "v3",
-    "status": "❌",
+    "status": "🧊",
     "moscow": "Must",
-    "depends_on": [
-      "US-0059",
-      "US-0057"
-    ],
+    "depends_on": [],
     "done_when": "versions/v3.md checklist done; EPIC-07 complete; v3 status complete.",
     "tests": "required",
     "tests_status": "pending"
@@ -857,9 +726,7 @@
     "version": "v4",
     "status": "❌",
     "moscow": "Must",
-    "depends_on": [
-      "US-0053"
-    ],
+    "depends_on": [],
     "done_when": "Extension creates docs/sprints/vX-SY.md from kit sprint template with valid stories list.",
     "tests": "required",
     "tests_status": "pending"
@@ -871,9 +738,7 @@
     "version": "v4",
     "status": "❌",
     "moscow": "Must",
-    "depends_on": [
-      "US-0061"
-    ],
+    "depends_on": [],
     "done_when": "Extension guides complete-user-story flow: acceptance, tests executed, technical implementation, status done.",
     "tests": "required",
     "tests_status": "pending"
@@ -885,9 +750,7 @@
     "version": "v4",
     "status": "❌",
     "moscow": "Must",
-    "depends_on": [
-      "US-0062"
-    ],
+    "depends_on": [],
     "done_when": "Extension prepends structured entry to docs/decisions/YYYY-MM-DD.json per kit schema.",
     "tests": "required",
     "tests_status": "pending"
@@ -899,10 +762,7 @@
     "version": "v4",
     "status": "❌",
     "moscow": "Must",
-    "depends_on": [
-      "US-0045",
-      "US-0062"
-    ],
+    "depends_on": [],
     "done_when": "Palette commands set US status with validator-safe frontmatter updates.",
     "tests": "required",
     "tests_status": "pending"
@@ -914,10 +774,7 @@
     "version": "v4",
     "status": "❌",
     "moscow": "Should",
-    "depends_on": [
-      "US-0046",
-      "US-0064"
-    ],
+    "depends_on": [],
     "done_when": "validate_meridian.py errors appear as VS Code diagnostics with file links.",
     "tests": "required",
     "tests_status": "pending"
@@ -929,10 +786,7 @@
     "version": "v4",
     "status": "❌",
     "moscow": "Should",
-    "depends_on": [
-      "US-0064",
-      "US-0051"
-    ],
+    "depends_on": [],
     "done_when": "US detail sheet in monitor shows suggested extension commands for status changes and sync.",
     "tests": "required",
     "tests_status": "pending"
@@ -944,10 +798,7 @@
     "version": "v4",
     "status": "❌",
     "moscow": "Must",
-    "depends_on": [
-      "US-0063",
-      "US-0066"
-    ],
+    "depends_on": [],
     "done_when": "versions/v4.md checklist done; EPIC-08 complete; v4 status complete.",
     "tests": "required",
     "tests_status": "pending"
@@ -959,9 +810,7 @@
     "version": "v5",
     "status": "❌",
     "moscow": "Must",
-    "depends_on": [
-      "US-0067"
-    ],
+    "depends_on": [],
     "done_when": "Command exports board columns to CSV file chosen by user.",
     "tests": "required",
     "tests_status": "pending"
@@ -973,9 +822,7 @@
     "version": "v5",
     "status": "❌",
     "moscow": "Should",
-    "depends_on": [
-      "US-0068"
-    ],
+    "depends_on": [],
     "done_when": "Command generates markdown report for selected sprint with US table and progress counts.",
     "tests": "required",
     "tests_status": "pending"
@@ -987,9 +834,7 @@
     "version": "v5",
     "status": "❌",
     "moscow": "Should",
-    "depends_on": [
-      "US-0067"
-    ],
+    "depends_on": [],
     "done_when": "Monitor settings store optional GitHub repo URL and show link on Deliverables header.",
     "tests": "required",
     "tests_status": "pending"
@@ -1001,9 +846,7 @@
     "version": "v5",
     "status": "❌",
     "moscow": "Could",
-    "depends_on": [
-      "US-0070"
-    ],
+    "depends_on": [],
     "done_when": "When git available locally, monitor shows last commit touching docs/us/ (read-only).",
     "tests": "required",
     "tests_status": "pending"
@@ -1015,10 +858,7 @@
     "version": "v5",
     "status": "❌",
     "moscow": "Must",
-    "depends_on": [
-      "US-0069",
-      "US-0071"
-    ],
+    "depends_on": [],
     "done_when": "versions/v5.md checklist done; EPIC-09 complete; v5 status complete.",
     "tests": "required",
     "tests_status": "pending"
@@ -1030,9 +870,7 @@
     "version": "v2",
     "status": "✅",
     "moscow": "Must",
-    "depends_on": [
-      "US-0014"
-    ],
+    "depends_on": [],
     "done_when": "Monitor flags US with status ✅ or 🔶 when",
     "tests": "required",
     "tests_status": "done"
@@ -1044,10 +882,7 @@
     "version": "v2",
     "status": "✅",
     "moscow": "Must",
-    "depends_on": [
-      "US-0073",
-      "US-0013"
-    ],
+    "depends_on": [],
     "done_when": "Each kanban card shows a compact Doc / Sem doc indicator derived from technical implementation status; ✅ without doc matches card warning styling.",
     "tests": "required",
     "tests_status": "done"
@@ -1059,9 +894,7 @@
     "version": "v2",
     "status": "✅",
     "moscow": "Should",
-    "depends_on": [
-      "US-0037"
-    ],
+    "depends_on": [],
     "done_when": "Board shows only columns with at least one visible US by default; frozen column hidden when empty and expandable via control when frozen US exist.",
     "tests": "required",
     "tests_status": "done"
@@ -1079,6 +912,88 @@
       "US-0014"
     ],
     "done_when": "Opening docs/ builds a frontmatter-only project index; monitor tabs use the index; full markdown bodies load from disk only when a reader or sheet opens.",
+    "tests": "required",
+    "tests_status": "done"
+  },
+  {
+    "id": "US-0077",
+    "title": "Header and navigation redesign",
+    "epic": "EPIC-11",
+    "version": "v3",
+    "status": "✅",
+    "moscow": "Must",
+    "depends_on": [],
+    "done_when": "The app header shows project identity and the current folder path; the active tab uses a visual treatment that reads as navigation state, not a primary action button; a page subtitle gives immediate context without occupying a dedicated row.",
+    "tests": "required",
+    "tests_status": "done"
+  },
+  {
+    "id": "US-0078",
+    "title": "Setup screen redesign",
+    "epic": "EPIC-11",
+    "version": "v3",
+    "status": "✅",
+    "moscow": "Must",
+    "depends_on": [
+      "US-0077"
+    ],
+    "done_when": "Setup document cards communicate their status visually without requiring the user to read a legend; the progress summary is the visual anchor of the page; the 'next focus' recommendation is prominently placed.",
+    "tests": "required",
+    "tests_status": "done"
+  },
+  {
+    "id": "US-0079",
+    "title": "Deliverables screen redesign",
+    "epic": "EPIC-11",
+    "version": "v3",
+    "status": "✅",
+    "moscow": "Must",
+    "depends_on": [
+      "US-0077"
+    ],
+    "done_when": "Deliverables shows version progress as the dominant visual element; sprint chips communicate status through color; epic rows show inline progress bars; planned versions are visually distinct from active/complete ones.",
+    "tests": "required",
+    "tests_status": "done"
+  },
+  {
+    "id": "US-0080",
+    "title": "Board screen redesign",
+    "epic": "EPIC-11",
+    "version": "v3",
+    "status": "✅",
+    "moscow": "Must",
+    "depends_on": [
+      "US-0077"
+    ],
+    "done_when": "Board empty states are designed and informative; filter controls are visually unified; kanban cards have clear internal hierarchy; status column headers use system icons consistent with the rest of the UI.",
+    "tests": "required",
+    "tests_status": "done"
+  },
+  {
+    "id": "US-0081",
+    "title": "Story Detail redesign",
+    "epic": "EPIC-11",
+    "version": "v3",
+    "status": "✅",
+    "moscow": "Must",
+    "depends_on": [
+      "US-0080"
+    ],
+    "done_when": "Story Detail panel shows no raw YAML frontmatter; metadata and content are visually separated; the layout is readable on first open without scrolling past a code block.",
+    "tests": "required",
+    "tests_status": "done"
+  },
+  {
+    "id": "US-0082",
+    "title": "Board grouped-by-epic accordion layout",
+    "epic": "EPIC-11",
+    "version": "v3",
+    "status": "✅",
+    "moscow": "Should",
+    "depends_on": [
+      "US-0080"
+    ],
+    "done_when": "The Board has a layout toggle that switches between the current column view and an epic-grouped accordion view, where each epic expands to show its stories organised by status column.",
     "tests": "required",
     "tests_status": "done"
   }

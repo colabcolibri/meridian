@@ -47,8 +47,9 @@ test-results/
 **/playwright-report/
 **/test-results/
 
-# Cursor adapter (gerado — não commitar)
+# IDE adapters (gerados — não commitar)
 .cursor/
+.claude/
 **/package-lock.json
 yarn.lock
 **/yarn.lock

@@ -53,7 +53,10 @@ function VersionBlock({
   return (
     <section
       className={cn(
-        "overflow-hidden rounded-xl border border-border bg-card transition-colors",
+        "overflow-hidden rounded-xl border bg-card transition-colors",
+        version.status === "planned"
+          ? "border-dashed border-border/60 opacity-70"
+          : "border-border",
         !expanded && "bg-muted/20",
       )}
     >
@@ -83,9 +86,22 @@ function VersionBlock({
                 {version.id} — {version.title}
               </h2>
             </div>
-            <p className={cn(typeScale.caption, "mt-1 tabular-nums")}>
-              {done}/{total} US · {progress}% · {version.status}
-            </p>
+            {total > 0 ? (
+              <div className="mt-2 flex items-center gap-2">
+                <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-muted">
+                  <div
+                    className={cn(
+                      "h-full rounded-full transition-all duration-500",
+                      progress === 100 ? "bg-meridian-success" : "bg-meridian",
+                    )}
+                    style={{ width: `${progress}%` }}
+                  />
+                </div>
+                <span className={cn(typeScale.caption, "shrink-0 tabular-nums")}>
+                  {done}/{total}
+                </span>
+              </div>
+            ) : null}
           </div>
         </button>
         <div className="flex shrink-0 items-center gap-2">
@@ -113,13 +129,20 @@ function VersionBlock({
           <div className="flex flex-wrap gap-2">
             {versionSprints.map((sprint) => (
               <button
-                className="rounded-full border border-border bg-muted/30 px-3 py-1.5 text-left text-xs font-medium text-foreground transition-colors hover:bg-muted/60"
+                className={cn(
+                  "rounded-full border px-3 py-1.5 text-left text-xs font-medium transition-colors",
+                  sprint.status === "complete"
+                    ? "border-meridian-success/40 bg-meridian-success-muted text-meridian-success-foreground hover:bg-meridian-success-muted/80"
+                    : sprint.status === "active"
+                      ? "border-meridian-border bg-meridian-muted text-meridian hover:bg-meridian-muted/80"
+                      : "border-border bg-muted/30 text-muted-foreground hover:bg-muted/60",
+                )}
                 key={sprint.id}
                 onClick={() => onOpenSprint(sprint)}
                 type="button"
               >
                 <span className="font-mono">{sprint.id}</span>
-                <span className="text-muted-foreground"> · {sprint.status}</span>
+                <span className="opacity-70"> · {sprint.status}</span>
               </button>
             ))}
           </div>
@@ -150,7 +173,7 @@ function VersionBlock({
                 onClick={() => onOpenEpic(epic, version.id)}
                 type="button"
               >
-                <div className="min-w-0">
+                <div className="min-w-0 flex-1">
                   <p className="font-mono text-xs font-semibold text-primary">
                     {epic.id}
                   </p>
@@ -158,9 +181,22 @@ function VersionBlock({
                     {epic.title}
                   </p>
                 </div>
-                <span className={typeScale.caption}>
-                  {epicDone}/{epicTotal} · {epicProgressPct}%
-                </span>
+                <div className="flex shrink-0 items-center gap-2">
+                  <div className="h-1.5 w-20 overflow-hidden rounded-full bg-muted">
+                    <div
+                      className={cn(
+                        "h-full rounded-full",
+                        epicProgressPct === 100 ? "bg-meridian-success" : "bg-meridian",
+                      )}
+                      style={{ width: `${epicProgressPct}%` }}
+                    />
+                  </div>
+                  <span
+                    className={cn(typeScale.caption, "w-16 text-right tabular-nums")}
+                  >
+                    {epicDone}/{epicTotal}
+                  </span>
+                </div>
               </button>
             )
           })}
