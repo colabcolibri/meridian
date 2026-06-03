@@ -1,6 +1,7 @@
 import { Badge } from "@/components/ui/badge"
 import type { MonitorIssue } from "@/domain/meridian/monitor-issues"
 import type { Epic, UserStory } from "@/domain/meridian/types"
+import { LinkedStoriesList } from "@/features/monitor/components/linked-stories-list"
 import { typeScale } from "@/features/monitor/monitor-typography"
 
 export function storyDetailBadges(story: UserStory) {
@@ -17,10 +18,14 @@ export function StoryDetailSummary({
   story,
   epic,
   storyIssues,
+  stories,
+  onSelectDependency,
 }: {
   story: UserStory
   epic: Epic | undefined
   storyIssues: MonitorIssue[]
+  stories: UserStory[]
+  onSelectDependency: (dependency: UserStory) => void
 }) {
   return (
     <div className="space-y-4">
@@ -37,12 +42,12 @@ export function StoryDetailSummary({
         </p>
       </div>
 
-      {story.dependsOn.length > 0 ? (
-        <div className="space-y-1">
-          <p className={typeScale.label}>Depends on</p>
-          <p className={typeScale.bodySm}>{story.dependsOn.join(", ")}</p>
-        </div>
-      ) : null}
+      <LinkedStoriesList
+        label="Depends on — tap to open detail"
+        onSelectStory={onSelectDependency}
+        stories={stories}
+        storyIds={story.dependsOn}
+      />
 
       {storyIssues.length > 0 ? (
         <div className="space-y-2">

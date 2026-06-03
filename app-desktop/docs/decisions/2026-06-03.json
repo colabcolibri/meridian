@@ -2,6 +2,24 @@
   "date": "2026-06-03",
   "entries": [
     {
+      "time": "13:28",
+      "title": "Story Detail — depends_on drill-down shipped (US-0085)",
+      "affected_document": "docs/us/US-0085.md, linked-stories-list.tsx, StoryDetailSheet.tsx, story-detail-summary.tsx, deliverable-doc-sheet.tsx, KanbanView.tsx",
+      "what_changed": "US-0085 closed: LinkedStoriesList for depends_on and sprint storyIds; StoryDetailSheet stacks dependency sheets with modal/allowOutsideDismiss; board.json updated.",
+      "why_changed": "Managers could see depends_on as comma-separated text but could not navigate the chain inside Story Detail.",
+      "impact": "EPIC-11 follow-up complete for US depends_on navigation; blocks/reverse links still out of scope.",
+      "responsible": "Product/Engineering"
+    },
+    {
+      "time": "13:23",
+      "title": "Story Detail — clickable depends_on drill-down (US-0085)",
+      "affected_document": "docs/us/US-0085.md, story-detail-summary.tsx, StoryDetailSheet.tsx, linked-stories-list.tsx, deliverable-doc-sheet.tsx, KanbanView.tsx",
+      "what_changed": "Refined US-0085: replace comma-separated depends_on with LinkedStoriesList rows; StoryDetailSheet stacks a second sheet for dependencies using the same modal/allowOutsideDismiss pattern as sprint→story (US-0083).",
+      "why_changed": "US-0081 exposed depends_on in summary but not as navigation; managers still leave Story Detail to follow dependency chains on the Board.",
+      "impact": "Implement US-0085 after US-0081/0083; no parser or board.json schema change.",
+      "responsible": "Product/Engineering"
+    },
+    {
       "time": "11:57",
       "title": "Open folder — deterministic session reset (US-0084)",
       "affected_document": "docs/us/US-0084.md, ProjectFolderContext.tsx, ProjectDataContext.tsx, folder-open-session.ts",

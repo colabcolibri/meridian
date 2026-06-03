@@ -5,11 +5,11 @@ import type { MonitorIssue } from "@/domain/meridian/monitor-issues"
 import { issuesForTarget } from "@/domain/meridian/protocol-validators"
 import type { Epic, ProductVersion, Sprint, UserStory } from "@/domain/meridian/types"
 import { countStoriesByEpic } from "@/domain/meridian/validators"
+import { LinkedStoriesList } from "@/features/monitor/components/linked-stories-list"
 import { MarkdownDocSheet } from "@/features/monitor/components/MarkdownDocSheet"
 import { StoryDetailSheet } from "@/features/monitor/components/StoryDetailSheet"
 import { typeScale } from "@/features/monitor/monitor-typography"
 import { countStoryProgress } from "@/features/monitor/version-filter"
-import { cn } from "@/lib/utils"
 
 export type DeliverableSheetTarget =
   | { kind: "version"; item: ProductVersion }
@@ -23,90 +23,6 @@ function epicProgressInVersion(
 ) {
   return countStoryProgress(
     stories.filter((story) => story.epic === epicId && story.version === versionId),
-  )
-}
-
-function SprintStoriesSummary({
-  storyIds,
-  stories,
-  onSelectStory,
-}: {
-  storyIds: string[]
-  stories: UserStory[]
-  onSelectStory: (story: UserStory) => void
-}) {
-  const storyById = useMemo(
-    () => new Map(stories.map((story) => [story.id, story])),
-    [stories],
-  )
-
-  if (storyIds.length === 0) {
-    return null
-  }
-
-  return (
-    <div className="space-y-2">
-      <p className={typeScale.label}>User stories — tap to open detail</p>
-      <ul className="space-y-1.5">
-        {storyIds.map((storyId) => {
-          const story = storyById.get(storyId)
-
-          return (
-            <li key={storyId}>
-              <button
-                className={cn(
-                  "group w-full rounded-lg border px-3 py-2.5 text-left transition-colors",
-                  story
-                    ? "cursor-pointer border-primary/25 bg-background shadow-sm hover:border-primary hover:bg-primary/5 focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
-                    : "cursor-not-allowed border-border/80 opacity-60",
-                )}
-                disabled={!story}
-                onClick={(event) => {
-                  event.stopPropagation()
-                  if (story) {
-                    onSelectStory(story)
-                  }
-                }}
-                type="button"
-              >
-                <span className="flex items-center justify-between gap-2">
-                  <span className="font-mono text-xs font-semibold text-primary">
-                    {storyId}
-                  </span>
-                  {story ? (
-                    <span
-                      aria-hidden
-                      className={cn(
-                        typeScale.caption,
-                        "shrink-0 text-primary opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100",
-                      )}
-                    >
-                      Open →
-                    </span>
-                  ) : null}
-                </span>
-                {story ? (
-                  <span
-                    className={cn(typeScale.bodySm, "mt-0.5 block text-foreground")}
-                  >
-                    {story.title}
-                  </span>
-                ) : (
-                  <span
-                    className={cn(
-                      typeScale.caption,
-                      "mt-0.5 block text-muted-foreground",
-                    )}
-                  >
-                    Story not loaded in monitor
-                  </span>
-                )}
-              </button>
-            </li>
-          )
-        })}
-      </ul>
-    </div>
   )
 }
 
@@ -200,7 +116,8 @@ export function DeliverableDocSheet({
           open={open}
           subtitle={sprint.versionId}
           summary={
-            <SprintStoriesSummary
+            <LinkedStoriesList
+              label="User stories — tap to open detail"
               onSelectStory={setNestedStory}
               stories={stories}
               storyIds={sprint.storyIds}
@@ -211,13 +128,17 @@ export function DeliverableDocSheet({
 
         {nestedStory ? (
           <StoryDetailSheet
+            contentClassName="z-[55]"
+            epics={epics}
             epic={epicById[nestedStory.epic]}
+            issues={issues}
             onOpenChange={(nextOpen) => {
               if (!nextOpen) {
                 closeNestedStory()
               }
             }}
             open
+            stories={stories}
             story={nestedStory}
             storyIssues={issuesForTarget(issues, nestedStory.id)}
           />

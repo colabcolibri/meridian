@@ -20,6 +20,7 @@ export function MarkdownDocSheet({
   onCloseClick,
   allowOutsideDismiss = true,
   modal = true,
+  contentClassName,
 }: {
   docPath: string | null
   open: boolean
@@ -32,6 +33,7 @@ export function MarkdownDocSheet({
   onCloseClick?: () => void
   allowOutsideDismiss?: boolean
   modal?: boolean
+  contentClassName?: string
 }) {
   if (!docPath) {
     return null
@@ -41,6 +43,7 @@ export function MarkdownDocSheet({
     <MarkdownDocSheetInner
       allowOutsideDismiss={allowOutsideDismiss}
       badges={badges}
+      contentClassName={contentClassName}
       docPath={docPath}
       hideFrontmatter={hideFrontmatter}
       modal={modal}
@@ -66,6 +69,7 @@ function MarkdownDocSheetInner({
   onCloseClick,
   allowOutsideDismiss,
   modal,
+  contentClassName,
 }: {
   docPath: string
   open: boolean
@@ -78,6 +82,7 @@ function MarkdownDocSheetInner({
   onCloseClick?: () => void
   allowOutsideDismiss: boolean
   modal: boolean
+  contentClassName?: string
 }) {
   const { folder, getDocsRoot } = useProjectFolder()
   const [loading, setLoading] = useState(true)
@@ -124,6 +129,7 @@ function MarkdownDocSheetInner({
     <MonitorSheet
       allowOutsideDismiss={allowOutsideDismiss}
       badges={badges}
+      contentClassName={contentClassName}
       modal={modal}
       onCloseClick={onCloseClick}
       onOpenChange={onOpenChange}

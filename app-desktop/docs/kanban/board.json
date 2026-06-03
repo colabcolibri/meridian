@@ -1028,6 +1028,21 @@
     "tests_status": "done"
   },
   {
+    "id": "US-0085",
+    "title": "Clickable depends_on list in Story Detail",
+    "epic": "EPIC-11",
+    "version": "v3",
+    "status": "✅",
+    "moscow": "Should",
+    "depends_on": [
+      "US-0081",
+      "US-0083"
+    ],
+    "done_when": "Story Detail shows each depends_on US as its own row (id + title when loaded); tapping a loaded dependency opens Story Detail in a nested sheet without closing the parent story sheet; missing ids are visible but not openable.",
+    "tests": "required",
+    "tests_status": "done"
+  },
+  {
     "id": "US-0086",
     "title": "By-epic board spacing and status summary on epic rows",
     "epic": "EPIC-11",
