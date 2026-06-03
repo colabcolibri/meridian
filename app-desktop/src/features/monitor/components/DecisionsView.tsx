@@ -2,13 +2,7 @@ import { useMemo, useState } from "react"
 
 import { ChevronDown, FileText, History } from "lucide-react"
 
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet"
+import { MonitorSheet } from "@/features/monitor/components/monitor-sheet"
 import type { DecisionDay, DecisionEntry } from "@/domain/meridian/types"
 import { typeScale } from "@/features/monitor/monitor-typography"
 import { cn } from "@/lib/utils"
@@ -47,26 +41,23 @@ function DecisionDetailSheet({
   const { day, entry } = target
 
   return (
-    <Sheet onOpenChange={onOpenChange} open={open}>
-      <SheetContent className="flex h-full flex-col p-0" side="right">
-        <SheetHeader className="space-y-1 border-b border-border px-6 py-5 text-left">
-          <SheetDescription className={typeScale.caption}>
-            {day.date} · {entry.time}
-          </SheetDescription>
-          <SheetTitle className={typeScale.sectionTitle}>{entry.title}</SheetTitle>
-          <p className={cn(typeScale.caption, "font-mono tabular-nums")}>
-            decisions/{day.filename}
-          </p>
-        </SheetHeader>
-        <div className="flex-1 space-y-5 overflow-y-auto px-6 py-5">
-          <DecisionField label="Affected document" value={entry.affectedDocument} />
-          <DecisionField label="What changed" value={entry.whatChanged} />
-          <DecisionField label="Why it changed" value={entry.whyChanged} />
-          <DecisionField label="Impact on other docs" value={entry.impact} />
-          <DecisionField label="Responsible" value={entry.responsible} />
-        </div>
-      </SheetContent>
-    </Sheet>
+    <MonitorSheet
+      eyebrow={`${day.date} · ${entry.time}`}
+      onOpenChange={onOpenChange}
+      open={open}
+      showDocumentIcon={false}
+      subtitle={`decisions/${day.filename}`}
+      title={entry.title}
+      titleClassName={typeScale.sectionTitle}
+    >
+      <div className="space-y-5 px-6 py-5">
+        <DecisionField label="Affected document" value={entry.affectedDocument} />
+        <DecisionField label="What changed" value={entry.whatChanged} />
+        <DecisionField label="Why it changed" value={entry.whyChanged} />
+        <DecisionField label="Impact on other docs" value={entry.impact} />
+        <DecisionField label="Responsible" value={entry.responsible} />
+      </div>
+    </MonitorSheet>
   )
 }
 

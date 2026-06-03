@@ -1,18 +1,10 @@
-import { FileText, Loader2 } from "lucide-react"
+import { Loader2 } from "lucide-react"
 import { useCallback, useEffect, useState, type ReactNode } from "react"
 
-import { ScrollArea } from "@/components/ui/scroll-area"
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  type SheetStackLayer,
-} from "@/components/ui/sheet"
 import { readMarkdownDocFromFolder } from "@/features/folder/read-markdown-doc"
 import { useProjectFolder } from "@/features/folder/ProjectFolderContext"
 import { MarkdownContent } from "@/features/monitor/components/MarkdownContent"
+import { MonitorSheet } from "@/features/monitor/components/monitor-sheet"
 import { typeScale } from "@/features/monitor/monitor-typography"
 import { cn } from "@/lib/utils"
 
@@ -25,7 +17,9 @@ export function MarkdownDocSheet({
   badges,
   summary,
   hideFrontmatter = false,
-  stackLayer = "base",
+  onCloseClick,
+  allowOutsideDismiss = true,
+  modal = true,
 }: {
   docPath: string | null
   open: boolean
@@ -35,44 +29,55 @@ export function MarkdownDocSheet({
   badges?: ReactNode
   summary?: ReactNode
   hideFrontmatter?: boolean
-  stackLayer?: SheetStackLayer
+  onCloseClick?: () => void
+  allowOutsideDismiss?: boolean
+  modal?: boolean
 }) {
+  if (!docPath) {
+    return null
+  }
+
   return (
-    <Sheet modal={stackLayer === "base"} onOpenChange={onOpenChange} open={open}>
-      <SheetContent
-        className="flex h-full flex-col p-0"
-        side="right"
-        stackLayer={stackLayer}
-      >
-        {docPath ? (
-          <MarkdownDocSheetBody
-            badges={badges}
-            docPath={docPath}
-            hideFrontmatter={hideFrontmatter}
-            subtitle={subtitle}
-            summary={summary}
-            title={title}
-          />
-        ) : null}
-      </SheetContent>
-    </Sheet>
+    <MarkdownDocSheetInner
+      allowOutsideDismiss={allowOutsideDismiss}
+      badges={badges}
+      docPath={docPath}
+      hideFrontmatter={hideFrontmatter}
+      modal={modal}
+      onCloseClick={onCloseClick}
+      onOpenChange={onOpenChange}
+      open={open}
+      subtitle={subtitle}
+      summary={summary}
+      title={title}
+    />
   )
 }
 
-function MarkdownDocSheetBody({
+function MarkdownDocSheetInner({
   docPath,
+  open,
+  onOpenChange,
   title,
   subtitle,
   badges,
   summary,
   hideFrontmatter,
+  onCloseClick,
+  allowOutsideDismiss,
+  modal,
 }: {
   docPath: string
+  open: boolean
+  onOpenChange: (open: boolean) => void
   title: string
   subtitle?: string
   badges?: ReactNode
   summary?: ReactNode
   hideFrontmatter: boolean
+  onCloseClick?: () => void
+  allowOutsideDismiss: boolean
+  modal: boolean
 }) {
   const { folder, getDocsRoot } = useProjectFolder()
   const [loading, setLoading] = useState(true)
@@ -107,55 +112,54 @@ function MarkdownDocSheetBody({
     void load()
   }, [load])
 
+  const metaLine = [
+    content?.relativePath ?? docPath,
+    folder ? folder.name : null,
+    subtitle ?? null,
+  ]
+    .filter(Boolean)
+    .join(" · ")
+
   return (
-    <>
-      <SheetHeader className="shrink-0">
-        <div className="flex flex-wrap items-center gap-2">
-          <FileText className="size-5 shrink-0 text-primary" aria-hidden />
-          <SheetTitle className={typeScale.panelTitle}>{title}</SheetTitle>
-          {badges}
+    <MonitorSheet
+      allowOutsideDismiss={allowOutsideDismiss}
+      badges={badges}
+      modal={modal}
+      onCloseClick={onCloseClick}
+      onOpenChange={onOpenChange}
+      open={open}
+      subtitle={metaLine}
+      summary={summary}
+      title={title}
+    >
+      {loading ? (
+        <div className="flex items-center justify-center gap-2 py-20 text-muted-foreground">
+          <Loader2 className="size-5 animate-spin" />
+          <span className={typeScale.bodySm}>Loading document…</span>
         </div>
-        <SheetDescription className={cn(typeScale.caption, "font-mono")}>
-          {content?.relativePath ?? docPath}
-          {folder ? ` · ${folder.name}` : null}
-          {subtitle ? ` · ${subtitle}` : null}
-        </SheetDescription>
-      </SheetHeader>
+      ) : null}
 
-      <ScrollArea className="min-h-0 w-full flex-1">
-        {summary ? (
-          <section className="w-full border-b bg-muted/30 px-6 py-4">{summary}</section>
-        ) : null}
+      {error ? (
+        <p className={cn(typeScale.body, "px-6 py-10 text-destructive")}>{error}</p>
+      ) : null}
 
-        {loading ? (
-          <div className="flex items-center justify-center gap-2 py-20 text-muted-foreground">
-            <Loader2 className="size-5 animate-spin" />
-            <span className={typeScale.bodySm}>Loading document…</span>
-          </div>
-        ) : null}
-
-        {error ? (
-          <p className={cn(typeScale.body, "px-6 py-10 text-destructive")}>{error}</p>
-        ) : null}
-
-        {content && !loading && !error ? (
-          <div className="w-full pb-8">
-            {!hideFrontmatter && content.frontmatter ? (
-              <section className="w-full border-b bg-muted/40 px-6 py-4">
-                <h3 className={cn(typeScale.label, "mb-2 uppercase tracking-wide")}>
-                  Metadata
-                </h3>
-                <pre className="w-full overflow-x-auto rounded-lg border bg-background p-3 font-mono text-sm leading-relaxed whitespace-pre-wrap text-foreground">
-                  {content.frontmatter}
-                </pre>
-              </section>
-            ) : null}
-            <article className="w-full px-6 py-5">
-              <MarkdownContent body={content.body} />
-            </article>
-          </div>
-        ) : null}
-      </ScrollArea>
-    </>
+      {content && !loading && !error ? (
+        <div className="w-full pb-8">
+          {!hideFrontmatter && content.frontmatter ? (
+            <section className="w-full border-b bg-muted/40 px-6 py-4">
+              <h3 className={cn(typeScale.label, "mb-2 uppercase tracking-wide")}>
+                Metadata
+              </h3>
+              <pre className="w-full overflow-x-auto rounded-lg border bg-background p-3 font-mono text-sm leading-relaxed whitespace-pre-wrap text-foreground">
+                {content.frontmatter}
+              </pre>
+            </section>
+          ) : null}
+          <article className="w-full px-6 py-5">
+            <MarkdownContent body={content.body} />
+          </article>
+        </div>
+      ) : null}
+    </MonitorSheet>
   )
 }

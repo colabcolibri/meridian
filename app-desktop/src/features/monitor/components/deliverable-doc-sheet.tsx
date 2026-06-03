@@ -46,7 +46,7 @@ function SprintStoriesSummary({
 
   return (
     <div className="space-y-2">
-      <p className={typeScale.label}>User stories</p>
+      <p className={typeScale.label}>User stories — tap to open detail</p>
       <ul className="space-y-1.5">
         {storyIds.map((storyId) => {
           const story = storyById.get(storyId)
@@ -55,24 +55,40 @@ function SprintStoriesSummary({
             <li key={storyId}>
               <button
                 className={cn(
-                  "w-full rounded-lg border border-border/80 px-3 py-2 text-left transition-colors",
+                  "group w-full rounded-lg border px-3 py-2.5 text-left transition-colors",
                   story
-                    ? "hover:border-primary/40 hover:bg-background"
-                    : "cursor-not-allowed opacity-60",
+                    ? "cursor-pointer border-primary/25 bg-background shadow-sm hover:border-primary hover:bg-primary/5 focus-visible:ring-3 focus-visible:ring-ring/50 focus-visible:outline-none"
+                    : "cursor-not-allowed border-border/80 opacity-60",
                 )}
                 disabled={!story}
-                onClick={() => {
+                onClick={(event) => {
+                  event.stopPropagation()
                   if (story) {
                     onSelectStory(story)
                   }
                 }}
                 type="button"
               >
-                <span className="font-mono text-xs font-semibold text-primary">
-                  {storyId}
+                <span className="flex items-center justify-between gap-2">
+                  <span className="font-mono text-xs font-semibold text-primary">
+                    {storyId}
+                  </span>
+                  {story ? (
+                    <span
+                      aria-hidden
+                      className={cn(
+                        typeScale.caption,
+                        "shrink-0 text-primary opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100",
+                      )}
+                    >
+                      Open →
+                    </span>
+                  ) : null}
                 </span>
                 {story ? (
-                  <span className={cn(typeScale.bodySm, "mt-0.5 block")}>
+                  <span
+                    className={cn(typeScale.bodySm, "mt-0.5 block text-foreground")}
+                  >
                     {story.title}
                   </span>
                 ) : (
@@ -120,7 +136,9 @@ export function DeliverableDocSheet({
     if (!open || target?.kind !== "sprint") {
       setNestedStory(null)
     }
-  }, [open, target?.kind])
+  }, [open, target])
+
+  const closeNestedStory = () => setNestedStory(null)
 
   if (!target) {
     return null
@@ -159,12 +177,26 @@ export function DeliverableDocSheet({
   if (target.kind === "sprint") {
     const sprint = target.item
 
+    const closeSprintSheet = () => {
+      setNestedStory(null)
+      onOpenChange(false)
+    }
+
+    const storyOpen = nestedStory !== null
+
     return (
       <>
         <MarkdownDocSheet
+          allowOutsideDismiss={!storyOpen}
           badges={<Badge variant="outline">{sprint.status}</Badge>}
           docPath={`sprints/${sprint.id}.md`}
-          onOpenChange={onOpenChange}
+          modal={!storyOpen}
+          onCloseClick={closeSprintSheet}
+          onOpenChange={(nextOpen) => {
+            if (!nextOpen) {
+              closeSprintSheet()
+            }
+          }}
           open={open}
           subtitle={sprint.versionId}
           summary={
@@ -177,18 +209,19 @@ export function DeliverableDocSheet({
           title={`${sprint.id} — ${sprint.title}`}
         />
 
-        <StoryDetailSheet
-          epic={nestedStory ? epicById[nestedStory.epic] : undefined}
-          onOpenChange={(nextOpen) => {
-            if (!nextOpen) {
-              setNestedStory(null)
-            }
-          }}
-          open={nestedStory !== null}
-          stackLayer="nested"
-          story={nestedStory}
-          storyIssues={nestedStory ? issuesForTarget(issues, nestedStory.id) : []}
-        />
+        {nestedStory ? (
+          <StoryDetailSheet
+            epic={epicById[nestedStory.epic]}
+            onOpenChange={(nextOpen) => {
+              if (!nextOpen) {
+                closeNestedStory()
+              }
+            }}
+            open
+            story={nestedStory}
+            storyIssues={issuesForTarget(issues, nestedStory.id)}
+          />
+        ) : null}
       </>
     )
   }
