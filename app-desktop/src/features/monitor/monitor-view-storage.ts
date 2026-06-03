@@ -1,4 +1,4 @@
-import type { MonitorView } from "@/features/monitor/components/MonitorHeader"
+import type { MonitorView } from "@/features/monitor/monitor-views"
 
 const STORAGE_KEY = "meridian.monitor.activeView"
 

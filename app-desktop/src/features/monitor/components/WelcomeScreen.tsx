@@ -9,6 +9,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { useProjectFolder } from "@/features/folder/ProjectFolderContext"
+import { OpenFolderButton } from "@/features/monitor/components/OpenFolderButton"
 import { MONITOR_CONTAINER } from "@/features/monitor/monitor-layout"
 import { monitorPanelClass } from "@/features/monitor/monitor-ui"
 import { typeScale } from "@/features/monitor/monitor-typography"
@@ -34,7 +35,6 @@ const steps = [
 export function WelcomeScreen() {
   const {
     folder,
-    openFolder,
     grantReadPermission,
     fsAccessSupported,
     isDemoBuild,
@@ -126,26 +126,19 @@ export function WelcomeScreen() {
             Allow folder read access
           </Button>
         ) : (
-          <Button
+          <OpenFolderButton
             className="h-11 w-full max-w-sm text-base sm:w-auto sm:min-w-[240px]"
-            disabled={!fsAccessSupported || isOpening}
-            onClick={() => void openFolder()}
             size="lg"
           >
             <FolderOpen className="mr-2 h-5 w-5" />
             Open project folder
-          </Button>
+          </OpenFolderButton>
         )}
 
         {needsPermission ? (
-          <Button
-            disabled={isOpening}
-            onClick={() => void openFolder()}
-            size="sm"
-            variant="outline"
-          >
+          <OpenFolderButton size="sm" variant="outline">
             Choose another folder
-          </Button>
+          </OpenFolderButton>
         ) : null}
 
         {!fsAccessSupported ? (

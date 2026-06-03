@@ -2,6 +2,8 @@ import { useCallback, useState } from "react"
 
 import { Loader2 } from "lucide-react"
 
+import { Button } from "@/components/ui/button"
+
 import {
   ProjectDataProvider,
   useProjectData,
@@ -15,11 +17,8 @@ import { ConceptsView } from "@/features/monitor/components/ConceptsView"
 import { DecisionsView } from "@/features/monitor/components/DecisionsView"
 import { DeliverablesView } from "@/features/monitor/components/DeliverablesView"
 import { KanbanView } from "@/features/monitor/components/KanbanView"
-import {
-  GUIDE_VIEWS,
-  MonitorHeader,
-  type MonitorView,
-} from "@/features/monitor/components/MonitorHeader"
+import { MonitorHeader } from "@/features/monitor/components/MonitorHeader"
+import { isGuideView, type MonitorView } from "@/features/monitor/monitor-views"
 import { MonitorIssuesBanner } from "@/features/monitor/components/MonitorIssuesBanner"
 import { SetupMonitorView } from "@/features/monitor/components/SetupMonitorView"
 import { UsageGuideView } from "@/features/monitor/components/UsageGuideView"
@@ -31,10 +30,6 @@ import {
   writeStoredMonitorView,
 } from "@/features/monitor/monitor-view-storage"
 
-function isGuideView(view: MonitorView): boolean {
-  return GUIDE_VIEWS.includes(view)
-}
-
 function MonitorProjectContent() {
   const [view, setView] = useState<MonitorView>(
     () => readStoredMonitorView() ?? "concepts",
@@ -43,7 +38,12 @@ function MonitorProjectContent() {
     setView(next)
     writeStoredMonitorView(next)
   }, [])
-  const { folder, status: folderStatus, isDemoActive } = useProjectFolder()
+  const {
+    folder,
+    status: folderStatus,
+    isDemoActive,
+    cancelOpening,
+  } = useProjectFolder()
   const { loading, loadingSupplement, data, issues, documentationBadges } =
     useProjectData()
 
@@ -61,6 +61,18 @@ function MonitorProjectContent() {
         isTabDisabled={(tab) => !folder && !isGuideView(tab)}
         onChange={changeView}
       />
+
+      {!folder && folderStatus === "opening" && !isGuideView(view) ? (
+        <div
+          className={`${MONITOR_CONTAINER} flex flex-col items-center justify-center gap-3 py-16 text-sm text-muted-foreground`}
+        >
+          <Loader2 className="h-5 w-5 animate-spin" />
+          <span>Loading project from disk…</span>
+          <Button size="sm" variant="outline" onClick={cancelOpening}>
+            Cancel
+          </Button>
+        </div>
+      ) : null}
 
       {!folder && folderStatus !== "opening" && !isGuideView(view) ? (
         <WelcomeScreen />

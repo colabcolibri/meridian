@@ -5,27 +5,10 @@ import { Button } from "@/components/ui/button"
 import { countIssuesBySeverity } from "@/domain/meridian/protocol-validators"
 import { useProjectData } from "@/features/folder/ProjectDataContext"
 import { useProjectFolder } from "@/features/folder/ProjectFolderContext"
+import { OpenFolderButton } from "@/features/monitor/components/OpenFolderButton"
 import { MONITOR_CONTAINER } from "@/features/monitor/monitor-layout"
+import { MONITOR_HEADER_TABS, type MonitorView } from "@/features/monitor/monitor-views"
 import { cn } from "@/lib/utils"
-
-export type MonitorView =
-  | "concepts"
-  | "usage"
-  | "setup"
-  | "decisions"
-  | "epics"
-  | "kanban"
-
-export const GUIDE_VIEWS: MonitorView[] = ["concepts", "usage"]
-
-const tabs: { id: MonitorView; label: string }[] = [
-  { id: "concepts", label: "Start here" },
-  { id: "usage", label: "Usage guide" },
-  { id: "setup", label: "Setup" },
-  { id: "decisions", label: "Decisions" },
-  { id: "epics", label: "Deliverables" },
-  { id: "kanban", label: "Board" },
-]
 
 export function MonitorHeader({
   active,
@@ -36,15 +19,7 @@ export function MonitorHeader({
   onChange: (view: MonitorView) => void
   isTabDisabled?: (view: MonitorView) => boolean
 }) {
-  const {
-    status,
-    folder,
-    error,
-    fsAccessSupported,
-    isDemoActive,
-    openFolder,
-    clearFolder,
-  } = useProjectFolder()
+  const { status, folder, error, isDemoActive, clearFolder } = useProjectFolder()
   const { issues } = useProjectData()
   const { errors, warnings } = countIssuesBySeverity(issues)
   const isOpening = status === "opening"
@@ -96,12 +71,7 @@ export function MonitorHeader({
 
         {/* Right: actions */}
         <div className="flex shrink-0 items-center gap-1.5">
-          <Button
-            disabled={isOpening || !fsAccessSupported}
-            onClick={() => void openFolder()}
-            size="sm"
-            variant={folder ? "outline" : "default"}
-          >
+          <OpenFolderButton size="sm" variant={folder ? "outline" : "default"}>
             {isOpening ? (
               <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />
             ) : (
@@ -112,7 +82,7 @@ export function MonitorHeader({
                 ? "Open local folder"
                 : "Change folder"
               : "Open folder"}
-          </Button>
+          </OpenFolderButton>
           {folder ? (
             <Button
               aria-label="Close project"
@@ -149,7 +119,7 @@ export function MonitorHeader({
           "flex gap-0 overflow-x-auto border-t border-border/50",
         )}
       >
-        {tabs.map((tab) => {
+        {MONITOR_HEADER_TABS.map((tab) => {
           const disabled = isTabDisabled?.(tab.id) ?? false
           return (
             <button

@@ -196,11 +196,9 @@ export function ProjectDataProvider({ children }: { children: ReactNode }) {
       ) {
         loadGenerationRef.current += 1
         enrichGenerationRef.current += 1
-        if (folderStatus !== "opening") {
-          setData(null)
-          setBodyIssues([])
-          setDocumentationBadges(new Map())
-        }
+        setData(null)
+        setBodyIssues([])
+        setDocumentationBadges(new Map())
         setLoading(false)
         setLoadingSupplement(false)
         setEnrichingStories(false)

@@ -14,20 +14,18 @@ import {
   openDemoMeridianFolder,
   meridianFolderHints,
 } from "@/features/folder/demo-folder-access"
+import { createFileListDocsRoot } from "@/features/folder/file-list-docs-root"
 import { createFilesystemDocsRoot } from "@/features/folder/filesystem-docs-root"
-import {
-  createBindingSnapshot,
-  resolveStatusAfterAbort,
-  shouldApplyAsyncResult,
-  type FolderBindingSnapshot,
-} from "@/features/folder/folder-open-session"
+import { shouldApplyAsyncResult } from "@/features/folder/folder-open-session"
 import {
   hasReadPermission,
   isFileSystemAccessSupported,
+  isFolderInputSupported,
   openSnapshotFromHandle,
-  pickMeridianFolder,
-  requestReadPermissionFromUser,
+  persistPickedFolderHandle,
   restoreMeridianFolderHandle,
+  startDirectoryPickerFromUserGesture,
+  startReadPermissionRequestFromUserGesture,
 } from "@/features/folder/folder-access"
 import { clearFolderHandle } from "@/features/folder/folder-handle-store"
 import type { MeridianDocsRoot } from "@/features/folder/meridian-docs-root"
@@ -37,10 +35,13 @@ import type {
   MeridianFolderValidation,
   ProjectFolderStatus,
 } from "@/features/folder/types"
+import {
+  assertMeridianFolder,
+  inferFolderDisplayName,
+  validateFileListFolder,
+} from "@/features/folder/validate-file-list-folder"
 
-interface StoredPriorSession extends FolderBindingSnapshot {
-  handle: FileSystemDirectoryHandle | null
-}
+const OPENING_WATCHDOG_MS = 8_000
 
 interface ProjectFolderContextValue {
   status: ProjectFolderStatus
@@ -52,8 +53,13 @@ interface ProjectFolderContextValue {
   fsAccessSupported: boolean
   isDemoBuild: boolean
   isDemoActive: boolean
-  openFolder: () => Promise<void>
-  grantReadPermission: () => Promise<void>
+  /** Demo only. */
+  openFolder: () => void
+  /** Sync picker on click (persists handle for F5). Returns false → use file input fallback. */
+  openFolderFromPicker: () => boolean
+  applyFolderFromFileList: (files: File[]) => void
+  cancelOpening: () => void
+  grantReadPermission: () => void
   clearFolder: () => Promise<void>
   getDocsRoot: () => Promise<MeridianDocsRoot | null>
   getHandle: () => Promise<FileSystemDirectoryHandle | null>
@@ -76,12 +82,17 @@ export function ProjectFolderProvider({ children }: { children: ReactNode }) {
 
   const handleRef = useRef<FileSystemDirectoryHandle | null>(null)
   const folderKeyRef = useRef<string | null>(null)
+  const docsRootRef = useRef<MeridianDocsRoot | null>(null)
   const restoreGenerationRef = useRef(0)
-  const userOpenGenerationRef = useRef(0)
   const openFolderGenerationRef = useRef(0)
-  const priorOpenSessionRef = useRef<StoredPriorSession | null>(null)
+  const statusRef = useRef(status)
 
-  const fsAccessSupported = isFileSystemAccessSupported()
+  docsRootRef.current = docsRoot
+  statusRef.current = status
+
+  const fsAccessSupported =
+    demoBuild || isFileSystemAccessSupported() || isFolderInputSupported()
+  const canPersistAcrossReload = isFileSystemAccessSupported()
 
   const bindFolder = useCallback(
     (
@@ -93,6 +104,7 @@ export function ProjectFolderProvider({ children }: { children: ReactNode }) {
         throw new Error("Could not open project folder.")
       }
 
+      docsRootRef.current = resolved
       setDocsRoot(resolved)
       setIsDemoActive(resolved.kind === "static")
       if (resolved.kind === "static") {
@@ -110,27 +122,9 @@ export function ProjectFolderProvider({ children }: { children: ReactNode }) {
     [],
   )
 
-  const requirePermissionForHandle = useCallback(
-    (handle: FileSystemDirectoryHandle) => {
-      if (openFolderGenerationRef.current === 0) {
-        openFolderGenerationRef.current = 1
-      }
-      handleRef.current = handle
-      setDocsRoot(null)
-      setIsDemoActive(false)
-      setFolder(null)
-      folderKeyRef.current = null
-      setFolderKey(null)
-      setPendingFolderName(handle.name)
-      setHints([])
-      setStatus("permission_required")
-      setError(null)
-    },
-    [],
-  )
-
   const clearBindingState = useCallback(() => {
     handleRef.current = null
+    docsRootRef.current = null
     setDocsRoot(null)
     setIsDemoActive(false)
     setFolder(null)
@@ -145,67 +139,16 @@ export function ProjectFolderProvider({ children }: { children: ReactNode }) {
     setStatus("none")
   }, [clearBindingState])
 
-  const readBindingState = useCallback(
-    (): StoredPriorSession => ({
-      ...createBindingSnapshot({
-        status,
-        folderKey,
-        folder,
-        pendingFolderName,
-        hints,
-        error,
-        isDemoActive,
-        docsRoot,
-      }),
-      handle: handleRef.current,
-    }),
-    [
-      status,
-      folderKey,
-      folder,
-      pendingFolderName,
-      hints,
-      error,
-      isDemoActive,
-      docsRoot,
-    ],
-  )
+  const cancelOpening = useCallback(() => {
+    restoreGenerationRef.current += 1
+    openFolderGenerationRef.current += 1
+    clearBoundFolder()
+    setError(null)
+  }, [clearBoundFolder])
 
-  const restorePriorSession = useCallback(() => {
-    const prior = priorOpenSessionRef.current
-    priorOpenSessionRef.current = null
-
-    if (!prior) {
-      const nextStatus = resolveStatusAfterAbort(null, { demoBuild })
-      setStatus(nextStatus)
-      if (demoBuild && nextStatus === "opening") {
-        void finishOpenDemoRef.current?.()
-      }
-      return
-    }
-
-    handleRef.current = prior.handle
-    folderKeyRef.current = prior.folderKey
-    setFolderKey(prior.folderKey)
-    setFolder(prior.folder)
-    setDocsRoot(prior.docsRoot)
-    setIsDemoActive(prior.isDemoActive)
-    setPendingFolderName(prior.pendingFolderName)
-    setHints(prior.hints)
-    setError(prior.error)
-    setStatus(prior.status)
-  }, [demoBuild])
-
-  const beginFolderOpen = useCallback(
-    (options?: { savePriorForAbort?: boolean }): number => {
-      if (options?.savePriorForAbort) {
-        priorOpenSessionRef.current = readBindingState()
-      } else {
-        priorOpenSessionRef.current = null
-      }
-
+  const beginHardResetSync = useCallback(
+    (options?: { clearPersistedHandle?: boolean }): number => {
       restoreGenerationRef.current += 1
-      userOpenGenerationRef.current += 1
       openFolderGenerationRef.current += 1
       const generation = openFolderGenerationRef.current
 
@@ -213,9 +156,30 @@ export function ProjectFolderProvider({ children }: { children: ReactNode }) {
       setError(null)
       setStatus("opening")
 
+      if (options?.clearPersistedHandle) {
+        void clearFolderHandle()
+      }
+
       return generation
     },
-    [clearBindingState, readBindingState],
+    [clearBindingState],
+  )
+
+  const setPermissionRequiredForHandle = useCallback(
+    (handle: FileSystemDirectoryHandle) => {
+      handleRef.current = handle
+      docsRootRef.current = null
+      setDocsRoot(null)
+      setIsDemoActive(false)
+      setFolder(null)
+      folderKeyRef.current = null
+      setFolderKey(null)
+      setPendingFolderName(handle.name)
+      setHints([])
+      setStatus("permission_required")
+      setError(null)
+    },
+    [],
   )
 
   const failOpenSession = useCallback(
@@ -243,7 +207,6 @@ export function ProjectFolderProvider({ children }: { children: ReactNode }) {
 
       handleRef.current = opened.handle
       bindFolder(opened.snapshot, createFilesystemDocsRoot(opened.handle))
-      priorOpenSessionRef.current = null
     },
     [bindFolder],
   )
@@ -254,8 +217,241 @@ export function ProjectFolderProvider({ children }: { children: ReactNode }) {
     bindFolder(opened.snapshot, opened.docsRoot)
   }, [bindFolder])
 
-  const finishOpenDemoRef = useRef(finishOpenDemo)
-  finishOpenDemoRef.current = finishOpenDemo
+  const completeOpenFromPicker = useCallback(
+    async (pickerPromise: Promise<FileSystemDirectoryHandle>, generation: number) => {
+      try {
+        const handle = await pickerPromise
+
+        if (!shouldApplyAsyncResult(generation, openFolderGenerationRef.current)) {
+          return
+        }
+
+        const granted = await persistPickedFolderHandle(handle)
+
+        if (!shouldApplyAsyncResult(generation, openFolderGenerationRef.current)) {
+          return
+        }
+
+        if (!granted) {
+          setPermissionRequiredForHandle(handle)
+          return
+        }
+
+        await finishOpenWithHandle(handle, generation)
+      } catch (cause) {
+        if (!shouldApplyAsyncResult(generation, openFolderGenerationRef.current)) {
+          return
+        }
+
+        if (cause instanceof DOMException && cause.name === "AbortError") {
+          void (async () => {
+            if (!shouldApplyAsyncResult(generation, openFolderGenerationRef.current)) {
+              return
+            }
+            const previous = canPersistAcrossReload
+              ? await restoreMeridianFolderHandle()
+              : null
+            if (!previous) {
+              clearBoundFolder()
+              return
+            }
+            if (!(await hasReadPermission(previous))) {
+              setPermissionRequiredForHandle(previous)
+              return
+            }
+            openFolderGenerationRef.current += 1
+            await finishOpenWithHandle(previous, openFolderGenerationRef.current)
+          })()
+          return
+        }
+
+        const message =
+          cause instanceof Error ? cause.message : "Could not open folder."
+        failOpenSession(message, generation)
+      }
+    },
+    [
+      canPersistAcrossReload,
+      clearBoundFolder,
+      failOpenSession,
+      finishOpenWithHandle,
+      setPermissionRequiredForHandle,
+    ],
+  )
+
+  const openFolderFromPicker = useCallback((): boolean => {
+    if (!canPersistAcrossReload) {
+      return false
+    }
+
+    let pickerPromise: Promise<FileSystemDirectoryHandle>
+    try {
+      pickerPromise = startDirectoryPickerFromUserGesture()
+    } catch {
+      return false
+    }
+
+    const generation = beginHardResetSync()
+    void completeOpenFromPicker(pickerPromise, generation)
+    return true
+  }, [beginHardResetSync, canPersistAcrossReload, completeOpenFromPicker])
+
+  const applyFolderFromFileList = useCallback(
+    (files: File[]) => {
+      if (files.length === 0) {
+        cancelOpening()
+        return
+      }
+
+      const generation = beginHardResetSync()
+
+      void (async () => {
+        try {
+          const validation = validateFileListFolder(files)
+          const invalidMessage = assertMeridianFolder(validation)
+          if (invalidMessage) {
+            throw new Error(invalidMessage)
+          }
+
+          if (!shouldApplyAsyncResult(generation, openFolderGenerationRef.current)) {
+            return
+          }
+
+          const displayName = inferFolderDisplayName(files)
+          const snapshot: MeridianFolderSnapshot = {
+            name: displayName,
+            validation,
+          }
+          const root = createFileListDocsRoot(files, displayName)
+          handleRef.current = null
+          bindFolder(snapshot, root)
+        } catch (cause) {
+          const message =
+            cause instanceof Error ? cause.message : "Could not open folder."
+          failOpenSession(message, generation)
+        }
+      })()
+    },
+    [beginHardResetSync, bindFolder, cancelOpening, failOpenSession],
+  )
+
+  const completeGrantReadPermission = useCallback(
+    async (permissionPromise: Promise<PermissionState>, generation: number) => {
+      const handle = handleRef.current
+      if (!handle) {
+        return
+      }
+
+      try {
+        const state = await permissionPromise
+
+        if (!shouldApplyAsyncResult(generation, openFolderGenerationRef.current)) {
+          return
+        }
+
+        setError(null)
+        setStatus("opening")
+
+        if (state !== "granted") {
+          setError("Read permission denied.")
+          setStatus("permission_required")
+          return
+        }
+
+        await finishOpenWithHandle(handle, generation)
+      } catch (cause) {
+        if (!shouldApplyAsyncResult(generation, openFolderGenerationRef.current)) {
+          return
+        }
+        const message =
+          cause instanceof Error ? cause.message : "Could not grant permission."
+        setError(message)
+        setStatus("permission_required")
+      }
+    },
+    [finishOpenWithHandle],
+  )
+
+  useEffect(() => {
+    if (status !== "opening") {
+      return
+    }
+
+    const generation = openFolderGenerationRef.current
+    const timeoutId = window.setTimeout(() => {
+      if (statusRef.current !== "opening" || folderKeyRef.current !== null) {
+        return
+      }
+      if (openFolderGenerationRef.current !== generation) {
+        return
+      }
+      cancelOpening()
+      setError(
+        "Folder open timed out. Click Open folder again and select the docs/ directory.",
+      )
+      setStatus("error")
+    }, OPENING_WATCHDOG_MS)
+
+    return () => {
+      window.clearTimeout(timeoutId)
+    }
+  }, [cancelOpening, status])
+
+  useEffect(() => {
+    if (demoBuild || !canPersistAcrossReload) {
+      return
+    }
+
+    const generation = ++restoreGenerationRef.current
+    let cancelled = false
+
+    async function restoreFromStorage() {
+      const handle = await restoreMeridianFolderHandle()
+      if (cancelled || generation !== restoreGenerationRef.current) {
+        return
+      }
+      if (folderKeyRef.current) {
+        return
+      }
+
+      if (!handle) {
+        setStatus("none")
+        return
+      }
+
+      setStatus("opening")
+
+      if (!(await hasReadPermission(handle))) {
+        setPermissionRequiredForHandle(handle)
+        return
+      }
+
+      openFolderGenerationRef.current += 1
+      try {
+        await finishOpenWithHandle(handle, openFolderGenerationRef.current)
+      } catch (cause) {
+        if (cancelled || generation !== restoreGenerationRef.current) {
+          return
+        }
+        await clearFolderHandle()
+        clearBoundFolder()
+        setError(cause instanceof Error ? cause.message : "Could not restore folder.")
+        setStatus("error")
+      }
+    }
+
+    void restoreFromStorage()
+
+    return () => {
+      cancelled = true
+    }
+  }, [
+    canPersistAcrossReload,
+    clearBoundFolder,
+    demoBuild,
+    finishOpenWithHandle,
+    setPermissionRequiredForHandle,
+  ])
 
   useEffect(() => {
     if (!demoBuild) {
@@ -287,115 +483,27 @@ export function ProjectFolderProvider({ children }: { children: ReactNode }) {
     }
   }, [clearBoundFolder, demoBuild, finishOpenDemo])
 
-  useEffect(() => {
-    if (demoBuild || !fsAccessSupported) {
-      if (demoBuild && !fsAccessSupported) {
-        return
-      }
-      if (demoBuild) {
-        return
-      }
+  const openFolder = useCallback(() => {
+    if (!demoBuild) {
       return
     }
 
-    const generation = ++restoreGenerationRef.current
-    let cancelled = false
-
-    setStatus("opening")
-
-    async function restore() {
-      const handle = await restoreMeridianFolderHandle()
-      if (cancelled || generation !== restoreGenerationRef.current) {
-        return
-      }
-      if (userOpenGenerationRef.current > 0) {
-        return
-      }
-
-      if (!handle) {
-        setStatus("none")
-        return
-      }
-
-      if (!(await hasReadPermission(handle))) {
-        requirePermissionForHandle(handle)
-        return
-      }
-
+    const generation = beginHardResetSync()
+    void (async () => {
       try {
-        openFolderGenerationRef.current += 1
-        await finishOpenWithHandle(handle, openFolderGenerationRef.current)
-      } catch (cause) {
-        if (cancelled) {
+        await finishOpenDemo()
+        if (!shouldApplyAsyncResult(generation, openFolderGenerationRef.current)) {
           return
         }
-        await clearFolderHandle()
-        clearBoundFolder()
-        setError(cause instanceof Error ? cause.message : "Could not restore folder.")
-        setStatus("error")
+      } catch (cause) {
+        const message =
+          cause instanceof Error ? cause.message : "Could not load demo project."
+        failOpenSession(message, generation)
       }
-    }
+    })()
+  }, [beginHardResetSync, demoBuild, failOpenSession, finishOpenDemo])
 
-    void restore()
-
-    return () => {
-      cancelled = true
-    }
-  }, [
-    clearBoundFolder,
-    demoBuild,
-    finishOpenWithHandle,
-    fsAccessSupported,
-    requirePermissionForHandle,
-  ])
-
-  const openFolder = useCallback(async () => {
-    if (!fsAccessSupported) {
-      setError(
-        "Your browser does not support folder access. Use Chrome or Edge, or run the demo build.",
-      )
-      setStatus("error")
-      return
-    }
-
-    const generation = beginFolderOpen({ savePriorForAbort: true })
-
-    try {
-      const picked = await pickMeridianFolder()
-
-      if (!shouldApplyAsyncResult(generation, openFolderGenerationRef.current)) {
-        return
-      }
-
-      if (!(await hasReadPermission(picked.handle))) {
-        requirePermissionForHandle(picked.handle)
-        return
-      }
-
-      await finishOpenWithHandle(picked.handle, generation)
-    } catch (cause) {
-      if (!shouldApplyAsyncResult(generation, openFolderGenerationRef.current)) {
-        return
-      }
-
-      if (cause instanceof DOMException && cause.name === "AbortError") {
-        restorePriorSession()
-        return
-      }
-
-      const message = cause instanceof Error ? cause.message : "Could not open folder."
-      failOpenSession(message, generation)
-    }
-  }, [
-    beginFolderOpen,
-    failOpenSession,
-    finishOpenWithHandle,
-    fsAccessSupported,
-    requirePermissionForHandle,
-    restorePriorSession,
-  ])
-
-  const grantReadPermission = useCallback(async () => {
+  const grantReadPermission = useCallback(() => {
     const handle = handleRef.current
     if (!handle) {
       setError("No pending folder. Use Open folder again.")
@@ -407,35 +515,12 @@ export function ProjectFolderProvider({ children }: { children: ReactNode }) {
     }
 
     const generation = openFolderGenerationRef.current
-    setError(null)
-    setStatus("opening")
-
-    try {
-      const granted = await requestReadPermissionFromUser(handle)
-      if (!shouldApplyAsyncResult(generation, openFolderGenerationRef.current)) {
-        return
-      }
-
-      if (!granted) {
-        setError("Read permission denied.")
-        setStatus("permission_required")
-        return
-      }
-
-      await finishOpenWithHandle(handle, generation)
-    } catch (cause) {
-      if (!shouldApplyAsyncResult(generation, openFolderGenerationRef.current)) {
-        return
-      }
-      const message =
-        cause instanceof Error ? cause.message : "Could not grant permission."
-      setError(message)
-      setStatus("permission_required")
-    }
-  }, [demoBuild, finishOpenDemo, finishOpenWithHandle])
+    const permissionPromise = startReadPermissionRequestFromUserGesture(handle)
+    void completeGrantReadPermission(permissionPromise, generation)
+  }, [completeGrantReadPermission, demoBuild, finishOpenDemo])
 
   const clearFolder = useCallback(async () => {
-    beginFolderOpen({ savePriorForAbort: false })
+    beginHardResetSync({ clearPersistedHandle: true })
     await clearFolderHandle()
 
     if (demoBuild) {
@@ -452,15 +537,16 @@ export function ProjectFolderProvider({ children }: { children: ReactNode }) {
 
     setError(null)
     setStatus("none")
-  }, [beginFolderOpen, demoBuild, finishOpenDemo])
+  }, [beginHardResetSync, demoBuild, finishOpenDemo])
 
   const getDocsRoot = useCallback(async () => {
-    const resolved = resolveMeridianDocsRoot(docsRoot, handleRef.current)
-    if (resolved && resolved !== docsRoot) {
+    const resolved = resolveMeridianDocsRoot(docsRootRef.current, handleRef.current)
+    if (resolved && resolved !== docsRootRef.current) {
+      docsRootRef.current = resolved
       setDocsRoot(resolved)
     }
     return resolved
-  }, [docsRoot])
+  }, [])
 
   const getHandle = useCallback(async () => {
     const cached = handleRef.current
@@ -485,6 +571,9 @@ export function ProjectFolderProvider({ children }: { children: ReactNode }) {
       isDemoBuild: demoBuild,
       isDemoActive,
       openFolder,
+      openFolderFromPicker,
+      applyFolderFromFileList,
+      cancelOpening,
       grantReadPermission,
       clearFolder,
       getDocsRoot,
@@ -501,6 +590,9 @@ export function ProjectFolderProvider({ children }: { children: ReactNode }) {
       demoBuild,
       isDemoActive,
       openFolder,
+      openFolderFromPicker,
+      applyFolderFromFileList,
+      cancelOpening,
       grantReadPermission,
       clearFolder,
       getDocsRoot,

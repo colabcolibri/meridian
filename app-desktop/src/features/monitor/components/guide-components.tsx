@@ -1,7 +1,6 @@
-import { ChevronDown, FolderOpen, Loader2, type LucideIcon } from "lucide-react"
+import { ChevronDown, FolderOpen, type LucideIcon } from "lucide-react"
 import { useState } from "react"
 
-import { Button } from "@/components/ui/button"
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import {
   Collapsible,
@@ -9,6 +8,7 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible"
 import { useProjectFolder } from "@/features/folder/ProjectFolderContext"
+import { OpenFolderButton } from "@/features/monitor/components/OpenFolderButton"
 import {
   type AnatomyGuide,
   type ConceptBlock,
@@ -332,8 +332,7 @@ export function SlashCommandsTable({ commands }: { commands: SlashCommandHint[] 
 }
 
 export function OpenFolderCallout({ className }: { className?: string }) {
-  const { folder, openFolder, fsAccessSupported, status } = useProjectFolder()
-  const isOpening = status === "opening"
+  const { folder, fsAccessSupported } = useProjectFolder()
 
   if (folder) {
     return null
@@ -356,18 +355,10 @@ export function OpenFolderCallout({ className }: { className?: string }) {
         ) to see real documents, epics, and user stories in the Setup, Deliverables, and
         Board tabs.
       </p>
-      <Button
-        className="mt-4"
-        disabled={!fsAccessSupported || isOpening}
-        onClick={() => void openFolder()}
-      >
-        {isOpening ? (
-          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-        ) : (
-          <FolderOpen className="mr-2 h-4 w-4" />
-        )}
+      <OpenFolderButton className="mt-4">
+        <FolderOpen className="mr-2 h-4 w-4" />
         Open docs folder
-      </Button>
+      </OpenFolderButton>
       {!fsAccessSupported ? (
         <p className={cn(typeScale.caption, "mt-3 text-amber-800")}>
           Use Chrome or Edge on localhost to open folders on your computer.

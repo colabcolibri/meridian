@@ -13,6 +13,15 @@ export function isFileSystemAccessSupported(): boolean {
   return typeof window !== "undefined" && "showDirectoryPicker" in window
 }
 
+/** Reliable folder pick via hidden &lt;input webkitdirectory&gt; (same-tab safe). */
+export function isFolderInputSupported(): boolean {
+  if (typeof document === "undefined") {
+    return false
+  }
+  const input = document.createElement("input")
+  return "webkitdirectory" in input
+}
+
 /** Does not require user activation — use on restore, reload, and after the picker. */
 export async function hasReadPermission(
   handle: FileSystemDirectoryHandle,
@@ -47,27 +56,47 @@ async function snapshotFromHandle(
   return { name: handle.name, validation }
 }
 
+const PICKER_UNSUPPORTED =
+  "Your browser does not support folder access. Use a recent Chrome or Edge on localhost."
+
+/**
+ * Starts the native picker synchronously on click — returns the promise immediately.
+ * Call this with zero `await` before it (not even inside an `async` function's first line
+ * after other work). Then await the returned promise in a separate task.
+ */
+export function startDirectoryPickerFromUserGesture(): Promise<FileSystemDirectoryHandle> {
+  if (!isFileSystemAccessSupported() || !window.showDirectoryPicker) {
+    throw new Error(PICKER_UNSUPPORTED)
+  }
+  return window.showDirectoryPicker({ mode: "read" })
+}
+
+export async function persistPickedFolderHandle(
+  handle: FileSystemDirectoryHandle,
+): Promise<boolean> {
+  await saveFolderHandle(handle)
+  return hasReadPermission(handle)
+}
+
+/**
+ * @deprecated Prefer startDirectoryPickerFromUserGesture + persistPickedFolderHandle.
+ */
 export async function pickMeridianFolder(): Promise<{
   handle: FileSystemDirectoryHandle
   granted: boolean
 }> {
-  if (!isFileSystemAccessSupported()) {
-    throw new Error(
-      "Your browser does not support folder access. Use a recent Chrome or Edge on localhost.",
-    )
-  }
-
-  if (!window.showDirectoryPicker) {
-    throw new Error(
-      "Your browser does not support folder access. Use a recent Chrome or Edge on localhost.",
-    )
-  }
-
-  const handle = await window.showDirectoryPicker({ mode: "read" })
-  await saveFolderHandle(handle)
-  const granted = await hasReadPermission(handle)
-
+  const handle = await startDirectoryPickerFromUserGesture()
+  const granted = await persistPickedFolderHandle(handle)
   return { handle, granted }
+}
+
+/**
+ * Starts permission request synchronously on click — same activation rules as the picker.
+ */
+export function startReadPermissionRequestFromUserGesture(
+  handle: FileSystemDirectoryHandle,
+): Promise<PermissionState> {
+  return handle.requestPermission({ mode: "read" })
 }
 
 /** Opens snapshot when read permission is already granted. */

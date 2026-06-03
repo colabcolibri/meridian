@@ -1017,7 +1017,7 @@
     "title": "Deterministic open-folder reset and visible errors",
     "epic": "EPIC-04",
     "version": "v2",
-    "status": "❌",
+    "status": "✅",
     "moscow": "Must",
     "depends_on": [
       "US-0009",
@@ -1025,6 +1025,6 @@
     ],
     "done_when": "Every Open folder runs a single deterministic session reset with generation-guarded async work; no code path leaves status open without a successful bind; all failures surface in UI or issues banner (zero silent catch).",
     "tests": "required",
-    "tests_status": "pending"
+    "tests_status": "done"
   }
 ]

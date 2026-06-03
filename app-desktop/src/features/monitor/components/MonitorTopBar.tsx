@@ -5,20 +5,13 @@ import { Button } from "@/components/ui/button"
 import { countIssuesBySeverity } from "@/domain/meridian/protocol-validators"
 import { useProjectData } from "@/features/folder/ProjectDataContext"
 import { useProjectFolder } from "@/features/folder/ProjectFolderContext"
+import { OpenFolderButton } from "@/features/monitor/components/OpenFolderButton"
 import { MONITOR_CONTAINER } from "@/features/monitor/monitor-layout"
 import { typeScale } from "@/features/monitor/monitor-typography"
 import { cn } from "@/lib/utils"
 
 export function MonitorTopBar() {
-  const {
-    status,
-    folder,
-    error,
-    fsAccessSupported,
-    isDemoActive,
-    openFolder,
-    clearFolder,
-  } = useProjectFolder()
+  const { status, folder, error, isDemoActive, clearFolder } = useProjectFolder()
   const { issues } = useProjectData()
   const { errors, warnings } = countIssuesBySeverity(issues)
   const isOpening = status === "opening"
@@ -70,12 +63,7 @@ export function MonitorTopBar() {
         </div>
 
         <div className="flex shrink-0 items-center gap-1.5">
-          <Button
-            disabled={isOpening || !fsAccessSupported}
-            onClick={() => void openFolder()}
-            size="sm"
-            variant={folder ? "outline" : "default"}
-          >
+          <OpenFolderButton size="sm" variant={folder ? "outline" : "default"}>
             {isOpening ? (
               <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" />
             ) : (
@@ -86,7 +74,7 @@ export function MonitorTopBar() {
                 ? "Open local folder"
                 : "Change folder"
               : "Open folder"}
-          </Button>
+          </OpenFolderButton>
           {folder ? (
             <Button
               aria-label="Close project"

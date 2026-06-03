@@ -1,18 +1,7 @@
 import { cn } from "@/lib/utils"
 import { MONITOR_CONTAINER } from "@/features/monitor/monitor-layout"
 import { typeScale } from "@/features/monitor/monitor-typography"
-
-export type MonitorView =
-  | "concepts"
-  | "usage"
-  | "setup"
-  | "decisions"
-  | "epics"
-  | "kanban"
-
-const GUIDE_VIEWS: MonitorView[] = ["concepts", "usage"]
-
-export { GUIDE_VIEWS }
+import type { MonitorView } from "@/features/monitor/monitor-views"
 
 const tabs: { id: MonitorView; label: string; hint: string }[] = [
   {
