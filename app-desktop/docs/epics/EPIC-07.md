@@ -2,7 +2,7 @@
 id: EPIC-07
 title: Native Desktop Shell
 status: paused
-versions: [v3]
+versions: [v7]
 profiles: [Process Manager, Local Operator]
 outcome: "Monitor runs as a native desktop app with bundled validation and no dev-server Python bridge."
 ---

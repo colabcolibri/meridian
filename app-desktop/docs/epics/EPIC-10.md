@@ -2,9 +2,9 @@
 id: EPIC-10
 title: Shared Workspace Vision
 status: paused
-versions: [v6]
+versions: [v8]
 profiles: [Process Manager]
-outcome: "Documented north-star for multi-user and cloud — not committed until v5 is complete."
+outcome: "Documented north-star for multi-user and cloud — not committed until v7 is complete."
 ---
 
 # EPIC-10 — Shared Workspace Vision

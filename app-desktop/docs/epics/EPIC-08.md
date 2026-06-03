@@ -2,7 +2,7 @@
 id: EPIC-08
 title: Delivery Authoring
 status: paused
-versions: [v4]
+versions: [v5]
 profiles: [Future VSCode User, Process Manager]
 outcome: "Manager authors sprints, closes US, and updates board status from the editor with guided workflows."
 ---

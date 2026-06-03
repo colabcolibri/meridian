@@ -2,7 +2,7 @@
 id: EPIC-09
 title: Export and GitHub Bridge
 status: paused
-versions: [v5]
+versions: [v6]
 profiles: [Process Manager, Local Operator]
 outcome: "Manager exports board data and sees lightweight Git context beside Meridian docs."
 ---

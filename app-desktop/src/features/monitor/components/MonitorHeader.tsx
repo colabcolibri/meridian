@@ -16,6 +16,8 @@ export type MonitorView =
   | "epics"
   | "kanban"
 
+export const GUIDE_VIEWS: MonitorView[] = ["concepts", "usage"]
+
 const tabs: { id: MonitorView; label: string }[] = [
   { id: "concepts", label: "Start here" },
   { id: "usage", label: "Usage guide" },

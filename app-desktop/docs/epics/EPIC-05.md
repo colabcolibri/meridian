@@ -1,8 +1,8 @@
 ---
 id: EPIC-05
 title: VSCode Bridge
-status: active
-versions: [v2]
+status: planned
+versions: [v4]
 profiles: [Future VSCode User]
 outcome: "Developer edits docs/us and docs/epics in the editor with sync and integrated board generation."
 ---

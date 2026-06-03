@@ -2,6 +2,15 @@
   "date": "2026-06-03",
   "entries": [
     {
+      "time": "11:49",
+      "title": "Roadmap realignment — v2 kanban, v3 complete, VS Code → v4",
+      "affected_document": "docs/versions/v2.md–v8.md, docs/epics/EPIC-04.md, EPIC-05.md, EPIC-07–10.md, docs/sprints/v2-S4..v8, docs/us/US-0041..0072 (version frontmatter), docs/README.md, docs/kanban/board.json",
+      "what_changed": "v2 redefined as Kanban and board polish (EPIC-04), status active. v3 Monitor UI/UX marked complete (EPIC-11). VS Code bridge (EPIC-05) moved from v2 to v4 planned. Authoring v4→v5, Export v5→v6, Tauri v3→v7, Vision v6→v8. Sprint files renamed accordingly; US-0051 stays v2/EPIC-04 (stale board).",
+      "why_changed": "Delivery order diverged from docs: monitor kanban and UI shipped while v2 still labeled Visual Studio Bridge and v3 still planned; EPIC-04 work was conflated with extension scope.",
+      "impact": "Active release is v2 (close US-0051 or defer); next product slice is v4 extension. Board.json regenerated. Historical decision entries unchanged.",
+      "responsible": "Product/Engineering"
+    },
+    {
       "time": "10:02",
       "title": "Monitor loading — frontmatter index instead of full snapshot",
       "affected_document": "docs/05_architecture.md, docs/us/US-0076.md, docs/sprints/v2-S6.md, docs/versions/v2.md, project-loader.ts, ProjectDataContext.tsx",
