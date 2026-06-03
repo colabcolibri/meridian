@@ -16,7 +16,7 @@
 <!-- GitHub About → Settings → Description: -->
 <!-- Docs-first protocol: structure your app in Git, work with AI from user stories and acceptance in files. -->
 
-> **Very early experiment** — personal project; APIs and rules will change. [Roadmap](#roadmap) · [Protocol](.agent/MERIDIAN.md)
+> **Very early experiment** — personal project; APIs and rules will change. [Live demo](https://colabcolibri.github.io/meridian/) · [Protocol](.agent/MERIDIAN.md)
 
 # Meridian
 
@@ -39,10 +39,10 @@ One place in your repository — the `docs/` folder — to **structure the appli
 | You get | What it means in practice |
 | ------- | ------------------------- |
 | **Ordered product docs** | Scope, stack, security, principles, architecture (`00`–`08`, `11`) — each step unlocks the next so you do not code on vibes alone. |
-| **User stories with acceptance** | Work lives in `docs/us/` with Why / Where / Approach, checkable criteria, and `ready: true` before code; “done” is recorded in the file (`/complete-us`), not implied by a green checkmark in the chat. |
+| **User stories with acceptance** | Work lives in `docs/us/` with Intent / Plan / Record, checkable criteria, and `ready: true` before code; “done” is recorded in the file (`/complete-us`), not implied by a green checkmark in the chat. |
 | **A decision trail** | `docs/decisions/` captures *why* something changed — for you on Monday and for the agent on Tuesday. |
 | **Agents on rails** | `.agent/` supplies workflows, skills, and gates so the IDE does not reinvent the process every prompt. |
-| **Visible progress (optional)** | The desktop monitor reads `docs/` and shows setup, backlog, board, and story detail — read-only, no second source of truth. |
+| **Visible progress (optional)** | The monitor reads `docs/` and shows setup, backlog, board, and story detail — read-only, no second source of truth. |
 
 **Docs-first** (documentation-driven) development: the spec lives in Git next to the code. User stories and acceptance criteria follow familiar agile ideas; Meridian is not Scrum-in-a-box and not Jira — it is a **file protocol** for one repo, one truth, AI included.
 
@@ -93,7 +93,7 @@ Details: [`.agent/CURSOR_ADAPTER.md`](.agent/CURSOR_ADAPTER.md)
 
 **Rule of thumb:** if it is not in `docs/`, it is not part of the managed process — chat does not count.
 
-No login. No cloud. Git holds the history. Agents follow `.agent/`; the desktop monitor, if you use it, only **reads** `docs/`.
+No login. No cloud. Git holds the history. Agents follow `.agent/`; the monitor, if you use it, only **reads** `docs/`.
 
 ## What it is not
 
@@ -111,7 +111,7 @@ cd meridian
 chmod +x .agent/scripts/sync_cursor_kit.sh
 ./.agent/scripts/sync_cursor_kit.sh
 
-# Optional — desktop monitor:
+# Optional — monitor locally:
 cd app-desktop && pnpm install && pnpm dev
 ```
 
@@ -119,91 +119,27 @@ If your IDE already supports `.agent/`, skip the sync script and open the repo t
 
 **New to Meridian?** [Start here](.agent/references/start-here.md) → [Usage guide](.agent/references/usage-guide.md) → `/init-meridian` or `/status`.
 
-To try the optional monitor locally:
+### Monitor
 
-1. `cd app-desktop && pnpm install && pnpm dev`
-2. Open **http://localhost:5173** (Chrome or Edge on localhost for folder access)
-3. Click **Open docs folder** and select a Meridian `docs/` directory (e.g. `app-desktop/docs/` in this repo)
+**Live demo:** [https://colabcolibri.github.io/meridian/](https://colabcolibri.github.io/meridian/) — read-only monitor with this repo’s `app-desktop/docs/` preloaded (no folder picker).
 
-**Live demo (GitHub Pages)** — read-only monitor with this repo’s `app-desktop/docs/` preloaded (no folder picker):
+**Run locally:** `pnpm dev` in `app-desktop/`, open http://localhost:5173, click **Open docs folder**, and select a Meridian `docs/` directory (e.g. `app-desktop/docs/`).
 
-**https://colabcolibri.github.io/meridian/**
+**Same build as Pages:** `pnpm dev:demo`, or `VITE_BASE_PATH=/meridian/ pnpm build:demo && VITE_BASE_PATH=/meridian/ pnpm preview`.
 
-Deploy runs automatically on push to `main` when `app-desktop/` changes (workflow [deploy-demo.yml](.github/workflows/deploy-demo.yml)). First time: repo **Settings → Pages → Build and deployment → Source → GitHub Actions**, then re-run the workflow or push again. Add the same URL under **About → Website** on the repo home page so visitors see it.
+The **real Meridian loop runs in your IDE** through `.agent/` — workflows, agents, and slash commands. The monitor is a **read-only window** on the Markdown and JSON you commit in `docs/`. Same guides as the first two tabs also exist as Markdown: [start-here.md](.agent/references/start-here.md) · [usage-guide.md](.agent/references/usage-guide.md).
 
-Local demo build (same as Pages): `cd app-desktop && pnpm dev:demo`, or `VITE_BASE_PATH=/meridian/ pnpm build:demo && VITE_BASE_PATH=/meridian/ pnpm preview`.
+| Tab | What you see |
+| --- | ------------ |
+| Start here | Concepts, `docs/` map, phases |
+| Usage guide | Daily paths and slash commands |
+| Setup | Phase docs 00–11 and gates |
+| Decisions | `docs/decisions/*.json` by day |
+| Deliverables | Versions, sprints, epics, coverage |
+| Board | Kanban from US frontmatter |
+| Story detail | One US — Intent, Plan, Record, Boundaries (sheet from Board or Deliverables) |
 
-## Desktop monitor (optional)
-
-The **real Meridian loop runs in your IDE** through `.agent/` — workflows, agents, and slash commands. The desktop app does **not** replace that; it is a **read-only window** on the same Markdown and JSON you already commit in `docs/`. Use it when you want a quick visual answer: *what is approved, what is blocked, which US is Must, what changed yesterday*.
-
-Same guides as the first two tabs also exist as Markdown: [start-here.md](.agent/references/start-here.md) · [usage-guide.md](.agent/references/usage-guide.md).
-
-| Tab | What you see | When it helps |
-| --- | ------------ | ------------- |
-| [Start here](#start-here-tab) | Concepts, `docs/` map, phases | Onboarding yourself or someone else |
-| [Usage guide](#usage-guide-tab) | Daily paths and slash commands | Choosing the next command in a session |
-| [Setup](#setup-tab) | Phase docs 00–11 and gates | Knowing which doc unlocks the next |
-| [Decisions](#decisions-tab) | `docs/decisions/*.json` by day | Auditing *why* scope or stack changed |
-| [Deliverables](#deliverables-tab) | Versions, sprints, epics, coverage | Planning releases without opening every file |
-| [Board](#board-tab) | Kanban from US frontmatter | Execution focus — what is ❌, 🔶, ✅, 🧪 |
-| [Story detail](#story-detail-tab) | One US opened in full | Reviewing Acceptance and implementation evidence |
-
-### Start here tab
-
-Onboarding inside the app: what Meridian is, what lives under `docs/`, how phase documents chain into architecture, and how epics/versions/sprints/US relate. Mirrors [start-here.md](.agent/references/start-here.md) for reading in the IDE or on GitHub without running the app.
-
-<p align="center">
-  <img src="assets/screenshots/monitor-start-here.jpg" alt="Meridian monitor — Start here tab with concepts and docs layout" width="920" />
-</p>
-
-### Usage guide tab
-
-Action-oriented: *where am I?* → first time, document, build backlog, implement US, close US. Each block ties to slash commands (`/init-meridian`, `/status`, `/create-us`, `/complete-us`, …). Mirrors [usage-guide.md](.agent/references/usage-guide.md).
-
-<p align="center">
-  <img src="assets/screenshots/monitor-usage-guide.jpg" alt="Meridian monitor — Usage guide tab with workflow sections and commands" width="920" />
-</p>
-
-### Setup tab
-
-Reads your project's phase Markdown (`00_scope` through `08_environments`, `11_decisions`) and shows **draft**, **review**, or **approved** per file, plus what is still blocked. This is the visual gate before you create epics or user stories — architecture must be **approved** before backlog work is valid.
-
-<p align="center">
-  <img src="assets/screenshots/monitor-setup.jpg" alt="Meridian monitor — Setup tab with phase document progress and dependencies" width="920" />
-</p>
-
-### Decisions tab
-
-Lists `docs/decisions/YYYY-MM-DD.json` files. Each day is one JSON file; new decisions are **prepended** to `entries` (newest first). You see title, rationale, and which documents were affected — the audit trail agents and humans should update when scope, stack, or security shifts.
-
-<p align="center">
-  <img src="assets/screenshots/monitor-decisions.jpg" alt="Meridian monitor — Decisions tab showing daily decision log entries" width="920" />
-</p>
-
-### Deliverables tab
-
-Epic-centric planning view: each epic shows user story coverage; toggle **version** to filter which release you are planning. Versions and sprints still live in `docs/versions/` and `docs/sprints/` — use this tab to spot gaps before opening every file in `docs/epics/`.
-
-<p align="center">
-  <img src="assets/screenshots/monitor-deliverables.jpg" alt="Meridian monitor — Deliverables tab with versions, sprints, and epic coverage" width="920" />
-</p>
-
-### Board tab
-
-Kanban **generated from** `docs/us/*.md` frontmatter — not edited by hand in `board.json`. Columns reflect status (pending, in progress, waiting for tests, done, frozen). Filter by version and epic when the backlog grows.
-
-<p align="center">
-  <img src="assets/screenshots/monitor-board.jpg" alt="Meridian monitor — Board tab with kanban columns from user story status" width="920" />
-</p>
-
-### Story detail tab
-
-Drill-down on a single user story: narrative, **Intent** (Acceptance), **Plan**, **Record** (required before ✅), and **Boundaries**. What you verify here should match what `/complete-us` writes back to the file — chat alone is not enough.
-
-<p align="center">
-  <img src="assets/screenshots/monitor-story-detail.jpg" alt="Meridian monitor — Story detail with acceptance, implementation, and tests" width="920" />
-</p>
+Deploy to GitHub Pages runs on push to `main` when `app-desktop/` changes ([deploy-demo.yml](.github/workflows/deploy-demo.yml)).
 
 ## Adopt Meridian in your project
 
@@ -222,30 +158,16 @@ cp -R path/to/meridian/.agent ./your-project/
 1. Commit `.agent/` and grow `docs/` as the living project record.
 2. **Antigravity / `.agent`-native IDE** — workflows and agents under `.agent/` drive the process.
 3. **Cursor** — run `./.agent/scripts/sync_cursor_kit.sh` for slash commands in `.cursor/`; still edit the kit in `.agent/`. Do not commit `.cursor/`.
-4. **Monitor (optional)** — run `app-desktop` locally if you want a visual read-only view of `docs/`.
+4. **Monitor (optional)** — use the [live demo](https://colabcolibri.github.io/meridian/) or run `app-desktop` locally.
 
 ## Agents and commands
 
 | Where | Agents | Commands |
 | ----- | ------ | -------- |
-| `.agent/` (all IDEs) | `process-manager`, `scope-architect`, `documentation-strategist`, `security-steward`, `architecture-guardian`, `sprint-planner`, `board-keeper` | Workflows in `.agent/workflows/` (e.g. `init-meridian`, `status`, `complete-us`) |
+| `.agent/` (all IDEs) | `process-manager`, `scope-architect`, `documentation-strategist`, `security-steward`, `architecture-guardian`, `sprint-planner`, `board-keeper` | Workflows in `.agent/workflows/` — see [usage guide](.agent/references/usage-guide.md) |
 | `.cursor/` (Cursor) | Same personas (symlinked) | Slash commands: `/init-meridian`, `/status`, `/create-us`, `/refine-us`, `/complete-us`, `/sync-board`, `/daily-with-ai`, … |
 
 Full map: [`.agent/ARCHITECTURE.md`](.agent/ARCHITECTURE.md).
-
-## Roadmap
-
-| Version | Status | Focus |
-| ------- | ------ | ----- |
-| v0 Foundation | done | `.agent/` kit |
-| v1 Folder monitor | done | Read real `docs/` in the browser |
-| v2 VS Code bridge | active | Extension, disk writes — `v2-S1`…`v2-S4` |
-| v3 Native desktop | planned | Tauri shell, bundled validate — `v3-S1`…`v3-S3` |
-| v4 Authoring workflows | planned | Extension wizards, US closure — `v4-S1`…`v4-S3` |
-| v5 Export and Git | planned | CSV, sprint report, GitHub link — `v5-S1`…`v5-S3` |
-| v6 Shared workspace | planned | Vision / go-no-go only — no US until v5 done |
-
-More detail: [`app-desktop/docs/README.md`](app-desktop/docs/README.md).
 
 ## Protocol authority
 
