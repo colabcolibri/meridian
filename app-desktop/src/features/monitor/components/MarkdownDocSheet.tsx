@@ -62,7 +62,7 @@ function MarkdownDocSheetBody({
   badges?: ReactNode
   summary?: ReactNode
 }) {
-  const { folder, getHandle } = useProjectFolder()
+  const { folder, getDocsRoot } = useProjectFolder()
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [content, setContent] = useState<Awaited<
@@ -74,22 +74,22 @@ function MarkdownDocSheetBody({
     setError(null)
     setContent(null)
 
-    const handle = await getHandle()
-    if (!handle) {
+    const docsRoot = await getDocsRoot()
+    if (!docsRoot) {
       setError("Open the project docs folder to read files.")
       setLoading(false)
       return
     }
 
     try {
-      const result = await readMarkdownDocFromFolder(handle, docPath)
+      const result = await readMarkdownDocFromFolder(docsRoot, docPath)
       setContent(result)
     } catch {
       setError(`Could not read ${docPath}. Confirm the file exists in the open folder.`)
     } finally {
       setLoading(false)
     }
-  }, [docPath, getHandle])
+  }, [docPath, getDocsRoot])
 
   useEffect(() => {
     void load()

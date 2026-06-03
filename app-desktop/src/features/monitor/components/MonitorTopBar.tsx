@@ -1,5 +1,6 @@
-import { AlertCircle, FolderOpen, Loader2, X } from "lucide-react"
+import { AlertCircle, FolderOpen, Loader2, Sparkles, X } from "lucide-react"
 
+import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { countIssuesBySeverity } from "@/domain/meridian/protocol-validators"
 import { useProjectData } from "@/features/folder/ProjectDataContext"
@@ -9,8 +10,15 @@ import { typeScale } from "@/features/monitor/monitor-typography"
 import { cn } from "@/lib/utils"
 
 export function MonitorTopBar() {
-  const { status, folder, error, fsAccessSupported, openFolder, clearFolder } =
-    useProjectFolder()
+  const {
+    status,
+    folder,
+    error,
+    fsAccessSupported,
+    isDemoActive,
+    openFolder,
+    clearFolder,
+  } = useProjectFolder()
   const { issues } = useProjectData()
   const { errors, warnings } = countIssuesBySeverity(issues)
   const isOpening = status === "opening"
@@ -34,6 +42,12 @@ export function MonitorTopBar() {
               <p className={cn(typeScale.caption, "truncate")}>
                 Project:{" "}
                 <span className="font-medium text-foreground">{folder.name}</span>
+                {isDemoActive ? (
+                  <Badge className="ml-2 align-middle" variant="secondary">
+                    <Sparkles className="mr-1 h-3 w-3" />
+                    Demo
+                  </Badge>
+                ) : null}
               </p>
             ) : (
               <p className={typeScale.caption}>No project open</p>
@@ -64,7 +78,11 @@ export function MonitorTopBar() {
             ) : (
               <FolderOpen className="mr-2 h-4 w-4" />
             )}
-            {folder ? "Change folder" : "Open folder"}
+            {folder
+              ? isDemoActive
+                ? "Open local folder"
+                : "Change folder"
+              : "Open folder"}
           </Button>
           {folder ? (
             <Button

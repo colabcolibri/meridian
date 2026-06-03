@@ -125,6 +125,14 @@ To try the optional monitor locally:
 2. Open **http://localhost:5173** (Chrome or Edge on localhost for folder access)
 3. Click **Open docs folder** and select a Meridian `docs/` directory (e.g. `app-desktop/docs/` in this repo)
 
+**Live demo (GitHub Pages)** — read-only monitor with this repo’s `app-desktop/docs/` preloaded (no folder picker):
+
+**https://colabcolibri.github.io/meridian/**
+
+Deploy runs automatically on push to `main` when `app-desktop/` changes (workflow [deploy-demo.yml](.github/workflows/deploy-demo.yml)). First time: repo **Settings → Pages → Build and deployment → Source → GitHub Actions**, then re-run the workflow or push again. Add the same URL under **About → Website** on the repo home page so visitors see it.
+
+Local demo build (same as Pages): `cd app-desktop && pnpm dev:demo`, or `VITE_BASE_PATH=/meridian/ pnpm build:demo && VITE_BASE_PATH=/meridian/ pnpm preview`.
+
 ## Desktop monitor (optional)
 
 The **real Meridian loop runs in your IDE** through `.agent/` — workflows, agents, and slash commands. The desktop app does **not** replace that; it is a **read-only window** on the same Markdown and JSON you already commit in `docs/`. Use it when you want a quick visual answer: *what is approved, what is blocked, which US is Must, what changed yesterday*.

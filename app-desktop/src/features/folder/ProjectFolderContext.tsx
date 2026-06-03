@@ -9,16 +9,23 @@ import {
   type ReactNode,
 } from "react"
 
+import { isDemoMode } from "@/features/folder/demo-config"
+import {
+  openDemoMeridianFolder,
+  meridianFolderHints,
+} from "@/features/folder/demo-folder-access"
+import { createFilesystemDocsRoot } from "@/features/folder/filesystem-docs-root"
 import {
   hasReadPermission,
   isFileSystemAccessSupported,
-  meridianFolderHints,
   openSnapshotFromHandle,
   pickMeridianFolder,
   requestReadPermissionFromUser,
   restoreMeridianFolderHandle,
 } from "@/features/folder/folder-access"
 import { clearFolderHandle } from "@/features/folder/folder-handle-store"
+import type { MeridianDocsRoot } from "@/features/folder/meridian-docs-root"
+import { resolveMeridianDocsRoot } from "@/features/folder/resolve-docs-root"
 import type {
   MeridianFolderSnapshot,
   MeridianFolderValidation,
@@ -33,21 +40,29 @@ interface ProjectFolderContextValue {
   hints: string[]
   error: string | null
   fsAccessSupported: boolean
+  isDemoBuild: boolean
+  isDemoActive: boolean
   openFolder: () => Promise<void>
   grantReadPermission: () => Promise<void>
   clearFolder: () => Promise<void>
+  getDocsRoot: () => Promise<MeridianDocsRoot | null>
   getHandle: () => Promise<FileSystemDirectoryHandle | null>
 }
 
 const ProjectFolderContext = createContext<ProjectFolderContextValue | null>(null)
 
 export function ProjectFolderProvider({ children }: { children: ReactNode }) {
-  const [status, setStatus] = useState<ProjectFolderStatus>("none")
+  const demoBuild = isDemoMode()
+  const [status, setStatus] = useState<ProjectFolderStatus>(
+    demoBuild ? "opening" : "none",
+  )
   const [folder, setFolder] = useState<MeridianFolderSnapshot | null>(null)
   const [folderKey, setFolderKey] = useState<string | null>(null)
   const [pendingFolderName, setPendingFolderName] = useState<string | null>(null)
   const [hints, setHints] = useState<string[]>([])
   const [error, setError] = useState<string | null>(null)
+  const [isDemoActive, setIsDemoActive] = useState(false)
+  const [docsRoot, setDocsRoot] = useState<MeridianDocsRoot | null>(null)
 
   const handleRef = useRef<FileSystemDirectoryHandle | null>(null)
   const folderKeyRef = useRef<string | null>(null)
@@ -57,10 +72,22 @@ export function ProjectFolderProvider({ children }: { children: ReactNode }) {
   const fsAccessSupported = isFileSystemAccessSupported()
 
   const bindFolder = useCallback(
-    (snapshot: MeridianFolderSnapshot, handle: FileSystemDirectoryHandle) => {
-      handleRef.current = handle
+    (
+      snapshot: MeridianFolderSnapshot,
+      root: MeridianDocsRoot | FileSystemDirectoryHandle,
+    ) => {
+      const resolved = resolveMeridianDocsRoot(root, null)
+      if (!resolved) {
+        throw new Error("Could not open project folder.")
+      }
+
+      setDocsRoot(resolved)
+      setIsDemoActive(resolved.kind === "static")
+      if (resolved.kind === "static") {
+        handleRef.current = null
+      }
       setFolder(snapshot)
-      const key = `${handle.name}-${Date.now()}`
+      const key = `${resolved.kind}-${resolved.displayName}-${Date.now()}`
       folderKeyRef.current = key
       setFolderKey(key)
       setPendingFolderName(null)
@@ -74,6 +101,8 @@ export function ProjectFolderProvider({ children }: { children: ReactNode }) {
   const requirePermissionForHandle = useCallback(
     (handle: FileSystemDirectoryHandle) => {
       handleRef.current = handle
+      setDocsRoot(null)
+      setIsDemoActive(false)
       setFolder(null)
       folderKeyRef.current = null
       setFolderKey(null)
@@ -87,6 +116,8 @@ export function ProjectFolderProvider({ children }: { children: ReactNode }) {
 
   const clearBoundFolder = useCallback(() => {
     handleRef.current = null
+    setDocsRoot(null)
+    setIsDemoActive(false)
     setFolder(null)
     folderKeyRef.current = null
     setFolderKey(null)
@@ -98,13 +129,56 @@ export function ProjectFolderProvider({ children }: { children: ReactNode }) {
   const finishOpenWithHandle = useCallback(
     async (handle: FileSystemDirectoryHandle) => {
       const opened = await openSnapshotFromHandle(handle)
-      bindFolder(opened.snapshot, opened.handle)
+      handleRef.current = opened.handle
+      bindFolder(opened.snapshot, createFilesystemDocsRoot(opened.handle))
     },
     [bindFolder],
   )
 
+  const finishOpenDemo = useCallback(async () => {
+    const opened = await openDemoMeridianFolder()
+    handleRef.current = null
+    bindFolder(opened.snapshot, opened.docsRoot)
+  }, [bindFolder])
+
   useEffect(() => {
-    if (!fsAccessSupported) {
+    if (!demoBuild) {
+      return
+    }
+
+    const generation = ++restoreGenerationRef.current
+    let cancelled = false
+
+    async function openDemo() {
+      try {
+        await finishOpenDemo()
+      } catch (cause) {
+        if (cancelled || generation !== restoreGenerationRef.current) {
+          return
+        }
+        clearBoundFolder()
+        setError(
+          cause instanceof Error ? cause.message : "Could not load demo project.",
+        )
+        setStatus("error")
+      }
+    }
+
+    void openDemo()
+
+    return () => {
+      cancelled = true
+    }
+  }, [clearBoundFolder, demoBuild, finishOpenDemo])
+
+  useEffect(() => {
+    if (demoBuild || !fsAccessSupported) {
+      if (demoBuild && !fsAccessSupported) {
+        return
+      }
+      if (demoBuild) {
+        return
+      }
       return
     }
 
@@ -152,12 +226,21 @@ export function ProjectFolderProvider({ children }: { children: ReactNode }) {
     }
   }, [
     clearBoundFolder,
+    demoBuild,
     finishOpenWithHandle,
     fsAccessSupported,
     requirePermissionForHandle,
   ])
 
   const openFolder = useCallback(async () => {
+    if (!fsAccessSupported) {
+      setError(
+        "Your browser does not support folder access. Use Chrome or Edge, or run the demo build.",
+      )
+      setStatus("error")
+      return
+    }
+
     userOpenGenerationRef.current += 1
     restoreGenerationRef.current += 1
     setError(null)
@@ -179,8 +262,13 @@ export function ProjectFolderProvider({ children }: { children: ReactNode }) {
             ? "open"
             : handleRef.current
               ? "permission_required"
-              : "none",
+              : demoBuild
+                ? "opening"
+                : "none",
         )
+        if (demoBuild && !folderKeyRef.current && !handleRef.current) {
+          void finishOpenDemo()
+        }
         return
       }
 
@@ -194,13 +282,22 @@ export function ProjectFolderProvider({ children }: { children: ReactNode }) {
             : "error",
       )
     }
-  }, [finishOpenWithHandle, requirePermissionForHandle])
+  }, [
+    demoBuild,
+    finishOpenDemo,
+    finishOpenWithHandle,
+    fsAccessSupported,
+    requirePermissionForHandle,
+  ])
 
   const grantReadPermission = useCallback(async () => {
     const handle = handleRef.current
     if (!handle) {
       setError("No pending folder. Use Open folder again.")
-      setStatus("none")
+      setStatus(demoBuild ? "opening" : "none")
+      if (demoBuild) {
+        void finishOpenDemo()
+      }
       return
     }
 
@@ -222,7 +319,7 @@ export function ProjectFolderProvider({ children }: { children: ReactNode }) {
       setError(message)
       setStatus("permission_required")
     }
-  }, [finishOpenWithHandle])
+  }, [demoBuild, finishOpenDemo, finishOpenWithHandle])
 
   const clearFolder = useCallback(async () => {
     restoreGenerationRef.current += 1
@@ -230,7 +327,27 @@ export function ProjectFolderProvider({ children }: { children: ReactNode }) {
     await clearFolderHandle()
     clearBoundFolder()
     setError(null)
-  }, [clearBoundFolder])
+
+    if (demoBuild) {
+      setStatus("opening")
+      try {
+        await finishOpenDemo()
+      } catch (cause) {
+        setError(
+          cause instanceof Error ? cause.message : "Could not reload demo project.",
+        )
+        setStatus("error")
+      }
+    }
+  }, [clearBoundFolder, demoBuild, finishOpenDemo])
+
+  const getDocsRoot = useCallback(async () => {
+    const resolved = resolveMeridianDocsRoot(docsRoot, handleRef.current)
+    if (resolved && resolved !== docsRoot) {
+      setDocsRoot(resolved)
+    }
+    return resolved
+  }, [docsRoot])
 
   const getHandle = useCallback(async () => {
     const cached = handleRef.current
@@ -252,9 +369,12 @@ export function ProjectFolderProvider({ children }: { children: ReactNode }) {
       hints,
       error,
       fsAccessSupported,
+      isDemoBuild: demoBuild,
+      isDemoActive,
       openFolder,
       grantReadPermission,
       clearFolder,
+      getDocsRoot,
       getHandle,
     }),
     [
@@ -265,9 +385,12 @@ export function ProjectFolderProvider({ children }: { children: ReactNode }) {
       hints,
       error,
       fsAccessSupported,
+      demoBuild,
+      isDemoActive,
       openFolder,
       grantReadPermission,
       clearFolder,
+      getDocsRoot,
       getHandle,
     ],
   )

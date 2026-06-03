@@ -34,7 +34,7 @@ function isGuideView(view: MonitorView): boolean {
 
 function MonitorProjectContent() {
   const [view, setView] = useState<MonitorView>("concepts")
-  const { folder, status: folderStatus } = useProjectFolder()
+  const { folder, status: folderStatus, isDemoActive } = useProjectFolder()
   const { loading, loadingSupplement, data, issues, documentationBadges } =
     useProjectData()
 
@@ -78,7 +78,10 @@ function MonitorProjectContent() {
 
           {!loading && view === "setup" ? (
             <>
-              <AdvancedToolsPanel folderName={folder.name} />
+              <AdvancedToolsPanel
+                folderName={folder.name}
+                isDemoActive={isDemoActive}
+              />
               <SetupMonitorView documents={phaseDocuments} issues={issues} />
             </>
           ) : null}

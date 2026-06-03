@@ -6,7 +6,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "sync:demo-docs": "node scripts/sync-demo-docs.mjs",
+    "dev:demo": "pnpm sync:demo-docs && VITE_DEMO_MODE=true vite",
     "build": "tsc -b && vite build",
+    "build:demo": "pnpm sync:demo-docs && VITE_DEMO_MODE=true tsc -b && VITE_DEMO_MODE=true vite build",
     "format": "prettier . --write",
     "format:check": "prettier . --check",
     "lint": "eslint .",

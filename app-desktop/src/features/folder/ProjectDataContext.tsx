@@ -11,6 +11,7 @@ import {
 
 import type { MonitorIssue } from "@/domain/meridian/monitor-issues"
 import type { StoryDocumentationBadge } from "@/domain/meridian/story-body"
+import type { MeridianDocsRoot } from "@/features/folder/meridian-docs-root"
 import {
   enrichUserStoryValidation,
   loadMeridianProjectCore,
@@ -57,7 +58,7 @@ function scheduleIdleWork(callback: () => void): void {
 const ProjectDataContext = createContext<ProjectDataContextValue | null>(null)
 
 export function ProjectDataProvider({ children }: { children: ReactNode }) {
-  const { folderKey, status: folderStatus, getHandle } = useProjectFolder()
+  const { folderKey, status: folderStatus, getDocsRoot } = useProjectFolder()
   const [loading, setLoading] = useState(false)
   const [loadingSupplement, setLoadingSupplement] = useState(false)
   const [enrichingStories, setEnrichingStories] = useState(false)
@@ -70,15 +71,12 @@ export function ProjectDataProvider({ children }: { children: ReactNode }) {
   const enrichGenerationRef = useRef(0)
 
   const startStoryEnrichment = useCallback(
-    (
-      handle: FileSystemDirectoryHandle,
-      stories: MeridianProjectData["userStories"],
-    ) => {
+    (docsRoot: MeridianDocsRoot, stories: MeridianProjectData["userStories"]) => {
       const enrichGeneration = ++enrichGenerationRef.current
       setEnrichingStories(true)
 
       const run = () => {
-        void enrichUserStoryValidation(handle, stories)
+        void enrichUserStoryValidation(docsRoot, stories)
           .then((enrichment) => {
             if (enrichGeneration !== enrichGenerationRef.current) {
               return
@@ -105,8 +103,8 @@ export function ProjectDataProvider({ children }: { children: ReactNode }) {
   )
 
   const reload = useCallback(async () => {
-    const handle = await getHandle()
-    if (!handle) {
+    const docsRoot = await getDocsRoot()
+    if (!docsRoot) {
       setData(null)
       setBodyIssues([])
       setDocumentationBadges(new Map())
@@ -126,7 +124,7 @@ export function ProjectDataProvider({ children }: { children: ReactNode }) {
     setDocumentationBadges(new Map())
 
     try {
-      const core = await loadMeridianProjectCore(handle)
+      const core = await loadMeridianProjectCore(docsRoot)
       if (generation !== loadGenerationRef.current) {
         return
       }
@@ -141,21 +139,21 @@ export function ProjectDataProvider({ children }: { children: ReactNode }) {
       setLoading(false)
       setLoadingSupplement(true)
 
-      void loadMeridianProjectSupplement(handle)
+      void loadMeridianProjectSupplement(docsRoot)
         .then((supplement) => {
           if (generation !== loadGenerationRef.current) {
             return
           }
           setData(mergeMeridianProject(core, supplement))
           setLoadingSupplement(false)
-          startStoryEnrichment(handle, core.userStories)
+          startStoryEnrichment(docsRoot, core.userStories)
         })
         .catch(() => {
           if (generation !== loadGenerationRef.current) {
             return
           }
           setLoadingSupplement(false)
-          startStoryEnrichment(handle, core.userStories)
+          startStoryEnrichment(docsRoot, core.userStories)
         })
     } catch (error) {
       if (generation !== loadGenerationRef.current) {
@@ -176,7 +174,7 @@ export function ProjectDataProvider({ children }: { children: ReactNode }) {
       setLoadingSupplement(false)
       setEnrichingStories(false)
     }
-  }, [getHandle, startStoryEnrichment])
+  }, [getDocsRoot, startStoryEnrichment])
 
   useEffect(() => {
     if (folderStatus !== "open" || !folderKey) {

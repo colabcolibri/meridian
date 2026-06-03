@@ -32,13 +32,8 @@ import type {
   Sprint,
   UserStory,
 } from "@/domain/meridian/types"
-import {
-  FS_READ_CONCURRENCY,
-  listFileHandles,
-  readFrontmatterFromFileHandle,
-  readTextFile,
-  readTextFromFileHandle,
-} from "@/features/folder/read-folder-file"
+import type { MeridianDocsRoot } from "@/features/folder/meridian-docs-root"
+import { FS_READ_CONCURRENCY } from "@/features/folder/read-folder-file"
 import { USER_STORY_FILENAME_PATTERN } from "@/domain/meridian/user-story-id"
 
 export type { MonitorIssue }
@@ -113,7 +108,7 @@ function recordStructureIssues(
 }
 
 async function loadPhaseDocuments(
-  docsRoot: FileSystemDirectoryHandle,
+  docsRoot: MeridianDocsRoot,
   parseIssues: MonitorIssue[],
 ): Promise<PhaseDocument[]> {
   const results = await mapWithConcurrency(
@@ -122,7 +117,7 @@ async function loadPhaseDocuments(
     async (docId) => {
       const filename = `${docId}.md`
       try {
-        const raw = await readTextFile(docsRoot, filename)
+        const raw = await docsRoot.readText(filename)
         return parsePhaseDocument(docId, raw)
       } catch (error) {
         recordParseIssue(
@@ -140,15 +135,14 @@ async function loadPhaseDocuments(
 }
 
 async function loadEpics(
-  docsRoot: FileSystemDirectoryHandle,
+  docsRoot: MeridianDocsRoot,
   parseIssues: MonitorIssue[],
   structureIssues: MonitorIssue[],
 ): Promise<Epic[]> {
   const epics: Epic[] = []
 
   try {
-    const epicsDir = await docsRoot.getDirectoryHandle("epics")
-    const files = await listFileHandles(epicsDir, /^EPIC-\d+\.md$/i)
+    const files = await docsRoot.listFiles("epics", /^EPIC-\d+\.md$/i)
 
     if (files.length === 0) {
       parseIssues.push({
@@ -163,9 +157,9 @@ async function loadEpics(
     const parsed = await mapWithConcurrency(
       files,
       FS_READ_CONCURRENCY,
-      async ({ name: filename, handle }) => {
+      async ({ name: filename, relativePath }) => {
         try {
-          const raw = await readTextFromFileHandle(handle)
+          const raw = await docsRoot.readText(relativePath)
           const epic = parseEpicFile(filename, raw)
           recordStructureIssues(
             structureIssues,
@@ -204,15 +198,14 @@ async function loadEpics(
 }
 
 async function loadVersions(
-  docsRoot: FileSystemDirectoryHandle,
+  docsRoot: MeridianDocsRoot,
   parseIssues: MonitorIssue[],
   structureIssues: MonitorIssue[],
 ): Promise<ProductVersion[]> {
   const versions: ProductVersion[] = []
 
   try {
-    const versionsDir = await docsRoot.getDirectoryHandle("versions")
-    const files = await listFileHandles(versionsDir, /^v\d+\.md$/i)
+    const files = await docsRoot.listFiles("versions", /^v\d+\.md$/i)
 
     if (files.length === 0) {
       parseIssues.push({
@@ -227,9 +220,9 @@ async function loadVersions(
     const parsed = await mapWithConcurrency(
       files,
       FS_READ_CONCURRENCY,
-      async ({ name: filename, handle }) => {
+      async ({ name: filename, relativePath }) => {
         try {
-          const raw = await readTextFromFileHandle(handle)
+          const raw = await docsRoot.readText(relativePath)
           const version = parseVersionFile(filename, raw)
           recordStructureIssues(
             structureIssues,
@@ -268,21 +261,20 @@ async function loadVersions(
 }
 
 async function loadSprints(
-  docsRoot: FileSystemDirectoryHandle,
+  docsRoot: MeridianDocsRoot,
   parseIssues: MonitorIssue[],
 ): Promise<Sprint[]> {
   const sprints: Sprint[] = []
 
   try {
-    const sprintsDir = await docsRoot.getDirectoryHandle("sprints")
-    const files = await listFileHandles(sprintsDir, /^v\d+-S\d+\.md$/i)
+    const files = await docsRoot.listFiles("sprints", /^v\d+-S\d+\.md$/i)
 
     const parsed = await mapWithConcurrency(
       files,
       FS_READ_CONCURRENCY,
-      async ({ name: filename, handle }) => {
+      async ({ name: filename, relativePath }) => {
         try {
-          const raw = await readTextFromFileHandle(handle)
+          const raw = await docsRoot.readText(relativePath)
           return parseSprintFile(filename, raw)
         } catch (error) {
           recordParseIssue(
@@ -314,14 +306,13 @@ async function loadSprints(
 }
 
 async function loadDecisions(
-  docsRoot: FileSystemDirectoryHandle,
+  docsRoot: MeridianDocsRoot,
   parseIssues: MonitorIssue[],
 ): Promise<DecisionDay[]> {
   const decisionDays: DecisionDay[] = []
 
   try {
-    const decisionsDir = await docsRoot.getDirectoryHandle("decisions")
-    const files = await listFileHandles(decisionsDir, /^\d{4}-\d{2}-\d{2}\.json$/i)
+    const files = await docsRoot.listFiles("decisions", /^\d{4}-\d{2}-\d{2}\.json$/i)
     files.sort((a, b) => b.name.localeCompare(a.name))
 
     if (files.length === 0) {
@@ -337,9 +328,9 @@ async function loadDecisions(
     const parsed = await mapWithConcurrency(
       files,
       FS_READ_CONCURRENCY,
-      async ({ name: filename, handle }) => {
+      async ({ name: filename, relativePath }) => {
         try {
-          const raw = await readTextFromFileHandle(handle)
+          const raw = await docsRoot.readText(relativePath)
           return parseDecisionDayFile(filename, raw)
         } catch (error) {
           recordParseIssue(
@@ -372,21 +363,20 @@ async function loadDecisions(
 }
 
 async function loadUserStoryIndex(
-  docsRoot: FileSystemDirectoryHandle,
+  docsRoot: MeridianDocsRoot,
   parseIssues: MonitorIssue[],
 ): Promise<UserStory[]> {
   const userStories: UserStory[] = []
 
   try {
-    const usDir = await docsRoot.getDirectoryHandle("us")
-    const files = await listFileHandles(usDir, USER_STORY_FILENAME_PATTERN)
+    const files = await docsRoot.listFiles("us", USER_STORY_FILENAME_PATTERN)
 
     const stories = await mapWithConcurrency(
       files,
       FS_READ_CONCURRENCY,
-      async ({ name: filename, handle }) => {
+      async ({ name: filename, relativePath }) => {
         try {
-          const raw = await readFrontmatterFromFileHandle(handle)
+          const raw = await docsRoot.readTextForFrontmatter(relativePath)
           return parseUserStoryFile(filename, raw)
         } catch (error) {
           recordParseIssue(
@@ -441,7 +431,7 @@ function buildIndexIssues(
 
 /** Fast path: phase docs + US frontmatter index (kanban-ready). */
 export async function loadMeridianProjectCore(
-  docsRoot: FileSystemDirectoryHandle,
+  docsRoot: MeridianDocsRoot,
 ): Promise<MeridianProjectCore> {
   const parseIssues: MonitorIssue[] = []
 
@@ -466,7 +456,7 @@ export async function loadMeridianProjectCore(
 
 /** Secondary load: epics, versions, sprints, decisions (after UI is interactive). */
 export async function loadMeridianProjectSupplement(
-  docsRoot: FileSystemDirectoryHandle,
+  docsRoot: MeridianDocsRoot,
 ): Promise<MeridianProjectSupplement> {
   const parseIssues: MonitorIssue[] = []
   const structureIssues: MonitorIssue[] = []
@@ -521,7 +511,7 @@ export function mergeMeridianProject(
 
 /** Full load (tests and scripts). Prefer staged core + supplement in the UI. */
 export async function loadMeridianProject(
-  docsRoot: FileSystemDirectoryHandle,
+  docsRoot: MeridianDocsRoot,
 ): Promise<MeridianProjectData> {
   const core = await loadMeridianProjectCore(docsRoot)
   const supplement = await loadMeridianProjectSupplement(docsRoot)
@@ -530,7 +520,7 @@ export async function loadMeridianProject(
 
 /** Reads US bodies from disk and returns body-dependent protocol issues and doc badges. */
 export async function enrichUserStoryValidation(
-  docsRoot: FileSystemDirectoryHandle,
+  docsRoot: MeridianDocsRoot,
   userStories: UserStory[],
 ): Promise<StoryValidationEnrichment> {
   const bodyIssues: MonitorIssue[] = []
@@ -540,25 +530,24 @@ export async function enrichUserStoryValidation(
     return { bodyIssues, documentationBadges }
   }
 
-  let files: Awaited<ReturnType<typeof listFileHandles>>
+  let files: Awaited<ReturnType<MeridianDocsRoot["listFiles"]>>
   try {
-    const usDir = await docsRoot.getDirectoryHandle("us")
-    files = await listFileHandles(usDir, USER_STORY_FILENAME_PATTERN)
+    files = await docsRoot.listFiles("us", USER_STORY_FILENAME_PATTERN)
   } catch {
     return { bodyIssues, documentationBadges }
   }
 
-  const handleByFilename = new Map(files.map((file) => [file.name, file.handle]))
+  const pathByFilename = new Map(files.map((file) => [file.name, file.relativePath]))
 
   await mapWithConcurrency(userStories, USER_STORY_BODY_CONCURRENCY, async (story) => {
-    const handle = handleByFilename.get(`${story.id}.md`)
-    if (!handle) {
+    const relativePath = pathByFilename.get(`${story.id}.md`)
+    if (!relativePath) {
       documentationBadges.set(story.id, null)
       return
     }
 
     try {
-      const raw = await readTextFromFileHandle(handle)
+      const raw = await docsRoot.readText(relativePath)
       const body = splitMarkdown(raw).body
       const storyBodies = new Map([[story.id, body]])
 

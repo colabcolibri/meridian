@@ -1,5 +1,6 @@
 import { phaseDocFilename } from "@/domain/meridian/phase-doc-files"
 import { splitMarkdown } from "@/domain/meridian/frontmatter"
+import type { MeridianDocsRoot } from "@/features/folder/meridian-docs-root"
 
 export interface PhaseDocContent {
   filename: string
@@ -9,13 +10,11 @@ export interface PhaseDocContent {
 }
 
 export async function readPhaseDocFromFolder(
-  docsRoot: FileSystemDirectoryHandle,
+  docsRoot: MeridianDocsRoot,
   docId: string,
 ): Promise<PhaseDocContent> {
   const filename = phaseDocFilename(docId)
-  const fileHandle = await docsRoot.getFileHandle(filename)
-  const file = await fileHandle.getFile()
-  const raw = await file.text()
+  const raw = await docsRoot.readText(filename)
   const { frontmatter, body } = splitMarkdown(raw)
 
   return { filename, raw, frontmatter, body }

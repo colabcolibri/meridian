@@ -37,6 +37,7 @@ export function WelcomeScreen() {
     openFolder,
     grantReadPermission,
     fsAccessSupported,
+    isDemoBuild,
     status,
     error,
     pendingFolderName,
@@ -47,6 +48,14 @@ export function WelcomeScreen() {
   }
 
   const isOpening = status === "opening"
+
+  if (isDemoBuild && isOpening) {
+    return (
+      <section className={`${MONITOR_CONTAINER} py-16 text-center`}>
+        <p className={typeScale.bodySm}>Loading Meridian demo project…</p>
+      </section>
+    )
+  }
   const needsPermission = status === "permission_required"
 
   return (

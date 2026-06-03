@@ -1,4 +1,5 @@
 import { splitMarkdown } from "@/domain/meridian/frontmatter"
+import type { MeridianDocsRoot } from "@/features/folder/meridian-docs-root"
 
 export interface MarkdownDocContent {
   filename: string
@@ -9,20 +10,11 @@ export interface MarkdownDocContent {
 }
 
 export async function readMarkdownDocFromFolder(
-  docsRoot: FileSystemDirectoryHandle,
+  docsRoot: MeridianDocsRoot,
   relativePath: string,
 ): Promise<MarkdownDocContent> {
-  const segments = relativePath.split("/").filter(Boolean)
-  let directory = docsRoot
-
-  for (let index = 0; index < segments.length - 1; index += 1) {
-    directory = await directory.getDirectoryHandle(segments[index]!)
-  }
-
-  const filename = segments.at(-1)!
-  const fileHandle = await directory.getFileHandle(filename)
-  const file = await fileHandle.getFile()
-  const raw = await file.text()
+  const filename = relativePath.split("/").filter(Boolean).at(-1)!
+  const raw = await docsRoot.readText(relativePath)
   const { frontmatter, body } = splitMarkdown(raw)
 
   return { filename, relativePath, raw, frontmatter, body }

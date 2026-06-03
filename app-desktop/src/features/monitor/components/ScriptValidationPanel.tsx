@@ -22,7 +22,13 @@ import { cn } from "@/lib/utils"
 
 const isDev = import.meta.env.DEV
 
-export function ScriptValidationPanel({ folderName }: { folderName?: string }) {
+export function ScriptValidationPanel({
+  folderName,
+  isDemoActive = false,
+}: {
+  folderName?: string
+  isDemoActive?: boolean
+}) {
   const [loading, setLoading] = useState(false)
   const [result, setResult] = useState<ScriptValidationResult | null>(null)
 
@@ -69,9 +75,17 @@ export function ScriptValidationPanel({ folderName }: { folderName?: string }) {
           </p>
         ) : null}
 
+        {isDemoActive ? (
+          <p className={cn(typeScale.caption, "text-muted-foreground")}>
+            Demo mode uses a static snapshot of{" "}
+            <code className={inlineCodeClass}>app-desktop/docs</code>. Run validation
+            locally with the command below.
+          </p>
+        ) : null}
+
         <div className="flex flex-wrap gap-2">
           <Button
-            disabled={!isDev || loading}
+            disabled={!isDev || loading || isDemoActive}
             onClick={() => void handleValidate()}
             size="sm"
           >

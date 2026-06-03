@@ -6,7 +6,13 @@ import { monitorDashedPanelClass } from "@/features/monitor/monitor-ui"
 import { typeScale } from "@/features/monitor/monitor-typography"
 import { cn } from "@/lib/utils"
 
-export function AdvancedToolsPanel({ folderName }: { folderName?: string }) {
+export function AdvancedToolsPanel({
+  folderName,
+  isDemoActive = false,
+}: {
+  folderName?: string
+  isDemoActive?: boolean
+}) {
   const [open, setOpen] = useState(false)
 
   return (
@@ -29,7 +35,7 @@ export function AdvancedToolsPanel({ folderName }: { folderName?: string }) {
       </button>
       {open ? (
         <div className="border-t border-border px-2 pb-2 pt-1">
-          <ScriptValidationPanel folderName={folderName} />
+          <ScriptValidationPanel folderName={folderName} isDemoActive={isDemoActive} />
         </div>
       ) : null}
     </div>

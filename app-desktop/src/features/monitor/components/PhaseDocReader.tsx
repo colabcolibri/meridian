@@ -39,7 +39,7 @@ export function PhaseDocReaderSheet({
 }
 
 function PhaseDocReaderBody({ document }: { document: PhaseDocument }) {
-  const { folder, getHandle } = useProjectFolder()
+  const { folder, getDocsRoot } = useProjectFolder()
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const [content, setContent] = useState<PhaseDocContent | null>(null)
@@ -50,15 +50,15 @@ function PhaseDocReaderBody({ document }: { document: PhaseDocument }) {
     setError(null)
     setContent(null)
 
-    const handle = await getHandle()
-    if (!handle) {
+    const docsRoot = await getDocsRoot()
+    if (!docsRoot) {
       setError("Open the project docs folder to read files.")
       setLoading(false)
       return
     }
 
     try {
-      const result = await readPhaseDocFromFolder(handle, document.id)
+      const result = await readPhaseDocFromFolder(docsRoot, document.id)
       setContent(result)
     } catch {
       setError(
@@ -67,7 +67,7 @@ function PhaseDocReaderBody({ document }: { document: PhaseDocument }) {
     } finally {
       setLoading(false)
     }
-  }, [document.id, getHandle])
+  }, [document.id, getDocsRoot])
 
   useEffect(() => {
     void load()
