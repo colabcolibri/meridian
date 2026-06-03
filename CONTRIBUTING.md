@@ -15,7 +15,7 @@ By contributing, you agree that your contributions will be licensed under the [P
 | What you want to change | Where to edit |
 | ----------------------- | ------------- |
 | Agents, skills, workflows, rules | **`.agent/`** (canonical source) |
-| Cursor adapter (local symlinks) | Run `./.agent/scripts/sync_cursor_kit.sh` — **do not** commit `.cursor/` |
+| Cursor / Claude Code adapters (local symlinks) | Run `./.agent/scripts/sync_cursor_kit.sh` — **do not** commit `.cursor/` or `.claude/` |
 | Desktop app (UI, parser, validations) | `app-desktop/src/` |
 | App product documentation | `app-desktop/docs/` |
 | Architecture decisions | Prepend in `app-desktop/docs/decisions/YYYY-MM-DD.json` (skill `update-decisions-log`) |
@@ -40,7 +40,7 @@ pnpm test
 pnpm build
 ```
 
-### Cursor (optional)
+### Cursor or Claude Code (optional)
 
 After clone or when adding a new item under `.agent/`:
 
@@ -48,6 +48,8 @@ After clone or when adding a new item under `.agent/`:
 chmod +x .agent/scripts/sync_cursor_kit.sh
 ./.agent/scripts/sync_cursor_kit.sh
 ```
+
+Builds `.cursor/` and `.claude/` locally. See [`.agent/IDE_ADAPTERS.md`](.agent/IDE_ADAPTERS.md).
 
 ## Contribution flow
 

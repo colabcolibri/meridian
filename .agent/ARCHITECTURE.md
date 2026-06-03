@@ -9,8 +9,8 @@
 | Layer | File | Audience |
 | ------ | ------- | ------- |
 | Kit monorepo | `README.md` | Humans (GitHub, onboarding) |
-| Portable kit | `.agent/` | Copy to client projects; Antigravity, ag-kit, Cursor |
-| Cursor adapter | `.cursor/` (local, gitignored) | Cursor IDE (symlinks → `.agent/`) |
+| Portable kit | `.agent/` | Copy to client projects; Antigravity, ag-kit, Cursor, Claude Code |
+| IDE adapters | `.cursor/`, `.claude/` (local, gitignored) | Cursor and Claude Code (symlinks → `.agent/`) — see [IDE_ADAPTERS.md](./IDE_ADAPTERS.md) |
 | Always-on rules | `.agent/rules/meridian.mdc` + `.agent/rules/MERIDIAN.md` | Agents |
 | Master protocol | `.agent/MERIDIAN.md` | Full governance |
 | Operations | `.agent/agents`, `skills`, `workflows` | Personas and procedures |
@@ -22,7 +22,7 @@ The desktop app (`app-desktop/`) monitors Meridian folders; it is not the source
 - **`.agent/`** — Antigravity convention; copyable to projects and other tools.
 - **`.cursor/`** — **local** adapter (generated symlinks; **do not commit**).
 
-**Edit in `.agent/`** and run `./.agent/scripts/sync_cursor_kit.sh` to recreate symlinks in `.cursor/` (required after clone in Cursor).
+**Edit in `.agent/`** and run `./.agent/scripts/sync_cursor_kit.sh` to recreate symlinks in `.cursor/` and `.claude/` (required after clone in Cursor or Claude Code).
 
 ---
 
@@ -134,7 +134,7 @@ python3 .agent/scripts/validate_meridian.py <project-root> --json   # CI
 python3 .agent/scripts/migrate_us_v2_structure.py <project-root>
 python3 .agent/scripts/migrate_us_v2_structure.py <project-root> --restore-preamble
 
-# Cursor adapter (after clone or kit changes)
+# IDE adapters (after clone or kit changes)
 ./.agent/scripts/sync_cursor_kit.sh
 ```
 

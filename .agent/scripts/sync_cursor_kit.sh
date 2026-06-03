@@ -84,7 +84,8 @@ done
 link "../../.agent/rules/meridian.mdc" "${CURSOR}/rules/meridian.mdc"
 
 # README local do adapter
-link "../../.agent/CURSOR_ADAPTER.md" "${CURSOR}/README.md"
+link "../../.agent/IDE_ADAPTERS.md" "${CURSOR}/README.md"
+link "../../.agent/IDE_ADAPTERS.md" "${CLAUDE}/README.md"
 
 # ── Claude Code adapter ────────────────────────────────────────────────────────
 # Workflows -> Claude Code slash commands

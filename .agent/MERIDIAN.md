@@ -74,7 +74,7 @@ docs/                        ← target project source of truth
   templates/                 ← symlinks to kit templates (human mirror)
 ```
 
-**Cursor:** edit `.agent/`, run `./.agent/scripts/sync_cursor_kit.sh`. Do not commit `.cursor/`.
+**IDE adapters:** edit `.agent/`, run `./.agent/scripts/sync_cursor_kit.sh` for `.cursor/` and `.claude/`. Do not commit adapter folders. See [IDE_ADAPTERS.md](./IDE_ADAPTERS.md).
 
 ---
 

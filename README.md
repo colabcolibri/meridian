@@ -44,7 +44,7 @@ One place in your repository — the `docs/` folder — to **structure the appli
 | **Agents on rails** | `.agent/` supplies workflows, skills, and gates so the IDE does not reinvent the process every prompt. |
 | **Visible progress (optional)** | The monitor reads `docs/` and shows setup, backlog, board, and story detail — read-only, no second source of truth. |
 
-**Docs-first** (documentation-driven) development: the spec lives in Git next to the code. User stories and acceptance criteria follow familiar agile ideas; Meridian is not Scrum-in-a-box and not Jira — it is a **file protocol** for one repo, one truth, AI included.
+**Docs-first** development: the spec lives in Git next to the code. Meridian is not Scrum-in-a-box and not Jira — it is a **file protocol** for one repo, one truth, AI included.
 
 **You** stay manager: agents propose and implement; you approve documents, scope, and ✅ with evidence.
 
@@ -55,7 +55,7 @@ One place in your repository — the `docs/` folder — to **structure the appli
 | Piece | Role |
 | ----- | ---- |
 | **`docs/`** | What is true about the product — if it is not here, it is not part of the process. |
-| **`.agent/`** | How AI sessions run — slash workflows, agents, skills, rules (copy this kit into your repo). |
+| **`.agent/`** | How AI sessions run — workflows, agents, skills, rules (copy this kit into your repo). |
 
 Code implements `docs/`. Agents follow `.agent/`. Chat is where work happens; **files are what persist.**
 
@@ -63,42 +63,45 @@ Code implements `docs/`. Agents follow `.agent/`. Chat is where work happens; **
 
 | Piece | Required? | What it does |
 | ----- | --------- | ------------ |
-| [`.agent/`](.agent/) + [protocol](.agent/MERIDIAN.md) | **Yes** | Defines the Meridian flow: agents, workflows (`/status`, `/complete-us`, …), skills, and always-on rules. **Copy into every Meridian project.** |
-| `docs/` (in *your* project) | **Yes** | Project documentation the agents read and update — not shipped inside this kit repo except as a [dogfooding example](app-desktop/docs/). |
-| `.cursor/` | Cursor only | Local mirror of `.agent/` ([adapter](.agent/CURSOR_ADAPTER.md)). Symlinks, not committed. |
-| [`app-desktop/`](app-desktop/) | **No** | Optional **visual tracker** (browser): read a `docs/` folder and see setup, deliverables, decisions, and kanban. Does not replace `.agent/` or your IDE. |
+| [`.agent/`](.agent/) + [protocol](.agent/MERIDIAN.md) | **Yes** | Meridian flow: agents, workflows, skills, rules. **Copy into every Meridian project.** |
+| `docs/` (in *your* project) | **Yes** | Project documentation agents read and update — [dogfooding example](app-desktop/docs/) in this repo. |
+| `.cursor/` · `.claude/` | Local only | IDE adapters generated from `.agent/` ([details](.agent/IDE_ADAPTERS.md)). Symlinks, not committed. |
+| [`app-desktop/`](app-desktop/) | **No** | Optional browser monitor — read-only view of `docs/`. Does not replace `.agent/` or your IDE. |
 
 ## IDE support
 
-Meridian is **not tied to Cursor**. The kit lives in `.agent/` (Antigravity / ag-kit convention). Any IDE that reads `.agent/` can use it as-is.
+Meridian is **not tied to one editor**. The portable kit lives in `.agent/` (Antigravity / ag-kit convention).
 
 | IDE / tool | How you use Meridian |
 | ---------- | ------------------- |
-| **Antigravity, ag-kit, others** | Point the IDE at `.agent/` — workflows, agents, and skills work natively. |
-| **Cursor** | Cursor does not index `.agent/` by default. Run `./.agent/scripts/sync_cursor_kit.sh` to build a **local** `.cursor/` folder (rules, skills, agents, slash commands). Still edit the kit in `.agent/`; regenerate symlinks after clone or kit changes. |
+| **Antigravity, ag-kit, others** | Point the tool at `.agent/` — workflows, agents, and skills work natively. No sync step. |
+| **Cursor** | Run `./.agent/scripts/sync_cursor_kit.sh` to build `.cursor/` (rules, skills, agents, slash commands). Edit the kit in `.agent/`; regenerate after clone or kit changes. |
+| **Claude Code** | Same script builds `.claude/` (agents + slash commands). Workflows map to Claude slash commands; agents map to subagent definitions. |
 
 ```txt
 .agent/          ← source of truth (commit this)
-.cursor/         ← Cursor adapter only (gitignored, symlinks → .agent/)
+.cursor/         ← Cursor adapter (gitignored, symlinks → .agent/)
+.claude/         ← Claude Code adapter (gitignored, symlinks → .agent/)
 ```
 
-Details: [`.agent/CURSOR_ADAPTER.md`](.agent/CURSOR_ADAPTER.md)
+Details: [`.agent/IDE_ADAPTERS.md`](.agent/IDE_ADAPTERS.md)
 
 ## How it works
 
 1. **Document** — Phase docs (`00_scope` … `05_architecture`, security, stack, …) and `docs/decisions/` for why things changed.
-2. **Plan** — Epics, versions, sprints, and user stories after architecture is approved enough to commit.
-3. **Refine** — `/refine-us` deepens Approach and sets `ready: true` before any product code.
+2. **Plan** — Epics, versions, sprints, and user stories after architecture is approved.
+3. **Refine** — `/review-us` (optional audit) then `/refine-us` deepens Approach and sets `ready: true` before product code.
 4. **Execute** — Work from a US file; record evidence; `/complete-us` when it is really done.
+5. **Commit** — You review `git diff` and commit (one US per commit). Agents do not commit unless you ask — see [commit-after-us-close](.agent/references/commit-after-us-close.md).
 
 **Rule of thumb:** if it is not in `docs/`, it is not part of the managed process — chat does not count.
 
-No login. No cloud. Git holds the history. Agents follow `.agent/`; the monitor, if you use it, only **reads** `docs/`.
+No login. No cloud. Git holds the history. The monitor, if you use it, only **reads** `docs/`.
 
 ## What it is not
 
-- Not a PM SaaS, not a wiki you forget to update, not vibe-coding without a spec.
-- Not “the agent said done” — done is in `docs/us/` with acceptance and implementation recorded.
+- Not a PM SaaS or a wiki you forget to update — it is Markdown and JSON in your repo.
+- Not “the agent said done” — done is `status: ✅` in `docs/us/` with a filled Record, then your git commit.
 - Not the monitor running the project — the IDE + `.agent/` + `docs/` do; the app only displays files.
 
 ## Quick start
@@ -107,7 +110,7 @@ No login. No cloud. Git holds the history. Agents follow `.agent/`; the monitor,
 git clone https://github.com/colabcolibri/meridian.git
 cd meridian
 
-# Cursor only — mirror .agent/ into .cursor/ (local, not committed):
+# Cursor or Claude Code — mirror .agent/ into local adapters (not committed):
 chmod +x .agent/scripts/sync_cursor_kit.sh
 ./.agent/scripts/sync_cursor_kit.sh
 
@@ -115,31 +118,19 @@ chmod +x .agent/scripts/sync_cursor_kit.sh
 cd app-desktop && pnpm install && pnpm dev
 ```
 
-If your IDE already supports `.agent/`, skip the sync script and open the repo there.
+If your IDE already supports `.agent/` natively, skip the sync script.
 
 **New to Meridian?** [Start here](.agent/references/start-here.md) → [Usage guide](.agent/references/usage-guide.md) → `/init-meridian` or `/status`.
 
 ### Monitor
 
-**Live demo:** [https://colabcolibri.github.io/meridian/](https://colabcolibri.github.io/meridian/) — read-only monitor with this repo’s `app-desktop/docs/` preloaded (no folder picker).
+**Live demo:** [https://colabcolibri.github.io/meridian/](https://colabcolibri.github.io/meridian/) — read-only monitor with this repo’s `app-desktop/docs/` preloaded.
 
-**Run locally:** `pnpm dev` in `app-desktop/`, open http://localhost:5173, click **Open docs folder**, and select a Meridian `docs/` directory (e.g. `app-desktop/docs/`).
+**Run locally:** `pnpm dev` in `app-desktop/`, open http://localhost:5173, click **Open docs folder**, select a Meridian `docs/` directory (e.g. `app-desktop/docs/`).
 
-**Same build as Pages:** `pnpm dev:demo`, or `VITE_BASE_PATH=/meridian/ pnpm build:demo && VITE_BASE_PATH=/meridian/ pnpm preview`.
+The loop itself runs in your IDE via `.agent/`; the monitor is a read-only window on the same files. Tabs: Start here, Usage guide, Setup, Decisions, Deliverables, Board — plus story detail as a sheet from Board or Deliverables. Markdown mirrors: [start-here.md](.agent/references/start-here.md) · [usage-guide.md](.agent/references/usage-guide.md).
 
-The **real Meridian loop runs in your IDE** through `.agent/` — workflows, agents, and slash commands. The monitor is a **read-only window** on the Markdown and JSON you commit in `docs/`. Same guides as the first two tabs also exist as Markdown: [start-here.md](.agent/references/start-here.md) · [usage-guide.md](.agent/references/usage-guide.md).
-
-| Tab | What you see |
-| --- | ------------ |
-| Start here | Concepts, `docs/` map, phases |
-| Usage guide | Daily paths and slash commands |
-| Setup | Phase docs 00–11 and gates |
-| Decisions | `docs/decisions/*.json` by day |
-| Deliverables | Versions, sprints, epics, coverage |
-| Board | Kanban from US frontmatter |
-| Story detail | One US — Intent, Plan, Record, Boundaries (sheet from Board or Deliverables) |
-
-Deploy to GitHub Pages runs on push to `main` when `app-desktop/` changes ([deploy-demo.yml](.github/workflows/deploy-demo.yml)).
+Deploy to GitHub Pages on push to `main` when `app-desktop/` changes ([deploy-demo.yml](.github/workflows/deploy-demo.yml)).
 
 ## Adopt Meridian in your project
 
@@ -156,20 +147,25 @@ cp -R path/to/meridian/.agent ./your-project/
 ```
 
 1. Commit `.agent/` and grow `docs/` as the living project record.
-2. **Antigravity / `.agent`-native IDE** — workflows and agents under `.agent/` drive the process.
-3. **Cursor** — run `./.agent/scripts/sync_cursor_kit.sh` for slash commands in `.cursor/`; still edit the kit in `.agent/`. Do not commit `.cursor/`.
-4. **Monitor (optional)** — use the [live demo](https://colabcolibri.github.io/meridian/) or run `app-desktop` locally.
+2. **Native `.agent/` IDE** — workflows and agents drive the process with no adapter.
+3. **Cursor or Claude Code** — run `./.agent/scripts/sync_cursor_kit.sh` after clone; do not commit `.cursor/` or `.claude/`.
+4. **Monitor (optional)** — [live demo](https://colabcolibri.github.io/meridian/) or run `app-desktop` locally.
 
 ## Agents and commands
 
-| Where | Agents | Commands |
-| ----- | ------ | -------- |
-| `.agent/` (all IDEs) | `process-manager`, `scope-architect`, `documentation-strategist`, `security-steward`, `architecture-guardian`, `sprint-planner`, `board-keeper` | Workflows in `.agent/workflows/` — see [usage guide](.agent/references/usage-guide.md) |
-| `.cursor/` (Cursor) | Same personas (symlinked) | Slash commands: `/init-meridian`, `/status`, `/create-us`, `/refine-us`, `/complete-us`, `/sync-board`, `/daily-with-ai`, … |
+Seven agents (`process-manager`, `scope-architect`, `documentation-strategist`, `security-steward`, `architecture-guardian`, `sprint-planner`, `board-keeper`) orchestrate workflows in `.agent/workflows/`.
 
-Full map: [`.agent/ARCHITECTURE.md`](.agent/ARCHITECTURE.md).
+| Where | Slash commands |
+| ----- | -------------- |
+| `.agent/workflows/` | Source definitions — all IDEs |
+| `.cursor/commands/` | Cursor — after sync |
+| `.claude/commands/` | Claude Code — after sync |
+
+Common commands: `/init-meridian`, `/status`, `/create-epic`, `/create-version`, `/plan-sprint`, `/create-us`, `/review-us`, `/refine-us`, `/complete-us`, `/sync-board`, `/architecture`, `/security-pass`, `/daily-with-ai`. Full list: [usage guide](.agent/references/usage-guide.md). Map: [`.agent/ARCHITECTURE.md`](.agent/ARCHITECTURE.md).
 
 ## Protocol authority
+
+When agents conflict, resolution order is:
 
 1. Your instruction  
 2. [`.agent/MERIDIAN.md`](.agent/MERIDIAN.md)  
@@ -183,6 +179,8 @@ python3 .agent/scripts/validate_meridian.py app-desktop
 python3 .agent/scripts/validate_meridian.py app-desktop --json   # CI / machine output
 cd app-desktop && pnpm lint && pnpm test && pnpm build
 ```
+
+Run validation before marking docs `approved` or creating user stories.
 
 ## Contributing · license
 
