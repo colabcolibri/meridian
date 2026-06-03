@@ -41,8 +41,6 @@ import {
   validateFileListFolder,
 } from "@/features/folder/validate-file-list-folder"
 
-const OPENING_WATCHDOG_MS = 8_000
-
 interface ProjectFolderContextValue {
   status: ProjectFolderStatus
   folder: MeridianFolderSnapshot | null
@@ -85,10 +83,8 @@ export function ProjectFolderProvider({ children }: { children: ReactNode }) {
   const docsRootRef = useRef<MeridianDocsRoot | null>(null)
   const restoreGenerationRef = useRef(0)
   const openFolderGenerationRef = useRef(0)
-  const statusRef = useRef(status)
 
   docsRootRef.current = docsRoot
-  statusRef.current = status
 
   const fsAccessSupported =
     demoBuild || isFileSystemAccessSupported() || isFolderInputSupported()
@@ -371,31 +367,6 @@ export function ProjectFolderProvider({ children }: { children: ReactNode }) {
     },
     [finishOpenWithHandle],
   )
-
-  useEffect(() => {
-    if (status !== "opening") {
-      return
-    }
-
-    const generation = openFolderGenerationRef.current
-    const timeoutId = window.setTimeout(() => {
-      if (statusRef.current !== "opening" || folderKeyRef.current !== null) {
-        return
-      }
-      if (openFolderGenerationRef.current !== generation) {
-        return
-      }
-      cancelOpening()
-      setError(
-        "Folder open timed out. Click Open folder again and select the docs/ directory.",
-      )
-      setStatus("error")
-    }, OPENING_WATCHDOG_MS)
-
-    return () => {
-      window.clearTimeout(timeoutId)
-    }
-  }, [cancelOpening, status])
 
   useEffect(() => {
     if (demoBuild || !canPersistAcrossReload) {
