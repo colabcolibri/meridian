@@ -8,6 +8,7 @@ import { useProjectFolder } from "@/features/folder/ProjectFolderContext"
 import { OpenFolderButton } from "@/features/monitor/components/OpenFolderButton"
 import { MONITOR_CONTAINER } from "@/features/monitor/monitor-layout"
 import { typeScale } from "@/features/monitor/monitor-typography"
+import { publicAssetUrl } from "@/lib/site-urls"
 import { cn } from "@/lib/utils"
 
 export function MonitorTopBar() {
@@ -28,7 +29,13 @@ export function MonitorTopBar() {
       >
         <div className="flex min-w-0 items-center gap-3">
           <div className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-md bg-meridian-muted ring-1 ring-meridian-border">
-            <img alt="" className="h-5 w-5" height={20} src="/favicon.svg" width={20} />
+            <img
+              alt=""
+              className="h-5 w-5"
+              height={20}
+              src={publicAssetUrl("favicon.svg")}
+              width={20}
+            />
           </div>
           <div className="flex min-w-0 items-baseline gap-2">
             <span className="text-xs text-muted-foreground shrink-0">Meridian</span>

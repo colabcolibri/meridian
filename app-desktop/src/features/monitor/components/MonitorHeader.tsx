@@ -1,4 +1,4 @@
-import { AlertCircle, FolderOpen, Loader2, Sparkles, X } from "lucide-react"
+import { AlertCircle, FolderOpen, Github, Loader2, Sparkles, X } from "lucide-react"
 
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -8,6 +8,7 @@ import { useProjectFolder } from "@/features/folder/ProjectFolderContext"
 import { OpenFolderButton } from "@/features/monitor/components/OpenFolderButton"
 import { MONITOR_CONTAINER } from "@/features/monitor/monitor-layout"
 import { MONITOR_HEADER_TABS, type MonitorView } from "@/features/monitor/monitor-views"
+import { MERIDIAN_GITHUB_URL, publicAssetUrl } from "@/lib/site-urls"
 import { cn } from "@/lib/utils"
 
 export function MonitorHeader({
@@ -37,7 +38,13 @@ export function MonitorHeader({
         {/* Left: logo + breadcrumb */}
         <div className="flex min-w-0 items-center gap-2.5">
           <div className="flex h-7 w-7 shrink-0 items-center justify-center overflow-hidden rounded-md bg-meridian-muted ring-1 ring-meridian-border">
-            <img alt="" className="h-4 w-4" height={16} src="/favicon.svg" width={16} />
+            <img
+              alt=""
+              className="h-4 w-4"
+              height={16}
+              src={publicAssetUrl("favicon.svg")}
+              width={16}
+            />
           </div>
           <div className="flex min-w-0 items-center gap-1.5 text-sm">
             <span className="shrink-0 text-muted-foreground">Meridian</span>
@@ -71,6 +78,27 @@ export function MonitorHeader({
 
         {/* Right: actions */}
         <div className="flex shrink-0 items-center gap-1.5">
+          <Button
+            asChild
+            className="hidden gap-1.5 sm:inline-flex"
+            size="sm"
+            variant="ghost"
+          >
+            <a href={MERIDIAN_GITHUB_URL} rel="noopener noreferrer" target="_blank">
+              <Github className="h-4 w-4" aria-hidden />
+              GitHub
+            </a>
+          </Button>
+          <Button asChild className="sm:hidden" size="sm" variant="ghost">
+            <a
+              aria-label="Meridian on GitHub"
+              href={MERIDIAN_GITHUB_URL}
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <Github className="h-4 w-4" />
+            </a>
+          </Button>
           <OpenFolderButton size="sm" variant={folder ? "outline" : "default"}>
             {isOpening ? (
               <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />
