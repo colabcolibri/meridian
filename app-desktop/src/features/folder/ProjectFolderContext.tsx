@@ -240,24 +240,7 @@ export function ProjectFolderProvider({ children }: { children: ReactNode }) {
         }
 
         if (cause instanceof DOMException && cause.name === "AbortError") {
-          void (async () => {
-            if (!shouldApplyAsyncResult(generation, openFolderGenerationRef.current)) {
-              return
-            }
-            const previous = canPersistAcrossReload
-              ? await restoreMeridianFolderHandle()
-              : null
-            if (!previous) {
-              clearBoundFolder()
-              return
-            }
-            if (!(await hasReadPermission(previous))) {
-              setPermissionRequiredForHandle(previous)
-              return
-            }
-            openFolderGenerationRef.current += 1
-            await finishOpenWithHandle(previous, openFolderGenerationRef.current)
-          })()
+          clearBoundFolder()
           return
         }
 
