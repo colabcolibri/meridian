@@ -15,13 +15,10 @@ import {
   meridianFolderHints,
 } from "@/features/folder/demo-folder-access"
 import { createFileListDocsRoot } from "@/features/folder/file-list-docs-root"
-import { createFilesystemDocsRoot } from "@/features/folder/filesystem-docs-root"
 import { shouldApplyAsyncResult } from "@/features/folder/folder-open-session"
 import {
-  isFileSystemAccessSupported,
   isFolderInputSupported,
-  openSnapshotFromHandle,
-  startDirectoryPickerFromUserGesture,
+  isFileSystemAccessSupported,
 } from "@/features/folder/folder-access"
 import type { MeridianDocsRoot } from "@/features/folder/meridian-docs-root"
 import { resolveMeridianDocsRoot } from "@/features/folder/resolve-docs-root"
@@ -48,8 +45,6 @@ interface ProjectFolderContextValue {
   isDemoActive: boolean
   /** Demo only. */
   openFolder: () => void
-  /** Sync picker on click (persists handle for F5). Returns false → use file input fallback. */
-  openFolderFromPicker: () => boolean
   applyFolderFromFileList: (files: File[]) => void
   cancelOpening: () => void
   clearFolder: () => Promise<void>
@@ -159,69 +154,11 @@ export function ProjectFolderProvider({ children }: { children: ReactNode }) {
     [clearBoundFolder],
   )
 
-  const finishOpenWithHandle = useCallback(
-    async (handle: FileSystemDirectoryHandle, generation: number) => {
-      if (!shouldApplyAsyncResult(generation, openFolderGenerationRef.current)) {
-        return
-      }
-
-      const opened = await openSnapshotFromHandle(handle)
-      if (!shouldApplyAsyncResult(generation, openFolderGenerationRef.current)) {
-        return
-      }
-
-      handleRef.current = opened.handle
-      bindFolder(opened.snapshot, createFilesystemDocsRoot(opened.handle))
-    },
-    [bindFolder],
-  )
-
   const finishOpenDemo = useCallback(async () => {
     const opened = await openDemoMeridianFolder()
     handleRef.current = null
     bindFolder(opened.snapshot, opened.docsRoot)
   }, [bindFolder])
-
-  const completeOpenFromPicker = useCallback(
-    async (pickerPromise: Promise<FileSystemDirectoryHandle>, generation: number) => {
-      try {
-        const handle = await pickerPromise
-        if (!shouldApplyAsyncResult(generation, openFolderGenerationRef.current)) {
-          return
-        }
-        await finishOpenWithHandle(handle, generation)
-      } catch (cause) {
-        if (!shouldApplyAsyncResult(generation, openFolderGenerationRef.current)) {
-          return
-        }
-        if (cause instanceof DOMException && cause.name === "AbortError") {
-          clearBoundFolder()
-          return
-        }
-        const message =
-          cause instanceof Error ? cause.message : "Could not open folder."
-        failOpenSession(message, generation)
-      }
-    },
-    [clearBoundFolder, failOpenSession, finishOpenWithHandle],
-  )
-
-  const openFolderFromPicker = useCallback((): boolean => {
-    if (!isFileSystemAccessSupported()) {
-      return false
-    }
-
-    let pickerPromise: Promise<FileSystemDirectoryHandle>
-    try {
-      pickerPromise = startDirectoryPickerFromUserGesture()
-    } catch {
-      return false
-    }
-
-    const generation = beginHardResetSync()
-    void completeOpenFromPicker(pickerPromise, generation)
-    return true
-  }, [beginHardResetSync, completeOpenFromPicker])
 
   const applyFolderFromFileList = useCallback(
     (files: File[]) => {
@@ -356,7 +293,6 @@ export function ProjectFolderProvider({ children }: { children: ReactNode }) {
       isDemoBuild: demoBuild,
       isDemoActive,
       openFolder,
-      openFolderFromPicker,
       applyFolderFromFileList,
       cancelOpening,
       clearFolder,
@@ -374,7 +310,6 @@ export function ProjectFolderProvider({ children }: { children: ReactNode }) {
       demoBuild,
       isDemoActive,
       openFolder,
-      openFolderFromPicker,
       applyFolderFromFileList,
       cancelOpening,
       clearFolder,

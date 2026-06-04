@@ -24,16 +24,11 @@ export function OpenFolderButton({
     fsAccessSupported,
     isDemoBuild,
     openFolder,
-    openFolderFromPicker,
   } = useProjectFolder()
 
   const handleClick = () => {
     if (isDemoBuild) {
       openFolder()
-      return
-    }
-
-    if (openFolderFromPicker()) {
       return
     }
 
