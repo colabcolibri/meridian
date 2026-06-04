@@ -290,7 +290,7 @@ def main() -> int:
 
     if sprints_dir.exists():
         for sprint_path in sorted(sprints_dir.glob("v*-S*.md")):
-            if not re.match(r"v\d+-S\d+\.md$", sprint_path.name):
+            if not re.match(r"v\d+(\.\d+)*-S\d+\.md$", sprint_path.name):
                 errors.append(f"Invalid sprint filename: {sprint_path.name}")
                 continue
             frontmatter = read_frontmatter(sprint_path)
