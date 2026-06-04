@@ -1055,5 +1055,29 @@
     "done_when": "In Board By epic layout, the epic accordion list has top spacing aligned with the column view, and each collapsed epic row shows per-column US counts (Pending, In progress, Awaiting tests, Complete, Frozen only when > 0) derived from the same kanban rules as the inner grid.",
     "tests": "required",
     "tests_status": "done"
+  },
+  {
+    "id": "US-0087",
+    "title": "Local HTTP file server sidecar replacing File System Access API",
+    "epic": "EPIC-02",
+    "version": "v2.01",
+    "status": "❌",
+    "moscow": "Must",
+    "depends_on": [],
+    "done_when": "Running `pnpm dev` starts a local HTTP file server; the user enters a folder path once in the browser UI; F5 reloads all documents and board state without any folder picker appearing; the path is restored from localStorage on every subsequent load.",
+    "tests": "required",
+    "tests_status": "pending"
+  },
+  {
+    "id": "US-0088",
+    "title": "Scrum ↔ Meridian map in kit and monitor guide",
+    "epic": "EPIC-06",
+    "version": "v2.01",
+    "status": "✅",
+    "moscow": "Must",
+    "depends_on": [],
+    "done_when": "Kit has scrum-meridian-map.md and human-only scrum-guia-completo.md; agents are directed to the map not the textbook; app How it works shows Scrum and Meridian with diagram; v2.01 lists this US; validate_meridian.py passes.",
+    "tests": "required",
+    "tests_status": "done"
   }
 ]
