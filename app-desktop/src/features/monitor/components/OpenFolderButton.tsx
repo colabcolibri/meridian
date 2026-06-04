@@ -33,12 +33,11 @@ export function OpenFolderButton({
       return
     }
 
-    cancelOpening()
-
     if (openFolderFromPicker()) {
       return
     }
 
+    cancelOpening()
     inputRef.current?.click()
   }
 

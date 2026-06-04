@@ -381,16 +381,19 @@ export function ProjectFolderProvider({ children }: { children: ReactNode }) {
       }
 
       openFolderGenerationRef.current += 1
+      const restoreGeneration = openFolderGenerationRef.current
       try {
-        await finishOpenWithHandle(handle, openFolderGenerationRef.current)
-      } catch (cause) {
+        const timeout = new Promise<never>((_, reject) =>
+          setTimeout(() => reject(new Error("Restore timed out.")), 8000),
+        )
+        await Promise.race([finishOpenWithHandle(handle, restoreGeneration), timeout])
+      } catch {
         if (cancelled || generation !== restoreGenerationRef.current) {
           return
         }
         await clearFolderHandle()
         clearBoundFolder()
-        setError(cause instanceof Error ? cause.message : "Could not restore folder.")
-        setStatus("error")
+        setStatus("none")
       }
     }
 
