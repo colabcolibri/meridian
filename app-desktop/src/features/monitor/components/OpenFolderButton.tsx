@@ -24,6 +24,7 @@ export function OpenFolderButton({
     fsAccessSupported,
     isDemoBuild,
     openFolder,
+    openFolderFromPicker,
   } = useProjectFolder()
 
   const handleClick = () => {
@@ -33,6 +34,11 @@ export function OpenFolderButton({
     }
 
     cancelOpening()
+
+    if (openFolderFromPicker()) {
+      return
+    }
+
     inputRef.current?.click()
   }
 
