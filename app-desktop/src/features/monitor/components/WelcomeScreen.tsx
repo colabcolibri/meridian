@@ -1,9 +1,8 @@
-import { FolderOpen, FolderTree, LayoutDashboard, Sparkles } from "lucide-react"
+import { FolderTree, LayoutDashboard, Sparkles } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { useProjectFolder } from "@/features/folder/ProjectFolderContext"
 import { PathInput } from "@/features/folder/PathInput"
-import { OpenFolderButton } from "@/features/monitor/components/OpenFolderButton"
 import { MONITOR_CONTAINER } from "@/features/monitor/monitor-layout"
 import { monitorPanelClass } from "@/features/monitor/monitor-ui"
 import { typeScale } from "@/features/monitor/monitor-typography"
@@ -21,21 +20,14 @@ const steps = [
   },
   {
     icon: Sparkles,
-    title: "Use Chrome or Edge on localhost",
-    body: "The browser must allow opening the folder on your computer (once per session).",
+    title: "Paste the absolute path to your docs folder",
+    body: "e.g. /Users/you/project/docs — the server reads it directly. F5 restores the board automatically.",
   },
 ]
 
 export function WelcomeScreen() {
-  const {
-    folder,
-    fsAccessSupported,
-    isDemoBuild,
-    status,
-    error,
-    openFolderFromPath,
-    storedPath,
-  } = useProjectFolder()
+  const { folder, isDemoBuild, status, error, openFolderFromPath, storedPath } =
+    useProjectFolder()
 
   if (folder) {
     return null
@@ -91,34 +83,12 @@ export function WelcomeScreen() {
         })}
       </ol>
 
-      <div className="mx-auto mt-10 flex max-w-xl flex-col items-center gap-4">
+      <div className="mx-auto mt-10 flex max-w-xl flex-col items-center gap-3">
         <PathInput
           initialPath={storedPath ?? ""}
           onSubmit={openFolderFromPath}
           disabled={isOpening}
         />
-
-        <div className="flex items-center gap-3 text-xs text-muted-foreground">
-          <span className="h-px w-16 bg-border" />
-          or
-          <span className="h-px w-16 bg-border" />
-        </div>
-
-        <OpenFolderButton
-          className="h-10 w-full max-w-sm text-sm sm:w-auto sm:min-w-[240px]"
-          size="default"
-          variant="outline"
-        >
-          <FolderOpen className="mr-2 h-4 w-4" />
-          Browse folder
-        </OpenFolderButton>
-
-        {!fsAccessSupported ? (
-          <p className="text-center text-xs text-amber-800">
-            Your browser does not support folder access. Use Chrome or Edge on
-            localhost.
-          </p>
-        ) : null}
         {error ? (
           <p className="text-center text-sm text-red-800" role="alert">
             {error}
