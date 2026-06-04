@@ -383,10 +383,16 @@ export function ProjectFolderProvider({ children }: { children: ReactNode }) {
       openFolderGenerationRef.current += 1
       const restoreGeneration = openFolderGenerationRef.current
       try {
-        const timeout = new Promise<never>((_, reject) =>
-          setTimeout(() => reject(new Error("Restore timed out.")), 8000),
-        )
-        await Promise.race([finishOpenWithHandle(handle, restoreGeneration), timeout])
+        await finishOpenWithHandle(handle, restoreGeneration)
+        if (
+          !cancelled &&
+          generation === restoreGenerationRef.current &&
+          !folderKeyRef.current
+        ) {
+          await clearFolderHandle()
+          clearBoundFolder()
+          setStatus("none")
+        }
       } catch {
         if (cancelled || generation !== restoreGenerationRef.current) {
           return
