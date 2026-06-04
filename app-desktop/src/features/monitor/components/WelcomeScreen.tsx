@@ -1,8 +1,9 @@
-import { FolderTree, LayoutDashboard, Sparkles } from "lucide-react"
+import { FolderOpen, FolderTree, LayoutDashboard, Sparkles } from "lucide-react"
 
+import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { useProjectFolder } from "@/features/folder/ProjectFolderContext"
-import { PathInput } from "@/features/folder/PathInput"
+import { OpenFolderDialog } from "@/features/folder/OpenFolderDialog"
 import { MONITOR_CONTAINER } from "@/features/monitor/monitor-layout"
 import { monitorPanelClass } from "@/features/monitor/monitor-ui"
 import { typeScale } from "@/features/monitor/monitor-typography"
@@ -20,8 +21,8 @@ const steps = [
   },
   {
     icon: Sparkles,
-    title: "Paste the absolute path to your docs folder",
-    body: "e.g. /Users/you/project/docs — the server reads it directly. F5 restores the board automatically.",
+    title: "Works across reloads",
+    body: "The path is saved locally — F5 restores the board automatically without opening anything again.",
   },
 ]
 
@@ -84,11 +85,21 @@ export function WelcomeScreen() {
       </ol>
 
       <div className="mx-auto mt-10 flex max-w-xl flex-col items-center gap-3">
-        <PathInput
+        <OpenFolderDialog
           initialPath={storedPath ?? ""}
           onSubmit={openFolderFromPath}
           disabled={isOpening}
-        />
+        >
+          <Button
+            className="h-11 w-full max-w-sm text-base sm:w-auto sm:min-w-[240px]"
+            disabled={isOpening}
+            size="lg"
+          >
+            <FolderOpen className="mr-2 h-5 w-5" />
+            Open project folder
+          </Button>
+        </OpenFolderDialog>
+
         {error ? (
           <p className="text-center text-sm text-red-800" role="alert">
             {error}
