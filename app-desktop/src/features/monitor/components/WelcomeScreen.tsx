@@ -17,13 +17,13 @@ import { typeScale } from "@/features/monitor/monitor-typography"
 const steps = [
   {
     icon: FolderTree,
-    title: "Choose your project's docs folder",
-    body: "This is where scope, versions, user stories, and the board live — the same folder you edit with agents in Cursor.",
+    title: "Open your project's docs folder",
+    body: "This is where the spec lives — scope, architecture, epics, versions, user stories, decision log. The same files your agents read and update.",
   },
   {
     icon: LayoutDashboard,
-    title: "Track setup, deliverables, and board",
-    body: "Three views: initial document progress, product epics, and status of each delivery.",
+    title: "See Setup, Deliverables, and Board",
+    body: "Setup tracks phase doc progress. Deliverables shows epic coverage. Board shows each user story's status — all read from the files, no database.",
   },
   {
     icon: Sparkles,
@@ -67,7 +67,7 @@ export function WelcomeScreen() {
         <h2 className={cn(typeScale.pageTitle, "mt-2 sm:text-3xl")}>
           {needsPermission
             ? "Allow folder read access"
-            : "Manage your project through the docs folder"}
+            : "Monitor your Meridian project"}
         </h2>
         <p className={cn(typeScale.bodySm, "mt-3")}>
           {needsPermission ? (
@@ -82,8 +82,8 @@ export function WelcomeScreen() {
             <>
               Open the project's{" "}
               <strong className="font-medium text-foreground">docs</strong> folder (e.g.{" "}
-              <span className="font-mono text-xs">app-desktop/docs</span>) to see the
-              same content your agents use.
+              <span className="font-mono text-xs">my-project/docs</span>) to see Setup,
+              Deliverables, and Board — read directly from your spec files.
             </>
           )}
         </p>

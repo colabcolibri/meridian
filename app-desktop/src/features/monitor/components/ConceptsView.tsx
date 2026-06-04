@@ -2,6 +2,7 @@ import {
   BookOpen,
   FileText,
   GitBranch,
+  GitCommit,
   ListChecks,
   Milestone,
   Rocket,
@@ -20,16 +21,17 @@ import {
   Prose,
 } from "@/features/monitor/components/guide-components"
 import {
-  appIntro,
+  audiences,
   corePrinciples,
   decisionLogAnatomy,
+  deliveryArtifacts,
+  deliveryArtifactsNote,
   docFlowNote,
   epicAnatomy,
-  epicsVersionsStories,
   folderStructure,
   journeyPhases,
   meridianIntro,
-  monitorTabsGuide,
+  meridianLoop,
   nextStepsAfterConcepts,
   sprintAnatomy,
   statusGuide,
@@ -44,11 +46,11 @@ import { cn } from "@/lib/utils"
 const phaseIcons = [Settings, FileText, Milestone, Rocket]
 
 const principleIcons = {
-  "docs-first": FileText,
+  "spec-first": FileText,
   "human-manager": Users,
   "audit-status": ListChecks,
   "refine-before-code": GitBranch,
-  "derived-board": GitBranch,
+  "derived-board": GitCommit,
 } as const
 
 function PhaseCard({ phase, index }: { phase: JourneyPhase; index: number }) {
@@ -98,21 +100,58 @@ export function ConceptsView() {
   return (
     <div className="w-full max-w-none space-y-10">
       {/* ── 1. Introduction ─────────────────────────────────────── */}
-      <header className="space-y-3">
+      <header className="space-y-5">
         <div className="flex items-center gap-2">
           <BookOpen className="h-5 w-5 text-meridian" aria-hidden />
           <h2 className={typeScale.pageTitle}>{meridianIntro.title}</h2>
         </div>
         <Prose paragraphs={meridianIntro.paragraphs} />
+        <div className="grid gap-3 sm:grid-cols-3">
+          {audiences.map((a) => (
+            <div
+              key={a.id}
+              className={cn(monitorPanelClass, "flex flex-col gap-2 p-4")}
+            >
+              <p className={typeScale.label}>{a.label}</p>
+              <p className={cn(typeScale.caption, "leading-relaxed")}>
+                {a.description}
+              </p>
+            </div>
+          ))}
+        </div>
       </header>
 
-      {/* ── 2. Golden rules — visible, not collapsed ─────────────── */}
+      {/* ── 2. The loop ───────────────────────────────────────────── */}
+      <section className="space-y-3">
+        <div>
+          <h3 className={typeScale.sectionTitle}>{meridianLoop.title}</h3>
+          <p className={cn(typeScale.bodySm, "mt-1")}>{meridianLoop.subtitle}</p>
+        </div>
+        <div className="overflow-x-auto rounded-xl border border-border">
+          <ol className="grid grid-cols-6 divide-x divide-border min-w-[640px]">
+            {meridianLoop.steps.map((step, index) => (
+              <li key={step.id} className="flex flex-col gap-3 p-4">
+                <div className="flex items-center gap-2">
+                  <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-meridian text-[11px] font-bold text-white">
+                    {index + 1}
+                  </span>
+                  <span className={typeScale.label}>{step.label}</span>
+                </div>
+                <p className={cn(typeScale.caption, "leading-relaxed")}>
+                  {step.description}
+                </p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </section>
+
+      {/* ── 3. Three principles ───────────────────────────────────── */}
       <section className="space-y-4">
         <div>
-          <h3 className={typeScale.sectionTitle}>Five rules that govern everything</h3>
+          <h3 className={typeScale.sectionTitle}>Three rules that govern everything</h3>
           <p className={cn(typeScale.bodySm, "mt-1")}>
-            These are not suggestions. Every workflow, every gate, every command exists
-            because of these.
+            Every workflow, every gate, every command exists because of these.
           </p>
         </div>
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
@@ -126,21 +165,17 @@ export function ConceptsView() {
         </div>
       </section>
 
-      {/* ── 3. Four phases — visible, not collapsed ───────────────── */}
-      <section className="space-y-4">
-        <div>
-          <h3 className={typeScale.sectionTitle}>The four phases</h3>
-          <p className={cn(typeScale.bodySm, "mt-1")}>
-            Every project goes through these phases in order. Each one unlocks the next
-            — you cannot skip.
-          </p>
-        </div>
+      {/* ── 4. Four phases — collapsed reference ─────────────────── */}
+      <ConceptAccordion
+        subtitle="From first file to shipped story — what gets created at each step"
+        title="The four phases"
+      >
         <div className="grid gap-4 sm:grid-cols-2">
           {journeyPhases.map((phase, index) => (
             <PhaseCard index={index} key={phase.id} phase={phase} />
           ))}
         </div>
-      </section>
+      </ConceptAccordion>
 
       {/* ── 4. Document structure (collapsed) ────────────────────── */}
       <ConceptAccordion
@@ -165,38 +200,31 @@ export function ConceptsView() {
         </p>
       </ConceptAccordion>
 
-      {/* ── 5. Epics / versions / sprints / stories relationship ──── */}
+      {/* ── 5. Delivery artifacts ─────────────────────────────────── */}
       <ConceptAccordion
-        subtitle="How the four delivery artifacts connect"
-        title="Epics, versions, sprints, and user stories"
+        subtitle="Epic, version, sprint, user story — what each one is for"
+        title="Delivery artifacts"
       >
-        <p className={typeScale.body}>
-          Four linked artifacts: <strong className="text-foreground">epic</strong>{" "}
-          (product capability) → <strong className="text-foreground">version</strong>{" "}
-          (release) → <strong className="text-foreground">sprint</strong> (time box) →{" "}
-          <strong className="text-foreground">user story</strong> (executable task).
-        </p>
-        <div className="mt-4 grid gap-4">
-          {epicsVersionsStories.map((section) => (
-            <article className={cn(monitorPanelClass, "p-5")} key={section.title}>
-              <h4 className={typeScale.cardTitle}>{section.title}</h4>
-              <div className="mt-3 space-y-3">
-                {section.paragraphs.map((p) => (
-                  <p className={typeScale.body} key={p}>
-                    {p}
-                  </p>
-                ))}
+        <div className="grid gap-3 sm:grid-cols-2">
+          {deliveryArtifacts.map((a) => (
+            <div
+              key={a.id}
+              className="rounded-xl border border-border bg-card p-4 flex flex-col gap-2"
+            >
+              <div className="flex items-center justify-between gap-2">
+                <p className={typeScale.label}>{a.artifact}</p>
+                <code className="font-mono text-[11px] text-meridian">{a.path}</code>
               </div>
-              {section.bullets?.length ? (
-                <ul className={cn(typeScale.bodySm, "mt-4 list-disc space-y-2 pl-5")}>
-                  {section.bullets.map((item) => (
-                    <li key={item}>{item}</li>
-                  ))}
-                </ul>
-              ) : null}
-            </article>
+              <p className={cn(typeScale.caption, "text-muted-foreground italic")}>
+                {a.question}
+              </p>
+              <p className={typeScale.bodySm}>{a.description}</p>
+            </div>
           ))}
         </div>
+        <p className={cn(typeScale.caption, "mt-3 rounded-lg bg-muted/40 px-3 py-2")}>
+          {deliveryArtifactsNote}
+        </p>
       </ConceptAccordion>
 
       {/* ── 6. Anatomy of each artifact (collapsed) ──────────────── */}
@@ -304,26 +332,7 @@ export function ConceptsView() {
         </p>
       </ConceptAccordion>
 
-      {/* ── 8. App tabs (collapsed) ───────────────────────────────── */}
-      <ConceptAccordion
-        subtitle="What each tab shows after opening docs/"
-        title={appIntro.title}
-      >
-        <Prose paragraphs={appIntro.paragraphs} />
-        <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-          {monitorTabsGuide.map((tab) => (
-            <div
-              className="rounded-lg border border-border bg-muted/30 px-4 py-3"
-              key={tab.label}
-            >
-              <p className={typeScale.label}>{tab.label}</p>
-              <p className={cn(typeScale.caption, "mt-1")}>{tab.hint}</p>
-            </div>
-          ))}
-        </div>
-      </ConceptAccordion>
-
-      {/* ── 9. Next step ─────────────────────────────────────────── */}
+      {/* ── 8. Next step ─────────────────────────────────────────── */}
       <section className="space-y-3 rounded-xl border border-meridian-border bg-meridian-muted/20 p-5 sm:p-6">
         <h3 className={typeScale.sectionTitle}>{nextStepsAfterConcepts.title}</h3>
         <Prose paragraphs={nextStepsAfterConcepts.paragraphs} />

@@ -1,12 +1,20 @@
 import { ChevronDown, FolderOpen, type LucideIcon } from "lucide-react"
 import { useState } from "react"
 
-import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible"
+import { MonitorSheet } from "@/features/monitor/components/monitor-sheet"
 import { useProjectFolder } from "@/features/folder/ProjectFolderContext"
 import { OpenFolderButton } from "@/features/monitor/components/OpenFolderButton"
 import {
@@ -52,6 +60,18 @@ export function ConceptCard({
           {block.summary}
         </CardDescription>
       </CardHeader>
+      {block.bullets?.length ? (
+        <CardContent className="pt-0">
+          <ul className="space-y-1.5 border-t border-border pt-3">
+            {block.bullets.map((b) => (
+              <li key={b} className="flex gap-2">
+                <span className="mt-0.5 shrink-0 text-meridian text-xs">→</span>
+                <span className={cn(typeScale.caption, "leading-relaxed")}>{b}</span>
+              </li>
+            ))}
+          </ul>
+        </CardContent>
+      ) : null}
     </Card>
   )
 }
@@ -168,13 +188,30 @@ export function ConceptAccordion({
 }
 
 export function AnatomyCard({ guide }: { guide: AnatomyGuide }) {
+  const [exampleOpen, setExampleOpen] = useState(false)
+
   return (
     <article className="rounded-lg border border-border bg-muted/15 p-4 sm:p-5">
-      <h4 className={typeScale.cardTitle}>{guide.title}</h4>
-      <p className={cn(typeScale.bodySm, "mt-2")}>{guide.intro}</p>
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <h4 className={typeScale.cardTitle}>{guide.title}</h4>
+          <p className={cn(typeScale.bodySm, "mt-1")}>{guide.intro}</p>
+        </div>
+        {guide.exampleCode ? (
+          <Button
+            className="shrink-0"
+            onClick={() => setExampleOpen(true)}
+            size="sm"
+            variant="outline"
+          >
+            See example
+          </Button>
+        ) : null}
+      </div>
+
       <dl className="mt-4 space-y-2">
         {guide.fields.map((item) => (
-          <div className="grid gap-1 sm:grid-cols-[8rem_1fr]" key={item.field}>
+          <div className="grid gap-1 sm:grid-cols-[10rem_1fr]" key={item.field}>
             <dt>
               <code className="font-mono text-xs text-meridian">{item.field}</code>
             </dt>
@@ -182,25 +219,46 @@ export function AnatomyCard({ guide }: { guide: AnatomyGuide }) {
           </div>
         ))}
       </dl>
+
       {guide.sections && guide.sections.length > 0 ? (
-        <dl className="mt-4 space-y-2 border-t border-border pt-4">
+        <div className="mt-4 space-y-3 border-t border-border pt-4">
           {guide.sections.map((s) => (
-            <div className="grid gap-1 sm:grid-cols-[12rem_1fr]" key={s.heading}>
-              <dt>
+            <div key={s.heading}>
+              <div className="flex items-baseline gap-2">
                 <code className="font-mono text-xs text-meridian">{s.heading}</code>
-              </dt>
-              <dd className={typeScale.bodySm}>{s.description}</dd>
+                <span className={cn(typeScale.caption, "text-muted-foreground")}>
+                  {s.description}
+                </span>
+              </div>
+              {s.subsections?.length ? (
+                <ul className="mt-1.5 space-y-1 pl-4">
+                  {s.subsections.map((sub) => (
+                    <li key={sub.label} className="flex gap-2">
+                      <code className="shrink-0 font-mono text-[11px] text-meridian/70">
+                        {sub.label}
+                      </code>
+                      <span className={typeScale.caption}>{sub.description}</span>
+                    </li>
+                  ))}
+                </ul>
+              ) : null}
             </div>
           ))}
-        </dl>
-      ) : null}
-      {guide.exampleTitle ? (
-        <div className="mt-4 rounded-lg border border-meridian-border bg-meridian-muted/20 px-3 py-3">
-          <p className={typeScale.label}>{guide.exampleTitle}</p>
-          {guide.exampleBody ? (
-            <p className={cn(typeScale.bodySm, "mt-1.5")}>{guide.exampleBody}</p>
-          ) : null}
         </div>
+      ) : null}
+
+      {guide.exampleCode ? (
+        <MonitorSheet
+          contentClassName="data-[side=right]:!max-w-3xl data-[side=right]:sm:!max-w-3xl"
+          onOpenChange={setExampleOpen}
+          open={exampleOpen}
+          showDocumentIcon={false}
+          title={guide.exampleTitle ?? ""}
+        >
+          <pre className="whitespace-pre-wrap wrap-break-word overflow-x-hidden px-6 py-5 text-xs leading-relaxed text-foreground">
+            {guide.exampleCode}
+          </pre>
+        </MonitorSheet>
       ) : null}
     </article>
   )

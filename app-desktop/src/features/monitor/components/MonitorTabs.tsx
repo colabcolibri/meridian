@@ -6,12 +6,12 @@ import type { MonitorView } from "@/features/monitor/monitor-views"
 const tabs: { id: MonitorView; label: string; hint: string }[] = [
   {
     id: "concepts",
-    label: "Start here",
-    hint: "What Meridian is, folders, phases, and concepts",
+    label: "How it works",
+    hint: "What Meridian is, the loop, principles, and artifact reference",
   },
   {
     id: "usage",
-    label: "Usage guide",
+    label: "Commands",
     hint: "Step-by-step: document, backlog, implement, close, commit.",
   },
   {

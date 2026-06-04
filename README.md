@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/screenshots/meridian-header.jpg" alt="Meridian — Documentation-Driven Development Protocol for AI Agents" width="100%" />
+  <img src="assets/screenshots/meridian-header.jpg" alt="Meridian — Scrum-inspired workflow protocol for AI agents" width="100%" />
 </p>
 
 <p align="center">
@@ -9,12 +9,9 @@
 </p>
 
 <p align="center">
-  <strong>Your repo documents what you are building.</strong><br />
-  AI agents read the same files — so “done” means done in Git, not done in chat.
+  <strong>AI agents that build what you actually specified.</strong><br />
+  Spec in Git. Agent reads the spec. Done means done in files — not in chat.
 </p>
-
-<!-- GitHub About → Settings → Description: -->
-<!-- Docs-first protocol: structure your app in Git, work with AI from user stories and acceptance in files. -->
 
 > **Very early experiment** — personal project; APIs and rules will change. [Live demo](https://colabcolibri.github.io/meridian/) · [Protocol](.agent/MERIDIAN.md)
 
@@ -24,85 +21,54 @@
 
 ## The problem
 
-With AI in the IDE, code appears quickly — but the **project** often does not: decisions stay in chat, scope drifts, and “it’s done” means the model said so five messages ago. A week later you (or the next session) cannot reliably answer:
+AI agents in the IDE produce code fast — but without a written spec they hallucinate scope, repeat decisions already made, and "done" means whatever the model said five messages ago. A week later you cannot answer:
 
 - What are we building, and what is explicitly out of scope?
-- What did we change last Tuesday, and why?
 - Which user story is next, and what counts as finished?
+- Why did we make that architectural call last Tuesday?
 
-Meridian treats that gap as a **documentation problem**, not a tooling problem.
+Chat does not persist. Files do.
 
-## What Meridian gives you
+## What Meridian is
 
-One place in your repository — the `docs/` folder — to **structure the application** and **run work with AI** without losing continuity:
+Meridian is a **Scrum-inspired workflow protocol** that keeps AI agents accountable to a written spec — not to chat history.
 
-| You get | What it means in practice |
-| ------- | ------------------------- |
-| **Ordered product docs** | Scope, stack, security, principles, architecture (`00`–`08`, `11`) — each step unlocks the next so you do not code on vibes alone. |
-| **User stories with acceptance** | Work lives in `docs/us/` with Intent / Plan / Record, checkable criteria, and `ready: true` before code; “done” is recorded in the file (`/complete-us`), not implied by a green checkmark in the chat. |
-| **A decision trail** | `docs/decisions/` captures *why* something changed — for you on Monday and for the agent on Tuesday. |
-| **Agents on rails** | `.agent/` supplies workflows, skills, and gates so the IDE does not reinvent the process every prompt. |
-| **Visible progress (optional)** | The monitor reads `docs/` and shows setup, backlog, board, and story detail — read-only, no second source of truth. |
+You manage the project through Markdown files in `docs/`. Agents read those same files, propose and implement work, and record evidence of completion. You approve direction; agents execute. The loop is:
 
-**Docs-first** development: the spec lives in Git next to the code. Meridian is not Scrum-in-a-box and not Jira — it is a **file protocol** for one repo, one truth, AI included.
+```
+document → plan → refine → implement → close → commit
+```
 
-**You** stay manager: agents propose and implement; you approve documents, scope, and ✅ with evidence.
+Every step produces a file. Every file is Git history.
 
-**Guides:** [Start here](.agent/references/start-here.md) (concepts) · [Usage guide](.agent/references/usage-guide.md) (commands and daily flow).
+## How it works
 
-## Two pieces in every Meridian project
+| Step | What you do | What the agent does |
+| ---- | ----------- | ------------------- |
+| **Document** | Approve phase docs (`00_scope` → `05_architecture`) | Drafts, asks questions, fills gaps |
+| **Plan** | Approve epics, versions, sprint | Creates artifacts from your answers |
+| **Refine** | Review story intent | Deepens Approach, sets `ready: true` |
+| **Implement** | Reference the US file | Reads spec, writes code |
+| **Close** | Review diff, run tests | Fills `## Record`, marks `status: ✅` |
+| **Commit** | `git commit` | Suggests message — does not commit unless asked |
 
-| Piece | Role |
-| ----- | ---- |
-| **`docs/`** | What is true about the product — if it is not here, it is not part of the process. |
-| **`.agent/`** | How AI sessions run — workflows, agents, skills, rules (copy this kit into your repo). |
+**Rule:** no product code without `ready: true`. No `✅` without evidence in the Record. You hold both gates.
 
-Code implements `docs/`. Agents follow `.agent/`. Chat is where work happens; **files are what persist.**
+## Two things in every Meridian project
+
+| | Role |
+| - | ---- |
+| **`docs/`** | The spec — scope, architecture, epics, versions, user stories, decision log. If it is not here, it is not managed. |
+| **`.agent/`** | The workflow kit — agents, skills, slash commands, rules. Copy into your repo. |
 
 ## What is in this repository
 
 | Piece | Required? | What it does |
 | ----- | --------- | ------------ |
-| [`.agent/`](.agent/) + [protocol](.agent/MERIDIAN.md) | **Yes** | Meridian flow: agents, workflows, skills, rules. **Copy into every Meridian project.** |
-| `docs/` (in *your* project) | **Yes** | Project documentation agents read and update — [dogfooding example](app-desktop/docs/) in this repo. |
-| `.cursor/` · `.claude/` | Local only | IDE adapters generated from `.agent/` ([details](.agent/IDE_ADAPTERS.md)). Symlinks, not committed. |
-| [`app-desktop/`](app-desktop/) | **No** | Optional browser monitor — read-only view of `docs/`. Does not replace `.agent/` or your IDE. |
-
-## IDE support
-
-Meridian is **not tied to one editor**. The portable kit lives in `.agent/` (Antigravity / ag-kit convention).
-
-| IDE / tool | How you use Meridian |
-| ---------- | ------------------- |
-| **Antigravity, ag-kit, others** | Point the tool at `.agent/` — workflows, agents, and skills work natively. No sync step. |
-| **Cursor** | Run `./.agent/scripts/sync_cursor_kit.sh` to build `.cursor/` (rules, skills, agents, slash commands). Edit the kit in `.agent/`; regenerate after clone or kit changes. |
-| **Claude Code** | Same script builds `.claude/` (agents + slash commands). Workflows map to Claude slash commands; agents map to subagent definitions. |
-
-```txt
-.agent/          ← source of truth (commit this)
-.cursor/         ← Cursor adapter (gitignored, symlinks → .agent/)
-.claude/         ← Claude Code adapter (gitignored, symlinks → .agent/)
-```
-
-Details: [`.agent/IDE_ADAPTERS.md`](.agent/IDE_ADAPTERS.md)
-
-## How it works
-
-1. **Document** — Phase docs (`00_scope` … `05_architecture`, security, stack, …) and `docs/decisions/` for why things changed.
-2. **Plan** — Epics, versions, sprints, and user stories after architecture is approved.
-3. **Refine** — `/review-us` (optional audit) then `/refine-us` deepens Approach and sets `ready: true` before product code.
-4. **Execute** — Work from a US file; record evidence; `/complete-us` when it is really done.
-5. **Commit** — You review `git diff` and commit (one US per commit). Agents do not commit unless you ask — see [commit-after-us-close](.agent/references/commit-after-us-close.md).
-
-**Rule of thumb:** if it is not in `docs/`, it is not part of the managed process — chat does not count.
-
-No login. No cloud. Git holds the history. The monitor, if you use it, only **reads** `docs/`.
-
-## What it is not
-
-- Not a PM SaaS or a wiki you forget to update — it is Markdown and JSON in your repo.
-- Not “the agent said done” — done is `status: ✅` in `docs/us/` with a filled Record, then your git commit.
-- Not the monitor running the project — the IDE + `.agent/` + `docs/` do; the app only displays files.
+| [`.agent/`](.agent/) | **Yes** | Portable workflow kit — agents, skills, commands. Copy into every project. |
+| `docs/` (in *your* project) | **Yes** | Living spec — [dogfooding example](app-desktop/docs/) here. |
+| [`app-desktop/`](app-desktop/) | No | Read-only monitor — shows Setup, Board, Deliverables from `docs/`. |
+| `.cursor/` · `.claude/` | Local only | IDE adapters generated from `.agent/` ([details](.agent/IDE_ADAPTERS.md)). Not committed. |
 
 ## Quick start
 
@@ -110,7 +76,7 @@ No login. No cloud. Git holds the history. The monitor, if you use it, only **re
 git clone https://github.com/colabcolibri/meridian.git
 cd meridian
 
-# Cursor or Claude Code — mirror .agent/ into local adapters (not committed):
+# Cursor or Claude Code — generate local adapters (not committed):
 chmod +x .agent/scripts/sync_cursor_kit.sh
 ./.agent/scripts/sync_cursor_kit.sh
 
@@ -118,69 +84,62 @@ chmod +x .agent/scripts/sync_cursor_kit.sh
 cd app-desktop && pnpm install && pnpm dev
 ```
 
-If your IDE already supports `.agent/` natively, skip the sync script.
-
-**New to Meridian?** [Start here](.agent/references/start-here.md) → [Usage guide](.agent/references/usage-guide.md) → `/init-meridian` or `/status`.
-
-### Monitor
-
-**Live demo:** [https://colabcolibri.github.io/meridian/](https://colabcolibri.github.io/meridian/) — read-only monitor with this repo’s `app-desktop/docs/` preloaded.
-
-**Run locally:** `pnpm dev` in `app-desktop/`, open http://localhost:5173, click **Open docs folder**, select a Meridian `docs/` directory (e.g. `app-desktop/docs/`).
-
-The loop itself runs in your IDE via `.agent/`; the monitor is a read-only window on the same files. Tabs: Start here, Usage guide, Setup, Decisions, Deliverables, Board — plus story detail as a sheet from Board or Deliverables. Markdown mirrors: [start-here.md](.agent/references/start-here.md) · [usage-guide.md](.agent/references/usage-guide.md).
-
-Deploy to GitHub Pages on push to `main` when `app-desktop/` changes ([deploy-demo.yml](.github/workflows/deploy-demo.yml)).
+Then run `/init-meridian` in your IDE to create `docs/` for your project.
 
 ## Adopt Meridian in your project
-
-You need **both** in the target repo:
-
-```txt
-your-project/
-  .agent/          ← required: flows, agents, skills (copy from this kit)
-  docs/            ← required: create via /init-meridian or init-project skill
-```
 
 ```bash
 cp -R path/to/meridian/.agent ./your-project/
 ```
 
-1. Commit `.agent/` and grow `docs/` as the living project record.
-2. **Native `.agent/` IDE** — workflows and agents drive the process with no adapter.
-3. **Cursor or Claude Code** — run `./.agent/scripts/sync_cursor_kit.sh` after clone; do not commit `.cursor/` or `.claude/`.
-4. **Monitor (optional)** — [live demo](https://colabcolibri.github.io/meridian/) or run `app-desktop` locally.
+1. Commit `.agent/`.
+2. Run `/init-meridian` — agent creates `docs/` (new project or existing codebase migration).
+3. Run the sync script if using Cursor or Claude Code.
+4. Optional: open `app-desktop` or the [live demo](https://colabcolibri.github.io/meridian/) to monitor `docs/`.
+
+## IDE support
+
+The portable kit lives in `.agent/`. No lock-in.
+
+| IDE / tool | How |
+| ---------- | --- |
+| **Antigravity, ag-kit** | Point at `.agent/` — works natively. |
+| **Cursor** | `sync_cursor_kit.sh` → `.cursor/` (gitignored). |
+| **Claude Code** | Same script → `.claude/` (gitignored). |
+
+Details: [`.agent/IDE_ADAPTERS.md`](.agent/IDE_ADAPTERS.md)
 
 ## Agents and commands
 
-Seven agents (`process-manager`, `scope-architect`, `documentation-strategist`, `security-steward`, `architecture-guardian`, `sprint-planner`, `board-keeper`) orchestrate workflows in `.agent/workflows/`.
+Seven agents handle specialized work: `process-manager`, `scope-architect`, `documentation-strategist`, `security-steward`, `architecture-guardian`, `sprint-planner`, `board-keeper`.
 
-| Where | Slash commands |
-| ----- | -------------- |
-| `.agent/workflows/` | Source definitions — all IDEs |
-| `.cursor/commands/` | Cursor — after sync |
-| `.claude/commands/` | Claude Code — after sync |
+Common commands: `/init-meridian`, `/status`, `/create-epic`, `/create-version`, `/plan-sprint`, `/create-us`, `/review-us`, `/refine-us`, `/complete-us`, `/sync-board`, `/architecture`, `/security-pass`, `/daily-with-ai`.
 
-Common commands: `/init-meridian`, `/status`, `/create-epic`, `/create-version`, `/plan-sprint`, `/create-us`, `/review-us`, `/refine-us`, `/complete-us`, `/sync-board`, `/architecture`, `/security-pass`, `/daily-with-ai`. Full list: [usage guide](.agent/references/usage-guide.md). Map: [`.agent/ARCHITECTURE.md`](.agent/ARCHITECTURE.md).
+Full reference: [usage guide](.agent/references/usage-guide.md).
 
-## Protocol authority
-
-When agents conflict, resolution order is:
-
-1. Your instruction  
-2. [`.agent/MERIDIAN.md`](.agent/MERIDIAN.md)  
-3. [`.agent/rules/MERIDIAN.md`](.agent/rules/MERIDIAN.md)  
-4. Workflows → agents → skills  
-
-## Validate locally
+## Validate
 
 ```bash
 python3 .agent/scripts/validate_meridian.py app-desktop
-python3 .agent/scripts/validate_meridian.py app-desktop --json   # CI / machine output
-cd app-desktop && pnpm lint && pnpm test && pnpm build
+python3 .agent/scripts/validate_meridian.py app-desktop --json
 ```
 
-Run validation before marking docs `approved` or creating user stories.
+## Monitor
+
+**Live demo:** [https://colabcolibri.github.io/meridian/](https://colabcolibri.github.io/meridian/)
+
+**Locally:** `pnpm dev` in `app-desktop/`, open http://localhost:5173, click **Open docs folder**.
+
+The monitor reads `docs/` — it does not replace `.agent/` or your IDE.
+
+## Protocol authority
+
+When agents conflict, resolution order:
+
+1. Your instruction
+2. [`.agent/MERIDIAN.md`](.agent/MERIDIAN.md)
+3. [`.agent/rules/MERIDIAN.md`](.agent/rules/MERIDIAN.md)
+4. Workflows → agents → skills
 
 ## Contributing · license
 

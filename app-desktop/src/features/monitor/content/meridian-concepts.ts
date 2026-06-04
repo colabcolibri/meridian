@@ -41,13 +41,19 @@ export type SlashCommandHint = {
 
 export type AnatomyField = { field: string; meaning: string }
 
+export type AnatomySection = {
+  heading: string
+  description: string
+  subsections?: { label: string; description: string }[]
+}
+
 export type AnatomyGuide = {
   title: string
   intro: string
   fields: AnatomyField[]
-  sections?: { heading: string; description: string }[]
+  sections?: AnatomySection[]
   exampleTitle?: string
-  exampleBody?: string
+  exampleCode?: string
 }
 
 // ─── Intro ────────────────────────────────────────────────────────────────────
@@ -55,9 +61,79 @@ export type AnatomyGuide = {
 export const meridianIntro = {
   title: "What is Meridian",
   paragraphs: [
-    "Meridian is a protocol for building software with AI. The core idea is simple: documentation comes before code. You define what the product is, who it is for, and how it should work — then the AI implements it, guided by those files.",
-    "Without this, AI agents hallucinate scope, repeat decisions already made, and produce code that does not match what the team actually agreed on. Meridian solves that by making documentation the source of truth that both humans and agents read.",
-    "It is not Jira, it is not Notion, and it does not require a login. The source of truth is the files in your repository. This app reads those files and shows progress visually.",
+    "Meridian is a workflow protocol for developers building with AI agents. It keeps context alive between sessions — scope, architecture, decisions, and user stories all live as files in your repo, readable by any agent at any time.",
+    "Think of it as a lightweight Scrum adapted for AI-assisted development. You stay in control of direction. The agent works as your pair — implementing, recording, proposing. When you come back tomorrow, or open a new session, the files carry the full story forward.",
+  ],
+}
+
+export type AudienceCard = {
+  id: string
+  label: string
+  description: string
+}
+
+export const audiences: AudienceCard[] = [
+  {
+    id: "solo",
+    label: "Solo developer",
+    description:
+      "Working alone with AI agents. Meridian keeps your project organized — scope, decisions, and progress in one place — so each new session picks up exactly where the last one ended.",
+  },
+  {
+    id: "small-team",
+    label: "Small team (2–3 people)",
+    description:
+      "No dedicated PM tool, no Jira. Meridian gives the team a shared written spec that everyone — and every agent — works from. No more 'what did we decide last week?'",
+  },
+  {
+    id: "agent-driven",
+    label: "Agent-heavy workflow",
+    description:
+      "Running agents autonomously across long sessions or multiple tasks. The file structure gives agents a stable context to read, follow, and update — so they stay aligned without constant supervision.",
+  },
+]
+
+export const meridianLoop = {
+  title: "The development loop",
+  subtitle:
+    "Each user story follows this cycle. The files persist across every session.",
+  steps: [
+    {
+      id: "document",
+      label: "Document",
+      description:
+        "Define scope, stack, security, and architecture in phase docs. Each approved doc unlocks the next.",
+    },
+    {
+      id: "plan",
+      label: "Plan",
+      description:
+        "Create epics, versions, and user stories. Define what ships, in what order, and why.",
+    },
+    {
+      id: "refine",
+      label: "Refine",
+      description:
+        "Deepen the story's Approach and acceptance criteria until it is concrete enough to implement.",
+    },
+    {
+      id: "implement",
+      label: "Implement",
+      description:
+        "The agent reads the story file and writes code against the acceptance criteria.",
+    },
+    {
+      id: "close",
+      label: "Close",
+      description:
+        "Record what was built — real file paths, test output, evidence of completion.",
+    },
+    {
+      id: "commit",
+      label: "Commit",
+      description:
+        "One git commit per closed story. Code and docs together — a permanent record of what changed and why.",
+    },
   ],
 }
 
@@ -65,34 +141,34 @@ export const meridianIntro = {
 
 export const corePrinciples: ConceptBlock[] = [
   {
-    id: "docs-first",
-    title: "Documentation before code",
+    id: "spec-first",
+    title: "Files carry the context",
     summary:
-      "Scope, architecture, and acceptance criteria come first. Code implements documentation, not the other way around.",
+      "Scope, architecture, and acceptance criteria live in docs/ before any implementation. Every agent session starts by reading these files — so context is never rebuilt from scratch in chat.",
+    bullets: [
+      "A story needs a written Approach before the agent implements. /refine-us establishes this.",
+      "Architecture approval gates the backlog — so agents always build on solid, agreed ground.",
+    ],
   },
   {
     id: "human-manager",
-    title: "You approve, agents execute",
+    title: "You set the direction",
     summary:
-      "AI can write and review, but scope changes, approved status, and ✅ only happen with your validation. The agent never sets approved on its own.",
+      "The developer steers the project — approving documents, reviewing output, deciding what ships. The agent moves faster when the direction is clear in the files.",
+    bullets: [
+      "Phase docs move to approved when you review and confirm them.",
+      "Stories close with ✅ after reviewing the evidence with /complete-us.",
+    ],
   },
   {
     id: "audit-status",
-    title: "Done = evidence",
+    title: "Done means recorded",
     summary:
-      "Compiling is not enough. ✅ requires Acceptance and tests evidenced in the files. Use /complete-us after reviewing. 🔶 requires explicit Missing:.",
-  },
-  {
-    id: "refine-before-code",
-    title: "Refine before code",
-    summary:
-      "/create-us fills Intent and drafts Plan (ready: false). /refine-us writes the Approach and sets ready: true. No product code until then.",
-  },
-  {
-    id: "derived-board",
-    title: "Derived board",
-    summary:
-      "board.json is generated from the US files. Edit docs/us/*.md — not the JSON — as the status source of truth.",
+      "A completed story has real evidence in the file: acceptance criteria checked, files listed, tests run. The next session — yours or the agent's — picks up exactly where things left off.",
+    bullets: [
+      "🔶 marks a story as partial, with an explicit note on what is still missing.",
+      "The board reflects the story files. Run /sync-board to regenerate it after any change.",
+    ],
   },
 ]
 
@@ -101,60 +177,57 @@ export const corePrinciples: ConceptBlock[] = [
 export const journeyPhases: JourneyPhase[] = [
   {
     id: "phase-1",
-    label: "Phase 1 — Project definition",
-    subtitle: "What the product is and who it is for",
+    label: "Phase 1 — Foundation",
+    subtitle: "What are we building and for whom",
     purpose:
-      "Before writing any code, define what the project is. This is not technical work — it is about identity, purpose, and audience. The agent interviews you (or reads your codebase if migrating) and produces the foundation documents.",
+      "At the end of this phase you have a clear answer to what the product is, what it is not, and who uses it. The agent can help draft these — or read an existing codebase and infer them.",
     documents: [
-      "11_decisions.md — decision log rules (stub)",
-      "docs/decisions/YYYY-MM-DD.json — structured decision log from day one",
-      "00_scope.md — what the product is and is not",
-      "03_user_types.md — who uses it and how they relate to each other",
+      "00_scope.md — product scope and boundaries",
+      "03_user_types.md — who uses it",
+      "11_decisions.md — decision log (starts here, runs forever)",
     ],
-    gate: "00_scope.md approved → unlocks Phase 2",
+    gate: "00_scope.md approved → Phase 2 opens",
   },
   {
     id: "phase-2",
-    label: "Phase 2 — Structure definition",
-    subtitle: "How the product is built",
+    label: "Phase 2 — Architecture",
+    subtitle: "How it is built",
     purpose:
-      "Once you know what the product is, define how it is built. Technology choices, security model, architecture, database, API contracts, environments.",
+      "At the end of this phase the technical ground is stable: stack, security model, architecture, data, APIs, environments. This is what agents reference when writing code.",
     documents: [
-      "01_tech_stack.md — languages, frameworks, infrastructure",
-      "02_security.md — threats, sensitive data, auth model, compliance posture",
-      "04_principles.md — code quality and design conventions",
-      "05_architecture.md — how the system is divided into modules and services",
-      "06_database.md — data model and migrations",
+      "01_tech_stack.md — languages and frameworks",
+      "02_security.md — threats and auth model",
+      "04_principles.md — code conventions",
+      "05_architecture.md — modules and boundaries",
+      "06_database.md — data model",
       "07_api_contracts.md — API definitions",
       "08_environments.md — dev, staging, production",
     ],
-    gate: "05_architecture.md approved → unlocks Phase 3",
+    gate: "05_architecture.md approved → backlog opens",
   },
   {
     id: "phase-3",
-    label: "Phase 3 — Backlog definition",
-    subtitle: "What will be built and in what order",
+    label: "Phase 3 — Backlog",
+    subtitle: "What ships and in what order",
     purpose:
-      "With the architecture approved, define what will be built: epics (capabilities), versions (releases), sprints (time boxes), and user stories (executable tasks).",
+      "At the end of this phase there is a structured backlog: epics group the capabilities, versions define releases, sprints scope the work, and user stories are the executable units the agent implements one at a time.",
     documents: [
-      "docs/epics/EPIC-XX.md — product capability",
-      "docs/versions/vX.md — release goal and scope",
-      "docs/sprints/vX-SY.md — time-boxed unit within a version",
+      "docs/epics/ — product capabilities",
+      "docs/versions/ — releases",
+      "docs/sprints/ — time-boxed scope",
     ],
-    gate: "Epic and version exist → US can be created",
-    note: "Usual creation order: epic → version → sprint → US.",
+    gate: "Epic + version exist → user stories can be created",
   },
   {
     id: "phase-4",
     label: "Phase 4 — Execution",
-    subtitle: "Implement, record, close",
+    subtitle: "Build, record, ship",
     purpose:
-      "The AI implements each user story, guided by the files from Phase 3. You review the code, then close the story with evidence. The board reflects reality.",
+      "Each user story is refined, implemented, and closed with evidence. The board reflects what is actually done. One commit per story — code and docs together.",
     documents: [
-      "docs/us/US-XXXX.md — one executable task per file",
-      "docs/kanban/board.json — generated status summary (never edit by hand)",
+      "docs/us/ — one story per file, full lifecycle",
+      "docs/kanban/board.json — generated from story files",
     ],
-    note: "/create-us → /refine-us → implement → /complete-us → /sync-board → commit (you). No code without ready: true. No ✅ without evidence in the Record. Agents suggest commit message on close; they do not commit unless you ask.",
   },
 ]
 
@@ -163,44 +236,44 @@ export const journeyPhases: JourneyPhase[] = [
 export const folderStructure = {
   title: "What is inside docs/",
   intro: [
-    "Every Meridian project has a docs/ folder at the root. That is the folder you open in this app. Its content is split between phase documents at the docs/ root and delivery folders:",
+    "Two types of files: foundation docs that define the project, and delivery files that track the work. Every agent session reads from here. Everything the project knows lives here.",
   ],
   items: [
     {
       path: "docs/*.md",
-      label: "Phase documents (00–08, 11)",
+      label: "Foundation docs",
       description:
-        "Foundation (00–03), principles (04), architecture (05), technical detail (06–08), decision log index (11). Delivery lives in epics/, versions/, sprints/, and us/ folders.",
+        "Scope, stack, security, architecture, and principles. Written once, updated when things change. The stable ground agents build on.",
     },
     {
-      path: "docs/epics/EPIC-XX.md",
-      label: "Epics — product capabilities",
+      path: "docs/epics/",
+      label: "Epics",
       description:
-        "One file per epic. Defines a large product capability in user language. Only created after 05_architecture is approved.",
+        "Product capabilities — the big things the product can do, written in plain language.",
     },
     {
-      path: "docs/versions/vX.md",
-      label: "Versions — releases",
+      path: "docs/versions/",
+      label: "Versions",
       description:
-        "One file per release (v0, v1, v2…). Release goal, scope, done criteria, and go-live checklist.",
+        "Releases — what ships together, what the goal is, what done looks like at the release level.",
     },
     {
-      path: "docs/sprints/vX-SY.md",
-      label: "Sprints — time boxes",
+      path: "docs/sprints/",
+      label: "Sprints",
       description:
-        "Time-boxed delivery units within a version. Each sprint has a single goal and a list of US in frontmatter.",
+        "Time-boxed scope within a version. A sprint has one goal and a defined list of stories.",
     },
     {
-      path: "docs/us/US-XXXX.md",
-      label: "User stories — executable tasks",
+      path: "docs/us/",
+      label: "User stories",
       description:
-        "One file per task. Only after 05_architecture is approved and epic/version exist. Lifecycle: create → refine → implement → complete.",
+        "One file per task. Carries the full lifecycle — intent, approach, implementation record, and evidence of completion.",
     },
     {
-      path: "docs/decisions/YYYY-MM-DD.json",
+      path: "docs/decisions/",
       label: "Decision log",
       description:
-        "One JSON file per day. Entries array, newest first — never edited, only prepended. Records why the system is the way it is.",
+        "Why things are the way they are. One JSON file per day, entries prepended — a permanent record agents and developers read to understand past choices.",
     },
     {
       path: "docs/kanban/board.json",
@@ -218,224 +291,288 @@ export const folderStructure = {
 }
 
 export const docFlowNote =
-  "Dependencies: 00–03 in sequence; 04_principles before 05_architecture; 06–08 after 05 (06 before 07). Decision log starts day one. Epics, versions, and US only after 05_architecture is approved."
+  "Foundation docs follow a sequence — each one builds on the previous. The backlog (epics, versions, stories) only opens after architecture is approved. The decision log starts on day one and never closes."
 
 // ─── Artifact anatomy ─────────────────────────────────────────────────────────
 
 export const userStoryAnatomy: AnatomyGuide = {
-  title: "Anatomy of a User Story (US-XXXX)",
+  title: "User Story (US-XXXX)",
   intro:
-    "A user story is not a ticket title. It is a complete document that travels through the full lifecycle — from intent to implementation record. Open any file in docs/us/ to see it.",
+    "One task, one file. A story travels through its full lifecycle in the same document — from intent to implementation record.",
   fields: [
-    {
-      field: "id",
-      meaning: "Permanent identifier — US-0001, US-0042. Never changes after creation.",
-    },
-    {
-      field: "title",
-      meaning: "Short name for the story — what it delivers, not how.",
-    },
-    {
-      field: "epic",
-      meaning:
-        "Reference to the parent epic (EPIC-02). Frontmatter only — never paste epic text into the body.",
-    },
-    { field: "version", meaning: "Which release this story ships in (v1)." },
-    {
-      field: "status",
-      meaning:
-        "❌ not started · 🔶 partial (requires Missing: in Acceptance) · ✅ done · 🧊 frozen",
-    },
+    { field: "id", meaning: "Permanent identifier — US-0001, US-0042." },
+    { field: "title", meaning: "What it delivers, in plain language." },
+    { field: "epic", meaning: "Parent epic (EPIC-02)." },
+    { field: "version", meaning: "Which release this ships in." },
+    { field: "status", meaning: "❌ not started · 🔶 partial · ✅ done · 🧊 frozen" },
     { field: "moscow", meaning: "Priority: Must · Should · Could · Won't" },
-    {
-      field: "depends_on",
-      meaning: "List of US ids that must be ✅ before this one can be implemented.",
-    },
+    { field: "depends_on", meaning: "Stories that must be ✅ before this one starts." },
     {
       field: "ready",
       meaning:
-        "false after /create-us. true only after /refine-us passes all checks. Gate for implementation.",
+        "Gate for implementation. Set by /refine-us when the Approach is concrete.",
     },
     {
       field: "done_when",
-      meaning:
-        "One measurable sentence — the observable condition that proves this story is complete.",
+      meaning: "One observable sentence that proves this story is complete.",
     },
     {
       field: "tests",
-      meaning:
-        "required — tests must be written and pass. none — explicitly no tests (document why).",
+      meaning: "required — must be written and pass. none — explicitly no tests.",
     },
-    {
-      field: "tests_status",
-      meaning:
-        "pending · done · n/a (only when tests: none). Board shows 🧪 when pending + required.",
-    },
+    { field: "tests_status", meaning: "pending · done · n/a" },
   ],
   sections: [
     {
-      heading: "## Intent — what and why",
-      description:
-        "Acceptance: verifiable checklist — observable outcomes, not plans. Why: 2–4 sentences explaining what problem this slice solves and what the user can do after this US alone. Where: 2–4 sentences on where this story sits in the release and what it unblocks.",
+      heading: "## Intent",
+      description: "What this story does and why it matters.",
+      subsections: [
+        {
+          label: "### Acceptance",
+          description: "Verifiable checklist — observable outcomes, not plans.",
+        },
+        {
+          label: "### Why",
+          description:
+            "What problem this slice solves and what becomes possible after it.",
+        },
+        {
+          label: "### Where",
+          description: "Where this story fits in the release and what it unblocks.",
+        },
+      ],
     },
     {
-      heading: "## Plan — how it will be built",
-      description:
-        "Approach: optional at create, required at refine — minimum 2 bullets explaining what changes, where in the codebase, and why. Architecture refs: exact section headings from 05_architecture.md. API / DB impact: named endpoints, tables, or n/a with a short explanation. Security notes: auth checks, data exposure risks, or n/a with reason. Planned: numbered manual steps and/or exact test commands.",
+      heading: "## Plan",
+      description: "How it will be built. Written before implementation starts.",
+      subsections: [
+        {
+          label: "### Approach",
+          description:
+            "What changes, where in the codebase, and why. Required before /refine-us sets ready: true.",
+        },
+        {
+          label: "### Architecture refs",
+          description: "Exact section headings from 05_architecture.md.",
+        },
+        {
+          label: "### API / DB",
+          description: "Named endpoints or tables affected, or n/a.",
+        },
+        {
+          label: "### Planned",
+          description: "Manual test steps and exact test commands.",
+        },
+      ],
     },
     {
-      heading: "## Record — what was actually done",
-      description:
-        "Filled only on close (/complete-us). Files: real paths changed. Backend / Frontend / Scripts / Docs: summary by layer. Executed: test output, suggested commit on close, optional git commit line (SHA + message) after you commit — omit git commit until then.",
+      heading: "## Record",
+      description: "What was actually built. Filled on close by /complete-us.",
+      subsections: [
+        { label: "### Files", description: "Real paths changed." },
+        {
+          label: "### Executed",
+          description: "Test output and the git commit reference.",
+        },
+      ],
     },
     {
-      heading: "## Boundaries — scope control",
-      description:
-        "Out of scope for this story: what this US explicitly does not do. Prevents scope creep during implementation. Notes: links, risks, follow-ups.",
+      heading: "## Boundaries",
+      description: "Scope control.",
+      subsections: [
+        {
+          label: "### Out of scope",
+          description: "What this story explicitly does not do.",
+        },
+        { label: "### Notes", description: "Links, risks, follow-ups." },
+      ],
     },
   ],
   exampleTitle: "US-0017 — Read phase documents in Markdown",
-  exampleBody:
-    "As the process manager, I want to open each phase document inside the app, so I can review scope and architecture without leaving the monitor. Acceptance: button on each doc, reading via File System Access API, visible frontmatter + body.",
+  exampleCode: `---
+id: US-0017
+title: Read phase documents in Markdown
+epic: EPIC-02
+version: v1
+status: ✅
+moscow: Must
+ready: true
+done_when: User clicks a phase doc and reads its full content inside the app.
+tests: required
+tests_status: done
+---
+
+## Intent
+
+### Acceptance
+- [ ] Each phase doc has an Open button
+- [ ] Content renders with frontmatter and body visible
+- [ ] Works via File System Access API in Chrome/Edge
+
+### Why
+The developer needs to review scope and architecture decisions without leaving the monitor.
+
+### Where
+Sits in the Setup tab. Unblocks inline editing in a future story.
+
+## Plan
+
+### Approach
+- Add a PhaseDocReader component that reads the file and renders Markdown
+- Wire the Open button in PhaseStepCard
+
+### Architecture refs
+- 05_architecture.md § Monitor — read-only views
+
+### Planned
+1. Click Open on 00_scope.md
+2. Verify frontmatter and body render correctly
+
+## Record
+
+### Files
+- src/features/monitor/components/PhaseDocReader.tsx (new)
+- src/features/monitor/components/PhaseStepCard.tsx (modified)
+
+### Executed
+All tests pass. git commit: a3f9c1d — feat(monitor): phase doc reader (US-0017)`,
 }
 
 export const epicAnatomy: AnatomyGuide = {
-  title: "Anatomy of an Epic (EPIC-XX)",
+  title: "Epic (EPIC-XX)",
   intro:
-    "An epic is a product capability — a meaningful thing the product can do. It is written in user language, not in modules or file paths. Open docs/epics/EPIC-XX.md to see it.",
+    "A product capability — something meaningful the product can do. Written in plain language, not in modules or file paths.",
   fields: [
-    { field: "id", meaning: "Permanent identifier — EPIC-01, EPIC-02." },
-    { field: "title", meaning: "Short capability name in user language." },
-    {
-      field: "status",
-      meaning:
-        "active — delivery in progress · complete — outcome reached · paused — frozen",
-    },
-    {
-      field: "versions",
-      meaning:
-        "Which releases this epic ships across ([v1], [v1, v2]). An epic can span multiple releases.",
-    },
-    {
-      field: "profiles",
-      meaning: "User types from 03_user_types.md that this epic serves.",
-    },
-    {
-      field: "outcome",
-      meaning:
-        "One sentence: what is true at the product level when this epic is done.",
-    },
+    { field: "id", meaning: "EPIC-01, EPIC-02 — permanent." },
+    { field: "title", meaning: "Capability name in plain language." },
+    { field: "status", meaning: "active · complete · paused" },
+    { field: "versions", meaning: "Which releases this epic ships across." },
+    { field: "outcome", meaning: "One sentence: what is true when this epic is done." },
   ],
   sections: [
     {
       heading: "## Capability",
-      description:
-        "Minimum two paragraphs — no bullet lists. Paragraph 1: the user problem today. Paragraph 2: what the product offers after this epic, in user language.",
+      description: "The user problem and what the product offers after this epic.",
     },
     {
       heading: "## Expected outcome",
-      description:
-        "One paragraph. How a manager or user recognizes the epic is done — an observable signal, not 'all US ✅'.",
+      description: "How you recognize this epic is done — an observable signal.",
     },
     {
-      heading: "## Out of scope for this epic",
-      description:
-        "Bullets with rationale — what belongs in another epic, a later version, or is explicitly deferred. Each line explains why.",
-    },
-    {
-      heading: "## Notes",
-      description:
-        "Optional. Decisions, risks, links — only when they add context not already in the body.",
+      heading: "## Out of scope",
+      description: "What is deferred, and why.",
     },
   ],
-  exampleTitle: "EPIC-02 — Initial setup monitor",
-  exampleBody:
-    "Outcome: manager opens docs/, sees progress for the 10 phase documents, and reads each .md inline. US-0017 and US-0018 reference epic: EPIC-02 in frontmatter without repeating this text.",
+  exampleTitle: "EPIC-02 — Project setup monitor",
+  exampleCode: `---
+id: EPIC-02
+title: Project setup monitor
+status: active
+versions: [v1]
+outcome: Developer opens docs/ and sees the real state of every phase document.
+---
+
+## Capability
+
+Today the developer has no visual way to know which foundation documents
+are missing or incomplete without opening each file manually.
+
+After this epic, opening docs/ in the monitor shows a Setup view —
+each phase document with its current status, what is blocking it,
+and a way to read its content inline.
+
+## Expected outcome
+
+Developer opens the app, sees that 05_architecture.md is still in draft,
+and knows exactly what to work on next — without running any command.
+
+## Out of scope
+
+- Editing documents from inside the app (planned for a later epic)
+- Notifications or alerts outside the monitor`,
 }
 
 export const versionAnatomy: AnatomyGuide = {
-  title: "Anatomy of a Version (vX)",
+  title: "Version (vX)",
   intro:
-    "A version is a release — a go-live package. It defines what changes for the user in a specific delivery, and what the observable done condition is at the release level. Open docs/versions/vX.md to see it.",
+    "A release — what ships together and what done looks like at the release level.",
   fields: [
     { field: "id", meaning: "v0, v1, v2 — sequential." },
-    { field: "title", meaning: "Short release name describing the theme." },
+    { field: "title", meaning: "Short release name." },
     { field: "status", meaning: "planned · active · complete" },
     {
       field: "outcome",
-      meaning:
-        "One sentence: what is true at the product level when this release ships.",
+      meaning: "One sentence: what is true when this release ships.",
     },
   ],
   sections: [
     {
       heading: "## Objective",
-      description:
-        "One paragraph. What changes for the user or manager in this release — the theme, the main capabilities, how it differs from the previous version. Not a list of tickets.",
+      description: "What changes for the user in this release.",
     },
     {
       heading: "## Done criteria",
-      description:
-        "One paragraph. The observable condition to close this version — who validates, what they can do, what must be true in docs and product.",
+      description: "The observable condition to close this version.",
     },
     {
-      heading: "## Included in this version",
-      description: "Epics and US by id, one line each explaining why they belong here.",
-    },
-    {
-      heading: "## Explicitly out",
-      description: "Bullets with rationale — what waits for a later version and why.",
+      heading: "## Included",
+      description: "Epics and stories in this release, with one line per item.",
     },
     {
       heading: "## Go-live checklist",
-      description: "Items that must be true before the version is marked complete.",
-    },
-    {
-      heading: "## Sprints",
-      description: "List of sprint ids and their theme.",
+      description: "What must be true before marking this version complete.",
     },
   ],
-  exampleTitle: "v1 — Folder Monitor MVP",
-  exampleBody:
-    "Outcome: user opens docs/, tabs reflect real .md files. US-0009 to US-0022 use version: v1. Sprints v1-S1 and v1-S2 in docs/sprints/.",
+  exampleTitle: "v1 — Monitor MVP",
+  exampleCode: `---
+id: v1
+title: Monitor MVP
+status: active
+outcome: Developer opens docs/ and sees real setup progress, deliverables, and board.
+---
+
+## Objective
+
+v1 delivers the core monitor: a read-only view of the docs/ folder.
+The developer can track phase document progress, browse epics and stories,
+and see the board without leaving the browser.
+
+## Done criteria
+
+Developer opens docs/ in the app and sees Setup, Deliverables, and Board
+populated with real data from the project.
+
+## Included
+
+- EPIC-02 — Project setup monitor
+- US-0009 through US-0022
+
+## Go-live checklist
+
+- [ ] All Must stories ✅
+- [ ] Live demo deployed to GitHub Pages`,
 }
 
 export const sprintAnatomy: AnatomyGuide = {
-  title: "Anatomy of a Sprint (vX-SY)",
+  title: "Sprint (vX-SY)",
   intro:
-    "A sprint is a time-boxed unit within a version. It has a single goal, a defined scope, and a retrospective on close. It is not a bucket for whatever is left. Open docs/sprints/vX-SY.md to see it.",
+    "A time-boxed commitment inside a version. One goal, a defined list of stories, a retrospective on close.",
   fields: [
-    {
-      field: "id",
-      meaning: "v1-S1, v1-S2 — version + sprint number. Must match filename.",
-    },
-    { field: "version", meaning: "Parent version — must exist in docs/versions/." },
-    { field: "title", meaning: "Short sprint name." },
-    {
-      field: "status",
-      meaning: "planned · active · complete. One sprint active per version at a time.",
-    },
-    {
-      field: "goal",
-      meaning:
-        "One measurable sentence — what this sprint proves or delivers. Not a copy of the version objective.",
-    },
-    {
-      field: "done_when",
-      meaning: "Observable condition to close the sprint — not 'all US done'.",
-    },
-    { field: "stories", meaning: "Canonical list of US ids — used by validation." },
+    { field: "id", meaning: "v1-S1, v1-S2 — version + sprint number." },
+    { field: "version", meaning: "Parent version." },
+    { field: "status", meaning: "planned · active · complete" },
+    { field: "goal", meaning: "One sentence: what this sprint proves or delivers." },
+    { field: "done_when", meaning: "Observable condition to close the sprint." },
+    { field: "stories", meaning: "List of US ids in this sprint." },
   ],
   sections: [
     {
       heading: "## Goal",
-      description:
-        "One or two sentences. Why this sprint, why now, what changes by the end.",
+      description: "Why this sprint, why now, what changes by the end.",
     },
     {
       heading: "## Scope",
-      description:
-        "Table of US with status, MoSCoW, dependencies, epic, and description.",
+      description: "Stories with status, priority, and dependencies.",
     },
     {
       heading: "## Out of scope for this sprint",
@@ -450,43 +587,73 @@ export const sprintAnatomy: AnatomyGuide = {
 }
 
 export const decisionLogAnatomy: AnatomyGuide = {
-  title: "Anatomy of a Decision Log entry",
+  title: "Decision Log entry",
   intro:
-    "Every significant decision — technology choice, architecture change, scope adjustment, security posture — is logged in docs/decisions/YYYY-MM-DD.json. Entries are prepended (newest first) and never edited. This is the audit trail of why the system is the way it is.",
+    "Every significant decision lives in docs/decisions/YYYY-MM-DD.json. Entries are prepended and never edited — a permanent record of why the project is the way it is.",
   fields: [
-    { field: "date", meaning: "ISO date string — YYYY-MM-DD." },
-    { field: "title", meaning: "Short decision name — what was decided in a phrase." },
-    {
-      field: "context",
-      meaning: "Why this decision was needed — the situation that forced a choice.",
-    },
+    { field: "date", meaning: "YYYY-MM-DD." },
+    { field: "title", meaning: "What was decided, in a phrase." },
+    { field: "context", meaning: "The situation that forced a choice." },
     { field: "decision", meaning: "What was decided — specific and unambiguous." },
-    {
-      field: "consequences",
-      meaning: "What changes as a result — what is now true, what becomes harder.",
-    },
+    { field: "consequences", meaning: "What is now true, what becomes harder." },
   ],
+  exampleTitle: "Switching from REST to file-based state",
+  exampleCode: `{
+  "date": "2025-03-12",
+  "title": "Use File System Access API instead of a backend",
+  "context": "We considered a lightweight Express server to read docs/ files, but it would require users to run a local process and manage ports.",
+  "decision": "Use the browser File System Access API to read docs/ directly. The app stays fully static — no server, no build step for users.",
+  "consequences": "App works only in Chrome and Edge on localhost. Safari and Firefox are not supported. No backend to maintain."
+}`,
 }
 
-// ─── Epics / versions / stories — prose guide ─────────────────────────────────
+// ─── Epics / versions / stories — table ──────────────────────────────────────
 
-export const epicsVersionsStories: GuideSubsection[] = [
+export type DeliveryArtifact = {
+  id: string
+  artifact: string
+  question: string
+  description: string
+  path: string
+}
+
+export const deliveryArtifacts: DeliveryArtifact[] = [
   {
-    title: "How they relate",
-    paragraphs: [
-      "Epic answers: what capability are we building? It defines a large product capability in user language — not a technical module. An epic may span multiple versions.",
-      "Version answers: what goes live in this release? It is a go-live package that groups epics into a deliverable milestone. You decide what fits in each version.",
-      "Sprint answers: which user stories do we tackle this week or fortnight? A sprint belongs to one version and has a single goal. It is not a planning artifact — it is a commitment: these specific US, in this order, done by the end of the sprint.",
-      "User story answers: what is the smallest executable slice? Each story belongs to one epic and one version. The sprint selects which stories to implement now.",
-    ],
-    bullets: [
-      "Creation order: epic → version → sprint → user story. You cannot create a US before the epic and version exist.",
-      "Sprints are optional but recommended — they give a goal and a boundary to each delivery cycle.",
-      "A story references epic and version in frontmatter only (epic: EPIC-02, version: v1). The story body explains its own slice.",
-      "An epic can span multiple versions (versions: [v1, v2]). A sprint belongs to exactly one version.",
-    ],
+    id: "epic",
+    artifact: "Epic",
+    question: "What can the product do?",
+    description:
+      "A capability written in plain language. Stays high-level — no file paths, no technical detail. Groups the user stories that together deliver this capability.",
+    path: "docs/epics/",
+  },
+  {
+    id: "version",
+    artifact: "Version",
+    question: "What ships in this release?",
+    description:
+      "A release package. Defines the goal, which epics are in scope, and what done looks like at the release level. One version per go-live.",
+    path: "docs/versions/",
+  },
+  {
+    id: "sprint",
+    artifact: "Sprint",
+    question: "What are we tackling right now?",
+    description:
+      "A time-boxed commitment inside a version. One goal, a defined list of stories. Optional — but useful when you want a clear boundary for each work cycle.",
+    path: "docs/sprints/",
+  },
+  {
+    id: "story",
+    artifact: "User story",
+    question: "What is the next concrete thing to build?",
+    description:
+      "One task, one file. Carries the full lifecycle: intent, approach, implementation record, and evidence of completion. The agent implements from this file.",
+    path: "docs/us/",
   },
 ]
+
+export const deliveryArtifactsNote =
+  "Creation order: epic → version → sprint → story. A story needs its epic and version to exist first."
 
 // ─── Status guide ─────────────────────────────────────────────────────────────
 
@@ -561,10 +728,10 @@ export type UsageGuideSection = {
 }
 
 export const usageGuideIntro = {
-  title: "Usage guide",
+  title: "Commands",
   lead: "How to work with Meridian day-to-day — commands, checks, and the sequence of actions for each situation.",
   paragraphs: [
-    "For concepts (what is an epic, how phases work, what ready means), read Start here first.",
+    "For concepts (what is an epic, how phases work, what ready means), see the How it works tab first.",
     "Run /status at any point to get blockers, current state, and the suggested next action.",
     "After you close a US in the files (/complete-us + /sync-board), commit in git (one commit per US) before starting the next story — unless you batch commits on purpose.",
   ],
@@ -1006,11 +1173,11 @@ export const appIntro = {
 
 export const monitorTabsGuide = [
   {
-    label: "Start here",
-    hint: "What Meridian is, the four phases, and the anatomy of each artifact. Available without an open folder.",
+    label: "How it works",
+    hint: "What Meridian is, the loop, principles, and artifact reference. Available without an open folder.",
   },
   {
-    label: "Usage guide",
+    label: "Commands",
     hint: "Step-by-step per situation: getting started, phase docs, backlog, implement, close, commit.",
   },
   {
@@ -1032,8 +1199,8 @@ export const monitorTabsGuide = [
 export const nextStepsAfterConcepts = {
   title: "Ready to start?",
   paragraphs: [
-    "Go to the Usage guide tab for step-by-step commands and checks for your current situation.",
-    "The same guides live in the kit repo: .agent/references/start-here.md and .agent/references/usage-guide.md — for IDE and GitHub without this app.",
+    "Go to the Commands tab for step-by-step instructions and slash commands for your current situation.",
+    "Run /init-meridian in your IDE to create docs/ — new project or existing codebase migration.",
     "Open your repository's docs/ folder in this app to see Setup, Deliverables, and Board with real data.",
   ],
 }

@@ -1,11 +1,11 @@
-# Meridian — documentation-driven development protocol
+# Meridian — protocol manifest
 
 > Define the meridian before writing code.
 
-This file is the **master manifest**: principles, gates, and where to read operational detail.
+This file is the **master manifest** for agents: principles, gates, and where to read operational detail.
 It is **not** the structural contract for epics, versions, or user stories — use templates for that.
 
-In the kit monorepo, [`README.md`](../README.md) is human onboarding; `.agent/` is the portable kit for agents.
+Human onboarding: [`README.md`](../README.md). This file is for agents and advanced reference.
 
 **Protocol version:** 2.0 (US schema: Intent / Plan / Record / Boundaries)
 
@@ -13,14 +13,14 @@ In the kit monorepo, [`README.md`](../README.md) is human onboarding; `.agent/` 
 
 ## 1. What Meridian is
 
-Meridian is a documentation-driven protocol for building software with AI agents.
+Meridian is a Scrum-inspired workflow protocol for building software with AI agents.
 
-- **Documentation is the project** — code implements what is documented.
-- **The person is manager** — agents execute; humans approve maturity and direction.
+- **The spec is the project** — code implements what is documented in `docs/`.
+- **The person is manager** — agents propose and execute; humans approve direction and ✅.
 - **Files are the source of truth** — not chat, not a dashboard, not manually edited board JSON.
-- **Works with Markdown + JSON only** — apps and extensions are optional monitors.
+- **Minimal surface** — Markdown + JSON only; apps and extensions are optional monitors.
 
-Meridian is not a mesh of autonomous agents. It is a minimal, auditable flow.
+Meridian is not a mesh of autonomous agents. It is a minimal, auditable loop.
 
 ---
 
