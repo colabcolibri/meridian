@@ -191,7 +191,6 @@ export function ProjectDataProvider({ children }: { children: ReactNode }) {
       if (
         folderStatus === "none" ||
         folderStatus === "error" ||
-        folderStatus === "permission_required" ||
         folderStatus === "opening"
       ) {
         loadGenerationRef.current += 1
