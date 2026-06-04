@@ -360,41 +360,36 @@ export function ProjectFolderProvider({ children }: { children: ReactNode }) {
     let cancelled = false
 
     async function restoreFromStorage() {
-      const handle = await restoreMeridianFolderHandle()
-      if (cancelled || generation !== restoreGenerationRef.current) {
-        return
-      }
-      if (folderKeyRef.current) {
-        return
-      }
-
-      if (!handle) {
-        setStatus("none")
-        return
-      }
-
-      setStatus("opening")
-
-      if (!(await hasReadPermission(handle))) {
-        setPermissionRequiredForHandle(handle)
-        return
-      }
-
-      openFolderGenerationRef.current += 1
-      const restoreGeneration = openFolderGenerationRef.current
-      const timeout = new Promise<"timeout">((resolve) =>
+      const timeoutPromise = new Promise<"timeout">((resolve) =>
         setTimeout(() => resolve("timeout"), 5000),
       )
+
       const result = await Promise.race([
-        finishOpenWithHandle(handle, restoreGeneration)
-          .then(() => "done" as const)
-          .catch(() => "done" as const),
-        timeout,
+        (async () => {
+          const handle = await restoreMeridianFolderHandle()
+          if (cancelled || generation !== restoreGenerationRef.current)
+            return "cancelled" as const
+          if (folderKeyRef.current) return "already-open" as const
+          if (!handle) return "no-handle" as const
+
+          setStatus("opening")
+
+          if (!(await hasReadPermission(handle))) {
+            setPermissionRequiredForHandle(handle)
+            return "permission-required" as const
+          }
+
+          openFolderGenerationRef.current += 1
+          const restoreGeneration = openFolderGenerationRef.current
+          await finishOpenWithHandle(handle, restoreGeneration).catch(() => {})
+          if (cancelled || restoreGeneration !== openFolderGenerationRef.current)
+            return "cancelled" as const
+          return folderKeyRef.current ? ("opened" as const) : ("failed" as const)
+        })(),
+        timeoutPromise,
       ])
-      if (cancelled || restoreGeneration !== openFolderGenerationRef.current) {
-        return
-      }
-      if (result === "timeout" || !folderKeyRef.current) {
+
+      if (result === "no-handle" || result === "failed" || result === "timeout") {
         await clearFolderHandle()
         clearBoundFolder()
         setStatus("none")
