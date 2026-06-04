@@ -384,19 +384,13 @@ export function ProjectFolderProvider({ children }: { children: ReactNode }) {
       const restoreGeneration = openFolderGenerationRef.current
       try {
         await finishOpenWithHandle(handle, restoreGeneration)
-        if (
-          !cancelled &&
-          generation === restoreGenerationRef.current &&
-          !folderKeyRef.current
-        ) {
-          await clearFolderHandle()
-          clearBoundFolder()
-          setStatus("none")
-        }
       } catch {
-        if (cancelled || generation !== restoreGenerationRef.current) {
-          return
-        }
+        // ignore
+      }
+      if (cancelled || restoreGeneration !== openFolderGenerationRef.current) {
+        return
+      }
+      if (!folderKeyRef.current) {
         await clearFolderHandle()
         clearBoundFolder()
         setStatus("none")
