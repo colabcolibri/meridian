@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { countIssuesBySeverity } from "@/domain/meridian/protocol-validators"
 import { useProjectData } from "@/features/folder/ProjectDataContext"
 import { useProjectFolder } from "@/features/folder/ProjectFolderContext"
-import { OpenFolderButton } from "@/features/monitor/components/OpenFolderButton"
+import { OpenFolderDialog } from "@/features/folder/OpenFolderDialog"
 import { MONITOR_CONTAINER } from "@/features/monitor/monitor-layout"
 import { MONITOR_HEADER_TABS, type MonitorView } from "@/features/monitor/monitor-views"
 import { MERIDIAN_GITHUB_URL, publicAssetUrl } from "@/lib/site-urls"
@@ -20,7 +20,15 @@ export function MonitorHeader({
   onChange: (view: MonitorView) => void
   isTabDisabled?: (view: MonitorView) => boolean
 }) {
-  const { status, folder, error, isDemoActive, clearFolder } = useProjectFolder()
+  const {
+    status,
+    folder,
+    error,
+    isDemoActive,
+    clearFolder,
+    openFolderFromPath,
+    storedPath,
+  } = useProjectFolder()
   const { issues } = useProjectData()
   const { errors, warnings } = countIssuesBySeverity(issues)
   const isOpening = status === "opening"
@@ -99,18 +107,28 @@ export function MonitorHeader({
               <Github className="h-4 w-4" />
             </a>
           </Button>
-          <OpenFolderButton size="sm" variant={folder ? "outline" : "default"}>
-            {isOpening ? (
-              <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />
-            ) : (
-              <FolderOpen className="mr-1.5 h-3.5 w-3.5" />
-            )}
-            {folder
-              ? isDemoActive
-                ? "Open local folder"
-                : "Change folder"
-              : "Open folder"}
-          </OpenFolderButton>
+          <OpenFolderDialog
+            initialPath={storedPath ?? ""}
+            onSubmit={openFolderFromPath}
+            disabled={isOpening}
+          >
+            <Button
+              size="sm"
+              variant={folder ? "outline" : "default"}
+              disabled={isOpening}
+            >
+              {isOpening ? (
+                <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />
+              ) : (
+                <FolderOpen className="mr-1.5 h-3.5 w-3.5" />
+              )}
+              {folder
+                ? isDemoActive
+                  ? "Open local folder"
+                  : "Change folder"
+                : "Open folder"}
+            </Button>
+          </OpenFolderDialog>
           {folder ? (
             <Button
               aria-label="Close project"

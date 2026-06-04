@@ -5,14 +5,22 @@ import { Button } from "@/components/ui/button"
 import { countIssuesBySeverity } from "@/domain/meridian/protocol-validators"
 import { useProjectData } from "@/features/folder/ProjectDataContext"
 import { useProjectFolder } from "@/features/folder/ProjectFolderContext"
-import { OpenFolderButton } from "@/features/monitor/components/OpenFolderButton"
+import { OpenFolderDialog } from "@/features/folder/OpenFolderDialog"
 import { MONITOR_CONTAINER } from "@/features/monitor/monitor-layout"
 import { typeScale } from "@/features/monitor/monitor-typography"
 import { publicAssetUrl } from "@/lib/site-urls"
 import { cn } from "@/lib/utils"
 
 export function MonitorTopBar() {
-  const { status, folder, error, isDemoActive, clearFolder } = useProjectFolder()
+  const {
+    status,
+    folder,
+    error,
+    isDemoActive,
+    clearFolder,
+    openFolderFromPath,
+    storedPath,
+  } = useProjectFolder()
   const { issues } = useProjectData()
   const { errors, warnings } = countIssuesBySeverity(issues)
   const isOpening = status === "opening"
@@ -70,18 +78,28 @@ export function MonitorTopBar() {
         </div>
 
         <div className="flex shrink-0 items-center gap-1.5">
-          <OpenFolderButton size="sm" variant={folder ? "outline" : "default"}>
-            {isOpening ? (
-              <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" />
-            ) : (
-              <FolderOpen className="mr-2 h-3.5 w-3.5" />
-            )}
-            {folder
-              ? isDemoActive
-                ? "Open local folder"
-                : "Change folder"
-              : "Open folder"}
-          </OpenFolderButton>
+          <OpenFolderDialog
+            initialPath={storedPath ?? ""}
+            onSubmit={openFolderFromPath}
+            disabled={isOpening}
+          >
+            <Button
+              size="sm"
+              variant={folder ? "outline" : "default"}
+              disabled={isOpening}
+            >
+              {isOpening ? (
+                <Loader2 className="mr-2 h-3.5 w-3.5 animate-spin" />
+              ) : (
+                <FolderOpen className="mr-2 h-3.5 w-3.5" />
+              )}
+              {folder
+                ? isDemoActive
+                  ? "Open local folder"
+                  : "Change folder"
+                : "Open folder"}
+            </Button>
+          </OpenFolderDialog>
           {folder ? (
             <Button
               aria-label="Close project"

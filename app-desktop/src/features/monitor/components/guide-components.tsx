@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/collapsible"
 import { MonitorSheet } from "@/features/monitor/components/monitor-sheet"
 import { useProjectFolder } from "@/features/folder/ProjectFolderContext"
-import { OpenFolderButton } from "@/features/monitor/components/OpenFolderButton"
+import { OpenFolderDialog } from "@/features/folder/OpenFolderDialog"
 import {
   type AnatomyGuide,
   type ConceptBlock,
@@ -390,7 +390,7 @@ export function SlashCommandsTable({ commands }: { commands: SlashCommandHint[] 
 }
 
 export function OpenFolderCallout({ className }: { className?: string }) {
-  const { folder, fsAccessSupported } = useProjectFolder()
+  const { folder, openFolderFromPath, storedPath } = useProjectFolder()
 
   if (folder) {
     return null
@@ -413,15 +413,16 @@ export function OpenFolderCallout({ className }: { className?: string }) {
         ) to see real documents, epics, and user stories in the Setup, Deliverables, and
         Board tabs.
       </p>
-      <OpenFolderButton className="mt-4">
-        <FolderOpen className="mr-2 h-4 w-4" />
-        Open docs folder
-      </OpenFolderButton>
-      {!fsAccessSupported ? (
-        <p className={cn(typeScale.caption, "mt-3 text-amber-800")}>
-          Use Chrome or Edge on localhost to open folders on your computer.
-        </p>
-      ) : null}
+      <OpenFolderDialog
+        initialPath={storedPath ?? ""}
+        onSubmit={openFolderFromPath}
+        className="mt-4"
+      >
+        <Button className="mt-4">
+          <FolderOpen className="mr-2 h-4 w-4" />
+          Open docs folder
+        </Button>
+      </OpenFolderDialog>
     </section>
   )
 }
