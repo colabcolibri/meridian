@@ -20,6 +20,10 @@ import {
   isFolderInputSupported,
   isFileSystemAccessSupported,
 } from "@/features/folder/folder-access"
+import {
+  createHttpDocsRoot,
+  probeHttpServer,
+} from "@/features/folder/http-folder-access"
 import type { MeridianDocsRoot } from "@/features/folder/meridian-docs-root"
 import { resolveMeridianDocsRoot } from "@/features/folder/resolve-docs-root"
 import type {
@@ -45,17 +49,43 @@ interface ProjectFolderContextValue {
   isDemoActive: boolean
   /** Demo only. */
   openFolder: () => void
+  openFolderFromPath: (folderPath: string) => void
   applyFolderFromFileList: (files: File[]) => void
   cancelOpening: () => void
   clearFolder: () => Promise<void>
+  storedPath: string | null
   getDocsRoot: () => Promise<MeridianDocsRoot | null>
   getHandle: () => Promise<FileSystemDirectoryHandle | null>
+}
+
+const LOCAL_PATH_KEY = "meridian.localFolderPath"
+
+function loadStoredPath(): string | null {
+  try {
+    const raw = localStorage.getItem(LOCAL_PATH_KEY)
+    if (!raw) return null
+    const parsed = JSON.parse(raw) as { path?: string }
+    return parsed.path ?? null
+  } catch {
+    return null
+  }
+}
+
+function saveStoredPath(p: string) {
+  localStorage.setItem(LOCAL_PATH_KEY, JSON.stringify({ path: p }))
+}
+
+function clearStoredPath() {
+  localStorage.removeItem(LOCAL_PATH_KEY)
 }
 
 const ProjectFolderContext = createContext<ProjectFolderContextValue | null>(null)
 
 export function ProjectFolderProvider({ children }: { children: ReactNode }) {
   const demoBuild = isDemoMode()
+  const [storedPath, setStoredPath] = useState<string | null>(() =>
+    demoBuild ? null : loadStoredPath(),
+  )
   const [status, setStatus] = useState<ProjectFolderStatus>(
     demoBuild ? "opening" : "none",
   )
@@ -249,7 +279,92 @@ export function ProjectFolderProvider({ children }: { children: ReactNode }) {
     })()
   }, [beginHardResetSync, demoBuild, failOpenSession, finishOpenDemo])
 
+  const openFolderFromPath = useCallback(
+    (folderPath: string) => {
+      saveStoredPath(folderPath)
+      setStoredPath(folderPath)
+      const generation = beginHardResetSync()
+
+      void (async () => {
+        try {
+          const reachable = await probeHttpServer(folderPath)
+          if (!reachable) {
+            throw new Error(
+              "Local file server not reachable. Make sure `pnpm dev` is running.",
+            )
+          }
+          if (!shouldApplyAsyncResult(generation, openFolderGenerationRef.current)) {
+            return
+          }
+          const root = createHttpDocsRoot(folderPath)
+          const { validateMeridianFolder, assertMeridianFolder } =
+            await import("@/features/folder/validate-meridian-folder-http")
+          const validation = await validateMeridianFolder(root)
+          const invalidMessage = assertMeridianFolder(validation)
+          if (invalidMessage) throw new Error(invalidMessage)
+          if (!shouldApplyAsyncResult(generation, openFolderGenerationRef.current)) {
+            return
+          }
+          const displayName = root.displayName
+          bindFolder({ name: displayName, validation }, root)
+        } catch (cause) {
+          const message =
+            cause instanceof Error ? cause.message : "Could not open folder."
+          failOpenSession(message, generation)
+        }
+      })()
+    },
+    [beginHardResetSync, bindFolder, failOpenSession],
+  )
+
+  useEffect(() => {
+    if (demoBuild || !storedPath) return
+
+    const generation = ++restoreGenerationRef.current
+    let cancelled = false
+
+    void (async () => {
+      try {
+        const reachable = await probeHttpServer(storedPath)
+        if (cancelled || generation !== restoreGenerationRef.current) return
+        if (!reachable) {
+          setStatus("none")
+          return
+        }
+        openFolderGenerationRef.current += 1
+        const restoreGeneration = openFolderGenerationRef.current
+        setStatus("opening")
+        const root = createHttpDocsRoot(storedPath)
+        const { validateMeridianFolder, assertMeridianFolder } =
+          await import("@/features/folder/validate-meridian-folder-http")
+        const validation = await validateMeridianFolder(root)
+        if (cancelled || restoreGeneration !== openFolderGenerationRef.current) return
+        const invalidMessage = assertMeridianFolder(validation)
+        if (invalidMessage) {
+          clearStoredPath()
+          setStoredPath(null)
+          clearBoundFolder()
+          setError(invalidMessage)
+          return
+        }
+        const displayName = root.displayName
+        bindFolder({ name: displayName, validation }, root)
+      } catch {
+        if (cancelled) return
+        clearStoredPath()
+        setStoredPath(null)
+        clearBoundFolder()
+      }
+    })()
+
+    return () => {
+      cancelled = true
+    }
+  }, [demoBuild, storedPath, clearBoundFolder, bindFolder])
+
   const clearFolder = useCallback(async () => {
+    clearStoredPath()
+    setStoredPath(null)
     beginHardResetSync()
 
     if (demoBuild) {
@@ -293,11 +408,13 @@ export function ProjectFolderProvider({ children }: { children: ReactNode }) {
       isDemoBuild: demoBuild,
       isDemoActive,
       openFolder,
+      openFolderFromPath,
       applyFolderFromFileList,
       cancelOpening,
       clearFolder,
       getDocsRoot,
       getHandle,
+      storedPath,
     }),
     [
       status,
@@ -310,11 +427,13 @@ export function ProjectFolderProvider({ children }: { children: ReactNode }) {
       demoBuild,
       isDemoActive,
       openFolder,
+      openFolderFromPath,
       applyFolderFromFileList,
       cancelOpening,
       clearFolder,
       getDocsRoot,
       getHandle,
+      storedPath,
     ],
   )
 

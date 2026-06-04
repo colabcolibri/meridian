@@ -2,6 +2,7 @@ import { FolderOpen, FolderTree, LayoutDashboard, Sparkles } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { useProjectFolder } from "@/features/folder/ProjectFolderContext"
+import { PathInput } from "@/features/folder/PathInput"
 import { OpenFolderButton } from "@/features/monitor/components/OpenFolderButton"
 import { MONITOR_CONTAINER } from "@/features/monitor/monitor-layout"
 import { monitorPanelClass } from "@/features/monitor/monitor-ui"
@@ -26,7 +27,15 @@ const steps = [
 ]
 
 export function WelcomeScreen() {
-  const { folder, fsAccessSupported, isDemoBuild, status, error } = useProjectFolder()
+  const {
+    folder,
+    fsAccessSupported,
+    isDemoBuild,
+    status,
+    error,
+    openFolderFromPath,
+    storedPath,
+  } = useProjectFolder()
 
   if (folder) {
     return null
@@ -82,13 +91,26 @@ export function WelcomeScreen() {
         })}
       </ol>
 
-      <div className="mx-auto mt-10 flex max-w-xl flex-col items-center gap-3">
+      <div className="mx-auto mt-10 flex max-w-xl flex-col items-center gap-4">
+        <PathInput
+          initialPath={storedPath ?? ""}
+          onSubmit={openFolderFromPath}
+          disabled={isOpening}
+        />
+
+        <div className="flex items-center gap-3 text-xs text-muted-foreground">
+          <span className="h-px w-16 bg-border" />
+          or
+          <span className="h-px w-16 bg-border" />
+        </div>
+
         <OpenFolderButton
-          className="h-11 w-full max-w-sm text-base sm:w-auto sm:min-w-[240px]"
-          size="lg"
+          className="h-10 w-full max-w-sm text-sm sm:w-auto sm:min-w-[240px]"
+          size="default"
+          variant="outline"
         >
-          <FolderOpen className="mr-2 h-5 w-5" />
-          Open project folder
+          <FolderOpen className="mr-2 h-4 w-4" />
+          Browse folder
         </OpenFolderButton>
 
         {!fsAccessSupported ? (
