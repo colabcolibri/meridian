@@ -1,38 +1,38 @@
-import { FolderOpen, FolderTree, LayoutDashboard, Sparkles } from "lucide-react"
+import { FolderTree, LayoutDashboard, Sparkles } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 import { cn } from "@/lib/utils"
 import { useProjectFolder } from "@/features/folder/ProjectFolderContext"
-import { OpenFolderDialog } from "@/features/folder/OpenFolderDialog"
 import { MONITOR_CONTAINER } from "@/features/monitor/monitor-layout"
 import { monitorPanelClass } from "@/features/monitor/monitor-ui"
 import { typeScale } from "@/features/monitor/monitor-typography"
+import { useState } from "react"
 
 const steps = [
   {
     icon: FolderTree,
     title: "Open your project's docs folder",
-    body: "This is where the spec lives — scope, architecture, epics, versions, user stories, decision log. The same files your agents read and update.",
+    body: "This is where the spec lives — scope, architecture, epics, versions, user stories, decision log.",
   },
   {
     icon: LayoutDashboard,
     title: "See Setup, Deliverables, and Board",
-    body: "Setup tracks phase doc progress. Deliverables shows epic coverage. Board shows each user story's status — all read from the files, no database.",
+    body: "Setup tracks phase doc progress. Deliverables shows epic coverage. Board shows each user story's status.",
   },
   {
     icon: Sparkles,
     title: "Works across reloads",
-    body: "The path is saved locally — F5 restores the board automatically without opening anything again.",
+    body: "The path is saved locally — F5 restores the board automatically.",
   },
 ]
 
 export function WelcomeScreen() {
   const { folder, isDemoBuild, status, error, openFolderFromPath, storedPath } =
     useProjectFolder()
+  const [value, setValue] = useState(storedPath ?? "")
 
-  if (folder) {
-    return null
-  }
+  if (folder) return null
 
   const isOpening = status === "opening"
 
@@ -42,6 +42,12 @@ export function WelcomeScreen() {
         <p className={typeScale.bodySm}>Loading Meridian demo project…</p>
       </section>
     )
+  }
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    const trimmed = value.trim()
+    if (trimmed) openFolderFromPath(trimmed)
   }
 
   return (
@@ -54,10 +60,9 @@ export function WelcomeScreen() {
           Monitor your Meridian project
         </h2>
         <p className={cn(typeScale.bodySm, "mt-3")}>
-          Open the project's{" "}
-          <strong className="font-medium text-foreground">docs</strong> folder (e.g.{" "}
-          <span className="font-mono text-xs">my-project/docs</span>) to see Setup,
-          Deliverables, and Board — read directly from your spec files.
+          Paste the absolute path to your project's{" "}
+          <strong className="font-medium text-foreground">docs</strong> folder and press
+          Enter.
         </p>
       </div>
 
@@ -84,28 +89,29 @@ export function WelcomeScreen() {
         })}
       </ol>
 
-      <div className="mx-auto mt-10 flex max-w-xl flex-col items-center gap-3">
-        <OpenFolderDialog
-          initialPath={storedPath ?? ""}
-          onSubmit={openFolderFromPath}
+      <form
+        onSubmit={handleSubmit}
+        className="mx-auto mt-10 flex w-full max-w-xl gap-2"
+      >
+        <Input
+          autoFocus
+          type="text"
+          placeholder="/Users/you/project/docs"
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
           disabled={isOpening}
-        >
-          <Button
-            className="h-11 w-full max-w-sm text-base sm:w-auto sm:min-w-[240px]"
-            disabled={isOpening}
-            size="lg"
-          >
-            <FolderOpen className="mr-2 h-5 w-5" />
-            Open project folder
-          </Button>
-        </OpenFolderDialog>
+          className="font-mono text-sm"
+        />
+        <Button type="submit" disabled={isOpening || !value.trim()}>
+          Open
+        </Button>
+      </form>
 
-        {error ? (
-          <p className="text-center text-sm text-red-800" role="alert">
-            {error}
-          </p>
-        ) : null}
-      </div>
+      {error ? (
+        <p className="mt-3 text-center text-sm text-red-800" role="alert">
+          {error}
+        </p>
+      ) : null}
     </section>
   )
 }
