@@ -205,7 +205,7 @@ async function loadVersions(
   const versions: ProductVersion[] = []
 
   try {
-    const files = await docsRoot.listFiles("versions", /^v\d+\.md$/i)
+    const files = await docsRoot.listFiles("versions", /^v\d+(\.\d+)*\.md$/i)
 
     if (files.length === 0) {
       parseIssues.push({
@@ -267,7 +267,7 @@ async function loadSprints(
   const sprints: Sprint[] = []
 
   try {
-    const files = await docsRoot.listFiles("sprints", /^v\d+-S\d+\.md$/i)
+    const files = await docsRoot.listFiles("sprints", /^v\d+(\.\d+)*-S\d+\.md$/i)
 
     const parsed = await mapWithConcurrency(
       files,

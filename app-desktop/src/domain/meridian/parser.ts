@@ -42,8 +42,8 @@ const MOSCOW_VALUES: Moscow[] = ["Must", "Should", "Could", "Won't"]
 const EPIC_STATUSES: EpicStatus[] = ["active", "paused", "complete"]
 const RELEASE_STATUSES: ReleaseStatus[] = ["planned", "active", "complete"]
 const SPRINT_STATUSES: SprintStatus[] = ["planned", "active", "complete"]
-const VERSION_ID_PATTERN = /^v\d+$/i
-const SPRINT_ID_PATTERN = /^v\d+-S\d+$/i
+const VERSION_ID_PATTERN = /^v\d+(\.\d+)*$/i
+const SPRINT_ID_PATTERN = /^v\d+(\.\d+)*-S\d+$/i
 
 function requireString(
   record: Record<string, unknown>,
@@ -290,7 +290,10 @@ export function parseVersionFile(filename: string, raw: string): ProductVersion 
   assertFilenameMatchesId(file, filename, id)
 
   if (!VERSION_ID_PATTERN.test(id)) {
-    throw new MeridianParseError(file, `id "${id}" must use vX format (e.g. v0, v1)`)
+    throw new MeridianParseError(
+      file,
+      `id "${id}" must use vX or vX.Y format (e.g. v0, v1, v2.01)`,
+    )
   }
 
   return {
@@ -397,12 +400,18 @@ export function parseSprintFile(filename: string, raw: string): Sprint {
   assertFilenameMatchesId(file, filename, id)
 
   if (!SPRINT_ID_PATTERN.test(id)) {
-    throw new MeridianParseError(file, `id "${id}" must use vX-SY format (e.g. v1-S1)`)
+    throw new MeridianParseError(
+      file,
+      `id "${id}" must use vX-SY or vX.Y-SY format (e.g. v1-S1)`,
+    )
   }
 
   const versionId = requireString(record, "version", file)
   if (!VERSION_ID_PATTERN.test(versionId)) {
-    throw new MeridianParseError(file, `version "${versionId}" must use vX format`)
+    throw new MeridianParseError(
+      file,
+      `version "${versionId}" must use vX or vX.Y format (e.g. v1, v2.01)`,
+    )
   }
 
   return {

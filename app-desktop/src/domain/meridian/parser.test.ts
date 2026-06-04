@@ -117,6 +117,15 @@ tests_status: n/a
     expect(version.objective.length).toBeGreaterThan(10)
   })
 
+  it("parses v2.01.md patch version ids", () => {
+    const raw = readFileSync(resolve(docsRoot, "versions/v2.01.md"), "utf8")
+    const version = parseVersionFile("v2.01.md", raw)
+
+    expect(version.id).toBe("v2.01")
+    expect(version.title).toContain("File Server")
+    expect(version.outcome.length).toBeGreaterThan(10)
+  })
+
   it("parses v1-S1.md in docs/sprints/", () => {
     const raw = readFileSync(resolve(docsRoot, "sprints/v1-S1.md"), "utf8")
     const sprint = parseSprintFile("v1-S1.md", raw)
