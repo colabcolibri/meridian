@@ -21,14 +21,10 @@ export function OpenFolderButton({
   const {
     applyFolderFromFileList,
     cancelOpening,
-    status,
     fsAccessSupported,
     isDemoBuild,
     openFolder,
-    openFolderFromPicker,
   } = useProjectFolder()
-
-  const isOpening = status === "opening"
 
   const handleClick = () => {
     if (isDemoBuild) {
@@ -36,14 +32,7 @@ export function OpenFolderButton({
       return
     }
 
-    if (isOpening) {
-      cancelOpening()
-    }
-
-    if (openFolderFromPicker()) {
-      return
-    }
-
+    cancelOpening()
     inputRef.current?.click()
   }
 
