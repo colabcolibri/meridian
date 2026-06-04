@@ -1061,12 +1061,12 @@
     "title": "Local HTTP file server sidecar replacing File System Access API",
     "epic": "EPIC-02",
     "version": "v2.01",
-    "status": "❌",
+    "status": "✅",
     "moscow": "Must",
     "depends_on": [],
     "done_when": "Running `pnpm dev` starts a local HTTP file server; the user enters a folder path once in the browser UI; F5 reloads all documents and board state without any folder picker appearing; the path is restored from localStorage on every subsequent load.",
     "tests": "required",
-    "tests_status": "pending"
+    "tests_status": "done"
   },
   {
     "id": "US-0088",
