@@ -1,5 +1,6 @@
 import { PHASE_DOC_IDS } from "@/domain/meridian/phase-doc-files"
 import { phaseLabelForDocId } from "@/domain/meridian/doc-refs"
+import { SCRUM_MERIDIAN_MERMAID } from "@/features/monitor/content/scrum-meridian-mermaid"
 
 export type ConceptBlock = {
   id: string
@@ -135,6 +136,71 @@ export const meridianLoop = {
         "One git commit per closed story. Code and docs together — a permanent record of what changed and why.",
     },
   ],
+}
+
+// ─── Scrum ↔ Meridian (synthesis) ─────────────────────────────────────────────
+
+export type ScrumMappingRow = {
+  scrum: string
+  meridian: string
+  note?: string
+}
+
+export type ScrumCeremonyRow = {
+  ceremony: string
+  meridian: string
+}
+
+export const scrumMeridianMap = {
+  title: "Scrum and Meridian",
+  subtitle:
+    "Meridian uses a subset of Scrum adapted for one manager plus AI agents — files in docs/, not chat or Jira.",
+  paragraphs: [
+    "Use this section for day-to-day mapping. The full Scrum textbook lives in the kit as optional human reading — agents use scrum-meridian-map.md in .agent/references/, not the long guide, unless you ask.",
+    "We skip story points, velocity, burndown, and a mandatory Feature layer. Sprint priority is the order of US ids in the sprint file.",
+  ],
+  flowTitle: "How concepts map",
+  flowColumns: {
+    scrum: "Scrum (reference)",
+    meridian: "Meridian (source of truth)",
+  },
+  flowRows: [
+    { scrum: "Phase / product vision", meridian: "docs/00–11 phase docs" },
+    { scrum: "Epic", meridian: "docs/epics/EPIC-XX.md" },
+    { scrum: "Feature (optional)", meridian: "— (epic → US)" },
+    { scrum: "User story", meridian: "docs/us/US-XXXX.md" },
+    { scrum: "Task / subtask", meridian: "Plan → Approach + Planned" },
+    { scrum: "Bug", meridian: "Correction US or fix in current US" },
+    { scrum: "Spike", meridian: "US with timebox in Notes → decision log" },
+    { scrum: "Release", meridian: "docs/versions/vX.md" },
+    { scrum: "Sprint", meridian: "docs/sprints/vX-SY.md (optional)" },
+    { scrum: "Board", meridian: "docs/kanban/board.json (generated)" },
+  ],
+  mermaidDiagram: SCRUM_MERIDIAN_MERMAID,
+  ceremoniesTitle: "Ceremonies → commands",
+  ceremonies: [
+    {
+      ceremony: "Backlog refinement",
+      meridian: "/create-us · /review-us · /refine-us",
+    },
+    {
+      ceremony: "Sprint planning",
+      meridian: "/plan-sprint — stories: order = priority",
+    },
+    { ceremony: "Daily", meridian: "/daily-with-ai or /status" },
+    { ceremony: "Sprint review", meridian: "You demo against Acceptance + Planned" },
+    { ceremony: "Retrospective", meridian: "Sprint ## Retrospective on close" },
+  ] satisfies ScrumCeremonyRow[],
+  notImported: [
+    "Story points and velocity",
+    "Burndown charts as required",
+    "docs/tasks/ or docs/bugs/ folders",
+    "Agents auto-prioritizing the backlog",
+  ],
+  kitPaths: {
+    map: ".agent/references/scrum-meridian-map.md",
+    textbook: ".agent/references/scrum-guide-complete.md",
+  },
 }
 
 // ─── Core principles ─────────────────────────────────────────────────────────
@@ -908,6 +974,17 @@ export const backlogWorkflowSteps: DailyWorkflowStep[] = [
     tip: "Sprints are optional. If you prefer a continuous flow, work directly from the Board without them.",
   },
   {
+    id: "backlog-bugs-spikes",
+    title: "Bugs and spikes (no extra folders)",
+    when: "Correction work or investigation before estimating implementation.",
+    actions: [
+      "Bug in production: /create-us with fix acceptance; prioritize with MoSCoW and version (e.g. patch release).",
+      "Bug found while implementing: fix in the current US; record in ## Record on close.",
+      "Spike: US with timebox in Notes, tests: none, outcome in docs/decisions/ — not a docs/spikes/ folder.",
+      "See .agent/references/scrum-meridian-map.md in the kit.",
+    ],
+  },
+  {
     id: "backlog-us",
     title: "Create and refine user stories",
     when: "Epic and version exist — create the executable tasks.",
@@ -1152,6 +1229,8 @@ export const usageAntiPatterns = [
   "Using status: ✅ without a filled ## Record.",
   "Closing a US with /complete-us and starting the next story without committing the closed slice (unless you batch commits intentionally).",
   "Letting the agent git commit without your explicit request.",
+  "Adding story points or velocity fields — Meridian uses MoSCoW, depends_on, and sprint story order instead.",
+  "Creating docs/tasks/ or docs/bugs/ — use Plan/Planned and correction US files.",
 ]
 
 // ─── Validate hint ────────────────────────────────────────────────────────────
@@ -1202,6 +1281,7 @@ export const nextStepsAfterConcepts = {
     "Go to the Commands tab for step-by-step instructions and slash commands for your current situation.",
     "Run /init-meridian in your IDE to create docs/ — new project or existing codebase migration.",
     "Open your repository's docs/ folder in this app to see Setup, Deliverables, and Board with real data.",
+    "Coming from Scrum? Read the Scrum and Meridian section above, then .agent/references/scrum-meridian-map.md in the repo for the full map and Mermaid diagram.",
   ],
 }
 

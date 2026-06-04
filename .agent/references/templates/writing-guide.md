@@ -11,6 +11,9 @@
 3. **Bullets with substance** — each bullet can be one or two sentences. Forbidden: telegraphic stubs (`src/foo.ts`, `see epic`, `TBD`).
 4. **Observable acceptance** — checklist items must be verifiable; narrative sections must not repeat acceptance verbatim.
 5. **Create vs refine** — `/create-us` writes the story (clarity). `/refine-us` deepens Plan and tests before code.
+6. **INVEST (qualitative)** — at review/refine: Independent (`depends_on` minimal), Negotiable (Why allows tradeoffs), Valuable (`so that`), Estimable (concrete Approach), Small (one session), Testable (observable Acceptance). No story points — see `scrum-meridian-map.md`.
+7. **Gherkin optional** — use Given/When/Then only when a flow is ambiguous; default remains observable checklist bullets.
+8. **Bugs and spikes** — no `docs/bugs/` or spike folders; bugs = correction US; spikes = US with timebox in Notes or decision log outcome. See `scrum-meridian-map.md`.
 
 ---
 

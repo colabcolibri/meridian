@@ -413,11 +413,7 @@ export function OpenFolderCallout({ className }: { className?: string }) {
         ) to see real documents, epics, and user stories in the Setup, Deliverables, and
         Board tabs.
       </p>
-      <OpenFolderDialog
-        initialPath={storedPath ?? ""}
-        onSubmit={openFolderFromPath}
-        className="mt-4"
-      >
+      <OpenFolderDialog initialPath={storedPath ?? ""} onSubmit={openFolderFromPath}>
         <Button className="mt-4">
           <FolderOpen className="mr-2 h-4 w-4" />
           Open docs folder

@@ -85,7 +85,7 @@ Validate: `python3 ../../.agent/scripts/validate_meridian.py app-desktop` (`--js
 
 ## How agents should work
 
-See also: [Start here](../../.agent/references/start-here.md) · [Usage guide](../../.agent/references/usage-guide.md) · `/daily-with-ai` in Cursor.
+See also: [Start here](../../.agent/references/start-here.md) · [Usage guide](../../.agent/references/usage-guide.md) · [Scrum ↔ Meridian map](../../.agent/references/scrum-meridian-map.md) · [Scrum guide (human, optional)](../../.agent/references/scrum-guide-complete.md) · `/daily-with-ai` in Cursor.
 
 ### Daily loop (manager + AI)
 

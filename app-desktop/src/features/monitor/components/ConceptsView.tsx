@@ -20,6 +20,7 @@ import {
   OpenFolderCallout,
   Prose,
 } from "@/features/monitor/components/guide-components"
+import { MermaidDiagram } from "@/features/monitor/components/MermaidDiagram"
 import {
   audiences,
   corePrinciples,
@@ -33,6 +34,7 @@ import {
   meridianIntro,
   meridianLoop,
   nextStepsAfterConcepts,
+  scrumMeridianMap,
   sprintAnatomy,
   statusGuide,
   userStoryAnatomy,
@@ -165,7 +167,85 @@ export function ConceptsView() {
         </div>
       </section>
 
-      {/* ── 4. Four phases — collapsed reference ─────────────────── */}
+      {/* ── 4. Scrum ↔ Meridian ───────────────────────────────────── */}
+      <section className="space-y-4">
+        <div>
+          <h3 className={typeScale.sectionTitle}>{scrumMeridianMap.title}</h3>
+          <p className={cn(typeScale.bodySm, "mt-1")}>{scrumMeridianMap.subtitle}</p>
+        </div>
+        <Prose paragraphs={scrumMeridianMap.paragraphs} />
+        <div className={cn(monitorPanelClass, "overflow-x-auto p-4 sm:p-5")}>
+          <p className={typeScale.label}>{scrumMeridianMap.flowTitle}</p>
+          <div className="mt-3 grid min-w-[520px] grid-cols-2 gap-px rounded-lg border border-border bg-border text-sm">
+            <div className="bg-muted/40 px-3 py-2 font-medium">
+              {scrumMeridianMap.flowColumns.scrum}
+            </div>
+            <div className="bg-meridian-muted/30 px-3 py-2 font-medium text-meridian">
+              {scrumMeridianMap.flowColumns.meridian}
+            </div>
+            {scrumMeridianMap.flowRows.map((row) => (
+              <div className="contents" key={row.scrum}>
+                <div className="bg-card px-3 py-2 text-muted-foreground">
+                  {row.scrum}
+                </div>
+                <div className="bg-card px-3 py-2">{row.meridian}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+        <div className={cn(monitorPanelClass, "p-4 sm:p-5")}>
+          <p className={typeScale.label}>Synthesis diagram</p>
+          <MermaidDiagram
+            className="mt-4 rounded-lg border border-border bg-card/80 p-3 sm:p-5"
+            chart={scrumMeridianMap.mermaidDiagram}
+            layoutEngine="elk"
+          />
+          <p className={cn(typeScale.caption, "mt-3")}>
+            Same diagram in kit:{" "}
+            <code className="text-meridian">{scrumMeridianMap.kitPaths.map}</code>
+          </p>
+        </div>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div className={cn(monitorPanelClass, "p-4 sm:p-5")}>
+            <p className={typeScale.label}>{scrumMeridianMap.ceremoniesTitle}</p>
+            <ul className="mt-3 space-y-2">
+              {scrumMeridianMap.ceremonies.map((c) => (
+                <li
+                  className="flex flex-col gap-0.5 sm:flex-row sm:gap-3"
+                  key={c.ceremony}
+                >
+                  <span
+                    className={cn(typeScale.caption, "shrink-0 font-medium sm:w-36")}
+                  >
+                    {c.ceremony}
+                  </span>
+                  <span className={typeScale.bodySm}>{c.meridian}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className={cn(monitorPanelClass, "p-4 sm:p-5")}>
+            <p className={typeScale.label}>Not in Meridian</p>
+            <ul className="mt-3 list-disc space-y-1.5 pl-5">
+              {scrumMeridianMap.notImported.map((item) => (
+                <li className={typeScale.bodySm} key={item}>
+                  {item}
+                </li>
+              ))}
+            </ul>
+            <p
+              className={cn(typeScale.caption, "mt-4 rounded-lg bg-muted/40 px-3 py-2")}
+            >
+              Optional textbook:{" "}
+              <code className="text-meridian">
+                {scrumMeridianMap.kitPaths.textbook}
+              </code>
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ── 5. Four phases — collapsed reference ─────────────────── */}
       <ConceptAccordion
         subtitle="From first file to shipped story — what gets created at each step"
         title="The four phases"
@@ -177,7 +257,7 @@ export function ConceptsView() {
         </div>
       </ConceptAccordion>
 
-      {/* ── 4. Document structure (collapsed) ────────────────────── */}
+      {/* ── 6. Document structure (collapsed) ────────────────────── */}
       <ConceptAccordion
         subtitle="The docs/ folder and what lives where"
         title={folderStructure.title}
@@ -200,7 +280,7 @@ export function ConceptsView() {
         </p>
       </ConceptAccordion>
 
-      {/* ── 5. Delivery artifacts ─────────────────────────────────── */}
+      {/* ── 7. Delivery artifacts ─────────────────────────────────── */}
       <ConceptAccordion
         subtitle="Epic, version, sprint, user story — what each one is for"
         title="Delivery artifacts"
@@ -227,7 +307,7 @@ export function ConceptsView() {
         </p>
       </ConceptAccordion>
 
-      {/* ── 6. Anatomy of each artifact (collapsed) ──────────────── */}
+      {/* ── 8. Anatomy of each artifact (collapsed) ──────────────── */}
       <ConceptAccordion
         subtitle="Every field and section explained — open when you need the detail"
         title="Anatomy of each artifact"
@@ -245,7 +325,7 @@ export function ConceptsView() {
         </div>
       </ConceptAccordion>
 
-      {/* ── 7. Status reference (collapsed) ──────────────────────── */}
+      {/* ── 9. Status reference (collapsed) ──────────────────────── */}
       <ConceptAccordion
         subtitle="Phase docs, epics, versions, sprints, and user stories"
         title={statusGuide.title}
@@ -332,7 +412,7 @@ export function ConceptsView() {
         </p>
       </ConceptAccordion>
 
-      {/* ── 8. Next step ─────────────────────────────────────────── */}
+      {/* ── 10. Next step ─────────────────────────────────────────── */}
       <section className="space-y-3 rounded-xl border border-meridian-border bg-meridian-muted/20 p-5 sm:p-6">
         <h3 className={typeScale.sectionTitle}>{nextStepsAfterConcepts.title}</h3>
         <Prose paragraphs={nextStepsAfterConcepts.paragraphs} />

@@ -31,10 +31,14 @@ RULES:
 1. sprint-planner Phase 0 context check
 2. Update docs/versions/ and docs/sprints/ as needed
 3. MoSCoW per US
-4. Explicit dependency order
-5. Log decisions if scope/version changes
-6. NO app/API/DB implementation files
+4. Explicit dependency order — stories: [US-…] order = sprint priority (no story points)
+5. Capacity = Must US + ready + deps + human judgment (see scrum-meridian-map.md)
+6. Active sprint: do not expand scope without manager; log scope shifts in decisions
+7. Log decisions if scope/version changes
+8. NO app/API/DB implementation files
 ```
+
+Read `.agent/references/scrum-meridian-map.md` for sprint ↔ ceremony mapping.
 
 ---
 

@@ -17,6 +17,7 @@ trigger: always_on
 Agent activated → check frontmatter `skills:` → read `SKILL.md` (index) → read `.agent/references/templates/INDEX.md` when creating/closing delivery artifacts → read the **full template file** listed for that artifact → read `section-contracts.md` for US/epic/version structure → read only other relevant files in `references/`.
 
 - **Selective reading:** Do NOT read every file in the skill folder. Read `SKILL.md` first; then only what the request requires.
+- **Scrum:** use `.agent/references/scrum-meridian-map.md` for delivery mapping. Do **not** read `scrum-guide-complete.md` unless the manager explicitly asks.
 - **Rule priority:** P0 (`rules/MERIDIAN.md`) > P1 (`.agent/MERIDIAN.md` + agent `.md`) > P2 (`SKILL.md`).
 
 ### 2. Enforcement protocol

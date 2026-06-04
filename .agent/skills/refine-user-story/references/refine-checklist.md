@@ -19,6 +19,9 @@ Read `writing-guide.md` for tone: Approach bullets must **explain**, not telegra
 | 7 | Plan / Planned | Numbered manual steps and/or exact commands; no “add when known” |
 | 8 | `done_when` | One measurable sentence in frontmatter |
 | 9 | Epic link | `epic: EPIC-XX` in frontmatter only — body explains slice in own words |
+| 10 | INVEST | Independent enough (`depends_on` justified), Small (one session), Testable (Planned + Acceptance) |
+
+See `.agent/references/scrum-meridian-map.md` for bugs/spikes (no extra artifact types).
 
 ---
 

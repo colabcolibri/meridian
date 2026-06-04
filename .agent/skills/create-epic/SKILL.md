@@ -11,6 +11,7 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 | File | When to read |
 | ------- | ---------- |
 | `.agent/references/templates/writing-guide.md` | **Mandatory** — epic prose + golden example |
+| `.agent/references/scrum-meridian-map.md` | Epic lifecycle (new epic vs reopen) |
 | `references/epic-template.md` | **Mandatory** before Write |
 | `docs/03_user_types.md` | Validate `profiles` |
 | `docs/epics/`, `docs/versions/` | IDs and duplication |

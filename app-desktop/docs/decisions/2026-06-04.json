@@ -1,0 +1,14 @@
+{
+  "date": "2026-06-04",
+  "entries": [
+    {
+      "time": "14:00",
+      "title": "Scrum map as agent operational reference",
+      "affected_document": ".agent/references/scrum-meridian-map.md, .agent/rules/MERIDIAN.md, app-desktop/docs/us/US-0088.md, meridian-concepts.ts, ConceptsView.tsx",
+      "what_changed": "Added scrum-meridian-map.md with synthesis diagram and rules; moved scrum-guia-completo to kit as human-only; wired agents/templates; monitor How it works section; closed US-0088 in v2.01.",
+      "why_changed": "Scrum guide was added for humans but agents could load it every session and invent non-Meridian artifacts (tasks folders, story points).",
+      "impact": "Agents use map only unless manager asks for full guia; INVEST R14 and sprint priority documented without schema changes; EPIC-06 active for v2.01.",
+      "responsible": "Product/Engineering"
+    }
+  ]
+}

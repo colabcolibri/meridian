@@ -4,6 +4,8 @@ How to work with Meridian day-to-day. This file covers commands, checks, and the
 
 For concepts (what is an epic, how phases work, what `ready` means), read **[start-here.md](./start-here.md)** first.
 
+**Scrum ↔ Meridian:** [scrum-meridian-map.md](./scrum-meridian-map.md) (operational). Optional deep dive: [scrum-guide-complete.md](./scrum-guide-complete.md).
+
 ---
 
 ## Where are you right now?
@@ -115,6 +117,19 @@ This is the step between creation and implementation. The agent:
 - Sets `ready: true` when all checks pass
 
 A story without `ready: true` cannot be implemented.
+
+### Sprint priority and scope
+
+- Order of work in a sprint = `stories: [US-…]` in the sprint frontmatter (first = highest priority).
+- While a sprint is `active`, new requests go to the backlog or the next sprint — not silently appended mid-sprint unless you decide and log it.
+- Close a sprint with **Retrospective** filled and a quick **sprint review** (you confirm the increment against Acceptance).
+
+### Bugs and spikes
+
+- **Bug:** create a US with fix acceptance (or fix inside the current US if introduced this session). No `docs/bugs/` folder.
+- **Spike:** US with timebox in Notes and knowledge outcome → decision log; no production deliverable required.
+
+Details: [scrum-meridian-map.md](./scrum-meridian-map.md).
 
 ### After backlog changes
 

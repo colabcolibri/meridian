@@ -1,9 +1,19 @@
+import { isValidElement } from "react"
 import type { Components } from "react-markdown"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
 
+import { MermaidDiagram } from "@/features/monitor/components/MermaidDiagram"
 import { typeScale } from "@/features/monitor/monitor-typography"
 import { cn } from "@/lib/utils"
+
+function isMermaidCodeBlock(child: unknown): boolean {
+  if (!isValidElement(child)) return false
+  const props = child.props as { className?: string }
+  return (
+    typeof props.className === "string" && props.className.includes("language-mermaid")
+  )
+}
 
 const markdownComponents: Components = {
   h1: ({ children }) => (
@@ -47,13 +57,26 @@ const markdownComponents: Components = {
       {children}
     </blockquote>
   ),
-  pre: ({ children }) => (
-    <pre className="w-full max-w-full overflow-x-auto rounded-lg border bg-muted/50 p-3 font-mono text-sm leading-relaxed whitespace-pre-wrap">
-      {children}
-    </pre>
-  ),
+  pre: ({ children }) => {
+    if (isMermaidCodeBlock(children)) {
+      return <>{children}</>
+    }
+    return (
+      <pre className="w-full max-w-full overflow-x-auto rounded-lg border bg-muted/50 p-3 font-mono text-sm leading-relaxed whitespace-pre-wrap">
+        {children}
+      </pre>
+    )
+  },
   code: ({ className, children }) => {
     const isBlock = Boolean(className)
+    if (isBlock && className?.includes("language-mermaid")) {
+      return (
+        <MermaidDiagram
+          chart={String(children).replace(/\n$/, "")}
+          className="w-full rounded-lg border border-border bg-card px-2"
+        />
+      )
+    }
     if (isBlock) {
       return <code className={className}>{children}</code>
     }

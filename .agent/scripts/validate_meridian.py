@@ -258,7 +258,7 @@ def main() -> int:
 
     if versions_dir.exists():
         for version_path in sorted(versions_dir.glob("v*.md")):
-            if not re.match(r"v\d+\.md$", version_path.name):
+            if not re.match(r"v\d+(\.\d+)*\.md$", version_path.name):
                 errors.append(f"Invalid version filename: {version_path.name}")
                 continue
             frontmatter = read_frontmatter(version_path)
@@ -273,8 +273,8 @@ def main() -> int:
                 errors.append(
                     f"{version_path.name}: id {version_id} does not match filename"
                 )
-            if not re.match(r"^v\d+$", str(version_id)):
-                errors.append(f"{version_path.name}: id must use vX format")
+            if not re.match(r"^v\d+(\.\d+)*$", str(version_id)):
+                errors.append(f"{version_path.name}: id must use vX or vX.Y format")
             if not frontmatter.get("outcome"):
                 errors.append(f"Missing outcome in {version_path.name}")
             if not frontmatter.get("title"):

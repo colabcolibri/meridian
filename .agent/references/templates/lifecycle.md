@@ -26,6 +26,8 @@ Board sync (board-schema.md)
 Commit (human) — one commit per closed US; see commit-after-us-close.md
 ```
 
+Scrum mapping (bugs, spikes, ceremonies, no story points): `.agent/references/scrum-meridian-map.md`.
+
 ---
 
 ## User story — templates by moment

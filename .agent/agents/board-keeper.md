@@ -35,6 +35,7 @@ Before creating or closing delivery artifacts, read `.agent/references/templates
 | Close US | `implementation-template.md` + `us-template.md` + skill `complete-user-story` |
 | Create epic | `epic-template.md` + skill `create-epic` |
 | Sync board | `board-schema.md` + skill `generate-board-json` |
+| Bugs / spikes / INVEST | `scrum-meridian-map.md` (not `scrum-guide-complete.md` unless manager asks) |
 
 Do not invent US/epic structure from `MERIDIAN.md` excerpts alone.
 

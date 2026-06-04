@@ -115,7 +115,7 @@ Seven agents handle specialized work: `process-manager`, `scope-architect`, `doc
 
 Common commands: `/init-meridian`, `/status`, `/create-epic`, `/create-version`, `/plan-sprint`, `/create-us`, `/review-us`, `/refine-us`, `/complete-us`, `/sync-board`, `/architecture`, `/security-pass`, `/daily-with-ai`.
 
-Full reference: [usage guide](.agent/references/usage-guide.md).
+Full reference: [usage guide](.agent/references/usage-guide.md). Scrum mapping: [scrum-meridian-map](.agent/references/scrum-meridian-map.md).
 
 ## Validate
 

@@ -14,6 +14,7 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 | `.agent/references/templates/section-contracts.md` | Verify all `##` / `###` still match contract |
 | `references/implementation-template.md` | **Mandatory** before filling `## Record` |
 | `.agent/references/commit-after-us-close.md` | Commit timing and message — suggest only on close |
+| `.agent/references/scrum-meridian-map.md` | Definition of Done alignment with `04_principles.md` |
 | `../create-user-story/references/us-template.md` | Full US structure (verify all sections) |
 
 ## When to trigger
@@ -32,6 +33,7 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 | Dependencies | Every `depends_on` with status `✅` |
 | Evidence | Applicable build/lint/test passed |
 | Acceptance | Criteria proven (mark `[x]`) |
+| DoD | Project DoD in `docs/04_principles.md` satisfied (global); CA remain per US |
 
 If anything fails → **do not** mark `✅`; use `🔶` with `Missing:` in acceptance.
 

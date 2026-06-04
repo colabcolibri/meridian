@@ -26,6 +26,19 @@ blocks: [05_architecture.md]
 | Component UI | Generic, accessible rendering based on shadcn/ui.                |
 | App          | Main layout, navigation, and feature composition.                |
 
+## Definition of Done (Meridian)
+
+Global “done” for any closed user story — in addition to that story’s Acceptance criteria:
+
+- Acceptance criteria evidenced in `docs/us/US-XXXX.md` (checked `[x]` or justified `🔶` + Missing)
+- Build/lint/test per this document and the US `tests` / `tests_status` fields
+- `## Record` filled with real paths and `### Executed` (commands + results)
+- `status: ✅` only via `/complete-us`, then `/sync-board`
+- One git commit per closed US (code + docs in scope), unless the manager batches intentionally
+- Cross-cutting changes logged in `docs/decisions/YYYY-MM-DD.json`
+
+Per-story scope stays in US Intent — this section is the team-wide bar. See `.agent/references/scrum-meridian-map.md`.
+
 ## Mandatory conventions
 
 - TypeScript for all application modules.

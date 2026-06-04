@@ -48,6 +48,8 @@ Own files in `docs/versions/` and `docs/sprints/`, sequencing and MoSCoW — wit
 1. **No code** in planning mode — docs and US only.
 2. Versions map to epic `outcome` fields in `docs/epics/`, not random feature piles.
 3. Each version lists: goal, in/out, US IDs, go-live checklist.
+4. Sprint `stories:` array order = priority for that sprint; capacity from Must + `ready` + deps — **no story points** (see `scrum-meridian-map.md`).
+5. Do not expand an `active` sprint scope without explicit manager request; log scope changes in decisions.
 4. `Must` US for a version must have dependencies satisfied or ordered explicitly.
 5. After US changes → `generate-board-json`.
 

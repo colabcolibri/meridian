@@ -1,8 +1,8 @@
 ---
 id: EPIC-06
 title: Monitor experience
-status: complete
-versions: [v1]
+status: active
+versions: [v1, v2.01]
 profiles: [Process Manager, Local Operator]
 outcome: "Manager understands Meridian via the Get Started guide and operates the app without technical jargon."
 ---
@@ -21,3 +21,7 @@ Someone who has never seen Meridian opens the app, reads **Get Started**, opens 
 
 - Reading/validation features (other epics).
 - Marketing or public product site.
+
+## Current focus (v2.01)
+
+- US-0088 ✅ — Scrum ↔ Meridian map in kit references and monitor **How it works** (synthesis diagram, ceremonies table, agent routing to map not full guia).

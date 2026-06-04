@@ -147,6 +147,19 @@ Phase documents (`00`–`08`, `11`) follow a maturity path. **Only you set `appr
 
 ---
 
+## Scrum and Meridian
+
+Meridian adapts Scrum for **one manager + AI agents** — files as source of truth, no story points, no mandatory Feature layer.
+
+| Need | File |
+| ---- | ---- |
+| Map artifacts, ceremonies, bugs, spikes | [scrum-meridian-map.md](./scrum-meridian-map.md) (includes synthesis diagram) |
+| Learn Scrum in depth (optional) | [scrum-guide-complete.md](./scrum-guide-complete.md) — human onboarding only |
+
+Agents use **scrum-meridian-map.md**, not the full Scrum guide, unless you ask otherwise.
+
+---
+
 ## What Meridian does not do
 
 - Does not write code without a `ready: true` user story
@@ -155,6 +168,8 @@ Phase documents (`00`–`08`, `11`) follow a maturity path. **Only you set `appr
 - Does not approve its own documents — you do
 - Does not manage deploys or CI — those are referenced in docs, not run by Meridian
 - Does not `git commit` on its own — after you close a US in docs, you commit (or explicitly ask the agent to). See `commit-after-us-close.md`
+- Does not use story points, velocity, or burndown as required fields
+- Does not auto-prioritize the backlog — you choose Must US and sprint order
 
 ---
 

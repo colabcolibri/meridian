@@ -258,7 +258,9 @@ Both modes:
 6. `.gitignore` before secrets or dependencies land
 
 Human guide: `.agent/references/start-here.md`  
-Operational guide: `.agent/references/usage-guide.md`
+Operational guide: `.agent/references/usage-guide.md`  
+Scrum ↔ Meridian (agents + managers): `.agent/references/scrum-meridian-map.md`  
+Scrum textbook (human only, optional): `.agent/references/scrum-guide-complete.md`
 
 ---
 

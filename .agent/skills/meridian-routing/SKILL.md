@@ -64,6 +64,7 @@ Multiple agents:
 2. **User override** — `@agent` wins over automatic routing.
 3. **Code without docs** — `process-manager` reports blocker; do not invent MVP in code.
 4. **Decisions** — any relevant change triggers `update-decisions-log`.
+5. **Scrum concepts** — read `.agent/references/scrum-meridian-map.md` only; not `scrum-guide-complete.md` unless the manager asks.
 
 ## Complexity detection
 

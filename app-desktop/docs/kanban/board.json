@@ -1076,7 +1076,7 @@
     "status": "✅",
     "moscow": "Must",
     "depends_on": [],
-    "done_when": "Kit has scrum-meridian-map.md and human-only scrum-guia-completo.md; agents are directed to the map not the textbook; app How it works shows Scrum and Meridian with diagram; v2.01 lists this US; validate_meridian.py passes.",
+    "done_when": "Kit has scrum-meridian-map.md and human-only scrum-guide-complete.md; agents are directed to the map not the textbook; app How it works shows Scrum and Meridian with synthesis diagram; v2.01 lists this US; validate_meridian.py passes.",
     "tests": "required",
     "tests_status": "done"
   }

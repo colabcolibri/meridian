@@ -92,6 +92,12 @@ Read `.agent/MERIDIAN.md` for full dependency graph between `00`–`11`.
 
 ---
 
+## Scrum references
+
+- **Operational map:** `.agent/references/scrum-meridian-map.md` — use for bugs, spikes, sprint scope, INVEST.
+- **Do not** load `.agent/references/scrum-guide-complete.md` unless the manager explicitly asks for the full Scrum guide.
+- **Do not** prioritize backlog, assign people, or mark `approved` / `✅` — human manager only.
+
 ## Forbidden actions
 
 | Forbidden | Why |

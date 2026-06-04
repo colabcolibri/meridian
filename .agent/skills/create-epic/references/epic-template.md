@@ -53,6 +53,10 @@ Optional: decisions, risks, links — explanatory when present.
 | `complete` | Outcome reached; only closure or bugfix US |
 | `paused` | Deliberately frozen |
 
+## Reopening vs new epic
+
+Prefer **creating a new epic** (e.g. `EPIC-12 — Auth advanced`) with a note referencing the closed epic — do not flip `complete` → `active` for large new scope. Small follow-ups (1–2 US) may attach to a related `active` epic. See `.agent/references/scrum-meridian-map.md`.
+
 ## Relationship with user stories
 
 - Epic = **what** and **why** at product level.

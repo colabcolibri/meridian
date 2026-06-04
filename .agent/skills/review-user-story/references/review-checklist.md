@@ -8,6 +8,8 @@ Use with skill `review-user-story` and workflow `/review-us`. **Do not edit the 
 
 **Structure bar:** `.agent/references/templates/section-contracts.md`
 
+**INVEST / Scrum mapping:** `.agent/references/scrum-meridian-map.md` (agents — not `scrum-guide-complete.md` unless manager asks)
+
 ---
 
 ## Audit rows (mark pass | fail | warn)
@@ -27,6 +29,7 @@ Use with skill `review-user-story` and workflow `/review-us`. **Do not edit the 
 | R11 | Epic link | `epic:` in frontmatter only — body explains slice |
 | R12 | `ready` flag | `true` only if R3–R9 would all pass (review does not set it) |
 | R13 | Record section | Empty or placeholder OK before code; must be filled before ✅ |
+| R14 | INVEST (qualitative) | Slice valuable, small enough for one session, testable acceptance; deps justified |
 
 ---
 

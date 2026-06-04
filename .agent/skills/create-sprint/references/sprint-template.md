@@ -44,6 +44,9 @@ _(fill at sprint close)_
 ## Rules
 
 - `id` must match filename (`v1-S1.md`).
+- **`stories:` order** in frontmatter is the sprint priority (top first) — no separate priority field on US.
+- While `status: active`, do not add US to the sprint without manager request; new work goes to backlog or next sprint (see `scrum-meridian-map.md`).
+- Before `status: complete`, manager performs **sprint review** (increment vs `goal` and US Acceptance) then fills **Retrospective**.
 - `version` must exist in `docs/versions/`.
 - `goal` is one measurable sentence — not a copy of the version objective.
 - `stories` in frontmatter is the canonical list used by validation; body table is for human readability.
