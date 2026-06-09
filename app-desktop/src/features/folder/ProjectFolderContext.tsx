@@ -86,9 +86,7 @@ export function ProjectFolderProvider({ children }: { children: ReactNode }) {
   const [storedPath, setStoredPath] = useState<string | null>(() =>
     demoBuild ? null : loadStoredPath(),
   )
-  const [status, setStatus] = useState<ProjectFolderStatus>(
-    demoBuild ? "opening" : "none",
-  )
+  const [status, setStatus] = useState<ProjectFolderStatus>("none")
   const [folder, setFolder] = useState<MeridianFolderSnapshot | null>(null)
   const [folderKey, setFolderKey] = useState<string | null>(null)
   const [pendingFolderName, setPendingFolderName] = useState<string | null>(null)
@@ -229,36 +227,6 @@ export function ProjectFolderProvider({ children }: { children: ReactNode }) {
     [beginHardResetSync, bindFolder, cancelOpening, failOpenSession],
   )
 
-  useEffect(() => {
-    if (!demoBuild) {
-      return
-    }
-
-    const generation = ++restoreGenerationRef.current
-    let cancelled = false
-
-    async function openDemo() {
-      try {
-        await finishOpenDemo()
-      } catch (cause) {
-        if (cancelled || generation !== restoreGenerationRef.current) {
-          return
-        }
-        clearBoundFolder()
-        setError(
-          cause instanceof Error ? cause.message : "Could not load demo project.",
-        )
-        setStatus("error")
-      }
-    }
-
-    void openDemo()
-
-    return () => {
-      cancelled = true
-    }
-  }, [clearBoundFolder, demoBuild, finishOpenDemo])
-
   const openFolder = useCallback(() => {
     if (!demoBuild) {
       return
@@ -367,21 +335,9 @@ export function ProjectFolderProvider({ children }: { children: ReactNode }) {
     setStoredPath(null)
     beginHardResetSync()
 
-    if (demoBuild) {
-      try {
-        await finishOpenDemo()
-      } catch (cause) {
-        setError(
-          cause instanceof Error ? cause.message : "Could not reload demo project.",
-        )
-        setStatus("error")
-      }
-      return
-    }
-
     setError(null)
     setStatus("none")
-  }, [beginHardResetSync, demoBuild, finishOpenDemo])
+  }, [beginHardResetSync])
 
   const getDocsRoot = useCallback(async () => {
     const resolved = resolveMeridianDocsRoot(docsRootRef.current, handleRef.current)

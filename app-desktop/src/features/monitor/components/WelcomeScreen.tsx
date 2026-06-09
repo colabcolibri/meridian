@@ -1,9 +1,15 @@
 import { useState } from "react"
 
+import { Loader2, Sparkles } from "lucide-react"
+
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { useProjectFolder } from "@/features/folder/ProjectFolderContext"
-import { meridianLoop, welcomeHome } from "@/features/monitor/content/meridian-concepts"
+import {
+  meridianLoop,
+  welcomeHome,
+  whatImLearning,
+} from "@/features/monitor/content/meridian-concepts"
 import { MONITOR_CONTAINER } from "@/features/monitor/monitor-layout"
 import { monitorPanelClass } from "@/features/monitor/monitor-ui"
 import { typeScale } from "@/features/monitor/monitor-typography"
@@ -15,17 +21,27 @@ export function WelcomeScreen({
 }: {
   onNavigate?: (view: MonitorView) => void
 }) {
-  const { folder, isDemoBuild, status, error, openFolderFromPath, storedPath } =
-    useProjectFolder()
+  const {
+    folder,
+    isDemoBuild,
+    status,
+    error,
+    openFolder,
+    openFolderFromPath,
+    storedPath,
+  } = useProjectFolder()
   const [value, setValue] = useState(storedPath ?? "")
 
   if (folder) return null
 
   const isOpening = status === "opening"
 
-  if (isDemoBuild && isOpening) {
+  if (isOpening) {
     return (
-      <section className={`${MONITOR_CONTAINER} py-16 text-center`}>
+      <section
+        className={`${MONITOR_CONTAINER} flex flex-col items-center justify-center gap-3 py-16 text-center`}
+      >
+        <Loader2 className="h-5 w-5 animate-spin text-meridian" aria-hidden />
         <p className={typeScale.bodySm}>Loading Meridian demo project…</p>
       </section>
     )
@@ -53,7 +69,19 @@ export function WelcomeScreen({
 
       <div className={cn(monitorPanelClass, "mx-auto mt-8 max-w-2xl p-4 sm:p-5")}>
         <h3 className={typeScale.label}>{welcomeHome.hypothesis.title}</h3>
-        <p className={cn(typeScale.bodySm, "mt-2")}>{welcomeHome.hypothesis.body}</p>
+        <ul className={cn(typeScale.bodySm, "mt-3 space-y-2.5 text-left")}>
+          {welcomeHome.hypothesis.questions.map((question) => (
+            <li className="flex gap-2" key={question}>
+              <span aria-hidden className="shrink-0 text-meridian">
+                →
+              </span>
+              <span>{question}</span>
+            </li>
+          ))}
+        </ul>
+        <p className={cn(typeScale.caption, "mt-3 text-muted-foreground")}>
+          {whatImLearning.footer}
+        </p>
       </div>
 
       <ol className="mx-auto mt-8 grid max-w-2xl gap-3 sm:gap-4">
@@ -79,38 +107,42 @@ export function WelcomeScreen({
         {welcomeHome.rules}
       </p>
 
-      <form
-        onSubmit={handleSubmit}
-        className="mx-auto mt-8 flex w-full max-w-xl flex-col gap-2 sm:flex-row"
-      >
-        <div className="w-full space-y-1.5">
-          <label className={cn(typeScale.caption, "block text-center sm:text-left")}>
-            {welcomeHome.ctaLabel}
-          </label>
-          <Input
-            autoFocus
-            type="text"
-            placeholder="/Users/you/your-project/docs"
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
-            disabled={isOpening}
-            className="font-mono text-sm"
-          />
-        </div>
-        <Button
-          type="submit"
-          disabled={isOpening || !value.trim()}
-          className="shrink-0 sm:mt-6"
-        >
-          Open
-        </Button>
-      </form>
-
       {isDemoBuild ? (
-        <p className={cn(typeScale.caption, "mt-4 text-center")}>
-          {welcomeHome.demoNote}
-        </p>
-      ) : null}
+        <div className="mx-auto mt-8 flex max-w-xl flex-col items-center gap-2 text-center">
+          <Button className="gap-2" onClick={() => openFolder()} type="button">
+            <Sparkles className="h-4 w-4" aria-hidden />
+            {welcomeHome.demoCtaLabel}
+          </Button>
+          <p className={cn(typeScale.caption, "max-w-md")}>{welcomeHome.demoNote}</p>
+        </div>
+      ) : (
+        <form
+          onSubmit={handleSubmit}
+          className="mx-auto mt-8 flex w-full max-w-xl flex-col gap-2 sm:flex-row"
+        >
+          <div className="w-full space-y-1.5">
+            <label className={cn(typeScale.caption, "block text-center sm:text-left")}>
+              {welcomeHome.ctaLabel}
+            </label>
+            <Input
+              autoFocus
+              type="text"
+              placeholder="/Users/you/your-project/docs"
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
+              disabled={isOpening}
+              className="font-mono text-sm"
+            />
+          </div>
+          <Button
+            type="submit"
+            disabled={isOpening || !value.trim()}
+            className="shrink-0 sm:mt-6"
+          >
+            Open
+          </Button>
+        </form>
+      )}
 
       {error ? (
         <p className="mt-3 text-center text-sm text-red-800" role="alert">

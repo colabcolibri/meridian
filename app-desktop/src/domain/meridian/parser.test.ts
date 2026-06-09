@@ -103,7 +103,7 @@ tests_status: n/a
       "EPIC-05.md",
       readFileSync(resolve(epicsDir, "EPIC-05.md"), "utf8"),
     )
-    expect(epic05.status).toBe("active")
+    expect(epic05.status).toBe("complete")
   })
 
   it("parses v1.md in docs/versions/", () => {

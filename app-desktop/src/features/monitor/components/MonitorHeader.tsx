@@ -25,7 +25,9 @@ export function MonitorHeader({
     folder,
     error,
     isDemoActive,
+    isDemoBuild,
     clearFolder,
+    openFolder,
     openFolderFromPath,
     storedPath,
   } = useProjectFolder()
@@ -113,28 +115,42 @@ export function MonitorHeader({
               <Github className="h-4 w-4" />
             </a>
           </Button>
-          <OpenFolderDialog
-            initialPath={storedPath ?? ""}
-            onSubmit={openFolderFromPath}
-            disabled={isOpening}
-          >
-            <Button
-              size="sm"
-              variant={folder ? "outline" : "default"}
+          {isDemoBuild ? (
+            !folder ? (
+              <Button
+                disabled={isOpening}
+                onClick={() => openFolder()}
+                size="sm"
+                variant="default"
+              >
+                {isOpening ? (
+                  <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />
+                ) : (
+                  <FolderOpen className="mr-1.5 h-3.5 w-3.5" />
+                )}
+                Load demo
+              </Button>
+            ) : null
+          ) : (
+            <OpenFolderDialog
+              initialPath={storedPath ?? ""}
+              onSubmit={openFolderFromPath}
               disabled={isOpening}
             >
-              {isOpening ? (
-                <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />
-              ) : (
-                <FolderOpen className="mr-1.5 h-3.5 w-3.5" />
-              )}
-              {folder
-                ? isDemoActive
-                  ? "Open local folder"
-                  : "Change folder"
-                : "Open docs folder"}
-            </Button>
-          </OpenFolderDialog>
+              <Button
+                size="sm"
+                variant={folder ? "outline" : "default"}
+                disabled={isOpening}
+              >
+                {isOpening ? (
+                  <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />
+                ) : (
+                  <FolderOpen className="mr-1.5 h-3.5 w-3.5" />
+                )}
+                {folder ? "Change folder" : "Open docs folder"}
+              </Button>
+            </OpenFolderDialog>
+          )}
           {folder ? (
             <Button
               aria-label="Close project"

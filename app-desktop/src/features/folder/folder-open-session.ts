@@ -13,8 +13,6 @@ export function shouldApplyAsyncResult(
 }
 
 /** Picker cancelled after hard reset — no rollback to previous folder. */
-export function resolveStatusAfterPickerAbort(options: {
-  demoBuild: boolean
-}): ProjectFolderStatus {
-  return options.demoBuild ? "opening" : "none"
+export function resolveStatusAfterPickerAbort(): ProjectFolderStatus {
+  return "none"
 }

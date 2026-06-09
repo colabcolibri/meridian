@@ -22,13 +22,13 @@
 
 AI agents in the IDE ship code fast — but without a written spec, scope drifts in chat, decisions get lost, and "done" means whatever the model said five messages ago.
 
-**I'm testing another approach:** a thin harness layer on top of Cursor or Claude Code — `docs/` for memory and task specs, `.agent/` for guides and workflows, validators as sensors. I approve direction; agents propose and execute. Chat does not persist. Files do.
+**I'm testing another approach:** a thin harness layer on top of Cursor or Claude Code — `docs/` for versions, sprints, and task specs, `.agent/` for guides and workflows, validators as sensors. I plan the project and work solo with the agent, but I also want to see if it can run longer autonomous stretches on the open backlog without breaking the flow. Chat does not persist. Files do.
 
 ## What I'm learning
 
-- Do repo-native guides (rules, skills, US files) keep agents aligned better than chat history alone?
-- Do mechanical sensors (validate script, `ready` / `Record` gates) catch drift that prompts cannot?
-- Can a Scrum-shaped management loop run on top of that harness when I'm the only person directing the agent?
+- Once versions, sprints, and open US are in `docs/`, can the agent run long continuous sessions on the backlog — refine, implement, close — without drifting or skipping harness gates?
+- Does managing Scrum in files (commands, skills, structured artifacts) cost fewer credits than re-explaining context and priorities in chat every session?
+- Does the harness — guides, sensors, `ready` / `Record` gates, phase docs — actually ship functional, organized, secure, **documented** software, not just fast code?
 
 Still open questions. This repository is my lab.
 

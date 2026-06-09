@@ -63,7 +63,7 @@ export const meridianIntro = {
   title: "What Meridian is",
   paragraphs: [
     "Meridian is my workflow experiment for building with AI agents — a thin, repo-native harness on top of Cursor or Claude Code. docs/ holds task specs and memory; .agent/ holds guides (rules, agents, skills, workflows); validators act as sensors.",
-    "I stay in control of direction; the agent proposes, implements, and records evidence. Scrum shapes how I manage the loop — document, plan, refine, implement, close, commit — but the technical bet is harness engineering: guides plus sensors plus persistent state in Git.",
+    "I plan in docs/ and work solo with the agent, but I'm also testing longer autonomous stretches on open sprints and US. Scrum shapes the management loop; the technical bet is harness engineering: guides, sensors, and persistent state in Git.",
     "This tab is the full reference. To work with a real project, open docs/ from the home screen or use the IDE with the .agent/ kit.",
   ],
 }
@@ -136,17 +136,28 @@ export const meridianLoop = {
   ],
 }
 
+export const whatImLearning = {
+  footer: "Still open questions. This repository is my lab.",
+  questions: [
+    "Once versions, sprints, and open US are in docs/, can the agent run long continuous sessions on the backlog — refine, implement, close — without drifting or skipping harness gates?",
+    "Does managing Scrum in files (commands, skills, structured artifacts) cost fewer credits than re-explaining context and priorities in chat every session?",
+    "Does the harness — guides, sensors, ready/Record gates, phase docs — actually ship functional, organized, secure, documented software, not just fast code?",
+  ],
+}
+
 export const welcomeHome = {
   eyebrow: "Experiment · AI agent harness",
   title: "Spec in Git. Guides for the agent. I direct the loop.",
-  lead: "Meridian is my thin harness layer on top of Cursor or Claude Code: docs/ holds task specs and memory, .agent/ holds guides and workflows, validators act as sensors. This app is observability — it reads docs/ and shows setup, deliverables, and board.",
+  lead: "Meridian is my thin harness layer on top of Cursor or Claude Code: docs/ holds versions, sprints, and task specs; .agent/ holds guides and workflows; validators act as sensors. I plan and work solo with the agent — and I'm testing whether it can also run longer autonomous stretches on the open backlog without breaking the flow. This app is observability — it reads docs/ and shows setup, deliverables, and board.",
   hypothesis: {
-    title: "What I'm testing",
-    body: "Whether I can run the full loop — spec, backlog, sprint, done — with Markdown files in the repo and agents that read them every session.",
+    title: "What I'm learning",
+    questions: whatImLearning.questions,
   },
   rules: "No ready: true → no product code. No ## Record → no ✅.",
   ctaLabel: "Open your Meridian project's docs folder",
-  demoNote: "Or browse this repo's demo — the board loads automatically.",
+  demoCtaLabel: "Load demo project",
+  demoNote:
+    "Opens this repository's docs/ — setup, deliverables, and board with real Meridian data.",
 }
 
 // ─── Scrum ↔ Meridian (synthesis) ─────────────────────────────────────────────

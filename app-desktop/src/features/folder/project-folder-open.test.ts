@@ -18,7 +18,6 @@ describe("folder-open-session", () => {
   })
 
   it("resolveStatusAfterPickerAbort never restores a prior folder", () => {
-    expect(resolveStatusAfterPickerAbort({ demoBuild: false })).toBe("none")
-    expect(resolveStatusAfterPickerAbort({ demoBuild: true })).toBe("opening")
+    expect(resolveStatusAfterPickerAbort()).toBe("none")
   })
 })
