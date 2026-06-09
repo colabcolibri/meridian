@@ -520,7 +520,7 @@
     "title": "generate_board.py script in kit",
     "epic": "EPIC-05",
     "version": "v4",
-    "status": "❌",
+    "status": "🧊",
     "moscow": "Must",
     "depends_on": [],
     "done_when": ".agent/scripts/generate_board.py reads docs/us/ and writes docs/kanban/board.json matching board-schema.",
@@ -532,7 +532,7 @@
     "title": "Meridian Sync Board command",
     "epic": "EPIC-05",
     "version": "v4",
-    "status": "❌",
+    "status": "🧊",
     "moscow": "Must",
     "depends_on": [],
     "done_when": "Command Meridian Sync Board runs generate_board.py and shows success or errors in the editor.",
@@ -544,12 +544,14 @@
     "title": "Meridian Validate Project command",
     "epic": "EPIC-05",
     "version": "v4",
-    "status": "❌",
+    "status": "✅",
     "moscow": "Must",
-    "depends_on": [],
+    "depends_on": [
+      "US-0042"
+    ],
     "done_when": "Command Meridian Validate Project runs validate_meridian.py and lists errors and warnings in the editor.",
     "tests": "required",
-    "tests_status": "pending"
+    "tests_status": "done"
   },
   {
     "id": "US-0047",
@@ -628,7 +630,7 @@
     "title": "v2 go-live and EPIC-05 complete",
     "epic": "EPIC-05",
     "version": "v4",
-    "status": "❌",
+    "status": "🧊",
     "moscow": "Must",
     "depends_on": [],
     "done_when": "versions/v2.md go-live checklist checked; EPIC-05 status complete; v2 status complete.",
@@ -1202,6 +1204,20 @@
       "US-0097"
     ],
     "done_when": "Board opens with all versions and epics selected; each kanban column paginates independently with shared page size.",
+    "tests": "required",
+    "tests_status": "done"
+  },
+  {
+    "id": "US-0099",
+    "title": "Command help reference tab in VS Code extension",
+    "epic": "EPIC-05",
+    "version": "v4",
+    "status": "✅",
+    "moscow": "Should",
+    "depends_on": [
+      "US-0094"
+    ],
+    "done_when": "Meridian: Open Command Help shows a reference tab explaining every extension command including Validate, Sync Board, and Workspace status.",
     "tests": "required",
     "tests_status": "done"
   }

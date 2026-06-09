@@ -2,6 +2,24 @@
   "date": "2026-06-04",
   "entries": [
     {
+      "time": "23:30",
+      "title": "Supersede obsolete v4 extension US; close US-0046",
+      "affected_document": "US-0044.md, US-0045.md, US-0053.md, US-0046.md",
+      "what_changed": "US-0046 marked complete (Validate Project in extension). US-0044/0045/0053 frozen — superseded by US-0095 and US-0093/v4 go-live. No partial (🔶) US in backlog.",
+      "why_changed": "Backlog hygiene after v4-S8; avoid false open Must items already delivered under different US ids.",
+      "impact": "Open Must extension work concentrates on v5 wizards (US-0061+).",
+      "responsible": "Product/Engineering"
+    },
+    {
+      "time": "23:00",
+      "title": "Extension command help tab",
+      "affected_document": "app-visual-studio/, US-0099.md, v4-S8",
+      "what_changed": "US-0099 adds Meridian: Open Command Help — static PT-BR reference for all commands (Validate, Sync Board, Workspace status, views). command-catalog.ts is single source for sidebar and help HTML.",
+      "why_changed": "Managers needed in-IDE documentation without reading README or asking agents what each command does.",
+      "impact": "Commands sidebar lists Command help first; EPIC-05 read surface complete through v4-S8.",
+      "responsible": "Product/Engineering"
+    },
+    {
       "time": "22:00",
       "title": "Extension pagination — list views and board columns",
       "affected_document": "app-visual-studio/, US-0097.md, US-0098.md, v4-S6, v4-S7",
