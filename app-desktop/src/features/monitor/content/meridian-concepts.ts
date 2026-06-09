@@ -60,10 +60,11 @@ export type AnatomyGuide = {
 // ─── Intro ────────────────────────────────────────────────────────────────────
 
 export const meridianIntro = {
-  title: "What is Meridian",
+  title: "What Meridian is",
   paragraphs: [
-    "Meridian is a workflow protocol for developers building with AI agents. It keeps context alive between sessions — scope, architecture, decisions, and user stories all live as files in your repo, readable by any agent at any time.",
-    "Think of it as a lightweight Scrum adapted for AI-assisted development. You stay in control of direction. The agent works as your pair — implementing, recording, proposing. When you come back tomorrow, or open a new session, the files carry the full story forward.",
+    "Meridian is my workflow experiment for building with AI agents — a thin, repo-native harness on top of Cursor or Claude Code. docs/ holds task specs and memory; .agent/ holds guides (rules, agents, skills, workflows); validators act as sensors.",
+    "I stay in control of direction; the agent proposes, implements, and records evidence. Scrum shapes how I manage the loop — document, plan, refine, implement, close, commit — but the technical bet is harness engineering: guides plus sensors plus persistent state in Git.",
+    "This tab is the full reference. To work with a real project, open docs/ from the home screen or use the IDE with the .agent/ kit.",
   ],
 }
 
@@ -84,7 +85,7 @@ export const audiences: AudienceCard[] = [
     id: "small-team",
     label: "Small team (2–3 people)",
     description:
-      "No dedicated PM tool, no Jira. Meridian gives the team a shared written spec that everyone — and every agent — works from. No more 'what did we decide last week?'",
+      "No dedicated PM tool. Meridian gives the team a shared written spec that everyone — and every agent — works from. No more 'what did we decide last week?'",
   },
   {
     id: "agent-driven",
@@ -103,39 +104,49 @@ export const meridianLoop = {
       id: "document",
       label: "Document",
       description:
-        "Define scope, stack, security, and architecture in phase docs. Each approved doc unlocks the next.",
+        "Scope, architecture, and decisions in docs/ — I approve, agent drafts.",
     },
     {
       id: "plan",
       label: "Plan",
       description:
-        "Create epics, versions, and user stories. Define what ships, in what order, and why.",
+        "Epics, versions, sprint, and user stories define what ships and in what order.",
     },
     {
       id: "refine",
       label: "Refine",
       description:
-        "Deepen the story's Approach and acceptance criteria until it is concrete enough to implement.",
+        "Each story needs a clear Approach and ready: true before product code.",
     },
     {
       id: "implement",
       label: "Implement",
-      description:
-        "The agent reads the story file and writes code against the acceptance criteria.",
+      description: "Agent reads the US and implements against acceptance criteria.",
     },
     {
       id: "close",
       label: "Close",
-      description:
-        "Record what was built — real file paths, test output, evidence of completion.",
+      description: "Record with evidence; I review before status ✅.",
     },
     {
       id: "commit",
       label: "Commit",
-      description:
-        "One git commit per closed story. Code and docs together — a permanent record of what changed and why.",
+      description: "One commit per story — code and docs in the same Git history.",
     },
   ],
+}
+
+export const welcomeHome = {
+  eyebrow: "Experiment · AI agent harness",
+  title: "Spec in Git. Guides for the agent. I direct the loop.",
+  lead: "Meridian is my thin harness layer on top of Cursor or Claude Code: docs/ holds task specs and memory, .agent/ holds guides and workflows, validators act as sensors. This app is observability — it reads docs/ and shows setup, deliverables, and board.",
+  hypothesis: {
+    title: "What I'm testing",
+    body: "Whether I can run the full loop — spec, backlog, sprint, done — with Markdown files in the repo and agents that read them every session.",
+  },
+  rules: "No ready: true → no product code. No ## Record → no ✅.",
+  ctaLabel: "Open your Meridian project's docs folder",
+  demoNote: "Or browse this repo's demo — the board loads automatically.",
 }
 
 // ─── Scrum ↔ Meridian (synthesis) ─────────────────────────────────────────────
@@ -154,7 +165,7 @@ export type ScrumCeremonyRow = {
 export const scrumMeridianMap = {
   title: "Scrum and Meridian",
   subtitle:
-    "Meridian uses a subset of Scrum adapted for one manager plus AI agents — files in docs/, not chat or Jira.",
+    "Scrum-inspired management loop on top of the harness — files in docs/, not chat.",
   paragraphs: [
     "Use this section for day-to-day mapping. The full Scrum textbook lives in the kit as optional human reading — agents use scrum-meridian-map.md in .agent/references/, not the long guide, unless you ask.",
     "We skip story points, velocity, burndown, and a mandatory Feature layer. Sprint priority is the order of US ids in the sprint file.",
@@ -795,11 +806,11 @@ export type UsageGuideSection = {
 
 export const usageGuideIntro = {
   title: "Commands",
-  lead: "How to work with Meridian day-to-day — commands, checks, and the sequence of actions for each situation.",
+  lead: "How to run the experiment day to day — from first /init-meridian to closing a story.",
   paragraphs: [
-    "For concepts (what is an epic, how phases work, what ready means), see the How it works tab first.",
-    "Run /status at any point to get blockers, current state, and the suggested next action.",
-    "After you close a US in the files (/complete-us + /sync-board), commit in git (one commit per US) before starting the next story — unless you batch commits on purpose.",
+    "Concepts (epic, ready, Record) are on the Learn tab.",
+    "Anytime in the IDE: /status — blockers, state, and suggested next step.",
+    "After /complete-us and /sync-board, commit in Git before the next story — unless you batch commits on purpose.",
   ],
 }
 
@@ -1252,24 +1263,24 @@ export const appIntro = {
 
 export const monitorTabsGuide = [
   {
-    label: "How it works",
-    hint: "What Meridian is, the loop, principles, and artifact reference. Available without an open folder.",
+    label: "Learn",
+    hint: "Harness concepts, loop, Scrum map, and artifact reference. Available without an open folder.",
   },
   {
     label: "Commands",
-    hint: "Step-by-step per situation: getting started, phase docs, backlog, implement, close, commit.",
+    hint: "Day-to-day in the IDE — /init-meridian, /status, /complete-us…",
   },
   {
     label: "Setup",
-    hint: "Phase docs 00–08 and 11: foundation → principles → architecture → technical detail. Shows which are blocked, draft, or approved.",
+    hint: "Phase documents 00–11 — what is left to approve before the backlog.",
   },
   {
     label: "Deliverables",
-    hint: "Epic-centric view: each epic shows US coverage. Toggle version to filter the release you are planning.",
+    hint: "Epics and versions for the product.",
   },
   {
     label: "Board",
-    hint: "US kanban: ❌, 🔶, ✅, 🧪 (pending tests), 🧊. Filterable by epic.",
+    hint: "Kanban derived from user stories.",
   },
 ]
 
@@ -1280,7 +1291,7 @@ export const nextStepsAfterConcepts = {
   paragraphs: [
     "Go to the Commands tab for step-by-step instructions and slash commands for your current situation.",
     "Run /init-meridian in your IDE to create docs/ — new project or existing codebase migration.",
-    "Open your repository's docs/ folder in this app to see Setup, Deliverables, and Board with real data.",
+    "Open your repository's docs/ folder on the home screen to see Setup, Deliverables, and Board with real data.",
     "Coming from Scrum? Read the Scrum and Meridian section above, then .agent/references/scrum-meridian-map.md in the repo for the full map and Mermaid diagram.",
   ],
 }

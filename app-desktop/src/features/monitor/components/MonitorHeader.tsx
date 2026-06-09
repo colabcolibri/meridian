@@ -33,6 +33,7 @@ export function MonitorHeader({
   const { errors, warnings } = countIssuesBySeverity(issues)
   const isOpening = status === "opening"
   const problemCount = errors + warnings
+  const activeTab = MONITOR_HEADER_TABS.find((tab) => tab.id === active)
 
   return (
     <header className="sticky top-0 z-10 border-b border-border bg-card/95 backdrop-blur-sm">
@@ -56,6 +57,11 @@ export function MonitorHeader({
           </div>
           <div className="flex min-w-0 items-center gap-1.5 text-sm">
             <span className="shrink-0 text-muted-foreground">Meridian</span>
+            {!folder ? (
+              <Badge className="ml-0.5" variant="secondary">
+                Experiment
+              </Badge>
+            ) : null}
             {folder ? (
               <>
                 <span className="text-muted-foreground/50">/</span>
@@ -126,7 +132,7 @@ export function MonitorHeader({
                 ? isDemoActive
                   ? "Open local folder"
                   : "Change folder"
-                : "Open folder"}
+                : "Open docs folder"}
             </Button>
           </OpenFolderDialog>
           {folder ? (
@@ -180,6 +186,7 @@ export function MonitorHeader({
               disabled={disabled}
               key={tab.id}
               onClick={() => onChange(tab.id)}
+              title={tab.hint}
               type="button"
             >
               {tab.label}
@@ -187,6 +194,11 @@ export function MonitorHeader({
           )
         })}
       </nav>
+      {activeTab?.hint ? (
+        <p className={cn(MONITOR_CONTAINER, "py-1.5 text-xs text-muted-foreground")}>
+          {activeTab.hint}
+        </p>
+      ) : null}
     </header>
   )
 }

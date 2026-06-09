@@ -6,33 +6,33 @@ import type { MonitorView } from "@/features/monitor/monitor-views"
 const tabs: { id: MonitorView; label: string; hint: string }[] = [
   {
     id: "concepts",
-    label: "How it works",
-    hint: "What Meridian is, the loop, principles, and artifact reference",
+    label: "Learn",
+    hint: "Harness concepts, loop, Scrum map, and artifact reference",
   },
   {
     id: "usage",
     label: "Commands",
-    hint: "Step-by-step: document, backlog, implement, close, commit.",
+    hint: "Day-to-day in the IDE — /init-meridian, /status, /complete-us…",
   },
   {
     id: "setup",
     label: "Setup",
-    hint: "Progress of the project's initial documents",
+    hint: "Phase documents 00–11 — what is left to approve before the backlog",
   },
   {
     id: "decisions",
     label: "Decisions",
-    hint: "History by date — docs/decisions/YYYY-MM-DD.json",
+    hint: "Decision log by date — docs/decisions/YYYY-MM-DD.json",
   },
   {
     id: "epics",
     label: "Deliverables",
-    hint: "Large product capability blocks",
+    hint: "Epics and versions for the product",
   },
   {
     id: "kanban",
     label: "Board",
-    hint: "Status of each user story",
+    hint: "Kanban derived from user stories",
   },
 ]
 

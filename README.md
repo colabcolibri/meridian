@@ -1,85 +1,65 @@
 <p align="center">
-  <img src="assets/screenshots/meridian-header.jpg" alt="Meridian — Scrum-inspired workflow protocol for AI agents" width="100%" />
+  <img src="assets/screenshots/meridian-header.jpg" alt="Meridian — AI agent harness experiment" width="100%" />
 </p>
 
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-PolyForm%20Noncommercial-blue" alt="PolyForm Noncommercial 1.0.0" /></a>
   <a href=".github/workflows/ci.yml"><img src="https://img.shields.io/badge/CI-GitHub%20Actions-2088FF?logo=githubactions&logoColor=white" alt="CI" /></a>
-  <img src="https://img.shields.io/badge/status-experimental-orange" alt="Experimental" />
+  <img src="https://img.shields.io/badge/status-experiment-orange" alt="Experiment" />
 </p>
 
 <p align="center">
-  <strong>AI agents that build what you actually specified.</strong><br />
-  Spec in Git. Agent reads the spec. Done means done in files — not in chat.
+  <strong>I'm testing a repo-native harness for AI coding agents —<br />
+  guides and sensors in Git, persistent task specs, and a Scrum-shaped loop I manage.</strong>
 </p>
 
-> **Very early experiment** — personal project; APIs and rules will change. [Live demo](https://colabcolibri.github.io/meridian/) · [Protocol](.agent/MERIDIAN.md)
+> Very early personal experiment. Rules, structure, and APIs will change.  
+> [Live demo](https://colabcolibri.github.io/meridian/) · [Full protocol](.agent/MERIDIAN.md)
 
 # Meridian
 
-**Set the meridian before you write code.**
+## The hypothesis
 
-## The problem
+AI agents in the IDE ship code fast — but without a written spec, scope drifts in chat, decisions get lost, and "done" means whatever the model said five messages ago.
 
-AI agents in the IDE produce code fast — but without a written spec they hallucinate scope, repeat decisions already made, and "done" means whatever the model said five messages ago. A week later you cannot answer:
+**I'm testing another approach:** a thin harness layer on top of Cursor or Claude Code — `docs/` for memory and task specs, `.agent/` for guides and workflows, validators as sensors. I approve direction; agents propose and execute. Chat does not persist. Files do.
 
-- What are we building, and what is explicitly out of scope?
-- Which user story is next, and what counts as finished?
-- Why did we make that architectural call last Tuesday?
+## What I'm learning
 
-Chat does not persist. Files do.
+- Do repo-native guides (rules, skills, US files) keep agents aligned better than chat history alone?
+- Do mechanical sensors (validate script, `ready` / `Record` gates) catch drift that prompts cannot?
+- Can a Scrum-shaped management loop run on top of that harness when I'm the only person directing the agent?
 
-## What Meridian is
+Still open questions. This repository is my lab.
 
-Meridian is a **Scrum-inspired workflow protocol** that keeps AI agents accountable to a written spec — not to chat history.
-
-You manage the project through Markdown files in `docs/`. Agents read those same files, propose and implement work, and record evidence of completion. You approve direction; agents execute. The loop is:
+## The loop I'm testing
 
 ```
 document → plan → refine → implement → close → commit
 ```
 
-Every step produces a file. Every file is Git history.
+| Step | In one line |
+| ---- | ----------- |
+| **Document** | Scope, stack, security, architecture in `docs/00`–`11` — I approve, agent drafts |
+| **Plan** | Epics, versions, sprint, and user stories in `docs/` |
+| **Refine** | Story gets a concrete Approach and `ready: true` before any product code |
+| **Implement** | Agent reads the US and codes against acceptance criteria |
+| **Close** | Agent fills `## Record` with evidence; I review and set `status: ✅` |
+| **Commit** | One commit per closed story — code and docs together in Git |
 
-## How it works
+**Two rules of the experiment:** no product code without `ready: true`. No ✅ without a filled `## Record`.
 
-| Step | What you do | What the agent does |
-| ---- | ----------- | ------------------- |
-| **Document** | Approve phase docs (`00_scope` → `05_architecture`) | Drafts, asks questions, fills gaps |
-| **Plan** | Approve epics, versions, sprint | Creates artifacts from your answers |
-| **Refine** | Review story intent | Deepens Approach, sets `ready: true` |
-| **Implement** | Reference the US file | Reads spec, writes code |
-| **Close** | Review diff, run tests | Fills `## Record`, marks `status: ✅` |
-| **Commit** | `git commit` | Suggests message — does not commit unless asked |
+## Three folders, three roles
 
-**Rule:** no product code without `ready: true`. No `✅` without evidence in the Record. You hold both gates.
+| Folder | Role |
+| ------ | ---- |
+| **`docs/`** (in *your* project) | Memory + task specs — the product spec and what counts as done |
+| **`.agent/`** (copied from the kit) | Guides — rules, agents, skills, slash-command workflows |
+| **`app-desktop/`** · **`app-visual-studio/`** | Observability — read `docs/`; optional monitors, not the harness itself |
 
-## Two things in every Meridian project
+Scrum-inspired, adapted for a **single human directing AI agents** — no story points, velocity, or mandatory Feature layer. [Scrum ↔ Meridian map](.agent/references/scrum-meridian-map.md)
 
-| | Role |
-| - | ---- |
-| **`docs/`** | The spec — scope, architecture, epics, versions, user stories, decision log. If it is not here, it is not managed. |
-| **`.agent/`** | The workflow kit — agents, skills, slash commands, rules. Copy into your repo. |
-
-## What is in this repository
-
-| Piece | Required? | What it does |
-| ----- | --------- | ------------ |
-| [`.agent/`](.agent/) | **Yes** | Portable workflow kit — agents, skills, commands. Copy into every project. |
-| `docs/` (in *your* project) | **Yes** | Living spec — [dogfooding example](app-desktop/docs/) here. |
-| [`app-desktop/`](app-desktop/) | No | Read-only monitor — shows Setup, Board, Deliverables from `docs/`. |
-| [`app-visual-studio/`](app-visual-studio/) | No | VS Code extension (v4) — sync board, validate, new US on disk. Scaffold in US-0041+. |
-| `.cursor/` · `.claude/` | Local only | IDE adapters generated from `.agent/` ([details](.agent/IDE_ADAPTERS.md)). Not committed. |
-
-## Roadmap (this repository)
-
-| Version | Folder | Status |
-| ------- | ------ | ------ |
-| Monitor v0–v3, v2.01 | `app-desktop/` | Shipped in `app-desktop/docs/versions/` |
-| **v4 — VS Code bridge** | `app-visual-studio/` | In progress — extension commands and disk writes |
-| v5+ | — | Wizards, export, native (see `app-desktop/docs/versions/`) |
-
-## Quick start
+## Try it now
 
 ```bash
 git clone https://github.com/colabcolibri/meridian.git
@@ -88,68 +68,43 @@ cd meridian
 # Cursor or Claude Code — generate local adapters (not committed):
 chmod +x .agent/scripts/sync_cursor_kit.sh
 ./.agent/scripts/sync_cursor_kit.sh
-
-# Optional — monitor locally:
-cd app-desktop && pnpm install && pnpm dev
 ```
 
-Then run `/init-meridian` in your IDE to create `docs/` for your project.
+1. In your IDE: `/init-meridian` — creates `docs/` for your project (greenfield or existing codebase).
+2. Optional: [browser demo](https://colabcolibri.github.io/meridian/) or `cd app-desktop && pnpm install && pnpm dev`.
+3. Anytime: `/status` — blockers, current state, suggested next step.
 
-## Adopt Meridian in your project
+**Use in another repo:** copy `.agent/` only, run `/init-meridian`, sync the kit if you use Cursor/Claude.
 
-```bash
-cp -R path/to/meridian/.agent ./your-project/
-```
+## What's in this repository
 
-1. Commit `.agent/`.
-2. Run `/init-meridian` — agent creates `docs/` (new project or existing codebase migration).
-3. Run the sync script if using Cursor or Claude Code.
-4. Optional: open `app-desktop` or the [live demo](https://colabcolibri.github.io/meridian/) to monitor `docs/`.
+| Piece | Required? | Role in the experiment |
+| ----- | --------- | ---------------------- |
+| [`.agent/`](.agent/) | Yes (in your project) | Portable harness kit — guides, skills, validation |
+| `docs/` | Yes (in your project) | Living spec — [example here](app-desktop/docs/) |
+| [`app-desktop/`](app-desktop/) | No | Browser observability (demo + local) |
+| [`app-visual-studio/`](app-visual-studio/) | No | VS Code/Cursor extension — board and planning in the editor |
 
-## IDE support
+## Where the experiment stands
 
-The portable kit lives in `.agent/`. No lock-in.
+| Version | What | Status |
+| ------- | ---- | ------ |
+| Monitor v0–v3 | Read `docs/` in the browser | Shipped |
+| **v4** | VS Code bridge — board, versions, sprints, epics | In progress |
+| v5+ | Write commands, wizards | Planned |
 
-| IDE / tool | How |
-| ---------- | --- |
-| **Antigravity, ag-kit** | Point at `.agent/` — works natively. |
-| **Cursor** | `sync_cursor_kit.sh` → `.cursor/` (gitignored). |
-| **Claude Code** | Same script → `.claude/` (gitignored). |
+Details in [`app-desktop/docs/versions/`](app-desktop/docs/versions/).
 
-Details: [`.agent/IDE_ADAPTERS.md`](.agent/IDE_ADAPTERS.md)
+## Reference (not the home page)
 
-## Agents and commands
-
-Seven agents handle specialized work: `process-manager`, `scope-architect`, `documentation-strategist`, `security-steward`, `architecture-guardian`, `sprint-planner`, `board-keeper`.
-
-Common commands: `/init-meridian`, `/status`, `/create-epic`, `/create-version`, `/plan-sprint`, `/create-us`, `/review-us`, `/refine-us`, `/complete-us`, `/sync-board`, `/architecture`, `/security-pass`, `/daily-with-ai`.
-
-Full reference: [usage guide](.agent/references/usage-guide.md). Scrum mapping: [scrum-meridian-map](.agent/references/scrum-meridian-map.md).
-
-## Validate
-
-```bash
-python3 .agent/scripts/validate_meridian.py app-desktop
-python3 .agent/scripts/validate_meridian.py app-desktop --json
-```
-
-## Monitor
-
-**Live demo:** [https://colabcolibri.github.io/meridian/](https://colabcolibri.github.io/meridian/)
-
-**Locally:** `pnpm dev` in `app-desktop/`, open http://localhost:5173, click **Open docs folder**.
-
-The monitor reads `docs/` — it does not replace `.agent/` or your IDE.
-
-## Protocol authority
-
-When agents conflict, resolution order:
-
-1. Your instruction
-2. [`.agent/MERIDIAN.md`](.agent/MERIDIAN.md)
-3. [`.agent/rules/MERIDIAN.md`](.agent/rules/MERIDIAN.md)
-4. Workflows → agents → skills
+- [Protocol for agents](.agent/MERIDIAN.md)
+- [Usage guide and commands](.agent/references/usage-guide.md)
+- [Scrum ↔ Meridian map](.agent/references/scrum-meridian-map.md)
+- [Validate a project](.agent/scripts/validate_meridian.py): `python3 .agent/scripts/validate_meridian.py <project-folder>`
+- [IDE adapters](.agent/IDE_ADAPTERS.md) — Antigravity native; Cursor/Claude via sync script
 
 ## Contributing · license
 
 [`CONTRIBUTING.md`](CONTRIBUTING.md) · [`SECURITY.md`](SECURITY.md) · [PolyForm Noncommercial 1.0.0](LICENSE)
+
+Feedback and issues welcome — this is an open lab, not a finished product.

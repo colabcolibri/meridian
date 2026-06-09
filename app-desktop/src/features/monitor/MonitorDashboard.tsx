@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 
 import { Loader2 } from "lucide-react"
 
@@ -30,9 +30,16 @@ import {
   writeStoredMonitorView,
 } from "@/features/monitor/monitor-view-storage"
 
+function resolveViewForOpenedProject(
+  phaseDocuments: { id: string; status: string }[],
+): MonitorView {
+  const architecture = phaseDocuments.find((doc) => doc.id === "05_architecture")
+  return architecture?.status === "approved" ? "kanban" : "setup"
+}
+
 function MonitorProjectContent() {
   const [view, setView] = useState<MonitorView>(
-    () => readStoredMonitorView() ?? "concepts",
+    () => readStoredMonitorView() ?? "setup",
   )
   const changeView = useCallback((next: MonitorView) => {
     setView(next)
@@ -46,6 +53,7 @@ function MonitorProjectContent() {
   } = useProjectFolder()
   const { loading, loadingSupplement, data, issues, documentationBadges } =
     useProjectData()
+  const appliedFolderDefault = useRef(false)
 
   const phaseDocuments = data?.phaseDocuments ?? []
   const userStories = data?.userStories ?? []
@@ -53,6 +61,18 @@ function MonitorProjectContent() {
   const versions = data?.versions ?? []
   const sprints = data?.sprints ?? []
   const decisionDays = data?.decisionDays ?? []
+
+  useEffect(() => {
+    if (!folder) {
+      appliedFolderDefault.current = false
+      return
+    }
+    if (loading || phaseDocuments.length === 0 || appliedFolderDefault.current) {
+      return
+    }
+    appliedFolderDefault.current = true
+    changeView(resolveViewForOpenedProject(phaseDocuments))
+  }, [folder, loading, phaseDocuments, changeView])
 
   return (
     <MonitorVersionFilterProvider stories={userStories} versions={versions}>
@@ -75,7 +95,7 @@ function MonitorProjectContent() {
       ) : null}
 
       {!folder && folderStatus !== "opening" && !isGuideView(view) ? (
-        <WelcomeScreen />
+        <WelcomeScreen onNavigate={changeView} />
       ) : null}
 
       {isGuideView(view) ? (
