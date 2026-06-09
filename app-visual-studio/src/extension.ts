@@ -11,6 +11,11 @@ import { AgentsHelpEditorPanel } from "./agents-help-editor-panel.js"
 import { MeridianCommandsProvider } from "./commands-sidebar.js"
 import { formatStatusTooltip, type MeridianWorkspaceInfo } from "./meridian-workspace.js"
 import { MeridianContext } from "./meridian-context.js"
+import {
+  installBundledKit,
+  kitInstalledAt,
+  workspaceProjectRoot,
+} from "./kit-installer.js"
 import { syncBoardFromDocs } from "./sync-board.js"
 import { resolveValidateTarget, runValidateMeridian } from "./validate-runner.js"
 
@@ -70,13 +75,70 @@ async function requireWorkspace(): Promise<MeridianWorkspaceInfo | null> {
   await meridianContext?.refresh()
   const info = meridianContext?.workspace
   if (!info?.docsExists) {
-    void vscode.window.showWarningMessage(
-      "Meridian: open a workspace with .agent/MERIDIAN.md and docs/.",
-    )
-    appendToolOutput("Workspace", "No Meridian docs/ detected.")
+    if (info && !info.docsExists) {
+      void vscode.window.showWarningMessage(
+        "Meridian: kit installed — run /init-meridian or create docs/ to use the board.",
+      )
+    } else {
+      void vscode.window.showWarningMessage(
+        "Meridian: install the harness in this workspace first (status bar or Meridian: Install Harness).",
+      )
+    }
+    appendToolOutput("Workspace", "Meridian kit or docs/ not ready.")
     return null
   }
   return info
+}
+
+async function installKit(force = false): Promise<void> {
+  const root = workspaceProjectRoot(vscode.workspace.workspaceFolders)
+  if (!root) {
+    void vscode.window.showWarningMessage("Meridian: open a workspace folder first.")
+    return
+  }
+
+  if (!force && kitInstalledAt(root)) {
+    const upgrade = await vscode.window.showWarningMessage(
+      "Meridian: .agent/ already exists. Replace with the bundled kit version?",
+      "Upgrade harness",
+      "Cancel",
+    )
+    if (upgrade !== "Upgrade harness") {
+      return
+    }
+    force = true
+  }
+
+  const result = installBundledKit(root, meridianContext!.extensionPath, { force })
+  appendToolOutput(force ? "Upgrade harness" : "Install harness", result.message)
+  if (result.ok) {
+    void vscode.window.showInformationMessage(`Meridian: ${result.message}`)
+    await meridianContext?.refresh()
+    refreshAllPanels()
+  } else {
+    void vscode.window.showErrorMessage(`Meridian: ${result.message}`)
+  }
+}
+
+async function maybePromptInstall(context: vscode.ExtensionContext): Promise<void> {
+  const root = workspaceProjectRoot(vscode.workspace.workspaceFolders)
+  if (!root || kitInstalledAt(root)) {
+    return
+  }
+  const key = `meridian.installPrompt.${root}`
+  if (context.globalState.get<boolean>(key)) {
+    return
+  }
+  await context.globalState.update(key, true)
+
+  const choice = await vscode.window.showInformationMessage(
+    "Meridian Harness: install agents, skills, and workflows (.agent/) into this workspace?",
+    "Install",
+    "Later",
+  )
+  if (choice === "Install") {
+    await installKit(false)
+  }
 }
 
 async function validateProject(): Promise<void> {
@@ -105,7 +167,13 @@ async function showStatus(): Promise<void> {
   await meridianContext?.refresh()
   const info = meridianContext?.workspace
   if (!info) {
-    appendToolOutput("Workspace status", "No Meridian workspace detected.")
+    const root = workspaceProjectRoot(vscode.workspace.workspaceFolders)
+    appendToolOutput(
+      "Workspace status",
+      root
+        ? "No Meridian kit in workspace. Use Meridian: Install Harness."
+        : "No workspace folder open.",
+    )
     return
   }
   appendToolOutput("Workspace status", formatStatusTooltip(info))
@@ -158,7 +226,7 @@ export function activate(context: vscode.ExtensionContext): void {
 
   meridianContext = new MeridianContext(context, outputGeneral, refreshAllPanels)
   meridianContext.registerListeners()
-  void meridianContext.refresh()
+  void meridianContext.refresh().then(() => maybePromptInstall(context))
 
   context.subscriptions.push(
     vscode.commands.registerCommand("meridian.openBoard", openBoardTab),
@@ -168,6 +236,8 @@ export function activate(context: vscode.ExtensionContext): void {
     vscode.commands.registerCommand("meridian.openEpics", openEpicsTab),
     vscode.commands.registerCommand("meridian.openHelp", openHelpTab),
     vscode.commands.registerCommand("meridian.openAgentsHelp", openAgentsHelpTab),
+    vscode.commands.registerCommand("meridian.installKit", () => installKit(false)),
+    vscode.commands.registerCommand("meridian.upgradeKit", () => installKit(true)),
     vscode.commands.registerCommand("meridian.validateProject", validateProject),
     vscode.commands.registerCommand("meridian.showStatus", showStatus),
     vscode.commands.registerCommand("meridian.syncBoard", syncBoard),

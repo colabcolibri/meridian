@@ -20,6 +20,37 @@ export const COMMAND_HELP_GROUPS: { id: CommandHelpEntry["group"]; label: string
 
 export const MERIDIAN_COMMAND_CATALOG: CommandHelpEntry[] = [
   {
+    id: "install-kit",
+    title: "Install harness",
+    commandId: "meridian.installKit",
+    paletteTitle: "Meridian: Install Harness",
+    group: "kit",
+    summary: "Copy bundled Meridian kit (.agent/) into the workspace",
+    details: [
+      "Runs on first open or from the status bar / Command Palette.",
+      "Copies agents, skills, workflows, and scripts from the VSIX bundle.",
+      "Syncs .cursor/ and .claude/ IDE adapters via sync_cursor_kit.sh.",
+    ],
+    outputChannel: "Meridian Tools",
+    icon: "$(cloud-download)",
+    status: "shipped",
+  },
+  {
+    id: "upgrade-kit",
+    title: "Upgrade harness",
+    commandId: "meridian.upgradeKit",
+    paletteTitle: "Meridian: Upgrade Harness",
+    group: "kit",
+    summary: "Replace existing .agent/ with the bundled kit version",
+    details: [
+      "Overwrites .agent/ and re-runs adapter sync.",
+      "Use after updating the extension to pick up kit changes.",
+    ],
+    outputChannel: "Meridian Tools",
+    icon: "$(cloud-upload)",
+    status: "shipped",
+  },
+  {
     id: "board",
     title: "Open Board",
     commandId: "meridian.openBoard",

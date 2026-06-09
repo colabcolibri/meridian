@@ -1,6 +1,6 @@
 {
-  "extension.displayName": "Meridian",
-  "extension.description": "Kanban board and deliverables for Meridian projects (docs/us, epics, versions) — installable sidebar for VS Code and Cursor.",
+  "extension.displayName": "Meridian Harness",
+  "extension.description": "Meridian AI agent harness for VS Code and Cursor — installs agents, skills, slash commands, and workflows (.agent/) into your workspace, plus kanban board, versions, sprints, and epics from docs/. One extension; kit bundled inside.",
   "meridian.activitybar.title": "Meridian",
   "meridian.view.commands.name": "Commands",
   "meridian.submenu.label": "Meridian",
@@ -12,6 +12,8 @@
   "meridian.command.syncBoard.title": "Meridian: Sync Board",
   "meridian.command.openHelp.title": "Meridian: Open Command Help",
   "meridian.command.openAgentsHelp.title": "Meridian: Open Agents Help",
+  "meridian.command.installKit.title": "Meridian: Install Harness",
+  "meridian.command.upgradeKit.title": "Meridian: Upgrade Harness",
   "meridian.command.validateProject.title": "Meridian: Validate Project",
   "meridian.command.newUserStory.title": "Meridian: New User Story",
   "meridian.command.showStatus.title": "Meridian: Show Workspace Status",

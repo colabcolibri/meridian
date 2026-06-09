@@ -12,6 +12,20 @@ export type CommandTreeItem = {
 
 const ROOT_ITEMS: CommandTreeItem[] = [
   {
+    id: "install-kit",
+    label: "Install harness",
+    description: "Copy bundled .agent/ kit into workspace",
+    commandId: "meridian.installKit",
+    icon: "$(cloud-download)",
+  },
+  {
+    id: "upgrade-kit",
+    label: "Upgrade harness",
+    description: "Replace .agent/ with bundled kit version",
+    commandId: "meridian.upgradeKit",
+    icon: "$(cloud-upload)",
+  },
+  {
     id: "help",
     label: "Command help",
     description: "Extension commands (Board, Validate…)",

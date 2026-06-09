@@ -94,9 +94,15 @@ cd meridian/app-visual-studio
 pnpm install:cursor   # builds VSIX and installs locally
 ```
 
-### Option C — Marketplace (future)
+### Option C — Visual Studio Marketplace (recommended for end users)
 
-Requires a [Visual Studio Marketplace publisher](https://marketplace.visualstudio.com/manage) (`colabcolibri`). Until listed, use Release `.vsix` or Option B.
+1. One-time: create publisher **`colabcolibri`** and PAT — see [`app-visual-studio/MARKETPLACE.md`](../app-visual-studio/MARKETPLACE.md).
+2. Maintainer: `cd app-visual-studio && pnpm publish:marketplace`.
+3. Users: Extensions → search **Meridian** → Install (VS Code and Cursor).
+
+Listing: `https://marketplace.visualstudio.com/items?itemName=colabcolibri.meridian-vscode` (live after first publish).
+
+Until published, use Release `.vsix` or Option B.
 
 The extension **reads** the project's `docs/` — it does not replace the kit. Install **kit first**, extension second.
 

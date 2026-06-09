@@ -35,6 +35,10 @@ export class MeridianContext {
     return this.state.info?.docsExists === true
   }
 
+  get extensionPath(): string {
+    return this.extensionContext.extensionPath
+  }
+
   async refresh(): Promise<void> {
     const folders = vscode.workspace.workspaceFolders ?? []
     const picked = await pickMeridianWorkspace(folders)
@@ -175,14 +179,28 @@ export class MeridianContext {
         vscode.StatusBarAlignment.Left,
         100,
       )
-      this.statusItem.command = undefined
       this.extensionContext.subscriptions.push(this.statusItem)
     }
 
     const info = this.state.info
+    const folder = vscode.workspace.workspaceFolders?.[0]
+
+    if (!folder) {
+      this.statusItem.command = undefined
+      this.statusItem.text = "Meridian: no folder"
+      this.statusItem.tooltip = "Open a workspace folder to install the Meridian harness"
+      this.statusItem.backgroundColor = new vscode.ThemeColor(
+        "statusBarItem.warningBackground",
+      )
+      this.statusItem.show()
+      return
+    }
+
     if (!info) {
-      this.statusItem.text = "Meridian: off"
-      this.statusItem.tooltip = "Not a Meridian workspace (.agent/MERIDIAN.md not found)"
+      this.statusItem.command = "meridian.installKit"
+      this.statusItem.text = "Meridian: install harness"
+      this.statusItem.tooltip =
+        "Install bundled Meridian kit (.agent/ — agents, skills, workflows) into this workspace"
       this.statusItem.backgroundColor = new vscode.ThemeColor(
         "statusBarItem.warningBackground",
       )
@@ -191,6 +209,7 @@ export class MeridianContext {
     }
 
     this.statusItem.backgroundColor = undefined
+    this.statusItem.command = undefined
     this.statusItem.text = info.docsExists
       ? `Meridian: ${info.usCount} US`
       : "Meridian: no docs"

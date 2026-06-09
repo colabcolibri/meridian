@@ -2,10 +2,14 @@
   "name": "meridian-vscode",
   "displayName": "%extension.displayName%",
   "description": "%extension.description%",
-  "version": "0.3.7",
+  "version": "1.1.0",
   "publisher": "colabcolibri",
   "license": "PolyForm-Noncommercial-1.0.0",
   "icon": "media/icon.png",
+  "galleryBanner": {
+    "color": "#18181b",
+    "theme": "dark"
+  },
   "homepage": "https://github.com/colabcolibri/meridian",
   "repository": {
     "type": "git",
@@ -18,14 +22,34 @@
     "name": "Sergio Luciano Jr",
     "url": "https://github.com/colabcolibri"
   },
-  "private": true,
+  "qna": "marketplace",
   "engines": {
     "vscode": "^1.85.0"
   },
   "categories": [
-    "Other"
+    "Visualization"
+  ],
+  "keywords": [
+    "meridian",
+    "meridian harness",
+    "harness",
+    "agent harness",
+    "ai harness",
+    "kanban",
+    "scrum",
+    "agile",
+    "user stories",
+    "documentation",
+    "project management",
+    "ai agents",
+    "cursor",
+    "cursor agents",
+    "copilot workflow",
+    "governance",
+    "board"
   ],
   "activationEvents": [
+    "onStartupFinished",
     "onView:meridian.commands",
     "onCommand:meridian.openBoard",
     "onCommand:meridian.openVersions",
@@ -34,6 +58,8 @@
     "onCommand:meridian.openDeliverables",
     "onCommand:meridian.openHelp",
     "onCommand:meridian.openAgentsHelp",
+    "onCommand:meridian.installKit",
+    "onCommand:meridian.upgradeKit",
     "onCommand:meridian.validateProject",
     "onCommand:meridian.showStatus",
     "onCommand:meridian.syncBoard",
@@ -79,6 +105,8 @@
         { "command": "meridian.openEpics", "group": "1@4" },
         { "command": "meridian.openHelp", "group": "2@3" },
         { "command": "meridian.openAgentsHelp", "group": "2@4" },
+        { "command": "meridian.installKit", "group": "2@1" },
+        { "command": "meridian.upgradeKit", "group": "2@2" },
         { "command": "meridian.validateProject", "group": "3@1" },
         { "command": "meridian.showStatus", "group": "3@2" },
         { "command": "meridian.syncBoard", "group": "4@1" },
@@ -133,6 +161,16 @@
         "icon": "$(book)"
       },
       {
+        "command": "meridian.installKit",
+        "title": "%meridian.command.installKit.title%",
+        "icon": "$(cloud-download)"
+      },
+      {
+        "command": "meridian.upgradeKit",
+        "title": "%meridian.command.upgradeKit.title%",
+        "icon": "$(cloud-upload)"
+      },
+      {
         "command": "meridian.validateProject",
         "title": "%meridian.command.validateProject.title%",
         "icon": "$(checklist)"
@@ -160,10 +198,12 @@
     "dev": "pnpm watch",
     "build": "pnpm compile",
     "test": "pnpm compile && node --import tsx --test test/**/*.test.ts",
-    "package:vsix": "node esbuild.mjs && vsce package --no-dependencies",
+    "package:vsix": "node scripts/bundle-kit.mjs && node esbuild.mjs && vsce package --no-dependencies",
+    "publish:marketplace": "node scripts/bundle-kit.mjs && node esbuild.mjs && vsce publish --no-dependencies",
+    "publish:marketplace:patch": "node scripts/bundle-kit.mjs && node esbuild.mjs && vsce publish patch --no-dependencies",
     "install:cursor": "pnpm package:vsix && node scripts/install-vsix.mjs cursor",
     "install:code": "pnpm package:vsix && node scripts/install-vsix.mjs code",
-    "vscode:prepublish": "node esbuild.mjs"
+    "vscode:prepublish": "node scripts/bundle-kit.mjs && node esbuild.mjs"
   },
   "devDependencies": {
     "@types/node": "^22.10.0",

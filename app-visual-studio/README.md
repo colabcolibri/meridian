@@ -1,14 +1,36 @@
-# Meridian — installable VS Code extension (`app-visual-studio`)
+# Meridian Harness — VS Code / Cursor extension
 
-**Product:** an extension you **install** (`.vsix` from [GitHub Releases](https://github.com/colabcolibri/meridian/releases) or `pnpm install:cursor` from a clone) — not a repo-only tool. When your workspace has Meridian (`docs/` + `.agent/MERIDIAN.md`), you get a **sidebar** with Board (kanban), planning views, and kit help — all read from disk.
+**Install from Extensions:** search **Meridian Harness** (publisher **colabcolibri**) after [Marketplace publish](./MARKETPLACE.md).
 
-**Requires the kit:** copy or install `.agent/` in the project first ([kit tarball](https://github.com/colabcolibri/meridian/blob/main/.agent/DISTRIBUTION.md)). The extension does not ship agents or slash commands.
+**One product:** this extension **bundles and installs** the Meridian kit (`.agent/` — agents, skills, workflows, slash commands) into your workspace, plus kanban board, versions, sprints, and epics from `docs/`.
+
+## Quick start
+
+1. Install **Meridian Harness** from the Marketplace (or a `.vsix` from [GitHub Releases](https://github.com/colabcolibri/meridian/releases)).
+2. Open your project folder in VS Code or Cursor.
+3. Accept **Install harness** when prompted, or click **Meridian: install harness** in the status bar / Command Palette.
+4. Run `/init-meridian` in Cursor if `docs/` is missing.
+5. **Meridian: Open Board** — kanban from `docs/us/`.
+
+No separate tarball step. The kit ships inside the VSIX.
+
+---
+
+## Product details
 
 **Publisher:** `colabcolibri` · **Author:** [Sergio Luciano Jr](https://github.com/colabcolibri) · **Repository:** [colabcolibri/meridian](https://github.com/colabcolibri/meridian)
 
-**Not the goal:** replacing Cursor agents or slash commands that maintain `docs/us/` and `board.json`.
+**What installs where:**
 
-**Dev:** this folder is source; end users install the packaged extension unless they contribute. **Ship:** `pnpm package:vsix` → publish or install `.vsix`.
+| Component | Location | When |
+| --------- | -------- | ---- |
+| Extension UI | Editor (activity bar, tabs) | Marketplace / VSIX |
+| Meridian kit | `{workspace}/.agent/` | **Install harness** command |
+| IDE adapters | `.cursor/`, `.claude/` (synced) | After kit install |
+
+**Upgrade:** after updating the extension, run **Meridian: Upgrade Harness** to replace `.agent/` with the bundled version.
+
+**Dev:** this folder is source; end users install the packaged extension. **Ship:** `pnpm package:vsix` bundles `.agent/` then packages the VSIX.
 
 The browser monitor in `app-desktop/` remains optional/demo.
 
@@ -47,7 +69,7 @@ After reload:
 2. **Cmd+Shift+P** → **Meridian: Open Board** or **Meridian: Open Deliverables** — editor tabs.
    - **Board:** version and epic filters with **All / None** + multi-select chips; frozen toggle.
    - **Deliverables (Versions):** version filter with **All / None** + chips; accordion per release (▶/▼); click an id to open the `.md` file.
-3. Activity bar **Meridian → Commands** — same actions + **Validate Project**.
+3. Activity bar **Meridian → Commands** — install harness, board, validate, etc.
 
 **Alternative (UI):** Extensions → `⋯` → **Install from VSIX…** → pick `meridian-vscode-*.vsix`.
 
@@ -62,9 +84,11 @@ To reinstall after code changes: run `pnpm install:cursor` again and reload the 
 1. Open **`meridian.code-workspace`** (double-click in Finder) or **File → Open Workspace from File…**.
 2. In the Run and Debug sidebar, choose **Run Meridian extension** (not a generic Node config).
 3. Press **F5**. A second window opens (`[Extension Development Host]`) with **`app-desktop/`** already open (configured in `launch.json`).
-4. Status bar should show **`Meridian (N)`**; Command Palette → **Meridian: Open Board**.
+4. Status bar shows **Meridian: install harness** or US count when kit + docs exist.
 
 If the host window is empty, use **File → Open Folder…** → `app-desktop/` (fixes Cursor `NoWorkspaceUriError` in the log).
+
+During F5 dev, **Install harness** copies from `../.agent/` when `bundled/` is not built yet.
 
 ### Option B — extension folder only
 
@@ -100,7 +124,7 @@ cd app-visual-studio && pnpm compile
 | `pnpm watch` / `pnpm dev` | Rebuild on file changes |
 | `pnpm build` | Same as `compile` |
 | `pnpm test` | Unit tests + compile smoke |
-| `pnpm package:vsix` | Build installable `.vsix` |
+| `pnpm package:vsix` | Bundle `.agent/` + build installable `.vsix` |
 | `pnpm install:cursor` | Install/reinstall `.vsix` into local Cursor |
 | `pnpm install:vscode` | Install/reinstall `.vsix` into local VS Code |
 
@@ -108,6 +132,8 @@ cd app-visual-studio && pnpm compile
 
 | Place | What |
 | ----- | ---- |
+| **Status bar** | **Meridian: install harness** when kit missing |
+| **Commands → Install harness** | Copy bundled kit into workspace |
 | **Commands → Command help** or **View → Meridian → Open Command Help** | Reference tab for every extension command |
 | **Commands → Agents & commands** or **Meridian: Open Agents Help** | Webview tab — kit manual (agents, slash commands, steps) |
 | **Activity bar → Meridian → Commands** | List of actions (click = run + **Output**) |
@@ -119,7 +145,7 @@ cd app-visual-studio && pnpm compile
 | Command | Output channel |
 | ------- | -------------- |
 | Validate project | **Meridian Validate** (full `validate_meridian.py` log) |
-| Workspace status / Sync board / New US | **Meridian Tools** |
+| Install / upgrade harness / Workspace status / Sync board / New US | **Meridian Tools** |
 
 ### Board (kanban)
 
@@ -129,7 +155,7 @@ cd app-visual-studio && pnpm compile
 
 ## Activation
 
-The extension activates when the workspace contains `.agent/MERIDIAN.md` (`workspaceContains` in `package.json`), or when you open the Meridian view or run a Meridian command.
+The extension activates on **startup** (`onStartupFinished`) so it can prompt to install the harness, and when `.agent/MERIDIAN.md` is present, or when you open the Meridian view or run a Meridian command.
 
 ## Workspace detection (US-0042)
 
@@ -140,12 +166,14 @@ On activate, the extension resolves the Meridian project:
 | Client repo | workspace root | `{root}/docs/` |
 | Nested app (e.g. `app-desktop/`) | parent with `.agent/` | `{workspace}/docs/` |
 
-Rules match `validate_meridian.py` (`.agent/MERIDIAN.md`). Status bar shows **Meridian** with US count when `docs/` exists; commands stay disabled until kit + `docs/` are valid.
+Rules match `validate_meridian.py` (`.agent/MERIDIAN.md`). Status bar shows **Meridian: install harness** without kit; US count when `docs/` exists.
 
 ## Commands (v4 — shipped)
 
 | Command ID | Title | Status |
 | ---------- | ----- | ------ |
+| `meridian.installKit` | Meridian: Install Harness | ✅ Bundled `.agent/` → workspace |
+| `meridian.upgradeKit` | Meridian: Upgrade Harness | ✅ Replace `.agent/` + sync adapters |
 | `meridian.openBoard` | Meridian: Open Board | ✅ Kanban + filters |
 | `meridian.openVersions` | Meridian: Open Versions | ✅ All releases |
 | `meridian.openSprints` | Meridian: Open Sprints | ✅ Filter by version |
@@ -187,7 +215,7 @@ pnpm package:vsix
 pnpm install:cursor   # or install VSIX manually
 ```
 
-Reload Cursor → **Meridian → Open Board / Versions / Sprints / Epics** → **Sync Board** → **Validate Project**.
+Reload Cursor → **Install harness** (if needed) → **Meridian → Open Board / Versions / Sprints / Epics** → **Sync Board** → **Validate Project**.
 
 ## Related docs
 
