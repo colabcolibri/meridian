@@ -2,7 +2,7 @@
   "name": "meridian-vscode",
   "displayName": "Meridian",
   "description": "Kanban board and deliverables for Meridian projects (docs/us, epics, versions) — installable sidebar for VS Code and Cursor.",
-  "version": "0.3.5",
+  "version": "0.3.6",
   "publisher": "meridian-placeholder",
   "license": "PolyForm-Noncommercial-1.0.0",
   "private": true,

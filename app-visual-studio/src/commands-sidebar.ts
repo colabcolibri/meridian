@@ -14,14 +14,14 @@ const ROOT_ITEMS: CommandTreeItem[] = [
   {
     id: "help",
     label: "Command help",
-    description: "Comandos da extensão (Board, Validate…)",
+    description: "Extension commands (Board, Validate…)",
     commandId: "meridian.openHelp",
     icon: "$(question)",
   },
   {
     id: "agents-help",
     label: "Agents & commands",
-    description: "Grupos, passos e slash commands do kit",
+    description: "Kit groups, steps, and slash commands",
     commandId: "meridian.openAgentsHelp",
     icon: "$(book)",
   },
@@ -59,9 +59,9 @@ export class MeridianCommandsProvider implements vscode.TreeDataProvider<Command
     }
     item.tooltip =
       element.id === "help"
-        ? "Referência dos comandos da extensão (aba webview)"
+        ? "Extension command reference (webview tab)"
         : element.id === "agents-help"
-          ? "Aba webview com agents-help.md do kit (mesmo padrão do Command help)"
+          ? "Kit agents-help.md in a webview tab (same pattern as Command help)"
           : `${element.label} — Command Palette: ${element.commandId}`
     return item
   }

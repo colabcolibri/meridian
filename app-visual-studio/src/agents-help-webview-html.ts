@@ -80,7 +80,7 @@ export function agentsHelpWebviewHtml(markdown: string, sourceLabel: string): st
   const body = markdownToHtml(markdown)
 
   return `<!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline';" />
@@ -119,7 +119,7 @@ export function agentsHelpWebviewHtml(markdown: string, sourceLabel: string): st
 <body>
   <div class="intro">
     <h1>Meridian — agents &amp; commands</h1>
-    <p>Grupos de agentes, slash commands, skills e sequência numerada (1–17). Read-only — fonte: kit <code>.agent/</code>.</p>
+    <p>Agent groups, slash commands, skills, and the numbered sequence (1–17). Read-only — sourced from the kit <code>.agent/</code>.</p>
     <p class="source">${esc(sourceLabel)}</p>
   </div>
   <div class="content">

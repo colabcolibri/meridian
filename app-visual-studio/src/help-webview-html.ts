@@ -19,8 +19,8 @@ function renderEntry(entry: CommandHelpEntry): string {
     : ""
   const status =
     entry.status === "stub"
-      ? `<span class="badge stub">Em breve</span>`
-      : `<span class="badge ok">Disponível</span>`
+      ? `<span class="badge stub">Coming soon</span>`
+      : `<span class="badge ok">Available</span>`
 
   return `<article class="card">
     <header class="card-head">
@@ -45,7 +45,7 @@ export function helpWebviewHtml(): string {
   }).join("")
 
   return `<!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline';" />
@@ -132,13 +132,13 @@ export function helpWebviewHtml(): string {
 </head>
 <body>
   <div class="intro">
-    <h1>Meridian — comandos da extensão</h1>
-    <p>Referência read-only: o que cada ação faz, onde ver o resultado e como abrir.</p>
+    <h1>Meridian — extension commands</h1>
+    <p>Read-only reference: what each action does, where to see results, and how to open it.</p>
     <ul>
-      <li><strong>Sidebar</strong> → ícone Meridian → Commands (clique na linha)</li>
+      <li><strong>Sidebar</strong> → Meridian icon → Commands (click a row)</li>
       <li><strong>Menu</strong> → View → Meridian</li>
-      <li><strong>Palette</strong> → ⇧⌘P → digite <code>Meridian:</code></li>
-      <li><strong>Kit</strong> → <code>Meridian: Open Agents Help</code> — mesma UX desta aba (agentes e slash commands)</li>
+      <li><strong>Palette</strong> → ⇧⌘P → type <code>Meridian:</code></li>
+      <li><strong>Kit</strong> → <code>Meridian: Open Agents Help</code> — same webview UX (agents and slash commands)</li>
     </ul>
   </div>
   ${sections}

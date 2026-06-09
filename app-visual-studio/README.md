@@ -143,7 +143,7 @@ Rules match `validate_meridian.py` (`.agent/MERIDIAN.md`). Status bar shows **Me
 | `meridian.openEpics` | Meridian: Open Epics | ✅ Filter version + epic |
 | `meridian.openDeliverables` | Meridian: Open Deliverables | ✅ Alias → Versions |
 | `meridian.syncBoard` | Meridian: Sync Board | ✅ Writes `board.json` |
-| `meridian.openHelp` | Meridian: Open Command Help | ✅ Reference tab (PT) |
+| `meridian.openHelp` | Meridian: Open Command Help | ✅ Reference tab (EN) |
 | `meridian.openAgentsHelp` | Meridian: Open Agents Help | ✅ Agents help webview tab |
 | `meridian.validateProject` | Meridian: Validate Project | ✅ Runs `validate_meridian.py` |
 | `meridian.showStatus` | Meridian: Show Workspace Status | ✅ Output |
