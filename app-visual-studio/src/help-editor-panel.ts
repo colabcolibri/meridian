@@ -27,7 +27,7 @@ export class HelpEditorPanel {
       },
     )
 
-    this.panel.iconPath = vscode.Uri.joinPath(this.extensionUri, "media", "meridian.svg")
+    this.panel.iconPath = vscode.Uri.joinPath(this.extensionUri, "media", "meridian-mark.svg")
     this.panel.webview.html = helpWebviewHtml()
     this.panel.onDidDispose(() => {
       this.panel = undefined

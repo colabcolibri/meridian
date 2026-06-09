@@ -1220,5 +1220,19 @@
     "done_when": "Meridian: Open Command Help shows a reference tab explaining every extension command including Validate, Sync Board, and Workspace status.",
     "tests": "required",
     "tests_status": "done"
+  },
+  {
+    "id": "US-0100",
+    "title": "Distributable meridian-kit install and surgical IDE sync",
+    "epic": "EPIC-12",
+    "version": "v2.02",
+    "status": "✅",
+    "moscow": "Must",
+    "depends_on": [
+      "US-0007"
+    ],
+    "done_when": "Manager builds meridian-kit tarball, installs into an external project, upgrades with --force, and IDE adapters sync without deleting non-Meridian files in .cursor/ or .claude/.",
+    "tests": "required",
+    "tests_status": "done"
   }
 ]

@@ -43,7 +43,7 @@ export class AgentsHelpEditorPanel {
       },
     )
 
-    this.panel.iconPath = vscode.Uri.joinPath(this.extensionUri, "media", "meridian.svg")
+    this.panel.iconPath = vscode.Uri.joinPath(this.extensionUri, "media", "meridian-mark.svg")
     this.panel.onDidDispose(() => {
       this.panel = undefined
     })

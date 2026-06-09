@@ -39,7 +39,7 @@ export class BoardEditorPanel {
       },
     )
 
-    this.panel.iconPath = vscode.Uri.joinPath(this.extensionUri, "media", "meridian.svg")
+    this.panel.iconPath = vscode.Uri.joinPath(this.extensionUri, "media", "meridian-mark.svg")
     this.panel.webview.onDidReceiveMessage((msg: BoardMessage) => {
       if (msg.type === "openStory") {
         void this.openStory(msg.id)

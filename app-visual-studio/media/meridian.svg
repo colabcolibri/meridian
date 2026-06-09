@@ -1,5 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-  <rect x="3" y="3" width="5" height="18" rx="1"/>
-  <rect x="10" y="3" width="5" height="12" rx="1"/>
-  <rect x="17" y="3" width="5" height="15" rx="1"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+  <!-- Activity bar: monochrome — VS Code tints via currentColor -->
+  <line x1="12" y1="3.5" x2="12" y2="20.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
+  <circle cx="12" cy="8.25" r="2.35" fill="currentColor"/>
+  <circle cx="12" cy="15.75" r="1.2" fill="currentColor"/>
 </svg>

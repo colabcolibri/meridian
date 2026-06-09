@@ -37,7 +37,7 @@ export abstract class DocsOpenPanel {
       localResourceRoots: [this.extensionUri],
     })
 
-    this.panel.iconPath = vscode.Uri.joinPath(this.extensionUri, "media", "meridian.svg")
+    this.panel.iconPath = vscode.Uri.joinPath(this.extensionUri, "media", "meridian-mark.svg")
     this.panel.webview.onDidReceiveMessage((msg: DocsOpenMessage) => {
       void this.handleMessage(msg)
     })

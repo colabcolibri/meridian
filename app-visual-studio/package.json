@@ -1,10 +1,11 @@
 {
   "name": "meridian-vscode",
-  "displayName": "Meridian",
-  "description": "Kanban board and deliverables for Meridian projects (docs/us, epics, versions) — installable sidebar for VS Code and Cursor.",
+  "displayName": "%extension.displayName%",
+  "description": "%extension.description%",
   "version": "0.3.6",
   "publisher": "meridian-placeholder",
   "license": "PolyForm-Noncommercial-1.0.0",
+  "icon": "media/icon.png",
   "private": true,
   "engines": {
     "vscode": "^1.85.0"
@@ -32,7 +33,7 @@
       "activitybar": [
         {
           "id": "meridian",
-          "title": "Meridian",
+          "title": "%meridian.activitybar.title%",
           "icon": "media/meridian.svg"
         }
       ]
@@ -41,7 +42,7 @@
       "meridian": [
         {
           "id": "meridian.commands",
-          "name": "Commands"
+          "name": "%meridian.view.commands.name%"
         }
       ]
     },
@@ -75,68 +76,68 @@
     "submenus": [
       {
         "id": "meridian.submenu",
-        "label": "Meridian"
+        "label": "%meridian.submenu.label%"
       }
     ],
     "commands": [
       {
         "command": "meridian.openBoard",
-        "title": "Meridian: Open Board",
+        "title": "%meridian.command.openBoard.title%",
         "icon": "$(layout)"
       },
       {
         "command": "meridian.openVersions",
-        "title": "Meridian: Open Versions",
+        "title": "%meridian.command.openVersions.title%",
         "icon": "$(versions)"
       },
       {
         "command": "meridian.openSprints",
-        "title": "Meridian: Open Sprints",
+        "title": "%meridian.command.openSprints.title%",
         "icon": "$(run-all)"
       },
       {
         "command": "meridian.openEpics",
-        "title": "Meridian: Open Epics",
+        "title": "%meridian.command.openEpics.title%",
         "icon": "$(layers)"
       },
       {
         "command": "meridian.openDeliverables",
-        "title": "Meridian: Open Deliverables",
+        "title": "%meridian.command.openDeliverables.title%",
         "icon": "$(list-tree)"
       },
       {
         "command": "meridian.syncBoard",
-        "title": "Meridian: Sync Board",
+        "title": "%meridian.command.syncBoard.title%",
         "icon": "$(sync)"
       },
       {
         "command": "meridian.openHelp",
-        "title": "Meridian: Open Command Help",
+        "title": "%meridian.command.openHelp.title%",
         "icon": "$(question)"
       },
       {
         "command": "meridian.openAgentsHelp",
-        "title": "Meridian: Open Agents Help",
+        "title": "%meridian.command.openAgentsHelp.title%",
         "icon": "$(book)"
       },
       {
         "command": "meridian.validateProject",
-        "title": "Meridian: Validate Project",
+        "title": "%meridian.command.validateProject.title%",
         "icon": "$(checklist)"
       },
       {
         "command": "meridian.newUserStory",
-        "title": "Meridian: New User Story",
+        "title": "%meridian.command.newUserStory.title%",
         "icon": "$(add)"
       },
       {
         "command": "meridian.showStatus",
-        "title": "Meridian: Show Workspace Status",
+        "title": "%meridian.command.showStatus.title%",
         "icon": "$(info)"
       },
       {
         "command": "meridian.refreshCommands",
-        "title": "Meridian: Refresh Commands",
+        "title": "%meridian.command.refreshCommands.title%",
         "icon": "$(refresh)"
       }
     ]

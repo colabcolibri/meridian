@@ -1,0 +1,32 @@
+{
+  "date": "2026-06-09",
+  "entries": [
+    {
+      "time": "20:23",
+      "title": "US-0100 kit install — multi-IDE and surgical sync",
+      "affected_document": ".agent/scripts/, .agent/KIT_README.md, .agent/IDE_ADAPTERS.md, US-0100.md, EPIC-12.md, v2.02.md",
+      "what_changed": "Implemented surgical sync_cursor_kit.sh (orphan prune, --cursor-only/--claude-only/--no-sync), install-meridian-kit.sh fixes, IDE matrix docs. Cursor+Claude get adapters; Antigravity uses .agent/ only. US-0100, v2.02, v2.02-S1, EPIC-12 closed.",
+      "why_changed": "Managers need distributable kit working across IDEs without wiping custom .cursor/ content.",
+      "impact": "meridian-kit tarball ready for release; npm CLI remains backlog.",
+      "responsible": "Process Manager"
+    },
+    {
+      "time": "20:35",
+      "title": "EPIC-12 Kit distribution — revert EPIC-01 extension",
+      "affected_document": "docs/epics/EPIC-01.md, docs/epics/EPIC-12.md, docs/us/US-0100.md, docs/versions/v2.02.md, docs/sprints/v2.02-S1.md",
+      "what_changed": "Reverted EPIC-01 to complete/v0 only. Created EPIC-12 (Kit distribution, active) for v2.02/US-0100. US-0100 epic frontmatter and sprint table now reference EPIC-12.",
+      "why_changed": "EPIC-01 is closed foundation work; kit installer is a new product capability — Meridian prefers new epic over reopening complete epic.",
+      "impact": "EPIC-12 active; US-0100 unchanged in scope; board sync required.",
+      "responsible": "Process Manager"
+    },
+    {
+      "time": "20:21",
+      "title": "v2.02 kit distribution — US-0100 and surgical IDE sync",
+      "affected_document": "docs/versions/v2.02.md, docs/sprints/v2.02-S1.md, docs/us/US-0100.md, docs/epics/EPIC-01.md",
+      "what_changed": "Added version v2.02 (Kit distribution), sprint v2.02-S1, and US-0100 for meridian-kit tarball, install-meridian-kit.sh, and non-destructive .cursor/.claude symlink sync. EPIC-01 extended with v2.02; supersedes deferred installer scope from US-0006/US-0007 for bash/tarball path.",
+      "why_changed": "Install scripts and package-kit existed without backlog documentation; managers need formal acceptance for distributable kit without monorepo and safe adapter upgrades.",
+      "impact": "v2.02 planned parallel to v5 extension wizards; implementation blocked until /refine-us on US-0100.",
+      "responsible": "Process Manager"
+    }
+  ]
+}

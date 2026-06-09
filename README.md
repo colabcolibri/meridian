@@ -77,6 +77,15 @@ chmod +x .agent/scripts/sync_cursor_kit.sh
 
 **Use in another repo:** copy `.agent/` only, run `/init-meridian`, sync the kit if you use Cursor/Claude.
 
+Or download a **kit release** (`.agent` only, no app-desktop):
+
+```bash
+tar -xzf meridian-kit-1.0.0.tar.gz && cd meridian-kit-1.0.0
+./install.sh /path/to/my-project
+```
+
+Build the tarball from this repo: `KIT_VERSION=1.0.0 ./.agent/scripts/package-kit.sh`
+
 ## What's in this repository
 
 | Piece | Required? | Role in the experiment |

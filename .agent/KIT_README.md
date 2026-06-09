@@ -1,0 +1,93 @@
+# Meridian kit
+
+Portable agent harness for **Cursor**, **Claude Code**, **Antigravity**, and other AI IDEs.
+
+**This package contains only the kit** (`.agent/` + installer). No desktop app, no VS Code extension source — those are optional extras in the full [Meridian](https://github.com/colabcolibri/meridian) repository.
+
+## Which IDE do you use?
+
+| IDE | What install does | Slash commands |
+| --- | ----------------- | -------------- |
+| **Cursor** | Copies `.agent/` + builds `.cursor/` symlinks | Yes — `.cursor/commands/` |
+| **Claude Code** | Copies `.agent/` + builds `.claude/` symlinks | Yes — `.claude/commands/` |
+| **Antigravity / ag-kit** | Copies `.agent/` only (`--no-sync`) | Yes — reads `.agent/workflows/` directly |
+| **Other `.agent` tools** | Copies `.agent/` only (`--no-sync`) | Depends on tool |
+
+Default `./install.sh` syncs **both** Cursor and Claude adapters. That is safe: only Meridian symlinks are created; your own `.cursor/rules/` files are never deleted.
+
+## Install into your project
+
+Extract this archive, then:
+
+```bash
+chmod +x install.sh
+./install.sh /path/to/your-project
+```
+
+Or install into the current directory:
+
+```bash
+./install.sh .
+```
+
+**Antigravity-only project:**
+
+```bash
+./install.sh --no-sync /path/to/your-project
+```
+
+**Cursor-only or Claude-only:**
+
+```bash
+./install.sh --cursor-only .
+./install.sh --claude-only .
+```
+
+Do **not** commit `.cursor/` or `.claude/` — they are regenerated per machine.
+
+## After install
+
+1. Open your project in your IDE.
+2. Run **`/init-meridian`** if `docs/` does not exist yet.
+3. Read **`.agent/references/agents-help.md`** or run **`/agents-help`**.
+
+## Update the kit
+
+From your project (after a new kit release):
+
+```bash
+./install.sh --force .
+```
+
+`--force` replaces `.agent/` entirely and refreshes IDE adapters. Custom files in `.cursor/` or `.claude/` that are **not** Meridian symlinks are preserved.
+
+Re-sync adapters only (no `.agent/` copy):
+
+```bash
+./.agent/scripts/sync_cursor_kit.sh
+./.agent/scripts/sync_cursor_kit.sh --cursor-only
+./.agent/scripts/sync_cursor_kit.sh --dry-run
+```
+
+## Build tarball (maintainers)
+
+From the Meridian monorepo:
+
+```bash
+KIT_VERSION=1.0.0 ./.agent/scripts/package-kit.sh
+# → dist/meridian-kit-1.0.0.tar.gz
+```
+
+## Validate
+
+```bash
+python3 .agent/scripts/validate_meridian.py .
+```
+
+## Optional: VS Code / Cursor extension
+
+The **Meridian** editor extension (kanban, planning views) is separate. Install from the full repo (`app-visual-studio/`) or a published `.vsix`. It reads your project's `docs/` — it does not replace the kit.
+
+## License
+
+PolyForm Noncommercial 1.0.0 — see `LICENSE`.

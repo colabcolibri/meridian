@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+  <!-- Brand mark  matches app-desktop/public/favicon.svg -->
+  <rect width="24" height="24" rx="6" fill="#18181b"/>
+  <line x1="12" y1="5.25" x2="12" y2="18.75" stroke="#fafafa" stroke-width="1.125" stroke-linecap="round"/>
+  <circle cx="12" cy="9.75" r="1.875" fill="#3b82f6"/>
+  <circle cx="12" cy="15.75" r="0.9375" fill="#71717a"/>
+</svg>
