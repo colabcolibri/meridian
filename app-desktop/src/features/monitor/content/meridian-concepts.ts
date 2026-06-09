@@ -370,6 +370,12 @@ export const folderStructure = {
         "Generated from the US files. Never edit by hand. Run /sync-board after changing any US.",
     },
     {
+      path: "docs/inventory/",
+      label: "As-is inventory (Mode B)",
+      description:
+        "Transitional map during migration of an existing codebase — docs/inventory/as-is.md. Archive after 05_architecture is approved; not a permanent source of truth.",
+    },
+    {
       path: "docs/templates/",
       label: "Delivery templates",
       description:
@@ -893,9 +899,10 @@ export const gettingStartedSteps: DailyWorkflowStep[] = [
     actions: [
       "Open your codebase in the IDE and run /init-meridian.",
       "The agent reads the code first — package files, folder structure, README, any existing docs.",
-      "It asks only what it could not infer from the code.",
-      "Phase documents are populated from what it observed — every inference is marked as an assumption.",
-      "Review docs/00_scope.md and docs/05_architecture.md — correct anything the agent got wrong.",
+      "It creates docs/inventory/as-is.md — a transitional table of existing capabilities (evidence, confidence, epic candidates).",
+      "Phase documents are populated from inventory + observations — every inference is marked as an assumption.",
+      "Review the inventory, then docs/00_scope.md and docs/05_architecture.md — promote validated rows; archive inventory after architecture is approved.",
+      "Create epics for major existing capabilities (optional v0 baseline). No retroactive user stories with ✅ — forward work only in v1+.",
     ],
     commands: ["/init-meridian"],
   },

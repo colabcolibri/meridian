@@ -33,6 +33,7 @@ CANONICAL (edit here)          REGISTRY (agents read)              HUMAN / CURSO
 | `decision-template.md` | `.agent/skills/update-decisions-log/references/decision-template.md` | `.agent/references/templates/decision-template.md` | `update-decisions-log` |
 | `decision-schema.md` | `.agent/skills/update-decisions-log/references/decision-schema.md` | `.agent/references/templates/decision-schema.md` | `update-decisions-log` (validation) |
 | `doc-templates.md` | `.agent/skills/init-project/references/doc-templates.md` | `.agent/references/templates/doc-templates.md` | `/init-meridian` |
+| `as-is-inventory-template.md` | *(kit-owned — edit in registry)* | `.agent/references/templates/as-is-inventory-template.md` | `/init-meridian` (Mode B) |
 
 ---
 
@@ -40,6 +41,7 @@ CANONICAL (edit here)          REGISTRY (agents read)              HUMAN / CURSO
 
 | File | Purpose |
 | ---- | ------- |
+| `.agent/references/templates/as-is-inventory-template.md` | Mode B as-is map — `docs/inventory/as-is.md` |
 | `.agent/references/templates/INDEX.md` | Registry table artifact → template → agent → workflow |
 | `.agent/references/templates/writing-guide.md` | Prose quality — Intent, Plan, epic paragraphs |
 | `.agent/references/templates/section-contracts.md` | Fixed headings — validated by Python + monitor |

@@ -13,6 +13,7 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 | File | When to read |
 | ------- | ---------- |
 | `.agent/references/templates/INDEX.md` | Before creating phase docs or pointing manager to templates |
+| `.agent/references/templates/as-is-inventory-template.md` | **Mode B only** — before creating `docs/inventory/as-is.md` |
 | `references/doc-templates.md` | **Mandatory** before creating phase files and first decision |
 | `references/gitignore-baseline.md` | Before `npm install` or first commit |
 
@@ -90,21 +91,31 @@ After reading the codebase, ask (only what is still unclear after reading):
 - Are there security or compliance requirements (auth model, PII, regulated data)?
 - Are there architecture decisions already made that should be documented (DB choice, hosting, auth library)?
 
-### Phase 2 — generate docs from code
+### Phase 2 — as-is inventory
 
-Populate docs from what was observed, not from blank templates:
+Read `as-is-inventory-template.md`, then create `docs/inventory/as-is.md`:
 
-1. `00_scope.md` — derive from README + code structure + interview answers.
+1. One table row per **user-facing capability** (not per folder).
+2. Evidence = real paths, routes, models, or docs.
+3. Confidence = `high` | `medium` | `low` — never `high` without evidence.
+4. Epic candidate column for significant blocks (ids only — do not create epics yet).
+5. Assumptions section for anything the manager must confirm.
+
+### Phase 3 — generate docs from code
+
+Populate phase docs from inventory + observations (not blank templates):
+
+1. `00_scope.md` — derive from README + inventory + interview answers. Include **current product state** from high-confidence rows.
 2. `01_tech_stack.md` — list what was found (languages, frameworks, infra). Mark `status: draft`.
 3. `02_security.md` — note what exists (auth libraries, env handling) and what is unknown. Mark gaps explicitly.
 4. `03_user_types.md` — derive from code (admin routes, user models, role checks found in code).
 5. `04_principles.md` — leave mostly blank with a note: "derived from existing code style; needs human review".
 6. `05_architecture.md` — diagram the actual structure found. Mark `status: draft` — **not approved**.
-7. For each existing feature that is significant, note it as candidate for an Epic (do not create yet).
+7. Cross-check: every `high` inventory row appears in scope or architecture (or explain why not).
 
-### Phase 3 — structure
+### Phase 4 — structure
 
-Same as Mode A steps 3–8, applied to inferred content.
+Same as Mode A steps 3–8, applied to inferred content. Ensure `docs/inventory/` exists with `as-is.md`.
 
 ---
 
@@ -115,7 +126,8 @@ Same as Mode A steps 3–8, applied to inferred content.
 | 1 | `docs/`, `decisions/`, `epics/`, `versions/`, `us/`, `sprints/`, `board.json`, `11_decisions`, `00_scope` exist |
 | 2 | `.env*` protected in `.gitignore` |
 | 3 | No product code created |
-| 4 | (Mode B) Inferences marked as assumptions — human must review and approve |
+| 4 | (Mode B) `docs/inventory/as-is.md` exists with capability table |
+| 5 | (Mode B) Inferences marked as assumptions — human must review and approve |
 
 ## Prohibitions
 
@@ -123,8 +135,10 @@ Same as Mode A steps 3–8, applied to inferred content.
 | -------- | --------- |
 | Mark phase docs as `approved` without human | `draft` + assumptions |
 | Create US | Empty `us/` structure |
+| Create retroactive US with `✅` for legacy | Inventory + epics `complete` + optional v0 |
 | Implement features | Docs + initial decision |
 | (Mode B) Replace existing README | Add `docs/README.md` alongside |
+| (Mode B) Keep inventory after `05_architecture` approved | Archive or delete after promotion |
 
 ## Output
 
@@ -132,6 +146,7 @@ Same as Mode A steps 3–8, applied to inferred content.
 Meridian initialized:
 Mode: new project | existing codebase
 Created:
+Inventory (Mode B): docs/inventory/as-is.md
 Inferred (Mode B):
 Assumptions requiring human review:
 Pending:

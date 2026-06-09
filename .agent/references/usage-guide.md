@@ -6,6 +6,8 @@ For concepts (what is an epic, how phases work, what `ready` means), read **[sta
 
 For **agent groups, who serves what, and the numbered step sequence**, read **[agents-help.md](./agents-help.md)**.
 
+**Kit maintainers:** **[instruction-surfaces.md](./instruction-surfaces.md)** — every place that carries instructions (kit, app-desktop UI, extension, mirrors).
+
 **Scrum ↔ Meridian:** [scrum-meridian-map.md](./scrum-meridian-map.md) (operational). Optional deep dive: [scrum-guide-complete.md](./scrum-guide-complete.md).
 
 ---
@@ -47,9 +49,29 @@ Run: **`/init-meridian`** with your codebase open in the IDE.
 
 The agent reads the codebase first — package files, folder structure, README, any existing docs. Then it asks only what it could not infer.
 
-What gets created: same as a new project, but the phase documents are populated from the code — not blank. Every inference is marked as an assumption for your review.
+What gets created:
 
-After this, review `docs/00_scope.md` and `docs/05_architecture.md` — correct anything the agent got wrong, then follow the same path as a new project.
+- Same `docs/` tree as a new project, but phase documents are populated from the code — not blank
+- **`docs/inventory/as-is.md`** — transitional map of existing capabilities (table with evidence, confidence, epic candidates)
+- Every inference marked as an assumption for your review
+
+### Migration sequence (existing codebase)
+
+```
+/init-meridian → review inventory → approve phase docs → epics (+ optional v0) → US for new work only
+```
+
+| Step | You do | Result |
+| ---- | ------ | ------ |
+| 1 | Run `/init-meridian` | `docs/inventory/as-is.md` + draft phase docs |
+| 2 | Review inventory table — fix confidence and gaps | Validated as-is map |
+| 3 | Promote rows into `00_scope`, `05_architecture`, etc. | Phase docs reflect reality |
+| 4 | Approve `05_architecture` (human) | Backlog gate unlocked |
+| 5 | `/create-epic` for major existing capabilities; optional **`v0`** baseline version | Epics `complete` where already shipped — **no retroactive US** |
+| 6 | `/create-version` **v1**+ and `/create-us` | Forward work only |
+| 7 | Archive or delete `docs/inventory/as-is.md` | Single source of truth in phase docs |
+
+After step 2, review `docs/00_scope.md` and `docs/05_architecture.md` — correct anything the agent got wrong, then follow the same path as a new project.
 
 ---
 

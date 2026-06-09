@@ -136,7 +136,7 @@ Thirteen workflows in **six groups**. Each maps to one primary agent (sometimes 
 
 | Step | Command | Agent | What it does |
 | ---- | ------- | ----- | ------------ |
-| A1 | **`/init-meridian`** | `process-manager` | Creates `docs/` tree, initial scope, decision log, empty board. New project or existing codebase migration. **No product code.** |
+| A1 | **`/init-meridian`** | `process-manager` | Creates `docs/` tree, initial scope, decision log, empty board. **Mode B (existing codebase):** also `docs/inventory/as-is.md` — transitional capability map; no retroactive US. **No product code.** |
 
 ---
 

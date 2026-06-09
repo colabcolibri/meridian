@@ -51,6 +51,8 @@ Priority: **P0 rules > P1 agent + MERIDIAN.md > P2 skills**.
 
 Human reference (groups + numbered steps): `.agent/references/agents-help.md`
 
+Maintainer map (protocol change → which files to edit): `.agent/references/instruction-surfaces.md`
+
 ## Validate project
 
 ```bash

@@ -3,6 +3,11 @@
 Each phase uses a **fixed template**. Agents must not skip phases or merge them in one conversation without explicit manager approval.
 
 ```txt
+Existing codebase only (Mode B):
+  Codebase → as-is-inventory-template.md → docs/inventory/as-is.md
+  ↓ human review + promote rows
+  ↓ archive inventory after 05 approved
+
 Phase docs (doc-templates.md)
   ↓ 05_architecture approved
 Epic (epic-template.md)

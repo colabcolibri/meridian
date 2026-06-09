@@ -76,3 +76,7 @@ On first day, create `docs/decisions/YYYY-MM-DD.json`:
 ```json
 []
 ```
+
+## `docs/inventory/as-is.md` (Mode B only)
+
+Transitional capability map for existing codebases. Read `.agent/references/templates/as-is-inventory-template.md` before Write. Archive after `05_architecture` is approved.

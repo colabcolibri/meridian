@@ -246,7 +246,7 @@ Use workflow `/init-meridian` and skill `init-project`. Two modes:
 
 **Mode A — New project:** agent interviews user (up to 5 questions), creates `docs/` from answers.
 
-**Mode B — Existing codebase:** agent reads code first, infers scope and tech, asks only what is unclear, populates phase docs from observations. All inferences marked as assumptions for human review.
+**Mode B — Existing codebase:** agent reads code first, creates `docs/inventory/as-is.md` (capability table with evidence), infers scope and tech, asks only what is unclear, populates phase docs from inventory + observations. All inferences marked as assumptions for human review. No retroactive US with `✅`; optional baseline version `v0` for pre-Meridian epics.
 
 Both modes:
 
@@ -259,6 +259,7 @@ Both modes:
 
 Human guide: `.agent/references/start-here.md`  
 Operational guide: `.agent/references/usage-guide.md`  
+Maintainer map (where to edit instructions): `.agent/references/instruction-surfaces.md`  
 Agents & commands (groups, steps): `.agent/references/agents-help.md`  
 Scrum ↔ Meridian (agents + managers): `.agent/references/scrum-meridian-map.md`  
 Scrum textbook (human only, optional): `.agent/references/scrum-guide-complete.md`

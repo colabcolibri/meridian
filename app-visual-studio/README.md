@@ -118,6 +118,12 @@ Slash commands (after Install Harness): `/init-meridian`, `/create-us`, `/archit
 
 ---
 
+## Maintainers
+
+Help panels (Agents Help, Usage, Start Here) read `.agent/references/*.md` from the workspace kit. Command palette copy lives in `src/command-catalog.ts`. When the protocol changes, see [instruction-surfaces.md](../.agent/references/instruction-surfaces.md).
+
+---
+
 ## Quick flow
 
 ```txt

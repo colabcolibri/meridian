@@ -64,6 +64,7 @@ RULES:
 | Initial scope | `docs/00_scope.md` (populated, not blank) |
 | Decision log | `docs/decisions/YYYY-MM-DD.json` + stub `11_decisions.md` |
 | Empty board | `docs/kanban/board.json` |
+| As-is inventory (Mode B only) | `docs/inventory/as-is.md` |
 | Templates mirror | `docs/templates/` (symlinks to kit; optional but recommended) |
 
 ---
@@ -88,11 +89,18 @@ Next human decision:
 Tell the user:
 
 ```txt
-Next steps:
+Next steps (new project):
 1. Review docs/00_scope.md — approve or adjust inferences
 2. Work through 01_tech_stack → 02_security → 03_user_types → 04_principles (in order)
 3. Run /architecture to draft 05_architecture.md
 4. Approve 05_architecture (human action in frontmatter)
 5. Plan delivery: /create-epic → /create-version → /plan-sprint
 6. Create work: /create-us → /refine-us → implement → /complete-us → /sync-board
+
+Next steps (existing codebase — add before step 5):
+A. Review docs/inventory/as-is.md — fix confidence, gaps, epic candidates
+B. Promote validated rows into phase docs; archive inventory after 05_architecture approved
+C. /create-epic for existing capabilities (status: complete where already shipped)
+D. Optional v0 baseline version for pre-Meridian state — no retroactive US with ✅
+E. Forward work only in v1+ via /create-us
 ```

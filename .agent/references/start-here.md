@@ -10,9 +10,9 @@ Without this, AI agents hallucinate scope, repeat decisions already made, and pr
 
 **New project:** run `/init-meridian`. The agent asks up to 5 questions about the product and creates the foundation documents from your answers.
 
-**Existing codebase:** run `/init-meridian` with your project open. The agent reads the code first — package files, folder structure, README, any existing docs. Then it asks only what it could not determine. It populates the phase documents from what it observed, marking every inference as an assumption for you to review and approve.
+**Existing codebase:** run `/init-meridian` with your project open. The agent reads the code first — package files, folder structure, README, any existing docs. Then it asks only what it could not determine. It creates **`docs/inventory/as-is.md`** (a transitional capability map) and populates the phase documents from what it observed, marking every inference as an assumption for you to review and approve. Legacy work is captured in inventory and phase docs — not as retroactive user stories with `✅`.
 
-Either way, the result is the same: a `docs/` folder with the structure below, ready to complete and approve.
+Either way, the result is the same: a `docs/` folder with the structure below, ready to complete and approve. Existing codebases also get `docs/inventory/` until you promote and archive the as-is map.
 
 ---
 
@@ -91,6 +91,7 @@ docs/
   sprints/vX-SY.md         Phase 3 — time-boxed delivery units
   us/US-XXXX.md            Phase 3+4 — executable tasks
   kanban/board.json        Generated — never edit by hand
+  inventory/as-is.md       Mode B only — transitional; archive after promotion
 ```
 
 ---
@@ -267,3 +268,5 @@ Each entry: `date`, `title`, `context` (why the decision was needed), `decision`
 For commands and step-by-step instructions, open **[usage-guide.md](./usage-guide.md)**.
 
 For **agents, slash command groups, and numbered steps**, open **[agents-help.md](./agents-help.md)**.
+
+**Kit maintainers:** when the protocol changes, open **[instruction-surfaces.md](./instruction-surfaces.md)** — map of every place that carries instructions (kit, app-desktop UI, extension, mirrors).

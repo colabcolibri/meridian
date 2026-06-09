@@ -75,7 +75,9 @@ chmod +x .agent/scripts/sync_cursor_kit.sh
 3. Optional: [browser demo](https://colabcolibri.github.io/meridian/) or `cd app-desktop && pnpm install && pnpm dev`.
 4. Anytime: `/status` — blockers, current state, suggested next step.
 
-**Use in another repo:** copy `.agent/` only, run `/init-meridian`, sync the kit if you use Cursor/Claude.
+**Use in another repo:** copy `.agent/` only, run `/init-meridian`, sync the kit if you use Cursor/Claude. Existing codebase → also `docs/inventory/as-is.md` (see [usage guide](.agent/references/usage-guide.md#migrate-an-existing-project)).
+
+**Maintainers:** [instruction surfaces](.agent/references/instruction-surfaces.md) — where to edit when the protocol changes (kit, app-desktop UI, extension).
 
 Or download a **kit release** (`.agent` only, no app-desktop):
 

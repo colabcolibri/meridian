@@ -27,6 +27,7 @@ Registry: `.agent/references/templates/INDEX.md`
 | Task | Read full template before Write |
 | ---- | ------------------------------ |
 | Phase docs `00`–`11` | `doc-templates.md` + skill `init-project` |
+| As-is inventory (Mode B) | `as-is-inventory-template.md` + skill `init-project` |
 | Epic | `epic-template.md` + skill `create-epic` |
 | User story | `us-template.md` + skill `create-user-story` (defer file ops to `board-keeper`) |
 

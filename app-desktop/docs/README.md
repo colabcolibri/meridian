@@ -4,12 +4,13 @@ This folder is the **source of truth** for Meridian Desktop development. In dogf
 
 ## Repository (Meridian kit)
 
-| File                                                               | Role                                 |
-| ------------------------------------------------------------------ | ------------------------------------ |
-| [`../../README.md`](../../README.md)                               | Repository onboarding (Git/GitHub)   |
-| [`../../.agent/MERIDIAN.md`](../../.agent/MERIDIAN.md)             | Master protocol for agents           |
-| [`../../.agent/rules/MERIDIAN.md`](../../.agent/rules/MERIDIAN.md) | Global rules (`trigger: always_on`)  |
-| [`../../.agent/ARCHITECTURE.md`](../../.agent/ARCHITECTURE.md)     | Map of agents, skills, and workflows |
+| File                                                                                                 | Role                                                      |
+| ---------------------------------------------------------------------------------------------------- | --------------------------------------------------------- |
+| [`../../README.md`](../../README.md)                                                                 | Repository onboarding (Git/GitHub)                        |
+| [`../../.agent/MERIDIAN.md`](../../.agent/MERIDIAN.md)                                               | Master protocol for agents                                |
+| [`../../.agent/rules/MERIDIAN.md`](../../.agent/rules/MERIDIAN.md)                                   | Global rules (`trigger: always_on`)                       |
+| [`../../.agent/ARCHITECTURE.md`](../../.agent/ARCHITECTURE.md)                                       | Map of agents, skills, and workflows                      |
+| [`../../.agent/references/instruction-surfaces.md`](../../.agent/references/instruction-surfaces.md) | **Where to edit** when protocol or UI instructions change |
 
 ## Phase documents (system axis)
 
@@ -86,7 +87,9 @@ Validate: `python3 ../../.agent/scripts/validate_meridian.py app-desktop` (`--js
 
 ## How agents should work
 
-See also: [Start here](../../.agent/references/start-here.md) · [Usage guide](../../.agent/references/usage-guide.md) · [Scrum ↔ Meridian map](../../.agent/references/scrum-meridian-map.md) · [Scrum guide (human, optional)](../../.agent/references/scrum-guide-complete.md) · `/daily-with-ai` in Cursor.
+See also: [Start here](../../.agent/references/start-here.md) · [Usage guide](../../.agent/references/usage-guide.md) · [Instruction surfaces](../../.agent/references/instruction-surfaces.md) · [Scrum ↔ Meridian map](../../.agent/references/scrum-meridian-map.md) · [Scrum guide (human, optional)](../../.agent/references/scrum-guide-complete.md) · `/daily-with-ai` in Cursor.
+
+**Updating Learn/Commands in the app:** UI copy is duplicated in `src/features/monitor/content/meridian-concepts.ts` — not synced from markdown. See [instruction-surfaces.md](../../.agent/references/instruction-surfaces.md).
 
 ### Daily loop (manager + AI)
 
