@@ -4,6 +4,14 @@ All notable changes to the **Meridian** VS Code extension (`meridian-vscode`).
 
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.1.7] - 2026-06-09
+
+### Changed
+
+- Bundled kit: **as-is inventory** (`docs/inventory/as-is.md`) for Mode B migration of existing codebases
+- Bundled kit: **instruction-surfaces** maintainer map — where to edit when the protocol changes
+- README: maintainers section (kit refs vs `command-catalog.ts`)
+
 ## [1.1.6] - 2026-06-10
 
 ### Changed
