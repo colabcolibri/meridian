@@ -14,7 +14,7 @@
 | Always-on rules | `.agent/rules/meridian.mdc` + `.agent/rules/MERIDIAN.md` | Agents |
 | Master protocol | `.agent/MERIDIAN.md` | Full governance |
 | Operations | `.agent/agents`, `skills`, `workflows` | Personas and procedures |
-| Human references | `.agent/references/` | `start-here`, `usage-guide`, `scrum-meridian-map`, optional `scrum-guide-complete` |
+| Human references | `.agent/references/` | `start-here`, `usage-guide`, `agents-help`, `scrum-meridian-map`, optional `scrum-guide-complete` |
 
 The desktop app (`app-desktop/`) monitors Meridian folders; it is not the source of truth.
 

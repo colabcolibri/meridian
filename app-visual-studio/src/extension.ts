@@ -7,6 +7,7 @@ import {
   VersionsEditorPanel,
 } from "./planning-panels.js"
 import { HelpEditorPanel } from "./help-editor-panel.js"
+import { AgentsHelpEditorPanel } from "./agents-help-editor-panel.js"
 import { MeridianCommandsProvider } from "./commands-sidebar.js"
 import { formatStatusTooltip, type MeridianWorkspaceInfo } from "./meridian-workspace.js"
 import { MeridianContext } from "./meridian-context.js"
@@ -19,6 +20,7 @@ let versionsEditor: VersionsEditorPanel | undefined
 let sprintsEditor: SprintsEditorPanel | undefined
 let epicsEditor: EpicsEditorPanel | undefined
 let helpEditor: HelpEditorPanel | undefined
+let agentsHelpEditor: AgentsHelpEditorPanel | undefined
 let commandsProvider: MeridianCommandsProvider | undefined
 let outputGeneral: vscode.OutputChannel | undefined
 let outputValidate: vscode.OutputChannel | undefined
@@ -42,6 +44,11 @@ function openEpicsTab(): void {
 
 function openHelpTab(): void {
   helpEditor?.show(vscode.ViewColumn.One)
+}
+
+async function openAgentsHelpTab(): Promise<void> {
+  await meridianContext?.refresh()
+  agentsHelpEditor?.show(vscode.ViewColumn.One)
 }
 
 function refreshAllPanels(): void {
@@ -129,6 +136,12 @@ async function newUserStory(): Promise<void> {
 }
 
 export function activate(context: vscode.ExtensionContext): void {
+  commandsProvider = new MeridianCommandsProvider()
+  context.subscriptions.push(
+    vscode.window.registerTreeDataProvider(MeridianCommandsProvider.viewId, commandsProvider),
+    vscode.commands.registerCommand("meridian.refreshCommands", () => commandsProvider?.refresh()),
+  )
+
   outputGeneral = vscode.window.createOutputChannel("Meridian")
   outputValidate = vscode.window.createOutputChannel("Meridian Validate")
   outputTools = vscode.window.createOutputChannel("Meridian Tools")
@@ -141,12 +154,7 @@ export function activate(context: vscode.ExtensionContext): void {
   sprintsEditor = new SprintsEditorPanel(context.extensionUri, getWorkspace)
   epicsEditor = new EpicsEditorPanel(context.extensionUri, getWorkspace)
   helpEditor = new HelpEditorPanel(context.extensionUri)
-
-  commandsProvider = new MeridianCommandsProvider()
-  context.subscriptions.push(
-    vscode.window.registerTreeDataProvider(MeridianCommandsProvider.viewId, commandsProvider),
-    vscode.commands.registerCommand("meridian.refreshCommands", () => commandsProvider?.refresh()),
-  )
+  agentsHelpEditor = new AgentsHelpEditorPanel(context.extensionUri, getWorkspace)
 
   meridianContext = new MeridianContext(context, outputGeneral, refreshAllPanels)
   meridianContext.registerListeners()
@@ -159,6 +167,7 @@ export function activate(context: vscode.ExtensionContext): void {
     vscode.commands.registerCommand("meridian.openSprints", openSprintsTab),
     vscode.commands.registerCommand("meridian.openEpics", openEpicsTab),
     vscode.commands.registerCommand("meridian.openHelp", openHelpTab),
+    vscode.commands.registerCommand("meridian.openAgentsHelp", openAgentsHelpTab),
     vscode.commands.registerCommand("meridian.validateProject", validateProject),
     vscode.commands.registerCommand("meridian.showStatus", showStatus),
     vscode.commands.registerCommand("meridian.syncBoard", syncBoard),
@@ -174,5 +183,6 @@ export function deactivate(): void {
   sprintsEditor = undefined
   epicsEditor = undefined
   helpEditor = undefined
+  agentsHelpEditor = undefined
   commandsProvider = undefined
 }

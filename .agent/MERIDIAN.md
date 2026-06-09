@@ -259,6 +259,7 @@ Both modes:
 
 Human guide: `.agent/references/start-here.md`  
 Operational guide: `.agent/references/usage-guide.md`  
+Agents & commands (groups, steps): `.agent/references/agents-help.md`  
 Scrum ↔ Meridian (agents + managers): `.agent/references/scrum-meridian-map.md`  
 Scrum textbook (human only, optional): `.agent/references/scrum-guide-complete.md`
 

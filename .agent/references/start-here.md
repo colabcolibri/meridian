@@ -265,3 +265,5 @@ Each entry: `date`, `title`, `context` (why the decision was needed), `decision`
 ---
 
 For commands and step-by-step instructions, open **[usage-guide.md](./usage-guide.md)**.
+
+For **agents, slash command groups, and numbered steps**, open **[agents-help.md](./agents-help.md)**.

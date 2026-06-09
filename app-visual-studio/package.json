@@ -2,7 +2,7 @@
   "name": "meridian-vscode",
   "displayName": "Meridian",
   "description": "Kanban board and deliverables for Meridian projects (docs/us, epics, versions) — installable sidebar for VS Code and Cursor.",
-  "version": "0.3.0",
+  "version": "0.3.5",
   "publisher": "meridian-placeholder",
   "license": "PolyForm-Noncommercial-1.0.0",
   "private": true,
@@ -13,6 +13,17 @@
     "Other"
   ],
   "activationEvents": [
+    "onView:meridian.commands",
+    "onCommand:meridian.openBoard",
+    "onCommand:meridian.openVersions",
+    "onCommand:meridian.openSprints",
+    "onCommand:meridian.openEpics",
+    "onCommand:meridian.openDeliverables",
+    "onCommand:meridian.openHelp",
+    "onCommand:meridian.openAgentsHelp",
+    "onCommand:meridian.validateProject",
+    "onCommand:meridian.showStatus",
+    "onCommand:meridian.syncBoard",
     "workspaceContains:.agent/MERIDIAN.md"
   ],
   "main": "./dist/extension.js",
@@ -54,6 +65,7 @@
         { "command": "meridian.openSprints", "group": "1@3" },
         { "command": "meridian.openEpics", "group": "1@4" },
         { "command": "meridian.openHelp", "group": "2@3" },
+        { "command": "meridian.openAgentsHelp", "group": "2@4" },
         { "command": "meridian.validateProject", "group": "3@1" },
         { "command": "meridian.showStatus", "group": "3@2" },
         { "command": "meridian.syncBoard", "group": "4@1" },
@@ -70,7 +82,7 @@
       {
         "command": "meridian.openBoard",
         "title": "Meridian: Open Board",
-        "icon": "$(kanban)"
+        "icon": "$(layout)"
       },
       {
         "command": "meridian.openVersions",
@@ -103,6 +115,11 @@
         "icon": "$(question)"
       },
       {
+        "command": "meridian.openAgentsHelp",
+        "title": "Meridian: Open Agents Help",
+        "icon": "$(book)"
+      },
+      {
         "command": "meridian.validateProject",
         "title": "Meridian: Validate Project",
         "icon": "$(checklist)"
@@ -130,10 +147,10 @@
     "dev": "pnpm watch",
     "build": "pnpm compile",
     "test": "pnpm compile && node --import tsx --test test/**/*.test.ts",
-    "package:vsix": "pnpm compile && vsce package --no-dependencies --allow-missing-repository",
+    "package:vsix": "node esbuild.mjs && vsce package --no-dependencies --allow-missing-repository",
     "install:cursor": "pnpm package:vsix && node scripts/install-vsix.mjs cursor",
     "install:code": "pnpm package:vsix && node scripts/install-vsix.mjs code",
-    "vscode:prepublish": "pnpm compile"
+    "vscode:prepublish": "node esbuild.mjs"
   },
   "devDependencies": {
     "@types/node": "^22.10.0",

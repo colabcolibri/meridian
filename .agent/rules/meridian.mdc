@@ -47,6 +47,9 @@ Priority: **P0 rules > P1 agent + MERIDIAN.md > P2 skills**.
 | `/security-pass` | `.cursor/commands/security-pass.md` |
 | `/sync-board` | `.cursor/commands/sync-board.md` |
 | `/daily-with-ai` | `.cursor/commands/daily-with-ai.md` |
+| `/agents-help` | `.cursor/commands/agents-help.md` |
+
+Human reference (groups + numbered steps): `.agent/references/agents-help.md`
 
 ## Validate project
 

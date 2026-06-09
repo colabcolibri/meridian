@@ -71,8 +71,9 @@ chmod +x .agent/scripts/sync_cursor_kit.sh
 ```
 
 1. In your IDE: `/init-meridian` — creates `docs/` for your project (greenfield or existing codebase).
-2. Optional: [browser demo](https://colabcolibri.github.io/meridian/) or `cd app-desktop && pnpm install && pnpm dev`.
-3. Anytime: `/status` — blockers, current state, suggested next step.
+2. **`/agents-help`** — agent groups, slash command groups, numbered steps (`.agent/references/agents-help.md`).
+3. Optional: [browser demo](https://colabcolibri.github.io/meridian/) or `cd app-desktop && pnpm install && pnpm dev`.
+4. Anytime: `/status` — blockers, current state, suggested next step.
 
 **Use in another repo:** copy `.agent/` only, run `/init-meridian`, sync the kit if you use Cursor/Claude.
 
@@ -99,6 +100,7 @@ Details in [`app-desktop/docs/versions/`](app-desktop/docs/versions/).
 
 - [Protocol for agents](.agent/MERIDIAN.md)
 - [Usage guide and commands](.agent/references/usage-guide.md)
+- [Agents & commands help — groups and steps](.agent/references/agents-help.md)
 - [Scrum ↔ Meridian map](.agent/references/scrum-meridian-map.md)
 - [Validate a project](.agent/scripts/validate_meridian.py): `python3 .agent/scripts/validate_meridian.py <project-folder>`
 - [IDE adapters](.agent/IDE_ADAPTERS.md) — Antigravity native; Cursor/Claude via sync script

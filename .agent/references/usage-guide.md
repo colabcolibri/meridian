@@ -4,6 +4,8 @@ How to work with Meridian day-to-day. This file covers commands, checks, and the
 
 For concepts (what is an epic, how phases work, what `ready` means), read **[start-here.md](./start-here.md)** first.
 
+For **agent groups, who serves what, and the numbered step sequence**, read **[agents-help.md](./agents-help.md)**.
+
 **Scrum ↔ Meridian:** [scrum-meridian-map.md](./scrum-meridian-map.md) (operational). Optional deep dive: [scrum-guide-complete.md](./scrum-guide-complete.md).
 
 ---
@@ -240,6 +242,7 @@ Run at the project root. Fix errors before creating US or marking docs `approved
 | `/complete-us US-XXXX` | Close story — fills Record, marks `✅`, syncs board |
 | `/sync-board` | Regenerate `docs/kanban/board.json` from US files |
 | `/daily-with-ai` | Full guided session loop |
+| `/agents-help` | Agent groups, slash command groups, numbered steps — open `.agent/references/agents-help.md` |
 | `/update-decisions-log` | Prepend a decision entry to `docs/decisions/YYYY-MM-DD.json` |
 
 ---

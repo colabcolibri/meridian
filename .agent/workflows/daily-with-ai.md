@@ -152,5 +152,5 @@ Suggested next US:
 | Master protocol | `.agent/MERIDIAN.md` |
 | Close US | `.agent/workflows/complete-us.md` |
 | App — guides | **Start here** and **Usage guide** tabs / `meridian-concepts.ts` |
-| Human guides | `.agent/references/start-here.md` · `.agent/references/usage-guide.md` (cheat sheet: Daily loop section) |
+| Human guides | `.agent/references/start-here.md` · `.agent/references/usage-guide.md` · `.agent/references/agents-help.md` (cheat sheet: Daily loop section) |
 | Scrum map | `.agent/references/scrum-meridian-map.md` (agents; not scrum-guide-complete unless manager asks) |

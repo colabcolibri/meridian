@@ -54,8 +54,8 @@ export function helpWebviewHtml(): string {
     body {
       margin: 0;
       font-family: var(--vscode-font-family);
-      font-size: var(--vscode-font-size);
-      line-height: 1.5;
+      font-size: calc(var(--vscode-font-size) * 1.08);
+      line-height: 1.55;
       color: var(--vscode-foreground);
       background: var(--vscode-editor-background);
       padding: 20px 24px 32px;
@@ -72,10 +72,10 @@ export function helpWebviewHtml(): string {
       font-weight: 600;
     }
     .intro p { margin: 0 0 8px; color: var(--vscode-descriptionForeground); }
-    .intro ul { margin: 8px 0 0; padding-left: 1.2em; color: var(--vscode-descriptionForeground); font-size: 0.95em; }
+    .intro ul { margin: 8px 0 0; padding-left: 1.2em; color: var(--vscode-descriptionForeground); font-size: 1em; }
     .group { margin-bottom: 28px; }
     .group > h1 {
-      font-size: 0.75em;
+      font-size: 0.82em;
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.06em;
@@ -101,7 +101,7 @@ export function helpWebviewHtml(): string {
       font-size: 1.05em;
       font-weight: 600;
     }
-    .palette { margin: 0 0 8px; font-size: 0.9em; }
+    .palette { margin: 0 0 8px; font-size: 0.96em; }
     .palette code {
       font-family: var(--vscode-editor-font-family, monospace);
       font-size: 0.88em;
@@ -111,11 +111,11 @@ export function helpWebviewHtml(): string {
     .details {
       margin: 0 0 10px;
       padding-left: 1.25em;
-      font-size: 0.92em;
+      font-size: 0.98em;
       color: var(--vscode-foreground);
     }
     .details li { margin-bottom: 4px; }
-    .meta { margin: 0; font-size: 0.85em; color: var(--vscode-descriptionForeground); }
+    .meta { margin: 0; font-size: 0.92em; color: var(--vscode-descriptionForeground); }
     .badge {
       font-size: 0.7em;
       font-weight: 600;
@@ -138,6 +138,7 @@ export function helpWebviewHtml(): string {
       <li><strong>Sidebar</strong> → ícone Meridian → Commands (clique na linha)</li>
       <li><strong>Menu</strong> → View → Meridian</li>
       <li><strong>Palette</strong> → ⇧⌘P → digite <code>Meridian:</code></li>
+      <li><strong>Kit</strong> → <code>Meridian: Open Agents Help</code> — mesma UX desta aba (agentes e slash commands)</li>
     </ul>
   </div>
   ${sections}

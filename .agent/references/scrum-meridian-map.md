@@ -196,6 +196,6 @@ Per-story criteria stay in **Intent / Acceptance** — not duplicated as global 
 
 Full Scrum guide (onboarding): **[scrum-guide-complete.md](./scrum-guide-complete.md)** — read when learning Scrum; not loaded by default in agent sessions.
 
-Kit entry points: [start-here.md](./start-here.md) · [usage-guide.md](./usage-guide.md) · [MERIDIAN.md](../MERIDIAN.md)
+Kit entry points: [start-here.md](./start-here.md) · [usage-guide.md](./usage-guide.md) · [agents-help.md](./agents-help.md) · [MERIDIAN.md](../MERIDIAN.md)
 
 App (monitor): **How it works** tab → section “Scrum and Meridian”.

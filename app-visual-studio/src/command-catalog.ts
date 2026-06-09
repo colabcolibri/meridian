@@ -3,7 +3,7 @@ export type CommandHelpEntry = {
   title: string
   commandId: string
   paletteTitle: string
-  group: "views" | "governance" | "planned"
+  group: "views" | "governance" | "kit" | "planned"
   summary: string
   details: string[]
   outputChannel?: string
@@ -14,6 +14,7 @@ export type CommandHelpEntry = {
 export const COMMAND_HELP_GROUPS: { id: CommandHelpEntry["group"]; label: string }[] = [
   { id: "views", label: "Views (editor tabs)" },
   { id: "governance", label: "Governance & diagnostics" },
+  { id: "kit", label: "Kit (agents & slash commands)" },
   { id: "planned", label: "Planned (v5)" },
 ]
 
@@ -31,7 +32,7 @@ export const MERIDIAN_COMMAND_CATALOG: CommandHelpEntry[] = [
       "Paginação independente por coluna (Show 25/50/100 no toolbar).",
       "Clique no card abre docs/us/US-XXXX.md ao lado.",
     ],
-    icon: "$(kanban)",
+    icon: "$(layout)",
     status: "shipped",
   },
   {
@@ -137,6 +138,21 @@ export const MERIDIAN_COMMAND_CATALOG: CommandHelpEntry[] = [
     ],
     outputChannel: "Meridian Tools",
     icon: "$(info)",
+    status: "shipped",
+  },
+  {
+    id: "agents-help",
+    title: "Open Agents Help",
+    commandId: "meridian.openAgentsHelp",
+    paletteTitle: "Meridian: Open Agents Help",
+    group: "kit",
+    summary: "Aba de referência — grupos de agentes, slash commands e passos 1–17",
+    details: [
+      "Mesmo padrão do Command Help: aba webview read-only no editor.",
+      "Lê .agent/references/agents-help.md do project root em tempo real.",
+      "Complementa Command Help (comandos da extensão) e o slash /agents-help no Cursor.",
+    ],
+    icon: "$(book)",
     status: "shipped",
   },
   {
