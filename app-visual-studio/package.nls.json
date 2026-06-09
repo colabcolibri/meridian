@@ -1,6 +1,6 @@
 {
   "extension.displayName": "Meridian Harness",
-  "extension.description": "Meridian AI agent harness for VS Code and Cursor — installs agents, skills, slash commands, and workflows (.agent/) into your workspace, plus kanban board, versions, sprints, and epics from docs/. One extension; kit bundled inside.",
+  "extension.description": "Meridian AI agent harness — bundled kit (.agent/) installed on demand via Install Harness (manual). Board, versions, sprints, epics from docs/. Agents, skills, slash commands for Cursor.",
   "meridian.activitybar.title": "Meridian",
   "meridian.view.commands.name": "Commands",
   "meridian.submenu.label": "Meridian",

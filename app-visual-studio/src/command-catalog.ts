@@ -27,7 +27,7 @@ export const MERIDIAN_COMMAND_CATALOG: CommandHelpEntry[] = [
     group: "kit",
     summary: "Copy bundled Meridian kit (.agent/) into the workspace",
     details: [
-      "Runs on first open or from the status bar / Command Palette.",
+      "Manual only — run from status bar, Command Palette, or Meridian → Commands.",
       "Copies agents, skills, workflows, and scripts from the VSIX bundle.",
       "Syncs .cursor/ and .claude/ IDE adapters via sync_cursor_kit.sh.",
     ],

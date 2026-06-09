@@ -1,225 +1,129 @@
-# Meridian Harness — VS Code / Cursor extension
+# Meridian Harness
 
-**Install from Extensions:** search **Meridian Harness** (publisher **colabcolibri**) after [Marketplace publish](./MARKETPLACE.md).
+**Repo-native harness for AI coding agents** — in VS Code and Cursor.
 
-**One product:** this extension **bundles and installs** the Meridian kit (`.agent/` — agents, skills, workflows, slash commands) into your workspace, plus kanban board, versions, sprints, and epics from `docs/`.
+Meridian keeps specs, decisions, and task status in **files** (`docs/`), not in chat. Agents follow guides, skills, and slash commands (`.agent/`). This extension **bundles that kit** and gives you a **kanban board** and planning views inside the editor.
 
-## Quick start
-
-1. Install **Meridian Harness** from the Marketplace (or a `.vsix` from [GitHub Releases](https://github.com/colabcolibri/meridian/releases)).
-2. Open your project folder in VS Code or Cursor.
-3. Accept **Install harness** when prompted, or click **Meridian: install harness** in the status bar / Command Palette.
-4. Run `/init-meridian` in Cursor if `docs/` is missing.
-5. **Meridian: Open Board** — kanban from `docs/us/`.
-
-No separate tarball step. The kit ships inside the VSIX.
+**Install:** [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=colabcolibri.meridian-vscode) — search **Meridian Harness**, publisher **colabcolibri**  
+**GitHub:** https://github.com/colabcolibri/meridian
 
 ---
 
-## Product details
+## What is this?
 
-**Publisher:** `colabcolibri` · **Author:** [Sergio Luciano Jr](https://github.com/colabcolibri) · **Repository:** [colabcolibri/meridian](https://github.com/colabcolibri/meridian)
+AI agents ship code fast, but without a written spec scope drifts, decisions get lost, and “done” is whatever the model said last.
 
-**What installs where:**
+Meridian is a **thin harness** on top of Cursor or Claude Code:
 
-| Component | Location | When |
-| --------- | -------- | ---- |
-| Extension UI | Editor (activity bar, tabs) | Marketplace / VSIX |
-| Meridian kit | `{workspace}/.agent/` | **Install harness** command |
-| IDE adapters | `.cursor/`, `.claude/` (synced) | After kit install |
+- **`docs/`** — versions, sprints, user stories, architecture (what to build and what counts as done)
+- **`.agent/`** — agents, skills, workflows, validators (how the agent should work)
+- **This extension** — installs the kit into your project and shows board / versions / sprints / epics from `docs/`
 
-**Upgrade:** after updating the extension, run **Meridian: Upgrade Harness** to replace `.agent/` with the bundled version.
+Chat does not persist. **Files do.**
 
-**Dev:** this folder is source; end users install the packaged extension. **Ship:** `pnpm package:vsix` bundles `.agent/` then packages the VSIX.
+---
 
-The browser monitor in `app-desktop/` remains optional/demo.
+## What you get
 
-## Prerequisites
+| Piece | Where | Role |
+| ----- | ----- | ---- |
+| **Extension** | Installed in the editor (Marketplace) | UI + bundled kit source |
+| **Kit** | `{project}/.agent/` after **Install Harness** | Slash commands (`/init-meridian`, `/create-us`, …), agents, skills |
+| **Cursor adapters** | `{project}/.cursor/` after **Install Harness** | Cursor reads rules, skills, commands from here |
+| **Docs** | `{project}/docs/` after `/init-meridian` | Living spec — board, US, versions |
 
-- Node.js 18+
-- [pnpm](https://pnpm.io/)
+The extension is **global** (one install per machine). The kit is **per project** — you run **Install Harness** in each folder.
+
+---
+
+## The loop
+
+```txt
+document → plan → refine → implement → close
+```
+
+1. **Document** — scope, stack, security, architecture in `docs/`
+2. **Plan** — epics, versions, sprints, user stories
+3. **Refine** — story gets a concrete approach before code
+4. **Implement** — agent codes against acceptance criteria
+5. **Close** — evidence in the story record; you approve
+
+Use slash commands in Cursor for most steps. Use **Meridian: Open Board** to see kanban from `docs/us/`.
+
+---
+
+## How to install
+
+### 1. Install the extension
+
+1. **Extensions** (⇧⌘X / Ctrl+Shift+X)
+2. Search **Meridian Harness** (publisher **colabcolibri**)
+3. **Install** → **Developer: Reload Window**
+
+### 2. Open your project
+
+**File → Open Folder…**
+
+### 3. Install the harness in the project
+
+The extension **never** installs the kit automatically. You run **Install Harness** once per project:
+
+| Where | Command |
+| ----- | ------- |
+| Status bar | **Meridian: install harness** |
+| Command Palette (⇧⌘P / Ctrl+Shift+P) | **Meridian: Install Harness** |
+| **Meridian → Commands** | **Install harness** |
+| **View → Meridian** | **Meridian: Install Harness** |
+
+Copies `.agent/` into the project and syncs `.cursor/`. Log: **Output → Meridian Tools**.
+
+### 4. Create docs (new projects only)
+
+After step 3, in **Cursor chat**:
+
+```txt
+/init-meridian
+```
+
+---
+
+## How to use
+
+| Goal | Command |
+| ---- | ------- |
+| Kanban board | **Meridian: Open Board** |
+| Versions / sprints / epics | **Meridian: Open Versions**, **Open Sprints**, **Open Epics** |
+| Regenerate board.json | **Meridian: Sync Board** |
+| Validate project | **Meridian: Validate Project** (needs `python3`) |
+| Agents & slash commands | **Meridian: Open Agents Help** |
+
+Slash commands (after Install Harness): `/init-meridian`, `/create-us`, `/architecture`, `/complete-us`, …
+
+**Status bar:** **install harness** when kit is missing · US count when `docs/` is ready.
+
+---
+
+## Update the kit
+
+1. Update **Meridian Harness** in Extensions
+2. Reload window
+3. **Meridian: Upgrade Harness** in each project
+
+---
+
+## Requirements
+
 - VS Code or Cursor
+- `python3` only for **Validate Project**
 
-## Setup (contributors)
+---
 
-```bash
-cd app-visual-studio
-pnpm install
-pnpm compile
+## Quick flow
+
+```txt
+Marketplace → Install Meridian Harness → Reload
+Open project folder
+Meridian: Install Harness          ← you run this (not automatic)
+/init-meridian                     ← only if no docs/
+Meridian: Open Board · slash commands
 ```
-
-## Use in your current window (recommended)
-
-**F5 always opens a second window** — that flow is for *developing* the extension, not daily use.
-
-To use Meridian **in the same Cursor/VS Code window** where you already opened the `meridian/` repo:
-
-```bash
-cd app-visual-studio
-pnpm install:cursor
-```
-
-The script finds the Cursor CLI on `PATH`, or falls back to default app paths (e.g. `/Applications/Cursor.app/...` on macOS). You do not need *Shell Command: Install 'cursor' command in PATH* first, but it helps on non-standard setups.
-
-Then in Cursor: **Cmd+Shift+P** (Mac) or **Ctrl+Shift+P** (Windows/Linux) → **Developer: Reload Window**.
-
-After reload:
-
-1. Stay in the **same window** with the monorepo (`meridian/` or `app-desktop/`).
-2. **Cmd+Shift+P** → **Meridian: Open Board** or **Meridian: Open Deliverables** — editor tabs.
-   - **Board:** version and epic filters with **All / None** + multi-select chips; frozen toggle.
-   - **Deliverables (Versions):** version filter with **All / None** + chips; accordion per release (▶/▼); click an id to open the `.md` file.
-3. Activity bar **Meridian → Commands** — install harness, board, validate, etc.
-
-**Alternative (UI):** Extensions → `⋯` → **Install from VSIX…** → pick `meridian-vscode-*.vsix`.
-
-Download the VSIX from [GitHub Releases](https://github.com/colabcolibri/meridian/releases) if you do not clone this repo. Build locally: `pnpm package:vsix`.
-
-To reinstall after code changes: run `pnpm install:cursor` again and reload the window.
-
-## Develop the extension (F5 — extra window, maintainers only)
-
-### Option A — monorepo root (recommended if you use Cursor on `meridian/`)
-
-1. Open **`meridian.code-workspace`** (double-click in Finder) or **File → Open Workspace from File…**.
-2. In the Run and Debug sidebar, choose **Run Meridian extension** (not a generic Node config).
-3. Press **F5**. A second window opens (`[Extension Development Host]`) with **`app-desktop/`** already open (configured in `launch.json`).
-4. Status bar shows **Meridian: install harness** or US count when kit + docs exist.
-
-If the host window is empty, use **File → Open Folder…** → `app-desktop/` (fixes Cursor `NoWorkspaceUriError` in the log).
-
-During F5 dev, **Install harness** copies from `../.agent/` when `bundled/` is not built yet.
-
-### Option B — extension folder only
-
-1. **File → Open Folder…** → `app-visual-studio/` (not the whole repo).
-2. Run and Debug → **Run Extension** → **F5**.
-3. In the new window, open `app-desktop/` (or your project with `.agent/` + `docs/`).
-
-### NPM task detection: failed to parse `package.json`
-
-The extension `package.json` is a **VS Code manifest** (fields like `contributes`, `activationEvents`), not a plain Node app. Cursor/VS Code npm auto-detect fails on it — harmless. This repo sets `"npm.autoDetect": "off"` in `.vscode/settings.json`. Use **`pnpm compile`** or the **compile** shell task for F5.
-
-### F5 “does nothing” or fails
-
-| Cause | Fix |
-| ----- | --- |
-| Repo root open, no debug config | Use **`meridian.code-workspace`** or root `.vscode/launch.json` → **Run Meridian extension** |
-| Wrong debug target selected | Sidebar **Run and Debug** → dropdown must be extension config, not “Node” |
-| `preLaunchTask` failed | Terminal: `cd app-visual-studio && pnpm install && pnpm compile` |
-| No second window | Check **View → Output** → **Log (Extension Host)** for errors |
-| Cursor | Same steps; Extension Development Host is available (Cursor builds on VS Code) |
-
-Manual compile before F5:
-
-```bash
-cd app-visual-studio && pnpm compile
-```
-
-## Scripts
-
-| Script | Purpose |
-| ------ | ------- |
-| `pnpm compile` | Bundle `src/extension.ts` → `dist/extension.js` |
-| `pnpm watch` / `pnpm dev` | Rebuild on file changes |
-| `pnpm build` | Same as `compile` |
-| `pnpm test` | Unit tests + compile smoke |
-| `pnpm package:vsix` | Bundle `.agent/` + build installable `.vsix` |
-| `pnpm install:cursor` | Install/reinstall `.vsix` into local Cursor |
-| `pnpm install:vscode` | Install/reinstall `.vsix` into local VS Code |
-
-## Where to run commands
-
-| Place | What |
-| ----- | ---- |
-| **Status bar** | **Meridian: install harness** when kit missing |
-| **Commands → Install harness** | Copy bundled kit into workspace |
-| **Commands → Command help** or **View → Meridian → Open Command Help** | Reference tab for every extension command |
-| **Commands → Agents & commands** or **Meridian: Open Agents Help** | Webview tab — kit manual (agents, slash commands, steps) |
-| **Activity bar → Meridian → Commands** | List of actions (click = run + **Output**) |
-| **Menu View → Meridian** | Same commands |
-| **Command Palette** | `Meridian: …` (⇧⌘P / Ctrl+Shift+P) |
-
-### Output channels
-
-| Command | Output channel |
-| ------- | -------------- |
-| Validate project | **Meridian Validate** (full `validate_meridian.py` log) |
-| Install / upgrade harness / Workspace status / Sync board / New US | **Meridian Tools** |
-
-### Board (kanban)
-
-- **Commands → Open Board** or **View → Meridian → Open Board**
-- Opens an **editor tab** `Meridian Board` (not inside the Commands tree)
-- Click a card → US file opens beside the board
-
-## Activation
-
-The extension activates on **startup** (`onStartupFinished`) so it can prompt to install the harness, and when `.agent/MERIDIAN.md` is present, or when you open the Meridian view or run a Meridian command.
-
-## Workspace detection (US-0042)
-
-On activate, the extension resolves the Meridian project:
-
-| Layout | `projectRoot` | `docs/` |
-| ------ | ------------- | ------- |
-| Client repo | workspace root | `{root}/docs/` |
-| Nested app (e.g. `app-desktop/`) | parent with `.agent/` | `{workspace}/docs/` |
-
-Rules match `validate_meridian.py` (`.agent/MERIDIAN.md`). Status bar shows **Meridian: install harness** without kit; US count when `docs/` exists.
-
-## Commands (v4 — shipped)
-
-| Command ID | Title | Status |
-| ---------- | ----- | ------ |
-| `meridian.installKit` | Meridian: Install Harness | ✅ Bundled `.agent/` → workspace |
-| `meridian.upgradeKit` | Meridian: Upgrade Harness | ✅ Replace `.agent/` + sync adapters |
-| `meridian.openBoard` | Meridian: Open Board | ✅ Kanban + filters |
-| `meridian.openVersions` | Meridian: Open Versions | ✅ All releases |
-| `meridian.openSprints` | Meridian: Open Sprints | ✅ Filter by version |
-| `meridian.openEpics` | Meridian: Open Epics | ✅ Filter version + epic |
-| `meridian.openDeliverables` | Meridian: Open Deliverables | ✅ Alias → Versions |
-| `meridian.syncBoard` | Meridian: Sync Board | ✅ Writes `board.json` |
-| `meridian.openHelp` | Meridian: Open Command Help | ✅ Reference tab |
-| `meridian.openAgentsHelp` | Meridian: Open Agents Help | ✅ Agents help webview |
-| `meridian.validateProject` | Meridian: Validate Project | ✅ Runs `validate_meridian.py` |
-| `meridian.showStatus` | Meridian: Show Workspace Status | ✅ Output |
-| `meridian.newUserStory` | Meridian: New User Story | Stub — use `/create-us` (v5) |
-
-All user-facing extension UI strings and help content are **English**.
-
-### Display language (Cursor / VS Code)
-
-Meridian strings (command titles, sidebar, webviews, notifications) are **English** via `package.nls.json`.
-
-If the **Extensions** detail page shows section headers in Portuguese — e.g. **Comandos**, **Título**, **Atalhos de Teclado** — that is **editor chrome**, not the extension. Those labels follow your Cursor **display language** (`pt-BR`). The command titles in the table remain `Meridian: Open Board`, etc.
-
-To switch editor UI to English: Command Palette → **Configure Display Language** → `en` → restart.
-
-## Icons
-
-| File | Use |
-| ---- | --- |
-| `media/meridian.svg` | Activity bar (monochrome, theme-tinted) |
-| `media/meridian-mark.svg` | Editor tab icon (brand mark, matches monitor favicon) |
-| `media/icon.png` | Marketplace / VSIX listing (128x128) |
-
-Source: same meridian-line mark as `app-desktop/public/favicon.svg`.
-
-## Go-live smoke (v4)
-
-```bash
-cd app-visual-studio
-pnpm test
-pnpm package:vsix
-pnpm install:cursor   # or install VSIX manually
-```
-
-Reload Cursor → **Install harness** (if needed) → **Meridian → Open Board / Versions / Sprints / Epics** → **Sync Board** → **Validate Project**.
-
-## Related docs
-
-- `app-desktop/docs/versions/v4.md`
-- `app-desktop/docs/epics/EPIC-05.md`
-- `app-desktop/docs/us/US-0041.md`
-- `.agent/references/agents-help.md` — kit manual (also in **Meridian: Open Agents Help**)

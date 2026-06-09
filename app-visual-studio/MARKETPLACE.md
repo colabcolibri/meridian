@@ -16,7 +16,7 @@ This extension appears in **VS Code** and **Cursor** Extensions search after you
 2. Sign in with your **Microsoft** account (same you use for Azure DevOps if applicable)
 3. **Create publisher**
    - **ID:** `colabcolibri` (must match `package.json` → `"publisher"`)
-   - **Name:** `colabcolibri` or your display name (e.g. Sergio Luciano Jr)
+   - **Name:** display name on Marketplace (e.g. `colabcolibri`)
 4. Optional: add profile link to https://github.com/colabcolibri
 
 ### 2. Create a Personal Access Token (PAT)
@@ -88,26 +88,18 @@ pnpm publish:marketplace
 
 ### Categories (official VS Code enum)
 
-Microsoft allows only fixed categories. Meridian **does not** register LLM APIs, chat participants, or Copilot extensions — so **do not** use `AI` or `Chat` on the extension manifest (wrong expectations and possibly rejected on review).
+Microsoft allows only fixed categories. Meridian installs the **agent harness** (`.agent/` — agents, skills, slash commands) and provides board/planning UI.
 
 | Category | Use for Meridian? | Why |
 | -------- | ----------------- | --- |
-| **Visualization** | **Yes — primary** | Board kanban, Versions/Sprints/Epics tabs — read-only visual surfaces |
-| **Other** | Optional second | Catch-all; we omit it to stay precise (one category is enough) |
-| **AI** | **No** | Category is for extensions that *call* LLM APIs. This VSIX installs the kit and visualizes docs; agents run via Cursor/Copilot + kit |
-| **Chat** | **No** | Chat UI extensions |
-| **Testing** | **No** | Validate is ancillary; not a test runner |
-| **SCM Providers** | **No** | Does not replace Git integration |
-| **Programming Languages** | **No** | No syntax/LS |
-| **Machine Learning** / **Data Science** | **No** | Not ML tooling |
-| **Education** | **No** | Help tabs are reference, not a course |
-| **Formatters** / **Linters** | **No** | Validate delegates to kit script, not an linter extension category |
+| **AI** | **Yes** | Installs and upgrades the Meridian agent harness in the workspace |
+| **Visualization** | **Yes** | Board kanban, Versions/Sprints/Epics tabs |
+| **Chat** | **No** | No in-editor chat participant API — agents run via Cursor + kit |
+| **Other** | Optional | Omitted — AI + Visualization are enough |
 
-**Discovery for “harness / agents / IA”:** `displayName`, `keywords` (`harness`, `meridian harness`, `agent harness`), and description — not category `AI`.
+**Discovery:** `displayName`, `keywords` (`harness`, `meridian harness`, `agent harness`), and description.
 
-**Why only `Visualization`?** Marketplace categories describe what the **VSIX UI code does** in the editor (board, planning tabs). The kit is installed into the workspace on demand; category `AI` is for extensions that embed LLM/chat APIs in-process.
-
-Current manifest: `"categories": ["Visualization"]`, `displayName`: **Meridian Harness**.
+Current manifest: `"categories": ["AI", "Visualization"]`, `displayName`: **Meridian Harness**.
 
 ---
 
@@ -120,9 +112,7 @@ This extension is **PolyForm Noncommercial 1.0.0**. Marketplace allows noncommer
 ## Cursor vs VS Code
 
 - **VS Code:** installs from Visual Studio Marketplace by default.
-- **Cursor:** also indexes Marketplace extensions — users search **Meridian** in Extensions and click Install (same as any VS Code extension).
-
-For users without Marketplace access, keep attaching `.vsix` on [GitHub Releases](https://github.com/colabcolibri/meridian/releases).
+- **Cursor:** Extensions → **Meridian Harness** → Install (same Marketplace as VS Code).
 
 ---
 

@@ -1,125 +1,41 @@
 # Meridian distribution
 
-Two **separate** products. Most users need only the **kit**. The **extension** is optional observability in Cursor/VS Code.
+**Product:** [Meridian Harness](https://marketplace.visualstudio.com/items?itemName=colabcolibri.meridian-vscode) on the Visual Studio Marketplace.
 
-| Product | What it is | Who needs it |
-| ------- | ---------- | ------------ |
-| **meridian-kit** | `.agent/` + `install.sh` (tarball) | Everyone using Meridian in a project |
-| **meridian-vscode** | Editor extension (`.vsix`) | Optional — board and planning tabs in the IDE |
-
-Author: [Sergio Luciano Jr](https://github.com/colabcolibri) · Repository: [colabcolibri/meridian](https://github.com/colabcolibri/meridian)
+**GitHub:** https://github.com/colabcolibri/meridian · **Publisher:** https://github.com/colabcolibri · **Author:** S. Luciano
 
 ---
 
-## Kit install — what you get (including agents)
+## End users
 
-Running `./install.sh` (or `install-meridian-kit.sh`) copies the **full** `.agent/` tree into the target project:
+1. **Extensions** → **Meridian Harness** (publisher `colabcolibri`) → Install → Reload.
+2. **File → Open Folder…** → your project.
+3. **Meridian: Install Harness** — manual; status bar, Command Palette, or **Meridian → Commands**.
+4. Cursor: `/init-meridian` if `docs/` is missing.
+5. **Meridian: Open Board**, slash commands, **Validate Project**.
 
-| Path | Contents |
-| ---- | -------- |
-| `.agent/agents/` | All Meridian agents (`process-manager`, `board-keeper`, …) |
-| `.agent/skills/` | Skills with `SKILL.md` |
-| `.agent/workflows/` | Slash commands (`/create-us`, `/init-meridian`, …) |
-| `.agent/rules/` | Always-on rules (`meridian.mdc`) |
-| `.agent/scripts/` | `validate_meridian.py`, sync, install, package |
-| `.agent/references/` | Templates, agents-help, usage guides |
+Install Harness copies `.agent/` and syncs `.cursor/` / `.claude/`. The extension never installs the kit automatically.
 
-Then (default install) **adapter sync** wires IDE slash commands:
+**Update kit:** update extension → **Meridian: Upgrade Harness**.
 
-| IDE | Extra folders |
-| --- | ------------- |
-| **Cursor** | `.cursor/agents/`, `.cursor/commands/`, `.cursor/skills/`, `.cursor/rules/` → symlinks to `.agent/` |
-| **Claude Code** | `.claude/agents/`, `.claude/commands/` → symlinks |
-| **Antigravity / `.agent` native** | None — use `--no-sync`; agents live in `.agent/agents/` |
-
-**Yes — every kit install includes all agents.** Re-run with `--force` to upgrade the kit and refresh adapters without deleting your custom `.cursor/` files.
+User-facing install guide: [`app-visual-studio/README.md`](../app-visual-studio/README.md).
 
 ---
 
-## Distribute the kit (no monorepo clone)
-
-### Maintainers — build tarball
-
-From the meridian repo:
-
-```bash
-KIT_VERSION=1.0.0 ./.agent/scripts/package-kit.sh
-# → dist/meridian-kit-1.0.0.tar.gz
-```
-
-Publish on **GitHub Releases** (tag e.g. `kit-v1.0.0`), attach the `.tar.gz`.
-
-### End users — install in any repo
-
-```bash
-# Download release asset, then:
-tar -xzf meridian-kit-1.0.0.tar.gz
-cd meridian-kit-1.0.0
-./install.sh /path/to/my-project
-cd /path/to/my-project
-# /init-meridian if docs/ is missing
-```
-
-No `git clone` of the full monorepo required. No `app-desktop/`, no extension source in the tarball.
-
----
-
-## Distribute the extension (optional)
-
-The extension is **not** inside the kit tarball. Users who want Board / planning views in Cursor:
-
-### Option A — GitHub Release `.vsix` (recommended for non-developers)
-
-Maintainers:
+## Maintainers — publish a new version
 
 ```bash
 cd app-visual-studio
+pnpm test
 pnpm package:vsix
-# → meridian-vscode-X.Y.Z.vsix
 ```
 
-Attach to **GitHub Releases** (tag e.g. `extension-v0.3.7`).
+Upload `meridian-vscode-X.Y.Z.vsix` at https://marketplace.visualstudio.com/manage
 
-End users:
-
-1. Download `meridian-vscode-*.vsix` from Releases.
-2. Cursor → Extensions → `⋯` → **Install from VSIX…**
-3. Reload window.
-
-### Option B — From a clone (developers)
-
-```bash
-git clone https://github.com/colabcolibri/meridian.git
-cd meridian/app-visual-studio
-pnpm install:cursor   # builds VSIX and installs locally
-```
-
-### Option C — Visual Studio Marketplace (recommended for end users)
-
-1. One-time: create publisher **`colabcolibri`** and PAT — see [`app-visual-studio/MARKETPLACE.md`](../app-visual-studio/MARKETPLACE.md).
-2. Maintainer: `cd app-visual-studio && pnpm publish:marketplace`.
-3. Users: Extensions → search **Meridian** → Install (VS Code and Cursor).
-
-Listing: `https://marketplace.visualstudio.com/items?itemName=colabcolibri.meridian-vscode` (live after first publish).
-
-Until published, use Release `.vsix` or Option B.
-
-The extension **reads** the project's `docs/` — it does not replace the kit. Install **kit first**, extension second.
-
----
-
-## Quick matrix
-
-| User goal | Install |
-| --------- | ------- |
-| Agents + slash commands in Cursor | `meridian-kit` tarball → `./install.sh` |
-| Same in Claude Code | Same (default sync includes `.claude/`) |
-| Antigravity only | `./install.sh --no-sync` |
-| Kanban in editor | Kit + `.vsix` from Releases or `pnpm install:cursor` |
-| Validate project | Kit only (`validate_meridian.py` in `.agent/scripts/`) |
+Details: [`app-visual-studio/MARKETPLACE.md`](../app-visual-studio/MARKETPLACE.md).
 
 ---
 
 ## License
 
-PolyForm Noncommercial 1.0.0 — see `LICENSE` in the kit tarball and monorepo root.
+PolyForm Noncommercial 1.0.0 — see `LICENSE` in the monorepo.

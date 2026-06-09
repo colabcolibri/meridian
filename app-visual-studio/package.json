@@ -2,7 +2,7 @@
   "name": "meridian-vscode",
   "displayName": "%extension.displayName%",
   "description": "%extension.description%",
-  "version": "1.1.0",
+  "version": "1.1.6",
   "publisher": "colabcolibri",
   "license": "PolyForm-Noncommercial-1.0.0",
   "icon": "media/icon.png",
@@ -19,7 +19,7 @@
     "url": "https://github.com/colabcolibri/meridian/issues"
   },
   "author": {
-    "name": "Sergio Luciano Jr",
+    "name": "S. Luciano",
     "url": "https://github.com/colabcolibri"
   },
   "qna": "marketplace",
@@ -27,6 +27,7 @@
     "vscode": "^1.85.0"
   },
   "categories": [
+    "AI",
     "Visualization"
   ],
   "keywords": [
@@ -34,19 +35,12 @@
     "meridian harness",
     "harness",
     "agent harness",
-    "ai harness",
     "kanban",
-    "scrum",
-    "agile",
     "user stories",
-    "documentation",
-    "project management",
-    "ai agents",
     "cursor",
-    "cursor agents",
-    "copilot workflow",
-    "governance",
-    "board"
+    "ai agents",
+    "project management",
+    "documentation"
   ],
   "activationEvents": [
     "onStartupFinished",

@@ -92,12 +92,11 @@ Full distribution guide (kit tarball + extension VSIX, GitHub Releases): [`.agen
 
 ## Distribution (for others)
 
-| Product | File | How users get it |
-| ------- | ---- | ---------------- |
-| **Kit** | `meridian-kit-VERSION.tar.gz` | GitHub Release → `./install.sh /path/to/project` |
-| **Extension** (optional) | `meridian-vscode-VERSION.vsix` | GitHub Release → Install from VSIX in Cursor |
+| Product | How users get it |
+| ------- | ---------------- |
+| **Meridian Harness** (kit + board) | [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=colabcolibri.meridian-vscode) → **Meridian: Install Harness** in each project |
 
-Publisher: **colabcolibri** · Author: [Sergio Luciano Jr](https://github.com/colabcolibri)
+Publisher: **colabcolibri** · [GitHub](https://github.com/colabcolibri/meridian)
 
 ## What's in this repository
 

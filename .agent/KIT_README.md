@@ -92,12 +92,9 @@ python3 .agent/scripts/validate_meridian.py .
 
 ## Optional: VS Code / Cursor extension
 
-The **Meridian** editor extension (kanban, planning views) is **separate** from this tarball.
+**Meridian Harness** on the [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=colabcolibri.meridian-vscode) — bundles the kit and installs it when you run **Meridian: Install Harness**. Kanban and planning views in the editor.
 
-- **End users:** download `meridian-vscode-*.vsix` from [GitHub Releases](https://github.com/colabcolibri/meridian/releases) → Extensions → Install from VSIX.
-- **Developers:** clone [colabcolibri/meridian](https://github.com/colabcolibri/meridian) → `cd app-visual-studio && pnpm install:cursor`.
-
-Install the **kit first**; the extension only reads your project's `docs/`. Details: [DISTRIBUTION.md](.agent/DISTRIBUTION.md).
+Details: [app-visual-studio/README.md](app-visual-studio/README.md)
 
 ## Author
 

@@ -120,27 +120,6 @@ async function installKit(force = false): Promise<void> {
   }
 }
 
-async function maybePromptInstall(context: vscode.ExtensionContext): Promise<void> {
-  const root = workspaceProjectRoot(vscode.workspace.workspaceFolders)
-  if (!root || kitInstalledAt(root)) {
-    return
-  }
-  const key = `meridian.installPrompt.${root}`
-  if (context.globalState.get<boolean>(key)) {
-    return
-  }
-  await context.globalState.update(key, true)
-
-  const choice = await vscode.window.showInformationMessage(
-    "Meridian Harness: install agents, skills, and workflows (.agent/) into this workspace?",
-    "Install",
-    "Later",
-  )
-  if (choice === "Install") {
-    await installKit(false)
-  }
-}
-
 async function validateProject(): Promise<void> {
   const info = await requireWorkspace()
   if (!info) {
@@ -226,7 +205,7 @@ export function activate(context: vscode.ExtensionContext): void {
 
   meridianContext = new MeridianContext(context, outputGeneral, refreshAllPanels)
   meridianContext.registerListeners()
-  void meridianContext.refresh().then(() => maybePromptInstall(context))
+  void meridianContext.refresh()
 
   context.subscriptions.push(
     vscode.commands.registerCommand("meridian.openBoard", openBoardTab),
