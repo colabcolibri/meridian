@@ -1,0 +1,15 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "meridian-extension: compile",
+      "type": "shell",
+      "command": "pnpm run compile",
+      "options": {
+        "cwd": "${workspaceFolder}/app-visual-studio"
+      },
+      "group": "build",
+      "problemMatcher": []
+    }
+  ]
+}

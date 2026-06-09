@@ -1,8 +1,8 @@
 ---
 title: Tech Stack
 status: approved
-version: 1.0
-updated: 2026-06-02
+version: 1.1
+updated: 2026-06-04
 depends_on: [00_scope.md]
 blocks: [02_security.md, 04_principles.md, 08_environments.md]
 ---
@@ -26,11 +26,29 @@ blocks: [02_security.md, 04_principles.md, 08_environments.md]
 - Vue/Svelte: valid, but React pairs better with shadcn/ui and the ecosystem expected for the future extension.
 - Plain CSS: less consistent for an operational interface with many states.
 
+## VS Code extension (`app-visual-studio/` — v4)
+
+| Piece           | Choice                                                   |
+| --------------- | -------------------------------------------------------- |
+| Runtime         | VS Code / Cursor Extension Host                          |
+| Language        | TypeScript (strict)                                      |
+| Bundle          | esbuild → `dist/extension.js` (CJS, `vscode` external)   |
+| Packaging       | `@vscode/vsce` when publishing (out of v4-S1)            |
+| Backend         | **None** — commands spawn `python3` on `.agent/scripts/` |
+| UI in extension | Status bar + Output channel; **no** React kanban in v4   |
+
+**Rationale:** Keep the extension thin: editor-native commands and file I/O only. Kanban, epic bars, and version progress stay in the Vite monitor where they already exist (v1–v3).
+
+**Discarded for v4:**
+
+- Embedded webview duplicating `app-desktop` Board — scope creep; use monitor side-by-side.
+- Shared npm package with `app-desktop` — separate build graphs.
+
 ## Backend
 
-There will be no backend in the first Vite version.
+There is no remote backend in the monitor or the extension.
 
-Initial persistence will be local and aimed at experience prototyping. Real file writes will be handled in the VSCode/desktop stage.
+The monitor uses local file access only. The extension writes under `docs/` and invokes kit Python scripts on disk.
 
 ## Database
 

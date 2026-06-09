@@ -68,7 +68,16 @@ Every step produces a file. Every file is Git history.
 | [`.agent/`](.agent/) | **Yes** | Portable workflow kit — agents, skills, commands. Copy into every project. |
 | `docs/` (in *your* project) | **Yes** | Living spec — [dogfooding example](app-desktop/docs/) here. |
 | [`app-desktop/`](app-desktop/) | No | Read-only monitor — shows Setup, Board, Deliverables from `docs/`. |
+| [`app-visual-studio/`](app-visual-studio/) | No | VS Code extension (v4) — sync board, validate, new US on disk. Scaffold in US-0041+. |
 | `.cursor/` · `.claude/` | Local only | IDE adapters generated from `.agent/` ([details](.agent/IDE_ADAPTERS.md)). Not committed. |
+
+## Roadmap (this repository)
+
+| Version | Folder | Status |
+| ------- | ------ | ------ |
+| Monitor v0–v3, v2.01 | `app-desktop/` | Shipped in `app-desktop/docs/versions/` |
+| **v4 — VS Code bridge** | `app-visual-studio/` | In progress — extension commands and disk writes |
+| v5+ | — | Wizards, export, native (see `app-desktop/docs/versions/`) |
 
 ## Quick start
 

@@ -1,0 +1,22 @@
+{
+  "folders": [
+    {
+      "name": "Meridian (repo)",
+      "path": "."
+    },
+    {
+      "name": "VS Code extension",
+      "path": "app-visual-studio"
+    },
+    {
+      "name": "Desktop monitor",
+      "path": "app-desktop"
+    }
+  ],
+  "settings": {
+    "npm.autoDetect": "off"
+  },
+  "extensions": {
+    "recommendations": []
+  }
+}

@@ -484,36 +484,36 @@
     "title": "Scaffold app-visual-studio extension",
     "epic": "EPIC-05",
     "version": "v4",
-    "status": "❌",
+    "status": "✅",
     "moscow": "Must",
     "depends_on": [],
     "done_when": "app-visual-studio/ loads in Extension Development Host with pnpm dev/build scripts documented.",
     "tests": "required",
-    "tests_status": "pending"
+    "tests_status": "done"
   },
   {
     "id": "US-0042",
     "title": "Detect Meridian workspace in extension",
     "epic": "EPIC-05",
     "version": "v4",
-    "status": "❌",
+    "status": "✅",
     "moscow": "Must",
     "depends_on": [],
     "done_when": "Extension detects .agent/MERIDIAN.md and docs/ folder and exposes status in the status bar.",
     "tests": "required",
-    "tests_status": "pending"
+    "tests_status": "done"
   },
   {
     "id": "US-0043",
     "title": "Document v2 extension layer in phase docs",
     "epic": "EPIC-05",
     "version": "v4",
-    "status": "❌",
+    "status": "✅",
     "moscow": "Must",
     "depends_on": [],
     "done_when": "05_architecture, 01_tech_stack, 02_security, and 08_environments describe app-visual-studio/ layer and commands.",
     "tests": "required",
-    "tests_status": "pending"
+    "tests_status": "done"
   },
   {
     "id": "US-0044",
@@ -1077,6 +1077,131 @@
     "moscow": "Must",
     "depends_on": [],
     "done_when": "Kit has scrum-meridian-map.md and human-only scrum-guide-complete.md; agents are directed to the map not the textbook; app How it works shows Scrum and Meridian with synthesis diagram; v2.01 lists this US; validate_meridian.py passes.",
+    "tests": "required",
+    "tests_status": "done"
+  },
+  {
+    "id": "US-0089",
+    "title": "Board kanban webview in VS Code extension sidebar",
+    "epic": "EPIC-05",
+    "version": "v4",
+    "status": "✅",
+    "moscow": "Must",
+    "depends_on": [],
+    "done_when": "Installable extension shows Meridian activity bar with Board webview — kanban columns from docs/us/, card click opens US file.",
+    "tests": "required",
+    "tests_status": "done"
+  },
+  {
+    "id": "US-0090",
+    "title": "Board filter toolbar in VS Code extension editor tab",
+    "epic": "EPIC-05",
+    "version": "v4",
+    "status": "✅",
+    "moscow": "Must",
+    "depends_on": [
+      "US-0089"
+    ],
+    "done_when": "Meridian Board editor tab shows version, epic, and frozen filters with persisted state and filtered kanban columns.",
+    "tests": "required",
+    "tests_status": "done"
+  },
+  {
+    "id": "US-0091",
+    "title": "Deliverables webview in VS Code extension editor tab",
+    "epic": "EPIC-05",
+    "version": "v4",
+    "status": "✅",
+    "moscow": "Must",
+    "depends_on": [
+      "US-0089"
+    ],
+    "done_when": "Extension opens Deliverables editor tab listing versions, sprints, and epics with progress; click opens docs file in editor.",
+    "tests": "required",
+    "tests_status": "done"
+  },
+  {
+    "id": "US-0092",
+    "title": "Board and Deliverables filter UX parity in extension",
+    "epic": "EPIC-05",
+    "version": "v4",
+    "status": "✅",
+    "moscow": "Must",
+    "depends_on": [
+      "US-0090",
+      "US-0091"
+    ],
+    "done_when": "Board and Deliverables use the same version filter (All, None, multi-select chips); Deliverables accordions expand/collapse correctly.",
+    "tests": "required",
+    "tests_status": "done"
+  },
+  {
+    "id": "US-0093",
+    "title": "v4 go-live — extension package, architecture sync, release closure",
+    "epic": "EPIC-05",
+    "version": "v4",
+    "status": "✅",
+    "moscow": "Must",
+    "depends_on": [
+      "US-0092"
+    ],
+    "done_when": "v4 marked complete; 05_architecture and v4 go-live checklist done; .vsix builds; EPIC-05 closed for v4 scope.",
+    "tests": "required",
+    "tests_status": "done"
+  },
+  {
+    "id": "US-0094",
+    "title": "Versions, Sprints, and Epics editor tabs in VS Code extension",
+    "epic": "EPIC-05",
+    "version": "v4",
+    "status": "✅",
+    "moscow": "Must",
+    "depends_on": [
+      "US-0092"
+    ],
+    "done_when": "Extension exposes Open Versions (no filter), Open Sprints and Open Epics (with filters); Deliverables command aliases Versions.",
+    "tests": "required",
+    "tests_status": "done"
+  },
+  {
+    "id": "US-0095",
+    "title": "Meridian Sync Board command writes board.json from docs/us",
+    "epic": "EPIC-05",
+    "version": "v4",
+    "status": "✅",
+    "moscow": "Must",
+    "depends_on": [
+      "US-0042"
+    ],
+    "done_when": "Meridian: Sync Board regenerates docs/kanban/board.json from US frontmatter and reports count in Output.",
+    "tests": "required",
+    "tests_status": "done"
+  },
+  {
+    "id": "US-0097",
+    "title": "Pagination and page size in planning list webviews",
+    "epic": "EPIC-05",
+    "version": "v4",
+    "status": "✅",
+    "moscow": "Should",
+    "depends_on": [
+      "US-0094"
+    ],
+    "done_when": "Versions, Sprints, and Epics list webviews paginate with Show 25/50/100 (default 50) and persist page preference.",
+    "tests": "required",
+    "tests_status": "done"
+  },
+  {
+    "id": "US-0098",
+    "title": "Board kanban per-column pagination and All default filters",
+    "epic": "EPIC-05",
+    "version": "v4",
+    "status": "✅",
+    "moscow": "Should",
+    "depends_on": [
+      "US-0097"
+    ],
+    "done_when": "Board opens with all versions and epics selected; each kanban column paginates independently with shared page size.",
     "tests": "required",
     "tests_status": "done"
   }

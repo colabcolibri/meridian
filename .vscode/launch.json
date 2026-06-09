@@ -1,0 +1,16 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run Meridian extension",
+      "type": "extensionHost",
+      "request": "launch",
+      "args": [
+        "--extensionDevelopmentPath=${workspaceFolder}/app-visual-studio",
+        "${workspaceFolder}/app-desktop"
+      ],
+      "outFiles": ["${workspaceFolder}/app-visual-studio/dist/**/*.js"],
+      "preLaunchTask": "meridian-extension: compile"
+    }
+  ]
+}

@@ -2,6 +2,9 @@
 node_modules/
 **/node_modules/
 
+# VS Code extension packages (build locally with pnpm package:vsix)
+*.vsix
+
 # Builds
 dist/
 build/

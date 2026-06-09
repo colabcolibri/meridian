@@ -20,7 +20,7 @@ This folder is the **source of truth** for Meridian Desktop development. In dogf
 | [02_security.md](02_security.md)           | approved | Local version security                       |
 | [03_user_types.md](03_user_types.md)       | approved | Usage profiles                               |
 | [04_principles.md](04_principles.md)       | approved | Implementation principles                    |
-| [05_architecture.md](05_architecture.md)   | approved | App architecture (parser, docs folder)       |
+| [05_architecture.md](05_architecture.md)   | approved | App architecture (HTTP dev path, parser)     |
 | [06_database.md](06_database.md)           | draft    | Out of initial scope                         |
 | [07_api_contracts.md](07_api_contracts.md) | draft    | Out of initial scope                         |
 | [08_environments.md](08_environments.md)   | approved | Local commands and Git hooks                 |
@@ -53,6 +53,7 @@ Epics, versions, and sprints live **only** in the folders above — no parallel 
 | **v2-S6** Lightweight index      | ✅      | US-0076 (EPIC-04)                     |
 | **v2-S4** Stale board warning    | planned | US-0051 (EPIC-04, Should)             |
 | **v3-S1–S3** Monitor UI redesign | ✅      | US-0077–0082 (EPIC-11)                |
+| **v2.01-S1** Local file server   | ✅      | US-0087–0088 (EPIC-02, EPIC-06)       |
 | **v4-S1** Extension foundation   | planned | US-0041–0043 (EPIC-05)                |
 | **v4-S2** Board sync + validate  | planned | US-0044–0046 (EPIC-05)                |
 | **v4-S3** Create US on disk      | planned | US-0047–0049 (EPIC-05)                |
@@ -98,7 +99,7 @@ See also: [Start here](../../.agent/references/start-here.md) · [Usage guide](.
 
 ### Detail by artifact
 
-1. Pick a US in `docs/sprints/` or `docs/versions/` (active: **v2** EPIC-04; next: **v4** VS Code; **v3** complete).
+1. Pick a US in `docs/sprints/` or `docs/versions/` (active: **v4** VS Code / EPIC-05; optional polish: **v2-S4** US-0051 after v4-S2; **v2.01** ✅).
 2. Implement citing `US-XXXX` in context.
 3. Fill `## Technical implementation` when done (skill `complete-user-story`).
 4. Update US frontmatter (`🔶` + `Missing:` or `✅` with evidence).

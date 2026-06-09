@@ -1,8 +1,8 @@
 ---
 title: Security
 status: approved
-version: 1.0
-updated: 2026-06-02
+version: 1.1
+updated: 2026-06-04
 depends_on: [00_scope.md, 01_tech_stack.md]
 blocks: [03_user_types.md, 04_principles.md]
 ---
@@ -21,7 +21,21 @@ There will be no profiles with technical permissions in the first version. The a
 
 - No sensitive data should be required in the first version.
 - Documentation content may contain project information and should be treated as local user data.
-- Future integrations with disk writes must avoid remote content transmission without explicit action.
+- VS Code extension (v4) performs **local disk writes only** under the resolved `docs/` tree — no network calls, no telemetry.
+
+## VS Code extension (v4)
+
+| Control         | Rule                                                                                                                            |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------------- |
+| Write scope     | Only paths under resolved `docs/` (`us/`, `epics/`, `versions/`, `sprints/`, `kanban/`, `decisions/`)                           |
+| Path traversal  | Reject writes outside project root + `docs/` resolution used by workspace detection                                             |
+| Kit (`.agent/`) | Read for detection; do not modify kit files from extension commands in v4                                                       |
+| Scripts         | Spawn `python3` with explicit script path under `.agent/scripts/`; pass project root as argv — no shell injection from UI input |
+| Network         | No HTTP/HTTPS from extension code in v4                                                                                         |
+| Secrets         | Do not read or write `.env`; do not store tokens in extension `globalState`                                                     |
+| Agent safety    | Extension does not auto-commit; manager runs Git separately                                                                     |
+
+Disk writes from the extension must mirror what agents do in Cursor: Markdown + JSON in `docs/`, evidence before `status: ✅`.
 
 ## Input validation
 

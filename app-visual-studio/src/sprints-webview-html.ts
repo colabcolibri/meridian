@@ -1,0 +1,139 @@
+import * as crypto from "node:crypto"
+
+import {
+  planningPayloadForListViews,
+  type PlanningPayload,
+} from "./planning-payload.js"
+import {
+  FILTER_CHIP_SCRIPT,
+  PAGINATION_SCRIPT,
+  PLANNING_WEBVIEW_STYLES,
+  planningWebviewShell,
+} from "./webview-common.js"
+
+export function sprintsWebviewHtml(payload: PlanningPayload): string {
+  const nonce = crypto.randomBytes(16).toString("hex")
+  const dataJson = JSON.stringify(planningPayloadForListViews(payload))
+  const body = `
+  <div class="toolbar">
+    <div class="toolbar-row">
+      <span class="toolbar-label">Version</span>
+      <button type="button" class="chip" id="version-all">All</button>
+      <button type="button" class="chip" id="version-none">None</button>
+      <div id="version-chips" class="chip-group"></div>
+      <span class="count" id="summary"></span>
+    </div>
+  </div>
+  <div class="main" id="list"></div>
+  <div class="pager" id="pager"></div>`
+  const script = `
+    const vscode = acquireVsCodeApi();
+    const payload = ${dataJson};
+    ${FILTER_CHIP_SCRIPT}
+    ${PAGINATION_SCRIPT}
+    const STATE_VERSION = 5;
+    const saved = vscode.getState() || {};
+    let selectedVersions = new Set(
+      saved.stateVersion === STATE_VERSION && saved.selectedVersions
+        ? saved.selectedVersions
+        : payload.defaultVersions,
+    );
+    let pageSize = saved.stateVersion === STATE_VERSION
+      ? normalizePageSize(saved.pageSize)
+      : DEFAULT_PAGE_SIZE;
+    let currentPage = saved.stateVersion === STATE_VERSION && saved.currentPage
+      ? saved.currentPage
+      : 1;
+
+    function versionItems() {
+      return payload.versions.map((v) => ({
+        id: v.id,
+        label: v.id,
+        title: (selectedVersions.has(v.id) ? "Hide" : "Show") + " " + v.id + " — " + v.title,
+      }));
+    }
+
+    function filteredSprints() {
+      if (selectedVersions.size === 0) return [];
+      return payload.sprints.filter((s) => selectedVersions.has(s.version));
+    }
+
+    function renderToolbar() {
+      const items = versionItems();
+      const allOn = items.length > 0 && items.every((v) => selectedVersions.has(v.id));
+      const noneOn = selectedVersions.size === 0;
+      wireAllNone(
+        document.getElementById("version-all"),
+        document.getElementById("version-none"),
+        allOn,
+        noneOn,
+        false,
+        () => { selectedVersions = new Set(items.map((v) => v.id)); currentPage = 1; persist(); renderAll(); },
+        () => { selectedVersions = new Set(); currentPage = 1; persist(); renderAll(); },
+      );
+      renderChipGroup(document.getElementById("version-chips"), items, selectedVersions, false, (id) => {
+        if (selectedVersions.has(id)) selectedVersions.delete(id);
+        else selectedVersions.add(id);
+        currentPage = 1;
+        persist();
+        renderAll();
+      });
+      const visible = filteredSprints().length;
+      document.getElementById("summary").textContent = noneOn
+        ? "0 sprints"
+        : visible + " sprint(s)";
+    }
+
+    function renderList() {
+      const root = document.getElementById("list");
+      if (selectedVersions.size === 0) {
+        root.innerHTML = '<p class="empty">No versions selected — choose All or pick versions</p>';
+        renderPager(document.getElementById("pager"), 0, 1, pageSize, () => {}, () => {});
+        return;
+      }
+      const all = filteredSprints();
+      const paged = pageSlice(all, currentPage, pageSize);
+      currentPage = paged.page;
+      root.innerHTML = "";
+      if (!all.length) {
+        root.innerHTML = '<p class="empty">No sprints for selected versions</p>';
+      } else {
+        for (const sp of paged.slice) {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "row-btn";
+          btn.innerHTML =
+            '<span class="row-id">' + esc(sp.id) + '</span>' +
+            '<span class="row-title">' + esc(sp.title) + '</span>' +
+            '<span class="badge">' + esc(sp.version) + '</span>' +
+            '<span class="badge">' + esc(sp.status) + '</span>';
+          btn.onclick = () => vscode.postMessage({ type: "openSprint", id: sp.id });
+          root.appendChild(btn);
+        }
+      }
+      currentPage = renderPager(
+        document.getElementById("pager"),
+        all.length,
+        currentPage,
+        pageSize,
+        (p) => { currentPage = p; persist(); renderList(); },
+        (size) => { pageSize = size; currentPage = 1; persist(); renderAll(); },
+      );
+    }
+
+    function persist() {
+      vscode.setState({
+        stateVersion: STATE_VERSION,
+        selectedVersions: [...selectedVersions],
+        pageSize,
+        currentPage,
+      });
+    }
+    function renderAll() {
+      renderToolbar();
+      renderList();
+    }
+    renderAll();
+  `
+  return planningWebviewShell(nonce, PLANNING_WEBVIEW_STYLES, body, script)
+}

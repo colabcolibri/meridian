@@ -1,0 +1,143 @@
+{
+  "name": "meridian-vscode",
+  "displayName": "Meridian",
+  "description": "Kanban board and deliverables for Meridian projects (docs/us, epics, versions) — installable sidebar for VS Code and Cursor.",
+  "version": "0.3.0",
+  "publisher": "meridian-placeholder",
+  "license": "PolyForm-Noncommercial-1.0.0",
+  "private": true,
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "workspaceContains:.agent/MERIDIAN.md"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "meridian",
+          "title": "Meridian",
+          "icon": "media/meridian.svg"
+        }
+      ]
+    },
+    "views": {
+      "meridian": [
+        {
+          "id": "meridian.commands",
+          "name": "Commands"
+        }
+      ]
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "meridian.refreshCommands",
+          "when": "view == meridian.commands",
+          "group": "navigation"
+        }
+      ],
+      "menubar/view": [
+        {
+          "submenu": "meridian.submenu",
+          "group": "7_modification"
+        }
+      ],
+      "meridian.submenu": [
+        { "command": "meridian.openBoard", "group": "1@1" },
+        { "command": "meridian.openVersions", "group": "1@2" },
+        { "command": "meridian.openSprints", "group": "1@3" },
+        { "command": "meridian.openEpics", "group": "1@4" },
+        { "command": "meridian.validateProject", "group": "2@1" },
+        { "command": "meridian.showStatus", "group": "2@2" },
+        { "command": "meridian.syncBoard", "group": "3@1" },
+        { "command": "meridian.newUserStory", "group": "3@2" }
+      ]
+    },
+    "submenus": [
+      {
+        "id": "meridian.submenu",
+        "label": "Meridian"
+      }
+    ],
+    "commands": [
+      {
+        "command": "meridian.openBoard",
+        "title": "Meridian: Open Board",
+        "icon": "$(kanban)"
+      },
+      {
+        "command": "meridian.openVersions",
+        "title": "Meridian: Open Versions",
+        "icon": "$(versions)"
+      },
+      {
+        "command": "meridian.openSprints",
+        "title": "Meridian: Open Sprints",
+        "icon": "$(run-all)"
+      },
+      {
+        "command": "meridian.openEpics",
+        "title": "Meridian: Open Epics",
+        "icon": "$(layers)"
+      },
+      {
+        "command": "meridian.openDeliverables",
+        "title": "Meridian: Open Deliverables",
+        "icon": "$(list-tree)"
+      },
+      {
+        "command": "meridian.syncBoard",
+        "title": "Meridian: Sync Board",
+        "icon": "$(sync)"
+      },
+      {
+        "command": "meridian.validateProject",
+        "title": "Meridian: Validate Project",
+        "icon": "$(checklist)"
+      },
+      {
+        "command": "meridian.newUserStory",
+        "title": "Meridian: New User Story",
+        "icon": "$(add)"
+      },
+      {
+        "command": "meridian.showStatus",
+        "title": "Meridian: Show Workspace Status",
+        "icon": "$(info)"
+      },
+      {
+        "command": "meridian.refreshCommands",
+        "title": "Meridian: Refresh Commands",
+        "icon": "$(refresh)"
+      }
+    ]
+  },
+  "scripts": {
+    "compile": "node esbuild.mjs",
+    "watch": "node esbuild.mjs --watch",
+    "dev": "pnpm watch",
+    "build": "pnpm compile",
+    "test": "pnpm compile && node --import tsx --test test/**/*.test.ts",
+    "package:vsix": "pnpm compile && vsce package --no-dependencies --allow-missing-repository",
+    "install:cursor": "pnpm package:vsix && cursor --install-extension \"$(ls -t meridian-vscode-*.vsix | head -1)\" --force",
+    "install:code": "pnpm package:vsix && code --install-extension \"$(ls -t meridian-vscode-*.vsix | head -1)\" --force",
+    "vscode:prepublish": "pnpm compile"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "@types/vscode": "^1.85.0",
+    "@vscode/vsce": "^3.9.2",
+    "esbuild": "^0.25.0",
+    "tsx": "^4.19.0",
+    "typescript": "~5.6.2"
+  },
+  "dependencies": {
+    "yaml": "^2.9.0"
+  }
+}
