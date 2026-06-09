@@ -6,6 +6,7 @@ import {
   SprintsEditorPanel,
   VersionsEditorPanel,
 } from "./planning-panels.js"
+import { HelpEditorPanel } from "./help-editor-panel.js"
 import { MeridianCommandsProvider } from "./commands-sidebar.js"
 import { formatStatusTooltip, type MeridianWorkspaceInfo } from "./meridian-workspace.js"
 import { MeridianContext } from "./meridian-context.js"
@@ -17,6 +18,7 @@ let boardEditor: BoardEditorPanel | undefined
 let versionsEditor: VersionsEditorPanel | undefined
 let sprintsEditor: SprintsEditorPanel | undefined
 let epicsEditor: EpicsEditorPanel | undefined
+let helpEditor: HelpEditorPanel | undefined
 let commandsProvider: MeridianCommandsProvider | undefined
 let outputGeneral: vscode.OutputChannel | undefined
 let outputValidate: vscode.OutputChannel | undefined
@@ -36,6 +38,10 @@ function openSprintsTab(): void {
 
 function openEpicsTab(): void {
   epicsEditor?.show(vscode.ViewColumn.One)
+}
+
+function openHelpTab(): void {
+  helpEditor?.show(vscode.ViewColumn.One)
 }
 
 function refreshAllPanels(): void {
@@ -134,6 +140,7 @@ export function activate(context: vscode.ExtensionContext): void {
   versionsEditor = new VersionsEditorPanel(context.extensionUri, getWorkspace)
   sprintsEditor = new SprintsEditorPanel(context.extensionUri, getWorkspace)
   epicsEditor = new EpicsEditorPanel(context.extensionUri, getWorkspace)
+  helpEditor = new HelpEditorPanel(context.extensionUri)
 
   commandsProvider = new MeridianCommandsProvider()
   context.subscriptions.push(
@@ -151,6 +158,7 @@ export function activate(context: vscode.ExtensionContext): void {
     vscode.commands.registerCommand("meridian.openDeliverables", openVersionsTab),
     vscode.commands.registerCommand("meridian.openSprints", openSprintsTab),
     vscode.commands.registerCommand("meridian.openEpics", openEpicsTab),
+    vscode.commands.registerCommand("meridian.openHelp", openHelpTab),
     vscode.commands.registerCommand("meridian.validateProject", validateProject),
     vscode.commands.registerCommand("meridian.showStatus", showStatus),
     vscode.commands.registerCommand("meridian.syncBoard", syncBoard),
@@ -165,5 +173,6 @@ export function deactivate(): void {
   versionsEditor = undefined
   sprintsEditor = undefined
   epicsEditor = undefined
+  helpEditor = undefined
   commandsProvider = undefined
 }

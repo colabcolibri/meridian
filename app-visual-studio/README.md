@@ -97,6 +97,7 @@ cd app-visual-studio && pnpm compile
 
 | Place | What |
 | ----- | ---- |
+| **Commands → Command help** or **View → Meridian → Open Command Help** | Reference tab for every command |
 | **Activity bar → Meridian → Commands** | List of actions (click = run + **Output**) |
 | **Menu View → Meridian** | Same commands |
 | **Command Palette** | `Meridian: …` (⇧⌘P) |
@@ -139,6 +140,7 @@ Rules match `validate_meridian.py` (`.agent/MERIDIAN.md`). Status bar shows **Me
 | `meridian.openEpics` | Meridian: Open Epics | ✅ Filter version + epic |
 | `meridian.openDeliverables` | Meridian: Open Deliverables | ✅ Alias → Versions |
 | `meridian.syncBoard` | Meridian: Sync Board | ✅ Writes `board.json` |
+| `meridian.openHelp` | Meridian: Open Command Help | ✅ Reference tab (PT) |
 | `meridian.validateProject` | Meridian: Validate Project | ✅ Runs `validate_meridian.py` |
 | `meridian.showStatus` | Meridian: Show Workspace Status | ✅ Output |
 | `meridian.newUserStory` | Meridian: New User Story | Stub — use `/create-us` (v5) |

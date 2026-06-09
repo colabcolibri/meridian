@@ -19,7 +19,7 @@ A **real, installable** editor extension (VS Code Marketplace or `.vsix`) — li
 2. Open any Meridian project folder.
 3. Use **Meridian: Open Board** and **Open Deliverables** to track US, epics, and versions — no separate browser app required for day-to-day work.
 
-Writing and `board.json` regeneration: **Meridian: Sync Board** (US-0095) or agents (`/sync-board`). The extension is **read-first** in v4; **Validate Project** runs kit Python. v4 closed with US-0089–US-0098 (EPIC-05).
+Writing and `board.json` regeneration: **Meridian: Sync Board** (US-0095) or agents (`/sync-board`). The extension is **read-first** in v4; **Validate Project** runs kit Python. v4 closed with US-0089–US-0099 (EPIC-05).
 
 ## Out of scope for this epic
 

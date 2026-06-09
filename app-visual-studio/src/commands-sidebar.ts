@@ -1,5 +1,7 @@
 import * as vscode from "vscode"
 
+import { MERIDIAN_COMMAND_CATALOG } from "./command-catalog.js"
+
 export type CommandTreeItem = {
   id: string
   label: string
@@ -10,61 +12,19 @@ export type CommandTreeItem = {
 
 const ROOT_ITEMS: CommandTreeItem[] = [
   {
-    id: "board",
-    label: "Open Board",
-    description: "Kanban — version/epic filters, empty columns",
-    commandId: "meridian.openBoard",
-    icon: "$(kanban)",
+    id: "help",
+    label: "Command help",
+    description: "O que faz cada comando da extensão",
+    commandId: "meridian.openHelp",
+    icon: "$(question)",
   },
-  {
-    id: "versions",
-    label: "Open Versions",
-    description: "All releases — no filter",
-    commandId: "meridian.openVersions",
-    icon: "$(versions)",
-  },
-  {
-    id: "sprints",
-    label: "Open Sprints",
-    description: "Sprints — filter by version",
-    commandId: "meridian.openSprints",
-    icon: "$(run-all)",
-  },
-  {
-    id: "epics",
-    label: "Open Epics",
-    description: "Epics — filter by version and epic",
-    commandId: "meridian.openEpics",
-    icon: "$(layers)",
-  },
-  {
-    id: "validate",
-    label: "Validate project",
-    description: "Run validate_meridian.py → Output",
-    commandId: "meridian.validateProject",
-    icon: "$(checklist)",
-  },
-  {
-    id: "sync",
-    label: "Sync board",
-    description: "Regenerate docs/kanban/board.json from US",
-    commandId: "meridian.syncBoard",
-    icon: "$(sync)",
-  },
-  {
-    id: "status",
-    label: "Workspace status",
-    description: "Kit path, docs, US count",
-    commandId: "meridian.showStatus",
-    icon: "$(info)",
-  },
-  {
-    id: "new-us",
-    label: "New user story",
-    description: "Output — coming in v5",
-    commandId: "meridian.newUserStory",
-    icon: "$(add)",
-  },
+  ...MERIDIAN_COMMAND_CATALOG.filter((c) => c.id !== "deliverables").map((c) => ({
+    id: c.id,
+    label: c.title,
+    description: c.summary,
+    commandId: c.commandId,
+    icon: c.icon,
+  })),
 ]
 
 export class MeridianCommandsProvider implements vscode.TreeDataProvider<CommandTreeItem> {
@@ -88,7 +48,10 @@ export class MeridianCommandsProvider implements vscode.TreeDataProvider<Command
       command: element.commandId,
       title: element.label,
     }
-    item.tooltip = `${element.label} — same as Command Palette (⇧⌘P)`
+    item.tooltip =
+      element.id === "help"
+        ? "Abre a referência de comandos em uma aba"
+        : `${element.label} — Command Palette: ${element.commandId}`
     return item
   }
 
