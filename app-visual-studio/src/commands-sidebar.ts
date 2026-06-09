@@ -39,8 +39,13 @@ const ROOT_ITEMS: CommandTreeItem[] = [
     commandId: "meridian.openAgentsHelp",
     icon: "$(book)",
   },
+  // Pinned above already — exclude from catalog spread to avoid duplicate tree rows
   ...MERIDIAN_COMMAND_CATALOG.filter(
-    (c) => c.id !== "deliverables" && c.id !== "agents-help",
+    (c) =>
+      c.id !== "deliverables" &&
+      c.id !== "agents-help" &&
+      c.id !== "install-kit" &&
+      c.id !== "upgrade-kit",
   ).map((c) => ({
     id: c.id,
     label: c.title,

@@ -4,6 +4,12 @@ All notable changes to the **Meridian** VS Code extension (`meridian-vscode`).
 
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.1.8] - 2026-06-09
+
+### Fixed
+
+- Commands sidebar: Install Harness and Upgrade Harness no longer listed twice
+
 ## [1.1.7] - 2026-06-09
 
 ### Changed
