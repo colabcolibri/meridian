@@ -86,6 +86,19 @@ tar -xzf meridian-kit-1.0.0.tar.gz && cd meridian-kit-1.0.0
 
 Build the tarball from this repo: `KIT_VERSION=1.0.0 ./.agent/scripts/package-kit.sh`
 
+Full distribution guide (kit tarball + extension VSIX, GitHub Releases): [`.agent/DISTRIBUTION.md`](.agent/DISTRIBUTION.md)
+
+**Kit install includes all agents** (`.agent/agents/`) plus skills, workflows, and rules. Cursor/Claude get slash commands via adapter sync; Antigravity uses `.agent/` only (`--no-sync`).
+
+## Distribution (for others)
+
+| Product | File | How users get it |
+| ------- | ---- | ---------------- |
+| **Kit** | `meridian-kit-VERSION.tar.gz` | GitHub Release → `./install.sh /path/to/project` |
+| **Extension** (optional) | `meridian-vscode-VERSION.vsix` | GitHub Release → Install from VSIX in Cursor |
+
+Publisher: **colabcolibri** · Author: [Sergio Luciano Jr](https://github.com/colabcolibri)
+
 ## What's in this repository
 
 | Piece | Required? | Role in the experiment |

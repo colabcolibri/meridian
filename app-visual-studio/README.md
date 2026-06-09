@@ -1,6 +1,10 @@
 # Meridian — installable VS Code extension (`app-visual-studio`)
 
-**Product:** an extension you **install** (Marketplace or `.vsix`) — like a Markdown or Git extension — not a repo-only tool. When your workspace has Meridian (`docs/` + `.agent/MERIDIAN.md`), you get a **sidebar** with Board (kanban), planning views, and kit help — all read from disk.
+**Product:** an extension you **install** (`.vsix` from [GitHub Releases](https://github.com/colabcolibri/meridian/releases) or `pnpm install:cursor` from a clone) — not a repo-only tool. When your workspace has Meridian (`docs/` + `.agent/MERIDIAN.md`), you get a **sidebar** with Board (kanban), planning views, and kit help — all read from disk.
+
+**Requires the kit:** copy or install `.agent/` in the project first ([kit tarball](https://github.com/colabcolibri/meridian/blob/main/.agent/DISTRIBUTION.md)). The extension does not ship agents or slash commands.
+
+**Publisher:** `colabcolibri` · **Author:** [Sergio Luciano Jr](https://github.com/colabcolibri) · **Repository:** [colabcolibri/meridian](https://github.com/colabcolibri/meridian)
 
 **Not the goal:** replacing Cursor agents or slash commands that maintain `docs/us/` and `board.json`.
 
@@ -45,7 +49,9 @@ After reload:
    - **Deliverables (Versions):** version filter with **All / None** + chips; accordion per release (▶/▼); click an id to open the `.md` file.
 3. Activity bar **Meridian → Commands** — same actions + **Validate Project**.
 
-**Alternative (UI):** Extensions → `⋯` → **Install from VSIX…** → pick `app-visual-studio/meridian-vscode-*.vsix` (run `pnpm package:vsix` first).
+**Alternative (UI):** Extensions → `⋯` → **Install from VSIX…** → pick `meridian-vscode-*.vsix`.
+
+Download the VSIX from [GitHub Releases](https://github.com/colabcolibri/meridian/releases) if you do not clone this repo. Build locally: `pnpm package:vsix`.
 
 To reinstall after code changes: run `pnpm install:cursor` again and reload the window.
 

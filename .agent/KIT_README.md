@@ -15,6 +15,12 @@ Portable agent harness for **Cursor**, **Claude Code**, **Antigravity**, and oth
 
 Default `./install.sh` syncs **both** Cursor and Claude adapters. That is safe: only Meridian symlinks are created; your own `.cursor/rules/` files are never deleted.
 
+## What gets installed (agents included)
+
+The full `.agent/` tree is copied — **all agents**, skills, workflows, rules, scripts, and references. Adapter sync then exposes agents and slash commands in Cursor (`.cursor/agents/`, `.cursor/commands/`) and Claude Code (`.claude/agents/`, `.claude/commands/`). Antigravity reads `.agent/` directly — use `--no-sync`.
+
+See [DISTRIBUTION.md](.agent/DISTRIBUTION.md) for kit vs extension and GitHub Releases.
+
 ## Install into your project
 
 Extract this archive, then:
@@ -86,7 +92,16 @@ python3 .agent/scripts/validate_meridian.py .
 
 ## Optional: VS Code / Cursor extension
 
-The **Meridian** editor extension (kanban, planning views) is separate. Install from the full repo (`app-visual-studio/`) or a published `.vsix`. It reads your project's `docs/` — it does not replace the kit.
+The **Meridian** editor extension (kanban, planning views) is **separate** from this tarball.
+
+- **End users:** download `meridian-vscode-*.vsix` from [GitHub Releases](https://github.com/colabcolibri/meridian/releases) → Extensions → Install from VSIX.
+- **Developers:** clone [colabcolibri/meridian](https://github.com/colabcolibri/meridian) → `cd app-visual-studio && pnpm install:cursor`.
+
+Install the **kit first**; the extension only reads your project's `docs/`. Details: [DISTRIBUTION.md](.agent/DISTRIBUTION.md).
+
+## Author
+
+[Sergio Luciano Jr](https://github.com/colabcolibri) · [colabcolibri/meridian](https://github.com/colabcolibri/meridian)
 
 ## License
 

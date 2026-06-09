@@ -2,10 +2,22 @@
   "name": "meridian-vscode",
   "displayName": "%extension.displayName%",
   "description": "%extension.description%",
-  "version": "0.3.6",
-  "publisher": "meridian-placeholder",
+  "version": "0.3.7",
+  "publisher": "colabcolibri",
   "license": "PolyForm-Noncommercial-1.0.0",
   "icon": "media/icon.png",
+  "homepage": "https://github.com/colabcolibri/meridian",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/colabcolibri/meridian"
+  },
+  "bugs": {
+    "url": "https://github.com/colabcolibri/meridian/issues"
+  },
+  "author": {
+    "name": "Sergio Luciano Jr",
+    "url": "https://github.com/colabcolibri"
+  },
   "private": true,
   "engines": {
     "vscode": "^1.85.0"
@@ -148,7 +160,7 @@
     "dev": "pnpm watch",
     "build": "pnpm compile",
     "test": "pnpm compile && node --import tsx --test test/**/*.test.ts",
-    "package:vsix": "node esbuild.mjs && vsce package --no-dependencies --allow-missing-repository",
+    "package:vsix": "node esbuild.mjs && vsce package --no-dependencies",
     "install:cursor": "pnpm package:vsix && node scripts/install-vsix.mjs cursor",
     "install:code": "pnpm package:vsix && node scripts/install-vsix.mjs code",
     "vscode:prepublish": "node esbuild.mjs"

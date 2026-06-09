@@ -72,7 +72,7 @@ cd meridian-kit-1.0.0
 ./install.sh /path/to/my-project
 ```
 
-**Future channels:** GitHub Releases (`kit-v*` tags), npm `@colabcolibri/meridian-kit` (backlog), or `curl` bootstrap from release URL.
+**Future channels:** GitHub Releases (`kit-v*` + `extension-v*` tags with `.tar.gz` and `.vsix` assets). See [DISTRIBUTION.md](DISTRIBUTION.md).
 
 Always edit in `.agent/` first; then run sync (also mirrors `app-desktop/docs/templates/` in the Meridian monorepo).
 
