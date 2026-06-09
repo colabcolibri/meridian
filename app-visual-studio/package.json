@@ -131,8 +131,8 @@
     "build": "pnpm compile",
     "test": "pnpm compile && node --import tsx --test test/**/*.test.ts",
     "package:vsix": "pnpm compile && vsce package --no-dependencies --allow-missing-repository",
-    "install:cursor": "pnpm package:vsix && cursor --install-extension \"$(ls -t meridian-vscode-*.vsix | head -1)\" --force",
-    "install:code": "pnpm package:vsix && code --install-extension \"$(ls -t meridian-vscode-*.vsix | head -1)\" --force",
+    "install:cursor": "pnpm package:vsix && node scripts/install-vsix.mjs cursor",
+    "install:code": "pnpm package:vsix && node scripts/install-vsix.mjs code",
     "vscode:prepublish": "pnpm compile"
   },
   "devDependencies": {

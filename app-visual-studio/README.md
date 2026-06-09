@@ -33,6 +33,8 @@ cd app-visual-studio
 pnpm install:cursor
 ```
 
+O script procura o CLI do Cursor no `PATH` e, se não achar, nos caminhos padrão do app (ex.: `/Applications/Cursor.app/...` no macOS). Não é obrigatório rodar *Shell Command: Install 'cursor' command in PATH* antes — mas ajuda em setups não padrão.
+
 No Cursor: **Cmd+Shift+P** → `Developer: Reload Window`.
 
 Depois:
