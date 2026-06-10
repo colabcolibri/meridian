@@ -2,9 +2,12 @@ import * as vscode from "vscode"
 
 import { fileEventTouchesBoardSync, isBoardSyncDocsPath } from "./docs-board-sync.js"
 import {
+  pickMeridianWorkspace,
+  selectActiveMeridianProject,
+} from "./meridian-workspace-picker.js"
+import {
   countUserStoriesInDocs,
   formatStatusTooltip,
-  pickMeridianWorkspace,
   type MeridianWorkspaceInfo,
 } from "./meridian-workspace.js"
 
@@ -41,7 +44,7 @@ export class MeridianContext {
 
   async refresh(): Promise<void> {
     const folders = vscode.workspace.workspaceFolders ?? []
-    const picked = await pickMeridianWorkspace(folders)
+    const picked = await pickMeridianWorkspace(folders, this.extensionContext)
     this.state.info = picked?.info ?? null
     await this.applyContextKeys()
     this.updateStatusBar()
@@ -57,6 +60,22 @@ export class MeridianContext {
       }
     } else {
       this.lastWarnedDocsRoot = null
+    }
+  }
+
+  async selectActiveProject(): Promise<void> {
+    const next = await selectActiveMeridianProject(
+      this.extensionContext,
+      this.state.info,
+    )
+    if (next && next.projectId !== this.state.info?.projectId) {
+      this.state.info = next
+      this.updateStatusBar()
+      this.resetDocsWatcher()
+      this.onWorkspaceChanged?.()
+      void vscode.window.showInformationMessage(
+        `Meridian: active project — ${next.projectName} (${next.docsRoot})`,
+      )
     }
   }
 
@@ -209,9 +228,12 @@ export class MeridianContext {
     }
 
     this.statusItem.backgroundColor = undefined
-    this.statusItem.command = undefined
+    this.statusItem.command =
+      info.projects.length > 1 ? "meridian.selectActiveProject" : undefined
+    const projectLabel =
+      info.projects.length > 1 ? `${info.projectName} · ` : ""
     this.statusItem.text = info.docsExists
-      ? `Meridian: ${info.usCount} US`
+      ? `Meridian: ${projectLabel}${info.usCount} US`
       : "Meridian: no docs"
     this.statusItem.tooltip = formatStatusTooltip(info)
     this.statusItem.show()

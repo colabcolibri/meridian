@@ -4,13 +4,13 @@ import * as path from "node:path"
 
 import type { MeridianWorkspaceInfo } from "./meridian-workspace.js"
 
-/** Folder argument for validate_meridian.py (must contain docs/). */
+/** Folder argument for validate_meridian.py (package folder that owns docs/). */
 export function resolveValidateTarget(info: MeridianWorkspaceInfo): string {
+  if (fs.existsSync(path.join(info.packageRoot, "docs"))) {
+    return info.packageRoot
+  }
   const docsParent = path.dirname(info.docsRoot)
-  if (
-    path.basename(info.docsRoot) === "docs" &&
-    fs.existsSync(path.join(docsParent, "docs", "00_scope.md"))
-  ) {
+  if (path.basename(info.docsRoot) === "docs") {
     return docsParent
   }
   return info.projectRoot

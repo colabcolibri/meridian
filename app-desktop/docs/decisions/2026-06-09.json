@@ -2,6 +2,15 @@
   "date": "2026-06-09",
   "entries": [
     {
+      "time": "22:10",
+      "title": "EPIC-13 + v2.03 multi-product docs resolution",
+      "affected_document": "docs/epics/EPIC-13.md, docs/versions/v2.03.md, docs/sprints/v2.03-S1.md, docs/us/US-0101.md, docs/05_architecture.md, app-visual-studio/src/resolve-meridian-projects.ts",
+      "what_changed": "New epic EPIC-13 and version v2.03 for monorepo multi-product support: .meridian/projects.json manifest A + docs/ discovery B, extension active project picker, kit templates and guides. US-0101 created, refined, and closed retroactively after implementation.",
+      "why_changed": "Managers need several Meridian products per repo without hard-coded app-desktop/docs; Meridian protocol requires US/version/epic before or at close of work.",
+      "impact": "Extension validate uses packageRoot; agents follow same manifest contract; EPIC-13 complete in one sprint.",
+      "responsible": "Process Manager"
+    },
+    {
       "time": "20:23",
       "title": "US-0100 kit install — multi-IDE and surgical sync",
       "affected_document": ".agent/scripts/, .agent/KIT_README.md, .agent/IDE_ADAPTERS.md, US-0100.md, EPIC-12.md, v2.02.md",

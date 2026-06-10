@@ -2,7 +2,7 @@
   "name": "meridian-vscode",
   "displayName": "%extension.displayName%",
   "description": "%extension.description%",
-  "version": "1.1.8",
+  "version": "1.1.9",
   "publisher": "colabcolibri",
   "license": "PolyForm-Noncommercial-1.0.0",
   "icon": "media/icon.png",
@@ -57,6 +57,7 @@
     "onCommand:meridian.validateProject",
     "onCommand:meridian.showStatus",
     "onCommand:meridian.syncBoard",
+    "onCommand:meridian.selectActiveProject",
     "workspaceContains:.agent/MERIDIAN.md"
   ],
   "main": "./dist/extension.js",
@@ -103,6 +104,7 @@
         { "command": "meridian.upgradeKit", "group": "2@2" },
         { "command": "meridian.validateProject", "group": "3@1" },
         { "command": "meridian.showStatus", "group": "3@2" },
+        { "command": "meridian.selectActiveProject", "group": "3@3" },
         { "command": "meridian.syncBoard", "group": "4@1" },
         { "command": "meridian.newUserStory", "group": "4@2" }
       ]
@@ -183,8 +185,23 @@
         "command": "meridian.refreshCommands",
         "title": "%meridian.command.refreshCommands.title%",
         "icon": "$(refresh)"
+      },
+      {
+        "command": "meridian.selectActiveProject",
+        "title": "%meridian.command.selectActiveProject.title%",
+        "icon": "$(list-selection)"
       }
-    ]
+    ],
+    "configuration": {
+      "title": "Meridian",
+      "properties": {
+        "meridian.activeProject": {
+          "type": "string",
+          "default": "",
+          "description": "Active Meridian project id from .meridian/projects.json (overrides last picker choice)."
+        }
+      }
+    }
   },
   "scripts": {
     "compile": "node esbuild.mjs",

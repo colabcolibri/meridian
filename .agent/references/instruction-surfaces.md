@@ -148,6 +148,7 @@ Use this when adding or changing protocol behavior (example: **as-is inventory**
 | New delivery artifact | Template + skill + `INDEX.md` | `start-here.md`, `lifecycle.md`, validator if required |
 | Migration / bootstrap step | `init-project/SKILL.md`, `init-meridian.md` | `usage-guide.md`, `start-here.md`, `meridian-concepts.ts` |
 | New `docs/` folder (optional) | `start-here.md`, `doc-templates.md` | `meridian-concepts.ts` `folderStructure`, init skill |
+| Multi-product / monorepo | `projects-manifest-template.md`, `usage-guide.md`, `MERIDIAN.md` | `resolve-meridian-projects.ts`, `meridian-workspace.ts`, `meridian-context.ts`, `package.json` command, `meridian-concepts.ts` |
 | Agent behavior only | `.agent/agents/{name}.md` | Usually nothing else |
 | Desktop-only feature | `app-desktop/docs/us/` + phase docs | Not kit unless protocol changes |
 

@@ -9,6 +9,10 @@ test("kitReferencePath resolves agents-help under project root", () => {
   const info: MeridianWorkspaceInfo = {
     projectRoot: "/repo",
     docsRoot: "/repo/app-desktop/docs",
+    packageRoot: "/repo/app-desktop",
+    projectId: "app-desktop",
+    projectName: "Desktop",
+    projects: [],
     kitDetected: true,
     docsExists: true,
     usCount: 0,

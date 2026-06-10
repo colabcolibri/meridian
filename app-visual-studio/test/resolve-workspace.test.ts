@@ -33,7 +33,7 @@ test("client project: kit and docs at workspace root", () => {
   assert.equal(info.projectRoot, tmp)
   assert.equal(info.docsExists, true)
   assert.equal(info.usCount, 2)
-  assert.match(formatStatusTooltip(info), /User stories: 2/)
+  assert.match(formatStatusTooltip(info), /User stories \(active\): 2/)
 })
 
 test("nested app folder: kit at parent, docs in workspace", () => {
@@ -76,4 +76,6 @@ test("monorepo root: kit at root, docs under app-desktop/docs", () => {
   assert.equal(info.docsExists, true)
   assert.equal(info.usCount, 1)
   assert.ok(info.docsRoot.endsWith("app-desktop/docs"))
+  assert.equal(info.packageRoot, path.join(tmp, "app-desktop"))
+  assert.equal(info.projects.length, 1)
 })

@@ -42,6 +42,7 @@ CANONICAL (edit here)          REGISTRY (agents read)              HUMAN / CURSO
 | File | Purpose |
 | ---- | ------- |
 | `.agent/references/templates/as-is-inventory-template.md` | Mode B as-is map — `docs/inventory/as-is.md` |
+| `.agent/references/templates/projects-manifest-template.md` | Multi-product monorepo — `.meridian/projects.json` |
 | `.agent/references/templates/INDEX.md` | Registry table artifact → template → agent → workflow |
 | `.agent/references/templates/writing-guide.md` | Prose quality — Intent, Plan, epic paragraphs |
 | `.agent/references/templates/section-contracts.md` | Fixed headings — validated by Python + monitor |

@@ -24,6 +24,24 @@ Run `/status` at any point to get blockers, current state, and suggested next ac
 | Architecture approved, no backlog yet | [Build the backlog](#build-the-backlog) |
 | Backlog exists, ready to implement | [Implement a user story](#implement-a-user-story) |
 | Implementation done, not recorded | [Close a user story](#close-a-user-story) |
+| Monorepo with several `docs/` trees | [Multiple Meridian projects](#multiple-meridian-projects) |
+
+---
+
+## Multiple Meridian projects
+
+When the repo has **more than one** folder named exactly `docs` with Meridian content (any layout — root `docs/`, `apps/pkg/docs`, etc.):
+
+1. **Discovery (B)** — tools scan for `docs/` + fingerprint (`00_scope.md` or `us/US-*.md`). `docs-extra` and other names are ignored.
+2. **Manifest (A)** — optional `.meridian/projects.json` at kit root: ids, names, `default`, `exclude`.
+3. **Active project** — one `docs/` at a time for board, validate, `/status`, and US work.
+
+| Action | How |
+| ------ | --- |
+| Declare products | Create `.meridian/projects.json` (see `projects-manifest-template.md`) |
+| Switch in IDE | **Meridian: Select Active Project** or status bar (multi-project) |
+| Validate | `python3 .agent/scripts/validate_meridian.py <package-folder>` — folder that **owns** `docs/`, not always repo root |
+| Agent | `/status` lists projects; confirm active `docs/` before creating or editing US |
 
 ---
 

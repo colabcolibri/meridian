@@ -1,23 +1,39 @@
 import * as fs from "node:fs"
 import * as path from "node:path"
 
-import type * as vscode from "vscode"
+import {
+  findKitRoot,
+  isMeridianDocs,
+  matchProjectForWorkspacePath,
+  pickDefaultProjectId,
+  projectById,
+  readProjectsManifest,
+  resolveMeridianProjects,
+  type MeridianProject,
+} from "./resolve-meridian-projects.js"
 
-const KIT_REL = path.join(".agent", "MERIDIAN.md")
 const US_FILENAME = /^US-\d{4}\.md$/i
-/** Dogfood monorepo: kit at repo root, docs under app-desktop/docs */
-const MONOREPO_DOCS_CANDIDATES = ["docs", "app-desktop/docs"] as const
+
+export type MeridianProjectSummary = {
+  id: string
+  name: string
+  docs: string
+  packageRoot: string
+  source: MeridianProject["source"]
+  usCount: number
+  isActive: boolean
+}
 
 export type MeridianWorkspaceInfo = {
   projectRoot: string
   docsRoot: string
+  packageRoot: string
+  projectId: string
+  projectName: string
+  projects: MeridianProjectSummary[]
   kitDetected: true
   docsExists: boolean
   usCount: number
-}
-
-function kitFileAt(root: string): string {
-  return path.join(root, KIT_REL)
 }
 
 export function countUserStoriesInDocs(docsRoot: string): number {
@@ -30,77 +46,136 @@ export function countUserStoriesInDocs(docsRoot: string): number {
     .filter((e) => e.isFile() && US_FILENAME.test(e.name)).length
 }
 
-function firstExistingDir(candidates: string[]): string {
-  for (const dir of candidates) {
-    if (fs.existsSync(dir) && fs.statSync(dir).isDirectory()) {
-      return dir
+function docsDirExists(docsDir: string): boolean {
+  return fs.existsSync(docsDir) && fs.statSync(docsDir).isDirectory()
+}
+
+function buildInfo(
+  kitRoot: string,
+  project: MeridianProject,
+  allProjects: MeridianProject[],
+): MeridianWorkspaceInfo {
+  const docsRoot = path.join(kitRoot, ...project.docs.split("/"))
+  const packageRoot = path.join(kitRoot, ...project.packageRoot.split("/"))
+  const docsExists = docsDirExists(docsRoot)
+
+  const projects: MeridianProjectSummary[] = allProjects.map((p) => {
+    const pDocs = path.join(kitRoot, ...p.docs.split("/"))
+    const exists = docsDirExists(pDocs)
+    return {
+      id: p.id,
+      name: p.name,
+      docs: p.docs,
+      packageRoot: p.packageRoot,
+      source: p.source,
+      usCount: exists ? countUserStoriesInDocs(pDocs) : 0,
+      isActive: p.id === project.id,
     }
-  }
-  return candidates[0]
-}
+  })
 
-function resolveDocsRoot(projectRoot: string, workspacePath: string): string {
-  if (workspacePath !== projectRoot) {
-    return path.join(workspacePath, "docs")
-  }
-  const candidates = MONOREPO_DOCS_CANDIDATES.map((rel) =>
-    path.join(projectRoot, rel),
-  )
-  return firstExistingDir(candidates)
-}
-
-function buildInfo(projectRoot: string, docsRoot: string): MeridianWorkspaceInfo {
-  const docsExists =
-    fs.existsSync(docsRoot) && fs.statSync(docsRoot).isDirectory()
   return {
-    projectRoot,
+    projectRoot: kitRoot,
     docsRoot,
+    packageRoot,
+    projectId: project.id,
+    projectName: project.name,
+    projects,
     kitDetected: true,
     docsExists,
     usCount: docsExists ? countUserStoriesInDocs(docsRoot) : 0,
   }
 }
 
+export function resolveActiveProject(
+  kitRoot: string,
+  workspacePath: string,
+  storedActiveId: string | undefined,
+  configuredActiveId?: string,
+): MeridianProject | null {
+  const all = resolveMeridianProjects(kitRoot)
+  if (all.length === 0) {
+    return null
+  }
+
+  const manifest = readProjectsManifest(kitRoot)
+  const fromWorkspace = matchProjectForWorkspacePath(all, kitRoot, workspacePath)
+  const preferred = configuredActiveId ?? storedActiveId ?? fromWorkspace?.id
+  const defaultId = pickDefaultProjectId(all, manifest, preferred)
+  if (defaultId) {
+    return projectById(all, defaultId) ?? all[0]
+  }
+  return all[0] ?? null
+}
+
 /** Aligns with `validate_meridian.py` kit detection (`.agent/MERIDIAN.md`). */
 export function resolveMeridianWorkspaceFromPaths(
   workspacePath: string,
+  storedActiveId?: string,
+  configuredActiveId?: string,
 ): MeridianWorkspaceInfo | null {
   const normalized = path.resolve(workspacePath)
-
-  if (fs.existsSync(kitFileAt(normalized))) {
-    return buildInfo(normalized, resolveDocsRoot(normalized, normalized))
+  const kitRoot = findKitRoot(normalized)
+  if (!kitRoot) {
+    return null
   }
 
-  const parent = path.dirname(normalized)
-  if (fs.existsSync(kitFileAt(parent))) {
-    return buildInfo(parent, path.join(normalized, "docs"))
+  const all = resolveMeridianProjects(kitRoot)
+  let active = resolveActiveProject(
+    kitRoot,
+    normalized,
+    storedActiveId,
+    configuredActiveId,
+  )
+
+  if (!active && normalized !== kitRoot && isMeridianDocs(path.join(normalized, "docs"))) {
+    const docsRel = path.relative(kitRoot, path.join(normalized, "docs")).split(path.sep).join("/")
+    const packageRel = path.relative(kitRoot, normalized).split(path.sep).join("/") || "."
+    active = {
+      id: packageRel === "." ? "main" : packageRel.replace(/\//g, "-"),
+      name: path.basename(normalized),
+      docs: docsRel,
+      packageRoot: packageRel,
+      source: "discovered",
+    }
   }
 
-  return null
+  if (!active) {
+    active = {
+      id: "main",
+      name: "Main",
+      docs: "docs",
+      packageRoot: ".",
+      source: "discovered",
+    }
+  }
+
+  const projectList = all.length ? all : [active]
+  const resolved = projectById(projectList, active.id) ?? active
+  return buildInfo(kitRoot, resolved, projectList)
 }
 
 export function formatStatusTooltip(info: MeridianWorkspaceInfo): string {
   const lines = [
     "Meridian kit: detected",
-    `Project root: ${info.projectRoot}`,
+    `Kit root: ${info.projectRoot}`,
+    `Active project: ${info.projectName} (${info.projectId})`,
     `Docs: ${info.docsRoot}`,
+    `Package: ${info.packageRoot}`,
   ]
+  if (info.projects.length > 1) {
+    lines.push("Projects:")
+    for (const p of info.projects) {
+      const mark = p.isActive ? "•" : " "
+      lines.push(
+        `  ${mark} ${p.name} [${p.id}] → ${p.docs} (${p.usCount} US, ${p.source})`,
+      )
+    }
+    lines.push("Switch: Meridian: Select Active Project")
+  }
   if (!info.docsExists) {
-    lines.push("Warning: docs/ folder missing")
+    lines.push("Warning: docs/ folder missing or empty")
   } else {
-    lines.push(`User stories: ${info.usCount} (read-only)`)
+    lines.push(`User stories (active): ${info.usCount}`)
   }
   return lines.join("\n")
-}
-
-export async function pickMeridianWorkspace(
-  folders: readonly vscode.WorkspaceFolder[],
-): Promise<{ folder: vscode.WorkspaceFolder; info: MeridianWorkspaceInfo } | null> {
-  for (const folder of folders) {
-    const info = resolveMeridianWorkspaceFromPaths(folder.uri.fsPath)
-    if (info) {
-      return { folder, info }
-    }
-  }
-  return null
 }

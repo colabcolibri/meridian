@@ -17,5 +17,6 @@
   "meridian.command.validateProject.title": "Meridian: Validate Project",
   "meridian.command.newUserStory.title": "Meridian: New User Story",
   "meridian.command.showStatus.title": "Meridian: Show Workspace Status",
-  "meridian.command.refreshCommands.title": "Meridian: Refresh Commands"
+  "meridian.command.refreshCommands.title": "Meridian: Refresh Commands",
+  "meridian.command.selectActiveProject.title": "Meridian: Select Active Project"
 }

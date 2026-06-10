@@ -118,8 +118,9 @@ F5 / Extension Development Host is **maintainer-only**. End users install `.vsix
 ### Activation and `docs/` resolution
 
 - `workspaceContains:.agent/MERIDIAN.md`.
-- Monorepo: kit at repo root, `docs/` at `app-desktop/docs/` when workspace is root or nested app folder.
-- Client project: `docs/` next to copied `.agent/`.
+- **Single product:** `docs/` next to copied `.agent/` (client) or dogfood `app-desktop/docs/` when kit is at monorepo root.
+- **Multi-product (v2.03, US-0101):** optional `.meridian/projects.json` at kit root declares `projects[]` (`id`, `name`, `docs` path relative to repo) plus `default` and `exclude`. **Discovery B** also finds every folder named exactly `docs` whose tree passes Meridian fingerprint (`00_scope.md` or `us/US-*.md`). Manifest **A** merges with discovery; `exclude` removes paths. Only the folder name `docs` counts — not `docs-extra`.
+- **Active project:** `meridian.activeProject` + **Select Active Project**; board, deliverables, validate, and sync use the active `docs/` and its `packageRoot` (parent of `docs/`).
 
 ### Packaging
 

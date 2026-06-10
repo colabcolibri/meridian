@@ -126,6 +126,7 @@ The person is manager of the process. Agents report blockers, next step, and pen
 | -------- | ------------- | ----- |
 | `docs/` structure | `process-manager` | `init-project` |
 | `docs/inventory/as-is.md` (Mode B) | `documentation-strategist` | `init-project` |
+| `.meridian/projects.json` (multi-product) | `process-manager` | `init-project` |
 | `00_scope.md` | `scope-architect` | `init-project` |
 | `01`–`08`, `11` (phase) | `documentation-strategist` | `update-decisions-log` |
 | `02_security.md` | `security-steward` | `security-review` |

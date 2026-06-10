@@ -219,6 +219,9 @@ export function activate(context: vscode.ExtensionContext): void {
     vscode.commands.registerCommand("meridian.upgradeKit", () => installKit(true)),
     vscode.commands.registerCommand("meridian.validateProject", validateProject),
     vscode.commands.registerCommand("meridian.showStatus", showStatus),
+    vscode.commands.registerCommand("meridian.selectActiveProject", () =>
+      meridianContext?.selectActiveProject(),
+    ),
     vscode.commands.registerCommand("meridian.syncBoard", syncBoard),
     vscode.commands.registerCommand("meridian.newUserStory", newUserStory),
   )

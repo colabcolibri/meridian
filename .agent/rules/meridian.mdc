@@ -19,7 +19,7 @@ Priority: **P0 rules > P1 agent + MERIDIAN.md > P2 skills**.
 
 ## Short rules
 
-- `docs/` of the **target project** is the source of truth (do not confuse with `app-desktop/docs/` unless context is explicit).
+- `docs/` of the **active Meridian product** is the source of truth (monorepos may have several `docs/` trees — see `.meridian/projects.json` and `projects-manifest-template.md`).
 - Documentation precedes product code.
 - Do not create US before `05_architecture` `approved`.
 - `docs/kanban/board.json` is derived from `docs/us/*.md`.

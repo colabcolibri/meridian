@@ -1234,5 +1234,20 @@
     "done_when": "Manager builds meridian-kit tarball, installs into an external project, upgrades with --force, and IDE adapters sync without deleting non-Meridian files in .cursor/ or .claude/.",
     "tests": "required",
     "tests_status": "done"
+  },
+  {
+    "id": "US-0101",
+    "title": "Multi-product docs resolution (manifest A + discovery B)",
+    "epic": "EPIC-13",
+    "version": "v2.03",
+    "status": "✅",
+    "moscow": "Must",
+    "depends_on": [
+      "US-0042",
+      "US-0100"
+    ],
+    "done_when": "Extension lists every Meridian docs/ in the repo, respects .meridian/projects.json, persists active project, validates packageRoot; kit documents the same contract.",
+    "tests": "required",
+    "tests_status": "done"
   }
 ]

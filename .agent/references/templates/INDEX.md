@@ -12,6 +12,7 @@ Templates are mirrored here from skills (`references/`) so every agent uses the 
 | -------- | ---------------------------- | ------------- | ----- | -------- |
 | Phase docs `00`–`11` | `doc-templates.md` | `documentation-strategist` | `init-project` | `/init-meridian` |
 | As-is inventory `docs/inventory/as-is.md` | `as-is-inventory-template.md` | `documentation-strategist` | `init-project` (Mode B) | `/init-meridian` |
+| Projects manifest `.meridian/projects.json` | `projects-manifest-template.md` | `process-manager` | `init-project` | `/init-meridian`, `/status` |
 | Epic `docs/epics/EPIC-XX.md` | `epic-template.md` + **`writing-guide.md`** | `documentation-strategist` | `create-epic` | `/create-epic` |
 | Version `docs/versions/vX.md` | `version-template.md` + **`writing-guide.md`** | `sprint-planner` | `create-version` | `/create-version` |
 | Sprint `docs/sprints/vX-SY.md` | `sprint-template.md` | `sprint-planner` | `create-sprint` | `/plan-sprint` |

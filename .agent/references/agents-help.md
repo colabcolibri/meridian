@@ -144,7 +144,7 @@ Thirteen workflows in **six groups**. Each maps to one primary agent (sometimes 
 
 | Step | Command | Agent | What it does |
 | ---- | ------- | ----- | ------------ |
-| B1 | **`/status`** | `process-manager` | Read-only health: phase doc statuses, US counts, blockers, recommended next human action. |
+| B1 | **`/status`** | `process-manager` | Read-only health: kit root, Meridian projects (multi-`docs/` repos), active product, phase doc statuses, US counts, blockers. |
 | B2 | **`/daily-with-ai`** | `process-manager` | Guided session: status → pick story → implement → close → sync. |
 | B3 | **`/agents-help`** | `process-manager` | Opens this reference; summarizes groups and current-step hints. |
 

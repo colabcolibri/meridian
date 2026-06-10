@@ -1,0 +1,1 @@
+../../../.agent/references/templates/projects-manifest-template.md

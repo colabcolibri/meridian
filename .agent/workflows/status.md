@@ -26,11 +26,15 @@ CONTEXT:
 
 PROCEDURE:
 1. Read .agent/MERIDIAN.md
-2. Read docs/README.md
-3. For each phase doc 00–08 and 11: record status from frontmatter
-4. Count US by status from docs/us/ or board.json
-5. List blockers (missing deps, invalid US, immature docs)
-6. Recommend next human decision
+2. Resolve kit root and Meridian projects:
+   - Read .meridian/projects.json if present
+   - Discovery: every folder named exactly docs with 00_scope or us/
+   - Report active project (manager choice, default, or single match)
+3. Read docs/README.md for the **active** docs/ tree
+4. For each phase doc 00–08 and 11: record status from frontmatter
+5. Count US by status from active docs/us/ or board.json
+6. List blockers (missing deps, invalid US, immature docs)
+7. Recommend next human decision
 ```
 
 ---
@@ -38,6 +42,9 @@ PROCEDURE:
 ## Output
 
 ```txt
+Kit root:
+Meridian projects (if >1): id → docs path (active marked)
+Active project:
 Current phase:
 Docs:
   00_scope: [status]

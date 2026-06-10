@@ -325,6 +325,7 @@ export const folderStructure = {
   title: "What is inside docs/",
   intro: [
     "Two types of files: foundation docs that define the project, and delivery files that track the work. Every agent session reads from here. Everything the project knows lives here.",
+    "Monorepos may have several docs/ folders (any path — root docs/, apps/pkg/docs/, etc.). Only folders named exactly docs qualify; docs-extra does not. Optional .meridian/projects.json at kit root declares products; the IDE extension picks one active project at a time.",
   ],
   items: [
     {
@@ -374,6 +375,12 @@ export const folderStructure = {
       label: "As-is inventory (Mode B)",
       description:
         "Transitional map during migration of an existing codebase — docs/inventory/as-is.md. Archive after 05_architecture is approved; not a permanent source of truth.",
+    },
+    {
+      path: ".meridian/projects.json",
+      label: "Projects manifest (multi-product)",
+      description:
+        "Optional at kit root when the repo has several docs/ trees (any path). Declares ids, names, default, exclude. Discovery finds folders named exactly docs; docs-extra never counts.",
     },
     {
       path: "docs/templates/",

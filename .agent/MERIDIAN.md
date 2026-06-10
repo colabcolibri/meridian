@@ -68,11 +68,15 @@ See `.agent/ARCHITECTURE.md` for the full map. Minimum:
     migrate_us_v2_structure.py   # one-off US schema migration
     sync_cursor_kit.sh
 
-docs/                        ← target project source of truth
+docs/                        ← one product's source of truth (path varies in monorepos)
   00_scope.md … 11_decisions.md
   epics/  versions/  sprints/  us/  kanban/board.json  decisions/
   templates/                 ← symlinks to kit templates (human mirror)
+
+.meridian/projects.json      ← optional — several docs/ trees in one repo (A + discovery B)
 ```
+
+**Multi-product repos:** one `.agent/` kit root; each Meridian product = one folder named exactly `docs` (any path). `.meridian/projects.json` declares ids, default, exclude; discovery finds unnamed `docs/` trees. Active project selects which tree board/validate/US target. See `projects-manifest-template.md`.
 
 **IDE adapters:** edit `.agent/`, run `./.agent/scripts/sync_cursor_kit.sh` for `.cursor/` and `.claude/`. Do not commit adapter folders. See [IDE_ADAPTERS.md](./IDE_ADAPTERS.md).
 

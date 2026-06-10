@@ -4,6 +4,20 @@ All notable changes to the **Meridian** VS Code extension (`meridian-vscode`).
 
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.1.9] - 2026-06-09
+
+### Added
+
+- **Multi-product repos:** discovery of every Meridian `docs/` folder + optional `.meridian/projects.json` manifest
+- **Meridian: Select Active Project** — picker when the repo has more than one product; status bar shows active name
+- Setting `meridian.activeProject` to pin the active project id
+- Validate runs against the active product `packageRoot`, not only the monorepo root
+
+### Changed
+
+- Bundled kit: `projects-manifest-template.md`, usage-guide and init-project guidance for monorepos
+- Dogfood: US-0101, EPIC-13, v2.03 closed
+
 ## [1.1.8] - 2026-06-09
 
 ### Fixed

@@ -92,7 +92,20 @@ docs/
   us/US-XXXX.md            Phase 3+4 — executable tasks
   kanban/board.json        Generated — never edit by hand
   inventory/as-is.md       Mode B only — transitional; archive after promotion
+  ../.meridian/projects.json  Optional — multi-product repos (several docs/ trees)
 ```
+
+### Several `docs/` folders (monorepo)
+
+One kit (`.agent/`) at the repo root can serve **multiple products**. Each product owns a folder named exactly **`docs`** — anywhere in the tree (`docs`, `apps/pkg/docs`, `cliente-x/docs`, …). Folders like `docs-extra` are **not** Meridian projects.
+
+| Layer | File | Role |
+| ----- | ---- | ---- |
+| A — manifest | `.meridian/projects.json` | Declares ids, names, `default`, `exclude` |
+| B — discovery | automatic | Finds every `docs/` with Meridian fingerprint (`00_scope` or `us/`) |
+| Active project | picker / setting | Board, validate, and agent work target one `docs/` at a time |
+
+Template: `projects-manifest-template.md`. Extension: **Meridian: Select Active Project**.
 
 ---
 
