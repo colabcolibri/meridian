@@ -7,17 +7,33 @@ import {
   PLANNING_WEBVIEW_STYLES,
   planningWebviewShell,
 } from "./webview-common.js"
+import {
+  PROJECT_CONTEXT_SCRIPT,
+  PROJECT_CONTEXT_STYLES,
+  projectContextToolbarHtml,
+  type WebviewProjectContext,
+} from "./webview-project-context.js"
 
-export function versionsWebviewHtml(payload: PlanningPayload): string {
+export function versionsWebviewHtml(
+  payload: PlanningPayload,
+  context: WebviewProjectContext,
+): string {
   const nonce = crypto.randomBytes(16).toString("hex")
   const sorted = planningPayloadForVersionsView(payload)
   const dataJson = JSON.stringify(sorted)
+  const contextJson = JSON.stringify(context)
   const body = `
+  <div class="toolbar">
+    ${projectContextToolbarHtml(context)}
+  </div>
   <div class="main" id="list"></div>
   <div class="pager" id="pager"></div>`
   const script = `
     const vscode = acquireVsCodeApi();
     const payload = ${dataJson};
+    const projectContext = ${contextJson};
+    ${PROJECT_CONTEXT_SCRIPT}
+    wireProjectContext(projectContext);
     ${FILTER_CHIP_SCRIPT}
     ${PAGINATION_SCRIPT}
     const STATE_VERSION = 5;
@@ -112,5 +128,5 @@ export function versionsWebviewHtml(payload: PlanningPayload): string {
     }
     renderList();
   `
-  return planningWebviewShell(nonce, PLANNING_WEBVIEW_STYLES, body, script)
+  return planningWebviewShell(nonce, PLANNING_WEBVIEW_STYLES + PROJECT_CONTEXT_STYLES, body, script)
 }

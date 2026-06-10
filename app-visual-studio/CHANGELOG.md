@@ -4,6 +4,18 @@ All notable changes to the **Meridian** VS Code extension (`meridian-vscode`).
 
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.1.10] - 2026-06-09
+
+### Added
+
+- **Project context strip** in Board, Versions, Sprints, and Epics — active name, `docs/` path, US count
+- **Dropdown** in toolbar when multiple projects — switch persists and refreshes all open Meridian tabs
+- Tab titles: `Board — App OSC (42)` or `Board — app-desktop/docs (42)` for single nested `docs/`
+
+### Changed
+
+- `switchActiveMeridianProjectById` shared by status bar, command, and webview dropdown
+
 ## [1.1.9] - 2026-06-09
 
 ### Added

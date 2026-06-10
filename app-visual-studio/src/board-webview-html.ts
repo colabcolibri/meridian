@@ -7,12 +7,19 @@ import {
   allSelectedVersionIds,
 } from "./domain/version-filter.js"
 import { PAGINATION_SCRIPT } from "./webview-common.js"
+import {
+  PROJECT_CONTEXT_SCRIPT,
+  PROJECT_CONTEXT_STYLES,
+  projectContextToolbarHtml,
+  type WebviewProjectContext,
+} from "./webview-project-context.js"
 
 export type BoardWebviewPayload = {
   stories: UserStory[]
   epics: EpicSummary[]
   versions: VersionSummary[]
   defaultVersions: string[]
+  context: WebviewProjectContext
 }
 
 export function buildBoardPayload(
@@ -176,10 +183,12 @@ export function boardKanbanHtml(payload: BoardWebviewPayload): string {
       background: var(--vscode-input-background);
       color: var(--vscode-foreground);
     }
+    ${PROJECT_CONTEXT_STYLES}
   </style>
 </head>
 <body>
   <div class="toolbar">
+    ${projectContextToolbarHtml(payload.context)}
     <div class="toolbar-row">
       <span class="toolbar-label">Version</span>
       <button type="button" class="chip" id="version-all">All</button>
@@ -203,6 +212,8 @@ export function boardKanbanHtml(payload: BoardWebviewPayload): string {
   <script nonce="${nonce}">
     const vscode = acquireVsCodeApi();
     const payload = ${dataJson};
+    ${PROJECT_CONTEXT_SCRIPT}
+    wireProjectContext(payload.context);
     ${PAGINATION_SCRIPT}
     const BOARD_STATE_VERSION = 7;
     const COLUMN_ORDER = ["❌", "🔶", "🧪", "✅", "🧊"];

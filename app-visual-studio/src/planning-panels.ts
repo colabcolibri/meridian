@@ -4,6 +4,7 @@ import { loadPlanningPayload } from "./planning-payload.js"
 import { sprintsWebviewHtml } from "./sprints-webview-html.js"
 import { versionsWebviewHtml } from "./versions-webview-html.js"
 import type { MeridianWorkspaceInfo } from "./meridian-workspace.js"
+import { buildWebviewProjectContext, formatMeridianPanelTitle } from "./webview-project-context.js"
 
 export class VersionsEditorPanel extends DocsOpenPanel {
   protected readonly viewType = "meridian.versions"
@@ -13,9 +14,10 @@ export class VersionsEditorPanel extends DocsOpenPanel {
 
   protected buildHtml(info: MeridianWorkspaceInfo): BuiltHtml {
     const payload = loadPlanningPayload(info.docsRoot)
+    const context = buildWebviewProjectContext(info)
     return {
-      html: versionsWebviewHtml(payload),
-      title: `Meridian Versions (${payload.versions.length})`,
+      html: versionsWebviewHtml(payload, context),
+      title: formatMeridianPanelTitle("Versions", info, payload.versions.length),
     }
   }
 }
@@ -28,9 +30,10 @@ export class SprintsEditorPanel extends DocsOpenPanel {
 
   protected buildHtml(info: MeridianWorkspaceInfo): BuiltHtml {
     const payload = loadPlanningPayload(info.docsRoot)
+    const context = buildWebviewProjectContext(info)
     return {
-      html: sprintsWebviewHtml(payload),
-      title: `Meridian Sprints (${payload.sprints.length})`,
+      html: sprintsWebviewHtml(payload, context),
+      title: formatMeridianPanelTitle("Sprints", info, payload.sprints.length),
     }
   }
 }
@@ -43,9 +46,10 @@ export class EpicsEditorPanel extends DocsOpenPanel {
 
   protected buildHtml(info: MeridianWorkspaceInfo): BuiltHtml {
     const payload = loadPlanningPayload(info.docsRoot)
+    const context = buildWebviewProjectContext(info)
     return {
-      html: epicsWebviewHtml(payload),
-      title: `Meridian Epics (${payload.epics.length})`,
+      html: epicsWebviewHtml(payload, context),
+      title: formatMeridianPanelTitle("Epics", info, payload.epics.length),
     }
   }
 }

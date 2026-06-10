@@ -4,6 +4,7 @@ import { fileEventTouchesBoardSync, isBoardSyncDocsPath } from "./docs-board-syn
 import {
   pickMeridianWorkspace,
   selectActiveMeridianProject,
+  switchActiveMeridianProjectById,
 } from "./meridian-workspace-picker.js"
 import {
   countUserStoriesInDocs,
@@ -68,15 +69,38 @@ export class MeridianContext {
       this.extensionContext,
       this.state.info,
     )
-    if (next && next.projectId !== this.state.info?.projectId) {
-      this.state.info = next
-      this.updateStatusBar()
-      this.resetDocsWatcher()
-      this.onWorkspaceChanged?.()
-      void vscode.window.showInformationMessage(
-        `Meridian: active project — ${next.projectName} (${next.docsRoot})`,
-      )
+    if (next) {
+      this.applyActiveProject(next)
     }
+  }
+
+  async selectActiveProjectById(id: string): Promise<void> {
+    const current = this.state.info
+    if (!current) {
+      return
+    }
+    const next = await switchActiveMeridianProjectById(
+      this.extensionContext,
+      current,
+      id,
+    )
+    if (next) {
+      this.applyActiveProject(next)
+    }
+  }
+
+  private applyActiveProject(next: MeridianWorkspaceInfo): void {
+    if (next.projectId === this.state.info?.projectId) {
+      return
+    }
+    this.state.info = next
+    this.updateStatusBar()
+    this.resetDocsWatcher()
+    this.onWorkspaceChanged?.()
+    const active = next.projects.find((p) => p.isActive)
+    void vscode.window.showInformationMessage(
+      `Meridian: active project — ${next.projectName} (${active?.docs ?? next.docsRoot})`,
+    )
   }
 
   async requireReady(commandLabel: string): Promise<MeridianWorkspaceInfo | null> {

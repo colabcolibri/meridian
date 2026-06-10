@@ -104,7 +104,8 @@ The app is **not** the source of truth for the protocol. It monitors the project
 | **Editor tab — Sprints**  | Sprint list with version filter (All/None/multi)                                                                      |
 | **Editor tab — Epics**    | Epic progress with version + epic filters                                                                             |
 | **Sync Board**            | TypeScript export to `docs/kanban/board.json` (not Python)                                                            |
-| Status bar                | `Meridian: N US` when `docs/` resolved                                                                                |
+| Status bar                | `Meridian: N US` when `docs/` resolved; **project name** prefix when N>1; click opens **Select Active Project**       |
+| **Project context strip** | First toolbar row in Board + Deliverables (v2.04, US-0102): name, `docs/` path, US count; dropdown when N>1           |
 | Menu **View → Meridian**  | Quick access to commands                                                                                              |
 
 F5 / Extension Development Host is **maintainer-only**. End users install `.vsix` (`pnpm install:cursor` or Marketplace later).

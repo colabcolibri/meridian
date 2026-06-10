@@ -3,12 +3,15 @@ import * as path from "node:path"
 import * as vscode from "vscode"
 
 import { boardKanbanHtml, buildBoardPayload, emptyBoardHtml } from "./board-webview-html.js"
+import { buildWebviewProjectContext, formatMeridianPanelTitle } from "./webview-project-context.js"
 import { loadEpicSummaries } from "./load-epics.js"
 import { loadUserStoriesFromDocs } from "./load-stories.js"
 import { loadVersionSummaries } from "./load-versions.js"
 import type { MeridianWorkspaceInfo } from "./meridian-workspace.js"
 
-type BoardMessage = { type: "openStory"; id: string }
+type BoardMessage =
+  | { type: "openStory"; id: string }
+  | { type: "selectProject"; id: string }
 
 /** Kanban in an editor tab (WebviewPanel), not the sidebar. */
 export class BoardEditorPanel {
@@ -19,6 +22,7 @@ export class BoardEditorPanel {
   constructor(
     private readonly extensionUri: vscode.Uri,
     private readonly getWorkspace: () => MeridianWorkspaceInfo | null,
+    private readonly onSelectProject?: (id: string) => Promise<void>,
   ) {}
 
   show(column: vscode.ViewColumn = vscode.ViewColumn.One): void {
@@ -43,6 +47,8 @@ export class BoardEditorPanel {
     this.panel.webview.onDidReceiveMessage((msg: BoardMessage) => {
       if (msg.type === "openStory") {
         void this.openStory(msg.id)
+      } else if (msg.type === "selectProject") {
+        void this.onSelectProject?.(msg.id)
       }
     })
     this.panel.onDidDispose(() => {
@@ -67,9 +73,12 @@ export class BoardEditorPanel {
     const stories = loadUserStoriesFromDocs(info.docsRoot)
     const epics = loadEpicSummaries(info.docsRoot)
     const versions = loadVersionSummaries(info.docsRoot)
-    const payload = buildBoardPayload(stories, epics, versions)
+    const payload = {
+      ...buildBoardPayload(stories, epics, versions),
+      context: buildWebviewProjectContext(info),
+    }
     this.panel.webview.html = boardKanbanHtml(payload)
-    this.panel.title = `Meridian Board (${stories.length})`
+    this.panel.title = formatMeridianPanelTitle("Board", info, stories.length)
   }
 
   private async openStory(id: string): Promise<void> {

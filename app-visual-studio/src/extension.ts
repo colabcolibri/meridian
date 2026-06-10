@@ -195,15 +195,17 @@ export function activate(context: vscode.ExtensionContext): void {
   context.subscriptions.push(outputGeneral, outputValidate, outputTools)
 
   const getWorkspace = () => meridianContext?.workspace ?? null
-
-  boardEditor = new BoardEditorPanel(context.extensionUri, getWorkspace)
-  versionsEditor = new VersionsEditorPanel(context.extensionUri, getWorkspace)
-  sprintsEditor = new SprintsEditorPanel(context.extensionUri, getWorkspace)
-  epicsEditor = new EpicsEditorPanel(context.extensionUri, getWorkspace)
-  helpEditor = new HelpEditorPanel(context.extensionUri)
-  agentsHelpEditor = new AgentsHelpEditorPanel(context.extensionUri, getWorkspace)
+  const onSelectProject = (id: string) =>
+    meridianContext?.selectActiveProjectById(id) ?? Promise.resolve()
 
   meridianContext = new MeridianContext(context, outputGeneral, refreshAllPanels)
+
+  boardEditor = new BoardEditorPanel(context.extensionUri, getWorkspace, onSelectProject)
+  versionsEditor = new VersionsEditorPanel(context.extensionUri, getWorkspace, onSelectProject)
+  sprintsEditor = new SprintsEditorPanel(context.extensionUri, getWorkspace, onSelectProject)
+  epicsEditor = new EpicsEditorPanel(context.extensionUri, getWorkspace, onSelectProject)
+  helpEditor = new HelpEditorPanel(context.extensionUri)
+  agentsHelpEditor = new AgentsHelpEditorPanel(context.extensionUri, getWorkspace)
   meridianContext.registerListeners()
   void meridianContext.refresh()
 

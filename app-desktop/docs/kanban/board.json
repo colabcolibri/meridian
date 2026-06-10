@@ -1249,5 +1249,19 @@
     "done_when": "Extension lists every Meridian docs/ in the repo, respects .meridian/projects.json, persists active project, validates packageRoot; kit documents the same contract.",
     "tests": "required",
     "tests_status": "done"
+  },
+  {
+    "id": "US-0102",
+    "title": "Project context strip in Board and Deliverables",
+    "epic": "EPIC-13",
+    "version": "v2.04",
+    "status": "✅",
+    "moscow": "Must",
+    "depends_on": [
+      "US-0101"
+    ],
+    "done_when": "Board and Deliverables show active project name and docs/ path; reopening panels keeps the saved project; switching from the toolbar or command refreshes all open Meridian tabs without re-prompting on every open.",
+    "tests": "required",
+    "tests_status": "done"
   }
 ]

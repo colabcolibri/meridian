@@ -10,12 +10,23 @@ import {
   PLANNING_WEBVIEW_STYLES,
   planningWebviewShell,
 } from "./webview-common.js"
+import {
+  PROJECT_CONTEXT_SCRIPT,
+  PROJECT_CONTEXT_STYLES,
+  projectContextToolbarHtml,
+  type WebviewProjectContext,
+} from "./webview-project-context.js"
 
-export function sprintsWebviewHtml(payload: PlanningPayload): string {
+export function sprintsWebviewHtml(
+  payload: PlanningPayload,
+  context: WebviewProjectContext,
+): string {
   const nonce = crypto.randomBytes(16).toString("hex")
   const dataJson = JSON.stringify(planningPayloadForListViews(payload))
+  const contextJson = JSON.stringify(context)
   const body = `
   <div class="toolbar">
+    ${projectContextToolbarHtml(context)}
     <div class="toolbar-row">
       <span class="toolbar-label">Version</span>
       <button type="button" class="chip" id="version-all">All</button>
@@ -29,6 +40,9 @@ export function sprintsWebviewHtml(payload: PlanningPayload): string {
   const script = `
     const vscode = acquireVsCodeApi();
     const payload = ${dataJson};
+    const projectContext = ${contextJson};
+    ${PROJECT_CONTEXT_SCRIPT}
+    wireProjectContext(projectContext);
     ${FILTER_CHIP_SCRIPT}
     ${PAGINATION_SCRIPT}
     const STATE_VERSION = 5;
@@ -135,5 +149,5 @@ export function sprintsWebviewHtml(payload: PlanningPayload): string {
     }
     renderAll();
   `
-  return planningWebviewShell(nonce, PLANNING_WEBVIEW_STYLES, body, script)
+  return planningWebviewShell(nonce, PLANNING_WEBVIEW_STYLES + PROJECT_CONTEXT_STYLES, body, script)
 }

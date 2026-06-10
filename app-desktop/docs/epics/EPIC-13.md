@@ -2,9 +2,9 @@
 id: EPIC-13
 title: Multi-product Meridian repos
 status: complete
-versions: [v2.03]
+versions: [v2.03, v2.04]
 profiles: [Process Manager, Future VSCode User]
-outcome: "Manager runs several independent Meridian products in one repository — each with its own docs/ tree — with kit manifest, discovery, and an active project in the IDE."
+outcome: "Manager runs several independent Meridian products in one repository — each with its own docs/ tree — with kit manifest, discovery, a persisted active project, and visible project context in Board and Deliverables."
 ---
 
 # EPIC-13 — Multi-product Meridian repos
@@ -19,7 +19,7 @@ This epic introduces **A + B**: an optional `.meridian/projects.json` manifest (
 
 ## Expected outcome
 
-A Process Manager opens a monorepo with two or more Meridian `docs/` trees, sees both in **Show Workspace Status**, selects the active product once, and uses Board / Validate against the correct `docs/` path. Kit documentation and `/status` describe the same manifest and discovery rules. `docs-extra` never appears unless misnamed as `docs`.
+A Process Manager opens a monorepo with two or more Meridian `docs/` trees, selects the active product once (choice **persisted** across sessions and panel reopens), sees **which `docs/` path** Board and Deliverables are reading, switches product easily when needed, and uses Validate / Sync against the correct `packageRoot`. Kit documentation and `/status` describe the same manifest and discovery rules. `docs-extra` never appears unless misnamed as `docs`.
 
 ## Out of scope for this epic
 
@@ -31,4 +31,5 @@ A Process Manager opens a monorepo with two or more Meridian `docs/` trees, sees
 ## Notes
 
 - Follows Meridian rule: **new capability → new epic**; does not reopen EPIC-12 (`complete`, kit tarball) or EPIC-05 (`complete`, v4 IDE tabs).
-- US-0101 closes this epic in v2.03-S1.
+- v2.03 / US-0101: resolver, manifest, picker command, `workspaceState` + `meridian.activeProject` persistence.
+- v2.04 / US-0102: **visible project context** in webviews + tab titles; reopening Board/Deliverables must not reset active project or re-prompt unless first visit with no stored choice.

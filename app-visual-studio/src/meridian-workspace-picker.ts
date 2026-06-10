@@ -102,14 +102,29 @@ export async function selectActiveMeridianProject(
     return current
   }
 
+  return switchActiveMeridianProjectById(extensionContext, current, picked.id)
+}
+
+export async function switchActiveMeridianProjectById(
+  extensionContext: vscode.ExtensionContext,
+  current: MeridianWorkspaceInfo,
+  id: string,
+): Promise<MeridianWorkspaceInfo | null> {
+  if (current.projectId === id) {
+    return current
+  }
+  if (!current.projects.some((p) => p.id === id)) {
+    return current
+  }
+
   await extensionContext.workspaceState.update(
     workspaceStateKey(current.projectRoot),
-    picked.id,
+    id,
   )
 
   const folder = vscode.workspace.workspaceFolders?.[0]
   if (!folder) {
     return current
   }
-  return resolveMeridianWorkspaceFromPaths(folder.uri.fsPath, picked.id)
+  return resolveMeridianWorkspaceFromPaths(folder.uri.fsPath, id)
 }
