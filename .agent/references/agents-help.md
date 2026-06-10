@@ -291,15 +291,15 @@ Skills are procedures agents load automatically. Grouped by purpose.
 
 ## IDE extension commands (separate layer)
 
-These are **not** agents. They read `docs/` in the editor (extension `app-visual-studio`).
+These are **not** agents. They read the **active** `docs/` in the editor (extension `app-visual-studio`). In monorepos, **one active project** at a time — see [usage-guide.md § Multiple Meridian projects](./usage-guide.md#multiple-meridian-projects).
 
 | Group | Command | Purpose |
 | ----- | ------- | ------- |
-| Views | **Open Board**, **Open Versions**, **Open Sprints**, **Open Epics** | Read-only planning UI |
-| Governance | **Validate Project**, **Sync Board**, **Show Workspace Status** | Diagnostics and board JSON |
-| Help | **Open Command Help** | Extension command catalog only |
+| Views | **Open Board**, **Open Versions**, **Open Sprints**, **Open Epics** | Read-only planning UI; **Project** row in toolbar shows name + `docs/` path |
+| Governance | **Select Active Project**, **Validate Project**, **Sync Board**, **Show Workspace Status** | Switch product (saved); validate `packageRoot`; board JSON; list all projects |
+| Help | **Open Command Help**, **Open Agents Help** | Extension catalog; kit `agents-help.md` at runtime |
 
-Install: `app-visual-studio` → `pnpm install:cursor`. Does not install `.agent/` — copy the kit separately.
+**Multi-product UI:** Board and Deliverables show which `docs/` is loaded; dropdown switches product and refreshes open tabs. Status bar shows project name when N>1. Install: Marketplace **Meridian Harness** or `pnpm install:cursor` in `app-visual-studio/`.
 
 ---
 

@@ -29,7 +29,7 @@ Chat does not persist. **Files do.**
 | ----- | ----- | ---- |
 | **Extension** | Installed in the editor (Marketplace) | UI + bundled kit source |
 | **Kit** | `{project}/.agent/` after **Install Harness** | Slash commands (`/init-meridian`, `/create-us`, …), agents, skills |
-| **Multi-product** | `.meridian/projects.json` (optional) | Several `docs/` trees — **Select Active Project** picks which one board/validate use |
+| **Multi-product** | `.meridian/projects.json` (optional) | Several `docs/` trees — one **active** at a time (saved). Board/Deliverables **Project** toolbar row shows name + `docs/` path; dropdown or **Select Active Project** to switch |
 | **Cursor adapters** | `{project}/.cursor/` after **Install Harness** | Cursor reads rules, skills, commands from here |
 | **Docs** | `{project}/docs/` after `/init-meridian` | Living spec — board, US, versions |
 

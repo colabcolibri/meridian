@@ -112,7 +112,14 @@ One **active** `docs/` at a time for board, validate, sync, agent context.
 | 5 | Only one project → auto |
 | 6 | Quick Pick if still ambiguous |
 
-Extension command: **Meridian: Select Active Project**.
+| Switch | Where |
+| ------ | ----- |
+| **Board / Deliverables toolbar** | First row **Project** — dropdown when N>1; shows `docs/` path and US count |
+| Command | **Meridian: Select Active Project** |
+| Status bar | Project name prefix when N>1 (click to switch) |
+| Setting | `meridian.activeProject` — pin id in workspace settings |
+
+**Persistence:** after first choice, reopening Board or Deliverables loads the **same** project — no repeat Quick Pick.
 
 Validate target: **package folder** that owns `docs/` (e.g. `apps/app-osc`, not monorepo root).
 

@@ -103,9 +103,10 @@ One kit (`.agent/`) at the repo root can serve **multiple products**. Each produ
 | ----- | ---- | ---- |
 | A — manifest | `.meridian/projects.json` | Declares ids, names, `default`, `exclude` |
 | B — discovery | automatic | Finds every `docs/` with Meridian fingerprint (`00_scope` or `us/`) |
-| Active project | picker / setting | Board, validate, and agent work target one `docs/` at a time |
+| Active project | picker / setting / **saved** | Board, validate, and agent work target one `docs/` at a time; choice persists across tab reopens |
+| **Project context strip** | Board + Deliverables toolbar | First row: **Project** — name, `docs/` path, US count; dropdown when N>1 (v2.04) |
 
-Template: `projects-manifest-template.md`. Extension: **Meridian: Select Active Project**.
+Template: `projects-manifest-template.md`. Extension: **Meridian: Select Active Project**; tab titles like `Board — App OSC (42)`.
 
 ---
 

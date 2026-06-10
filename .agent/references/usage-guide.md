@@ -34,12 +34,14 @@ When the repo has **more than one** folder named exactly `docs` with Meridian co
 
 1. **Discovery (B)** — tools scan for `docs/` + fingerprint (`00_scope.md` or `us/US-*.md`). `docs-extra` and other names are ignored.
 2. **Manifest (A)** — optional `.meridian/projects.json` at kit root: ids, names, `default`, `exclude`.
-3. **Active project** — one `docs/` at a time for board, validate, `/status`, and US work.
+3. **Active project** — one `docs/` at a time for board, validate, `/status`, and US work. Choice is **saved** (`workspaceState` per kit root + optional VS Code setting `meridian.activeProject`) — reopening Board does **not** ask again.
 
 | Action | How |
 | ------ | --- |
 | Declare products | Create `.meridian/projects.json` (see `projects-manifest-template.md`) |
-| Switch in IDE | **Meridian: Select Active Project** or status bar (multi-project) |
+| See which `docs/` is on screen | **Board / Versions / Sprints / Epics** — first toolbar row **Project** (name, path, US count) |
+| Switch in IDE | Dropdown in that toolbar, **Meridian: Select Active Project**, or status bar when N>1 |
+| First visit only | Quick Pick when N>1 and no saved choice — once; then silent until you switch |
 | Validate | `python3 .agent/scripts/validate_meridian.py <package-folder>` — folder that **owns** `docs/`, not always repo root |
 | Agent | `/status` lists projects; confirm active `docs/` before creating or editing US |
 

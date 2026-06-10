@@ -325,7 +325,7 @@ export const folderStructure = {
   title: "What is inside docs/",
   intro: [
     "Two types of files: foundation docs that define the project, and delivery files that track the work. Every agent session reads from here. Everything the project knows lives here.",
-    "Monorepos may have several docs/ folders (any path — root docs/, apps/pkg/docs/, etc.). Only folders named exactly docs qualify; docs-extra does not. Optional .meridian/projects.json at kit root declares products; the IDE extension picks one active project at a time.",
+    "Monorepos may have several docs/ folders (any path — root docs/, apps/pkg/docs/, etc.). Only folders named exactly docs qualify; docs-extra does not. Optional .meridian/projects.json at kit root declares products. The VS Code extension keeps one active project at a time (saved across sessions); Board and Deliverables show a Project row in the toolbar — name, docs/ path, dropdown to switch.",
   ],
   items: [
     {
@@ -380,7 +380,7 @@ export const folderStructure = {
       path: ".meridian/projects.json",
       label: "Projects manifest (multi-product)",
       description:
-        "Optional at kit root when the repo has several docs/ trees (any path). Declares ids, names, default, exclude. Discovery finds folders named exactly docs; docs-extra never counts.",
+        "Optional at kit root when the repo has several docs/ trees (any path). Declares ids, names, default, exclude. Discovery finds folders named exactly docs; docs-extra never counts. Active choice persists; IDE toolbar shows which docs/ is loaded.",
     },
     {
       path: "docs/templates/",
@@ -870,6 +870,12 @@ export const usageSituations = [
     command: "/refine-us",
   },
   {
+    situation: "Monorepo with several docs/ trees",
+    section: "Multiple Meridian projects",
+    sectionId: "multi-project",
+    command: "/status",
+  },
+  {
     situation: "Implementation done, not recorded",
     section: "Close a user story",
     sectionId: "complete-us",
@@ -1035,6 +1041,34 @@ export const backlogWorkflowSteps: DailyWorkflowStep[] = [
   },
 ]
 
+export const multiProjectWorkflowSteps: DailyWorkflowStep[] = [
+  {
+    id: "multi-declare",
+    title: "Declare products (optional manifest)",
+    when: "Repo has more than one folder named docs with Meridian content.",
+    actions: [
+      "Create .meridian/projects.json at kit root (see projects-manifest-template.md) — ids, names, default, exclude.",
+      "Discovery still finds unnamed docs/ trees; manifest adds friendly names and default.",
+      "Only folders named exactly docs count — not docs-extra.",
+    ],
+    commands: ["/status"],
+  },
+  {
+    id: "multi-ide",
+    title: "Pick and see active project in the IDE",
+    when: "Using Meridian Harness extension with several docs/ trees.",
+    actions: [
+      "First visit with N>1: Quick Pick once — then choice is saved.",
+      "Board and Deliverables: first toolbar row Project shows name, docs/ path, US count.",
+      "Switch: dropdown in toolbar, Meridian: Select Active Project, or status bar.",
+      "Reopening Board keeps the same project — no repeat picker.",
+      "Validate and agents target the active package folder, not always repo root.",
+    ],
+    commands: ["/status"],
+    tip: "Run validate_meridian.py on the folder that owns docs/ (e.g. apps/pkg), not the monorepo root.",
+  },
+]
+
 export const implementWorkflowSteps: DailyWorkflowStep[] = [
   {
     id: "pick-us",
@@ -1139,6 +1173,12 @@ export const usageGuideSections: UsageGuideSection[] = [
     title: "Build the backlog",
     subtitle: "Epic → version → sprint → user stories.",
     steps: backlogWorkflowSteps,
+  },
+  {
+    id: "multi-project",
+    title: "Multiple Meridian projects",
+    subtitle: "Monorepo — several docs/ trees, one active at a time.",
+    steps: multiProjectWorkflowSteps,
   },
   {
     id: "implement",

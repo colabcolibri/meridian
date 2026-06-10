@@ -121,7 +121,8 @@ F5 / Extension Development Host is **maintainer-only**. End users install `.vsix
 - `workspaceContains:.agent/MERIDIAN.md`.
 - **Single product:** `docs/` next to copied `.agent/` (client) or dogfood `app-desktop/docs/` when kit is at monorepo root.
 - **Multi-product (v2.03, US-0101):** optional `.meridian/projects.json` at kit root declares `projects[]` (`id`, `name`, `docs` path relative to repo) plus `default` and `exclude`. **Discovery B** also finds every folder named exactly `docs` whose tree passes Meridian fingerprint (`00_scope.md` or `us/US-*.md`). Manifest **A** merges with discovery; `exclude` removes paths. Only the folder name `docs` counts — not `docs-extra`.
-- **Active project:** `meridian.activeProject` + **Select Active Project**; board, deliverables, validate, and sync use the active `docs/` and its `packageRoot` (parent of `docs/`).
+- **Active project:** `meridian.activeProject` + **Select Active Project** + Board/Deliverables **Project** toolbar (v2.04); board, deliverables, validate, and sync use the active `docs/` and its `packageRoot` (parent of `docs/`).
+- **Persistence:** `workspaceState` per kit root (+ optional setting); reopening editor tabs does not re-prompt Quick Pick when a choice exists.
 
 ### Packaging
 

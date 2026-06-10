@@ -58,10 +58,12 @@ export const MERIDIAN_COMMAND_CATALOG: CommandHelpEntry[] = [
     group: "views",
     summary: "Read-only kanban from docs/us/*.md",
     details: [
+      "Project row (first toolbar line): active name, docs/ path, US count; dropdown when several products.",
       "Columns: Todo, Partial, Tests, Done, and Frozen (toggle).",
       "Version and epic filters (All / None / chips). Opens with All selected for both.",
       "Independent pagination per column (Show 25/50/100 in the toolbar).",
       "Click a card to open docs/us/US-XXXX.md beside the board.",
+      "Tab title: Board — {project or docs path} (N). Active project is saved across reopens.",
     ],
     icon: "$(layout)",
     status: "shipped",
@@ -74,6 +76,7 @@ export const MERIDIAN_COMMAND_CATALOG: CommandHelpEntry[] = [
     group: "views",
     summary: "Lists all releases in docs/versions/",
     details: [
+      "Project row in toolbar — same active docs/ as Board.",
       "Accordion per version with progress (US done/total).",
       "No version filter — shows the full catalog.",
       "Footer pagination (Show 25/50/100).",
@@ -90,6 +93,7 @@ export const MERIDIAN_COMMAND_CATALOG: CommandHelpEntry[] = [
     group: "views",
     summary: "Lists sprints in docs/sprints/ filtered by version",
     details: [
+      "Project row in toolbar — same active docs/ as Board.",
       "All / None / chip filter (same pattern as the Board).",
       "Opens with all versions selected; sorted by id (v4-S1, v4-S2…).",
       "Footer pagination.",
@@ -105,6 +109,7 @@ export const MERIDIAN_COMMAND_CATALOG: CommandHelpEntry[] = [
     group: "views",
     summary: "Lists epics with stories in the selected version scope",
     details: [
+      "Project row in toolbar — same active docs/ as Board.",
       "Version filter only (All / None / chips).",
       "Progress bar per epic (US ✅ / total).",
       "Footer pagination.",
@@ -165,7 +170,8 @@ export const MERIDIAN_COMMAND_CATALOG: CommandHelpEntry[] = [
     details: [
       "Discovery finds every folder named docs with Meridian fingerprint (00_scope or us/).",
       "Manifest .meridian/projects.json declares ids, names, default, and exclude.",
-      "Board, validate, and sync use the active project only.",
+      "Same persistence as Board toolbar dropdown and status bar — choice saved per kit root.",
+      "Board, Deliverables, validate, and sync use the active project only.",
     ],
     icon: "$(list-selection)",
     status: "shipped",

@@ -4,13 +4,14 @@ This folder is the **source of truth** for Meridian Desktop development. In dogf
 
 ## Repository (Meridian kit)
 
-| File                                                                                                 | Role                                                      |
-| ---------------------------------------------------------------------------------------------------- | --------------------------------------------------------- |
-| [`../../README.md`](../../README.md)                                                                 | Repository onboarding (Git/GitHub)                        |
-| [`../../.agent/MERIDIAN.md`](../../.agent/MERIDIAN.md)                                               | Master protocol for agents                                |
-| [`../../.agent/rules/MERIDIAN.md`](../../.agent/rules/MERIDIAN.md)                                   | Global rules (`trigger: always_on`)                       |
-| [`../../.agent/ARCHITECTURE.md`](../../.agent/ARCHITECTURE.md)                                       | Map of agents, skills, and workflows                      |
-| [`../../.agent/references/instruction-surfaces.md`](../../.agent/references/instruction-surfaces.md) | **Where to edit** when protocol or UI instructions change |
+| File                                                                                                 | Role                                                                                                               |
+| ---------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| [`../../README.md`](../../README.md)                                                                 | Repository onboarding (Git/GitHub)                                                                                 |
+| [`../../.agent/MERIDIAN.md`](../../.agent/MERIDIAN.md)                                               | Master protocol for agents                                                                                         |
+| [`../../.agent/rules/MERIDIAN.md`](../../.agent/rules/MERIDIAN.md)                                   | Global rules (`trigger: always_on`)                                                                                |
+| [`../../.agent/ARCHITECTURE.md`](../../.agent/ARCHITECTURE.md)                                       | Map of agents, skills, and workflows                                                                               |
+| [`../../.agent/references/instruction-surfaces.md`](../../.agent/references/instruction-surfaces.md) | **Where to edit** when protocol or UI instructions change (incl. multi-product EPIC-13 checklist)                  |
+| [`../../.agent/references/usage-guide.md`](../../.agent/references/usage-guide.md)                   | Day-to-day guide — [Multiple Meridian projects](../../.agent/references/usage-guide.md#multiple-meridian-projects) |
 
 ## Phase documents (system axis)
 

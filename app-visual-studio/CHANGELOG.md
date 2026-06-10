@@ -4,6 +4,14 @@ All notable changes to the **Meridian** VS Code extension (`meridian-vscode`).
 
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.1.11] - 2026-06-09
+
+### Changed
+
+- **Bundled kit docs:** multi-product + project context strip parity across `usage-guide`, `start-here`, `agents-help`, `projects-manifest-template`, `instruction-surfaces` (EPIC-13 checklist)
+- **Command Help:** Board and Deliverables entries document Project toolbar row and persisted active project
+- Desktop Learn tab (`meridian-concepts.ts`) — Multiple Meridian projects section
+
 ## [1.1.10] - 2026-06-09
 
 ### Added

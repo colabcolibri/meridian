@@ -2,6 +2,15 @@
   "date": "2026-06-09",
   "entries": [
     {
+      "time": "23:55",
+      "title": "Doc sweep — multi-product + project context strip (EPIC-13)",
+      "affected_document": ".agent/references/instruction-surfaces.md, usage-guide.md, start-here.md, agents-help.md, projects-manifest-template.md, MERIDIAN.md, meridian-concepts.ts, command-catalog.ts, app-visual-studio/README.md, 05_architecture.md",
+      "what_changed": "Filled gaps after US-0102: instruction-surfaces EPIC-13 checklist, usage/start-here/agents-help narrative, manifest template UI table, desktop Learn Commands multi-project section, extension command catalog and README.",
+      "why_changed": "US-0101/0102 shipped code without full doc parity; maintainers need one map of all surfaces.",
+      "impact": "Future protocol edits should follow instruction-surfaces.md EPIC-13 checklist.",
+      "responsible": "Process Manager"
+    },
+    {
       "time": "23:45",
       "title": "US-0102 closed — webview project context strip",
       "affected_document": "app-visual-studio/src/webview-project-context.ts, docs/us/US-0102.md, docs/versions/v2.04.md, docs/sprints/v2.04-S1.md, docs/epics/EPIC-13.md",

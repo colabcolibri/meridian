@@ -76,7 +76,7 @@ docs/                        ← one product's source of truth (path varies in m
 .meridian/projects.json      ← optional — several docs/ trees in one repo (A + discovery B)
 ```
 
-**Multi-product repos:** one `.agent/` kit root; each Meridian product = one folder named exactly `docs` (any path). `.meridian/projects.json` declares ids, default, exclude; discovery finds unnamed `docs/` trees. Active project selects which tree board/validate/US target. See `projects-manifest-template.md`.
+**Multi-product repos:** one `.agent/` kit root; each Meridian product = one folder named exactly `docs` (any path). `.meridian/projects.json` declares ids, default, exclude; discovery finds unnamed `docs/` trees. **Active project** (saved) selects which tree board/validate/US target. IDE: **Project** toolbar row in Board/Deliverables + **Select Active Project**. Maintainer map: `references/instruction-surfaces.md` (EPIC-13 checklist). Template: `projects-manifest-template.md`.
 
 **IDE adapters:** edit `.agent/`, run `./.agent/scripts/sync_cursor_kit.sh` for `.cursor/` and `.claude/`. Do not commit adapter folders. See [IDE_ADAPTERS.md](./IDE_ADAPTERS.md).
 

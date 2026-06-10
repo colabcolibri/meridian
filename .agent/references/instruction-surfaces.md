@@ -148,9 +148,47 @@ Use this when adding or changing protocol behavior (example: **as-is inventory**
 | New delivery artifact | Template + skill + `INDEX.md` | `start-here.md`, `lifecycle.md`, validator if required |
 | Migration / bootstrap step | `init-project/SKILL.md`, `init-meridian.md` | `usage-guide.md`, `start-here.md`, `meridian-concepts.ts` |
 | New `docs/` folder (optional) | `start-here.md`, `doc-templates.md` | `meridian-concepts.ts` `folderStructure`, init skill |
-| Multi-product / monorepo | `projects-manifest-template.md`, `usage-guide.md`, `MERIDIAN.md` | `resolve-meridian-projects.ts`, `meridian-workspace.ts`, `meridian-context.ts`, `package.json` command, `meridian-concepts.ts` |
+| Multi-product / monorepo (resolver) | `projects-manifest-template.md`, `usage-guide.md`, `start-here.md`, `MERIDIAN.md` | `resolve-meridian-projects.ts`, `meridian-workspace.ts`, `meridian-workspace-picker.ts`, `meridian-context.ts`, `package.json`, `command-catalog.ts`, `meridian-concepts.ts`, `05_architecture.md` |
+| Multi-product UI context (v2.04) | `usage-guide.md`, `start-here.md`, `agents-help.md`, `projects-manifest-template.md` | `webview-project-context.ts`, all `*-webview-html.ts`, `planning-panels.ts`, `board-editor-panel.ts`, `command-catalog.ts` (Board + views), `meridian-concepts.ts`, `app-visual-studio/README.md`, `05_architecture.md` § UI structure |
 | Agent behavior only | `.agent/agents/{name}.md` | Usually nothing else |
 | Desktop-only feature | `app-desktop/docs/us/` + phase docs | Not kit unless protocol changes |
+
+---
+
+## Multi-product (EPIC-13) — full surface checklist
+
+When changing **several `docs/` trees in one repo** or **project context in the IDE**, touch every row below (v2.03 resolver + v2.04 UI).
+
+### Kit narrative (P0)
+
+- [ ] `.agent/MERIDIAN.md` — folder tree + multi-product paragraph
+- [ ] `.agent/references/start-here.md` — `docs/` tree + monorepo table
+- [ ] `.agent/references/usage-guide.md` — [Multiple Meridian projects](#multiple-meridian-projects) section
+- [ ] `.agent/references/agents-help.md` — IDE extension commands table
+- [ ] `.agent/references/templates/projects-manifest-template.md` — active project + UI
+- [ ] `.agent/workflows/status.md` — resolve active `docs/` in procedure
+- [ ] `.agent/skills/init-project/SKILL.md` — Phase 5 manifest proposal
+
+### Extension (P1)
+
+- [ ] `app-visual-studio/src/resolve-meridian-projects.ts` — A + B
+- [ ] `app-visual-studio/src/meridian-workspace*.ts`, `meridian-context.ts` — persistence
+- [ ] `app-visual-studio/src/webview-project-context.ts` — shared toolbar + titles (v2.04)
+- [ ] `app-visual-studio/src/*-webview-html.ts`, `planning-panels.ts`, `board-editor-panel.ts`
+- [ ] `app-visual-studio/src/command-catalog.ts` — Board, Deliverables, Select Active Project
+- [ ] `app-visual-studio/README.md`, `CHANGELOG.md`
+
+### Dogfood architecture (P1)
+
+- [ ] `app-desktop/docs/05_architecture.md` — § Activation and `docs/` resolution + § UI structure
+
+### Duplicated UI (P0 — manual)
+
+- [ ] `app-desktop/src/features/monitor/content/meridian-concepts.ts` — `folderStructure`, `usageSituations`
+
+### Mirrors
+
+- [ ] `./.agent/scripts/sync_cursor_kit.sh`
 
 ---
 
@@ -162,3 +200,4 @@ Use this when adding or changing protocol behavior (example: **as-is inventory**
 | Kit architecture | `.agent/ARCHITECTURE.md` |
 | IDE adapters | `.agent/IDE_ADAPTERS.md` |
 | Scrum ↔ Meridian | `.agent/references/scrum-meridian-map.md` |
+| Multi-product manifest | `.agent/references/templates/projects-manifest-template.md` |
