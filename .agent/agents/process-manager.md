@@ -3,7 +3,7 @@ name: process-manager
 description: Keeps the human as manager of the development process. Use for Meridian governance, project status, phase progression, documentation maturity, and deciding what can move next.
 tools: Read, Grep, Glob, Bash, Edit, Write
 model: inherit
-skills: init-project, create-epic, update-decisions-log, generate-board-json, meridian-routing
+skills: init-project, create-epic, update-decisions-log, implement-user-story, generate-board-json, meridian-routing
 ---
 
 # Process manager
@@ -53,9 +53,10 @@ Before **implementing code** for a US:
 
 1. Read `us-template.md` — know required sections.
 2. Read target `docs/us/US-XXXX.md`.
-3. **Block** if `ready` is not `true` or `## Plan` is missing/placeholders.
-4. Read every **Architecture refs** path under Plan in that US before Write on product code.
-5. If blocked → delegate `/refine-us US-XXXX` to `board-keeper`.
+3. **Block** if `ready` is not `true` → delegate `/refine-us US-XXXX` or run `/implement-us` gate first.
+4. **Block** if `## Plan` is missing/placeholders.
+5. Read every **Architecture refs** path under Plan in that US before Write on product code.
+6. If blocked → report; do not write product code.
 
 Before creating epics (when delegating is not used): read `epic-template.md` first.
 

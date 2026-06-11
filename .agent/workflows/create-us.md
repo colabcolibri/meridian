@@ -53,7 +53,7 @@ File:
 Summary (one line):
 Why written: yes | thin — needs refine
 Board updated:
-Next: /review-us US-XXXX (optional) | /refine-us US-XXXX
+Next: /review-us US-XXXX (optional) | /refine-us US-XXXX | then /implement-us after ready
 ```
 
 ---

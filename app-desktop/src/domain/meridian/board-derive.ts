@@ -14,6 +14,7 @@ export function userStoryToBoardEntry(story: UserStory): BoardEntry {
     done_when: story.doneWhen,
     tests: story.tests,
     tests_status: story.testsStatus,
+    ready: story.ready === true,
   }
 }
 

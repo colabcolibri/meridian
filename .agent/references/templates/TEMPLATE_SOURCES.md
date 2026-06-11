@@ -22,8 +22,9 @@ CANONICAL (edit here)          REGISTRY (agents read)              HUMAN / CURSO
 
 | Template | Canonical (edit) | Registry | Used by |
 | -------- | ---------------- | -------- | ------- |
-| `us-template.md` | `.agent/skills/create-user-story/references/us-template.md` | `.agent/references/templates/us-template.md` | `/create-us`, `/refine-us`, `/review-us`, `/complete-us` |
+| `us-template.md` | `.agent/skills/create-user-story/references/us-template.md` | `.agent/references/templates/us-template.md` | `/create-us`, `/refine-us`, `/review-us`, `/implement-us`, `/complete-us` |
 | `refine-checklist.md` | `.agent/skills/refine-user-story/references/refine-checklist.md` | `.agent/references/templates/refine-checklist.md` | `/refine-us` |
+| `implement-gate-checklist.md` | `.agent/skills/implement-user-story/references/implement-gate-checklist.md` | `.agent/references/templates/implement-gate-checklist.md` | `/implement-us` |
 | `review-checklist.md` | `.agent/skills/review-user-story/references/review-checklist.md` | `.agent/references/templates/review-checklist.md` | `/review-us` |
 | `implementation-template.md` | `.agent/skills/complete-user-story/references/implementation-template.md` | `.agent/references/templates/implementation-template.md` | `/complete-us` |
 | `epic-template.md` | `.agent/skills/create-epic/references/epic-template.md` | `.agent/references/templates/epic-template.md` | `/create-epic` |

@@ -25,6 +25,7 @@ Priority: **P0 rules > P1 agent + MERIDIAN.md > P2 skills**.
 - `docs/kanban/board.json` is derived from `docs/us/*.md`.
 - Never `✅` without evidence; never `🔶` without `Missing:` in acceptance.
 - Never `✅` without filled `## Record` on the US (skill `complete-user-story`).
+- Product code for a US requires `ready: true` — use `/implement-us US-XXXX` (skill `implement-user-story`) before coding.
 - `docs/decisions/YYYY-MM-DD.json`: prepend in `entries`; never edit old entries. **Before Write:** run `date +"%Y-%m-%d"` and `date +"%H:%M"` — use `/update-decisions-log` or skill `update-decisions-log`.
 - Structural contract for US/epic/version: `.agent/references/templates/section-contracts.md` (validated by script + monitor).
 - Routing: skill `meridian-routing` or specialized agents.
@@ -42,6 +43,7 @@ Priority: **P0 rules > P1 agent + MERIDIAN.md > P2 skills**.
 | `/create-us` | `.cursor/commands/create-us.md` |
 | `/review-us` | `.cursor/commands/review-us.md` |
 | `/refine-us` | `.cursor/commands/refine-us.md` |
+| `/implement-us` | `.cursor/commands/implement-us.md` |
 | `/complete-us` | `.cursor/commands/complete-us.md` |
 | `/complete-sprint` | `.cursor/commands/complete-sprint.md` |
 | `/architecture` | `.cursor/commands/architecture.md` |

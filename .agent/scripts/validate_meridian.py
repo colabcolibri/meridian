@@ -149,6 +149,7 @@ def validate_us_semantics(
     status: str | None,
     frontmatter: dict[str, str],
     story_text: str,
+    errors: list[str],
     warnings: list[str],
     legacy_missing_context: list[str],
 ) -> None:
@@ -183,8 +184,8 @@ def validate_us_semantics(
         )
 
     if has_ready_field and ready != "true":
-        warnings.append(
-            f"{story_name}: ready is not true — run /refine-us before implement."
+        errors.append(
+            f"{story_name}: ready is not true — run /refine-us before /implement-us."
         )
 
     planned_match = re.search(
@@ -487,6 +488,7 @@ def main() -> int:
                 status,
                 frontmatter,
                 story_text,
+                errors,
                 warnings,
                 legacy_missing_context,
             )

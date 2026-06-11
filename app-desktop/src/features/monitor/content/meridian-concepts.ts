@@ -870,7 +870,7 @@ export const usageSituations = [
     situation: "Backlog exists, ready to implement",
     section: "Implement a user story",
     sectionId: "implement",
-    command: "/refine-us",
+    command: "/implement-us",
   },
   {
     situation: "Monorepo with several docs/ trees",
@@ -1085,14 +1085,15 @@ export const implementWorkflowSteps: DailyWorkflowStep[] = [
   },
   {
     id: "implement",
-    title: "Ask the agent to implement",
-    when: "US selected, focused conversation.",
+    title: "Run /implement-us",
+    when: "US has ready: true (after /refine-us).",
     actions: [
-      "Reference the file explicitly: implement docs/us/US-0017.md per its Acceptance criteria.",
-      "The agent reads Acceptance, Approach, Architecture refs, and Planned tests before writing code.",
-      "It will refuse if ready is not true or if the Plan has placeholders.",
+      "Command: /implement-us US-XXXX — gate checks ready, Plan, depends_on, then codes.",
+      "If blocked: run /refine-us US-XXXX first.",
+      "One US per session; agent reads Architecture refs before Write on code.",
     ],
-    tip: 'Example: "Implement docs/us/US-0017.md per its Acceptance criteria."',
+    commands: ["/implement-us US-XXXX"],
+    tip: "Do not skip the gate — P0 requires ready: true before product code.",
   },
   {
     id: "review-diff",
@@ -1274,6 +1275,11 @@ export const slashCommandGroups: SlashCommandGroup[] = [
         example: "/refine-us US-0017",
       },
       {
+        command: "/implement-us",
+        when: "Gate + implement — requires ready: true; blocks if refine skipped",
+        example: "/implement-us US-0017",
+      },
+      {
         command: "/complete-us",
         when: "Close story — fills Record, marks ✅; then you commit (see Close section)",
         example: "/complete-us US-0017",
@@ -1304,7 +1310,8 @@ export const slashCommandReference: SlashCommandHint[] = slashCommandGroups.flat
 // ─── Anti-patterns ────────────────────────────────────────────────────────────
 
 export const usageAntiPatterns = [
-  "Asking the agent to implement without a ready: true story.",
+  "Asking the agent to implement without /implement-us or ready: true.",
+  "Implementing when ready is false — run /refine-us first.",
   "Marking ✅ in chat without running /complete-us in the files.",
   "Editing board.json directly — it is always generated.",
   "Creating US before 05_architecture.md is approved.",

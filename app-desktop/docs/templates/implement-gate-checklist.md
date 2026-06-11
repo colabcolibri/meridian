@@ -1,0 +1,1 @@
+../../../.agent/references/templates/implement-gate-checklist.md

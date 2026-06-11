@@ -14,6 +14,7 @@ export type BoardJsonEntry = {
   done_when: string
   tests: UserStory["tests"]
   tests_status: UserStory["testsStatus"]
+  ready: boolean
 }
 
 export function storyToBoardEntry(story: UserStory): BoardJsonEntry {
@@ -28,6 +29,7 @@ export function storyToBoardEntry(story: UserStory): BoardJsonEntry {
     done_when: story.doneWhen,
     tests: story.tests,
     tests_status: story.testsStatus,
+    ready: story.ready === true,
   }
 }
 

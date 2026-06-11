@@ -229,6 +229,7 @@ python3 .agent/scripts/validate_meridian.py <project-folder> --json
 | Architecture | `architecture-guardian` | `/architecture` |
 | Versions / sprints | `sprint-planner` | `/create-version`, `/plan-sprint`, `/complete-sprint` |
 | US / board | `board-keeper` | `/create-us`, `/refine-us`, `/complete-us`, `/sync-board` |
+| US implement | `process-manager` | `/implement-us` (requires `ready: true`) |
 | Decisions | any relevant agent | `/update-decisions-log` |
 | Auto-pick | `meridian-routing` skill | — |
 
@@ -240,7 +241,7 @@ Create drafts, suggest decisions, implement approved US, run tests, update docs,
 
 ### Agent must not
 
-- Start product code without minimum docs and US `ready: true`
+- Start product code without `/implement-us` gate or US `ready: true`
 - Create US before `05_architecture` approved and epic/version exist
 - Mark `✅` without evidence or filled Record
 - Edit old decision log entries

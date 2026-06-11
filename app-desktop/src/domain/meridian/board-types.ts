@@ -16,4 +16,5 @@ export interface BoardEntry {
   done_when: string
   tests: TestsRequirement
   tests_status: TestsStatus
+  ready: boolean
 }

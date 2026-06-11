@@ -64,7 +64,7 @@ Artifacts created in this phase:
 The AI implements each user story, guided by the files from Phase 3. You review the code, then close the story with evidence.
 
 ```
-/create-us  →  /refine-us  →  implement  →  /complete-us  →  /sync-board
+/create-us  →  /refine-us  →  /implement-us  →  /complete-us  →  /sync-board
 ```
 
 **No code without `ready: true`.** No `✅` without evidence in the Record.

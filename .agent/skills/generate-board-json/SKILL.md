@@ -23,7 +23,7 @@ Never edit the board as primary source.
 ## Procedure
 
 1. Glob `docs/us/US-*.md`
-2. Extract frontmatter: `id`, `title`, `epic`, `version`, `status`, `moscow`, `depends_on`, `done_when`, `tests`, `tests_status`
+2. Extract frontmatter: `id`, `title`, `epic`, `version`, `status`, `moscow`, `depends_on`, `done_when`, `tests`, `tests_status`, `ready`
 3. Validate against `references/board-schema.md` and epics/versions folders
 4. Sort by ascending ID
 5. Write `docs/kanban/board.json`

@@ -67,7 +67,7 @@ Workflows orchestrate agents; they do not replace the master protocol.
 
 | Agent | Purpose | Skills |
 | ----- | ------- | ------ |
-| `process-manager` | Governance, status, gates | init-project, update-decisions-log, generate-board-json, meridian-routing |
+| `process-manager` | Governance, status, gates, **implement US** | init-project, implement-user-story, update-decisions-log, generate-board-json, meridian-routing |
 | `scope-architect` | `00_scope.md` | init-project, update-decisions-log, meridian-routing |
 | `documentation-strategist` | Phase docs `01`–`05`, `08`–`10`, `docs/epics/` | init-project, create-epic, create-user-story, update-decisions-log, meridian-routing |
 | `security-steward` | `02_security.md` | security-review, update-decisions-log, meridian-routing |
@@ -91,6 +91,7 @@ Each agent includes: phases 0/-1, mission, prohibitions, output format, delegati
 | `create-user-story` | `us-template.md`, `writing-guide.md` |
 | `review-user-story` | `review-checklist.md`, `writing-guide.md` |
 | `refine-user-story` | `refine-checklist.md`, `writing-guide.md` |
+| `implement-user-story` | `implement-gate-checklist.md` |
 | `complete-user-story` | `implementation-template.md` |
 | `generate-board-json` | `board-schema.md` |
 | `update-decisions-log` | `decision-template.md`, `decision-schema.md` |
@@ -114,6 +115,7 @@ See `.agent/skills/doc.md` to create new skills.
 | `create-us` | board-keeper | create US |
 | `review-us` | board-keeper | audit US — report only |
 | `refine-us` | board-keeper | refine US before implement |
+| `implement-us` | process-manager | gate + implement when `ready: true` |
 | `complete-us` | board-keeper | close US after implementation |
 | `create-epic` | documentation-strategist | create epic in `docs/epics/` |
 | `architecture` | architecture-guardian | doc 05 |

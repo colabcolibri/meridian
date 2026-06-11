@@ -19,6 +19,7 @@ Templates are mirrored here from skills (`references/`) so every agent uses the 
 | User story (create) | `us-template.md` + **`writing-guide.md`** | `board-keeper` | `create-user-story` | `/create-us` |
 | User story (review) | `review-checklist.md` + `us-template.md` + **`writing-guide.md`** + `section-contracts.md` | `board-keeper` | `review-user-story` | `/review-us` |
 | User story (refine) | `us-template.md` + `refine-checklist.md` + **`writing-guide.md`** | `board-keeper` | `refine-user-story` | `/refine-us` |
+| User story (implement) | `implement-gate-checklist.md` + target US | `process-manager` | `implement-user-story` | `/implement-us` |
 | User story (close) | `implementation-template.md` + `us-template.md` | `board-keeper` | `complete-user-story` | `/complete-us` |
 | Decision entry | `decision-template.md` + `decision-schema.md` | any relevant agent | `update-decisions-log` | — |
 | Board JSON | `board-schema.md` | `board-keeper` | `generate-board-json` | `/sync-board` |
@@ -46,10 +47,11 @@ When an agent from the table is activated:
 
 If the request is **implement code** for a US (`process-manager` gate):
 
-1. Read `us-template.md` to know required sections.
-2. Read the target `docs/us/US-XXXX.md`.
+1. Read `implement-gate-checklist.md` + target `docs/us/US-XXXX.md`.
+2. Block if `ready` is not `true` → `/refine-us` first.
 3. Block if `## Plan` is empty or only placeholders.
-4. Read every path listed under Plan / **Architecture refs** in that US before writing code.
+4. Read every path listed under Plan / **Architecture refs** before writing code.
+5. Prefer workflow `/implement-us US-XXXX` to document gate pass before coding.
 
 ---
 

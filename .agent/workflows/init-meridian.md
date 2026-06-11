@@ -95,7 +95,7 @@ Next steps (new project):
 3. Run /architecture to draft 05_architecture.md
 4. Approve 05_architecture (human action in frontmatter)
 5. Plan delivery: /create-epic → /create-version → /plan-sprint
-6. Create work: /create-us → /refine-us → implement → /complete-us → /sync-board
+6. Create work: /create-us → /refine-us → /implement-us → /complete-us → /sync-board
 
 Next steps (existing codebase — add before step 5):
 A. Review docs/inventory/as-is.md — fix confidence, gaps, epic candidates

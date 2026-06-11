@@ -22,7 +22,7 @@ User story create (us-template.md + writing-guide.md) — status ❌, ready: fal
   ↓
 /refine-us (refine-checklist.md) — deepen Plan; ready: true
   ↓
-Implement — process-manager gate: ready true + Plan filled
+/implement-us (implement-gate-checklist.md) — gate then code; requires ready true
   ↓
 User story close (implementation-template.md) — Record + status ✅
   ↓
@@ -44,6 +44,7 @@ Scrum mapping (bugs, spikes, ceremonies, no story points): `.agent/references/sc
 | **Create** (`/create-us`) | `us-template.md` + `writing-guide.md` | Intent (Why/Where) + Plan draft; `ready: false` |
 | **Review** (`/review-us`) | `review-checklist.md` + `section-contracts.md` | Gap report; **no edits**, **no `ready`** |
 | **Refine** (`/refine-us`) | `refine-checklist.md` | Plan concrete; `ready: true` |
+| **Implement** (`/implement-us`) | `implement-gate-checklist.md` | Gate pass; product code allowed |
 | **Close** (`/complete-us`) | `implementation-template.md` | `## Record` filled; `status: ✅` |
 
 ## Sprint — close

@@ -1,0 +1,1 @@
+../../skills/implement-user-story/references/implement-gate-checklist.md

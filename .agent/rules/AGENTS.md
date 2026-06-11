@@ -48,7 +48,8 @@ After **Install Harness** or clone: run `./.agent/scripts/sync_cursor_kit.sh` to
 - `docs/kanban/board.json` is derived from `docs/us/*.md`.
 - Never `✅` without evidence; never `🔶` without `Missing:` in acceptance.
 - Never `✅` without filled `## Record` on the US (skill `complete-user-story`).
-- `docs/decisions/YYYY-MM-DD.json`: prepend in `entries`; never edit old entries. Before Write run `date +"%Y-%m-%d"` and `date +"%H:%M"` — use `/update-decisions-log`. Before Write run `date +"%Y-%m-%d"` and `date +"%H:%M"` — use `/update-decisions-log`.
+- Product code for a US requires `ready: true` — run `/implement-us US-XXXX` before coding.
+- `docs/decisions/YYYY-MM-DD.json`: prepend in `entries`; never edit old entries. Before Write run `date +"%Y-%m-%d"` and `date +"%H:%M"` — use `/update-decisions-log`.
 - Structural contract: `.agent/references/templates/section-contracts.md` (validator + monitor).
 
 ## Validate (optional)

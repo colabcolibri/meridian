@@ -14,6 +14,7 @@ $ARGUMENTS
 2. One US per implementation cycle when possible.
 3. Code only with minimum docs: `05_architecture` approved; epic/version in folders; US with `ready: true`.
 4. **Refine before implement** — `/refine-us` after `/create-us`; never skip to code with `ready: false`.
+5. **Implement only via gate** — `/implement-us US-XXXX` after `ready: true`; agent blocks otherwise.
 5. Always close with `complete-user-story` or `/complete-us` — never ✅ in chat only.
 6. `board.json` is derived — use `/sync-board` after changing US.
 7. **Commit after close** — human step after `/complete-us` + `/sync-board`; one commit per US. See `commit-after-us-close.md`. Agents suggest message only unless you explicitly ask them to commit.
@@ -65,6 +66,13 @@ Command: /refine-us US-XXXX
 
 ### 3. Implement
 
+```txt
+Agent: process-manager
+Skill: implement-user-story
+Command: /implement-us US-XXXX
+```
+
+- Gate runs first — blocks if `ready` is not `true`.
 - Agent reads US, architecture, dependencies before coding.
 - Manager reviews diff.
 - Partial → `🔶` + `Missing:` in US acceptance.
@@ -108,7 +116,8 @@ Reference: .agent/references/commit-after-us-close.md
 | ------- | --- |
 | `/status` | Session start |
 | `/create-us` | New task (gates OK) |
-| `/refine-us` | Deepen Context; set `ready: true` before code |
+| `/refine-us` | Deepen Plan; set `ready: true` before code |
+| `/implement-us` | Gate + implement — requires `ready: true` |
 | `/complete-us` | Close US after implementation |
 | `/complete-sprint` | Close sprint — retrospective + status complete |
 | `/sync-board` | Regenerate kanban JSON |
@@ -122,7 +131,7 @@ Reference: .agent/references/commit-after-us-close.md
 
 ## Anti-patterns
 
-- Code without US, `ready: false`, or minimum phase docs.
+- Code without US, `ready: false`, or skipping `/implement-us` gate.
 - ✅ in chat without updating `docs/us/US-XXXX.md`.
 - Editing `board.json` by hand.
 - Single conversation mixing many features.

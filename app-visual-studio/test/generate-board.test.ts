@@ -25,6 +25,7 @@ test("storyToBoardEntry maps depends_on field name", () => {
   assert.equal(entry.depends_on.length, 0)
   assert.equal(entry.tests_status, "pending")
   assert.equal(entry.done_when, "Done when.")
+  assert.equal(entry.ready, false)
 })
 
 test("writeBoardJson creates sorted array file", () => {

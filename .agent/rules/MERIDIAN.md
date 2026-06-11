@@ -37,6 +37,7 @@ Before any action, classify:
 | **STATUS** | "status", "where are we", "blockers" | `process-manager` + `/status` |
 | **DOC / PHASE** | "scope", "epic", "version", "architecture", `00_`–`11_` | Documentation agent per matrix |
 | **US / BOARD** | "user story", "US-", "kanban", "board" | `board-keeper` or `sprint-planner` |
+| **IMPLEMENT US** | "implement US", "build", "code for US", `/implement-us` | `process-manager` + `implement-user-story` — **block** if `ready` not true |
 | **REFINE US** | "refine US", `/refine-us`, "ready for implement" | `board-keeper` + `refine-user-story` |
 | **REVIEW US** | "review US", `/review-us`, "audit US", "check story" | `board-keeper` + `review-user-story` |
 | **CLOSE US** | "complete US", "mark done", "record", `/complete-us` | `board-keeper` + `complete-user-story` |
@@ -44,7 +45,7 @@ Before any action, classify:
 | **LOG DECISION** | "log decision", "decision log", `/update-decisions-log`, `docs/decisions/` | read `update-decisions-log` + run `date` before Write |
 | **SECURITY** | "security", "OWASP", "secrets", `02_security` | `security-steward` |
 | **START PROJECT** | "start", "meridian setup", "create docs" | `process-manager` + `init-project` |
-| **CODE** | "implement", "create app", "fix", "refactor" | Verify doc maturity FIRST |
+| **CODE** | "implement", "create app", "fix", "refactor" | `/implement-us US-XXXX` or equivalent gate; US `ready: true` required |
 | **SLASH** | `/init-meridian`, `/create-epic`, `/create-us`, `/complete-us`, `/daily-with-ai`, etc. | Corresponding workflow |
 
 > For automatic agent routing, follow `@[skills/meridian-routing]`.
@@ -74,12 +75,12 @@ Before any action, classify:
 | 3 | Announced `🤖 Applying...`? | Add before the response |
 | 4 | Loaded skills from frontmatter? | Read each listed `SKILL.md` |
 | 5 | Creating/closing epic, version, sprint, or US? | Read `.agent/references/templates/INDEX.md` + full template + `section-contracts.md` **before** Write |
-| 6 | Implementing code for a US? | US `ready: true` + Plan filled; else `/refine-us` |
+| 6 | Implementing code for a US? | US `ready: true` + Plan filled; run `/implement-us` or gate first; else `/refine-us` |
 | 7 | Required docs exist at correct maturity? | Block; report to manager |
 
 **Violations:**
 
-- Code without minimum docs = **protocol failure**
+- Code without US `ready: true` or without `/implement-us` gate = **protocol failure**
 - US without `05_architecture` approved = **protocol failure**
 - `✅` without evidence = **protocol failure**
 - `✅` without filled `## Record` on the US (skill `complete-user-story`) = **protocol failure**
@@ -139,6 +140,7 @@ The person is manager of the process. Agents report blockers, next step, and pen
 | `docs/us/*.md` (create) | `board-keeper` | `create-user-story` |
 | `docs/us/*.md` (review) | `board-keeper` | `review-user-story` |
 | `docs/us/*.md` (refine) | `board-keeper` | `refine-user-story` |
+| `docs/us/*.md` (implement) | `process-manager` | `implement-user-story` |
 | `docs/us/*.md` (close) | `board-keeper` | `complete-user-story` |
 | `board.json` | `board-keeper` | `generate-board-json` |
 | `11_decisions.md` (stub) + `docs/decisions/` | any relevant agent | `update-decisions-log` |

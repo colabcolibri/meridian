@@ -4,6 +4,16 @@ All notable changes to the **Meridian** VS Code extension (`meridian-vscode`).
 
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.1.15] - 2026-06-11
+
+### Added
+
+- **Bundled kit:** `/implement-us` workflow + `implement-user-story` skill — hard gate before product code (`ready: true` required)
+
+### Changed
+
+- **Bundled kit:** validator errors on open US with `ready != true`; `board.json` exports `ready` field
+
 ## [1.1.14] - 2026-06-11
 
 ### Changed

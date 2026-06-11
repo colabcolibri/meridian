@@ -189,11 +189,12 @@ Epic/version **close:** set `status: complete` manually when outcome reached (no
 | E1 | **`/create-us`** | `board-keeper` | `ready: false` | New US: Intent + draft Plan. |
 | E2 | **`/review-us US-XXXX`** | `board-keeper` | unchanged | Read-only quality audit. No `ready` change. |
 | E3 | **`/refine-us US-XXXX`** | `board-keeper` | `ready: true` | Approach, arch refs, concrete tests. **Gate for code.** |
-| E4 | *(implement)* | `process-manager` validates → implementer | `status: 🔶` or ready to close | One US per session. Reference file explicitly. |
-| E5 | **`/complete-us US-XXXX`** | `board-keeper` | `status: ✅` | Fills Record, checks acceptance, syncs board. |
-| E6 | **`/sync-board`** | `board-keeper` | — | Regenerates `docs/kanban/board.json` from US frontmatter. |
+| E4 | **`/implement-us US-XXXX`** | `process-manager` | — | Gate: `ready: true`, deps, Plan; then product code. **Block if not refined.** |
+| E5 | *(manager review)* | human | — | Review diff and run tests. |
+| E6 | **`/complete-us US-XXXX`** | `board-keeper` | `status: ✅` | Fills Record, checks acceptance, syncs board. |
+| E7 | **`/sync-board`** | `board-keeper` | — | Regenerates `docs/kanban/board.json` from US frontmatter. |
 
-**Rules:** no code without E3 (`ready: true`). No ✅ without E5 (`## Record` + evidence).
+**Rules:** no code without E3 (`ready: true`) **and** E4 gate. No ✅ without E6 (`## Record` + evidence).
 
 ---
 
@@ -224,12 +225,13 @@ Use this as the canonical sequence. Skip steps only when the artifact already ex
 10. /create-us                               [Group E]  board-keeper
 11. /review-us US-XXXX                       [Group E]  board-keeper  (optional)
 12. /refine-us US-XXXX                       [Group E]  board-keeper  → ready: true
-13. Implement US-XXXX                        [Group E]  process-manager gate + coder
-14. /complete-us US-XXXX                     [Group E]  board-keeper
-15. /sync-board                              [Group E]  board-keeper
-16. git commit (human)                       [Group F]  you — one US per commit
-17. /status or /daily-with-ai                [Group B]  process-manager → back to step 10
-18. /complete-sprint vX-SY (when sprint done) [Group D]  sprint-planner — after US in sprint closed
+13. /implement-us US-XXXX                    [Group E]  process-manager → gate then code
+14. Manager review diff + tests              [Group E]  human
+15. /complete-us US-XXXX                     [Group E]  board-keeper
+16. /sync-board                              [Group E]  board-keeper
+17. git commit (human)                       [Group F]  you — one US per commit
+18. /status or /daily-with-ai                [Group B]  process-manager → back to step 10
+19. /complete-sprint vX-SY (when sprint done) [Group D]  sprint-planner — after US in sprint closed
 ```
 
 ---
@@ -262,6 +264,7 @@ Skills are procedures agents load automatically. Grouped by purpose.
 | ----- | ------- | ------- |
 | `review-user-story` | board-keeper | Read-only US audit |
 | `refine-user-story` | board-keeper | Approach + `ready: true` |
+| `implement-user-story` | process-manager | Gate + implement when `ready: true` |
 | `complete-user-story` | board-keeper | Record + ✅ + board sync |
 
 ### Board & security
@@ -287,7 +290,7 @@ Skills are procedures agents load automatically. Grouped by purpose.
 | Architecture doc | C | `architecture-guardian` | `/architecture` |
 | New epic | D | `documentation-strategist` | `/create-epic` |
 | New version / sprint | D | `sprint-planner` | `/create-version`, `/plan-sprint`, `/complete-sprint` |
-| New / refine / close US | E | `board-keeper` | `/create-us`, `/refine-us`, `/complete-us` |
+| New / refine / implement / close US | E | `board-keeper` / `process-manager` | `/create-us`, `/refine-us`, `/implement-us`, `/complete-us` |
 | Refresh kanban JSON | E | `board-keeper` | `/sync-board` |
 | Log a decision | F | any | `/update-decisions-log` |
 | Validate structure | F | script / extension | `validate_meridian.py` or **Validate Project** |
@@ -314,7 +317,7 @@ These are **not** agents. They read the **active** `docs/` in the editor (extens
 | ------ | ------- | ---- |
 | Slash command | `/refine-us US-0017` | Known workflow step |
 | Explicit agent | `@board-keeper refine US-0017` | Override routing |
-| Natural language | “Implement docs/us/US-0017.md” | Agent routes if US is `ready: true` |
+| Natural language | “Implement docs/us/US-0017.md” | Run `/implement-us US-0017` if `ready: true`; else block |
 | Read-only check | `/status` | Start of every session |
 
 ---

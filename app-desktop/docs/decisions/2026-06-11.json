@@ -2,6 +2,15 @@
   "date": "2026-06-11",
   "entries": [
     {
+      "time": "22:34",
+      "title": "US implement gate — /implement-us workflow and ready enforcement",
+      "affected_document": ".agent/workflows/implement-us.md, skills/implement-user-story, P0 rules, validate_meridian.py, board-schema, board-derive.ts, generate-board.ts, agents-help, lifecycle, meridian-concepts.ts",
+      "what_changed": "Added /implement-us + implement-user-story skill with implement-gate-checklist. P0 requires ready: true before product code. Validator errors when open US has ready != true. board.json exports ready field.",
+      "why_changed": "Code could start without refine; implement step was implicit in chat with soft warnings only.",
+      "impact": "Flow: /create-us → /refine-us → /implement-us → /complete-us. process-manager owns implement gate; board shows ready for visibility.",
+      "responsible": "Process Manager"
+    },
+    {
       "time": "22:14",
       "title": "Kit resilience — decision clock, update-decisions-log, complete-sprint workflows",
       "affected_document": ".agent/rules/MERIDIAN.md, meridian.mdc, MERIDIAN.md §8, workflows/update-decisions-log.md, complete-sprint.md, skills/complete-sprint, complete-us.md, plan-sprint.md, agents-help.md, start-here.md, scrum-meridian-map.md, lifecycle.md, meridian-concepts.ts",

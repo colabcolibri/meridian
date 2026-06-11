@@ -213,11 +213,13 @@ One US per implementation session. Do not mix stories in one conversation.
 
 ### Ask the agent to implement
 
-Reference the story file explicitly:
+Run: **`/implement-us US-XXXX`**
 
-> "Implement `docs/us/US-0017.md` per its Acceptance criteria."
+The workflow gates on `ready: true`, filled Plan, and satisfied `depends_on`, then implements. If blocked, run **`/refine-us US-XXXX`** first.
 
-The agent reads the full story — Acceptance, Approach, Architecture refs, Planned tests — before writing code. It will refuse if `ready` is not `true` or if the Plan has placeholders.
+You can also ask in natural language — the agent must run the same gate before coding:
+
+> "Run `/implement-us US-0017`" or "Implement `docs/us/US-0017.md` per Acceptance."
 
 ### Review the output
 
@@ -304,6 +306,7 @@ Run at the project root. Fix errors before creating US or marking docs `approved
 | `/create-us` | New user story (gates: architecture approved + epic + version exist) |
 | `/review-us US-XXXX` | Quality audit — read-only, no changes, no `ready` |
 | `/refine-us US-XXXX` | Deepen Plan and Approach — sets `ready: true` when checklist passes |
+| `/implement-us US-XXXX` | Gate + implement — requires `ready: true` |
 | `/complete-us US-XXXX` | Close story — fills Record, marks `✅`, syncs board |
 | `/sync-board` | Regenerate `docs/kanban/board.json` from US files |
 | `/daily-with-ai` | Full guided session loop |
