@@ -4,6 +4,17 @@ All notable changes to the **Meridian** VS Code extension (`meridian-vscode`).
 
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.1.16] - 2026-06-11
+
+### Added
+
+- **Bundled kit:** `architecture-folder-guide.md` — optional `docs/architecture/` detail indexed from `05_architecture.md`
+- **Bundled kit:** `code-quality-at-us-time.md` — DRY and single responsibility gates at create, refine, and implement
+
+### Changed
+
+- **Bundled kit:** `/architecture`, `/create-us`, `/refine-us`, `/implement-us` aligned with new guides; refine/implement checklists extended; monitor concepts updated
+
 ## [1.1.15] - 2026-06-11
 
 ### Added

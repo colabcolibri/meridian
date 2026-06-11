@@ -1,0 +1,1 @@
+../../../.agent/references/templates/architecture-folder-guide.md

@@ -11,9 +11,12 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 | File | When to read |
 | ------- | ---------- |
 | `references/implement-gate-checklist.md` | **Mandatory** — gate before code |
+| `.agent/references/templates/code-quality-at-us-time.md` | **Mandatory** — DRY, SRP during coding |
 | Target `docs/us/US-XXXX.md` | Full Intent + Plan |
 | `depends_on` US files | Dependency status |
 | `docs/05_architecture.md` | Sections cited in Architecture refs |
+| `docs/architecture/*.md` | When US cites detail files directly |
+| `docs/04_principles.md` | DRY, SRP, layer table — mandatory this session |
 | `../refine-user-story/references/refine-checklist.md` | When sending user back to refine |
 
 ## When to trigger
@@ -41,10 +44,10 @@ Optional: run `validate_meridian.py` — treat `ready is not true` errors as blo
 
 ## Procedure
 
-1. Read `implement-gate-checklist.md` + target US + dependency US + architecture sections.
+1. Read `implement-gate-checklist.md`, `code-quality-at-us-time.md`, target US, `04_principles`, dependency US, architecture sections.
 2. Run gate checklist; report pass/fail per row.
 3. If **blocked** → no product code; state smallest fix.
-4. If **passed** → announce gate passed; read Architecture refs; then implement per Acceptance and Planned.
+4. If **passed** → announce gate passed; read Architecture refs; implement per Acceptance and Planned with **DRY + SRP** (reuse per `04_principles`; one concern per change).
 5. One US per session; cite file path in responses.
 6. After delivery → manager reviews diff → `/complete-us` (do not self-close without evidence).
 
@@ -66,6 +69,7 @@ Next: /refine-us US-XXXX | /status | fix depends_on
 Implement gate passed:
 US:
 Architecture refs read:
+DRY / SRP applied:
 Acceptance focus:
 Planned tests:
 Proceeding with implementation (one US session).

@@ -8,7 +8,7 @@ Existing codebase only (Mode B):
   ↓ human review + promote rows
   ↓ archive inventory after 05 approved
 
-Phase docs (doc-templates.md)
+Phase docs (doc-templates.md; optional docs/architecture/ indexed from 05)
   ↓ 05_architecture approved
 Epic (epic-template.md)
   ↓
@@ -16,13 +16,13 @@ Version (version-template.md)
   ↓
 Sprint (sprint-template.md) — optional but recommended
   ↓
-User story create (us-template.md + writing-guide.md) — status ❌, ready: false, Intent filled
+User story create (us-template.md + writing-guide.md + code-quality-at-us-time.md) — status ❌, ready: false, Intent filled
   ↓
 /review-us (review-checklist.md) — optional audit; report only; never sets ready
   ↓
-/refine-us (refine-checklist.md) — deepen Plan; ready: true
+/refine-us (refine-checklist.md + code-quality-at-us-time.md + 04_principles) — deepen Plan; DRY/SRP; ready: true
   ↓
-/implement-us (implement-gate-checklist.md) — gate then code; requires ready true
+/implement-us (implement-gate-checklist.md + code-quality-at-us-time.md) — gate then code; DRY/SRP; requires ready true
   ↓
 User story close (implementation-template.md) — Record + status ✅
   ↓
@@ -41,10 +41,10 @@ Scrum mapping (bugs, spikes, ceremonies, no story points): `.agent/references/sc
 
 | Moment | Template | What changes |
 | ------ | -------- | ------------ |
-| **Create** (`/create-us`) | `us-template.md` + `writing-guide.md` | Intent (Why/Where) + Plan draft; `ready: false` |
+| **Create** (`/create-us`) | `us-template.md` + `writing-guide.md` + `code-quality-at-us-time.md` | Intent (Why/Where) + Plan draft; one slice (SRP); `ready: false` |
 | **Review** (`/review-us`) | `review-checklist.md` + `section-contracts.md` | Gap report; **no edits**, **no `ready`** |
-| **Refine** (`/refine-us`) | `refine-checklist.md` | Plan concrete; `ready: true` |
-| **Implement** (`/implement-us`) | `implement-gate-checklist.md` | Gate pass; product code allowed |
+| **Refine** (`/refine-us`) | `refine-checklist.md` + `code-quality-at-us-time.md` + `04_principles.md` | Plan concrete; DRY/SRP in Approach; `ready: true` |
+| **Implement** (`/implement-us`) | `implement-gate-checklist.md` + `code-quality-at-us-time.md` + `04_principles.md` | Gate pass; product code with DRY/SRP |
 | **Close** (`/complete-us`) | `implementation-template.md` | `## Record` filled; `status: ✅` |
 
 ## Sprint — close

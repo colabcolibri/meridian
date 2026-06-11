@@ -81,6 +81,7 @@ docs/
   03_user_types.md         Phase 1 — who uses the product
   04_principles.md         Phase 2 — code and quality conventions
   05_architecture.md       Phase 2 — system structure (gate for backlog)
+  architecture/            Phase 2 — optional architecture detail (indexed from 05)
   06_database.md           Phase 2 — data model
   07_api_contracts.md      Phase 2 — API definitions
   08_environments.md       Phase 2 — dev, staging, production

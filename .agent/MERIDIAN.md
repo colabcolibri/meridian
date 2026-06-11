@@ -125,7 +125,7 @@ blocks: []
 | `02_security.md` | `security-steward` | `doc-templates.md` + `security-review` |
 | `03_user_types.md` | `documentation-strategist` | `doc-templates.md` |
 | `04_principles.md` | `documentation-strategist` | `doc-templates.md` |
-| `05_architecture.md` | `architecture-guardian` | `doc-templates.md` + `security-review` |
+| `05_architecture.md` | `architecture-guardian` | `doc-templates.md` + `architecture-folder-guide.md` + `security-review` |
 | `06_database.md` | `documentation-strategist` | `doc-templates.md` |
 | `07_api_contracts.md` | `documentation-strategist` | `doc-templates.md` |
 | `08_environments.md` | `documentation-strategist` | `doc-templates.md` |

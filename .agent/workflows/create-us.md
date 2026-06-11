@@ -11,11 +11,12 @@ $ARGUMENTS
 ## Critical rules
 
 1. Use `board-keeper` + `@[skills/create-user-story]`
-2. **Mandatory read:** `writing-guide.md` + `us-template.md` **before** Write
+2. **Mandatory read:** `writing-guide.md` + `code-quality-at-us-time.md` + `us-template.md` **before** Write
 3. **Gate:** `05_architecture` = `approved`; epic + version exist
 4. Write **Intent** (Why, Where, Acceptance) + **Plan** draft (refs, Planned) — see writing-guide
-5. `ready: false` — never implement in same turn
-6. Next step always: `/refine-us US-XXXX` (optional: `/review-us US-XXXX` first for audit)
+5. **One slice (SRP)** — split or narrow if request bundles unrelated layers; fill **Out of scope**
+6. `ready: false` — never implement in same turn
+7. Next step always: `/refine-us US-XXXX` (optional: `/review-us US-XXXX` first for audit)
 
 ---
 

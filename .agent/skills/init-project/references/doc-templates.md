@@ -49,6 +49,31 @@ Minimum sections:
 - Known risks
 - Open questions
 
+## `04_principles.md` (initial draft)
+
+Minimum sections — agents read this at refine and implement:
+
+- **DRY** — where each type of logic lives (domain, features, UI, constants)
+- **Single responsibility** — layer table (domain / feature / UI / app)
+- **Definition of Done** — team-wide bar for closed US
+- **Mandatory conventions** — lint, naming, tooling
+
+Mark `status: draft` until human approves. Blocks `05_architecture.md`.
+
+## `05_architecture.md` (initial draft)
+
+Overview + gate document. Minimum sections:
+
+- Objective
+- System context (text or mermaid)
+- Component boundaries and layers
+- Integration points
+- **Architecture detail files** — table indexing `docs/architecture/*.md` when used (see `architecture-folder-guide.md`)
+
+Keep cross-cutting content here; move deep specs to `docs/architecture/` when a section would grow too large.
+
+Optional at init: empty `docs/architecture/README.md` pointing to `architecture-folder-guide.md` in kit.
+
 ## `11_decisions.md` + `docs/decisions/` (first entry)
 
 Create stub `11_decisions.md` (rules) and folder `docs/decisions/`.

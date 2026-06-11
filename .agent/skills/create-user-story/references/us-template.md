@@ -51,6 +51,9 @@ Bullets allowed — **each bullet is a full thought** (one or two sentences): in
 ### Architecture refs
 
 - `docs/05_architecture.md` — § exact heading (fill on `/refine-us` if unknown at create)
+- Optional: `docs/architecture/name.md` — § exact heading when detail lives only in the folder
+
+Read `code-quality-at-us-time.md` at refine — Approach must respect DRY and SRP from `04_principles.md`.
 
 ### API / DB impact
 
@@ -97,7 +100,7 @@ _(pending until close)_
 
 ### Out of scope for this story
 
-What this US explicitly does **not** do — prevents scope creep in implementation.
+What this US explicitly does **not** do — prevents scope creep and SRP violations in implementation.
 
 ### Notes
 

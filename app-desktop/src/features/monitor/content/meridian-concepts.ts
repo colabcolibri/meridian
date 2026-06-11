@@ -116,12 +116,13 @@ export const meridianLoop = {
       id: "refine",
       label: "Refine",
       description:
-        "Each story needs a clear Approach and ready: true before product code.",
+        "Each story needs Approach (DRY + SRP), architecture refs, and ready: true before product code.",
     },
     {
       id: "implement",
       label: "Implement",
-      description: "Agent reads the US and implements against acceptance criteria.",
+      description:
+        "Agent reads US, 04_principles, and architecture refs — implements with DRY and single responsibility.",
     },
     {
       id: "close",
@@ -338,6 +339,12 @@ export const folderStructure = {
         "Scope, stack, security, architecture, and principles. Written once, updated when things change. The stable ground agents build on.",
     },
     {
+      path: "docs/architecture/",
+      label: "Architecture detail",
+      description:
+        "Optional deep specs indexed from 05_architecture.md — modules, integrations, deployment. Gate stays on 05 only.",
+    },
+    {
       path: "docs/epics/",
       label: "Epics",
       description:
@@ -453,11 +460,12 @@ export const userStoryAnatomy: AnatomyGuide = {
         {
           label: "### Approach",
           description:
-            "What changes, where in the codebase, and why. Required before /refine-us sets ready: true.",
+            "What changes, where in the codebase, and why — reuse existing modules (DRY) and one layer per bullet (SRP). Required before ready: true.",
         },
         {
           label: "### Architecture refs",
-          description: "Exact section headings from 05_architecture.md.",
+          description:
+            "Exact § from 05_architecture.md or docs/architecture/*.md when detail lives there.",
         },
         {
           label: "### API / DB",
@@ -952,7 +960,7 @@ export const documentWorkflowSteps: DailyWorkflowStep[] = [
     title: "Use specialized commands",
     when: "Target document identified.",
     actions: [
-      "/architecture — draft or review 05_architecture.md.",
+      "/architecture — draft or review 05_architecture.md; optional docs/architecture/ detail indexed from 05.",
       "/security-pass — draft or review 02_security.md.",
       "For any other doc, open it and ask the agent to work on it directly.",
       "Significant decision made? Log it with /update-decisions-log (real clock via date command).",
@@ -1034,9 +1042,9 @@ export const backlogWorkflowSteps: DailyWorkflowStep[] = [
     title: "Create and refine user stories",
     when: "Epic and version exist — create the executable tasks.",
     actions: [
-      "/create-us — creates the story with Intent (Why + Where) filled. ready: false.",
+      "/create-us — Intent (Why + Where); one slice (SRP); Out of scope filled. ready: false.",
       "/review-us US-XXXX — optional quality audit before refining. Read-only, no changes.",
-      "/refine-us US-XXXX — writes the Approach, sets architecture refs, concrete tests. Sets ready: true when checklist passes.",
+      "/refine-us US-XXXX — Approach with DRY/SRP; architecture refs; concrete tests. ready: true when checklist passes.",
       "A story without ready: true cannot be implemented.",
       "Run /sync-board after any US change.",
     ],
@@ -1090,7 +1098,7 @@ export const implementWorkflowSteps: DailyWorkflowStep[] = [
     actions: [
       "Command: /implement-us US-XXXX — gate checks ready, Plan, depends_on, then codes.",
       "If blocked: run /refine-us US-XXXX first.",
-      "One US per session; agent reads Architecture refs before Write on code.",
+      "One US per session; read Architecture refs and 04_principles (DRY, SRP) before Write on code.",
     ],
     commands: ["/implement-us US-XXXX"],
     tip: "Do not skip the gate — P0 requires ready: true before product code.",
@@ -1316,6 +1324,7 @@ export const usageAntiPatterns = [
   "Editing board.json directly — it is always generated.",
   "Creating US before 05_architecture.md is approved.",
   "Mixing document work, backlog work, and implementation in one conversation.",
+  "Approach without reuse plan (DRY) or one US touching unrelated layers (SRP) — refine must catch this.",
   "Setting approved on a document you did not read.",
   "Using status: ✅ without a filled ## Record.",
   "Closing a US with /complete-us and starting the next story without committing the closed slice (unless you batch commits intentionally).",
@@ -1395,8 +1404,10 @@ const phaseDocDescriptions: Record<string, string> = {
   "01_tech_stack": "Languages, frameworks, infrastructure, and rationale for choices.",
   "02_security": "Threats, sensitive data, auth model, OWASP, compliance posture.",
   "03_user_types": "Who uses the product and what each profile needs.",
-  "04_principles": "Code quality and design conventions.",
-  "05_architecture": "How the system is divided — apps, modules, services, boundaries.",
+  "04_principles":
+    "DRY, single responsibility, Definition of Done — agents read at refine and implement.",
+  "05_architecture":
+    "System overview and gate — optional detail in docs/architecture/ indexed from here.",
   "06_database": "Data model, schema, and migration strategy.",
   "07_api_contracts": "Contracts between services and external APIs.",
   "08_environments": "Local, staging, and production environment definitions.",

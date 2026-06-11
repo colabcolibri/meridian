@@ -13,13 +13,15 @@ Read `writing-guide.md` for tone: Approach bullets must **explain**, not telegra
 | 1 | Intent / `### Why` | 2+ sentences; explains slice, before/after; not epic paste |
 | 2 | Intent / `### Where` | 2+ sentences; release position, deps, unblocks; US ids ok |
 | 3 | Plan / `### Approach` | **required** — minimum 2 explanatory bullets; no placeholders |
-| 4 | Plan / Architecture refs | Real `docs/05_architecture.md` — § **exact heading** |
+| 4 | Plan / Architecture refs | Real path — `docs/05_architecture.md` **or** `docs/architecture/*.md` — § **exact heading** |
 | 5 | Plan / API / DB impact | `_n/a_` with short phrase **or** named endpoint/table/migration |
 | 6 | Intent / Acceptance | Each item observable; not vague intent |
 | 7 | Plan / Planned | Numbered manual steps and/or exact commands; no “add when known” |
 | 8 | `done_when` | One measurable sentence in frontmatter |
 | 9 | Epic link | `epic: EPIC-XX` in frontmatter only — body explains slice in own words |
 | 10 | INVEST | Independent enough (`depends_on` justified), Small (one session), Testable (Planned + Acceptance) |
+| 11 | DRY | Approach names existing module/hook to reuse **or** justifies new shared module with path (see `code-quality-at-us-time.md`) |
+| 12 | SRP | One slice; Approach bullets don't mix unrelated layers; **Out of scope** lists creep risks |
 
 See `.agent/references/scrum-meridian-map.md` for bugs/spikes (no extra artifact types).
 

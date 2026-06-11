@@ -11,6 +11,7 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 | File | When to read |
 | ------- | ---------- |
 | `.agent/references/templates/writing-guide.md` | **Mandatory** — how to write explanatory US prose |
+| `.agent/references/templates/code-quality-at-us-time.md` | **Mandatory** — DRY, SRP, link to `04_principles` |
 | `.agent/references/templates/INDEX.md` | Agent protocol |
 | `references/us-template.md` | **Mandatory** — full structure before Write |
 
@@ -47,12 +48,14 @@ Read linked epic and dependency US **for understanding** — write in your own w
 | **Approach** | optional at create; add on refine if bullets help |
 | **Acceptance** | 2–4 observable checklist items — not a copy of Approach |
 | **Architecture refs** | May use `§ TBD` at create; `/refine-us` fills exact heading |
+| **Out of scope** | Prevents SRP violations — what this slice does **not** touch |
+| **Code quality** | Read `code-quality-at-us-time.md`; one slice = one concern |
 
 Forbidden: telegraphic stubs, repeating acceptance under Approach, “see EPIC-XX” without explanation.
 
 ## Procedure
 
-1. Read `writing-guide.md` + full `us-template.md`.
+1. Read `writing-guide.md` + `code-quality-at-us-time.md` + full `us-template.md`.
 2. Read epic, version, dependency US files for context.
 3. Next ID = highest `US-XXXX` + 1 (4 digits).
 4. Write full US — especially Why / Where / Approach with explanatory prose.

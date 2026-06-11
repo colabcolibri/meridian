@@ -159,7 +159,7 @@ Complete in order: `00` → `01` → `02` → `03` → `04` → **`05`** → `06
 | C1 | *(conversation)* | `scope-architect` | `00_scope.md` | Scope, users, out of scope. |
 | C2 | *(conversation)* | `documentation-strategist` | `01`, `03`, `04`, `06`–`08` | Draft phase documents. |
 | C3 | **`/security-pass`** | `security-steward` | `02_security.md` | Threat model, secrets, OWASP, agent safety. |
-| C4 | **`/architecture`** | `architecture-guardian` | `05_architecture.md` | System structure, boundaries, integrations. |
+| C4 | **`/architecture`** | `architecture-guardian` | `05_architecture.md` + optional `docs/architecture/` | Overview, index, detail files; gate for backlog. |
 
 **Human gate:** you set `status: approved` on each doc. Agent never sets `approved`.
 

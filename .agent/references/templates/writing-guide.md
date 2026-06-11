@@ -13,7 +13,8 @@
 5. **Create vs refine** — `/create-us` writes the story (clarity). `/refine-us` deepens Plan and tests before code.
 6. **INVEST (qualitative)** — at review/refine: Independent (`depends_on` minimal), Negotiable (Why allows tradeoffs), Valuable (`so that`), Estimable (concrete Approach), Small (one session), Testable (observable Acceptance). No story points — see `scrum-meridian-map.md`.
 7. **Gherkin optional** — use Given/When/Then only when a flow is ambiguous; default remains observable checklist bullets.
-8. **Bugs and spikes** — no `docs/bugs/` or spike folders; bugs = correction US; spikes = US with timebox in Notes or decision log outcome. See `scrum-meridian-map.md`.
+8. **Code quality at US time** — at create/refine/implement read `code-quality-at-us-time.md` and `04_principles.md` (DRY, SRP). One US = one concern; Approach names reuse before new modules.
+9. **Architecture folder** — optional `docs/architecture/` for detail; `05_architecture.md` stays overview + index + gate. See `architecture-folder-guide.md`.
 
 ---
 

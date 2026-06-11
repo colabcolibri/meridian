@@ -133,7 +133,7 @@ If discovery finds **more than one** `docs/` folder named exactly `docs` with Me
 
 | # | Check |
 | - | ----------- |
-| 1 | `docs/`, `decisions/`, `epics/`, `versions/`, `us/`, `sprints/`, `board.json`, `11_decisions`, `00_scope` exist |
+| 1 | `docs/`, `decisions/`, `architecture/`, `epics/`, `versions/`, `us/`, `sprints/`, `board.json`, `11_decisions`, `00_scope` exist |
 | 2 | `.env*` protected in `.gitignore` |
 | 3 | No product code created |
 | 4 | (Mode B) `docs/inventory/as-is.md` exists with capability table |

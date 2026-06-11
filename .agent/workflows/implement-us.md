@@ -11,12 +11,14 @@ $ARGUMENTS
 ## Critical rules
 
 1. Use `process-manager` + `@[skills/implement-user-story]`
-2. **Mandatory read:** `implement-gate-checklist.md` + target US **before** product code
-3. **Hard block:** `ready: true` required — if false → stop; recommend `/refine-us`
-4. Read every **Architecture refs** section before Write on code
-5. One US per session — cite `docs/us/US-XXXX.md` explicitly
-6. Do **not** mark `✅` or run `/complete-us` in the same turn unless manager only asked to close
-7. Partial delivery → `🔶` + `Missing:` in Acceptance; no forced close
+2. **Mandatory read:** `implement-gate-checklist.md` + `code-quality-at-us-time.md` + target US **before** product code
+3. **Mandatory read:** `docs/04_principles.md` (DRY, SRP) before Write on code
+4. **Hard block:** `ready: true` required — if false → stop; recommend `/refine-us`
+5. Read every **Architecture refs** section before Write on code
+6. Implement with DRY + SRP — reuse modules per Approach; no scope creep across layers
+7. One US per session — cite `docs/us/US-XXXX.md` explicitly
+8. Do **not** mark `✅` or run `/complete-us` in the same turn unless manager only asked to close
+9. Partial delivery → `🔶` + `Missing:` in Acceptance; no forced close
 
 ---
 
@@ -31,7 +33,7 @@ RULES:
 1. Resolve US id from $ARGUMENTS or ask
 2. Run implement gate checklist (architecture, ready, Plan, depends_on, status)
 3. If blocked → output blocker; NO product code
-4. If passed → read Architecture refs → implement Acceptance + Planned
+4. If passed → read Architecture refs + 04_principles → implement Acceptance + Planned (DRY + SRP)
 5. validate_meridian.py optional after US edits (not before gate)
 6. Remind manager: review diff → /complete-us → /sync-board → commit (human)
 ```
@@ -45,6 +47,7 @@ Implement gate: passed | blocked
 US:
 Blockers:
 Architecture refs read:
+DRY / SRP applied:
 Files touched:
 Tests run:
 Next: /complete-us US-XXXX (after manager review)

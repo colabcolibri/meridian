@@ -11,11 +11,12 @@ $ARGUMENTS
 ## Critical rules
 
 1. Use `board-keeper` + `@[skills/refine-user-story]`
-2. **Mandatory read:** `writing-guide.md` (refine section) + `refine-checklist.md`
-3. **NO product code** — docs only
-4. Approach bullets must **explain** (full sentences) — not bare paths
-5. `ready: true` only when checklist passes
-6. **Not a review** — for audit-only without edits, use `/review-us` first
+2. **Mandatory read:** `writing-guide.md` + `code-quality-at-us-time.md` + `refine-checklist.md`
+3. **Mandatory read:** `docs/04_principles.md` (DRY, SRP) this session
+4. **NO product code** — docs only
+5. Approach bullets must **explain** (full sentences) — not bare paths
+6. `ready: true` only when checklist passes
+7. **Not a review** — for audit-only without edits, use `/review-us` first
 
 ---
 
@@ -29,11 +30,12 @@ CONTEXT:
 RULES:
 1. Read US, depends_on US, cited architecture sections
 2. Deepen ### Approach — each bullet: what + where + why
-3. Fix ### Architecture refs — exact § heading from 05_architecture.md
-4. Concrete Plan/Planned — numbered manual steps or commands
-5. Fix Why/Where only if create left real gaps
-6. ready: true iff checklist passes
-7. generate-board-json
+3. Fix ### Architecture refs — exact § from `05_architecture.md` or `docs/architecture/*.md`
+4. DRY / SRP — Approach names reuse; no mixed layers; Out of scope lists creep
+5. Concrete Plan/Planned — numbered manual steps or commands
+6. Fix Why/Where only if create left real gaps
+7. ready: true iff checklist passes (rows 11–12 included)
+8. generate-board-json
 ```
 
 ---
@@ -44,6 +46,7 @@ RULES:
 US refined:
 File:
 Ready: yes | no
+DRY / SRP: pass | fail
 Approach quality: explanatory | still thin
 Tests: concrete | generic
 Next: implement | /refine-us again

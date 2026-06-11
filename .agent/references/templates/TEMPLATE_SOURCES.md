@@ -46,6 +46,8 @@ CANONICAL (edit here)          REGISTRY (agents read)              HUMAN / CURSO
 | `.agent/references/templates/projects-manifest-template.md` | Multi-product monorepo — `.meridian/projects.json` |
 | `.agent/references/templates/INDEX.md` | Registry table artifact → template → agent → workflow |
 | `.agent/references/templates/writing-guide.md` | Prose quality — Intent, Plan, epic paragraphs |
+| `.agent/references/templates/code-quality-at-us-time.md` | DRY, SRP at create / refine / implement |
+| `.agent/references/templates/architecture-folder-guide.md` | `05` index + `docs/architecture/` detail |
 | `.agent/references/templates/section-contracts.md` | Fixed headings — validated by Python + monitor |
 | `.agent/references/templates/lifecycle.md` | create → review → refine → implement → close |
 | `.agent/references/templates/TEMPLATE_SOURCES.md` | This file — canonical paths |
@@ -56,10 +58,11 @@ CANONICAL (edit here)          REGISTRY (agents read)              HUMAN / CURSO
 
 | Step | Command | Read before acting |
 | ---- | ------- | ------------------- |
-| Create | `/create-us` | `writing-guide.md` + `us-template.md` |
+| Create | `/create-us` | `writing-guide.md` + `code-quality-at-us-time.md` + `us-template.md` |
 | Review | `/review-us` | `review-checklist.md` + `writing-guide.md` + `section-contracts.md` + `us-template.md` |
-| Refine | `/refine-us` | `refine-checklist.md` + `writing-guide.md` + `us-template.md` |
-| Implement | (code) | Target US + Architecture refs cited in US |
+| Refine | `/refine-us` | `refine-checklist.md` + `writing-guide.md` + `code-quality-at-us-time.md` + `us-template.md` + `04_principles.md` |
+| Implement | `/implement-us` | `implement-gate-checklist.md` + `code-quality-at-us-time.md` + target US + `04_principles.md` |
+| Architecture | `/architecture` | `architecture-folder-guide.md` + phase docs 00–04 |
 | Close | `/complete-us` | `implementation-template.md` + `us-template.md` + `section-contracts.md` |
 
 **Review vs refine:** review = audit report, no edits, no `ready`. Refine = edit US + `ready: true`.

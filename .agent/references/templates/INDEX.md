@@ -16,10 +16,11 @@ Templates are mirrored here from skills (`references/`) so every agent uses the 
 | Epic `docs/epics/EPIC-XX.md` | `epic-template.md` + **`writing-guide.md`** | `documentation-strategist` | `create-epic` | `/create-epic` |
 | Version `docs/versions/vX.md` | `version-template.md` + **`writing-guide.md`** | `sprint-planner` | `create-version` | `/create-version` |
 | Sprint `docs/sprints/vX-SY.md` | `sprint-template.md` | `sprint-planner` | `create-sprint` | `/plan-sprint` |
-| User story (create) | `us-template.md` + **`writing-guide.md`** | `board-keeper` | `create-user-story` | `/create-us` |
+| User story (create) | `us-template.md` + **`writing-guide.md`** + **`code-quality-at-us-time.md`** | `board-keeper` | `create-user-story` | `/create-us` |
 | User story (review) | `review-checklist.md` + `us-template.md` + **`writing-guide.md`** + `section-contracts.md` | `board-keeper` | `review-user-story` | `/review-us` |
-| User story (refine) | `us-template.md` + `refine-checklist.md` + **`writing-guide.md`** | `board-keeper` | `refine-user-story` | `/refine-us` |
-| User story (implement) | `implement-gate-checklist.md` + target US | `process-manager` | `implement-user-story` | `/implement-us` |
+| User story (refine) | `us-template.md` + `refine-checklist.md` + **`writing-guide.md`** + **`code-quality-at-us-time.md`** | `board-keeper` | `refine-user-story` | `/refine-us` |
+| User story (implement) | `implement-gate-checklist.md` + **`code-quality-at-us-time.md`** + target US | `process-manager` | `implement-user-story` | `/implement-us` |
+| Architecture detail | `architecture-folder-guide.md` + `05` phase doc | `architecture-guardian` | — | `/architecture` |
 | User story (close) | `implementation-template.md` + `us-template.md` | `board-keeper` | `complete-user-story` | `/complete-us` |
 | Decision entry | `decision-template.md` + `decision-schema.md` | any relevant agent | `update-decisions-log` | — |
 | Board JSON | `board-schema.md` | `board-keeper` | `generate-board-json` | `/sync-board` |
@@ -42,8 +43,10 @@ When an agent from the table is activated:
 2. Read the skill `SKILL.md` listed in the table.
 3. Read the **full template file** from this folder — not only frontmatter examples in `MERIDIAN.md`.
 4. Read **`writing-guide.md`** when creating or refining epic, version, or US.
-5. Read `section-contracts.md` when editing US, epic, or version structure.
-6. Only then create or edit the artifact.
+5. Read **`code-quality-at-us-time.md`** when creating, refining, or implementing US.
+6. Read `section-contracts.md` when editing US, epic, or version structure.
+7. Read **`architecture-folder-guide.md`** when editing `05_architecture.md` or `docs/architecture/`.
+8. Only then create or edit the artifact.
 
 If the request is **implement code** for a US (`process-manager` gate):
 
@@ -51,7 +54,8 @@ If the request is **implement code** for a US (`process-manager` gate):
 2. Block if `ready` is not `true` → `/refine-us` first.
 3. Block if `## Plan` is empty or only placeholders.
 4. Read every path listed under Plan / **Architecture refs** before writing code.
-5. Prefer workflow `/implement-us US-XXXX` to document gate pass before coding.
+5. Read **`code-quality-at-us-time.md`** and `docs/04_principles.md` before writing code.
+6. Prefer workflow `/implement-us US-XXXX` to document gate pass before coding.
 
 ---
 
