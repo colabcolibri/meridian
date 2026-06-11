@@ -2,6 +2,15 @@
   "date": "2026-06-11",
   "entries": [
     {
+      "time": "22:14",
+      "title": "Kit resilience — decision clock, update-decisions-log, complete-sprint workflows",
+      "affected_document": ".agent/rules/MERIDIAN.md, meridian.mdc, MERIDIAN.md §8, workflows/update-decisions-log.md, complete-sprint.md, skills/complete-sprint, complete-us.md, plan-sprint.md, agents-help.md, start-here.md, scrum-meridian-map.md, lifecycle.md, meridian-concepts.ts",
+      "what_changed": "P0 requires date +%Y-%m-%d and date +%H:%M before any Write to docs/decisions/. Added workflows /update-decisions-log and /complete-sprint with skills; wired routing, sprint-planner, daily-with-ai, usage-guide. Fixed start-here decision schema drift.",
+      "why_changed": "Agents logged decisions with invented timestamps; /update-decisions-log was documented but missing; sprint close had no enforced workflow despite Retrospective template rules.",
+      "impact": "All IDE adapters synced via sync_cursor_kit.sh; agents must read update-decisions-log skill when logging; sprint close uses /complete-sprint vX-SY. Epic/version close remains manual status: complete.",
+      "responsible": "Process Manager"
+    },
+    {
       "time": "14:30",
       "title": "v2.05 — Codex adapter + extension onboarding (US-0103, US-0104)",
       "affected_document": ".agent/scripts/sync_cursor_kit.sh, install-meridian-kit.sh, IDE_ADAPTERS.md, app-visual-studio/src/help-webview-html.ts, kit-reference-*.ts, docs/us/US-0103.md, US-0104.md, versions/v2.05.md",

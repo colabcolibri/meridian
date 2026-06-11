@@ -89,7 +89,7 @@ Velocity / burndown   →   não usados (capacidade = julgamento + Must + deps)
 | Sprint planning | `/plan-sprint` + sprint `stories:` order | Manager + `sprint-planner` |
 | Daily Scrum | `/daily-with-ai` or `/status` + Commands tab in app | Manager |
 | Sprint review (demo) | Manager reviews increment against Acceptance + Planned | Manager |
-| Sprint retrospective | Sprint `## Retrospective` on close → decisions log | Manager |
+| Sprint retrospective | `/complete-sprint` — fill `## Retrospective`, `status: complete` | Manager + `sprint-planner` |
 | — | `/sync-board` after US changes | Agent or manager |
 
 No fixed 15-minute daily or 8-hour planning timeboxes — async manager + AI sessions.

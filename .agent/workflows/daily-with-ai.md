@@ -80,7 +80,7 @@ Then: /sync-board
 
 - Fill `## Record` (Files + layers + Executed).
 - Intent/Acceptance `[x]`, status `✅`, tests documented.
-- Cross-cutting decision → skill `update-decisions-log` (`docs/decisions/YYYY-MM-DD.json`).
+- Cross-cutting decision → `/update-decisions-log` (read skill + run `date +"%Y-%m-%d"` and `date +"%H:%M"` before Write).
 
 ### 5. Commit (human)
 
@@ -110,7 +110,9 @@ Reference: .agent/references/commit-after-us-close.md
 | `/create-us` | New task (gates OK) |
 | `/refine-us` | Deepen Context; set `ready: true` before code |
 | `/complete-us` | Close US after implementation |
+| `/complete-sprint` | Close sprint — retrospective + status complete |
 | `/sync-board` | Regenerate kanban JSON |
+| `/update-decisions-log` | Prepend decision entry (real date + clock) |
 | `/plan-sprint` | Work slice in version |
 | `/create-epic` | New product capability |
 | `/architecture` | Doc 05 before structural change |

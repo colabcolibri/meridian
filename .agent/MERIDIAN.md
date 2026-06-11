@@ -30,7 +30,7 @@ Meridian is not a mesh of autonomous agents. It is a minimal, auditable loop.
 | - | --------- |
 | 1 | Documentation precedes product code |
 | 2 | Status reflects evidence, not optimism |
-| 3 | Decisions live in `docs/decisions/YYYY-MM-DD.json` (prepend; never edit old entries) |
+| 3 | Decisions live in `docs/decisions/YYYY-MM-DD.json` (prepend; never edit old entries). **Clock:** run `date +"%Y-%m-%d"` and `date +"%H:%M"` before Write — workflow `/update-decisions-log` |
 | 4 | `docs/kanban/board.json` is **derived** from `docs/us/*.md` — never the primary source |
 | 5 | Simplicity over bureaucracy — use agents/skills for detail, not duplicate specs here |
 
@@ -210,6 +210,12 @@ python3 .agent/scripts/validate_meridian.py <project-folder>
 python3 .agent/scripts/validate_meridian.py <project-folder> --json
 ```
 
+### Decision log
+
+- One file per day: `docs/decisions/YYYY-MM-DD.json` — prepend in `entries`; never edit old entries
+- **Before Write:** run `date +"%Y-%m-%d"` (filename + JSON `date`) and `date +"%H:%M"` (`entries[].time`)
+- Workflow `/update-decisions-log` + skill `update-decisions-log`; templates `decision-template.md`, `decision-schema.md`
+
 ---
 
 ## 9. Agents and routing
@@ -221,8 +227,9 @@ python3 .agent/scripts/validate_meridian.py <project-folder> --json
 | Phase docs | `documentation-strategist` | — |
 | Security | `security-steward` | `/security-pass` |
 | Architecture | `architecture-guardian` | `/architecture` |
-| Versions / sprints | `sprint-planner` | `/create-version`, `/plan-sprint` |
+| Versions / sprints | `sprint-planner` | `/create-version`, `/plan-sprint`, `/complete-sprint` |
 | US / board | `board-keeper` | `/create-us`, `/refine-us`, `/complete-us`, `/sync-board` |
+| Decisions | any relevant agent | `/update-decisions-log` |
 | Auto-pick | `meridian-routing` skill | — |
 
 Always announce: `🤖 Applying knowledge from @[agent-name]...` before specialized work.
@@ -237,6 +244,7 @@ Create drafts, suggest decisions, implement approved US, run tests, update docs,
 - Create US before `05_architecture` approved and epic/version exist
 - Mark `✅` without evidence or filled Record
 - Edit old decision log entries
+- Write to `docs/decisions/` without running `date +"%Y-%m-%d"` and `date +"%H:%M"` first
 - Edit `board.json` as primary source
 - Expose secrets or run destructive commands without confirmation
 
@@ -295,7 +303,7 @@ Delivery is done when:
 - `tests_status: done` when `tests: required`
 - `status: ✅` in frontmatter
 - `board.json` regenerated
-- Cross-cutting changes in decision log
+- Cross-cutting changes in decision log (skill `update-decisions-log` + real clock)
 
 **Repository (human, after the above):** one git commit per closed US — code + `docs/us/US-XXXX.md` + board/decisions in scope. Agents suggest message on close; they do not commit unless the manager explicitly asks. See `.agent/references/commit-after-us-close.md`.
 

@@ -29,6 +29,8 @@ User story close (implementation-template.md) — Record + status ✅
 Board sync (board-schema.md)
   ↓
 Commit (human) — one commit per closed US; see commit-after-us-close.md
+  ↓
+Sprint close (sprint-template.md Retrospective) — /complete-sprint when increment delivered
 ```
 
 Scrum mapping (bugs, spikes, ceremonies, no story points): `.agent/references/scrum-meridian-map.md`.
@@ -43,6 +45,14 @@ Scrum mapping (bugs, spikes, ceremonies, no story points): `.agent/references/sc
 | **Review** (`/review-us`) | `review-checklist.md` + `section-contracts.md` | Gap report; **no edits**, **no `ready`** |
 | **Refine** (`/refine-us`) | `refine-checklist.md` | Plan concrete; `ready: true` |
 | **Close** (`/complete-us`) | `implementation-template.md` | `## Record` filled; `status: ✅` |
+
+## Sprint — close
+
+| Moment | Workflow / skill | What changes |
+| ------ | ---------------- | ------------ |
+| **Close** (`/complete-sprint`) | `sprint-template.md` + `complete-sprint` | `## Retrospective` filled; `status: complete` |
+
+Epic and version **close** remain manual (`status: complete` in frontmatter when outcome reached) — no separate refine workflow.
 
 Between create and close, the US file is the **contract for implementation**. Structure is enforced by `section-contracts.md` (Python + monitor). If Plan or Planned tests are still generic placeholders, the agent must **not** implement — run `/refine-us` first.
 

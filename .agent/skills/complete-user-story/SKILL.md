@@ -55,7 +55,7 @@ If anything fails → **do not** mark `✅`; use `🔶` with `Missing:` in accep
 6. Mark acceptance `[x]` with objective evidence.
 7. Update frontmatter `status: ✅` (or `🔶` if partial + `Missing:`). Only mark `✅` if `tests: none` **or** `tests_status: done`.
 8. Invoke `generate-board-json`.
-9. If relevant cross-cutting change → `update-decisions-log` (local US decisions stay in Record).
+9. If relevant cross-cutting change → read `update-decisions-log` skill + run `date` before Write (local US decisions stay in Record).
 
 ## Validations before marking `✅`
 

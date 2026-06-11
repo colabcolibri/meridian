@@ -40,6 +40,8 @@ Before any action, classify:
 | **REFINE US** | "refine US", `/refine-us`, "ready for implement" | `board-keeper` + `refine-user-story` |
 | **REVIEW US** | "review US", `/review-us`, "audit US", "check story" | `board-keeper` + `review-user-story` |
 | **CLOSE US** | "complete US", "mark done", "record", `/complete-us` | `board-keeper` + `complete-user-story` |
+| **CLOSE SPRINT** | "complete sprint", "close sprint", `/complete-sprint` | `sprint-planner` + `complete-sprint` |
+| **LOG DECISION** | "log decision", "decision log", `/update-decisions-log`, `docs/decisions/` | read `update-decisions-log` + run `date` before Write |
 | **SECURITY** | "security", "OWASP", "secrets", `02_security` | `security-steward` |
 | **START PROJECT** | "start", "meridian setup", "create docs" | `process-manager` + `init-project` |
 | **CODE** | "implement", "create app", "fix", "refactor" | Verify doc maturity FIRST |
@@ -101,6 +103,7 @@ Do not write product code until required docs for the current phase exist (see `
 - Do not mark `approved` without human confirmation or explicit authorization.
 - Do not create US before `05_architecture.md` is `approved`.
 - Do not edit old entries in `docs/decisions/`; new entries go **at the start** of `entries`.
+- **Before any Write to `docs/decisions/`:** run `date +"%Y-%m-%d"` (file + JSON `date`) and `date +"%H:%M"` (`entries[].time`). Never invent or round timestamps. Use workflow `/update-decisions-log` or read skill `update-decisions-log` first.
 
 ### Acceptance and status
 
@@ -131,7 +134,8 @@ The person is manager of the process. Agents report blockers, next step, and pen
 | `01`–`08`, `11` (phase) | `documentation-strategist` | `update-decisions-log` |
 | `02_security.md` | `security-steward` | `security-review` |
 | `05_architecture.md` | `architecture-guardian` | `security-review` |
-| `docs/versions/`, `docs/sprints/` | `sprint-planner` | `create-user-story` |
+| `docs/versions/`, `docs/sprints/` (create/plan) | `sprint-planner` | `create-sprint`, `create-version` |
+| `docs/sprints/` (close) | `sprint-planner` | `complete-sprint` |
 | `docs/us/*.md` (create) | `board-keeper` | `create-user-story` |
 | `docs/us/*.md` (review) | `board-keeper` | `review-user-story` |
 | `docs/us/*.md` (refine) | `board-keeper` | `refine-user-story` |

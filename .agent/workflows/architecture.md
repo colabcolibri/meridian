@@ -13,7 +13,7 @@ $ARGUMENTS
 1. Use `architecture-guardian`
 2. Prerequisites: scope, stack, security, users (draft minimum)
 3. Align with `02_security` — load `security-review` if gaps
-4. Material change → `docs/decisions/YYYY-MM-DD.json` (skill `update-decisions-log`)
+4. Material change → `/update-decisions-log` (read skill + run `date` before Write)
 5. No product code in this workflow (unless explicit request in $ARGUMENTS)
 
 ---

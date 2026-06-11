@@ -48,4 +48,4 @@ python3 .agent/scripts/validate_meridian.py <project-root>
 
 - Rules stub: `docs/11_decisions.md`
 - Skill: `update-decisions-log`
-- Protocol: `.agent/MERIDIAN.md` §11.12
+- Protocol: `.agent/MERIDIAN.md` §8 Decision log

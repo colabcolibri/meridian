@@ -26,7 +26,8 @@ Before responding, classify the request and select the correct Meridian agent. S
 | Security | "security", "OWASP", "secrets", "threat", `02_security` | `security-steward` | yes |
 | Architecture | "architecture", `05_architecture` | `architecture-guardian` | yes |
 | Version / sprint | "version", "sprint", "roadmap", `/create-version`, `docs/versions/`, `docs/sprints/` | `sprint-planner` + skill `create-version` / `create-sprint` | yes |
-| Decisions / log | "decision", "decisions", "decision log", `docs/decisions/` | skill `update-decisions-log` | yes |
+| Close sprint | "complete sprint", "close sprint", `/complete-sprint`, sprint retrospective | `sprint-planner` + `complete-sprint` | yes |
+| Decisions / log | "decision", "decisions", "decision log", `/update-decisions-log`, `docs/decisions/` | read `update-decisions-log` + run `date` before Write | yes |
 | User story / board | "user story", "US-", "kanban", "board.json", "acceptance" | `board-keeper` | yes |
 | Refine US | "refine US", "ready for implement", `/refine-us`, "fill context" | `board-keeper` + `refine-user-story` | yes |
 | Review US | "review US", "audit US", `/review-us`, "check story quality" | `board-keeper` + `review-user-story` | yes |
@@ -63,7 +64,7 @@ Multiple agents:
 1. **Silent analysis** — do not narrate "I am analyzing" for paragraphs.
 2. **User override** — `@agent` wins over automatic routing.
 3. **Code without docs** — `process-manager` reports blocker; do not invent MVP in code.
-4. **Decisions** — any relevant change triggers `update-decisions-log`.
+4. **Decisions** — any relevant change → read `update-decisions-log` skill + run `date +"%Y-%m-%d"` and `date +"%H:%M"` before Write.
 5. **Scrum concepts** — read `.agent/references/scrum-meridian-map.md` only; not `scrum-guide-complete.md` unless the manager asks.
 
 ## Complexity detection

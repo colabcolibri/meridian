@@ -72,7 +72,7 @@ Workflows orchestrate agents; they do not replace the master protocol.
 | `documentation-strategist` | Phase docs `01`–`05`, `08`–`10`, `docs/epics/` | init-project, create-epic, create-user-story, update-decisions-log, meridian-routing |
 | `security-steward` | `02_security.md` | security-review, update-decisions-log, meridian-routing |
 | `architecture-guardian` | `05_architecture.md` | security-review, update-decisions-log, meridian-routing |
-| `sprint-planner` | `docs/versions/`, `docs/sprints/` | create-version, create-sprint, create-user-story, … |
+| `sprint-planner` | `docs/versions/`, `docs/sprints/` | create-version, create-sprint, complete-sprint, create-user-story, … |
 | `board-keeper` | US + `board.json` | create-user-story, review-user-story, refine-user-story, complete-user-story, generate-board-json, update-decisions-log, meridian-routing |
 
 Each agent includes: phases 0/-1, mission, prohibitions, output format, delegation.
@@ -87,6 +87,7 @@ Each agent includes: phases 0/-1, mission, prohibitions, output format, delegati
 | `create-epic` | `epic-template.md`, `writing-guide.md` |
 | `create-version` | `version-template.md`, `writing-guide.md` |
 | `create-sprint` | `sprint-template.md` |
+| `complete-sprint` | `sprint-template.md` |
 | `create-user-story` | `us-template.md`, `writing-guide.md` |
 | `review-user-story` | `review-checklist.md`, `writing-guide.md` |
 | `refine-user-story` | `refine-checklist.md`, `writing-guide.md` |

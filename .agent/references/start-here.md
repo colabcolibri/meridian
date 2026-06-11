@@ -275,7 +275,9 @@ Reference section — open when you need the detail on a specific file's fields 
 
 Append-only. Every significant decision — technology choice, architecture change, scope adjustment, security posture — goes here. Entries are prepended (newest first), never edited.
 
-Each entry: `date`, `title`, `context` (why the decision was needed), `decision` (what was decided), `consequences` (what changes as a result).
+Each entry requires: `time` (`HH:MM` from `date +"%H:%M"`), `title`, `affected_document`, `what_changed`, `why_changed`, `impact`, `responsible`. File name and JSON `date` use `date +"%Y-%m-%d"`.
+
+Workflow: **`/update-decisions-log`**. Never invent date or time.
 
 ---
 

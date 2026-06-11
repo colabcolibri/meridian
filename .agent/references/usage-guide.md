@@ -146,7 +146,7 @@ Phase documents must be completed in order. Each one unlocks the next.
 
 Any significant decision made while working on a document — technology choice, architectural tradeoff, security posture — should be logged:
 
-- Run **`/update-decisions-log`** or ask the agent to prepend an entry to `docs/decisions/YYYY-MM-DD.json`.
+- Run **`/update-decisions-log`** or ask the agent to prepend an entry to `docs/decisions/YYYY-MM-DD.json` (agent must run `date +"%Y-%m-%d"` and `date +"%H:%M"` first).
 - Never edit existing entries.
 
 ---
@@ -188,7 +188,7 @@ A story without `ready: true` cannot be implemented.
 
 - Order of work in a sprint = `stories: [US-…]` in the sprint frontmatter (first = highest priority).
 - While a sprint is `active`, new requests go to the backlog or the next sprint — not silently appended mid-sprint unless you decide and log it.
-- Close a sprint with **Retrospective** filled and a quick **sprint review** (you confirm the increment against Acceptance).
+- Close a sprint with **Retrospective** filled and sprint review — run **`/complete-sprint vX-SY`**, not only a manual status edit.
 
 ### Bugs and spikes
 
@@ -300,6 +300,7 @@ Run at the project root. Fix errors before creating US or marking docs `approved
 | `/create-epic` | New product capability in `docs/epics/` |
 | `/create-version` | New release in `docs/versions/` |
 | `/plan-sprint` | New sprint in `docs/sprints/` |
+| `/complete-sprint vX-SY` | Close sprint — retrospective + status complete |
 | `/create-us` | New user story (gates: architecture approved + epic + version exist) |
 | `/review-us US-XXXX` | Quality audit — read-only, no changes, no `ready` |
 | `/refine-us US-XXXX` | Deepen Plan and Approach — sets `ready: true` when checklist passes |

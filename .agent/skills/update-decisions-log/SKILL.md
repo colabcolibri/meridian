@@ -19,8 +19,8 @@ Change in: scope, stack, security, users, epics, versions, architecture, databas
 
 ## Procedure
 
-1. Determine today's date (`YYYY-MM-DD`) — `date +"%Y-%m-%d"` at project root.
-2. **Capture real clock time** — run `date +"%H:%M"` (24h, local). Use that value for `entries[].time`. Do **not** round to :00/:15/:30/:45 or invent a time.
+1. Determine today's date (`YYYY-MM-DD`) — **run** `date +"%Y-%m-%d"` at project root (never guess from chat or training cutoff).
+2. **Capture real clock time** — **run** `date +"%H:%M"` (24h, local). Use that value for `entries[].time`. Do **not** round to :00/:15/:30/:45 or invent a time.
 3. Open or create `docs/decisions/YYYY-MM-DD.json`.
 4. Insert **at the beginning** of `entries` using `references/decision-template.md`.
 5. Ensure `date` in JSON matches filename.

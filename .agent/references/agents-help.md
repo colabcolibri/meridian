@@ -130,7 +130,7 @@ Owns the executable backlog and honest execution state.
 
 ## Slash command groups
 
-Thirteen workflows in **six groups**. Each maps to one primary agent (sometimes two).
+Slash command groups — workflows in **six groups**. Each maps to one primary agent (sometimes two).
 
 ### Group A — Bootstrap
 
@@ -174,8 +174,11 @@ Complete in order: `00` → `01` → `02` → `03` → `04` → **`05`** → `06
 | D1 | **`/create-epic`** | `documentation-strategist` | `docs/epics/EPIC-XX.md` | Product capability block. |
 | D2 | **`/create-version`** | `sprint-planner` | `docs/versions/vX.md` | Release grouping epics/US. |
 | D3 | **`/plan-sprint`** | `sprint-planner` | `docs/sprints/vX-SY.md` | Time-boxed goal + story list. |
+| D4 | **`/complete-sprint vX-SY`** | `sprint-planner` | sprint `status: complete` | Sprint review + Retrospective filled. |
 
-Order: **Epic → Version → Sprint** (sprint optional but recommended) → User story.
+Order: **Epic → Version → Sprint** (sprint optional but recommended) → User story → **`/complete-sprint`** when increment delivered.
+
+Epic/version **close:** set `status: complete` manually when outcome reached (no `/complete-epic` workflow).
 
 ---
 
@@ -198,7 +201,7 @@ Order: **Epic → Version → Sprint** (sprint optional but recommended) → Use
 
 | Step | Command / action | Agent / tool | What it does |
 | ---- | ---------------- | ------------ | ------------ |
-| F1 | **`/update-decisions-log`** *(or ask agent)* | any + skill | Prepends `docs/decisions/YYYY-MM-DD.json`. Never edit old entries. |
+| F1 | **`/update-decisions-log`** | any + skill | Read skill; run `date +"%Y-%m-%d"` + `date +"%H:%M"`; prepend `docs/decisions/YYYY-MM-DD.json`. Never edit old entries. |
 | F2 | **`validate_meridian.py`** | script | `python3 .agent/scripts/validate_meridian.py <project-root>` — structure, US contracts, board. |
 | F3 | **Meridian: Validate Project** *(extension)* | IDE command | Same validator from VS Code/Cursor sidebar. |
 
@@ -226,6 +229,7 @@ Use this as the canonical sequence. Skip steps only when the artifact already ex
 15. /sync-board                              [Group E]  board-keeper
 16. git commit (human)                       [Group F]  you — one US per commit
 17. /status or /daily-with-ai                [Group B]  process-manager → back to step 10
+18. /complete-sprint vX-SY (when sprint done) [Group D]  sprint-planner — after US in sprint closed
 ```
 
 ---
@@ -240,7 +244,7 @@ Skills are procedures agents load automatically. Grouped by purpose.
 | ----- | ------- | ------- |
 | `meridian-routing` | all agents | Pick correct agent from intent |
 | `init-project` | process-manager, scope-architect, documentation-strategist | Bootstrap `docs/` |
-| `update-decisions-log` | most agents | Prepend decision JSON |
+| `update-decisions-log` | most agents | Prepend decision JSON (real `date` commands) |
 
 ### Delivery authoring
 
@@ -249,6 +253,7 @@ Skills are procedures agents load automatically. Grouped by purpose.
 | `create-epic` | documentation-strategist, sprint-planner | Epic file from template |
 | `create-version` | sprint-planner | Version file |
 | `create-sprint` | sprint-planner | Sprint file |
+| `complete-sprint` | sprint-planner | Sprint close + Retrospective |
 | `create-user-story` | documentation-strategist, board-keeper | US file at create |
 
 ### User story quality & close
@@ -281,10 +286,10 @@ Skills are procedures agents load automatically. Grouped by purpose.
 | Security doc | C | `security-steward` | `/security-pass` |
 | Architecture doc | C | `architecture-guardian` | `/architecture` |
 | New epic | D | `documentation-strategist` | `/create-epic` |
-| New version / sprint | D | `sprint-planner` | `/create-version`, `/plan-sprint` |
+| New version / sprint | D | `sprint-planner` | `/create-version`, `/plan-sprint`, `/complete-sprint` |
 | New / refine / close US | E | `board-keeper` | `/create-us`, `/refine-us`, `/complete-us` |
 | Refresh kanban JSON | E | `board-keeper` | `/sync-board` |
-| Log a decision | F | any | `/update-decisions-log` or ask |
+| Log a decision | F | any | `/update-decisions-log` |
 | Validate structure | F | script / extension | `validate_meridian.py` or **Validate Project** |
 
 ---

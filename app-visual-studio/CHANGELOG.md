@@ -4,6 +4,12 @@ All notable changes to the **Meridian** VS Code extension (`meridian-vscode`).
 
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.1.14] - 2026-06-11
+
+### Changed
+
+- **Bundled kit:** P0 decision log clock (`date` commands); workflows `/update-decisions-log` and `/complete-sprint`; routing and agent-help alignment; `start-here` decision schema fix
+
 ## [1.1.13] - 2026-06-11
 
 ### Added

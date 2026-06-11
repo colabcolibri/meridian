@@ -15,7 +15,7 @@ $ARGUMENTS
 3. **Mandatory read:** `implementation-template.md` + `us-template.md` + `section-contracts.md` + target US **before** editing status
 4. **Do not** mark `✅` with placeholder in `## Record`
 5. Regenerate `board.json` at the end
-6. `update-decisions-log` only if cross-cutting decision
+6. `update-decisions-log` only if cross-cutting decision — **read** `@[skills/update-decisions-log]` and run `date +"%Y-%m-%d"` + `date +"%H:%M"` before Write
 7. Add **suggested commit** in `### Executed` — do **not** `git commit` unless manager explicitly asks (see `commit-after-us-close.md`)
 
 ---
@@ -34,7 +34,7 @@ RULES:
 4. Mark Intent/Acceptance [x]; update Plan/Planned [x]; set tests_status: done
 5. Set status ✅ (or 🔶 + Missing: if partial) — only ✅ if tests: none or tests_status: done
 6. generate-board-json
-7. update-decisions-log if protocol/architecture changed
+7. update-decisions-log if protocol/architecture changed — read skill + run date before Write
 8. suggested commit line in ### Executed; remind manager: commit after /sync-board (human)
 ```
 

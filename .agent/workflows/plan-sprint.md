@@ -15,8 +15,10 @@ $ARGUMENTS
 3. Requires `05_architecture.md` approved
 4. **Mandatory read:** `sprint-template.md` (+ `us-template.md` + `section-contracts.md` if creating US) **before** Write
 5. New US only with epic/version referenced in existing folders
-5. Sprints in **`docs/sprints/`** — one file per sprint
-6. After changing US → `/sync-board`
+6. Sprints in **`docs/sprints/`** — one file per sprint
+7. Log scope shifts → read `@[skills/update-decisions-log]` + run `date` before Write
+8. After changing US → `/sync-board`
+9. `validate_meridian.py` on project folder when available
 
 ---
 
@@ -34,8 +36,9 @@ RULES:
 4. Explicit dependency order — stories: [US-…] order = sprint priority (no story points)
 5. Capacity = Must US + ready + deps + human judgment (see scrum-meridian-map.md)
 6. Active sprint: do not expand scope without manager; log scope shifts in decisions
-7. Log decisions if scope/version changes
+7. Log decisions if scope/version changes — read `update-decisions-log` skill + run `date` before Write
 8. NO app/API/DB implementation files
+9. validate_meridian.py when available
 ```
 
 Read `.agent/references/scrum-meridian-map.md` for sprint ↔ ceremony mapping.
