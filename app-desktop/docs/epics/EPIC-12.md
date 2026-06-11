@@ -2,7 +2,7 @@
 id: EPIC-12
 title: Kit distribution
 status: complete
-versions: [v2.02]
+versions: [v2.02, v2.05]
 profiles: [Process Manager]
 outcome: "Manager installs and upgrades Meridian protocol in any external repo from a standalone kit package — without the monorepo."
 ---
@@ -13,7 +13,7 @@ outcome: "Manager installs and upgrades Meridian protocol in any external repo f
 
 Today the Meridian kit (`.agent/`) ships inside the monorepo. A manager who wants only the protocol — agents, skills, workflows, validator — must clone the full repository or copy folders manually. US-0006 and US-0007 deferred an installer for external projects; that gap remains open while dogfooding spreads to repos that are not `meridian`.
 
-This epic delivers **standalone kit distribution**: a buildable tarball without `app-desktop/`, install scripts that replace `.agent/` on upgrade, and **surgical** sync of Cursor/Claude IDE adapters (`.cursor/`, `.claude/`) so Meridian symlinks stay current without deleting user-owned rules, skills, or other files in those trees.
+This epic delivers **standalone kit distribution**: a buildable tarball without `app-desktop/`, install scripts that replace `.agent/` on upgrade, and **surgical** sync of IDE adapters (`.cursor/`, `.claude/`, Codex `.agents/skills/` + `.codex/`) so Meridian symlinks stay current without deleting user-owned rules, skills, or other files in those trees.
 
 ## Expected outcome
 

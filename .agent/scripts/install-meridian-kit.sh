@@ -21,6 +21,7 @@ Options:
   --no-sync       Copy .agent/ only — for Antigravity and other .agent-native IDEs
   --cursor-only   Sync .cursor/ adapter only (after copy)
   --claude-only   Sync .claude/ adapter only (after copy)
+  --codex-only    Sync Codex adapters only (after copy)
   --dry-run       Show actions without writing
   -h, --help      This help
 
@@ -30,6 +31,7 @@ Environment:
 IDE support:
   Cursor       .agent/ + .cursor/ symlinks (default install)
   Claude Code  .agent/ + .claude/ symlinks (default install)
+  Codex        .agent/ + .agents/skills/ + .codex/ (default install)
   Antigravity  .agent/ only — pass --no-sync
 
 Examples:
@@ -53,6 +55,7 @@ while [[ $# -gt 0 ]]; do
     --no-sync) NO_SYNC=1; shift ;;
     --cursor-only) SYNC_FLAGS=(--cursor-only); shift ;;
     --claude-only) SYNC_FLAGS=(--claude-only); shift ;;
+    --codex-only) SYNC_FLAGS=(--codex-only); shift ;;
     --dry-run) DRY_RUN=1; shift ;;
     -h | --help) usage; exit 0 ;;
     -*)
@@ -128,7 +131,7 @@ else
 fi
 
 if [[ "${DRY_RUN}" -eq 1 ]]; then
-  echo "[dry-run] would ensure .cursor/ and .claude/ in .gitignore when adapters synced"
+  echo "[dry-run] would ensure IDE adapter paths in .gitignore when adapters synced"
 elif [[ "${NO_SYNC}" -eq 0 ]]; then
   GITIGNORE="${TARGET}/.gitignore"
   append_gitignore() {
@@ -154,6 +157,11 @@ EOF
   if [[ "${#SYNC_FLAGS[@]}" -eq 0 ]] || [[ "${SYNC_FLAGS[0]:-}" == "--claude-only" ]]; then
     append_gitignore ".claude/"
   fi
+  if [[ "${#SYNC_FLAGS[@]}" -eq 0 ]] || [[ "${SYNC_FLAGS[0]:-}" == "--codex-only" ]]; then
+    append_gitignore ".agents/skills/"
+    append_gitignore ".codex/"
+    append_gitignore "AGENTS.md"
+  fi
 fi
 
 cat <<EOF
@@ -162,13 +170,13 @@ Done.
 
 Next steps:
   1. Open ${TARGET} in your IDE
-     - Cursor / Claude Code: slash commands work after adapter sync
+     - Cursor / Claude Code / Codex: workflows work after adapter sync
      - Antigravity / .agent-native: open project — workflows live in .agent/
   2. If docs/ is missing: /init-meridian
   3. Read .agent/references/agents-help.md or /agents-help
   4. After kit updates: re-run install with --force, or:
        ${TARGET}/.agent/scripts/sync_cursor_kit.sh
 
-Note: .cursor/ and .claude/ are local symlinks — do not commit them.
+Note: .cursor/, .claude/, .agents/skills/, .codex/, and AGENTS.md (when symlinked) are local adapters — do not commit them.
       Commit .agent/ if this project owns its kit copy.
 EOF

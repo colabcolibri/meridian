@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs"
 import * as path from "node:path"
 import { test } from "node:test"
 
-import { agentsHelpWebviewHtml } from "../src/agents-help-webview-html.js"
+import { kitReferenceWebviewHtml } from "../src/kit-reference-webview-html.js"
 import { markdownToHtml } from "../src/markdown-to-html.js"
 
 test("markdownToHtml renders headings, table and code block", () => {
@@ -25,14 +25,17 @@ line
   assert.match(html, /<pre><code>line<\/code><\/pre>/)
 })
 
-test("agentsHelpWebviewHtml wraps kit agents-help.md", () => {
+test("kitReferenceWebviewHtml wraps kit agents-help.md", () => {
   const mdPath = path.resolve(
     import.meta.dirname,
     "../../.agent/references/agents-help.md",
   )
   const md = readFileSync(mdPath, "utf8")
-  const html = agentsHelpWebviewHtml(md, ".agent/references/agents-help.md")
-  assert.match(html, /Meridian — agents &amp; commands/)
+  const html = kitReferenceWebviewHtml(md, ".agent/references/agents-help.md", {
+    title: "Meridian — agents & slash commands",
+    description: "Test intro",
+  })
+  assert.match(html, /Meridian — agents &amp; slash commands/)
   assert.match(html, /Agent groups/)
   assert.match(html, /<table>/)
 })

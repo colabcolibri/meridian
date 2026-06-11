@@ -1263,5 +1263,33 @@
     "done_when": "Board and Deliverables show active project name and docs/ path; reopening panels keeps the saved project; switching from the toolbar or command refreshes all open Meridian tabs without re-prompting on every open.",
     "tests": "required",
     "tests_status": "done"
+  },
+  {
+    "id": "US-0103",
+    "title": "Codex IDE adapter sync",
+    "epic": "EPIC-12",
+    "version": "v2.05",
+    "status": "✅",
+    "moscow": "Must",
+    "depends_on": [
+      "US-0100"
+    ],
+    "done_when": "Install or sync creates .agents/skills/workflow-*, .codex/agents/*.toml, and AGENTS.md symlink without breaking kit skills; documented in IDE_ADAPTERS.md.",
+    "tests": "required",
+    "tests_status": "done"
+  },
+  {
+    "id": "US-0104",
+    "title": "Extension onboarding and guide panels",
+    "epic": "EPIC-05",
+    "version": "v2.05",
+    "status": "✅",
+    "moscow": "Must",
+    "depends_on": [
+      "US-0099"
+    ],
+    "done_when": "Manager opens four guides in order from the extension, understands extension vs chat and workflow vs agent, and installs meridian-vscode-1.1.13.vsix.",
+    "tests": "required",
+    "tests_status": "done"
   }
 ]

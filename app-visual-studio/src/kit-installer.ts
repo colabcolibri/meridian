@@ -26,11 +26,11 @@ export function workspaceProjectRoot(
 }
 
 function appendGitignoreAdapterEntries(gitignorePath: string): void {
-  const entries = [".cursor/", ".claude/"]
+  const entries = [".cursor/", ".claude/", ".agents/skills/", ".codex/", "AGENTS.md"]
   if (!fs.existsSync(gitignorePath)) {
     fs.writeFileSync(
       gitignorePath,
-      "# Meridian IDE adapters (local symlinks)\n.cursor/\n.claude/\n",
+      "# Meridian IDE adapters (local symlinks)\n.cursor/\n.claude/\n.agents/skills/\n.codex/\nAGENTS.md\n",
       "utf8",
     )
     return

@@ -3,6 +3,7 @@ import * as vscode from "vscode"
 import { MERIDIAN_COMMAND_CATALOG } from "./command-catalog.js"
 
 export type CommandTreeItem = {
+  kind: "command"
   id: string
   label: string
   description?: string
@@ -10,52 +11,78 @@ export type CommandTreeItem = {
   icon?: string
 }
 
-const ROOT_ITEMS: CommandTreeItem[] = [
+export type CategoryTreeItem = {
+  kind: "category"
+  id: string
+  label: string
+  children: CommandTreeItem[]
+}
+
+export type MeridianTreeItem = CategoryTreeItem | CommandTreeItem
+
+const PINNED_IDS = new Set([
+  "guide-how-to",
+  "guide-start-here",
+  "guide-usage",
+  "agents-help",
+  "install-kit",
+  "upgrade-kit",
+])
+
+const CATEGORY_ORDER: { id: string; label: string; groups: string[] }[] = [
   {
-    id: "install-kit",
-    label: "Install harness",
-    description: "Copy bundled .agent/ kit into workspace",
-    commandId: "meridian.installKit",
-    icon: "$(cloud-download)",
+    id: "cat-guides",
+    label: "Guides — read first",
+    groups: ["guides"],
   },
   {
-    id: "upgrade-kit",
-    label: "Upgrade harness",
-    description: "Replace .agent/ with bundled kit version",
-    commandId: "meridian.upgradeKit",
-    icon: "$(cloud-upload)",
+    id: "cat-views",
+    label: "Views",
+    groups: ["views"],
   },
   {
-    id: "help",
-    label: "Command help",
-    description: "Extension commands (Board, Validate…)",
-    commandId: "meridian.openHelp",
-    icon: "$(question)",
+    id: "cat-governance",
+    label: "Governance",
+    groups: ["governance"],
   },
   {
-    id: "agents-help",
-    label: "Agents & commands",
-    description: "Kit groups, steps, and slash commands",
-    commandId: "meridian.openAgentsHelp",
-    icon: "$(book)",
+    id: "cat-kit",
+    label: "Kit setup",
+    groups: ["kit"],
   },
-  // Pinned above already — exclude from catalog spread to avoid duplicate tree rows
-  ...MERIDIAN_COMMAND_CATALOG.filter(
-    (c) =>
-      c.id !== "deliverables" &&
-      c.id !== "agents-help" &&
-      c.id !== "install-kit" &&
-      c.id !== "upgrade-kit",
-  ).map((c) => ({
+  {
+    id: "cat-planned",
+    label: "Planned",
+    groups: ["planned"],
+  },
+]
+
+function catalogToCommandItem(
+  c: (typeof MERIDIAN_COMMAND_CATALOG)[number],
+): CommandTreeItem {
+  return {
+    kind: "command",
     id: c.id,
     label: c.title,
     description: c.summary,
     commandId: c.commandId,
     icon: c.icon,
-  })),
-]
+  }
+}
 
-export class MeridianCommandsProvider implements vscode.TreeDataProvider<CommandTreeItem> {
+const CATEGORIES: CategoryTreeItem[] = CATEGORY_ORDER.map((cat) => ({
+  kind: "category" as const,
+  id: cat.id,
+  label: cat.label,
+  children: MERIDIAN_COMMAND_CATALOG.filter(
+    (c) =>
+      cat.groups.includes(c.group) &&
+      c.id !== "deliverables" &&
+      (cat.id !== "cat-guides" || PINNED_IDS.has(c.id)),
+  ).map(catalogToCommandItem),
+})).filter((cat) => cat.children.length > 0)
+
+export class MeridianCommandsProvider implements vscode.TreeDataProvider<MeridianTreeItem> {
   static readonly viewId = "meridian.commands"
 
   private readonly emitter = new vscode.EventEmitter<void>()
@@ -66,7 +93,14 @@ export class MeridianCommandsProvider implements vscode.TreeDataProvider<Command
     this.emitter.fire()
   }
 
-  getTreeItem(element: CommandTreeItem): vscode.TreeItem {
+  getTreeItem(element: MeridianTreeItem): vscode.TreeItem {
+    if (element.kind === "category") {
+      const item = new vscode.TreeItem(element.label, vscode.TreeItemCollapsibleState.Expanded)
+      item.id = element.id
+      item.contextValue = "meridianCategory"
+      return item
+    }
+
     const item = new vscode.TreeItem(element.label, vscode.TreeItemCollapsibleState.None)
     item.description = element.description
     if (element.icon?.startsWith("$(")) {
@@ -77,15 +111,19 @@ export class MeridianCommandsProvider implements vscode.TreeDataProvider<Command
       title: element.label,
     }
     item.tooltip =
-      element.id === "help"
-        ? "Extension command reference (webview tab)"
-        : element.id === "agents-help"
-          ? "Kit agents-help.md in a webview tab (same pattern as Command help)"
-          : `${element.label} — Command Palette: ${element.commandId}`
+      element.id === "guide-how-to"
+        ? "How extension + chat slash commands fit together"
+        : `${element.label} — ${element.commandId}`
     return item
   }
 
-  getChildren(): CommandTreeItem[] {
-    return ROOT_ITEMS
+  getChildren(element?: MeridianTreeItem): MeridianTreeItem[] {
+    if (!element) {
+      return CATEGORIES
+    }
+    if (element.kind === "category") {
+      return element.children
+    }
+    return []
   }
 }

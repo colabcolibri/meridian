@@ -8,6 +8,7 @@ The kit source lives in **`.agent/`** (committed). How you wire it depends on yo
 | --- | -------------- | ------------ | ------------ |
 | **Cursor** | `.cursor/` | Yes | default, or `--cursor-only` |
 | **Claude Code** | `.claude/` | Yes | default, or `--claude-only` |
+| **Codex** | `.agents/skills/`, `.codex/`, `AGENTS.md` | Yes | default, or `--codex-only` |
 | **Antigravity / ag-kit** | _(none)_ | No | `--no-sync` |
 | **Other `.agent` indexers** | _(none)_ | No | `--no-sync` |
 
@@ -17,7 +18,7 @@ The kit source lives in **`.agent/`** (committed). How you wire it depends on yo
 ./install.sh --no-sync /path/to/project
 ```
 
-## Sync script (Cursor + Claude)
+## Sync script (Cursor + Claude + Codex)
 
 ```bash
 chmod +x .agent/scripts/sync_cursor_kit.sh   # once
@@ -26,12 +27,12 @@ chmod +x .agent/scripts/sync_cursor_kit.sh   # once
 
 ### Surgical sync policy
 
-- Never deletes `.cursor/` or `.claude/` wholesale
+- Never deletes adapter folders wholesale
 - Creates/replaces **Meridian symlinks** (targets containing `.agent/`)
 - Removes **orphan** Meridian symlinks when a workflow/agent/skill was removed from the kit
 - **Never touches** real files or symlinks pointing outside `.agent/`
 
-Options: `--cursor-only`, `--claude-only`, `--no-prune`, `--dry-run`
+Options: `--cursor-only`, `--claude-only`, `--codex-only`, `--no-prune`, `--dry-run`
 
 ## Install kit into another project
 
@@ -82,6 +83,7 @@ Always edit in `.agent/` first; then run sync (also mirrors `app-desktop/docs/te
 | ------- | ---- | -------- |
 | **Cursor** | `.cursor/` | rules, skills, agents, slash commands, template registry |
 | **Claude Code** | `.claude/` | agents, slash commands |
+| **Codex** | `.agents/skills/`, `.codex/`, `AGENTS.md` | skills (workflows + kit skills), subagent TOMLs, project guidance |
 
 Both adapters symlink workflows from `.agent/workflows/` as slash commands and agents from `.agent/agents/`.
 
@@ -104,9 +106,21 @@ Both adapters symlink workflows from `.agent/workflows/` as slash commands and a
 
 Claude Code does not mirror skills, rules, or templates — workflows and agents read `.agent/skills/` and templates from the repo when needed.
 
+### Codex mapping
+
+| Codex | Canonical source |
+| ----- | ------------------ |
+| `.agents/skills/<name>/` | `.agent/skills/<name>/` |
+| `.agents/skills/workflow-<name>/SKILL.md` | `.agent/workflows/<name>.md` |
+| `.agents/skills/meridian-authoring/SKILL.md` | `.agent/skills/doc.md` |
+| `.codex/agents/<name>.toml` | generated from `.agent/agents/<name>.md` |
+| `AGENTS.md` (repo root, when safe) | `.agent/rules/AGENTS.md` |
+
+Codex deprecated custom prompts (`~/.codex/prompts/`) in favor of skills — Meridian workflows are exposed as skills under `.agents/skills/`. Subagent TOMLs are generated (not symlinked) because Codex expects TOML, not Markdown.
+
 ## Git
 
-`.cursor/` and `.claude/` are in `.gitignore` — local symlinks, not versioned duplicates. Do not commit them.
+`.cursor/`, `.claude/`, `.agents/skills/`, `.codex/`, and `AGENTS.md` (when symlinked) are in `.gitignore` — local adapters, not versioned duplicates. Do not commit them. Canonical source stays in `.agent/` (including `.agent/rules/AGENTS.md`).
 
 ## Native `.agent/` IDEs
 

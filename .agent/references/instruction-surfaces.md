@@ -9,7 +9,7 @@
 ## Golden rules
 
 1. **Edit `.agent/` first** — never start in `.cursor/`, `app-desktop/docs/templates/`, or IDE adapters.
-2. **Run** `./.agent/scripts/sync_cursor_kit.sh` — refreshes `.cursor/`, `.claude/`, `app-desktop/docs/templates/`.
+2. **Run** `./.agent/scripts/sync_cursor_kit.sh` — refreshes `.cursor/`, `.claude/`, Codex adapters, `app-desktop/docs/templates/`.
 3. **Update duplicated UI** — app-desktop Learn/Commands tabs do not auto-sync from markdown.
 4. **VS Code extension** — Help panels that read `.agent/references/*.md` at runtime pick up kit changes after install/upgrade; command catalog and README are separate edits.
 5. **Record the change** — prepend `docs/decisions/YYYY-MM-DD.json` in this repo when the protocol itself changes.
@@ -33,12 +33,12 @@
 | Kit architecture | `.agent/ARCHITECTURE.md`, `.agent/IDE_ADAPTERS.md` | Maintainers | **Canonical** | P1 |
 | Distribution | `.agent/KIT_README.md`, `.agent/DISTRIBUTION.md` | Humans installing kit | **Canonical** | P2 |
 | Repo README | `README.md` | GitHub visitors | **Canonical** | P2 |
-| IDE adapters | `.cursor/`, `.claude/` | Cursor / Claude Code | **Mirror** — sync only | — |
+| IDE adapters | `.cursor/`, `.claude/`, `.agents/skills/`, `.codex/` | Cursor / Claude Code / Codex | **Mirror** — sync only | — |
 | Desktop template mirror | `app-desktop/docs/templates/` | Humans in monitor | **Mirror** — sync only | — |
 | **Desktop UI copy** | `app-desktop/src/features/monitor/content/meridian-concepts.ts` | Manager in Learn/Commands tabs | **Duplicate** — edit by hand | P0 |
 | Desktop tab hints | `app-desktop/src/.../MonitorTabs.tsx`, `monitor-views.ts` | Manager | **Duplicate** — edit by hand | P2 |
 | Desktop project docs | `app-desktop/docs/README.md` | Desktop dogfood | **Canonical** for app-desktop only | P1 |
-| VS Code help (runtime) | `.agent/references/{agents-help,usage-guide,start-here}.md` | Extension user | Same as kit refs — edit `.agent/` | P0 |
+| VS Code help (runtime) | `.agent/references/{agents-help,usage-guide,start-here}.md` | Extension user | Same as kit refs — edit `.agent/`; panels: How to Use (static), Start Here, Usage Guide, Agents Help | P0 |
 | VS Code command catalog | `app-visual-studio/src/command-catalog.ts` | Extension user | **Canonical** for extension UX | P1 |
 | VS Code README | `app-visual-studio/README.md` | Marketplace / GitHub | **Canonical** for extension | P2 |
 | Validators | `.agent/scripts/validate_meridian.py`, `meridian_section_contracts.py` | CI + agents | **Canonical** when structure changes | P1 |
@@ -84,7 +84,8 @@
 | What | Where | Notes |
 | ---- | ----- | ----- |
 | Agents Help / Usage / Start Here panels | Reads `.agent/references/*.md` via `kit-references.ts` | Updates when kit is installed/upgraded |
-| Command palette help | `app-visual-studio/src/command-catalog.ts` | Per-command summaries — edit when commands ship |
+| Command palette help | `app-visual-studio/src/command-catalog.ts` | Per-command summaries — edit when commands ship; `guides` group first |
+| Extension guide panels | `app-visual-studio/src/kit-reference-panels.ts`, `help-webview-html.ts` | Onboarding UX — edit when guide flow changes |
 | Extension onboarding | `app-visual-studio/README.md` | Install, F5, kit sync |
 
 ### Mirrors (do not edit)
@@ -93,6 +94,7 @@
 | ---- | -------------- |
 | `.cursor/commands/`, `.cursor/skills/`, `.cursor/agents/`, `.cursor/rules/` | `sync_cursor_kit.sh` |
 | `.claude/commands/`, `.claude/agents/` | `sync_cursor_kit.sh` |
+| `.agents/skills/` (incl. `workflow-*`), `.codex/agents/*.toml`, `AGENTS.md` (symlink) | `sync_cursor_kit.sh` |
 | `app-desktop/docs/templates/*` | `sync_cursor_kit.sh` |
 
 ---

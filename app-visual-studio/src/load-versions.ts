@@ -4,7 +4,12 @@ import * as path from "node:path"
 import { parseFrontmatterRecord } from "./load-frontmatter.js"
 import { sortByIdAsc } from "./domain/sort-by-id.js"
 
-export type VersionSummary = { id: string; title: string; status: string }
+export type VersionSummary = {
+  id: string
+  title: string
+  status: string
+  outcome: string
+}
 
 export function loadVersionSummaries(docsRoot: string): VersionSummary[] {
   const dir = path.join(docsRoot, "versions")
@@ -24,7 +29,8 @@ export function loadVersionSummaries(docsRoot: string): VersionSummary[] {
     const id = typeof record.id === "string" ? record.id : name.replace(/\.md$/i, "")
     const title = typeof record.title === "string" ? record.title : id
     const status = typeof record.status === "string" ? record.status : "planned"
-    out.push({ id, title, status })
+    const outcome = typeof record.outcome === "string" ? record.outcome : ""
+    out.push({ id, title, status, outcome })
   }
   return sortByIdAsc(out)
 }

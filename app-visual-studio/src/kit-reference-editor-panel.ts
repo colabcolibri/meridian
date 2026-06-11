@@ -3,24 +3,34 @@ import { statSync } from "node:fs"
 
 import * as vscode from "vscode"
 
-import {
-  agentsHelpLoadingHtml,
-  agentsHelpWebviewHtml,
-} from "./agents-help-webview-html.js"
 import { emptyPanelHtml } from "./docs-open-panel.js"
-import { KIT_REFERENCES, kitReferencePath } from "./kit-references.js"
+import {
+  kitReferenceLoadingHtml,
+  kitReferenceWebviewHtml,
+  type KitReferenceIntro,
+} from "./kit-reference-webview-html.js"
+import { kitReferencePath } from "./kit-references.js"
+import type { MeridianWorkspaceInfo } from "./meridian-workspace.js"
 
 type HtmlCache = { path: string; mtimeMs: number; html: string }
 
-/** Help tab — agents & slash commands from kit references/agents-help.md */
-export class AgentsHelpEditorPanel {
-  static readonly viewType = "meridian.agentsHelp"
+export type KitReferencePanelConfig = {
+  viewType: string
+  tabTitle: string
+  relativeFromAgent: string
+  sourceLabel: string
+  intro: KitReferenceIntro
+  missingKitMessage?: string
+}
 
+/** Read-only editor tab for a kit reference under `.agent/references/`. */
+export class KitReferenceEditorPanel {
   private panel: vscode.WebviewPanel | undefined
   private htmlCache: HtmlCache | null = null
   private loadGeneration = 0
 
   constructor(
+    private readonly config: KitReferencePanelConfig,
     private readonly extensionUri: vscode.Uri,
     private readonly getWorkspace: () => MeridianWorkspaceInfo | null,
   ) {}
@@ -33,8 +43,8 @@ export class AgentsHelpEditorPanel {
     }
 
     this.panel = vscode.window.createWebviewPanel(
-      AgentsHelpEditorPanel.viewType,
-      "Meridian Agents Help",
+      this.config.viewType,
+      this.config.tabTitle,
       column,
       {
         enableScripts: false,
@@ -57,28 +67,25 @@ export class AgentsHelpEditorPanel {
     }
 
     const generation = ++this.loadGeneration
-    this.panel.webview.html = agentsHelpLoadingHtml()
+    this.panel.webview.html = kitReferenceLoadingHtml()
 
     const info = this.getWorkspace()
     if (!info) {
       this.panel.webview.html = emptyPanelHtml(
-        "Meridian: open a workspace with .agent/MERIDIAN.md.",
+        this.config.missingKitMessage ??
+          "Meridian: open a workspace, then Meridian: Install Harness.",
       )
       return
     }
 
-    const filePath = kitReferencePath(info, KIT_REFERENCES.agentsHelp)
-    const sourceLabel = ".agent/references/agents-help.md"
+    const filePath = kitReferencePath(info, this.config.relativeFromAgent)
 
     try {
       const mtimeMs = statSync(filePath).mtimeMs
-      if (
-        this.htmlCache?.path === filePath &&
-        this.htmlCache.mtimeMs === mtimeMs
-      ) {
+      if (this.htmlCache?.path === filePath && this.htmlCache.mtimeMs === mtimeMs) {
         if (generation === this.loadGeneration && this.panel) {
           this.panel.webview.html = this.htmlCache.html
-          this.panel.title = "Meridian Agents Help"
+          this.panel.title = this.config.tabTitle
         }
         return
       }
@@ -88,14 +95,18 @@ export class AgentsHelpEditorPanel {
         return
       }
 
-      const html = agentsHelpWebviewHtml(markdown, sourceLabel)
+      const html = kitReferenceWebviewHtml(
+        markdown,
+        this.config.sourceLabel,
+        this.config.intro,
+      )
       this.htmlCache = { path: filePath, mtimeMs, html }
       this.panel.webview.html = html
-      this.panel.title = "Meridian Agents Help"
+      this.panel.title = this.config.tabTitle
     } catch {
       if (generation === this.loadGeneration && this.panel) {
         this.panel.webview.html = emptyPanelHtml(
-          `Could not read ${sourceLabel} at project root.`,
+          `Could not read ${this.config.sourceLabel}. Run Meridian: Install Harness first.`,
         )
       }
     }

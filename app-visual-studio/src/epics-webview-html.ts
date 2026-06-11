@@ -4,6 +4,7 @@ import { planningPayloadForListViews, type PlanningPayload } from "./planning-pa
 import {
   FILTER_CHIP_SCRIPT,
   PAGINATION_SCRIPT,
+  PLANNING_DETAIL_SCRIPT,
   PLANNING_WEBVIEW_STYLES,
   planningWebviewShell,
 } from "./webview-common.js"
@@ -42,12 +43,18 @@ export function epicsWebviewHtml(
     wireProjectContext(projectContext);
     ${FILTER_CHIP_SCRIPT}
     ${PAGINATION_SCRIPT}
-    const STATE_VERSION = 5;
+    ${PLANNING_DETAIL_SCRIPT}
+    const STATE_VERSION = 6;
     const saved = vscode.getState() || {};
     let selectedVersions = new Set(
       saved.stateVersion === STATE_VERSION && saved.selectedVersions
         ? saved.selectedVersions
         : payload.defaultVersions,
+    );
+    let expanded = new Set(
+      saved.stateVersion === STATE_VERSION && saved.expanded
+        ? saved.expanded
+        : [],
     );
     let pageSize = saved.stateVersion === STATE_VERSION
       ? normalizePageSize(saved.pageSize)
@@ -123,19 +130,66 @@ export function epicsWebviewHtml(
         root.innerHTML = '<p class="empty">No epics for selected versions</p>';
       } else {
         for (const epic of paged.slice) {
+          const open = expanded.has(epic.id);
           const epicStories = scoped.filter((s) => s.epic === epic.id);
           const p = progress(epicStories);
-          const btn = document.createElement("button");
-          btn.type = "button";
-          btn.className = "row-btn";
-          btn.innerHTML =
-            '<span class="row-id">' + esc(epic.id) + '</span>' +
-            '<span class="row-title">' + esc(epic.title) + '</span>' +
-            '<div class="progress-wrap"><div class="progress-bar"><div class="progress-fill' +
-            (p.pct === 100 ? " done" : "") + '" style="width:' + p.pct + '%"></div></div>' +
-            '<span class="progress-text">' + p.done + "/" + p.total + "</span></div>";
-          btn.onclick = () => vscode.postMessage({ type: "openEpic", id: epic.id });
-          root.appendChild(btn);
+          const block = document.createElement("div");
+          block.className = "block" + (open ? " open" : "");
+
+          const head = document.createElement("div");
+          head.className = "block-head";
+          const toggle = () => {
+            if (expanded.has(epic.id)) expanded.delete(epic.id);
+            else expanded.add(epic.id);
+            persist();
+            renderList();
+          };
+          head.append(
+            makeAccordionHead(open, toggle),
+            makeIdLink(epic.id, () => vscode.postMessage({ type: "openEpic", id: epic.id })),
+          );
+          const title = document.createElement("span");
+          title.className = "row-title";
+          title.textContent = epic.title;
+          const wrap = document.createElement("div");
+          wrap.className = "progress-wrap";
+          const bar = document.createElement("div");
+          bar.className = "progress-bar";
+          const fill = document.createElement("div");
+          fill.className = "progress-fill" + (p.pct === 100 ? " done" : "");
+          fill.style.width = p.pct + "%";
+          bar.appendChild(fill);
+          const progText = document.createElement("span");
+          progText.className = "progress-text";
+          progText.textContent = p.done + "/" + p.total;
+          wrap.append(bar, progText);
+          head.append(title, makeBadge(epic.status), wrap);
+          block.appendChild(head);
+
+          if (open) {
+            const bodyEl = document.createElement("div");
+            bodyEl.className = "block-body";
+            appendDetailLine(bodyEl, "Outcome:", epic.outcome);
+            const versionsInFilter = epic.versions.filter((v) => selectedVersions.has(v));
+            if (versionsInFilter.length) {
+              appendDetailLine(bodyEl, "Versions:", versionsInFilter.join(", "));
+            }
+            appendProgressBar(bodyEl, p.done, p.total);
+            const storiesSection = appendSection(bodyEl, "User stories in selected versions");
+            const storyIds = epicStories.map((s) => s.id);
+            appendStoryRows(
+              storiesSection,
+              storyIds,
+              payload.stories,
+              "No stories for this epic in the selected versions.",
+            );
+            const hint = document.createElement("p");
+            hint.className = "meta-line";
+            hint.textContent = "Open epic file for capability, expected outcome, and out of scope.";
+            bodyEl.appendChild(hint);
+            block.appendChild(bodyEl);
+          }
+          root.appendChild(block);
         }
       }
       currentPage = renderPager(
@@ -152,6 +206,7 @@ export function epicsWebviewHtml(
       vscode.setState({
         stateVersion: STATE_VERSION,
         selectedVersions: [...selectedVersions],
+        expanded: [...expanded],
         pageSize,
         currentPage,
       });

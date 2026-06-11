@@ -23,10 +23,10 @@ function story(id: string, version: string, epic = "EPIC-01"): UserStory {
 test("buildBoardPayload defaults to all versions selected", () => {
   const payload = buildBoardPayload(
     [story("US-0001", "v1"), story("US-0002", "v2"), story("US-0003", "v1")],
-    [{ id: "EPIC-01", title: "Epic", versions: ["v1", "v2"] }],
+    [{ id: "EPIC-01", title: "Epic", versions: ["v1", "v2"], status: "active", outcome: "" }],
     [
-      { id: "v2", title: "Two", status: "complete" },
-      { id: "v1", title: "One", status: "complete" },
+      { id: "v2", title: "Two", status: "complete", outcome: "" },
+      { id: "v1", title: "One", status: "complete", outcome: "" },
     ],
   )
   assert.deepEqual(payload.defaultVersions, ["v1", "v2"])

@@ -1,6 +1,6 @@
 # Meridian kit
 
-Portable agent harness for **Cursor**, **Claude Code**, **Antigravity**, and other AI IDEs.
+Portable agent harness for **Cursor**, **Claude Code**, **Codex**, **Antigravity**, and other AI IDEs.
 
 **This package contains only the kit** (`.agent/` + installer). No desktop app, no VS Code extension source — those are optional extras in the full [Meridian](https://github.com/colabcolibri/meridian) repository.
 
@@ -10,14 +10,15 @@ Portable agent harness for **Cursor**, **Claude Code**, **Antigravity**, and oth
 | --- | ----------------- | -------------- |
 | **Cursor** | Copies `.agent/` + builds `.cursor/` symlinks | Yes — `.cursor/commands/` |
 | **Claude Code** | Copies `.agent/` + builds `.claude/` symlinks | Yes — `.claude/commands/` |
+| **Codex** | Copies `.agent/` + builds `.agents/skills/` + `.codex/` | Yes — `workflow-*` skills (e.g. `$workflow-create-us`) |
 | **Antigravity / ag-kit** | Copies `.agent/` only (`--no-sync`) | Yes — reads `.agent/workflows/` directly |
 | **Other `.agent` tools** | Copies `.agent/` only (`--no-sync`) | Depends on tool |
 
-Default `./install.sh` syncs **both** Cursor and Claude adapters. That is safe: only Meridian symlinks are created; your own `.cursor/rules/` files are never deleted.
+Default `./install.sh` syncs Cursor, Claude Code, and Codex adapters. That is safe: only Meridian symlinks and generated Codex agent TOMLs are created; your own `.cursor/rules/` files are never deleted.
 
 ## What gets installed (agents included)
 
-The full `.agent/` tree is copied — **all agents**, skills, workflows, rules, scripts, and references. Adapter sync then exposes agents and slash commands in Cursor (`.cursor/agents/`, `.cursor/commands/`) and Claude Code (`.claude/agents/`, `.claude/commands/`). Antigravity reads `.agent/` directly — use `--no-sync`.
+The full `.agent/` tree is copied — **all agents**, skills, workflows, rules, scripts, and references. Adapter sync then exposes agents and slash commands in Cursor (`.cursor/agents/`, `.cursor/commands/`), Claude Code (`.claude/agents/`, `.claude/commands/`), and Codex (`.agents/skills/workflow-*`, `.codex/agents/`). Antigravity reads `.agent/` directly — use `--no-sync`.
 
 See [DISTRIBUTION.md](.agent/DISTRIBUTION.md) for kit vs extension and GitHub Releases.
 
@@ -42,14 +43,15 @@ Or install into the current directory:
 ./install.sh --no-sync /path/to/your-project
 ```
 
-**Cursor-only or Claude-only:**
+**Single IDE:**
 
 ```bash
 ./install.sh --cursor-only .
 ./install.sh --claude-only .
+./install.sh --codex-only .
 ```
 
-Do **not** commit `.cursor/` or `.claude/` — they are regenerated per machine.
+Do **not** commit `.cursor/`, `.claude/`, `.agents/skills/`, `.codex/`, or symlinked `AGENTS.md` — they are regenerated per machine.
 
 ## After install
 
@@ -65,7 +67,7 @@ From your project (after a new kit release):
 ./install.sh --force .
 ```
 
-`--force` replaces `.agent/` entirely and refreshes IDE adapters. Custom files in `.cursor/` or `.claude/` that are **not** Meridian symlinks are preserved.
+`--force` replaces `.agent/` entirely and refreshes IDE adapters. Custom files in adapter folders that are **not** Meridian-managed are preserved.
 
 Re-sync adapters only (no `.agent/` copy):
 

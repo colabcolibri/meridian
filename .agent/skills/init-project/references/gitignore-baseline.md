@@ -28,6 +28,10 @@ Thumbs.db
 .vscode/*
 !.vscode/extensions.json
 .cursor/
+.claude/
+.agents/skills/
+.codex/
+/AGENTS.md
 
 # Test / coverage
 coverage/

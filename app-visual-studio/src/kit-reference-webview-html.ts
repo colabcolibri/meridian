@@ -1,5 +1,10 @@
 import { esc, markdownToHtml } from "./markdown-to-html.js"
 
+export type KitReferenceIntro = {
+  title: string
+  description: string
+}
+
 const CONTENT_STYLES = `
   .content h1 { font-size: 1.35em; font-weight: 600; margin: 28px 0 12px; }
   .content h1:first-child { margin-top: 0; }
@@ -66,17 +71,21 @@ const CONTENT_STYLES = `
   .content tr:last-child td { border-bottom: none; }
 `
 
-export function agentsHelpLoadingHtml(): string {
+export function kitReferenceLoadingHtml(): string {
   return `<!DOCTYPE html><html><head><meta charset="utf-8"/>
     <style>
       body{font-family:var(--vscode-font-family);font-size:calc(var(--vscode-font-size)*1.08);
       color:var(--vscode-descriptionForeground);background:var(--vscode-editor-background);padding:24px;}
       p{margin:0;}
     </style></head>
-    <body><p>Loading agents help…</p></body></html>`
+    <body><p>Loading…</p></body></html>`
 }
 
-export function agentsHelpWebviewHtml(markdown: string, sourceLabel: string): string {
+export function kitReferenceWebviewHtml(
+  markdown: string,
+  sourceLabel: string,
+  intro: KitReferenceIntro,
+): string {
   const body = markdownToHtml(markdown)
 
   return `<!DOCTYPE html>
@@ -106,7 +115,7 @@ export function agentsHelpWebviewHtml(markdown: string, sourceLabel: string): st
       font-size: 1.35em;
       font-weight: 600;
     }
-    .intro p { margin: 0; color: var(--vscode-descriptionForeground); font-size: 1em; }
+    .intro p { margin: 0 0 8px; color: var(--vscode-descriptionForeground); font-size: 1em; }
     .source {
       margin-top: 8px;
       font-size: 0.88em;
@@ -118,8 +127,8 @@ export function agentsHelpWebviewHtml(markdown: string, sourceLabel: string): st
 </head>
 <body>
   <div class="intro">
-    <h1>Meridian — agents &amp; commands</h1>
-    <p>Agent groups, slash commands, skills, and the numbered sequence (1–17). Read-only — sourced from the kit <code>.agent/</code>.</p>
+    <h1>${esc(intro.title)}</h1>
+    <p>${esc(intro.description)}</p>
     <p class="source">${esc(sourceLabel)}</p>
   </div>
   <div class="content">
@@ -127,4 +136,16 @@ export function agentsHelpWebviewHtml(markdown: string, sourceLabel: string): st
   </div>
 </body>
 </html>`
+}
+
+/** @deprecated use kitReferenceLoadingHtml */
+export const agentsHelpLoadingHtml = kitReferenceLoadingHtml
+
+/** @deprecated use kitReferenceWebviewHtml */
+export function agentsHelpWebviewHtml(markdown: string, sourceLabel: string): string {
+  return kitReferenceWebviewHtml(markdown, sourceLabel, {
+    title: "Meridian — agents & slash commands",
+    description:
+      "Agent groups, slash commands, skills, and the numbered sequence (1–17). Read-only — sourced from the kit .agent/.",
+  })
 }

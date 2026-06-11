@@ -39,7 +39,7 @@ docs/                       →  source of truth
 
 ## Agent groups
 
-Seven agents in **five groups**. One agent may appear in notes when it supports another group.
+Seven agents in **six groups**. One agent may appear in notes when it supports another group.
 
 ### Group 1 — Orchestration
 

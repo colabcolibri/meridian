@@ -4,6 +4,32 @@ All notable changes to the **Meridian** VS Code extension (`meridian-vscode`).
 
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.1.13] - 2026-06-11
+
+### Added
+
+- **How to use** help tab — onboarding: extension vs chat, workflow vs agent vs skill, reading order
+- **Start here** and **Usage guide** editor tabs — same webview pattern as Agents Help (kit `.agent/references/`)
+- Sidebar **Commands** tree grouped: Guides, Views, Governance, Kit setup
+
+### Changed
+
+- Command Help renamed to **Meridian: How to Use**; guides section lists four docs in order
+- Kit references: `usage-guide.md` gains VS Code extension section; `agents-help.md` group count fix
+
+## [1.1.12] - 2026-06-10
+
+### Changed
+
+- **Sprints, Versions, and Epics webviews** — accordion blocks with expandable detail (goal/outcome, progress, linked US list)
+- **Sprints** — lists `stories:` from frontmatter in sprint order; tap US opens `docs/us/`
+- **Versions** — expanded body shows outcome, sprint links, and epics with progress in that release
+- **Epics** — accordion replaces flat rows; expanded body shows outcome, versions, and scoped US list
+
+### Fixed
+
+- Planning webviews showed blank lists — JavaScript syntax error in embedded helper script (`docs/us/` string quote typo)
+
 ## [1.1.11] - 2026-06-09
 
 ### Changed

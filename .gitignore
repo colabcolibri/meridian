@@ -54,6 +54,9 @@ test-results/
 # IDE adapters (gerados — não commitar)
 .cursor/
 .claude/
+.agents/skills/
+.codex/
+/AGENTS.md
 **/package-lock.json
 yarn.lock
 **/yarn.lock

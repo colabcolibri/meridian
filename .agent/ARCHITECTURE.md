@@ -10,7 +10,7 @@
 | ------ | ------- | ------- |
 | Kit monorepo | `README.md` | Humans (GitHub, onboarding) |
 | Portable kit | `.agent/` | Copy to client projects; Antigravity, ag-kit, Cursor, Claude Code |
-| IDE adapters | `.cursor/`, `.claude/` (local, gitignored) | Cursor and Claude Code (symlinks → `.agent/`) — see [IDE_ADAPTERS.md](./IDE_ADAPTERS.md) |
+| IDE adapters | `.cursor/`, `.claude/`, `.agents/skills/`, `.codex/` (local, gitignored) | Cursor, Claude Code, Codex (symlinks + generated TOMLs → `.agent/`) — see [IDE_ADAPTERS.md](./IDE_ADAPTERS.md) |
 | Always-on rules | `.agent/rules/meridian.mdc` + `.agent/rules/MERIDIAN.md` | Agents |
 | Master protocol | `.agent/MERIDIAN.md` | Full governance |
 | Operations | `.agent/agents`, `skills`, `workflows` | Personas and procedures |
@@ -23,7 +23,7 @@ The desktop app (`app-desktop/`) monitors Meridian folders; it is not the source
 - **`.agent/`** — Antigravity convention; copyable to projects and other tools.
 - **`.cursor/`** — **local** adapter (generated symlinks; **do not commit**).
 
-**Edit in `.agent/`** and run `./.agent/scripts/sync_cursor_kit.sh` to recreate symlinks in `.cursor/` and `.claude/` (required after clone in Cursor or Claude Code).
+**Edit in `.agent/`** and run `./.agent/scripts/sync_cursor_kit.sh` to recreate adapters in `.cursor/`, `.claude/`, and Codex paths (required after clone).
 
 ---
 

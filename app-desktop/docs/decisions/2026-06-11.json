@@ -1,0 +1,14 @@
+{
+  "date": "2026-06-11",
+  "entries": [
+    {
+      "time": "14:30",
+      "title": "v2.05 — Codex adapter + extension onboarding (US-0103, US-0104)",
+      "affected_document": ".agent/scripts/sync_cursor_kit.sh, install-meridian-kit.sh, IDE_ADAPTERS.md, app-visual-studio/src/help-webview-html.ts, kit-reference-*.ts, docs/us/US-0103.md, US-0104.md, versions/v2.05.md",
+      "what_changed": "Codex adapters via sync_codex (.agents/skills/workflow-*, .codex/agents TOML, AGENTS.md). Extension 1.1.13: How to Use tab, Start Here and Usage Guide panels, grouped Commands sidebar. US-0103 and US-0104 closed; v2.05-S1 complete.",
+      "why_changed": "Codex lacked kit symlink path; extension help did not explain workflow vs agent or expose start-here/usage-guide in UI.",
+      "impact": "Default install syncs three IDE adapters; managers read guides 1→4 in sidebar. Workflow skills prefixed workflow- to avoid skill name collisions.",
+      "responsible": "Process Manager"
+    }
+  ]
+}

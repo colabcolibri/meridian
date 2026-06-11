@@ -72,6 +72,20 @@ def validate_cursor_adapter(repo_root: Path, warnings: list[str]) -> None:
         warnings.append(".cursor/rules/meridian.mdc should set alwaysApply: true")
 
 
+def validate_codex_adapter(repo_root: Path, warnings: list[str]) -> None:
+    skills = repo_root / ".agents" / "skills"
+    codex = repo_root / ".codex"
+    if not skills.is_dir():
+        warnings.append("Missing .agents/skills/ — run .agent/scripts/sync_cursor_kit.sh for Codex.")
+        return
+    if not codex.is_dir():
+        warnings.append("Missing .codex/ — run sync_cursor_kit.sh for Codex subagents.")
+        return
+    agents_dir = codex / "agents"
+    if not agents_dir.is_dir():
+        warnings.append("Missing .codex/agents/ — run sync_cursor_kit.sh")
+
+
 def validate_agent_kit(repo_root: Path, errors: list[str], warnings: list[str]) -> None:
     agent_dir = repo_root / ".agent"
     if not agent_dir.is_dir():
@@ -228,6 +242,7 @@ def main() -> int:
             warnings.append("Missing README.md at kit repository root.")
         validate_agent_kit(kit_root, errors, warnings)
         validate_cursor_adapter(kit_root, warnings)
+        validate_codex_adapter(kit_root, warnings)
 
     architecture_approved = False
     if not docs.exists():

@@ -7,7 +7,12 @@ import {
   VersionsEditorPanel,
 } from "./planning-panels.js"
 import { HelpEditorPanel } from "./help-editor-panel.js"
-import { AgentsHelpEditorPanel } from "./agents-help-editor-panel.js"
+import { KitReferenceEditorPanel } from "./kit-reference-editor-panel.js"
+import {
+  AGENTS_HELP_PANEL,
+  START_HERE_PANEL,
+  USAGE_GUIDE_PANEL,
+} from "./kit-reference-panels.js"
 import { MeridianCommandsProvider } from "./commands-sidebar.js"
 import { formatStatusTooltip, type MeridianWorkspaceInfo } from "./meridian-workspace.js"
 import { MeridianContext } from "./meridian-context.js"
@@ -25,7 +30,9 @@ let versionsEditor: VersionsEditorPanel | undefined
 let sprintsEditor: SprintsEditorPanel | undefined
 let epicsEditor: EpicsEditorPanel | undefined
 let helpEditor: HelpEditorPanel | undefined
-let agentsHelpEditor: AgentsHelpEditorPanel | undefined
+let startHereEditor: KitReferenceEditorPanel | undefined
+let usageGuideEditor: KitReferenceEditorPanel | undefined
+let agentsHelpEditor: KitReferenceEditorPanel | undefined
 let commandsProvider: MeridianCommandsProvider | undefined
 let outputGeneral: vscode.OutputChannel | undefined
 let outputValidate: vscode.OutputChannel | undefined
@@ -51,6 +58,16 @@ function openHelpTab(): void {
   helpEditor?.show(vscode.ViewColumn.One)
 }
 
+async function openStartHereTab(): Promise<void> {
+  await meridianContext?.refresh()
+  startHereEditor?.show(vscode.ViewColumn.One)
+}
+
+async function openUsageGuideTab(): Promise<void> {
+  await meridianContext?.refresh()
+  usageGuideEditor?.show(vscode.ViewColumn.One)
+}
+
 async function openAgentsHelpTab(): Promise<void> {
   await meridianContext?.refresh()
   agentsHelpEditor?.show(vscode.ViewColumn.One)
@@ -61,6 +78,9 @@ function refreshAllPanels(): void {
   versionsEditor?.refresh()
   sprintsEditor?.refresh()
   epicsEditor?.refresh()
+  startHereEditor?.refresh()
+  usageGuideEditor?.refresh()
+  agentsHelpEditor?.refresh()
   commandsProvider?.refresh()
 }
 
@@ -77,7 +97,7 @@ async function requireWorkspace(): Promise<MeridianWorkspaceInfo | null> {
   if (!info?.docsExists) {
     if (info && !info.docsExists) {
       void vscode.window.showWarningMessage(
-        "Meridian: kit installed — run /init-meridian or create docs/ to use the board.",
+        "Meridian: kit installed — run /init-meridian in chat or create docs/ to use the board.",
       )
     } else {
       void vscode.window.showWarningMessage(
@@ -178,7 +198,7 @@ async function syncBoard(): Promise<void> {
 async function newUserStory(): Promise<void> {
   appendToolOutput(
     "New user story",
-    "Not implemented in the extension yet (planned v5).\nUse /create-us in Cursor with the Meridian kit.",
+    "Not implemented in the extension yet (planned v5).\nUse /create-us in chat with the Meridian kit.",
   )
 }
 
@@ -205,7 +225,21 @@ export function activate(context: vscode.ExtensionContext): void {
   sprintsEditor = new SprintsEditorPanel(context.extensionUri, getWorkspace, onSelectProject)
   epicsEditor = new EpicsEditorPanel(context.extensionUri, getWorkspace, onSelectProject)
   helpEditor = new HelpEditorPanel(context.extensionUri)
-  agentsHelpEditor = new AgentsHelpEditorPanel(context.extensionUri, getWorkspace)
+  startHereEditor = new KitReferenceEditorPanel(
+    START_HERE_PANEL,
+    context.extensionUri,
+    getWorkspace,
+  )
+  usageGuideEditor = new KitReferenceEditorPanel(
+    USAGE_GUIDE_PANEL,
+    context.extensionUri,
+    getWorkspace,
+  )
+  agentsHelpEditor = new KitReferenceEditorPanel(
+    AGENTS_HELP_PANEL,
+    context.extensionUri,
+    getWorkspace,
+  )
   meridianContext.registerListeners()
   void meridianContext.refresh()
 
@@ -216,6 +250,8 @@ export function activate(context: vscode.ExtensionContext): void {
     vscode.commands.registerCommand("meridian.openSprints", openSprintsTab),
     vscode.commands.registerCommand("meridian.openEpics", openEpicsTab),
     vscode.commands.registerCommand("meridian.openHelp", openHelpTab),
+    vscode.commands.registerCommand("meridian.openStartHere", openStartHereTab),
+    vscode.commands.registerCommand("meridian.openUsageGuide", openUsageGuideTab),
     vscode.commands.registerCommand("meridian.openAgentsHelp", openAgentsHelpTab),
     vscode.commands.registerCommand("meridian.installKit", () => installKit(false)),
     vscode.commands.registerCommand("meridian.upgradeKit", () => installKit(true)),
@@ -237,6 +273,8 @@ export function deactivate(): void {
   sprintsEditor = undefined
   epicsEditor = undefined
   helpEditor = undefined
+  startHereEditor = undefined
+  usageGuideEditor = undefined
   agentsHelpEditor = undefined
   commandsProvider = undefined
 }

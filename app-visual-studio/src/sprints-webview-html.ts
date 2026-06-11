@@ -7,6 +7,7 @@ import {
 import {
   FILTER_CHIP_SCRIPT,
   PAGINATION_SCRIPT,
+  PLANNING_DETAIL_SCRIPT,
   PLANNING_WEBVIEW_STYLES,
   planningWebviewShell,
 } from "./webview-common.js"
@@ -45,12 +46,18 @@ export function sprintsWebviewHtml(
     wireProjectContext(projectContext);
     ${FILTER_CHIP_SCRIPT}
     ${PAGINATION_SCRIPT}
-    const STATE_VERSION = 5;
+    ${PLANNING_DETAIL_SCRIPT}
+    const STATE_VERSION = 6;
     const saved = vscode.getState() || {};
     let selectedVersions = new Set(
       saved.stateVersion === STATE_VERSION && saved.selectedVersions
         ? saved.selectedVersions
         : payload.defaultVersions,
+    );
+    let expanded = new Set(
+      saved.stateVersion === STATE_VERSION && saved.expanded
+        ? saved.expanded
+        : [],
     );
     let pageSize = saved.stateVersion === STATE_VERSION
       ? normalizePageSize(saved.pageSize)
@@ -113,16 +120,50 @@ export function sprintsWebviewHtml(
         root.innerHTML = '<p class="empty">No sprints for selected versions</p>';
       } else {
         for (const sp of paged.slice) {
-          const btn = document.createElement("button");
-          btn.type = "button";
-          btn.className = "row-btn";
-          btn.innerHTML =
-            '<span class="row-id">' + esc(sp.id) + '</span>' +
-            '<span class="row-title">' + esc(sp.title) + '</span>' +
-            '<span class="badge">' + esc(sp.version) + '</span>' +
-            '<span class="badge">' + esc(sp.status) + '</span>';
-          btn.onclick = () => vscode.postMessage({ type: "openSprint", id: sp.id });
-          root.appendChild(btn);
+          const open = expanded.has(sp.id);
+          const scoped = storiesForIds(sp.storyIds, payload.stories);
+          const p = progress(scoped);
+          const block = document.createElement("div");
+          block.className = "block" + (open ? " open" : "");
+
+          const head = document.createElement("div");
+          head.className = "block-head";
+          const toggle = () => {
+            if (expanded.has(sp.id)) expanded.delete(sp.id);
+            else expanded.add(sp.id);
+            persist();
+            renderList();
+          };
+          head.append(
+            makeAccordionHead(open, toggle),
+            makeIdLink(sp.id, () => vscode.postMessage({ type: "openSprint", id: sp.id })),
+          );
+          const title = document.createElement("span");
+          title.className = "row-title";
+          title.textContent = sp.title;
+          head.append(title, makeBadge(sp.version), makeBadge(sp.status), makeHeadProgress(scoped));
+          block.appendChild(head);
+
+          if (open) {
+            const bodyEl = document.createElement("div");
+            bodyEl.className = "block-body";
+            appendDetailLine(bodyEl, "Goal:", sp.goal);
+            appendDetailLine(bodyEl, "Done when:", sp.doneWhen);
+            appendProgressBar(bodyEl, p.done, p.total);
+            const storiesSection = appendSection(bodyEl, "User stories (sprint order = priority)");
+            appendStoryRows(
+              storiesSection,
+              sp.storyIds,
+              payload.stories,
+              "No stories: in frontmatter — add stories: [US-…] via /plan-sprint",
+            );
+            const hint = document.createElement("p");
+            hint.className = "meta-line";
+            hint.textContent = "Open sprint file for scope table and retrospective.";
+            bodyEl.appendChild(hint);
+            block.appendChild(bodyEl);
+          }
+          root.appendChild(block);
         }
       }
       currentPage = renderPager(
@@ -139,6 +180,7 @@ export function sprintsWebviewHtml(
       vscode.setState({
         stateVersion: STATE_VERSION,
         selectedVersions: [...selectedVersions],
+        expanded: [...expanded],
         pageSize,
         currentPage,
       });

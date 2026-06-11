@@ -9,6 +9,24 @@ Meridian keeps specs, decisions, and task status in **files** (`docs/`), not in 
 
 ---
 
+## How to use (short)
+
+| Surface | You do | Examples |
+| ------- | ------ | -------- |
+| **Extension** | Click — see and validate | Open Board · Validate Project · Sync Board |
+| **Chat** | Type slash **workflows** | `/status` · `/create-us` · `/complete-us US-0103` |
+
+**You invoke workflows, not agents.** Workflows route the right agent automatically. Override with `@process-manager` when needed.
+
+**Guides in the IDE** (sidebar Meridian → Commands → **Guides**):
+
+1. **How to use** — full onboarding (extension + chat)
+2. **Start here** — concepts (phases, gates, artifacts)
+3. **Usage guide** — day-to-day situations
+4. **Agents & slash commands** — command map and steps 1–17
+
+---
+
 ## What is this?
 
 AI agents ship code fast, but without a written spec scope drifts, decisions get lost, and “done” is whatever the model said last.
@@ -29,11 +47,11 @@ Chat does not persist. **Files do.**
 | ----- | ----- | ---- |
 | **Extension** | Installed in the editor (Marketplace) | UI + bundled kit source |
 | **Kit** | `{project}/.agent/` after **Install Harness** | Slash commands (`/init-meridian`, `/create-us`, …), agents, skills |
-| **Multi-product** | `.meridian/projects.json` (optional) | Several `docs/` trees — one **active** at a time (saved). Board/Deliverables **Project** toolbar row shows name + `docs/` path; dropdown or **Select Active Project** to switch |
-| **Cursor adapters** | `{project}/.cursor/` after **Install Harness** | Cursor reads rules, skills, commands from here |
+| **Multi-product** | `.meridian/projects.json` (optional) | Several `docs/` trees — one **active** at a time |
+| **IDE adapters** | `.cursor/`, `.claude/`, `.agents/skills/`, `.codex/` after **Install Harness** | Cursor, Claude Code, Codex |
 | **Docs** | `{project}/docs/` after `/init-meridian` | Living spec — board, US, versions |
 
-The extension is **global** (one install per machine). The kit is **per project** — you run **Install Harness** in each folder.
+The extension is **global** (one install per machine). The kit is **per project**.
 
 ---
 
@@ -44,12 +62,12 @@ document → plan → refine → implement → close
 ```
 
 1. **Document** — scope, stack, security, architecture in `docs/`
-2. **Plan** — epics, versions, sprints, user stories
-3. **Refine** — story gets a concrete approach before code
+2. **Plan** — epics, versions, sprints, user stories (`/create-us`, …)
+3. **Refine** — story gets a concrete approach before code (`/refine-us`)
 4. **Implement** — agent codes against acceptance criteria
-5. **Close** — evidence in the story record; you approve
+5. **Close** — evidence in the story record (`/complete-us`); you approve
 
-Use slash commands in Cursor for most steps. Use **Meridian: Open Board** to see kanban from `docs/us/`.
+Use **slash commands in chat** for steps 1–5. Use **Open Board** to see status.
 
 ---
 
@@ -67,40 +85,41 @@ Use slash commands in Cursor for most steps. Use **Meridian: Open Board** to see
 
 ### 3. Install the harness in the project
 
-The extension **never** installs the kit automatically. You run **Install Harness** once per project:
-
 | Where | Command |
 | ----- | ------- |
 | Status bar | **Meridian: install harness** |
-| Command Palette (⇧⌘P / Ctrl+Shift+P) | **Meridian: Install Harness** |
+| Command Palette | **Meridian: Install Harness** |
 | **Meridian → Commands** | **Install harness** |
-| **View → Meridian** | **Meridian: Install Harness** |
 
-Copies `.agent/` into the project and syncs `.cursor/`. Log: **Output → Meridian Tools**.
+Copies `.agent/` and syncs IDE adapters. Log: **Output → Meridian Tools**.
 
 ### 4. Create docs (new projects only)
 
-After step 3, in **Cursor chat**:
+In **chat**:
 
 ```txt
 /init-meridian
 ```
 
+### 5. Read the guides
+
+**Meridian: How to Use** — or sidebar → Commands → Guides.
+
 ---
 
-## How to use
+## Extension commands
 
 | Goal | Command |
 | ---- | ------- |
-| Kanban board | **Meridian: Open Board** |
-| Versions / sprints / epics | **Meridian: Open Versions**, **Open Sprints**, **Open Epics** |
+| Onboarding | **Meridian: How to Use** |
+| Concepts | **Meridian: Open Start Here** |
+| Situations | **Meridian: Open Usage Guide** |
+| Slash commands | **Meridian: Open Agents Help** |
+| Kanban | **Meridian: Open Board** |
+| Planning | **Open Versions**, **Open Sprints**, **Open Epics** |
 | Regenerate board.json | **Meridian: Sync Board** |
 | Validate project | **Meridian: Validate Project** (needs `python3`) |
-| Agents & slash commands | **Meridian: Open Agents Help** |
-
-Slash commands (after Install Harness): `/init-meridian`, `/create-us`, `/architecture`, `/complete-us`, …
-
-**Status bar:** **install harness** when kit is missing · US count when `docs/` is ready.
+| Multi-product | **Meridian: Select Active Project** |
 
 ---
 
@@ -121,7 +140,7 @@ Slash commands (after Install Harness): `/init-meridian`, `/create-us`, `/archit
 
 ## Maintainers
 
-Help panels (Agents Help, Usage, Start Here) read `.agent/references/*.md` from the workspace kit. Command palette copy lives in `src/command-catalog.ts`. When the protocol changes, see [instruction-surfaces.md](../.agent/references/instruction-surfaces.md).
+Help panels read `.agent/references/*.md` at runtime (start-here, usage-guide, agents-help). Command palette copy: `src/command-catalog.ts`. Protocol changes: [instruction-surfaces.md](../.agent/references/instruction-surfaces.md).
 
 ---
 
@@ -130,7 +149,8 @@ Help panels (Agents Help, Usage, Start Here) read `.agent/references/*.md` from 
 ```txt
 Marketplace → Install Meridian Harness → Reload
 Open project folder
-Meridian: Install Harness          ← you run this (not automatic)
-/init-meridian                     ← only if no docs/
-Meridian: Open Board · slash commands
+Meridian: Install Harness
+Meridian: How to Use          ← read first
+/init-meridian                ← only if no docs/
+Meridian: Open Board · /status · /create-us …
 ```

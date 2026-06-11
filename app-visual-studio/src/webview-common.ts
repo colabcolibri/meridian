@@ -105,6 +105,76 @@ export const PLANNING_WEBVIEW_STYLES = `
     }
     .block-body { padding: 8px 12px 12px; }
     .meta-line { font-size: 11px; color: var(--vscode-descriptionForeground); margin: 4px 0; }
+    .detail-line {
+      font-size: 11px;
+      color: var(--vscode-foreground);
+      margin: 6px 0;
+      line-height: 1.45;
+    }
+    .detail-label {
+      font-weight: 600;
+      color: var(--vscode-descriptionForeground);
+      margin-right: 4px;
+    }
+    .block-section { margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--vscode-panel-border); }
+    .block-section-title {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--vscode-descriptionForeground);
+      margin: 0 0 6px;
+    }
+    .block-progress { margin: 6px 0 8px; }
+    .story-row {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 6px;
+      margin-bottom: 2px;
+      border: 1px solid transparent;
+      border-radius: 4px;
+      background: transparent;
+      color: inherit;
+      font: inherit;
+      font-size: 11px;
+      cursor: pointer;
+      text-align: left;
+    }
+    .story-row:hover:not(:disabled) {
+      background: var(--vscode-list-hoverBackground);
+      border-color: var(--vscode-widget-border);
+    }
+    .story-row:disabled { opacity: 0.55; cursor: default; }
+    .story-status { flex-shrink: 0; width: 1.25rem; text-align: center; font-size: 12px; }
+    .story-id {
+      flex-shrink: 0;
+      font-weight: 600;
+      font-size: 11px;
+      min-width: 56px;
+      color: var(--vscode-textLink-foreground);
+    }
+    .story-title { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .mini-row {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 2px;
+      margin-bottom: 2px;
+      border: none;
+      border-radius: 4px;
+      background: transparent;
+      color: inherit;
+      font: inherit;
+      font-size: 11px;
+      cursor: pointer;
+      text-align: left;
+    }
+    .mini-row:hover { background: var(--vscode-list-hoverBackground); }
+    .mini-id { font-weight: 600; color: var(--vscode-textLink-foreground); min-width: 52px; }
+    .mini-meta { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--vscode-descriptionForeground); }
     .row-btn {
       width: 100%;
       display: flex;
@@ -217,6 +287,124 @@ export const FILTER_CHIP_SCRIPT = `
       const d = document.createElement("div");
       d.textContent = t;
       return d.innerHTML;
+    }
+`
+
+/** Accordion detail helpers for Versions / Sprints / Epics webviews. */
+export const PLANNING_DETAIL_SCRIPT = `
+    function truncate(text, max) {
+      if (!text) return "";
+      return text.length <= max ? text : text.slice(0, max - 1) + "\\u2026";
+    }
+    function storyMap(stories) {
+      const m = new Map();
+      for (const s of stories) m.set(s.id, s);
+      return m;
+    }
+    function storiesForIds(storyIds, stories) {
+      const m = storyMap(stories);
+      return (storyIds || []).map((id) => m.get(id)).filter(Boolean);
+    }
+    function appendDetailLine(root, label, text) {
+      if (!text) return;
+      const p = document.createElement("p");
+      p.className = "detail-line";
+      p.innerHTML = '<span class="detail-label">' + esc(label) + "</span>" + esc(truncate(text, 220));
+      root.appendChild(p);
+    }
+    function appendProgressBar(root, done, total) {
+      const wrap = document.createElement("div");
+      wrap.className = "progress-wrap block-progress";
+      const bar = document.createElement("div");
+      bar.className = "progress-bar";
+      const fill = document.createElement("div");
+      fill.className = "progress-fill" + (total && done === total ? " done" : "");
+      fill.style.width = (total ? Math.round((done / total) * 100) : 0) + "%";
+      bar.appendChild(fill);
+      const text = document.createElement("span");
+      text.className = "progress-text";
+      text.textContent = done + "/" + total + " stories";
+      wrap.append(bar, text);
+      root.appendChild(wrap);
+    }
+    function appendSection(root, title) {
+      const section = document.createElement("div");
+      section.className = "block-section";
+      const h = document.createElement("p");
+      h.className = "block-section-title";
+      h.textContent = title;
+      section.appendChild(h);
+      root.appendChild(section);
+      return section;
+    }
+    function appendStoryRows(container, storyIds, stories, emptyText) {
+      if (!storyIds || !storyIds.length) {
+        const p = document.createElement("p");
+        p.className = "meta-line";
+        p.textContent = emptyText || "No stories listed.";
+        container.appendChild(p);
+        return;
+      }
+      const m = storyMap(stories);
+      for (const id of storyIds) {
+        const s = m.get(id);
+        const row = document.createElement("button");
+        row.type = "button";
+        row.className = "story-row";
+        if (s) {
+          row.innerHTML =
+            '<span class="story-status">' + esc(s.status) + "</span>" +
+            '<span class="story-id">' + esc(s.id) + "</span>" +
+            '<span class="story-title">' + esc(s.title) + "</span>";
+          row.onclick = () => vscode.postMessage({ type: "openStory", id: s.id });
+        } else {
+          row.innerHTML =
+            '<span class="story-status">?</span>' +
+            '<span class="story-id">' + esc(id) + "</span>" +
+            '<span class="story-title">Not found in docs/us/</span>';
+          row.disabled = true;
+        }
+        container.appendChild(row);
+      }
+    }
+    function appendMiniLink(container, id, meta, onOpen) {
+      const row = document.createElement("button");
+      row.type = "button";
+      row.className = "mini-row";
+      row.innerHTML =
+        '<span class="mini-id">' + esc(id) + "</span>" +
+        '<span class="mini-meta">' + esc(meta) + "</span>";
+      row.onclick = onOpen;
+      container.appendChild(row);
+    }
+    function makeAccordionHead(open, onToggle) {
+      const acc = document.createElement("button");
+      acc.type = "button";
+      acc.className = "acc-btn";
+      acc.textContent = open ? "\\u25bc" : "\\u25b6";
+      acc.onclick = onToggle;
+      return acc;
+    }
+    function makeIdLink(id, onOpen) {
+      const idBtn = document.createElement("button");
+      idBtn.type = "button";
+      idBtn.className = "link-btn row-id";
+      idBtn.textContent = id;
+      idBtn.onclick = onOpen;
+      return idBtn;
+    }
+    function makeBadge(text) {
+      const badge = document.createElement("span");
+      badge.className = "badge";
+      badge.textContent = text;
+      return badge;
+    }
+    function makeHeadProgress(stories) {
+      const p = progress(stories);
+      const prog = document.createElement("span");
+      prog.className = "progress-text";
+      prog.textContent = p.done + "/" + p.total;
+      return prog;
     }
 `
 

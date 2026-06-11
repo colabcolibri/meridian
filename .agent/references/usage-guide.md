@@ -12,6 +12,28 @@ For **agent groups, who serves what, and the numbered step sequence**, read **[a
 
 ---
 
+## VS Code extension (Meridian Harness)
+
+The **extension** shows and validates `docs/`. **Chat slash commands** create and change them. You are the manager in both.
+
+| You want to… | Use | Not |
+| ------------ | --- | --- |
+| See kanban, versions, epics | Extension: **Open Board**, **Open Versions**, … | `/create-us` |
+| Validate or sync `board.json` | Extension: **Validate Project**, **Sync Board** | Manual JSON edit |
+| Bootstrap or change docs | Chat: `/init-meridian`, `/create-us`, `/complete-us`, … | Extension forms (v5) |
+| Health check | Chat: `/status` | — |
+
+**Reading order in the IDE** (Meridian sidebar → Commands):
+
+1. **How to use** — extension vs chat, workflow vs agent
+2. **Start here** — concepts (this file’s companion)
+3. **Usage guide** — situations below
+4. **Agents & slash commands** — full command map
+
+**Setup:** Install extension → **Install Harness** → `/init-meridian` if no `docs/` → **Open Board**.
+
+---
+
 ## Where are you right now?
 
 Run `/status` at any point to get blockers, current state, and suggested next action.

@@ -8,6 +8,7 @@ export type DocsOpenMessage =
   | { type: "openVersion"; id: string }
   | { type: "openEpic"; id: string }
   | { type: "openSprint"; id: string }
+  | { type: "openStory"; id: string }
   | { type: "selectProject"; id: string }
 
 export type BuiltHtml = { html: string; title: string }
@@ -76,6 +77,8 @@ export abstract class DocsOpenPanel {
       await this.openFile(path.join("epics", `${msg.id}.md`))
     } else if (msg.type === "openSprint") {
       await this.openFile(path.join("sprints", `${msg.id}.md`))
+    } else if (msg.type === "openStory") {
+      await this.openFile(path.join("us", `${msg.id}.md`))
     } else if (msg.type === "selectProject") {
       await this.onSelectProject?.(msg.id)
     }

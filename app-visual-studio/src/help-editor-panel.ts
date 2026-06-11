@@ -18,7 +18,7 @@ export class HelpEditorPanel {
 
     this.panel = vscode.window.createWebviewPanel(
       HelpEditorPanel.viewType,
-      "Meridian Help",
+      "Meridian — how to use",
       column,
       {
         enableScripts: false,

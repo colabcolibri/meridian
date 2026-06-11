@@ -4,6 +4,7 @@ import { planningPayloadForVersionsView, type PlanningPayload } from "./planning
 import {
   FILTER_CHIP_SCRIPT,
   PAGINATION_SCRIPT,
+  PLANNING_DETAIL_SCRIPT,
   PLANNING_WEBVIEW_STYLES,
   planningWebviewShell,
 } from "./webview-common.js"
@@ -36,7 +37,8 @@ export function versionsWebviewHtml(
     wireProjectContext(projectContext);
     ${FILTER_CHIP_SCRIPT}
     ${PAGINATION_SCRIPT}
-    const STATE_VERSION = 5;
+    ${PLANNING_DETAIL_SCRIPT}
+    const STATE_VERSION = 6;
     const saved = vscode.getState() || {};
     let expanded = new Set(
       saved.stateVersion === STATE_VERSION && saved.expanded
@@ -59,6 +61,11 @@ export function versionsWebviewHtml(
       });
     }
 
+    function epicsInVersion(versionId, scoped) {
+      const ids = new Set(scoped.map((s) => s.epic));
+      return payload.epics.filter((e) => ids.has(e.id));
+    }
+
     function renderList() {
       const root = document.getElementById("list");
       const all = payload.versions;
@@ -69,50 +76,71 @@ export function versionsWebviewHtml(
         const open = expanded.has(version.id);
         const scoped = payload.stories.filter((s) => s.version === version.id);
         const p = progress(scoped);
+        const versionSprints = payload.sprints.filter((s) => s.version === version.id);
         const block = document.createElement("div");
         block.className = "block" + (open ? " open" : "");
 
         const head = document.createElement("div");
         head.className = "block-head";
-        const acc = document.createElement("button");
-        acc.type = "button";
-        acc.className = "acc-btn";
-        acc.textContent = open ? "▼" : "▶";
-        acc.onclick = () => {
+        const toggle = () => {
           if (expanded.has(version.id)) expanded.delete(version.id);
           else expanded.add(version.id);
           persist();
           renderList();
         };
-        const idBtn = document.createElement("button");
-        idBtn.type = "button";
-        idBtn.className = "link-btn row-id";
-        idBtn.textContent = version.id;
-        idBtn.onclick = () => vscode.postMessage({ type: "openVersion", id: version.id });
+        head.append(
+          makeAccordionHead(open, toggle),
+          makeIdLink(version.id, () => vscode.postMessage({ type: "openVersion", id: version.id })),
+        );
         const title = document.createElement("span");
         title.className = "row-title";
         title.textContent = version.title;
-        const badge = document.createElement("span");
-        badge.className = "badge";
-        badge.textContent = version.status;
-        const prog = document.createElement("span");
-        prog.className = "progress-text";
-        prog.textContent = p.done + "/" + p.total;
-        head.append(acc, idBtn, title, badge, prog);
+        head.append(title, makeBadge(version.status), makeHeadProgress(scoped));
         block.appendChild(head);
 
         if (open) {
           const bodyEl = document.createElement("div");
           bodyEl.className = "block-body";
-          const sprintCount = payload.sprints.filter((s) => s.version === version.id).length;
-          const epicIds = new Set(scoped.map((s) => s.epic));
-          bodyEl.innerHTML =
-            '<p class="meta-line">' +
-            sprintCount +
+          appendDetailLine(bodyEl, "Outcome:", version.outcome);
+          appendProgressBar(bodyEl, p.done, p.total);
+
+          if (versionSprints.length) {
+            const sprintSection = appendSection(bodyEl, "Sprints");
+            for (const sp of versionSprints) {
+              const spStories = storiesForIds(sp.storyIds, payload.stories);
+              const spProgress = progress(spStories);
+              appendMiniLink(
+                sprintSection,
+                sp.id,
+                sp.status + " · " + spProgress.done + "/" + spProgress.total + " stories · " + truncate(sp.title, 80),
+                () => vscode.postMessage({ type: "openSprint", id: sp.id }),
+              );
+            }
+          }
+
+          const versionEpics = epicsInVersion(version.id, scoped);
+          if (versionEpics.length) {
+            const epicSection = appendSection(bodyEl, "Epics with stories in this version");
+            for (const epic of versionEpics) {
+              const epicStories = scoped.filter((s) => s.epic === epic.id);
+              const ep = progress(epicStories);
+              appendMiniLink(
+                epicSection,
+                epic.id,
+                epic.status + " · " + ep.done + "/" + ep.total + " · " + truncate(epic.title, 72),
+                () => vscode.postMessage({ type: "openEpic", id: epic.id }),
+              );
+            }
+          }
+
+          const hint = document.createElement("p");
+          hint.className = "meta-line";
+          hint.textContent =
+            versionSprints.length +
             " sprint(s) · " +
-            epicIds.size +
-            " epic(s) with stories</p>" +
-            '<p class="meta-line">Open the version file for full release notes.</p>';
+            versionEpics.length +
+            " epic(s) — open version file for release notes and go-live checklist.";
+          bodyEl.appendChild(hint);
           block.appendChild(bodyEl);
         }
         root.appendChild(block);
