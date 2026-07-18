@@ -22,6 +22,7 @@ export type MeridianTreeItem = CategoryTreeItem | CommandTreeItem
 
 const PINNED_IDS = new Set([
   "guide-how-to",
+  "guide-extension-commands",
   "guide-start-here",
   "guide-usage",
   "agents-help",
@@ -49,11 +50,6 @@ const CATEGORY_ORDER: { id: string; label: string; groups: string[] }[] = [
     id: "cat-kit",
     label: "Kit setup",
     groups: ["kit"],
-  },
-  {
-    id: "cat-planned",
-    label: "Planned",
-    groups: ["planned"],
   },
 ]
 

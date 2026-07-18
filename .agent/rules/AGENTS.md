@@ -11,7 +11,7 @@ Agent (@backlog-refiner, …)                          (routed by workflow — o
          ↓
 Skill (create-user-story, …)                      (loaded by agent — rarely typed by human)
          ↓
-docs/                                             (source of truth)
+docs/ + .meridian/meridian.db                     (source of truth)
 ```
 
 | IDE | You invoke | Adapter (local, gitignored) |
@@ -25,9 +25,12 @@ After **Install Harness** or clone: run `./.agent/scripts/sync_cursor_kit.sh` to
 
 ## Human guides (read in order)
 
-1. `.agent/references/start-here.md` — concepts, phases, gates
-2. `.agent/references/usage-guide.md` — day-to-day situations
-3. `.agent/references/agents-help.md` — agents, slash commands, steps 1–17
+1. `.agent/references/how-to-use.md` — entry: extension vs chat, layering, setup
+2. `.agent/references/start-here.md` — concepts: phases, gates, folders
+3. `.agent/references/usage-guide.md` — recipes by situation
+4. `.agent/references/agents-help.md` — command reference (lookup, steps 1–20)
+
+Field detail: `.agent/references/artifact-reference.md`
 
 ## Required reading (agents)
 

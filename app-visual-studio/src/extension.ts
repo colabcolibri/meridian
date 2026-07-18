@@ -10,6 +10,7 @@ import { HelpEditorPanel } from "./help-editor-panel.js"
 import { KitReferenceEditorPanel } from "./kit-reference-editor-panel.js"
 import {
   AGENTS_HELP_PANEL,
+  HOW_TO_USE_PANEL,
   START_HERE_PANEL,
   USAGE_GUIDE_PANEL,
 } from "./kit-reference-panels.js"
@@ -33,6 +34,7 @@ let versionsEditor: VersionsEditorPanel | undefined
 let sprintsEditor: SprintsEditorPanel | undefined
 let epicsEditor: EpicsEditorPanel | undefined
 let helpEditor: HelpEditorPanel | undefined
+let howToUseEditor: KitReferenceEditorPanel | undefined
 let startHereEditor: KitReferenceEditorPanel | undefined
 let usageGuideEditor: KitReferenceEditorPanel | undefined
 let agentsHelpEditor: KitReferenceEditorPanel | undefined
@@ -61,6 +63,11 @@ function openHelpTab(): void {
   helpEditor?.show(vscode.ViewColumn.One)
 }
 
+async function openHowToUseTab(): Promise<void> {
+  await meridianContext?.refresh()
+  howToUseEditor?.show(vscode.ViewColumn.One)
+}
+
 async function openStartHereTab(): Promise<void> {
   await meridianContext?.refresh()
   startHereEditor?.show(vscode.ViewColumn.One)
@@ -82,6 +89,7 @@ function refreshAllPanels(): void {
   sprintsEditor?.refresh()
   epicsEditor?.refresh()
   startHereEditor?.refresh()
+  howToUseEditor?.refresh()
   usageGuideEditor?.refresh()
   agentsHelpEditor?.refresh()
   commandsProvider?.refresh()
@@ -181,13 +189,6 @@ async function showStatus(): Promise<void> {
   appendToolOutput("Workspace status", formatStatusTooltip(info))
 }
 
-async function newUserStory(): Promise<void> {
-  appendToolOutput(
-    "New user story",
-    "Not implemented in the extension yet (planned v5).\nUse /create-us in chat with the Meridian kit.",
-  )
-}
-
 export function activate(context: vscode.ExtensionContext): void {
   commandsProvider = new MeridianCommandsProvider()
   context.subscriptions.push(
@@ -239,6 +240,11 @@ export function activate(context: vscode.ExtensionContext): void {
     refreshAllPanels,
   )
   helpEditor = new HelpEditorPanel(context.extensionUri)
+  howToUseEditor = new KitReferenceEditorPanel(
+    HOW_TO_USE_PANEL,
+    context.extensionUri,
+    getWorkspace,
+  )
   startHereEditor = new KitReferenceEditorPanel(
     START_HERE_PANEL,
     context.extensionUri,
@@ -264,6 +270,7 @@ export function activate(context: vscode.ExtensionContext): void {
     vscode.commands.registerCommand("meridian.openSprints", openSprintsTab),
     vscode.commands.registerCommand("meridian.openEpics", openEpicsTab),
     vscode.commands.registerCommand("meridian.openHelp", openHelpTab),
+    vscode.commands.registerCommand("meridian.openHowToUse", openHowToUseTab),
     vscode.commands.registerCommand("meridian.openStartHere", openStartHereTab),
     vscode.commands.registerCommand("meridian.openUsageGuide", openUsageGuideTab),
     vscode.commands.registerCommand("meridian.openAgentsHelp", openAgentsHelpTab),
@@ -274,7 +281,6 @@ export function activate(context: vscode.ExtensionContext): void {
     vscode.commands.registerCommand("meridian.selectActiveProject", () =>
       meridianContext?.selectActiveProject(),
     ),
-    vscode.commands.registerCommand("meridian.newUserStory", newUserStory),
   )
 }
 
@@ -286,6 +292,7 @@ export function deactivate(): void {
   sprintsEditor = undefined
   epicsEditor = undefined
   helpEditor = undefined
+  howToUseEditor = undefined
   startHereEditor = undefined
   usageGuideEditor = undefined
   agentsHelpEditor = undefined

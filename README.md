@@ -135,8 +135,8 @@ Details in [`MERIDIAN_V2_CUTOVER.md`](MERIDIAN_V2_CUTOVER.md) and release rows i
 ## Reference (not the home page)
 
 - [Protocol for agents](.agent/MERIDIAN.md)
-- [Usage guide and commands](.agent/references/usage-guide.md)
-- [Agents & commands help — groups and steps](.agent/references/agents-help.md)
+- [How to use Meridian](.agent/references/how-to-use.md) — start here (extension vs chat, layering)
+- [Concepts](.agent/references/start-here.md) · [Recipes](.agent/references/usage-guide.md) · [Command reference](.agent/references/agents-help.md)
 - [Scrum ↔ Meridian map](.agent/references/scrum-meridian-map.md)
 - [Validate a project](.agent/scripts/validate_meridian.py): `python3 .agent/scripts/validate_meridian.py . --sqlite-only`
 - [Delivery CLI](.agent/references/templates/delivery-connector-schema.md): `python3 .agent/scripts/meridian_delivery.py counts`

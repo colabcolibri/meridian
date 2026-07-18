@@ -51,6 +51,7 @@
     "onCommand:meridian.openEpics",
     "onCommand:meridian.openDeliverables",
     "onCommand:meridian.openHelp",
+    "onCommand:meridian.openHowToUse",
     "onCommand:meridian.openAgentsHelp",
     "onCommand:meridian.installKit",
     "onCommand:meridian.upgradeKit",
@@ -97,16 +98,16 @@
         { "command": "meridian.openVersions", "group": "1@2" },
         { "command": "meridian.openSprints", "group": "1@3" },
         { "command": "meridian.openEpics", "group": "1@4" },
-        { "command": "meridian.openHelp", "group": "2@3" },
-        { "command": "meridian.openStartHere", "group": "2@4" },
-        { "command": "meridian.openUsageGuide", "group": "2@5" },
-        { "command": "meridian.openAgentsHelp", "group": "2@6" },
+        { "command": "meridian.openHowToUse", "group": "2@3" },
+        { "command": "meridian.openHelp", "group": "2@4" },
+        { "command": "meridian.openStartHere", "group": "2@5" },
+        { "command": "meridian.openUsageGuide", "group": "2@6" },
+        { "command": "meridian.openAgentsHelp", "group": "2@7" },
         { "command": "meridian.installKit", "group": "2@1" },
         { "command": "meridian.upgradeKit", "group": "2@2" },
         { "command": "meridian.validateProject", "group": "3@1" },
         { "command": "meridian.showStatus", "group": "3@2" },
-        { "command": "meridian.selectActiveProject", "group": "3@3" },
-        { "command": "meridian.newUserStory", "group": "4@1" }
+        { "command": "meridian.selectActiveProject", "group": "3@3" }
       ]
     },
     "submenus": [
@@ -144,6 +145,11 @@
       {
         "command": "meridian.openHelp",
         "title": "%meridian.command.openHelp.title%",
+        "icon": "$(symbol-event)"
+      },
+      {
+        "command": "meridian.openHowToUse",
+        "title": "%meridian.command.openHowToUse.title%",
         "icon": "$(lightbulb)"
       },
       {
@@ -175,11 +181,6 @@
         "command": "meridian.validateProject",
         "title": "%meridian.command.validateProject.title%",
         "icon": "$(checklist)"
-      },
-      {
-        "command": "meridian.newUserStory",
-        "title": "%meridian.command.newUserStory.title%",
-        "icon": "$(add)"
       },
       {
         "command": "meridian.showStatus",

@@ -94,7 +94,7 @@ Use real `depends_on` / `blocks` per `.agent/MERIDIAN.md` dependency order.
 ## How to work
 
 1. Approve phase docs in order: foundation → principles → architecture.
-2. Backlog in SQLite: `meridian_delivery.py` / extension forms.
+2. Backlog in SQLite: `meridian_delivery.py` / chat slash commands (`/create-us`, …).
 3. US only after `05_architecture` approved.
 4. Kit templates: `.agent/references/templates/INDEX.md` — not `docs/templates/`.
 5. Validate: `python3 .agent/scripts/validate_meridian.py . --sqlite-only`

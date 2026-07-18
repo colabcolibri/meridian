@@ -1,37 +1,9 @@
-# Agents & commands help
+# Agents & slash commands — reference
 
-Explicit map of **who does what**, **which group they belong to**, and **which step to run** in Meridian.
+> **Lookup, not a tutorial.** Use Ctrl+F for a command or agent.  
+> **Start:** [how-to-use.md](./how-to-use.md) · **Concepts:** [start-here.md](./start-here.md) · **Situations:** [usage-guide.md](./usage-guide.md)
 
-| Read first | File |
-| ---------- | ---- |
-| Concepts (phases, US, gates) | [start-here.md](./start-here.md) |
-| Day-to-day situations | [usage-guide.md](./usage-guide.md) |
-| **This file** | Agents, slash commands, skills, step order |
-| Scrum mapping | [scrum-meridian-map.md](./scrum-meridian-map.md) |
-
----
-
-## How the harness is layered
-
-```txt
-Human (manager)
-    ↓ approves direction, sets approved / ✅
-Slash command (/create-us)  →  opens workflow in .agent/workflows/
-    ↓ assigns persona
-Agent (@backlog-refiner)       →  .agent/agents/{name}.md
-    ↓ executes procedure
-Skill (create-user-story)   →  .agent/skills/{name}/SKILL.md
-    ↓ writes artifacts
-docs/                       →  phase docs + SQLite delivery (.meridian/meridian.db)
-```
-
-| Layer | Role | You invoke |
-| ----- | ---- | ---------- |
-| **Workflow** | Step-by-step recipe for one command | `/status`, `/create-us` |
-| **Agent** | Domain persona with gates and output format | Automatic routing or `@agent-name` |
-| **Skill** | Repeatable procedure (templates, scripts) | Used by agent — rarely typed by human |
-
-**Routing:** describe the task in chat → agent announces `Applying knowledge from @[agent]…`. Override with `@scrum-master`, `@backlog-refiner`, `@developer`, etc. (v11 slugs only).
+Workflow → agent → skill layering: [how-to-use.md § What you type](./how-to-use.md#what-you-type-and-what-you-do-not).
 
 **Priority:** P0 rules → MERIDIAN.md → agent → skill → templates.
 
@@ -224,9 +196,9 @@ Use this as the canonical sequence. Skip steps only when the artifact already ex
 
 ---
 
-## Skill groups
+## Skill groups (maintainers)
 
-Skills are procedures agents load automatically. Grouped by purpose.
+Skills are **agent procedures** — humans invoke workflows, not skills. Listed for kit authors and debugging routing.
 
 ### Governance & routing
 
@@ -297,7 +269,7 @@ These are **not** agents. They read the **active** `docs/` in the editor (extens
 | ----- | ------- | ------- |
 | Views | **Open Board**, **Open Versions**, **Open Sprints**, **Open Epics** | Read-only planning UI; **Project** row in toolbar shows name + `docs/` path |
 | Governance | **Select Active Project**, **Validate Project**, **Show Workspace Status** | Switch product (saved); validate `packageRoot`; list all projects |
-| Help | **Open Command Help**, **Open Agents Help** | Extension catalog; kit `agents-help.md` at runtime |
+| Help | **Open How to Use**, **Extension Commands**, **Open Agents Help** | Kit guides at runtime |
 
 **Multi-product UI:** Board and Deliverables show which `docs/` is loaded; dropdown switches product and refreshes open tabs. Status bar shows project name when N>1. Install: Marketplace **Meridian Harness** or `pnpm install:cursor` in `app-visual-studio/`.
 
@@ -321,5 +293,7 @@ These are **not** agents. They read the **active** `docs/` in the editor (extens
 | `.agent/agents/*.md` | Full agent procedures |
 | `.agent/workflows/*.md` | Full slash command recipes |
 | `.agent/skills/*/SKILL.md` | Skill procedures |
-| `.agent/references/usage-guide.md` | Situation-based how-to |
-| `.agent/references/start-here.md` | Concepts and artifact anatomy |
+| `.agent/references/how-to-use.md` | Human entry — surfaces, layering, setup |
+| `.agent/references/start-here.md` | Concepts — phases, gates, folders |
+| `.agent/references/usage-guide.md` | Situation recipes |
+| `.agent/references/artifact-reference.md` | US / epic / version field reference |

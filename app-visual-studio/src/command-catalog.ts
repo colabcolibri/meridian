@@ -3,7 +3,7 @@ export type CommandHelpEntry = {
   title: string
   commandId: string
   paletteTitle: string
-  group: "guides" | "views" | "governance" | "kit" | "planned"
+  group: "guides" | "views" | "governance" | "kit"
   summary: string
   details: string[]
   outputChannel?: string
@@ -16,34 +16,32 @@ export const COMMAND_HELP_GROUPS: { id: CommandHelpEntry["group"]; label: string
   { id: "views", label: "Views (editor tabs)" },
   { id: "governance", label: "Governance & diagnostics" },
   { id: "kit", label: "Kit setup" },
-  { id: "planned", label: "Planned (v5)" },
 ]
 
 export const MERIDIAN_COMMAND_CATALOG: CommandHelpEntry[] = [
   {
     id: "guide-how-to",
-    title: "How to use Meridian",
-    commandId: "meridian.openHelp",
-    paletteTitle: "Meridian: How to Use",
+    title: "How to use (start here)",
+    commandId: "meridian.openHowToUse",
+    paletteTitle: "Meridian: Open How to Use",
     group: "guides",
-    summary: "Extension UI vs chat — what you click vs what you type",
+    summary: "Entry guide — extension vs chat, workflows, setup, reading order",
     details: [
-      "Opens this help tab with the full onboarding flow at the top.",
-      "Rule of thumb: extension = see and validate docs/; chat slash commands = create and change docs/.",
-      "You type workflows (/create-us). You do not need to @mention agents — workflows route them.",
+      "Kit file: .agent/references/how-to-use.md — single human entry point.",
+      "You type slash workflows (/create-us). Agents and skills run automatically.",
     ],
     icon: "$(lightbulb)",
     status: "shipped",
   },
   {
     id: "guide-start-here",
-    title: "Start here (concepts)",
+    title: "Concepts (start here)",
     commandId: "meridian.openStartHere",
-    paletteTitle: "Meridian: Open Start Here",
+    paletteTitle: "Meridian: Open Concepts",
     group: "guides",
-    summary: "Phases, artifacts, gates, and docs/ layout",
+    summary: "Phases, gates, folders — mental model only",
     details: [
-      "Read first if Meridian is new — what is an epic, version, US, ready, Record.",
+      "No command lists — recipes are in the usage guide; commands in agents help.",
       "Kit file: .agent/references/start-here.md",
     ],
     icon: "$(home)",
@@ -51,14 +49,12 @@ export const MERIDIAN_COMMAND_CATALOG: CommandHelpEntry[] = [
   },
   {
     id: "guide-usage",
-    title: "Usage guide (situations)",
+    title: "Usage guide (recipes)",
     commandId: "meridian.openUsageGuide",
     paletteTitle: "Meridian: Open Usage Guide",
     group: "guides",
-    summary: "When to do what — new project, migrate, implement, close US",
+    summary: "Situation → steps: new project, brownfield, implement, close US",
     details: [
-      "Situation → sequence table and step-by-step flows.",
-      "Includes VS Code extension commands and how they pair with slash commands.",
       "Kit file: .agent/references/usage-guide.md",
     ],
     icon: "$(list-unordered)",
@@ -66,18 +62,30 @@ export const MERIDIAN_COMMAND_CATALOG: CommandHelpEntry[] = [
   },
   {
     id: "agents-help",
-    title: "Agents & slash commands",
+    title: "Agents & slash commands (reference)",
     commandId: "meridian.openAgentsHelp",
     paletteTitle: "Meridian: Open Agents Help",
     group: "guides",
-    summary: "Workflows, agents, skills, and steps 1–17",
+    summary: "Lookup: all /commands, agent groups, steps 1–20",
     details: [
-      "Slash commands (/status, /create-us) are workflows — you invoke these in chat.",
-      "Agents (scrum-master, backlog-refiner, developer, …) are personas — routed by the workflow, or override with @agent.",
-      "Skills are internal procedures — agents load them; you rarely type skill names.",
+      "Use Ctrl+F — not meant as a linear tutorial.",
       "Kit file: .agent/references/agents-help.md",
     ],
     icon: "$(book)",
+    status: "shipped",
+  },
+  {
+    id: "guide-extension-commands",
+    title: "Extension commands (this catalog)",
+    commandId: "meridian.openHelp",
+    paletteTitle: "Meridian: Extension Commands",
+    group: "guides",
+    summary: "Palette commands for board, validate, kit install — not chat slash commands",
+    details: [
+      "Opens this help tab listing extension-only commands.",
+      "Chat slash commands (/status, /create-us) live in agents-help.md.",
+    ],
+    icon: "$(symbol-event)",
     status: "shipped",
   },
   {
@@ -118,12 +126,12 @@ export const MERIDIAN_COMMAND_CATALOG: CommandHelpEntry[] = [
     commandId: "meridian.openBoard",
     paletteTitle: "Meridian: Open Board",
     group: "views",
-    summary: "Read-only kanban from SQLite (or docs/us when no DB)",
+    summary: "Read-only kanban from SQLite",
     details: [
-      "Use the board to see status — not to edit stories (edit via kit CLI or slash commands).",
+      "Use the board to see status — edit delivery via slash commands or kit CLI.",
       "Project row (first toolbar line): active name, docs/ path, US count; dropdown when several products.",
       "Columns: Todo, Partial, Tests, Done, and Frozen (toggle).",
-      "Click a card to open HTML preview; Edit opens a structured form backed by SQLite (US, epics, versions, sprints).",
+      "Click a card to open HTML preview; Edit opens a structured form backed by SQLite.",
     ],
     icon: "$(layout)",
     status: "shipped",
@@ -134,11 +142,10 @@ export const MERIDIAN_COMMAND_CATALOG: CommandHelpEntry[] = [
     commandId: "meridian.openVersions",
     paletteTitle: "Meridian: Open Versions",
     group: "views",
-    summary: "Lists all releases in docs/versions/",
+    summary: "Lists releases from SQLite delivery store",
     details: [
       "Project row in toolbar — same active docs/ as Board.",
       "Accordion per version with progress (US done/total).",
-      "Click an id to open the version .md file.",
     ],
     icon: "$(versions)",
     status: "shipped",
@@ -149,7 +156,7 @@ export const MERIDIAN_COMMAND_CATALOG: CommandHelpEntry[] = [
     commandId: "meridian.openSprints",
     paletteTitle: "Meridian: Open Sprints",
     group: "views",
-    summary: "Lists sprints in docs/sprints/ filtered by version",
+    summary: "Lists sprints filtered by version",
     details: [
       "Project row in toolbar — same active docs/ as Board.",
       "All / None / chip filter (same pattern as the Board).",
@@ -167,7 +174,7 @@ export const MERIDIAN_COMMAND_CATALOG: CommandHelpEntry[] = [
     details: [
       "Project row in toolbar — same active docs/ as Board.",
       "Version filter only (All / None / chips).",
-      "Progress bar per epic (US ✅ / total).",
+      "Progress bar per epic (US done / total).",
     ],
     icon: "$(layers)",
     status: "shipped",
@@ -207,7 +214,7 @@ export const MERIDIAN_COMMAND_CATALOG: CommandHelpEntry[] = [
     group: "governance",
     summary: "Switch which docs/ tree is active when the repo has several",
     details: [
-      "Discovery finds every folder named docs with Meridian fingerprint (00_scope or us/).",
+      "Discovery finds every folder named docs with Meridian fingerprint (00_scope or meridian.db).",
       "Manifest .meridian/projects.json declares ids, names, default, and exclude.",
       "Board, Deliverables, validate use the active project only.",
     ],
@@ -229,20 +236,5 @@ export const MERIDIAN_COMMAND_CATALOG: CommandHelpEntry[] = [
     outputChannel: "Meridian Tools",
     icon: "$(info)",
     status: "shipped",
-  },
-  {
-    id: "new-us",
-    title: "New user story",
-    commandId: "meridian.newUserStory",
-    paletteTitle: "Meridian: New User Story",
-    group: "planned",
-    summary: "User story creation wizard — planned for v5",
-    details: [
-      "Today: use /create-us in chat — not an extension form.",
-      "v5: guided form aligned with the Meridian kit.",
-    ],
-    outputChannel: "Meridian Tools",
-    icon: "$(add)",
-    status: "stub",
   },
 ]

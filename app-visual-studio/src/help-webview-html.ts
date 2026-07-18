@@ -35,69 +35,10 @@ function renderEntry(entry: CommandHelpEntry): string {
 }
 
 const HOW_TO_USE_HTML = `
-  <section class="onboarding" id="how-to-use">
-    <h1>How to use Meridian</h1>
-    <p class="lead">Two surfaces work together: <strong>this extension</strong> (see and validate) and <strong>chat slash commands</strong> (create and change). You are the manager — agents execute against <code>docs/</code>.</p>
-
-    <h2>1. First-time setup</h2>
-    <ol class="steps">
-      <li>Install this extension (Marketplace) and reload the window.</li>
-      <li>Open your project folder.</li>
-      <li><strong>Meridian: Install Harness</strong> — copies <code>.agent/</code> (agents, skills, workflows).</li>
-      <li>In <strong>chat</strong>, run <code>/init-meridian</code> if <code>docs/</code> does not exist yet.</li>
-      <li><strong>Meridian: Open Board</strong> to see the kanban from <code>.meridian/meridian.db</code> (bootstrap with <code>bootstrap_meridian_db.py</code> if missing).</li>
-    </ol>
-
-    <h2>2. Extension vs chat — who does what</h2>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr><th>You want to…</th><th>Use</th><th>Example</th></tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>See kanban, versions, epics</td>
-            <td><strong>Extension</strong> (views below)</td>
-            <td>Meridian: Open Board</td>
-          </tr>
-          <tr>
-            <td>Validate project structure</td>
-            <td><strong>Extension</strong> (governance)</td>
-            <td>Meridian: Validate Project</td>
-          </tr>
-          <tr>
-            <td>Create or change docs, run a procedure</td>
-            <td><strong>Chat slash command</strong> (workflow)</td>
-            <td><code>/create-us</code> · <code>/complete-us US-0103</code></td>
-          </tr>
-          <tr>
-            <td>Check health and next step</td>
-            <td><strong>Chat slash command</strong></td>
-            <td><code>/status</code></td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <h2>3. Workflow, agent, or skill?</h2>
-    <pre><code>YOU type          →  /create-us          (workflow — .agent/workflows/)
-workflow routes   →  @backlog-refiner    (agent — .agent/agents/)
-agent runs        →  create-user-story   (skill — .agent/skills/)
-output lands in   →  .meridian/meridian.db   (delivery source of truth)</code></pre>
-    <ul class="rules">
-      <li><strong>You invoke workflows</strong> — slash commands in Cursor, Claude Code, or Codex skills (<code>$workflow-create-us</code>).</li>
-      <li><strong>You rarely @mention agents</strong> — the workflow picks the right persona. Override with <code>@scrum-master</code> or <code>@developer</code> when needed.</li>
-      <li><strong>You never type skills</strong> — agents load them from the kit.</li>
-    </ul>
-
-    <h2>4. Reading order (guides)</h2>
-    <ol class="steps">
-      <li><strong>Start here</strong> — concepts (phases, gates, artifacts)</li>
-      <li><strong>Usage guide</strong> — situations (new project, migrate, implement, close)</li>
-      <li><strong>Agents &amp; slash commands</strong> — full command map and steps 1–17</li>
-      <li><strong>This tab</strong> — extension command reference (views + governance)</li>
-    </ol>
-    <p class="hint">Open guides from the Meridian sidebar → Commands, or ⇧⌘P → <code>Meridian: Open …</code></p>
+  <section class="onboarding" id="extension-commands-intro">
+    <h1>Extension commands</h1>
+    <p class="lead">This tab lists <strong>IDE palette commands</strong> (board, validate, kit install). For chat slash commands (<code>/create-us</code>, <code>/status</code>), open <strong>Meridian: Open How to Use</strong> or <code>.agent/references/agents-help.md</code>.</p>
+    <p class="hint">Human guides (read in order): How to use → Concepts → Usage guide → Agents help (reference).</p>
   </section>
 `
 

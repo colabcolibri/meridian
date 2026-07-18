@@ -12,6 +12,6 @@ test("helpWebviewHtml documents all catalog commands", () => {
   }
   assert.match(html, /Meridian Validate/)
   assert.match(html, /Meridian Tools/)
-  assert.match(html, /How to use Meridian/)
-  assert.match(html, /Workflow, agent, or skill/)
+  assert.match(html, /Extension commands/)
+  assert.match(html, /Meridian: Open How to Use/)
 })

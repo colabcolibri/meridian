@@ -19,9 +19,11 @@
 | ----- | ---- | -------- | --------- | -------- |
 | Master protocol | `.agent/MERIDIAN.md` | Agents + managers | **Canonical** | P0 |
 | P0 rules | `.agent/rules/MERIDIAN.md`, `.agent/rules/meridian.mdc` | Agents (always-on) | **Canonical** | P0 |
-| Human onboarding | `.agent/references/start-here.md` | Manager | **Canonical** | P0 |
-| Day-to-day guide | `.agent/references/usage-guide.md` | Manager | **Canonical** | P0 |
+| Human entry | `.agent/references/how-to-use.md` | Manager | **Canonical** | P0 |
+| Concepts | `.agent/references/start-here.md` | Manager | **Canonical** | P0 |
+| Day-to-day recipes | `.agent/references/usage-guide.md` | Manager | **Canonical** | P0 |
 | Commands & steps | `.agent/references/agents-help.md` | Manager + agents | **Canonical** | P0 |
+| Artifact fields | `.agent/references/artifact-reference.md` | Manager + agents | **Canonical** | P1 |
 | Artifact templates | `.agent/references/templates/` + `TEMPLATE_SOURCES.md` | Agents | **Canonical** (see TEMPLATE_SOURCES for edit path) | P0 |
 | Agent personas | `.agent/agents/*.md` | Agents | **Canonical** | P0 |
 | Skills (procedures) | `.agent/skills/*/SKILL.md` + `references/` | Agents | **Canonical** | P0 |
@@ -32,7 +34,7 @@
 | Repo README | `README.md` | GitHub visitors | **Canonical** | P2 |
 | IDE adapters | `.cursor/`, `.claude/`, `.agents/skills/`, `.codex/` | Cursor / Claude Code / Codex | **Mirror** — sync only | — |
 | Template registry | `.agent/references/templates/` | Agents + humans (via kit) | **Canonical** | `INDEX.md`, `TEMPLATE_SOURCES.md` |
-| VS Code help (runtime) | `.agent/references/{agents-help,usage-guide,start-here}.md` | Extension user | Same as kit refs — edit `.agent/` | P0 |
+| VS Code help (runtime) | `.agent/references/{how-to-use,start-here,usage-guide,agents-help,artifact-reference}.md` | Extension user | Same as kit refs — edit `.agent/` | P0 |
 | VS Code command catalog | `app-visual-studio/src/command-catalog.ts` | Extension user | **Canonical** for extension UX | P1 |
 | VS Code README | `app-visual-studio/README.md` | Marketplace / GitHub | **Canonical** for extension | P2 |
 | Validators | `.agent/scripts/validate_meridian.py`, `meridian_section_contracts.py` | CI + agents | **Canonical** when structure changes | P1 |
@@ -58,8 +60,9 @@
 
 | What | Where | When to touch |
 | ---- | ----- | ------------- |
-| Concepts & phases | `.agent/references/start-here.md` | New phases, artifacts, folder tree |
-| Situations & sequences | `.agent/references/usage-guide.md` | New workflows (migrate, close US, etc.) |
+| Concepts & phases | `.agent/references/start-here.md` | Phases, gates, folders only |
+| Human entry | `.agent/references/how-to-use.md` | Surfaces, layering, setup, reading order |
+| Situations & sequences | `.agent/references/usage-guide.md` | Recipe per situation |
 | Numbered steps | `.agent/references/agents-help.md` | New slash commands or groups |
 
 ### P0 — VS Code extension (runtime + catalog)
@@ -91,6 +94,7 @@ Use this when adding or changing protocol behavior (example: **as-is inventory**
 - [ ] `.agent/skills/init-project/SKILL.md` — procedure
 - [ ] `.agent/workflows/init-meridian.md` — deliverables + next steps
 - [ ] New template if needed — `.agent/references/templates/` + `INDEX.md` + `TEMPLATE_SOURCES.md`
+- [ ] `.agent/references/how-to-use.md` — entry + reading order
 - [ ] `.agent/references/start-here.md` — concepts + `docs/` tree
 - [ ] `.agent/references/usage-guide.md` — situations + step table
 - [ ] `.agent/references/agents-help.md` — command group row

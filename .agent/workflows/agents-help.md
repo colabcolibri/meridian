@@ -13,7 +13,7 @@ $ARGUMENTS
 1. **Read-only** — do not change docs unless `$ARGUMENTS` explicitly asks
 2. Use `scrum-master`
 3. Primary reference: `.agent/references/agents-help.md`
-4. Cross-read: `.agent/references/start-here.md` (concepts), `.agent/references/usage-guide.md` (situations)
+4. Cross-read: `.agent/references/how-to-use.md` (entry), `start-here.md` (concepts), `usage-guide.md` (situations)
 
 ---
 
