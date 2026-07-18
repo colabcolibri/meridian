@@ -4,6 +4,14 @@ All notable changes to the **Meridian** VS Code extension (`meridian-vscode`).
 
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.1.18] - 2026-07-18
+
+### Changed
+
+- **Bundled kit:** sync with `de42f27` — specialized agents, `generate-board-json`, `sync-board`, section contracts
+- **Bundled kit:** `validate_meridian.py` SQLite dogfood fix (`sqlite_delivery_active` skips markdown delivery dirs)
+- **Bundled kit:** adds `meridian_section_contracts.py` and `migrate_us_v2_structure.py`
+
 ## [1.1.17] - 2026-07-18
 
 ### Added
