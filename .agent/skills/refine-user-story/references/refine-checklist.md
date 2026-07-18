@@ -53,7 +53,7 @@ ready: false   # /create-us — narrative draft (`ready` flag in SQLite; not a d
 ready: true    # /refine-us — implement allowed
 ```
 
-**Forbidden:** `.meridian/drafts/`, `us-*-refine.md` — persist with `update-us --from-file` only.
+**Forbidden:** `.meridian/drafts/`, `us-*-refine.md` — persist with `update-us` (stdin) only.
 
 ---
 

@@ -6,10 +6,8 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 
 # Refine user story (Meridian)
 
-> **v11:** persist with `update-us --from-file` or `meridian_db_export.py --write-form`.  
-> **Forbidden:** `.meridian/drafts/`, `us-*-refine.md`. Refine = same SQLite row via `update-us` → `set-ready` (ephemeral `/tmp/us.md` ok).
-
-## Selective reading
+> **v11:** persist with `update-us` (stdin) or `meridian_db_export.py --write-form`.  
+> **Forbidden:** `.meridian/drafts/`, `us-*-refine.md`. Refine = same SQLite row via `update-us` → `set-ready`.
 
 | File | When to read |
 | ------- | ---------- |
@@ -24,7 +22,9 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 
 ```bash
 python3 .agent/scripts/meridian_delivery.py show US-0115 --full
-python3 .agent/scripts/meridian_delivery.py update-us US-0115 --from-file /tmp/us.md
+python3 .agent/scripts/meridian_delivery.py update-us US-0115 <<'EOF'
+(full US markdown)
+EOF
 python3 .agent/scripts/meridian_delivery.py set-ready US-0115 --ready true
 ```
 
@@ -35,7 +35,7 @@ Never Write `docs/us/`. No `generate-board-json` — upsert records `board_snaps
 1. Read guides, checklist, US `--full`, architecture sections.
 2. Deepen Why/Where if needed; **expand Approach** (≥2 bullets).
 3. Exact Architecture refs; DRY/SRP pass; concrete Planned steps.
-4. `update-us --from-file` with `ready: true` only when checklist passes.
+4. `update-us US-XXXX` (stdin) with `ready: true` in frontmatter only when checklist passes.
 5. `prepend-decision` if scope changed.
 
 ## Output

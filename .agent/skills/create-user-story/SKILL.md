@@ -7,7 +7,7 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 # Create user story (Meridian)
 
 > **v11:** delivery lives in `.meridian/meridian.db` — never create `docs/us/*.md`.  
-> **Forbidden:** `.meridian/drafts/`, `us-*-refine.md`, `us-*-complete.md`. “Draft” = `ready: false` in SQLite. Ephemeral `/tmp/us.md` → `update-us --from-file` only.
+> **Forbidden:** `.meridian/drafts/`, `us-*-refine.md`, `us-*-complete.md`, `docs/us/*.md`. “Draft” = `ready: false` in SQLite. **Persist:** `update-us US-XXXX` with markdown on **stdin** (heredoc) — no scratch files in the repo.
 
 ## Selective reading
 
@@ -25,7 +25,18 @@ python3 .agent/scripts/meridian_delivery.py list epics
 python3 .agent/scripts/meridian_delivery.py list versions
 python3 .agent/scripts/meridian_delivery.py show US-0115 --full   # dependency context
 python3 .agent/scripts/meridian_delivery.py create-us --title "..." --epic EPIC-15 --version v10
-python3 .agent/scripts/meridian_delivery.py update-us US-0116 --from-file /tmp/us.md
+python3 .agent/scripts/meridian_delivery.py update-us US-0116 <<'EOF'
+---
+id: US-0116
+title: ...
+epic: EPIC-15
+version: v10
+status: ❌
+ready: false
+---
+# US-0116 — ...
+(body per us-template.md)
+EOF
 ```
 
 Never Write `docs/us/` or `docs/kanban/board.json`. Upsert records `board_snapshots` automatically.
@@ -60,7 +71,7 @@ If vague, ask: user type, single slice, before/after, `depends_on`, `done_when` 
 2. Read epic/version/dependency US via `show --full` or `meridian_db_export.py --entity epics --id EPIC-XX`.
 3. `create-us` for id + stub, or draft full markdown with next id from `list user_stories`.
 4. Write full US markdown (Why / Where / Approach with real sentences).
-5. `update-us US-XXXX --from-file` with `ready: false`.
+5. `update-us US-XXXX` with full markdown on stdin (heredoc); `ready: false` in frontmatter.
 6. `prepend-decision` if acceptance model changes.
 
 ## Output

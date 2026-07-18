@@ -134,7 +134,7 @@ Full rules: `section-contracts.md`. Golden examples: `writing-guide.md`.
 
 ## Ready (frontmatter)
 
-**Forbidden:** `.meridian/drafts/`, `us-*-refine.md`, `us-*-complete.md`, delivery markdown under `.meridian/` or `docs/us/`. “Narrative draft” / “Plan draft” = **`ready: false`** and incomplete Plan in **`user_stories` (SQLite)** — persist only with `update-us --from-file`. Ephemeral CLI staging (e.g. `/tmp/us.md`) is allowed; discard after upsert.
+**Forbidden:** `.meridian/drafts/`, `us-*-refine.md`, `us-*-complete.md`, delivery markdown under `.meridian/` or `docs/us/`. “Narrative draft” / “Plan draft” = **`ready: false`** in **`user_stories` (SQLite)** — persist with `update-us US-XXXX` (markdown on stdin) or `meridian_db_export.py --write-form`.
 
 | Value | Meaning |
 | ----- | ------- |

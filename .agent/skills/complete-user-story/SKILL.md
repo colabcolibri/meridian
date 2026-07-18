@@ -22,7 +22,9 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 
 ```bash
 python3 .agent/scripts/meridian_delivery.py show US-0115 --full
-python3 .agent/scripts/meridian_delivery.py update-us US-0115 --from-file /tmp/us.md
+python3 .agent/scripts/meridian_delivery.py update-us US-0115 <<'EOF'
+(full US markdown with filled ## Record)
+EOF
 python3 .agent/scripts/meridian_delivery.py set-summary US-0115 --text "4-8 sentence summary"
 ```
 

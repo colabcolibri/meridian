@@ -16,7 +16,7 @@ $ARGUMENTS
 4. Write **Intent** (Why, Where, Acceptance) + **Plan** draft (refs, Planned) — see writing-guide
 5. **One slice (SRP)** — split or narrow if request bundles unrelated layers; fill **Out of scope**
 6. `ready: false` — never implement in same turn
-7. **Forbidden:** do not `Write` `.meridian/drafts/`, `us-*-refine.md`, `us-*-complete.md`, or delivery `.md` under `.meridian/` or `docs/us/`. “Narrative draft” = `ready: false` in SQLite after `update-us --from-file` (ephemeral `/tmp/us.md` ok → upsert → discard).
+7. **Forbidden:** do not `Write` `.meridian/drafts/`, `us-*-refine.md`, `us-*-complete.md`, or delivery `.md` under `.meridian/` or `docs/us/`. “Narrative draft” = `ready: false` in SQLite after `update-us` (markdown on **stdin** — heredoc; no temp files).
 8. Next step always: `/refine-us US-XXXX` (optional: `/review-us US-XXXX` first for audit)
 
 ---
@@ -41,7 +41,7 @@ RULES:
    - Plan / Architecture refs — ok with § TBD until refine
    - Plan / Planned — draft test steps
 5. ready: false
-6. `update-us --from-file` after full markdown draft
+6. `update-us US-XXXX` — pipe full markdown on stdin (heredoc)
 7. Tell user: run /refine-us before implement
 ```
 

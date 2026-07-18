@@ -4,6 +4,12 @@ All notable changes to the **Meridian** VS Code extension (`meridian-vscode`).
 
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.1.25] - 2026-07-19
+
+### Changed
+
+- **Bundled kit:** US persist docs — `update-us` via **stdin/heredoc** (direct SQLite upsert); removed `/tmp/us.md` staging guidance
+
 ## [1.1.24] - 2026-07-19
 
 ### Changed

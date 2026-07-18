@@ -11,7 +11,7 @@
 | ---- | ---- |
 | Database | `{packageRoot}/.meridian/meridian.db` |
 
-**Forbidden:** `.meridian/drafts/`, `us-*-refine.md`, `us-*-complete.md`, `docs/us/*.md`. Kit “narrative draft” / “Plan draft” = `ready: false` in `user_stories`. Persist: ephemeral markdown → `update-us --from-file` → SQLite.
+**Forbidden:** `.meridian/drafts/`, `us-*-refine.md`, `us-*-complete.md`, `docs/us/*.md`. Kit “narrative draft” / “Plan draft” = `ready: false` in `user_stories`. Persist: `update-us US-XXXX` with markdown on **stdin** (heredoc), or `meridian_db_export.py --write-form`. Do not create scratch `.md` in the repo.
 
 | Migrations | `.agent/migrations/YYYYMMDDHHMMSS_*.sql` |
 | Access layer | `.agent/scripts/lib/meridian_db.py` |
@@ -66,7 +66,13 @@ python3 .agent/scripts/meridian_delivery.py create-version --id v11 --title "Rel
 python3 .agent/scripts/meridian_delivery.py create-epic --title "Capability name" --versions "[v11]"
 python3 .agent/scripts/meridian_delivery.py create-sprint --version v11 --title "Sprint name" --stories US-0001
 python3 .agent/scripts/meridian_delivery.py create-us --title "..." --epic EPIC-15 --version v10
-python3 .agent/scripts/meridian_delivery.py update-us US-0115 --from-file /tmp/us.md
+python3 .agent/scripts/meridian_delivery.py update-us US-0115 <<'EOF'
+---
+id: US-0115
+...
+---
+# US body
+EOF
 python3 .agent/scripts/meridian_delivery.py update-epic EPIC-15 --from-file /tmp/epic.md
 python3 .agent/scripts/meridian_delivery.py update-version v11 --from-file /tmp/version.md
 python3 .agent/scripts/meridian_delivery.py update-sprint v11-S1 --from-file /tmp/sprint.md
