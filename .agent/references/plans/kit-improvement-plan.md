@@ -120,7 +120,7 @@ Subpastas `lib/`, `migrate/`, `test/`, `dev/` com shims na raiz para CI/extensã
 
 Revisão sistemática de ~107 arquivos `.md` — ver `markdown-audit-v11.md`.
 
-Sub-ondas: G1 P0 bloqueantes → G2 templates → G3 agents/workflows → G4 dogfood docs → G5 repo/CI → G6 guardrail grep.
+Sub-ondas: G1 ✅ · H1 ✅ · G2 🔄 · G3 🔄 · G4–G6 ⏳ — checklist em `markdown-audit-v11.md` §7
 
 ### Onda H — Agent roster e workflow — **✅ H1 concluída**
 

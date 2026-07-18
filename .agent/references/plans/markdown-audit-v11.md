@@ -1,8 +1,21 @@
 # Audit markdown v11 — review completo para estrutura SQLite
 
-> **Status:** aberto — jul/2026  
-> **Gatilho:** onda A marcou skills como ✅, mas dezenas de `.md` ainda descrevem delivery como arquivos `docs/us/*.md`, `app-desktop`, `/sync-board`, ou “US file”.  
+> **Status:** em execução — jul/2026  
+> **Última atualização:** H1 ✅ · G1 ✅ · G2 parcial · G3 parcial  
+> **Gatilho:** onda A marcou skills como ✅, mas dezenas de `.md` ainda descreviam delivery como arquivos `docs/us/*.md`, `app-desktop`, `/sync-board`, ou “US file”.  
 > **Objetivo:** um agente ou humano consegue seguir **qualquer** markdown do kit sem ambiguidade v1 vs v11.
+
+**Progresso rápido:**
+
+| Onda | Status | Notas |
+| ---- | ------ | ----- |
+| **G1** | ✅ | rules, lifecycle, start-here, instruction-surfaces, docs/README |
+| **H1** | ✅ | 9 agentes Scrum, `/design-pass`, routing v2, workflows |
+| **G2** | 🔄 | INDEX, discovery, as-is, projects-manifest, version/sprint refs, implementation-template |
+| **G3** | 🔄 | agents + workflows + meridian-routing + agents-help + MERIDIAN §9 |
+| **G4–G6** | ⏳ | dogfood docs, repo root/CI, guardrail grep |
+
+**Skills novas:** seguir `.agent/skills/doc.md` + padrão create-skill (description 3ª pessoa com WHAT/WHEN, tabela selective reading, corpo &lt;500 linhas, detalhes em `references/`).
 
 ---
 
@@ -10,11 +23,12 @@
 
 | O que dissemos | Realidade |
 | -------------- | --------- |
-| Onda A ✅ — skills/workflows SQLite | **Parcial:** write paths nos skills principais; **não** revisão linha a linha de templates, agents, `start-here`, `lifecycle`, `rules/`, `docs/` |
-| Onda C ✅ — sem `docs/templates/` | **OK** no repo; grep ainda encontra `docs/templates/README.md` em índices antigos — confirmar zero cópia no git |
-| Onda D/E ✅ — scripts | **OK** tecnicamente; docs ainda citam shims sem explicar `migrate/` / `test/` |
+| Onda A ✅ — skills/workflows SQLite | **Parcial:** write paths nos skills principais; templates P0 em G2 |
+| Onda H1 ✅ — roster Scrum | **OK** — 9 agentes, aliases legacy, validator atualizado |
+| Onda C ✅ — sem `docs/templates/` | **OK** no repo |
+| Onda D/E ✅ — scripts | **OK** |
 
-**Conclusão:** falta **onda G** — revisão sistemática de **todo** markdown operacional (~107 arquivos `.md` no kit + dogfood).
+**Conclusão:** onda **G** continua — G2–G5 + G6 guardrail.
 
 ---
 
@@ -28,66 +42,55 @@ Templates      → .agent/references/templates/                               (f
 Protocolo      → .agent/MERIDIAN.md, rules/, agents/, skills/, workflows/
 ```
 
-**Regra de ouro para revisores:** se o texto diz “crie/edite/leia `docs/us/US-XXXX.md`” como caminho **primário** → **P0 bug**. Menção a v1 em “não faça” ou “branch meridian-v1-old” → **P2 OK**.
+**Regra de ouro para revisores:** se o texto diz “crie/edite/leia `docs/us/US-XXXX.md`” como caminho **primário** → **P0 bug**. Menção a v1 em “não faça”, “legacy”, ou “branch meridian-v1-old” → **P2 OK**.
 
 ---
 
 ## 3. Scan automático (baseline jul/2026)
 
-Padrões legados em `**/*.md` (exceto changelog e cutover):
-
-| Padrão | Arquivos afetados (aprox.) | Severidade |
-| ------ | -------------------------- | ---------- |
-| `docs/us/`, `docs/epics/`, `docs/versions/`, `docs/sprints/` | ~28 | P0–P1 |
-| `app-desktop` como produto ativo | ~18 | P0–P1 |
-| `sync-board`, `generate-board`, `board.json` como fluxo | ~12 | P1 (maioria histórico) |
-| “US file”, “must match filename” | ~5 | P0 |
-| `validate_meridian.py app-desktop` | ~6 | P1 |
+| Padrão | Arquivos afetados (aprox.) | Severidade | Progresso |
+| ------ | -------------------------- | ---------- | --------- |
+| `docs/us/`, `docs/epics/`, … como write path | ~28 → ~12 | P0–P1 | G2/G3 em curso |
+| `app-desktop` como produto ativo | ~18 | P0–P1 | G4/G5 pendente |
+| `sync-board`, `board.json` | ~12 | P1 | maioria histórico |
+| “US file”, “must match filename” | ~5 → ~2 | P0 | sprint-template ✅ |
+| `validate_meridian.py app-desktop` | ~6 → ~1 | P1 | AGENTS.md ✅ |
 
 ---
 
 ## 4. P0 — corrige antes de confiar nos agentes
 
-Arquivos que **instruem comportamento errado hoje**:
-
-| Arquivo | Problema | Correção |
-| ------- | -------- | -------- |
-| `.agent/rules/MERIDIAN.md` § TIER 1 | `docs/versions/`, `docs/sprints/` como artefato | → `.meridian/meridian.db` + skills `create-*` |
-| `.agent/references/templates/lifecycle.md` | “Board sync”, “US **file** is the contract” | → refresh automático no DB; “US **row**” |
-| `.agent/references/start-here.md` | `must match filename`; `docs/versions/` | → id no SQLite; `versions` table |
-| `.agent/references/instruction-surfaces.md` | P0 inteiro sobre `app-desktop` UI | → reescrever para `app-visual-studio` + extensão |
-| `.agent/references/scrum-meridian-map.md` | `docs/sprints/vX-SY.md`; “multiple US **files**” | → `sprints` table; US rows |
-| `.agent/references/templates/as-is-inventory-template.md` | “Create `docs/epics/`, `docs/versions/v0.md`” | → upsert SQLite ou nota v1-only |
-| `.agent/references/templates/projects-manifest-template.md` | `us/US-XXXX.md exists` | → `user_stories` row ou legacy check |
-| `.agent/skills/create-sprint/references/sprint-template.md` | `version` in `docs/versions/` | → FK `versions.id` no DB |
-| `.agent/skills/create-version/references/version-template.md` | sprint “file in docs/sprints/” | → `sprints` table |
-| `.agent/skills/create-user-story/SKILL.md` | description: “adding work to **docs/us**” | → SQLite `user_stories` |
-| `.agent/skills/complete-user-story/references/implementation-template.md` | `feat(app-desktop):` | → `feat(extension):` ou `feat(kit):` |
-| `docs/README.md` | Desktop monitor, `app-desktop/docs/`, `meridian-concepts.ts` | → dogfood repo root + extensão VS Code |
-| `docs/04_principles.md` | tokens em `app-desktop/src/...` | → remover ou `app-visual-studio` |
-| `.github/pull_request_template.md` | lint/test `app-desktop/` | → `app-visual-studio/` + `validate . --sqlite-only` |
-| `SECURITY.md` | Vite `app-desktop/` | → extensão + kit scripts |
-| `.agent/rules/AGENTS.md` | dogfood `app-desktop/docs/` | → repo root `docs/` |
-
-**Artefato morto (remover do git se reaparecer):**
-
-- `.agent/skills/generate-board-json/` — skill removida; não deve existir
-- `docs/templates/` — espelho removido na onda C
+| Arquivo | Problema | Status |
+| ------- | -------- | ------ |
+| `.agent/rules/MERIDIAN.md` § TIER 1 | paths v1 | ✅ G1 |
+| `.agent/references/templates/lifecycle.md` | US file | ✅ G1 |
+| `.agent/references/start-here.md` | filename | ✅ G1 |
+| `.agent/references/instruction-surfaces.md` | app-desktop | ✅ G1 |
+| `.agent/references/scrum-meridian-map.md` | docs/sprints | ✅ G2 |
+| `.agent/references/templates/as-is-inventory-template.md` | docs/epics, versions | ✅ G2 |
+| `.agent/references/templates/projects-manifest-template.md` | us/US-XXXX.md only | ✅ G2 |
+| `create-sprint/.../sprint-template.md` | docs/versions | ✅ G2 |
+| `create-version/.../version-template.md` | docs/sprints | ✅ G2 |
+| `create-user-story/SKILL.md` | description docs/us | ✅ G2 |
+| `complete-user-story/.../implementation-template.md` | feat(app-desktop) | ✅ G2 |
+| `docs/README.md` | app-desktop | ✅ G1 |
+| `docs/04_principles.md` | tokens app-desktop | ✅ G4 parcial |
+| `.github/pull_request_template.md` | app-desktop | ⏳ G5 |
+| `SECURITY.md` | app-desktop | ⏳ G5 |
+| `.agent/rules/AGENTS.md` | app-desktop dogfood | ✅ G2 |
+| `.agent/skills/generate-board-json/` | skill morta | ✅ removida (confirmar zero cópia) |
 
 ---
 
 ## 5. P1 — desatualizado mas não quebra sempre
 
-| Arquivo | Ação |
-| ------- | ---- |
-| `.agent/MERIDIAN.md` | “app-desktop monitor” → extensão |
-| `.agent/references/usage-guide.md` | remover “app-desktop UI” de instruction surfaces |
-| `.agent/references/templates/writing-guide.md` | anti-pattern `docs/epics/EPIC-04.md`; build `app-desktop` |
-| `.agent/agents/process-manager.md` | `app-desktop/docs/` → `packageRoot` genérico |
-| `README.md` | link `docs/versions/` (pasta não existe no v11) |
-| `docs/01_tech_stack.md` | menções app-desktop como opção |
-| `docs/06_database.md` | OK na maior parte; revisar tom “markdown file” vs body column |
-| Skills `create-epic/version` | notas “do not create docs/*.md” — OK; padronizar wording |
+| Arquivo | Ação | Status |
+| ------- | ---- | ------ |
+| `.agent/MERIDIAN.md` | extensão vs monitor | 🔄 G3 parcial |
+| `.agent/references/usage-guide.md` | app-desktop UI | ⏳ |
+| `.agent/references/templates/writing-guide.md` | anti-pattern paths | ⏳ |
+| `README.md` | link docs/versions | ⏳ G5 |
+| Skills `create-epic/version` | padronizar wording | ⏳ |
 
 ---
 
@@ -95,47 +98,44 @@ Arquivos que **instruem comportamento errado hoje**:
 
 | Arquivo | Por quê |
 | ------- | ------- |
-| `MERIDIAN_V2_CUTOVER.md` | histórico de migração |
-| `README.md` branch `meridian-v1-old` | linhagem |
+| `MERIDIAN_V2_CUTOVER.md` | histórico |
 | `sqlite-delivery-operations.md` | lista o que **não** Write |
-| `board-schema.md` | shape SQLite + nota pre-v11 |
-| `board-keeper.md` proibições | anti-patterns |
-| `migrate/archive/README.md` | migração v1 |
+| `board-keeper.md` / legacy agents | anti-patterns + alias H1 |
 | `kit-improvement-plan.md` | diário de ondas |
-| `app-visual-studio/CHANGELOG.md` | changelog — não reescrever |
 
 ---
 
 ## 7. Inventário — checklist arquivo a arquivo
 
-Marque `[x]` quando o arquivo estiver **v11-operacional** (sem P0; P1 aceito ou corrigido).
+Marque `[x]` quando **v11-operacional** (sem P0; P1 aceito ou corrigido).
 
 ### 7.1 Protocolo raiz `.agent/`
 
-- [ ] `MERIDIAN.md`
-- [ ] `ARCHITECTURE.md`
+- [x] `MERIDIAN.md` — G3 (§9 agents, phase table)
+- [x] `ARCHITECTURE.md` — H1
 - [ ] `IDE_ADAPTERS.md`
 - [ ] `KIT_README.md`
 - [ ] `DISTRIBUTION.md`
 
 ### 7.2 Rules
 
-- [x] `rules/MERIDIAN.md` — G1
-- [ ] `rules/AGENTS.md` — **P0**
+- [x] `rules/MERIDIAN.md` — G1 + H1 classifier
+- [x] `rules/AGENTS.md` — G2
+- [x] `rules/meridian.mdc` — H1 (`/design-pass`)
 
 ### 7.3 References (guias)
 
 - [x] `references/start-here.md` — G1
 - [ ] `references/usage-guide.md`
-- [ ] `references/agents-help.md`
+- [x] `references/agents-help.md` — H1
 - [ ] `references/commit-after-us-close.md`
 - [x] `references/instruction-surfaces.md` — G1
-- [ ] `references/scrum-meridian-map.md` — **P0**
-- [ ] `references/scrum-guide-complete.md` (verificar menções delivery path)
+- [x] `references/scrum-meridian-map.md` — G2 + H1 roles
+- [ ] `references/scrum-guide-complete.md`
 
 ### 7.4 References/templates (registry)
 
-- [ ] `templates/INDEX.md`
+- [x] `templates/INDEX.md` — H1 + G2
 - [ ] `templates/TEMPLATE_SOURCES.md`
 - [x] `templates/lifecycle.md` — G1
 - [ ] `templates/writing-guide.md`
@@ -145,62 +145,35 @@ Marque `[x]` quando o arquivo estiver **v11-operacional** (sem P0; P1 aceito ou 
 - [ ] `templates/doc-templates.md`
 - [ ] `templates/us-template.md`
 - [ ] `templates/epic-template.md`
-- [ ] `templates/version-template.md`
-- [ ] `templates/sprint-template.md`
-- [ ] `templates/review-checklist.md`
+- [x] `templates/version-template.md` — G2 (symlink → skill ref)
+- [x] `templates/sprint-template.md` — G2
+- [x] `templates/review-checklist.md` — H1
 - [ ] `templates/refine-checklist.md`
 - [ ] `templates/implement-gate-checklist.md`
-- [ ] `templates/implementation-template.md`
+- [x] `templates/implementation-template.md` — G2
 - [ ] `templates/decision-template.md`
 - [ ] `templates/decision-schema.md`
-- [ ] `templates/discovery-folder-guide.md`
-- [ ] `templates/as-is-inventory-template.md` — **P0**
-- [ ] `templates/projects-manifest-template.md` — **P0**
-- [ ] `templates/architecture-folder-guide.md`
+- [x] `templates/discovery-folder-guide.md` — H1
+- [x] `templates/as-is-inventory-template.md` — G2
+- [x] `templates/projects-manifest-template.md` — G2
+- [x] `templates/architecture-folder-guide.md` — H1
 - [ ] `templates/code-quality-at-us-time.md`
 
 ### 7.5 Agents (v11 roster — 9 + legacy aliases)
 
-- [x] `agents/scrum-master.md`
-- [x] `agents/product-owner.md`
-- [x] `agents/technical-writer.md`
-- [x] `agents/security-champion.md`
-- [x] `agents/technical-architect.md`
-- [x] `agents/design-system-owner.md`
-- [x] `agents/sprint-planner.md`
-- [x] `agents/backlog-refiner.md`
-- [x] `agents/developer.md`
-- [x] Legacy aliases deprecated: `process-manager`, `board-keeper`, `scope-architect`, `documentation-strategist`, `architecture-guardian`, `security-steward`
+- [x] Todos os 9 agentes v11 + legacy deprecated — **H1**
 
-### 7.6 Workflows (17)
+### 7.6 Workflows (18)
 
-- [ ] `workflows/init-meridian.md`
-- [ ] `workflows/discover.md`
-- [ ] `workflows/status.md`
-- [ ] `workflows/create-epic.md`
-- [ ] `workflows/create-version.md`
-- [ ] `workflows/plan-sprint.md`
-- [ ] `workflows/create-us.md`
-- [ ] `workflows/review-us.md`
-- [ ] `workflows/refine-us.md`
-- [x] `workflows/implement-us.md` → `developer`
-- [x] `workflows/status.md`, `init-meridian.md`, `daily-with-ai.md` → `scrum-master`
-- [x] `workflows/create-us|review-us|refine-us|complete-us.md` → `backlog-refiner`
-- [x] `workflows/create-epic.md` → `product-owner`
-- [x] `workflows/architecture.md` → `technical-architect`
-- [x] `workflows/security-pass.md` → `security-champion`
-- [x] `workflows/design-pass.md` (novo)
-- [ ] `workflows/complete-us.md`
-- [ ] `workflows/complete-sprint.md`
-- [ ] `workflows/architecture.md`
-- [ ] `workflows/security-pass.md`
-- [ ] `workflows/daily-with-ai.md`
-- [ ] `workflows/agents-help.md`
-- [ ] `workflows/update-decisions-log.md`
+- [x] Todos workflows operacionais — **H1** (incl. `design-pass.md`)
+- [ ] Revisar `discover.md`, `update-decisions-log.md` (grep residual)
 
-### 7.7 Skills — SKILL.md (16)
+### 7.7 Skills — SKILL.md (17)
 
-- [ ] `skills/create-user-story/SKILL.md` — **P0 description**
+- [x] `skills/create-user-story/SKILL.md` — G2
+- [x] `skills/meridian-routing/SKILL.md` — H1
+- [x] `skills/design-system/SKILL.md` — H1 + create-skill pattern
+- [x] `skills/discover-product/SKILL.md` — H1
 - [ ] `skills/create-epic/SKILL.md`
 - [ ] `skills/create-version/SKILL.md`
 - [ ] `skills/create-sprint/SKILL.md`
@@ -210,98 +183,57 @@ Marque `[x]` quando o arquivo estiver **v11-operacional** (sem P0; P1 aceito ou 
 - [ ] `skills/complete-user-story/SKILL.md`
 - [ ] `skills/complete-sprint/SKILL.md`
 - [ ] `skills/init-project/SKILL.md`
-- [ ] `skills/discover-product/SKILL.md`
-- [ ] `skills/meridian-routing/SKILL.md`
 - [ ] `skills/security-review/SKILL.md`
 - [ ] `skills/update-decisions-log/SKILL.md`
 - [ ] `skills/doc.md`
 
-### 7.8 Skills — references/ (cópias locais)
+### 7.8 Skills — references/
 
-- [ ] `create-user-story/references/us-template.md`
-- [ ] `create-epic/references/epic-template.md`
-- [ ] `create-version/references/version-template.md` — **P0**
-- [ ] `create-sprint/references/sprint-template.md` — **P0**
-- [ ] `review-user-story/references/review-checklist.md`
-- [ ] `refine-user-story/references/refine-checklist.md`
-- [ ] `implement-user-story/references/implement-gate-checklist.md`
-- [ ] `complete-user-story/references/implementation-template.md` — **P0**
-- [ ] `init-project/references/doc-templates.md`
-- [ ] `init-project/references/gitignore-baseline.md`
-- [ ] `update-decisions-log/references/*`
-- [ ] `discover-product/references/*`
-- [ ] `security-review/references/*`
+- [x] `create-version/references/version-template.md` — G2
+- [x] `create-sprint/references/sprint-template.md` — G2
+- [x] `complete-user-story/references/implementation-template.md` — G2
+- [x] `review-user-story/references/review-checklist.md` — H1
+- [x] `discover-product/references/*` — H1
+- [ ] demais refs (grep §3)
 
 ### 7.9 Scripts docs
 
 - [ ] `scripts/README.md`
-- [ ] `scripts/migrate/archive/README.md`
+- [ ] `scripts/migrate/archive/README.md` (P2 OK)
 
-### 7.10 Dogfood `docs/` (repo root)
+### 7.10 Dogfood `docs/`
 
 - [x] `docs/README.md` — G1
-- [ ] `docs/00_scope.md`
-- [ ] `docs/01_tech_stack.md`
-- [ ] `docs/02_security.md`
-- [ ] `docs/03_user_types.md`
-- [ ] `docs/04_principles.md` — **P0**
-- [ ] `docs/05_architecture.md`
-- [ ] `docs/06_database.md`
-- [ ] `docs/07_api_contracts.md`
-- [ ] `docs/08_environments.md`
-- [ ] `docs/11_decisions.md`
-- [ ] `docs/scrum-guide-complete.md`
-- [ ] `docs/09_design_system.md` — stub H1 (created G1)
+- [ ] `docs/00_scope.md` … `docs/08_environments.md`
+- [x] `docs/04_principles.md` — G4 parcial (app-desktop → extension)
+- [x] `templates/writing-guide.md` — G2
+- [x] `docs/09_design_system.md` — stub G1
 
 ### 7.11 Repo root / CI / extensão
 
-- [ ] `README.md`
-- [ ] `AGENTS.md` (symlink → rules)
-- [ ] `CONTRIBUTING.md`
-- [ ] `SECURITY.md` — **P0**
-- [ ] `.github/pull_request_template.md` — **P0**
-- [ ] `app-visual-studio/README.md`
-- [ ] `MERIDIAN_V2_CUTOVER.md` (P2 — só conferir)
+- [ ] `README.md`, `SECURITY.md`, `.github/pull_request_template.md` — G5
 
 ---
 
 ## 8. Ondas de execução (onda G)
 
 ```txt
-G1 — P0 bloqueantes (rules, lifecycle, start-here, instruction-surfaces, docs/README)
-G2 — Templates registry + as-is + projects-manifest + sprint/version skill refs
-G3 — Agents + workflows (passagem única; grep após cada pasta)
-G4 — Dogfood docs/00–11 alinhados ao produto real (extensão, não desktop)
-G5 — Repo root, CI, SECURITY, PR template
-G6 — Guardrail: script ou job CI que falha se P0 patterns aparecem fora de allowlist
+G1 — P0 bloqueantes          ✅
+H1 — roster Scrum              ✅
+G2 — Templates + skill refs    🔄 (esta sessão)
+G3 — Agents/workflows grep     🔄 (maioria H1)
+G4 — Dogfood docs/00–11
+G5 — Repo root, CI, SECURITY
+G6 — Guardrail CI grep
 ```
 
-**Estimativa:** G1–G3 ≈ 1 sessão focada; G4–G5 ≈ 1 sessão; G6 ≈ meia sessão.
-
-**Ordem dentro de cada arquivo:**
-
-1. Abrir checklist §7
-2. Buscar: `docs/us`, `docs/epics`, `app-desktop`, `sync-board`, `US file`, `filename`
-3. Substituir por vocabulário SQLite (tabela, `meridian_db_cli`, `body_markdown`)
-4. Manter bloco `> v11:` no topo se arquivo mistura exemplos históricos
-5. Rodar `validate_meridian.py . --sqlite-only`
+**Ordem por arquivo:** checklist §7 → grep P0 patterns → substituir vocabulário §10 → `validate_meridian.py . --sqlite-only`
 
 ---
 
 ## 9. Guardrail proposto (G6)
 
-Adicionar em `validate_meridian.py` ou script `validate_kit_markdown_v11.py`:
-
-**Falhar** se em `.agent/{references,agents,skills,workflows,rules}/**/*.md`:
-
-```regex
-(?<!legacy: )(Write|Create|Edit|Open|Glob).{0,40}docs/(us|epics|versions|sprints)/
-must match filename
-/sync-board
-generate-board-json
-```
-
-**Allowlist:** `sqlite-delivery-operations.md`, `board-schema.md`, `kit-improvement-plan.md`, `markdown-audit-v11.md`, `MERIDIAN_V2_CUTOVER.md`, `migrate/archive/*`, linhas com `never`, `do not`, `legacy`, `v1-old`.
+_(inalterado — ver commit anterior)_
 
 ---
 
@@ -310,18 +242,18 @@ generate-board-json
 | Evitar (v1) | Usar (v11) |
 | ----------- | ---------- |
 | `docs/us/US-XXXX.md` | `user_stories` row / `meridian_db_cli show US-XXXX` |
-| `process-manager` + código | `scrum-master` (processo) + `developer` (código) |
+| `process-manager` + código | `scrum-master` + `developer` |
 | `board-keeper` | `backlog-refiner` |
 | `architecture-guardian` | `technical-architect` |
 | `security-steward` | `security-champion` |
 | `documentation-strategist` | `technical-writer` |
-| `scope-architect` | `product-owner` (`00_scope`) |
+| `scope-architect` | `product-owner` |
 | `implementation-specialist` / `design-steward` | `developer` / `design-system-owner` |
 | `docs/epics/EPIC-XX.md` | `epics` table / `create-epic` |
 | `docs/versions/vX.md` | `versions` table / `create-version` |
 | `docs/sprints/vX-SY.md` | `sprints` table / `create-sprint` |
 | `board.json` | `meridian_db_export --format planning` |
-| `/sync-board` | _(removido — board refresh no save)_ |
+| `/sync-board` | _(removido)_ |
 | `app-desktop` monitor | `app-visual-studio` extension |
 | US file / filename | US id / `body_markdown` column |
 | `validate_meridian.py app-desktop` | `validate_meridian.py . --sqlite-only` |
@@ -332,24 +264,26 @@ generate-board-json
 
 - [ ] Checklist §7 — 100% `[x]`
 - [ ] Zero P0 no grep com allowlist
-- [ ] `instruction-surfaces.md` descreve só superfícies que existem
-- [ ] Novo agente em projeto limpo: `/create-us` → só SQLite, sem menção a `docs/us/` exceto proibição
-- [ ] Guardrail G6 no CI (warning → error após 1 sprint)
-- [ ] Vocabulário de agentes alinhado com **`agent-roster-and-workflow-v11.md`** (onda H)
+- [x] Vocabulário de agentes alinhado com **`agent-roster-and-workflow-v11.md`** (H1 ✅)
+- [ ] Guardrail G6 no CI
+- [ ] Novo agente: `/create-us` → só SQLite
 
 ---
 
-## 12. Onda H — agentes e workflow (paralelo a G)
+## 12. Onda H — agentes e workflow
 
-Não substitui G — complementa. Ver plano completo: **[`agent-roster-and-workflow-v11.md`](./agent-roster-and-workflow-v11.md)**.
+**H1 ✅ concluída.** Ver [`agent-roster-and-workflow-v11.md`](./agent-roster-and-workflow-v11.md).
 
-| Novo agente | Papel | Workflow principal |
-| ----------- | ----- | ------------------ |
-| `implementation-specialist` | Código de produto pós-gate | `/implement-us` (hoje em `process-manager`) |
-| `design-steward` | `docs/09_design_system.md` + refinamento UI | `/design-pass` (novo) |
+| Agente | Papel | Workflow principal |
+| ------ | ----- | ------------------ |
+| `developer` | Development Team — incremento | `/implement-us` |
+| `design-system-owner` | Enabler UI | `/design-pass` |
+| `scrum-master` | Facilitação processo | `/status`, `/daily-with-ai` |
+| `backlog-refiner` | Backlog refinement | `/create-us` … `/complete-us` |
+| `product-owner` | Discovery + scope + epic | `/discover`, `/create-epic` |
 
-Ao marcar §7 agents/workflows, aplicar também checklist H1 do roster plan.
+**H2 pendente:** remover arquivos legacy após aliases estáveis.
 
 ---
 
-*Maintainer: após cada sub-onda G/H, marcar checkboxes aqui e atualizar `kit-improvement-plan.md`.*
+*Maintainer: após cada sub-onda, marcar §7 aqui e `kit-improvement-plan.md`.*

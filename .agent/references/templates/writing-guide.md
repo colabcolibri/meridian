@@ -89,7 +89,7 @@ Part of v1 / EPIC-04. Depends on US-0022 (kanban reads `user_stories` from `meri
 - [ ] **manual** — numbered steps + expected result
 ```
 
-**Anti-pattern:** Intent that only lists `docs/epics/EPIC-04.md — boundaries` and repeats acceptance bullets under Approach.
+**Anti-pattern:** Intent that only lists epic boundaries from SQLite (`EPIC-04`) and repeats acceptance bullets under Approach.
 
 ---
 
@@ -113,7 +113,7 @@ Refine **expands** optional Approach and makes Architecture refs and Planned tes
 ### Planned
 
 - [ ] **manual** — 1. Load project with v0 and v1 US. 2. Open Board, select v1 in filter. 3. Confirm v0 cards disappear from all columns. 4. Switch to Deliverables tab — same v1 still selected.
-- [ ] **build** — `cd app-desktop && pnpm build` exits 0.
+- [ ] **build** — `cd app-visual-studio && pnpm build` exits 0 (or product package per `01_tech_stack`).
 ```
 
 ---

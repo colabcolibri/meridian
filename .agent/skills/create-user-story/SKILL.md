@@ -1,6 +1,6 @@
 ---
 name: create-user-story
-description: Creates a valid Meridian user story after epics and versions are approved. Use when adding work to docs/us and keeping acceptance criteria concrete.
+description: Creates a Meridian user story row in SQLite after architecture is approved. Use when adding backlog items via /create-us, writing acceptance criteria, or when the user mentions US-, user story, or kanban.
 allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 ---
 
@@ -20,7 +20,7 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 | Doc | Required status |
 | --- | -------------- |
 | `05_architecture.md` | `approved` |
-| epic/version in folders | exist |
+| epic/version in SQLite | rows exist for FK targets |
 | Referenced epic | exists in SQLite (`meridian_db_cli.py list epics`) |
 | Referenced version | exists in SQLite (`meridian_db_cli.py list versions`) |
 | Profile in `03_user_types.md` | exists |

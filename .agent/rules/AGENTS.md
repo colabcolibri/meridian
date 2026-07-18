@@ -1,6 +1,6 @@
 # Meridian protocol
 
-This repository uses the [Meridian](https://github.com/colabcolibri/meridian) protocol. The kit source of truth is `.agent/`; product docs live under `docs/` of the **active Meridian product** (in monorepos: see `.meridian/projects.json` and `app-desktop/docs/` for dogfood).
+This repository uses the [Meridian](https://github.com/colabcolibri/meridian) protocol. The kit source of truth is `.agent/`; product docs live under `docs/` of the **active Meridian product** (in monorepos: see `.meridian/projects.json`).
 
 ## How to invoke (you type workflows, not agents)
 
@@ -58,4 +58,4 @@ After **Install Harness** or clone: run `./.agent/scripts/sync_cursor_kit.sh` to
 python3 .agent/scripts/validate_meridian.py <project-folder>
 ```
 
-Monorepo dogfood: `python3 .agent/scripts/validate_meridian.py app-desktop`
+Monorepo dogfood: `python3 .agent/scripts/validate_meridian.py . --sqlite-only`

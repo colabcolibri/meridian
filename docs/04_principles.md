@@ -50,7 +50,7 @@ Per-story scope stays in US Intent — this section is the team-wide bar. See `.
 - Code must pass ESLint and Prettier before commit.
 - Commits must pass the pre-commit hook with lint-staged.
 - After `/complete-us` for a US, the manager commits **one git commit per closed US** (code + SQLite delivery update and decisions in scope). Meridian ✅ does not replace this step.
-- Commit messages: conventional `type(scope): summary (US-XXXX)` (e.g. `feat(app-desktop): … (US-0085)`). Agents may suggest the line in `### Executed`; they commit only when explicitly asked.
+- Commit messages: conventional `type(scope): summary (US-XXXX)` (e.g. `feat(extension): … (US-0085)`). Agents may suggest the line in `### Executed`; they commit only when explicitly asked.
 - The project uses `pnpm`; do not version npm or yarn lockfiles.
 
 ## Error handling
@@ -68,7 +68,7 @@ In the first version, errors will be represented as validations and visual alert
 
 ### Meridian Desktop identity
 
-Tokens in `app-desktop/src/index.css` (`--meridian*`) and Tailwind classes `meridian`, `meridian-success`, etc. A single source of flow states in `src/features/monitor/setup-step-styles.ts`.
+Tokens in `app-visual-studio` extension UI (CSS variables / Tailwind per `09_design_system.md` when approved). A single source of flow states in the extension monitor setup styles.
 
 | State (flow) | Semantic color     | Usage                                 |
 | ------------ | ------------------ | ------------------------------------- |

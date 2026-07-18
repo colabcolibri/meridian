@@ -154,7 +154,7 @@ When more work appears after `status: complete`:
 
 ## Sprint scope (active sprint)
 
-When `docs/sprints/vX-SY.md` has `status: active`:
+When a sprint row in SQLite has `status: active`:
 
 - **Manager** owns the commitment; agents do not add US to the sprint file without explicit request.
 - New urgent items → product backlog in SQLite or next sprint; log scope change in decisions if the sprint goal shifts.
