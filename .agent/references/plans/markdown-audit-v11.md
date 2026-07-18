@@ -11,7 +11,7 @@
 | ---- | ------ | ----- |
 | **G1** | ✅ | rules, lifecycle, start-here, instruction-surfaces, docs/README |
 | **H1** | ✅ | 9 agentes Scrum, `/design-pass`, routing v2, workflows |
-| **H2** | ⏳ | gate `--h2-ready` + `agent-aliases-h2.md` — delete 6 legacy files |
+| **H2** | ✅ | 6 legacy deletados; routing alias permanece |
 | **G2** | ✅ | templates P0 + writing-guide |
 | **G3** | ✅ | MERIDIAN, usage-guide, agents/workflows H1 |
 | **G5** | ✅ | PR template, SECURITY, README |
@@ -184,15 +184,12 @@ Marque `[x]` quando **v11-operacional** (sem P0; P1 aceito ou corrigido).
 - [x] `skills/complete-sprint/SKILL.md` — v11 OK
 - [x] `skills/implement-user-story/SKILL.md` — v11 OK
 - [x] `skills/init-project/SKILL.md` — v11 OK
-- [ ] `skills/review-user-story/SKILL.md`
-- [ ] `skills/refine-user-story/SKILL.md`
-- [ ] `skills/implement-user-story/SKILL.md`
-- [ ] `skills/complete-user-story/SKILL.md`
-- [ ] `skills/complete-sprint/SKILL.md`
-- [ ] `skills/init-project/SKILL.md`
-- [ ] `skills/security-review/SKILL.md`
-- [ ] `skills/update-decisions-log/SKILL.md`
-- [ ] `skills/doc.md`
+- [x] `skills/review-user-story/SKILL.md` — v11 SQLite
+- [x] `skills/refine-user-story/SKILL.md` — v11 SQLite
+- [x] `skills/complete-user-story/SKILL.md` — v11 SQLite
+- [x] `skills/security-review/SKILL.md` — v11 OK
+- [x] `skills/update-decisions-log/SKILL.md` — v11 OK
+- [x] `skills/doc.md` — v11 OK
 
 ### 7.8 Skills — references/
 
@@ -309,7 +306,7 @@ python3 .agent/scripts/validate_meridian.py . --strict-kit-md
 | `backlog-refiner` | Backlog refinement | `/create-us` … `/complete-us` |
 | `product-owner` | Discovery + scope + epic | `/discover`, `/create-epic` |
 
-**H2 pendente:** remover 6 arquivos legacy — gate `validate_meridian.py . --h2-ready` + `agent-aliases-h2.md`.
+**H2 pendente:** ~~remover 6 arquivos legacy~~ **✅ concluída** — gate `validate_meridian.py . --h2-ready`.
 
 ---
 
@@ -323,8 +320,8 @@ python3 .agent/scripts/validate_meridian.py . --strict-kit-md
 | Quebra | `@process-manager` no IDE picklist — usar `@scrum-master` |
 | Não quebra | workflows, `REQUIRED_AGENTS`, `sync_cursor_kit` prune |
 
-- [ ] `--h2-ready` sem erros de refs operacionais
-- [ ] 6 arquivos `agents/*` legacy deletados
-- [ ] `sync_cursor_kit.sh` executado
-- [ ] `--h2-ready` com zero legacy files
+- [x] `--h2-ready` sem erros de refs operacionais
+- [x] 6 arquivos `agents/*` legacy deletados
+- [x] `sync_cursor_kit.sh` executado
+- [x] `--h2-ready` com zero legacy files
 

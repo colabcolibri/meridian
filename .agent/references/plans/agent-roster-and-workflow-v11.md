@@ -231,23 +231,14 @@ flowchart TB
 - [x] Routing matrix + `agents-help.md` + `scrum-meridian-map.md` § Ceremonies
 - [x] Aliases `@process-manager` → `scrum-master` em routing (1 release)
 
-### H2 — Limpeza (deletar legacy com gate)
+### H2 — Limpeza ✅
 
-Contrato completo: **`.agent/references/agent-aliases-h2.md`**
+Contrato: **`.agent/references/agent-aliases-h2.md`**
 
-```bash
-# 1. Corrigir refs operacionais até passar (sem erros de slug legacy)
-python3 .agent/scripts/validate_meridian.py . --h2-ready
-
-# 2. Deletar 6 agents deprecated (lista em agent-aliases-h2.md §1)
-# 3. ./.agent/scripts/sync_cursor_kit.sh   # prune symlinks + codex toml
-# 4. validate . --h2-ready && validate .
-```
-
-- [ ] `validate_meridian.py --h2-ready` sem blockers de refs
-- [ ] Deletar 6 arquivos legacy
-- [ ] `sync_cursor_kit.sh`
-- [ ] Remover notas “Legacy @…” de `agents-help` / `ARCHITECTURE`
+- [x] `validate_meridian.py --h2-ready` sem blockers de refs
+- [x] Deletar 6 arquivos legacy
+- [x] `sync_cursor_kit.sh`
+- [x] Remover notas “until H2” de `MERIDIAN` / `ARCHITECTURE`
 - [ ] Validator warning: UI US sem ref `09_design_system` (opcional)
 
 ---

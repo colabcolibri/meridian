@@ -81,7 +81,7 @@ Workflows orchestrate agents; they do not replace the master protocol.
 | `backlog-refiner` | US lifecycle (not implement) | create-user-story, review-user-story, refine-user-story, complete-user-story, … |
 | `developer` | `/implement-us` gate + code | implement-user-story, update-decisions-log, meridian-routing |
 
-**Legacy aliases (H1–H2):** see `.agent/references/agent-aliases-h2.md` + `meridian-routing` skill. H2 deletes legacy `.md` files; routing table remains.
+**Legacy chat aliases (H2 ✅):** IDE picklist = 9 v11 agents only. Chat may still say `@process-manager` — `meridian-routing` redirects. See `agent-aliases-h2.md`.
 
 Each agent includes: phases 0/-1, mission, prohibitions, output format, delegation.
 

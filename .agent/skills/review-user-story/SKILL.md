@@ -6,7 +6,7 @@ allowed-tools: Read, Glob, Grep, Bash
 
 # Review user story (Meridian)
 
-> **Read-only audit.** Compare the US file to templates and checklists; output a gap report. Do **not** set `ready: true`, edit the US, or write product code unless the manager explicitly asks to fix in the same turn.
+> **v11:** load US via `meridian_db_cli.py show US-XXXX --full` — compare `body_markdown` to templates and checklists; output a gap report. Do **not** set `ready: true`, edit the US, or write product code unless the manager explicitly asks to fix in the same turn.
 
 ## Selective reading
 
@@ -35,7 +35,7 @@ allowed-tools: Read, Glob, Grep, Bash
 | Edits US | **No** (default) | Yes — deepens Context |
 | Sets `ready: true` | **Never** | When checklist passes |
 | Product code | Never | Never |
-| Output | Gap report + recommendation | Updated US file |
+| Output | Gap report + recommendation | Updated US row (`update-us` / `--write-form`) |
 
 If review finds blockers → recommend `/refine-us US-XXXX`. If review passes all refine gates → say “ready for `/refine-us` to set ready: true” (refine still required for the flag).
 
@@ -53,7 +53,7 @@ If review finds blockers → recommend `/refine-us US-XXXX`. If review passes al
 
 ```txt
 US review:
-File:
+ID: US-XXXX
 Validator: pass | N errors, M warnings
 Checklist: X/Y pass
 
@@ -64,6 +64,6 @@ Warnings:
 - ...
 
 Ready for implement (content): yes | no
-ready flag in file: true | false | unset
+ready flag in DB: true | false | unset
 Recommendation: /refine-us US-XXXX | implement | /complete-us | human edit
 ```

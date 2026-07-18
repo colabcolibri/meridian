@@ -6,6 +6,8 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 
 # Complete user story (Meridian)
 
+> **v11:** close via `meridian_db_cli.py update-us` — never hand-edit `docs/us/*.md` when SQLite is active.
+
 ## Selective reading
 
 | File | When to read |
@@ -68,7 +70,7 @@ If anything fails → **do not** mark `✅`; use `🔶` with `Missing:` in accep
 
 ```txt
 US completed:
-File:
+ID: US-XXXX
 Status:
 Implementation summary: (1 line)
 Files touched: (count)

@@ -1,7 +1,6 @@
 # Agent aliases e contrato H2 (remoção de legacy)
 
-> **Status:** H1 — arquivos legacy existem; aliases em `meridian-routing` + esta tabela.  
-> **H2:** deletar os 6 `.md` deprecated; **manter** alias table no skill (routing por chat).  
+> **Status:** H2 ✅ — 6 arquivos legacy deletados; aliases permanecem em `meridian-routing` + esta tabela.  
 > **Não quebra:** workflows, skills v11, `sync_cursor_kit.sh` (prune orphans), validator `REQUIRED_AGENTS`.
 
 ---
@@ -81,7 +80,7 @@ Só estes paths podem citar slugs legados **como nome histórico**:
 | `references/plans/agent-roster-and-workflow-v11.md` | migração |
 | `references/plans/markdown-audit-v11.md` | vocabulário §10 |
 | `skills/meridian-routing/SKILL.md` | tabela alias (permanente) |
-| `agents/process-manager.md` … (6 legacy) | até delete H2 |
+| `agents/process-manager.md` … (6 legacy) | ~~até delete H2~~ **deletados** |
 
 **Proibido após H1 em:** workflows, skills (exceto routing), agents v11, `app-visual-studio/`, `rules/` (exceto nota única apontando para este doc).
 
@@ -89,15 +88,15 @@ Só estes paths podem citar slugs legados **como nome histórico**:
 
 ## 5. Checklist H2 (maintainer)
 
-- [ ] `validate_meridian.py . --h2-ready` sem erros de refs operacionais
-- [ ] `app-visual-studio` help/catalog sem slugs legados como primários
-- [ ] Grep kit: zero `` `process-manager` `` em workflows/skills/agents v11
-- [ ] Deletar 6 arquivos §1
-- [ ] `sync_cursor_kit.sh`
-- [ ] `validate_meridian.py . --h2-ready` (legacy files gone)
-- [ ] Atualizar `ARCHITECTURE.md` — remover nota “Legacy aliases H1”
-- [ ] Atualizar `agents-help.md` — remover frase “Legacy @process-manager”
-- [ ] Marcar H2 ✅ em `agent-roster-and-workflow-v11.md`
+- [x] `validate_meridian.py . --h2-ready` sem erros de refs operacionais
+- [x] `app-visual-studio` help/catalog sem slugs legados como primários
+- [x] Grep kit: zero slug legado em workflows/skills/agents v11 (routing allowlist OK)
+- [x] Deletar 6 arquivos §1
+- [x] `sync_cursor_kit.sh`
+- [x] `validate_meridian.py . --h2-ready` (legacy files gone)
+- [x] Atualizar `ARCHITECTURE.md` — nota H2
+- [x] Atualizar `agents-help.md` — picklist v11
+- [x] Marcar H2 ✅ em `agent-roster-and-workflow-v11.md`
 
 ---
 

@@ -67,7 +67,7 @@ Before any action, classify:
 [specialized response]
 ```
 
-4. **Respect override:** explicit `@agent` wins. Legacy slugs (`@process-manager`, …) → alias table in `meridian-routing` until H2 file delete — see `.agent/references/agent-aliases-h2.md`.
+4. **Respect override:** explicit `@agent` wins. Legacy chat slugs (`@process-manager`, …) → alias table in `meridian-routing` — see `.agent/references/agent-aliases-h2.md` (IDE picklist: v11 slugs only).
 
 ### Checklist before code or US
 

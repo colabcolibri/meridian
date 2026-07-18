@@ -6,6 +6,8 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 
 # Refine user story (Meridian)
 
+> **v11:** edit via `meridian_db_cli.py update-us` or `meridian_db_export.py --write-form` — do **not** create `docs/us/*.md` when `.meridian/meridian.db` exists.
+
 ## Selective reading
 
 | File | When to read |
@@ -53,13 +55,13 @@ Minimum 2 bullets. Each bullet ≥ one full sentence. Example pattern:
 
 ```txt
 US refined:
-File:
+ID: US-XXXX
 Ready for implementation: yes | no
 Approach explanatory: yes | no
 Architecture § exact: yes | no
 DRY / SRP in Approach: yes | no
 Tests concrete: yes | no
-Board updated:
+Board updated: (planning export refresh if extension open)
 Blockers:
 Next: implement US-XXXX | /refine-us again
 ```
