@@ -22,7 +22,7 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 ```bash
 python3 .agent/scripts/meridian_delivery.py list versions
 python3 .agent/scripts/meridian_delivery.py create-epic --title "..." --versions "[v11]"
-cat /tmp/epic.md | python3 .agent/scripts/meridian_db_export.py . --entity epics --id EPIC-15 --write
+python3 .agent/scripts/meridian_delivery.py update-epic EPIC-15 --from-file /tmp/epic.md
 ```
 
 Never Write `docs/epics/`.
@@ -39,7 +39,7 @@ Never Write `docs/epics/`.
 
 1. Read `writing-guide.md` + `epic-template.md`.
 2. `create-epic` (prints id) or use `next` from `list epics`.
-3. Draft full markdown per template; upsert with `meridian_db_export.py --write`.
+3. Draft full markdown per template; upsert with `update-epic --from-file`.
 4. Validate `profiles` vs `03_user_types.md`; `versions` vs `list versions`.
 5. `prepend-decision` if boundaries change.
 

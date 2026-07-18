@@ -50,7 +50,7 @@ Each incident → decision log + manager notification.
 
 - "We'll fix security later" without logged risk acceptance
 - Hardcoding credentials in docs or examples
-- Weakening controls without entry in `docs/decisions/`
+- Weakening controls without `prepend-decision` entry in SQLite
 
 ---
 

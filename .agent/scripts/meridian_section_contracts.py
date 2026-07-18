@@ -1,7 +1,7 @@
 """Section contracts for Meridian delivery artifacts (US, epic, version).
 
 Canonical definitions mirror `.agent/references/templates/section-contracts.md`
-and `app-desktop/src/domain/meridian/section-contracts.ts`.
+and `app-visual-studio/src/domain/meridian/section-contracts.ts`.
 """
 
 from __future__ import annotations

@@ -12,7 +12,7 @@ $ARGUMENTS
 
 1. Use `sprint-planner` + `@[skills/create-version]`
 2. **Mandatory read:** `version-template.md`
-3. `create-version` + `--write` export — never `docs/versions/`
+3. `create-version` + `update-version --from-file` — never `docs/versions/`
 
 ---
 

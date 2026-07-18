@@ -286,8 +286,8 @@ def main() -> int:
     parser.add_argument(
         "project",
         nargs="?",
-        default="app-desktop",
-        help="Project folder under repo root (default: app-desktop)",
+        default=".",
+        help="Project folder (Meridian package root; default: .)",
     )
     parser.add_argument("--dry-run", action="store_true")
     parser.add_argument(

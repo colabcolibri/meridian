@@ -6,7 +6,7 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 
 # Complete sprint (Meridian)
 
-> **v11:** read/write sprint via SQLite export — never `docs/sprints/*.md`.
+> **v11:** read/write sprint via `meridian_delivery.py` — never `docs/sprints/*.md`.
 
 ## Selective reading
 
@@ -20,9 +20,9 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 ## Delivery commands
 
 ```bash
-python3 .agent/scripts/meridian_db_export.py . --entity sprints --id v11-S1
-# edit markdown → upsert:
-cat /tmp/sprint.md | python3 .agent/scripts/meridian_db_export.py . --entity sprints --id v11-S1 --write
+python3 .agent/scripts/meridian_db_export.py . --entity sprints --id v11-S1 --format markdown
+# edit → upsert:
+python3 .agent/scripts/meridian_delivery.py update-sprint v11-S1 --from-file /tmp/sprint.md
 ```
 
 ## Procedure
@@ -30,7 +30,7 @@ cat /tmp/sprint.md | python3 .agent/scripts/meridian_db_export.py . --entity spr
 1. Export sprint markdown; read US statuses via `show`.
 2. Summarize delivery vs `goal` and `done_when`.
 3. Fill `## Retrospective` (What worked / improve / decisions to log).
-4. Set frontmatter `status: complete`; `--write` upsert.
+4. Set frontmatter `status: complete`; `update-sprint --from-file`.
 5. `prepend-decision` if warranted.
 6. `validate_meridian.py`
 

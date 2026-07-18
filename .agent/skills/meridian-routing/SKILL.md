@@ -22,13 +22,13 @@ Before responding, classify the request and select the correct Meridian agent. S
 | Daily AI workflow | "how to use AI", "day to day", "cursor routine", `/daily-with-ai` | `process-manager` | yes |
 | Scope | "scope", "in scope", "out of scope", `00_scope` | `scope-architect` | yes |
 | Phase documents | "tech stack", "principle", "environment", `01_`–`05_`, `08`–`10` | `documentation-strategist` | yes |
-| Epic (capability) | "create epic", "new epic", `/create-epic`, `docs/epics/`, `EPIC-` | `documentation-strategist` + skill `create-epic` | yes |
+| Epic (capability) | "create epic", "new epic", `/create-epic`, `EPIC-`, `list epics` | `documentation-strategist` + skill `create-epic` | yes |
 | Security | "security", "OWASP", "secrets", "threat", `02_security` | `security-steward` | yes |
 | Architecture | "architecture", `05_architecture` | `architecture-guardian` | yes |
-| Version / sprint | "version", "sprint", "roadmap", `/create-version`, `docs/versions/`, `docs/sprints/` | `sprint-planner` + skill `create-version` / `create-sprint` | yes |
+| Version / sprint | "version", "sprint", "roadmap", `/create-version`, `/plan-sprint`, `meridian.db` | `sprint-planner` + skill `create-version` / `create-sprint` | yes |
 | Close sprint | "complete sprint", "close sprint", `/complete-sprint`, sprint retrospective | `sprint-planner` + `complete-sprint` | yes |
 | Decisions / log | "decision", "decisions", "decision log", `/update-decisions-log` | read `update-decisions-log` + run `date` before `prepend-decision` | yes |
-| User story / board | "user story", "US-", "kanban", "board.json", "acceptance" | `board-keeper` | yes |
+| User story / board | "user story", "US-", "kanban", "board", "acceptance", `board_snapshots` | `board-keeper` | yes |
 | Implement US / code | "implement", "build", `/implement-us`, "code for US" | `process-manager` + `implement-user-story` | **block** if `ready` not true |
 | Refine US | "refine US", "ready for implement", `/refine-us`, "fill context" | `board-keeper` + `refine-user-story` | yes |
 | Review US | "review US", "audit US", `/review-us`, "check story quality" | `board-keeper` + `review-user-story` | yes |

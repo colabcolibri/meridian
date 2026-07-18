@@ -68,6 +68,10 @@ All **delivery verbs** pass through unchanged:
 python3 .agent/scripts/meridian_delivery.py counts
 python3 .agent/scripts/meridian_delivery.py show US-0115 --full
 python3 .agent/scripts/meridian_delivery.py create-us --title "..." --epic EPIC-01 --version v1
+python3 .agent/scripts/meridian_delivery.py update-us US-0115 --from-file /tmp/us.md
+python3 .agent/scripts/meridian_delivery.py update-epic EPIC-15 --from-file /tmp/epic.md
+python3 .agent/scripts/meridian_delivery.py update-version v11 --from-file /tmp/version.md
+python3 .agent/scripts/meridian_delivery.py update-sprint v11-S1 --from-file /tmp/sprint.md
 python3 .agent/scripts/meridian_delivery.py implement-gate US-0115
 python3 .agent/scripts/meridian_delivery.py prepend-decision --date YYYY-MM-DD --time HH:MM ...
 ```

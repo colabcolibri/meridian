@@ -21,7 +21,7 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 ```bash
 python3 .agent/scripts/meridian_delivery.py list sprints --version v11
 python3 .agent/scripts/meridian_delivery.py create-sprint --version v11 --title "Sprint name" --stories US-0001,US-0002
-cat /tmp/sprint.md | python3 .agent/scripts/meridian_db_export.py . --entity sprints --id v11-S1 --write
+python3 .agent/scripts/meridian_delivery.py update-sprint v11-S1 --from-file /tmp/sprint.md
 ```
 
 Never Write `docs/sprints/`.
@@ -36,7 +36,7 @@ Never Write `docs/sprints/`.
 
 1. Read `INDEX.md` + `sprint-template.md`.
 2. `list sprints --version vX` → next id `vX-Sn`.
-3. `create-sprint` or draft markdown + `--write`.
+3. `create-sprint` or draft markdown + `update-sprint --from-file`.
 4. New US → `/create-us` after gates.
 
 ## Output

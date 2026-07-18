@@ -3,13 +3,13 @@
 > **Audience:** humans (managers) and agents executing Meridian workflows.  
 > **Agents:** use **this file** for Scrum concepts in Meridian. Do **not** load `scrum-guide-complete.md` unless the manager explicitly asks for the full Scrum textbook.
 
-Meridian is **Scrum-inspired governance for AI-assisted delivery**, not a co-located Scrum team tool. We keep Markdown + JSON, evidence-based status, and a minimal agent loop.
+Meridian is **Scrum-inspired governance for AI-assisted delivery**, not a co-located Scrum team tool. We keep phase docs in Markdown, delivery in SQLite, evidence-based status, and a minimal agent loop.
 
 ---
 
 ## Synthesis (visual)
 
-> **app-desktop monitor** renders the same Mermaid block below via `MermaidDiagram` (mermaid **11.12.0**, **Dagre** default — same as VS Code/Cursor Markdown preview). Source of truth for the app: `app-desktop/src/features/monitor/content/scrum-meridian-mermaid.ts` (`SCRUM_MERIDIAN_MERMAID`). Keep this fence identical; `pnpm test` in app-desktop verifies parity.
+> **Extension / kit:** this Mermaid block is the canonical Scrum ↔ Meridian map. Keep the fence in sync with any extension copy if you add one.
 
 ```mermaid
 flowchart TB
@@ -87,7 +87,7 @@ Velocity / burndown   →   não usados (capacidade = julgamento + Must + deps)
 | -------------- | ------------------- | --- |
 | Backlog refinement | `/create-us`, `/review-us`, `/refine-us` | Manager + `board-keeper` |
 | Sprint planning | `/plan-sprint` + sprint `stories:` order | Manager + `sprint-planner` |
-| Daily Scrum | `/daily-with-ai` or `/status` + Commands tab in app | Manager |
+| Daily Scrum | `/daily-with-ai` or `/status` + extension Help panels | Manager |
 | Sprint review (demo) | Manager reviews increment against Acceptance + Planned | Manager |
 | Sprint retrospective | `/complete-sprint` — fill `## Retrospective`, `status: complete` | Manager + `sprint-planner` |
 

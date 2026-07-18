@@ -64,6 +64,9 @@ python3 .agent/scripts/meridian_delivery.py create-epic --title "Capability name
 python3 .agent/scripts/meridian_delivery.py create-sprint --version v11 --title "Sprint name" --stories US-0001
 python3 .agent/scripts/meridian_delivery.py create-us --title "..." --epic EPIC-15 --version v10
 python3 .agent/scripts/meridian_delivery.py update-us US-0115 --from-file /tmp/us.md
+python3 .agent/scripts/meridian_delivery.py update-epic EPIC-15 --from-file /tmp/epic.md
+python3 .agent/scripts/meridian_delivery.py update-version v11 --from-file /tmp/version.md
+python3 .agent/scripts/meridian_delivery.py update-sprint v11-S1 --from-file /tmp/sprint.md
 
 # 4b. Structured form (extension + agents — preferred)
 python3 .agent/scripts/meridian_db_export.py . --entity us --id US-0115 --format form

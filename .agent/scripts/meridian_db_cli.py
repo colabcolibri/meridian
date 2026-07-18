@@ -23,6 +23,7 @@ from meridian_db import (  # noqa: E402
     prepend_decision,
     record_board_snapshot,
     set_summary,
+    upsert_delivery_from_markdown,
     upsert_epic,
     upsert_sprint,
     upsert_user_story,
@@ -483,33 +484,40 @@ def cmd_create_sprint(args) -> int:
     return 0
 
 
-def cmd_update_us(args) -> int:
-    root = _root(args)
+def _read_markdown_input(args) -> str:
     if args.from_file:
-        text = Path(args.from_file).read_text(encoding="utf-8")
-    else:
-        text = sys.stdin.read()
+        return Path(args.from_file).read_text(encoding="utf-8")
+    return sys.stdin.read()
+
+
+def _cmd_update_markdown(args, entity: str, entity_id: str) -> int:
+    text = _read_markdown_input(args)
     if not text.strip():
         print("ERROR: empty input", file=sys.stderr)
         return 1
-    fm, body, full = read_markdown_text(text)
-    story_id = fm.get("id") or args.story_id
-    if story_id != args.story_id:
-        print("ERROR: frontmatter id mismatch", file=sys.stderr)
-        return 1
-    depends = parse_depends_on(fm.get("depends_on"))
-    conn = connect(root)
     try:
-        upsert_user_story(conn, fm, full, extract_us_sections(body), depends)
-        conn.commit()
+        upsert_delivery_from_markdown(_root(args), entity, entity_id, text)
     except ValueError as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
         return 1
-    finally:
-        conn.close()
-    record_board_snapshot(root)
-    print(f"Updated {story_id}")
+    print(f"Updated {entity_id}")
     return 0
+
+
+def cmd_update_us(args) -> int:
+    return _cmd_update_markdown(args, "user_stories", args.story_id)
+
+
+def cmd_update_epic(args) -> int:
+    return _cmd_update_markdown(args, "epics", args.epic_id)
+
+
+def cmd_update_version(args) -> int:
+    return _cmd_update_markdown(args, "versions", args.version_id)
+
+
+def cmd_update_sprint(args) -> int:
+    return _cmd_update_markdown(args, "sprints", args.sprint_id)
 
 
 def cmd_set_ready(args) -> int:
@@ -738,6 +746,23 @@ def main() -> int:
     update.add_argument("story_id")
     update.add_argument("--from-file")
     update.set_defaults(func=cmd_update_us)
+
+    update_epic = sub.add_parser("update-epic", help="Upsert epic from markdown file or stdin")
+    update_epic.add_argument("epic_id")
+    update_epic.add_argument("--from-file")
+    update_epic.set_defaults(func=cmd_update_epic)
+
+    update_version = sub.add_parser(
+        "update-version", help="Upsert version from markdown file or stdin"
+    )
+    update_version.add_argument("version_id")
+    update_version.add_argument("--from-file")
+    update_version.set_defaults(func=cmd_update_version)
+
+    update_sprint = sub.add_parser("update-sprint", help="Upsert sprint from markdown file or stdin")
+    update_sprint.add_argument("sprint_id")
+    update_sprint.add_argument("--from-file")
+    update_sprint.set_defaults(func=cmd_update_sprint)
 
     ready = sub.add_parser("set-ready")
     ready.add_argument("story_id")

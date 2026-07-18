@@ -317,7 +317,7 @@ Delivery is done when:
 
 ## 13. Management tools
 
-Meridian works without any app. Optional tools (e.g. app-desktop monitor) read the same folder — they are not the source of truth.
+Meridian works without any app. Optional tools (e.g. the VS Code extension in `app-visual-studio/`) read the same folder — they are not the source of truth.
 
 ---
 

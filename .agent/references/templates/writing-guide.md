@@ -111,7 +111,7 @@ Refine **expands** optional Approach and makes Architecture refs and Planned tes
 ### Planned
 
 - [ ] **manual** — 1. Load project with v0 and v1 US. 2. Open Board, select v1 in filter. 3. Confirm v0 cards disappear from all columns. 4. Switch to Deliverables tab — same v1 still selected.
-- [ ] **build** — `cd app-desktop && pnpm build` exits 0.
+- [ ] **build** — `cd app-visual-studio && npm test` exits 0 when extension code changed.
 ```
 
 ---

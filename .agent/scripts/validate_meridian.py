@@ -283,6 +283,9 @@ def _kit_line_allowed(line: str) -> bool:
         "proibição",
         "purge",
         "migrate",
+        "meridian-v1-old",
+        "example:",
+        "examples:",
     )
     return any(token in lowered for token in allow)
 
@@ -295,13 +298,17 @@ def validate_kit_markdown_v11(kit_root: Path, errors: list[str], warnings: list[
         (r"Save `docs/(us|epics|versions|sprints)/", "Save docs/*/ as primary write path"),
         (r"Invoke `generate-board-json`", "generate-board-json invoke"),
         (r"6\. generate-board-json", "workflow step generate-board-json"),
+        (r"app-desktop/", "app-desktop (removed — use app-visual-studio)"),
+        (r"meridian_db_export\.py[^\n]*--write(?!-form)", "meridian_db_export --write (use meridian_delivery update-*)"),
     ]
     scan_roots = [
         kit_root / "skills",
         kit_root / "workflows",
         kit_root / "agents",
+        kit_root / "references",
         kit_root / "MERIDIAN.md",
         kit_root / "rules" / "MERIDIAN.md",
+        kit_root / "ARCHITECTURE.md",
     ]
     skill_dead = kit_root / "skills" / "generate-board-json" / "SKILL.md"
     if skill_dead.is_file():

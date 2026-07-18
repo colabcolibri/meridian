@@ -58,8 +58,8 @@ _(pending until close)_
 
 - `pnpm build` — passed
 - manual — filter persists across tabs
-- **suggested commit:** `feat(app-desktop): short summary (US-XXXX)`
-- **git commit:** `abc1234` — feat(app-desktop): short summary (US-XXXX) _(add after manager commits; omit until then)_
+- **suggested commit:** `feat(scope): short summary (US-XXXX)`
+- **git commit:** `abc1234` — feat(scope): short summary (US-XXXX) _(add after manager commits; omit until then)_
 ```
 
 ## Rules

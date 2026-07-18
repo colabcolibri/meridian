@@ -91,7 +91,7 @@ Before any action, classify:
 
 ### Source of truth
 
-- `docs/` is the source of truth of the **target project** (do not confuse with this repo's `app-desktop/docs/` unless context is explicit).
+- `docs/` is the source of truth of the **target project** (monorepos: resolve via `.meridian/projects.json` — see `projects-manifest-template.md`).
 - Delivery backlog lives in `.meridian/meridian.db` (epics, versions, sprints, US, decisions).
 - Board UI reads SQLite via `meridian_db_export --format planning`; `board_snapshots` on upsert.
 - Read `.agent/MERIDIAN.md` before changing project structure.

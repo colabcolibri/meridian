@@ -2,7 +2,7 @@
 
 > **Última revisão G7:** jul/2026  
 > **Regra:** `references/*.md` de **delivery** = forma de `body_markdown` no SQLite — persistir com `meridian_delivery.py` / `meridian_db_export.py --write-form`.  
-> **Phase docs** (`docs/discovery/`, `docs/decisions/`, `09_design_system`) continuam Markdown no disco — OK.
+> **Phase docs** (`docs/discovery/`, `docs/09_design_system.md`, `docs/11_decisions.md` index) stay Markdown on disk. **Delivery decisions** live in SQLite (`decisions` table) — never `docs/decisions/*.json`.
 
 **Legenda «G7»:** `✅` lido + alterado ou grep v1 limpo · `👁` só grep (sem edição) · `⏳` pendente · `—` fora do escopo delivery
 

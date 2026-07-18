@@ -36,7 +36,7 @@ Before anything, check the prompt for:
 
 ## Phase 0: Context check
 
-1. Confirm project root (not `app-desktop/docs/` unless explicitly the target).
+1. Confirm project root (package with `docs/` + `.meridian/` — not a nested `docs/` subfolder unless explicitly the target).
 2. Check: `.agent/MERIDIAN.md`, `docs/`, optional `.agent/` kit at project root.
 3. Run mental checklist from `@[skills/meridian-routing]` if domain is unclear.
 4. If `docs/` missing and user wants to start → `@[skills/init-project]`.
@@ -105,7 +105,7 @@ Read `.agent/MERIDIAN.md` for full dependency graph between `00`–`11`.
 | --------- | --- |
 | Mark docs `approved` without human | Governance |
 | Create valid US early | Protocol |
-| Edit old `docs/decisions/` entries | Audit trail |
+| Edit old decision rows in SQLite | Audit trail — prepend only |
 | Manual CSV board as source | Single truth in US |
 | `✅` without evidence | Audit |
 | `✅` without `## Record` | Audit — use `complete-user-story` |

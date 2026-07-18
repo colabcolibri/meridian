@@ -291,4 +291,4 @@ For commands and step-by-step instructions, open **[usage-guide.md](./usage-guid
 
 For **agents, slash command groups, and numbered steps**, open **[agents-help.md](./agents-help.md)**.
 
-**Kit maintainers:** when the protocol changes, open **[instruction-surfaces.md](./instruction-surfaces.md)** — map of every place that carries instructions (kit, app-desktop UI, extension, mirrors).
+**Kit maintainers:** when the protocol changes, open **[instruction-surfaces.md](./instruction-surfaces.md)** — map of every place that carries instructions (kit, extension, mirrors).
