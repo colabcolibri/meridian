@@ -60,3 +60,6 @@ test-results/
 **/package-lock.json
 yarn.lock
 **/yarn.lock
+
+# Meridian 2.0 — local SQLite per product (US-0106)
+**/.meridian/meridian.db
