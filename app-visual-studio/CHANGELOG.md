@@ -4,6 +4,15 @@ All notable changes to the **Meridian** VS Code extension (`meridian-vscode`).
 
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.1.19] - 2026-07-18
+
+### Changed
+
+- **Bundled kit:** sync with `6533d2a` — v11 SQLite-only delivery (US, epics, versions, sprints, decisions)
+- **Bundled kit:** `prepend-decision` / `list decisions` / `show-decisions` CLI; `update-epic`, `update-version`, `update-sprint`
+- **Bundled kit:** removed `/sync-board`, `generate-board-json`, and markdown delivery write paths from operational skills/workflows
+- **Bundled kit:** `validate_meridian.py --sqlite-only` and `--strict-kit-md` for drift detection
+
 ## [1.1.18] - 2026-07-18
 
 ### Changed
