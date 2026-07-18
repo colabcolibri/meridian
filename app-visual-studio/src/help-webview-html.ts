@@ -45,7 +45,7 @@ const HOW_TO_USE_HTML = `
       <li>Open your project folder.</li>
       <li><strong>Meridian: Install Harness</strong> — copies <code>.agent/</code> (agents, skills, workflows).</li>
       <li>In <strong>chat</strong>, run <code>/init-meridian</code> if <code>docs/</code> does not exist yet.</li>
-      <li><strong>Meridian: Open Board</strong> to see the kanban from <code>docs/us/</code>.</li>
+      <li><strong>Meridian: Open Board</strong> to see the kanban from <code>.meridian/meridian.db</code> (bootstrap with <code>bootstrap_meridian_db.py</code> if missing).</li>
     </ol>
 
     <h2>2. Extension vs chat — who does what</h2>
@@ -61,9 +61,9 @@ const HOW_TO_USE_HTML = `
             <td>Meridian: Open Board</td>
           </tr>
           <tr>
-            <td>Validate structure or sync board.json</td>
+            <td>Validate project structure</td>
             <td><strong>Extension</strong> (governance)</td>
-            <td>Meridian: Validate Project · Sync Board</td>
+            <td>Meridian: Validate Project</td>
           </tr>
           <tr>
             <td>Create or change docs, run a procedure</td>
@@ -83,7 +83,7 @@ const HOW_TO_USE_HTML = `
     <pre><code>YOU type          →  /create-us          (workflow — .agent/workflows/)
 workflow routes   →  @board-keeper       (agent — .agent/agents/)
 agent runs        →  create-user-story   (skill — .agent/skills/)
-output lands in   →  docs/us/US-XXXX.md  (source of truth)</code></pre>
+output lands in   →  .meridian/meridian.db   (delivery source of truth)</code></pre>
     <ul class="rules">
       <li><strong>You invoke workflows</strong> — slash commands in Cursor, Claude Code, or Codex skills (<code>$workflow-create-us</code>).</li>
       <li><strong>You rarely @mention agents</strong> — the workflow picks the right persona. Override with <code>@process-manager</code> when needed.</li>

@@ -13,7 +13,7 @@ Meridian keeps specs, decisions, and task status in **files** (`docs/`), not in 
 
 | Surface | You do | Examples |
 | ------- | ------ | -------- |
-| **Extension** | Click — see and validate | Open Board · Validate Project · Sync Board |
+| **Extension** | Click — see and validate | Open Board · Validate Project · Show Status |
 | **Chat** | Type slash **workflows** | `/status` · `/create-us` · `/complete-us US-0103` |
 
 **You invoke workflows, not agents.** Workflows route the right agent automatically. Override with `@process-manager` when needed.
@@ -35,7 +35,7 @@ Meridian is a **thin harness** on top of Cursor or Claude Code:
 
 - **`docs/`** — versions, sprints, user stories, architecture (what to build and what counts as done)
 - **`.agent/`** — agents, skills, workflows, validators (how the agent should work)
-- **This extension** — installs the kit into your project and shows board / versions / sprints / epics from `docs/`
+- **This extension** — installs the kit and shows board / versions / sprints / epics from `.meridian/meridian.db`
 
 Chat does not persist. **Files do.**
 
@@ -49,7 +49,8 @@ Chat does not persist. **Files do.**
 | **Kit** | `{project}/.agent/` after **Install Harness** | Slash commands (`/init-meridian`, `/create-us`, …), agents, skills |
 | **Multi-product** | `.meridian/projects.json` (optional) | Several `docs/` trees — one **active** at a time |
 | **IDE adapters** | `.cursor/`, `.claude/`, `.agents/skills/`, `.codex/` after **Install Harness** | Cursor, Claude Code, Codex |
-| **Docs** | `{project}/docs/` after `/init-meridian` | Living spec — board, US, versions |
+| **Docs** | `{project}/docs/` after `/init-meridian` | Phase docs (scope, architecture, …) |
+| **Delivery** | `{project}/.meridian/meridian.db` | Epics, versions, sprints, user stories |
 
 The extension is **global** (one install per machine). The kit is **per project**.
 
@@ -117,7 +118,6 @@ In **chat**:
 | Slash commands | **Meridian: Open Agents Help** |
 | Kanban | **Meridian: Open Board** |
 | Planning | **Open Versions**, **Open Sprints**, **Open Epics** |
-| Regenerate board.json | **Meridian: Sync Board** |
 | Validate project | **Meridian: Validate Project** (needs `python3`) |
 | Multi-product | **Meridian: Select Active Project** |
 

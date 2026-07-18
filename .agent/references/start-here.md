@@ -64,7 +64,7 @@ Artifacts created in this phase:
 The AI implements each user story, guided by the files from Phase 3. You review the code, then close the story with evidence.
 
 ```
-/create-us  →  /refine-us  →  /implement-us  →  /complete-us  →  /sync-board
+/create-us  →  /refine-us  →  /implement-us  →  /complete-us  →  commit (human)
 ```
 
 **No code without `ready: true`.** No `✅` without evidence in the Record.
@@ -87,14 +87,20 @@ docs/
   08_environments.md       Phase 2 — dev, staging, production
   11_decisions.md          Always on — decision log index
   decisions/               One JSON file per day of decisions
-  epics/EPIC-XX.md         Phase 3 — product capabilities
-  versions/vX.md           Phase 3 — releases
-  sprints/vX-SY.md         Phase 3 — time-boxed delivery units
-  us/US-XXXX.md            Phase 3+4 — executable tasks
-  kanban/board.json        Generated — never edit by hand
   inventory/as-is.md       Mode B only — transitional; archive after promotion
-  ../.meridian/projects.json  Optional — multi-product repos (several docs/ trees)
+  ../.meridian/
+    meridian.db            Delivery store (gitignored) — epics, versions, sprints, US
+    projects.json          Optional — multi-product repos (several docs/ trees)
 ```
+
+**Delivery (v11):** epics, versions, sprints, and user stories live in **`.meridian/meridian.db`**, not as `docs/epics/`, `docs/us/`, or `docs/kanban/board.json`. Agents write via `meridian_db_cli.py` or `meridian_db_export.py --write-form` — see `sqlite-delivery-operations.md`.
+
+```txt
+docs/                      Phase docs only (00–11, decisions, architecture, inventory)
+.meridian/meridian.db      Epics, versions, sprints, user stories (canonical delivery)
+```
+
+Legacy v1 (branch `meridian-v1-old`): file-per-artifact Markdown — use `migrate_md_to_sqlite.py` once when adopting v2 on `main`.
 
 ### Several `docs/` folders (monorepo)
 
@@ -103,7 +109,7 @@ One kit (`.agent/`) at the repo root can serve **multiple products**. Each produ
 | Layer | File | Role |
 | ----- | ---- | ---- |
 | A — manifest | `.meridian/projects.json` | Declares ids, names, `default`, `exclude` |
-| B — discovery | automatic | Finds every `docs/` with Meridian fingerprint (`00_scope` or `us/`) |
+| B — discovery | automatic | Finds every `docs/` with Meridian fingerprint (`00_scope` or `.meridian/meridian.db`) |
 | Active project | picker / setting / **saved** | Board, validate, and agent work target one `docs/` at a time; choice persists across tab reopens |
 | **Project context strip** | Board + Deliverables toolbar | First row: **Project** — name, `docs/` path, US count; dropdown when N>1 (v2.04) |
 
@@ -286,4 +292,4 @@ For commands and step-by-step instructions, open **[usage-guide.md](./usage-guid
 
 For **agents, slash command groups, and numbered steps**, open **[agents-help.md](./agents-help.md)**.
 
-**Kit maintainers:** when the protocol changes, open **[instruction-surfaces.md](./instruction-surfaces.md)** — map of every place that carries instructions (kit, app-desktop UI, extension, mirrors).
+**Kit maintainers:** when the protocol changes, open **[instruction-surfaces.md](./instruction-surfaces.md)** — map of every place that carries instructions (kit, extension, mirrors).

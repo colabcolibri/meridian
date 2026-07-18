@@ -57,4 +57,4 @@ Meridian keeps the contract in Git and gives the process manager visibility insi
 ## Identified risks
 
 - Kit and extension drift if adapters are not synced after kit upgrades.
-- Dual storage during migration (legacy `docs/us/*.md` + SQLite) until cutover is complete.
+- v11: delivery cutover to SQLite complete; legacy `docs/us/*.md` removed from dogfood after migration.

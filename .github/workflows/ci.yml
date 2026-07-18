@@ -18,6 +18,12 @@ jobs:
       - name: Schema SQLite smoke test
         run: python3 .agent/scripts/test_meridian_db_schema.py
 
+      - name: Story dependencies smoke test
+        run: python3 .agent/scripts/test_story_dependencies.py
+
+      - name: Implement gate smoke test
+        run: python3 .agent/scripts/test_implement_gate.py
+
   extension:
     runs-on: ubuntu-latest
     defaults:

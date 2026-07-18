@@ -12,8 +12,7 @@ from typing import Any
 
 US_ID_RE = re.compile(r"^US-\d{4}$")
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
-MIGRATIONS_DIR = REPO_ROOT / ".agent" / "migrations"
+from meridian_paths import MIGRATIONS_DIR, REPO_ROOT
 DB_FILENAME = "meridian.db"
 MERIDIAN_DIR = ".meridian"
 
@@ -871,6 +870,39 @@ def next_user_story_id(package_root: str | Path) -> str:
             return "US-0001"
         num = int(str(row["id"]).split("-")[1])
         return f"US-{num + 1:04d}"
+    finally:
+        conn.close()
+
+
+def next_epic_id(package_root: str | Path) -> str:
+    conn = connect(package_root)
+    try:
+        rows = conn.execute("SELECT id FROM epics").fetchall()
+        max_num = 0
+        for row in rows:
+            match = re.match(r"^EPIC-(\d+)$", str(row["id"]))
+            if match:
+                max_num = max(max_num, int(match.group(1)))
+        return f"EPIC-{max_num + 1:02d}"
+    finally:
+        conn.close()
+
+
+def next_sprint_id(package_root: str | Path, version_id: str) -> str:
+    conn = connect(package_root)
+    try:
+        rows = conn.execute(
+            "SELECT id FROM sprints WHERE version_id = ?", (version_id,)
+        ).fetchall()
+        max_num = 0
+        prefix = f"{version_id}-S"
+        for row in rows:
+            story_id = str(row["id"])
+            if story_id.startswith(prefix):
+                suffix = story_id[len(prefix) :]
+                if suffix.isdigit():
+                    max_num = max(max_num, int(suffix))
+        return f"{prefix}{max_num + 1}"
     finally:
         conn.close()
 

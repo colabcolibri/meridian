@@ -18,7 +18,7 @@ allowed-tools: Read, Glob, Grep, Bash
 | `references/review-checklist.md` | **Mandatory** — audit rubric and output format |
 | `references/us-template.md` | Expected full US shape |
 | `.agent/skills/refine-user-story/references/refine-checklist.md` | Same gates `/refine-us` uses — cite failures here |
-| Target `docs/us/US-XXXX.md` | File under review |
+| Target US | `meridian_db_cli.py show US-XXXX --full` |
 
 ## When to trigger
 

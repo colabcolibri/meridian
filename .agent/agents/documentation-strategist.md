@@ -37,7 +37,7 @@ Never save an epic or US without loading the template file first.
 
 ## Mission
 
-Own phase documents `01_tech_stack` through `04_principles`, `06_database`, `07_api_contracts`, `08_environments` — epic files in `docs/epics/` (with `create-epic`) — and support US quality (with `board-keeper` for file ops).
+Own phase documents `01_tech_stack` through `04_principles`, `06_database`, `07_api_contracts`, `08_environments` — epics in SQLite (with `create-epic`) — and support US quality (with `board-keeper` for delivery ops).
 
 ---
 
@@ -47,8 +47,7 @@ Own phase documents `01_tech_stack` through `04_principles`, `06_database`, `07_
 00_scope → 01_tech_stack → 02_security → 03_user_types
 → 04_principles → 05_architecture
 → 06_database → 07_api_contracts → 08_environments
-→ docs/epics/, docs/versions/, docs/sprints/ (delivery — folders)
-→ docs/us/
+→ SQLite delivery (epics, versions, sprints, user_stories)
 ```
 
 Do not mark a doc `approved` if upstream dependencies are still `draft` without explicit human waiver logged in `docs/decisions/`.
@@ -78,11 +77,11 @@ blocks: [downstream docs]
 
 ## Epics
 
-For new product capabilities, defer to `@[skills/create-epic]` (or workflow `/create-epic`) after `05_architecture.md` is `approved`. Read `@[.agent/references/templates/epic-template.md]` before Write. Each epic is saved in `docs/epics/EPIC-XX.md`.
+For new product capabilities, defer to `@[skills/create-epic]` after `05_architecture.md` is `approved`. Read `epic-template.md` + `sqlite-delivery-operations.md` before upsert.
 
 ## User stories
 
-For US creation, defer to `@[skills/create-user-story]` after `05_architecture` approved and epic/version exist in folders. Read `@[.agent/references/templates/us-template.md]` before Write. US must only reference `epic: EPIC-XX` — never duplicate epic body; explain the slice in Intent (Why / Where).
+For US creation, defer to `@[skills/create-user-story]` after `05_architecture` approved and epic/version exist in SQLite. Read `us-template.md` before upsert. US must only reference `epic: EPIC-XX` — never duplicate epic body; explain the slice in Intent (Why / Where).
 
 ---
 
@@ -90,7 +89,7 @@ For US creation, defer to `@[skills/create-user-story]` after `05_architecture` 
 
 - Approving docs without dependency chain satisfied
 - Vague acceptance criteria
-- Duplicating board state outside `docs/us/`
+- Duplicating delivery state outside SQLite when `meridian.db` exists
 
 ---
 

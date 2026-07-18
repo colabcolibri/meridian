@@ -8,20 +8,28 @@ import sys
 from pathlib import Path
 
 _SCRIPT_DIR = Path(__file__).resolve().parent
-sys.path.insert(0, str(_SCRIPT_DIR))
+sys.path.insert(0, str(_SCRIPT_DIR / "lib"))
 
 from meridian_db import (  # noqa: E402
     bootstrap,
     connect,
     db_exists,
     delivery_counts,
+    next_epic_id,
+    next_sprint_id,
     next_user_story_id,
     record_board_snapshot,
     set_summary,
+    upsert_epic,
+    upsert_sprint,
     upsert_user_story,
+    upsert_version,
 )
 from meridian_markdown_parse import (  # noqa: E402
+    extract_epic_sections,
+    extract_sprint_sections,
     extract_us_sections,
+    extract_version_sections,
     parse_depends_on,
     read_markdown_file,
     read_markdown_text,
@@ -100,6 +108,75 @@ _(pending until close)_
 ### Notes
 
 - Created by meridian_db_cli create-us.
+"""
+
+EPIC_TEMPLATE_BODY = """# {id} — {title}
+
+## Capability
+
+{capability}
+
+## Expected outcome
+
+{expected_outcome}
+
+## Out of scope for this epic
+
+{out_of_scope}
+
+## Notes
+
+{notes}
+"""
+
+VERSION_TEMPLATE_BODY = """# {id} — {title}
+
+## Objective
+
+{objective}
+
+## Done criteria
+
+{done_criteria}
+
+## Included in this version
+
+{included}
+
+## Explicitly out
+
+{explicitly_out}
+
+## Go-live checklist
+
+### Product
+
+- [ ] TBD on refine
+
+### Ops
+
+- [ ] TBD on refine
+"""
+
+SPRINT_TEMPLATE_BODY = """# {id} — {title}
+
+## Goal
+
+{goal_body}
+
+## Scope
+
+| US | Status | MoSCoW | Depends on | Epic | Description |
+| -- | ------ | ------ | ---------- | ---- | ----------- |
+| _(add rows on refine)_ | | | | | |
+
+## Out of scope for this sprint
+
+{out_of_scope}
+
+## Retrospective
+
+_(fill at sprint close)_
 """
 
 ENTITY_TABLE = {
@@ -275,6 +352,120 @@ def cmd_create_us(args) -> int:
     return 0
 
 
+def cmd_create_epic(args) -> int:
+    root = _root(args)
+    bootstrap(root)
+    epic_id = args.id or next_epic_id(root)
+    title = args.title
+    capability = args.capability or (
+        f"Today users lack a clear capability for “{title}”. "
+        f"This epic adds that behavior in the product."
+    )
+    expected = args.expected_outcome or (
+        f"The manager recognizes {epic_id} as done when Must user stories are ✅ "
+        f"and the capability is observable without reading every US file."
+    )
+    out_of_scope = args.out_of_scope or "- TBD on refine."
+    notes = args.notes or "- Created by meridian_db_cli create-epic."
+    body = EPIC_TEMPLATE_BODY.format(
+        id=epic_id,
+        title=title,
+        capability=capability,
+        expected_outcome=expected,
+        out_of_scope=out_of_scope,
+        notes=notes,
+    )
+    fm = {
+        "id": epic_id,
+        "title": title,
+        "status": args.status,
+        "versions": args.versions,
+        "profiles": args.profiles,
+        "outcome": args.outcome or title,
+    }
+    conn = connect(root)
+    try:
+        upsert_epic(conn, fm, body, extract_epic_sections(body))
+        conn.commit()
+    finally:
+        conn.close()
+    record_board_snapshot(root)
+    print(epic_id)
+    return 0
+
+
+def cmd_create_version(args) -> int:
+    root = _root(args)
+    bootstrap(root)
+    version_id = args.id
+    title = args.title
+    objective = args.objective or (
+        f"This release delivers “{title}” — theme and user-visible changes for {version_id}."
+    )
+    done = args.done_criteria or (
+        f"{version_id} is complete when documented done criteria are met and "
+        f"Must stories for this version are ✅."
+    )
+    body = VERSION_TEMPLATE_BODY.format(
+        id=version_id,
+        title=title,
+        objective=objective,
+        done_criteria=done,
+        included=args.included or "- _(add epics/US on refine)_",
+        explicitly_out=args.explicitly_out or "- TBD on refine.",
+    )
+    fm = {
+        "id": version_id,
+        "title": title,
+        "status": args.status,
+        "outcome": args.outcome or title,
+    }
+    conn = connect(root)
+    try:
+        upsert_version(conn, fm, body, extract_version_sections(body))
+        conn.commit()
+    finally:
+        conn.close()
+    record_board_snapshot(root)
+    print(version_id)
+    return 0
+
+
+def cmd_create_sprint(args) -> int:
+    root = _root(args)
+    bootstrap(root)
+    sprint_id = args.id or next_sprint_id(root, args.version)
+    title = args.title
+    goal_body = args.goal or (
+        f"This sprint proves progress on “{title}” within {args.version}."
+    )
+    body = SPRINT_TEMPLATE_BODY.format(
+        id=sprint_id,
+        title=title,
+        goal_body=goal_body,
+        out_of_scope=args.out_of_scope or "- TBD on refine.",
+    )
+    stories = [s.strip() for s in args.stories.split(",") if s.strip()] if args.stories else []
+    fm = {
+        "id": sprint_id,
+        "version": args.version,
+        "title": title,
+        "status": args.status,
+        "goal": args.goal or title,
+        "done_when": args.done_when,
+        "stories": str(stories),
+    }
+    conn = connect(root)
+    try:
+        upsert_sprint(conn, fm, body, extract_sprint_sections(body), stories)
+        conn.commit()
+    finally:
+        conn.close()
+    record_board_snapshot(root)
+    print(sprint_id)
+    return 0
+
+
 def cmd_update_us(args) -> int:
     root = _root(args)
     if args.from_file:
@@ -403,6 +594,41 @@ def main() -> int:
     create.add_argument("--done-when", default="TBD")
     create.set_defaults(func=cmd_create_us)
 
+    epic = sub.add_parser("create-epic")
+    epic.add_argument("--title", required=True)
+    epic.add_argument("--id", help="EPIC-XX; default next id")
+    epic.add_argument("--versions", default="[v1]")
+    epic.add_argument("--profiles", default="[Process Manager]")
+    epic.add_argument("--status", default="active")
+    epic.add_argument("--outcome")
+    epic.add_argument("--capability")
+    epic.add_argument("--expected-outcome")
+    epic.add_argument("--out-of-scope")
+    epic.add_argument("--notes")
+    epic.set_defaults(func=cmd_create_epic)
+
+    version = sub.add_parser("create-version")
+    version.add_argument("--id", required=True, help="e.g. v11")
+    version.add_argument("--title", required=True)
+    version.add_argument("--status", default="planned")
+    version.add_argument("--outcome")
+    version.add_argument("--objective")
+    version.add_argument("--done-criteria")
+    version.add_argument("--included")
+    version.add_argument("--explicitly-out")
+    version.set_defaults(func=cmd_create_version)
+
+    sprint = sub.add_parser("create-sprint")
+    sprint.add_argument("--version", required=True)
+    sprint.add_argument("--title", required=True)
+    sprint.add_argument("--id", help="vX-Sn; default next for version")
+    sprint.add_argument("--status", default="planned")
+    sprint.add_argument("--goal")
+    sprint.add_argument("--done-when", default="TBD")
+    sprint.add_argument("--stories", help="comma-separated US ids")
+    sprint.add_argument("--out-of-scope")
+    sprint.set_defaults(func=cmd_create_sprint)
+
     update = sub.add_parser("update-us", help="Upsert US from markdown file or stdin")
     update.add_argument("story_id")
     update.add_argument("--from-file")
@@ -428,7 +654,8 @@ def main() -> int:
     gate.set_defaults(func=cmd_implement_gate)
 
     args = parser.parse_args()
-    if args.command != "create-us" and not db_exists(args.package_root):
+    create_commands = {"create-us", "create-epic", "create-version", "create-sprint"}
+    if args.command not in create_commands and not db_exists(args.package_root):
         print("ERROR: meridian.db not found — run bootstrap_meridian_db.py .", file=sys.stderr)
         return 1
     return args.func(args)

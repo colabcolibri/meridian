@@ -22,7 +22,7 @@
 
 | Problema | Status |
 | -------- | ------ |
-| Skills citam `docs/us/*.md` como write path | **Onda A — em andamento** |
+| Skills citam `docs/us/*.md` como write path | **Onda A — ✅ concluída** |
 | `docs/templates/` espelho frágil | **Onda C — ✅ concluída** |
 | Gate só em checklist | **Onda B — ✅ concluída** |
 | `board.json` + `/sync-board` + `generate_board.py` | **Onda F2 — ✅ concluída (removidos)** |
@@ -88,7 +88,7 @@ Scripts                     .agent/scripts/              CLI, CI, extension
 
 ## 4. Ondas de execução
 
-### Onda A — Verdade única SQLite (skills + workflows) — **P0 — em andamento**
+### Onda A — Verdade única SQLite (skills + workflows) — **✅ concluída (jul/2026)**
 
 Atualizar todo texto que cite `Write docs/us/`, `generate-board-json`, `/sync-board`.
 
@@ -108,13 +108,13 @@ Atualizar todo texto que cite `Write docs/us/`, `generate-board-json`, `/sync-bo
 
 ### Onda C — Remover `docs/templates/` — **✅ concluída**
 
-### Onda D — Reorganizar scripts — **P2 (pendente)**
+### Onda D — Reorganizar scripts — **✅ concluída (jul/2026)**
 
-Subpastas `lib/`, `migrate/`, `test/`, `dev/` com shims na raiz.
+Subpastas `lib/`, `migrate/`, `test/`, `dev/` com shims na raiz para CI/extensão.
 
-### Onda E — Epic / version / sprint no CLI — **P2**
+### Onda E — Epic / version / sprint no CLI — **✅ concluída (jul/2026)**
 
-`create-epic`, `create-version`, `create-sprint` dedicados.
+`meridian_db_cli.py create-epic`, `create-version`, `create-sprint`.
 
 ### Onda F — Board só SQLite — **✅ F2 concluída**
 
@@ -167,9 +167,9 @@ Subpastas `lib/`, `migrate/`, `test/`, `dev/` com shims na raiz.
 1. Onda B — implement-gate CLI          ✅
 2. Onda C — remover docs/templates      ✅
 3. Onda F2 — remover board.json/sync    ✅
-4. Onda A — skills/workflows SQLite     ← AGORA
-5. Onda D — reorganizar scripts
-6. Onda E — CLI epic/version/sprint
+4. Onda A — skills/workflows SQLite     ✅
+5. Onda D — reorganizar scripts            ✅
+6. Onda E — CLI epic/version/sprint        ✅
 ```
 
 ---
@@ -179,10 +179,10 @@ Subpastas `lib/`, `migrate/`, `test/`, `dev/` com shims na raiz.
 - [x] `/implement-us` documenta `implement-gate` CLI
 - [x] `docs/templates/` ausente; init não recria
 - [x] `board.json` e `/sync-board` removidos; extensão sem comando sync
-- [ ] Nenhuma skill de delivery cita `Write docs/us/` como caminho primário
-- [ ] Nenhuma referência ativa a `generate-board-json` ou `generate_board.py`
-- [ ] `agents-help.md` lista discover + fluxo v11
-- [ ] `validate_meridian.py . --sqlite-only` passa
+- [x] Nenhuma skill de delivery cita `Write docs/us/` como caminho primário
+- [x] Nenhuma referência ativa a `generate-board-json` ou `generate_board.py`
+- [x] `agents-help.md` e guias (`start-here`, `usage-guide`) listam fluxo v11
+- [x] `validate_meridian.py . --sqlite-only` passa
 - [x] Testes: schema, story_dependencies, implement_gate
 - [ ] Extensão: board + form + save em `meridian-teste`
 - [x] `sync_cursor_kit.sh` sem app-desktop templates
@@ -199,9 +199,9 @@ Subpastas `lib/`, `migrate/`, `test/`, `dev/` com shims na raiz.
 
 ## 9. Próximo passo imediato
 
-1. **Onda A** — atualizar skills/workflows/rules para SQLite-only (sem board.json, sem sync-board).
-2. Rodar `validate_meridian.py . --sqlite-only` + `pnpm test` em `app-visual-studio`.
-3. Validar extensão contra `meridian-teste`.
+1. Validar extensão contra `meridian-teste` (board + form + save).
+2. `/discover` em `agents-help` (pendente onda A residual).
+3. Pergunta aberta: CLI único `meridian` com subcomandos vs scripts na raiz.
 
 ---
 

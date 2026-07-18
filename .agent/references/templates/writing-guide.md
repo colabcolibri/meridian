@@ -1,6 +1,8 @@
 # Writing guide — delivery artifacts for AI
 
 > Read this **before** writing epics, versions, or user stories. Templates define structure; this guide defines **quality of prose**. Acceptance stays checklist; everything else should explain enough that a reader (human or AI) understands **what**, **where in the product**, and **how** without opening five other files.
+>
+> **v11:** delivery artifacts are stored in `.meridian/meridian.db`. Golden examples use SQLite terminology — apply the same prose rules to `meridian_db_export.py --write-form` upserts.
 
 ---
 
@@ -23,13 +25,13 @@
 ```md
 ## Capability
 
-Today the Process Manager opens the repo and cannot see delivery state without reading many Markdown files and mentally grouping them by release. This epic adds a monitor in app-desktop: Deliverables and Board read from `docs/epics/` and `docs/us/`, with status derived from frontmatter — board.json is output, never the source of truth.
+Today the Process Manager opens the repo and cannot see delivery state without running CLI exports or opening the VS Code board. This epic adds a monitor in the extension: Deliverables and Board read from `.meridian/meridian.db` via `meridian_db_export.py --format planning`, with status derived from `user_stories` rows — never from hand-edited JSON on disk.
 
 The manager filters by version and epic, sees ❌/🔶/✅ in one place, and uses that view in planning sessions. No manual column maintenance, no orphan IDs.
 
 ## Expected outcome
 
-In a single planning session the manager answers “what is still open in v1?” from the app alone. The epic is `complete` when Must US for the targeted versions are ✅ and nobody edits kanban JSON by hand to reflect reality.
+In a single planning session the manager answers “what is still open in v1?” from the extension alone. The epic is `complete` when Must US for the targeted versions are ✅ and nobody edits kanban data outside SQLite upserts.
 
 ## Out of scope for this epic
 
@@ -58,11 +60,11 @@ In a single planning session the manager answers “what is still open in v1?”
 
 ### Why
 
-v1 and v0 US mix on the same board today, which makes sprint review noisy. This story adds version filtering only — it does not change how stories are loaded or how board.json is generated. When done, the manager selects v1 and the columns show only v1 cards.
+v1 and v0 US mix on the same board today, which makes sprint review noisy. This story adds version filtering only — it does not change how stories are loaded from SQLite or how the board export is built. When done, the manager selects v1 and the columns show only v1 cards.
 
 ### Where
 
-Part of v1 / EPIC-04. Depends on US-0022 (kanban reads from `docs/us/`). Unblocks US-0025 (deliverables using the same version focus). No VS Code or write path — read-only monitor change.
+Part of v1 / EPIC-04. Depends on US-0022 (kanban reads `user_stories` from `meridian.db`). Unblocks US-0025 (deliverables using the same version focus). No write path — read-only monitor change.
 
 ## Plan
 
@@ -121,11 +123,11 @@ Refine **expands** optional Approach and makes Architecture refs and Planned tes
 ```md
 ## Objective
 
-v2 adds real writes from the editor: VS Code extension scaffold, sync-board command, and validate on save. The manager still uses app-desktop for visibility; the Future VSCode User can run Meridian workflows without leaving the IDE.
+v11 adds real writes from the editor: VS Code extension scaffold, SQLite upserts via `meridian_db_export.py --write-form`, and validate on save. The manager uses the extension board for visibility; the Future VSCode User can run Meridian workflows without leaving the IDE.
 
 ## Done criteria
 
-v2 is `complete` when the extension loads in Extension Development Host, at least one command writes to `docs/us/` correctly, and board.json regenerates from disk without manual merge.
+v11 is `complete` when the extension loads in Extension Development Host, at least one workflow upserts a user story into `meridian.db` correctly, and the board refreshes from SQLite without manual merge.
 ```
 
 ---

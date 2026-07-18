@@ -361,7 +361,7 @@ export const PLANNING_DETAIL_SCRIPT = `
           row.innerHTML =
             '<span class="story-status">?</span>' +
             '<span class="story-id">' + esc(id) + "</span>" +
-            '<span class="story-title">Not found in docs/us/</span>';
+            '<span class="story-title">Not found in database</span>';
           row.disabled = true;
         }
         container.appendChild(row);

@@ -8,7 +8,7 @@
 | ---- | ---- |
 | Database | `{packageRoot}/.meridian/meridian.db` |
 | Migrations | `.agent/migrations/YYYYMMDDHHMMSS_*.sql` |
-| Access layer | `.agent/scripts/meridian_db.py` |
+| Access layer | `.agent/scripts/lib/meridian_db.py` |
 | CLI | `.agent/scripts/meridian_db_cli.py` |
 
 Dogfood `packageRoot` = repository root (`.`).
@@ -56,6 +56,9 @@ python3 .agent/scripts/meridian_db_cli.py show US-0115
 python3 .agent/scripts/meridian_db_cli.py show US-0115 --full
 
 # 4. Write (never create docs/us/*.md when DB exists)
+python3 .agent/scripts/meridian_db_cli.py create-version --id v11 --title "Release name"
+python3 .agent/scripts/meridian_db_cli.py create-epic --title "Capability name" --versions "[v11]"
+python3 .agent/scripts/meridian_db_cli.py create-sprint --version v11 --title "Sprint name" --stories US-0001
 python3 .agent/scripts/meridian_db_cli.py create-us --title "..." --epic EPIC-15 --version v10
 python3 .agent/scripts/meridian_db_cli.py update-us US-0115 --from-file /tmp/us.md
 
@@ -148,7 +151,7 @@ Parse → upsert via CLI; do not hand-edit SQL for narrative bodies unless emerg
 | ---- | ---------------- |
 | Export fields | `meridian_db_export.py --entity {us\|epics\|versions\|sprints} --id ID --format form` |
 | Import + validate | `meridian_db_export.py … --write-form` (JSON stdin) |
-| Build/validate | `.agent/scripts/meridian_delivery_form.py` |
+| Build/validate | `.agent/scripts/lib/meridian_delivery_form.py` (shim at `meridian_delivery_form.py`) |
 
 JSON shape: `{ "frontmatter": {…}, "preamble": "…", "sections": { column_key: "markdown body" }, "catalog": { stories, epics, versions } }` (catalog on US export only).
 

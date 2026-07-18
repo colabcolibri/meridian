@@ -30,7 +30,7 @@ Brief description.
 ## How to work
 
 1. Approve docs in dependency order: foundation → principles → architecture → detail.
-2. Build backlog in `docs/epics/`, `docs/versions/` and `docs/sprints/`.
+2. Build backlog in SQLite (`meridian_db_cli.py` / `--write-form` for epics, versions, sprints).
 3. Create US only after `05_architecture` approved and epic/version exist (SQLite or legacy folders).
 4. Kit templates: `.agent/references/templates/INDEX.md` — do not create `docs/templates/`.
 5. Validate delivery: `python3 .agent/scripts/validate_meridian.py . --sqlite-only`

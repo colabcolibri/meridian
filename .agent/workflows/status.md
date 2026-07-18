@@ -28,11 +28,10 @@ PROCEDURE:
 1. Read .agent/MERIDIAN.md
 2. Resolve kit root and Meridian projects:
    - Read .meridian/projects.json if present
-   - Discovery: every folder named exactly docs with 00_scope or us/
-   - Report active project (manager choice, default, or single match)
+   - Discovery: every folder named exactly docs with 00_scope or .meridian/meridian.db
 3. Read docs/README.md for the **active** docs/ tree
 4. For each phase doc 00–08 and 11: record status from frontmatter
-5. Count US by status from active docs/us/ or board.json
+5. Count US by status: `meridian_db_cli.py counts .` or `list user_stories`
 6. List blockers (missing deps, invalid US, immature docs)
 7. Recommend next human decision
 ```
@@ -51,8 +50,6 @@ Docs:
   ...
 US summary: ❌ n | 🔶 n | ✅ n
 Ready for implement (ready: true): n | not ready: n
-Board in sync: yes | no
-Ready:
 Blocked:
 Next action (human):
 Next action (agent):

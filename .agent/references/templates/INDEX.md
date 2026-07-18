@@ -13,9 +13,9 @@ Templates are mirrored here from skills (`references/`) so every agent uses the 
 | Phase docs `00`–`11` | `doc-templates.md` | `documentation-strategist` | `init-project` | `/init-meridian` |
 | As-is inventory `docs/inventory/as-is.md` | `as-is-inventory-template.md` | `documentation-strategist` | `init-project` (Mode B) | `/init-meridian` |
 | Projects manifest `.meridian/projects.json` | `projects-manifest-template.md` | `process-manager` | `init-project` | `/init-meridian`, `/status` |
-| Epic `docs/epics/EPIC-XX.md` | `epic-template.md` + **`writing-guide.md`** | `documentation-strategist` | `create-epic` | `/create-epic` |
-| Version `docs/versions/vX.md` | `version-template.md` + **`writing-guide.md`** | `sprint-planner` | `create-version` | `/create-version` |
-| Sprint `docs/sprints/vX-SY.md` | `sprint-template.md` | `sprint-planner` | `create-sprint` | `/plan-sprint` |
+| Epic (SQLite `epics`) | `epic-template.md` + **`writing-guide.md`** | `documentation-strategist` | `create-epic` | `/create-epic` |
+| Version (SQLite `versions`) | `version-template.md` + **`writing-guide.md`** | `sprint-planner` | `create-version` | `/create-version` |
+| Sprint (SQLite `sprints`) | `sprint-template.md` | `sprint-planner` | `create-sprint` | `/plan-sprint` |
 | User story (create) | `us-template.md` + **`writing-guide.md`** + **`code-quality-at-us-time.md`** | `board-keeper` | `create-user-story` | `/create-us` |
 | User story (review) | `review-checklist.md` + `us-template.md` + **`writing-guide.md`** + `section-contracts.md` | `board-keeper` | `review-user-story` | `/review-us` |
 | User story (refine) | `us-template.md` + `refine-checklist.md` + **`writing-guide.md`** + **`code-quality-at-us-time.md`** | `board-keeper` | `refine-user-story` | `/refine-us` |
@@ -50,7 +50,7 @@ When an agent from the table is activated:
 
 If the request is **implement code** for a US (`process-manager` gate):
 
-1. Read `implement-gate-checklist.md` + target `docs/us/US-XXXX.md`.
+1. Read `implement-gate-checklist.md` + `meridian_db_cli.py show US-XXXX --full`.
 2. Block if `ready` is not `true` → `/refine-us` first.
 3. Block if `## Plan` is empty or only placeholders.
 4. Read every path listed under Plan / **Architecture refs** before writing code.
@@ -67,7 +67,7 @@ See `lifecycle.md` in this folder for the full create → refine → implement �
 
 ## Anti-patterns (protocol failure)
 
-- Saving `docs/us/US-XXXX.md` without reading `us-template.md` first
+- Writing delivery to `docs/us/` or `docs/epics/` when `meridian.db` exists
 - Closing US with `✅` without reading `implementation-template.md` first
 - Creating epic/version/sprint from memory or from `MERIDIAN.md` excerpts only
 - Partial template (frontmatter only, missing body sections)

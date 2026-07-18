@@ -1,40 +1,41 @@
 ---
 name: create-sprint
-description: Creates a Meridian sprint file in docs/sprints linked to a version. Use when planning execution slices within a release.
+description: Creates a Meridian sprint in SQLite linked to a version. Use when planning execution slices within a release.
 allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 ---
 
 # Create sprint (Meridian)
 
+> **v11:** save to `.meridian/meridian.db` — read `sqlite-delivery-operations.md` before Write.
+
 ## Selective reading
 
 | File | When to read |
 | ------- | ---------- |
+| `.agent/references/templates/sqlite-delivery-operations.md` | **Mandatory** |
 | `.agent/references/templates/INDEX.md` | Before any sprint create |
-| `references/sprint-template.md` | **Mandatory** before drafting `docs/sprints/vX-SY.md` |
-| `docs/versions/vX.md` | Parent version must exist |
-| `docs/sprints/` | Existing sprints for version |
+| `references/sprint-template.md` | **Mandatory** before drafting |
 
 ## Preconditions
 
-- File `docs/versions/{version}.md` exists (`version: v1` in sprint).
+- Parent version exists in SQLite (`meridian_db_cli.py list versions`).
 - Referenced version is `planned` or `active`.
 - `05_architecture.md` `approved` before creating new US.
 
 ## Procedure
 
-1. Read `.agent/references/templates/INDEX.md` and **full** `references/sprint-template.md`.
-2. List sprints for version in `docs/sprints/vX-S*.md` → next SY = highest + 1.
-3. Fill template with `stories: [US-XXXX, …]` (existing or planned US).
-3. Save `docs/sprints/vX-SY.md`.
-4. New US → `/create-us` after gates (board refreshes on DB save).
+1. Read `INDEX.md`, `sqlite-delivery-operations.md`, and **full** `sprint-template.md`.
+2. List sprints for version (`meridian_db_cli.py list sprints --version vX`) → next SY = highest + 1.
+3. Fill template with `stories: [US-XXXX, …]` (existing PKs only).
+4. Upsert via `meridian_db_cli.py create-sprint --version vX --title "..." --stories US-0001` or `meridian_db_export.py . --entity sprints --id vX-SY --write-form`.
+5. New US → `/create-us` after gates (board refreshes on DB save).
 
 ## Output
 
 ```txt
 Sprint created:
-File: docs/sprints/vX-SY.md
+Id: vX-SY
 Version:
 Stories:
-sprint file saved: yes | no
+saved: yes | no
 ```

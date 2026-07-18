@@ -1,5 +1,5 @@
 ---
-description: Create a Meridian epic file in docs/epics.
+description: Create a Meridian epic in SQLite.
 ---
 
 # /create-epic — create epic
@@ -31,8 +31,8 @@ RULES:
 2. Next EPIC-XX id
 3. Write prose Capability + Expected outcome (see writing-guide golden example)
 4. Out of scope — bullets with rationale
-5. Save docs/epics/EPIC-XX.md
-6. validate_meridian.py
+5. Upsert epic in SQLite (`meridian_db_export.py --write-form` or future `create-epic` CLI)
+6. validate_meridian.py . --sqlite-only
 ```
 
 ---

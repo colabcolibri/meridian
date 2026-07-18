@@ -8,8 +8,8 @@ import re
 import sys
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(REPO_ROOT / ".agent" / "scripts"))
+REPO_ROOT = Path(__file__).resolve().parents[3]
+sys.path.insert(0, str(REPO_ROOT / ".agent" / "scripts" / "lib"))
 
 from meridian_section_contracts import (  # noqa: E402
     extract_section_body,

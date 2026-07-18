@@ -64,8 +64,10 @@ See `.agent/ARCHITECTURE.md` for the full map. Minimum:
   workflows/               ← slash commands (/create-us, …)
   references/templates/    ← INDEX, section-contracts, us-template, …
   scripts/
+    lib/                     ← meridian_db, parsers, form
+    migrate/                 ← v1 → SQLite one-shot
+    meridian_db_cli.py
     validate_meridian.py
-    migrate_us_v2_structure.py   # one-off US schema migration
     sync_cursor_kit.sh
 
 docs/                        ← one product's source of truth (path varies in monorepos)

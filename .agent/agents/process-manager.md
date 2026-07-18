@@ -52,7 +52,7 @@ Registry: `.agent/references/templates/INDEX.md`
 Before **implementing code** for a US:
 
 1. Read `us-template.md` — know required sections.
-2. Read target `docs/us/US-XXXX.md`.
+2. Read target US: `meridian_db_cli.py show US-XXXX --full`.
 3. **Block** if `ready` is not `true` → delegate `/refine-us US-XXXX` or run `/implement-us` gate first.
 4. **Block** if `## Plan` is missing/placeholders.
 5. Read every **Architecture refs** path under Plan in that US before Write on product code.
@@ -74,7 +74,7 @@ Keep the project consistent, visible and auditable while agents execute work. Th
 | ----- | ------------------ |
 | Init | `docs/` + `decisions/` + stub `11_decisions` + `00_scope` draft |
 | Planning | `00_scope` → review path; stack/security draft |
-| Product | `05_architecture` approved; approve `05_architecture`; then US in `docs/epics/` |
+| Product | `05_architecture` approved; epic/version exist in SQLite; then US rows |
 | Build | Relevant US + deps satisfied; arch/security per MERIDIAN |
 | Done | US `✅` with evidence + `## Record` filled; docs reflect reality |
 

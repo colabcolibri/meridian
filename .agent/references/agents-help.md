@@ -22,7 +22,7 @@ Agent (@board-keeper)       →  .agent/agents/{name}.md
     ↓ executes procedure
 Skill (create-user-story)   →  .agent/skills/{name}/SKILL.md
     ↓ writes artifacts
-docs/                       →  source of truth
+docs/                       →  phase docs + SQLite delivery (.meridian/meridian.db)
 ```
 
 | Layer | Role | You invoke |
@@ -51,7 +51,7 @@ Keeps you as manager. Gates phases, reports blockers, decides what can move next
 
 **When to use:** `/status`, `/init-meridian`, `/daily-with-ai`, vague “what next?”, before any implementation.
 
-**Skills:** `init-project`, `create-epic`, `update-decisions-log`, `generate-board-json`, `meridian-routing`
+**Skills:** `init-project`, `create-epic`, `update-decisions-log`, `implement-user-story`, `meridian-routing`
 
 ---
 
@@ -75,7 +75,7 @@ Writes and reviews phase documents and product-facing docs agents can execute.
 
 | Agent | Serves for | Primary artifacts | Does not |
 | ----- | ---------- | ----------------- | -------- |
-| **`documentation-strategist`** | Phase docs `01`–`04`, `06`–`08`, `11`; epic drafting; doc quality | `docs/01_*` … `docs/08_*`, `docs/epics/` | Approve `status: approved`; implement code |
+| **`documentation-strategist`** | Phase docs `01`–`04`, `06`–`08`, `11`; epic drafting; doc quality | `docs/01_*` … `docs/08_*`, SQLite `epics` | Approve `status: approved`; implement code |
 
 **When to use:** filling tech stack, principles, environments; `/create-epic` (with templates).
 
@@ -106,11 +106,11 @@ Turns approved architecture into releases, sprints, and execution order.
 
 | Agent | Serves for | Primary artifacts | Does not |
 | ----- | ---------- | ----------------- | -------- |
-| **`sprint-planner`** | Versions, sprints, MoSCoW, go-live checklist, story sequencing | `docs/versions/`, `docs/sprints/` | Create US before architecture approved |
+| **`sprint-planner`** | Versions, sprints, MoSCoW, go-live checklist, story sequencing | SQLite `versions`, `sprints` | Create US before architecture approved |
 
 **When to use:** `/create-version`, `/plan-sprint`, roadmap and sprint scope.
 
-**Skills:** `create-epic`, `create-version`, `create-sprint`, `create-user-story`, `generate-board-json`, `update-decisions-log`, `meridian-routing`
+**Skills:** `create-epic`, `create-version`, `create-sprint`, `create-user-story`, `update-decisions-log`, `meridian-routing`
 
 ---
 
@@ -120,11 +120,11 @@ Owns the executable backlog and honest execution state.
 
 | Agent | Serves for | Primary artifacts | Does not |
 | ----- | ---------- | ----------------- | -------- |
-| **`board-keeper`** | US lifecycle, dependencies, board sync, close with evidence | `docs/us/`, `docs/kanban/board.json` (generated) | Implement without `ready: true`; mark ✅ without Record |
+| **`board-keeper`** | US lifecycle, dependencies, close with evidence | SQLite `user_stories` | Implement without `ready: true`; mark ✅ without Record |
 
-**When to use:** `/create-us`, `/review-us`, `/refine-us`, `/complete-us`, `/sync-board`, kanban consistency.
+**When to use:** `/create-us`, `/review-us`, `/refine-us`, `/complete-us`, kanban consistency.
 
-**Skills:** `create-user-story`, `review-user-story`, `refine-user-story`, `complete-user-story`, `generate-board-json`, `update-decisions-log`, `meridian-routing`
+**Skills:** `create-user-story`, `review-user-story`, `refine-user-story`, `complete-user-story`, `update-decisions-log`, `meridian-routing`
 
 ---
 
@@ -136,7 +136,7 @@ Slash command groups — workflows in **six groups**. Each maps to one primary a
 
 | Step | Command | Agent | What it does |
 | ---- | ------- | ----- | ------------ |
-| A1 | **`/init-meridian`** | `process-manager` | Creates `docs/` tree, initial scope, decision log, empty board. **Mode B (existing codebase):** also `docs/inventory/as-is.md` — transitional capability map; no retroactive US. **No product code.** |
+| A1 | **`/init-meridian`** | `process-manager` | Creates `docs/` tree, initial scope, decision log, bootstraps `meridian.db`. **Mode B:** also `docs/inventory/as-is.md`. **No product code.** |
 
 ---
 
@@ -145,7 +145,7 @@ Slash command groups — workflows in **six groups**. Each maps to one primary a
 | Step | Command | Agent | What it does |
 | ---- | ------- | ----- | ------------ |
 | B1 | **`/status`** | `process-manager` | Read-only health: kit root, Meridian projects (multi-`docs/` repos), active product, phase doc statuses, US counts, blockers. |
-| B2 | **`/daily-with-ai`** | `process-manager` | Guided session: status → pick story → implement → close → sync. |
+| B2 | **`/daily-with-ai`** | `process-manager` | Guided session: status → pick story → implement → close. |
 | B3 | **`/agents-help`** | `process-manager` | Opens this reference; summarizes groups and current-step hints. |
 
 ---
@@ -171,9 +171,9 @@ Complete in order: `00` → `01` → `02` → `03` → `04` → **`05`** → `06
 
 | Step | Command | Agent | Output | What it does |
 | ---- | ------- | ----- | ------ | ------------ |
-| D1 | **`/create-epic`** | `documentation-strategist` | `docs/epics/EPIC-XX.md` | Product capability block. |
-| D2 | **`/create-version`** | `sprint-planner` | `docs/versions/vX.md` | Release grouping epics/US. |
-| D3 | **`/plan-sprint`** | `sprint-planner` | `docs/sprints/vX-SY.md` | Time-boxed goal + story list. |
+| D1 | **`/create-epic`** | `documentation-strategist` | SQLite `epics` row | Product capability block. |
+| D2 | **`/create-version`** | `sprint-planner` | SQLite `versions` row | Release grouping epics/US. |
+| D3 | **`/plan-sprint`** | `sprint-planner` | SQLite `sprints` row | Time-boxed goal + story list. |
 | D4 | **`/complete-sprint vX-SY`** | `sprint-planner` | sprint `status: complete` | Sprint review + Retrospective filled. |
 
 Order: **Epic → Version → Sprint** (sprint optional but recommended) → User story → **`/complete-sprint`** when increment delivered.
@@ -191,8 +191,7 @@ Epic/version **close:** set `status: complete` manually when outcome reached (no
 | E3 | **`/refine-us US-XXXX`** | `board-keeper` | `ready: true` | Approach, arch refs, concrete tests. **Gate for code.** |
 | E4 | **`/implement-us US-XXXX`** | `process-manager` | — | Gate: `ready: true`, deps, Plan; then product code. **Block if not refined.** |
 | E5 | *(manager review)* | human | — | Review diff and run tests. |
-| E6 | **`/complete-us US-XXXX`** | `board-keeper` | `status: ✅` | Fills Record, checks acceptance, syncs board. |
-| E7 | **`/sync-board`** | `board-keeper` | — | Regenerates `docs/kanban/board.json` from US frontmatter. |
+| E6 | **`/complete-us US-XXXX`** | `board-keeper` | `status: ✅` | Fills Record, checks acceptance, updates SQLite. |
 
 **Rules:** no code without E3 (`ready: true`) **and** E4 gate. No ✅ without E6 (`## Record` + evidence).
 
@@ -203,7 +202,7 @@ Epic/version **close:** set `status: complete` manually when outcome reached (no
 | Step | Command / action | Agent / tool | What it does |
 | ---- | ---------------- | ------------ | ------------ |
 | F1 | **`/update-decisions-log`** | any + skill | Read skill; run `date +"%Y-%m-%d"` + `date +"%H:%M"`; prepend `docs/decisions/YYYY-MM-DD.json`. Never edit old entries. |
-| F2 | **`validate_meridian.py`** | script | `python3 .agent/scripts/validate_meridian.py <project-root>` — structure, US contracts, board. |
+| F2 | **`validate_meridian.py`** | script | `python3 .agent/scripts/validate_meridian.py <project-root> --sqlite-only` — structure, US contracts, phase docs. |
 | F3 | **Meridian: Validate Project** *(extension)* | IDE command | Same validator from VS Code/Cursor sidebar. |
 
 ---
@@ -228,10 +227,9 @@ Use this as the canonical sequence. Skip steps only when the artifact already ex
 13. /implement-us US-XXXX                    [Group E]  process-manager → gate then code
 14. Manager review diff + tests              [Group E]  human
 15. /complete-us US-XXXX                     [Group E]  board-keeper
-16. /sync-board                              [Group E]  board-keeper
-17. git commit (human)                       [Group F]  you — one US per commit
-18. /status or /daily-with-ai                [Group B]  process-manager → back to step 10
-19. /complete-sprint vX-SY (when sprint done) [Group D]  sprint-planner — after US in sprint closed
+16. git commit (human)                       [Group F]  you — one US per commit
+17. /status or /daily-with-ai                [Group B]  process-manager → back to step 10
+18. /complete-sprint vX-SY (when sprint done) [Group D]  sprint-planner — after US in sprint closed
 ```
 
 ---
@@ -256,7 +254,7 @@ Skills are procedures agents load automatically. Grouped by purpose.
 | `create-version` | sprint-planner | Version file |
 | `create-sprint` | sprint-planner | Sprint file |
 | `complete-sprint` | sprint-planner | Sprint close + Retrospective |
-| `create-user-story` | documentation-strategist, board-keeper | US file at create |
+| `create-user-story` | documentation-strategist, board-keeper | US row in SQLite at create |
 
 ### User story quality & close
 
@@ -265,14 +263,14 @@ Skills are procedures agents load automatically. Grouped by purpose.
 | `review-user-story` | board-keeper | Read-only US audit |
 | `refine-user-story` | board-keeper | Approach + `ready: true` |
 | `implement-user-story` | process-manager | Gate + implement when `ready: true` |
-| `complete-user-story` | board-keeper | Record + ✅ + board sync |
+| `complete-user-story` | board-keeper | Record + ✅ in SQLite |
 
-### Board & security
+### Security
 
 | Skill | Used by | Purpose |
 | ----- | ------- | ------- |
-| `generate-board-json` | board-keeper, sprint-planner, process-manager | Regenerate `board.json` |
 | `security-review` | security-steward, architecture-guardian | Security doc pass |
+| `sqlite-delivery-operations` | board-keeper, sprint-planner | **Read before** any delivery Write |
 
 ---
 
@@ -291,7 +289,6 @@ Skills are procedures agents load automatically. Grouped by purpose.
 | New epic | D | `documentation-strategist` | `/create-epic` |
 | New version / sprint | D | `sprint-planner` | `/create-version`, `/plan-sprint`, `/complete-sprint` |
 | New / refine / implement / close US | E | `board-keeper` / `process-manager` | `/create-us`, `/refine-us`, `/implement-us`, `/complete-us` |
-| Refresh kanban JSON | E | `board-keeper` | `/sync-board` |
 | Log a decision | F | any | `/update-decisions-log` |
 | Validate structure | F | script / extension | `validate_meridian.py` or **Validate Project** |
 
@@ -304,7 +301,7 @@ These are **not** agents. They read the **active** `docs/` in the editor (extens
 | Group | Command | Purpose |
 | ----- | ------- | ------- |
 | Views | **Open Board**, **Open Versions**, **Open Sprints**, **Open Epics** | Read-only planning UI; **Project** row in toolbar shows name + `docs/` path |
-| Governance | **Select Active Project**, **Validate Project**, **Sync Board**, **Show Workspace Status** | Switch product (saved); validate `packageRoot`; board JSON; list all projects |
+| Governance | **Select Active Project**, **Validate Project**, **Show Workspace Status** | Switch product (saved); validate `packageRoot`; list all projects |
 | Help | **Open Command Help**, **Open Agents Help** | Extension catalog; kit `agents-help.md` at runtime |
 
 **Multi-product UI:** Board and Deliverables show which `docs/` is loaded; dropdown switches product and refreshes open tabs. Status bar shows project name when N>1. Install: Marketplace **Meridian Harness** or `pnpm install:cursor` in `app-visual-studio/`.
@@ -317,7 +314,7 @@ These are **not** agents. They read the **active** `docs/` in the editor (extens
 | ------ | ------- | ---- |
 | Slash command | `/refine-us US-0017` | Known workflow step |
 | Explicit agent | `@board-keeper refine US-0017` | Override routing |
-| Natural language | “Implement docs/us/US-0017.md” | Run `/implement-us US-0017` if `ready: true`; else block |
+| Natural language | “Implement US-0017” | Run `/implement-us US-0017` if `ready: true`; else block |
 | Read-only check | `/status` | Start of every session |
 
 ---

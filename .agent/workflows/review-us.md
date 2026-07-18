@@ -11,7 +11,7 @@ $ARGUMENTS
 ## Critical rules
 
 1. Use `board-keeper` + `@[skills/review-user-story]`
-2. **Read-only** — do not edit `docs/us/US-XXXX.md` unless manager explicitly asks to fix in the same turn
+2. **Read-only** — do not edit the US in SQLite unless manager explicitly asks to fix in the same turn
 3. **Never** set `ready: true` — only `/refine-us` does that
 4. **NO product code**
 5. **Mandatory read:** `TEMPLATE_SOURCES.md` (if path confusion) + `writing-guide.md` + `review-checklist.md` + target US

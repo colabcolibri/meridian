@@ -152,7 +152,7 @@ Use this when adding or changing protocol behavior (example: **as-is inventory**
 | Multi-product / monorepo (resolver) | `projects-manifest-template.md`, `usage-guide.md`, `start-here.md`, `MERIDIAN.md` | `resolve-meridian-projects.ts`, `meridian-workspace.ts`, `meridian-workspace-picker.ts`, `meridian-context.ts`, `package.json`, `command-catalog.ts`, `meridian-concepts.ts`, `05_architecture.md` |
 | Multi-product UI context (v2.04) | `usage-guide.md`, `start-here.md`, `agents-help.md`, `projects-manifest-template.md` | `webview-project-context.ts`, all `*-webview-html.ts`, `planning-panels.ts`, `board-editor-panel.ts`, `command-catalog.ts` (Board + views), `meridian-concepts.ts`, `app-visual-studio/README.md`, `05_architecture.md` § UI structure |
 | Agent behavior only | `.agent/agents/{name}.md` | Usually nothing else |
-| Desktop-only feature | `app-desktop/docs/us/` + phase docs | Not kit unless protocol changes |
+| Extension / kit feature | `app-visual-studio/` + phase docs | Not kit unless protocol changes |
 
 ---
 

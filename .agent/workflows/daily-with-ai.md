@@ -105,7 +105,7 @@ Reference: .agent/references/commit-after-us-close.md
 
 - App: Board tab — US in correct column?
 - Record consistent with what was tested?
-- Optional later: monitor US-0071 — last commit touching `docs/us/`
+- Optional later: monitor last commit touching delivery for a US
 
 ---
 
