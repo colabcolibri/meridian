@@ -4,6 +4,14 @@ All notable changes to the **Meridian** VS Code extension (`meridian-vscode`).
 
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.1.21] - 2026-07-18
+
+### Added
+
+- **Bundled kit:** design system operator — `/design-pass` (bootstrap/US modes), `/design-showcase`, `/design-review`
+- **Bundled kit:** stack implementation references (`stacks/*` for shadcn, MUI, Chakra, antd, Streamlit, NiceGUI, Django HTMX, Go templ, Leptos)
+- **Bundled kit:** composed `App*` pattern, showcase US slices, validator warning when Must UI US omit `09_design_system` refs
+
 ## [1.1.20] - 2026-07-18
 
 ### Added
