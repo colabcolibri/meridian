@@ -1,7 +1,7 @@
 # Audit skills + references v11 — inventário honesto
 
 > **Última revisão G7:** jul/2026  
-> **Regra:** `references/*.md` de **delivery** = forma de `body_markdown` no SQLite — persistir com `meridian_db_cli.py` / `meridian_db_export.py --write-form`.  
+> **Regra:** `references/*.md` de **delivery** = forma de `body_markdown` no SQLite — persistir com `meridian_delivery.py` / `meridian_db_export.py --write-form`.  
 > **Phase docs** (`docs/discovery/`, `docs/decisions/`, `09_design_system`) continuam Markdown no disco — OK.
 
 **Legenda «G7»:** `✅` lido + alterado ou grep v1 limpo · `👁` só grep (sem edição) · `⏳` pendente · `—` fora do escopo delivery
@@ -12,7 +12,7 @@
 
 ## 1. Skills — SKILL.md (15 pastas ativas)
 
-| # | Skill | G7 | v11 banner | `## CLI (v11)` | sqlite-ops | Alterações G7 |
+| # | Skill | G7 | v11 banner | `## Delivery commands` | sqlite-ops | Alterações G7 |
 | - | ----- | -- | ---------- | -------------- | ---------- | ------------- |
 | 1 | `create-user-story` | ✅ | ✅ | ✅ | ✅ | CLI §; output `ID:` |
 | 2 | `review-user-story` | ✅ | ✅ | ✅ read-only | ✅ | CLI §; paths corrigidos |
@@ -98,7 +98,7 @@
 
 ## 5. Critério de fechamento G7
 
-- [x] 9 skills delivery: `## CLI (v11)` + templates references
+- [x] 9 skills delivery: `## Delivery commands` + templates references
 - [x] 18 workflows grep + delivery alinhados
 - [x] 9 agents grep + ajustes onde necessário
 - [x] security + design refs com cabeçalho escopo v11
@@ -111,15 +111,19 @@
 
 ## 6. Canon CLI (delivery)
 
-Fonte: `.agent/references/templates/sqlite-delivery-operations.md` § Agent workflow.
+Fonte: `.agent/references/templates/delivery-connector-schema.md` + `sqlite-delivery-operations.md`.
 
 | Ação | Comando |
 | ---- | ------- |
-| Read US | `python3 .agent/scripts/meridian_db_cli.py show US-XXXX --full` |
-| Create US | `python3 .agent/scripts/meridian_db_cli.py create-us …` |
-| Refine / close | `update-us --from-file` ou `--write-form` |
-| Ready | `set-ready US-XXXX --ready true` |
-| Implement gate | `implement-gate US-XXXX` |
+| Config | `.meridian/delivery.json` (`connector: sqlite` default) |
+| Facade | `python3 .agent/scripts/meridian_delivery.py <verb> …` |
+| Read US | `meridian_delivery.py show US-XXXX --full` |
+| Create US | `meridian_delivery.py create-us …` |
+| Refine / close | `update-us --from-file` ou `meridian_db_export.py --write-form` |
+| Ready | `meridian_delivery.py set-ready US-XXXX --ready true` |
+| Implement gate | `meridian_delivery.py implement-gate US-XXXX` |
 | Epic / version / sprint | `create-epic` / `create-version` / `create-sprint` |
-| Counts / status | `meridian_db_cli.py counts .` |
+| Counts / status | `meridian_delivery.py counts` |
 | Validate | `validate_meridian.py . --sqlite-only` |
+
+`meridian_db_cli.py` remains the sqlite implementation — agents use the facade only.

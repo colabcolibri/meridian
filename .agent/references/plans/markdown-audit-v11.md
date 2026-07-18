@@ -319,10 +319,9 @@ python3 .agent/scripts/validate_meridian.py . --strict-kit-md
 
 | Artefato | Git? | Motivo |
 | -------- | ---- | ------ |
-| `.meridian/meridian.db` | **Não** (gitignore) | Delivery local — como um DB de dev; compartilhar via bootstrap/migrations, não o arquivo |
-| `.meridian/meridian.db-wal` / `.db-shm` | **Não** | Sidecars SQLite |
-| `.meridian/projects.json` | **Sim** (quando existir) | Manifest multi-produto — configuração versionada |
-| Pasta `.meridian/` inteira | **Não** ignorar | Só o banco; deixar `projects.json` commitável |
+| `.meridian/meridian.db` | **Não** (gitignore) | Delivery local |
+| `.meridian/delivery.json` | **Sim** (quando existir) | Connector profile (`connector: sqlite` default) |
+| `.meridian/projects.json` | **Sim** (quando existir) | Manifest multi-produto |
 
 Baseline para novos projetos: `init-project/references/gitignore-baseline.md`. Referência operacional: `commit-after-us-close.md` § Scope.
 

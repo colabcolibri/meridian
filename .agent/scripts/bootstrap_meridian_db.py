@@ -10,6 +10,7 @@ _SCRIPT_DIR = Path(__file__).resolve().parent
 sys.path.insert(0, str(_SCRIPT_DIR / "lib"))
 
 from meridian_db import bootstrap, is_meridian_package  # noqa: E402
+from meridian_delivery_config import write_delivery_config  # noqa: E402
 
 
 def main() -> int:
@@ -31,6 +32,8 @@ def main() -> int:
         return 1
     try:
         print(bootstrap(root))
+        cfg = write_delivery_config(root)
+        print(f"delivery.json: connector={cfg['connector']}")
     except Exception as exc:  # noqa: BLE001
         print(f"ERROR: {exc}", file=sys.stderr)
         return 1

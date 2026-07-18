@@ -20,13 +20,13 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 | `.agent/references/scrum-meridian-map.md` | DoD vs `04_principles.md` |
 | `../create-user-story/references/us-template.md` | Full section contract (not a disk path) |
 
-## CLI (v11)
+## Delivery commands
 
 Run from **package root** (folder with `docs/` + `.meridian/meridian.db`).
 
 ```bash
 # 1. Read current row (mandatory)
-python3 .agent/scripts/meridian_db_cli.py show US-XXXX --full
+python3 .agent/scripts/meridian_delivery.py show US-XXXX --full
 
 # 2. Optional — validator before close
 python3 .agent/scripts/validate_meridian.py . --sqlite-only
@@ -34,7 +34,7 @@ python3 .agent/scripts/validate_meridian.py . --sqlite-only
 # 3. Persist closure (pick one)
 
 # 3a. Markdown file with full US body (frontmatter + sections)
-python3 .agent/scripts/meridian_db_cli.py update-us US-XXXX --from-file /tmp/us-close.md
+python3 .agent/scripts/meridian_delivery.py update-us US-XXXX --from-file /tmp/us-close.md
 
 # 3b. Structured form (extension / agents)
 python3 .agent/scripts/meridian_db_export.py . --entity us --id US-XXXX --format form
@@ -56,7 +56,7 @@ python3 .agent/scripts/meridian_db_export.py . --entity us --id US-XXXX --write-
 
 | Check | Requirement |
 | ----------- | --------- |
-| US exists | `meridian_db_cli.py show US-XXXX` |
+| US exists | `meridian_delivery.py show US-XXXX` |
 | Dependencies | Every `depends_on` with status `✅` |
 | Evidence | Applicable build/lint/test passed |
 | Acceptance | Criteria proven (mark `[x]`) |

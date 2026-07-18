@@ -1,10 +1,10 @@
 # Implement gate checklist — before product code
 
-> **v11:** load US from SQLite (`meridian_db_cli.py show US-XXXX --full`). Gate CLI: `implement-gate US-XXXX`.
+> **v11:** load US from SQLite (`meridian_delivery.py show US-XXXX --full`). Gate CLI: `implement-gate US-XXXX`.
 
 Use with `/implement-us US-XXXX` **before** any Write on product code for that story.
 
-**Automated:** `python3 .agent/scripts/meridian_db_cli.py implement-gate US-XXXX` (checks 1–7 except session scope and principles read).
+**Automated:** `python3 .agent/scripts/meridian_delivery.py implement-gate US-XXXX` (checks 1–7 except session scope and principles read).
 
 ---
 
@@ -27,7 +27,7 @@ Use with `/implement-us US-XXXX` **before** any Write on product code for that s
 
 ## After gate passes
 
-1. Read full US from SQLite: `meridian_db_cli.py show US-XXXX --full` (Intent + Plan).
+1. Read full US from SQLite: `meridian_delivery.py show US-XXXX --full` (Intent + Plan).
 2. Read every Architecture ref path/§ before coding.
 3. Read `docs/04_principles.md` (DRY, SRP) — apply during implementation.
 4. Implement against Acceptance + Planned steps only.

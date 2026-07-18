@@ -12,10 +12,10 @@ $ARGUMENTS
 
 1. Use `developer` + `@[skills/implement-user-story]`
 2. **Mandatory read:** `implement-gate-checklist.md` + `code-quality-at-us-time.md` + target US **before** product code
-3. **Run gate CLI first:** `python3 .agent/scripts/meridian_db_cli.py implement-gate US-XXXX` (exit 0 = pass)
+3. **Run gate CLI first:** `python3 .agent/scripts/meridian_delivery.py implement-gate US-XXXX` (exit 0 = pass)
 4. **Mandatory read:** `docs/04_principles.md` (DRY, SRP) before Write on code
 5. **Hard block:** `ready: true` required — if false → stop; recommend `/refine-us`
-6. Load US from SQLite: `meridian_db_cli.py show US-XXXX --full` (not `docs/us/`)
+6. Load US from SQLite: `meridian_delivery.py show US-XXXX --full` (not `docs/us/`)
 7. Read every **Architecture refs** section before Write on code
 8. One US per session — cite `US-XXXX` explicitly
 9. Do **not** mark `✅` or run `/complete-us` in the same turn unless manager only asked to close
@@ -32,7 +32,7 @@ CONTEXT:
 
 RULES:
 1. Resolve US id from $ARGUMENTS or ask
-2. Run: python3 .agent/scripts/meridian_db_cli.py implement-gate US-XXXX
+2. Run: python3 .agent/scripts/meridian_delivery.py implement-gate US-XXXX
 3. If exit != 0 → output blockers; NO product code
 4. If passed → meridian_db_cli show US-XXXX --full; read Architecture refs + 04_principles
 5. Implement Acceptance + Planned (DRY + SRP)

@@ -1,6 +1,9 @@
 # SQLite delivery operations — agent reference
 
-> **Read this before INSERT/UPDATE on `.meridian/meridian.db`.** Prefer kit CLI (`meridian_db_cli.py`) over raw SQL. Phase docs (`00`–`11`) stay Markdown — never store them in SQLite.
+> **Facade (agents):** `python3 .agent/scripts/meridian_delivery.py` — reads `.meridian/delivery.json` (default connector: `sqlite`).  
+> **This doc:** sqlite driver details. **Schema:** `delivery-connector-schema.md`.
+
+> **Read this before INSERT/UPDATE on delivery store.** Prefer **`meridian_delivery.py`** over raw SQL. Phase docs (`00`–`11`) stay Markdown — never store them in SQLite.
 
 ## Location
 
@@ -9,7 +12,7 @@
 | Database | `{packageRoot}/.meridian/meridian.db` |
 | Migrations | `.agent/migrations/YYYYMMDDHHMMSS_*.sql` |
 | Access layer | `.agent/scripts/lib/meridian_db.py` |
-| CLI | `.agent/scripts/meridian_db_cli.py` |
+| CLI | `.agent/scripts/meridian_delivery.py` (facade) → `meridian_db_cli.py` (sqlite driver) |
 
 Dogfood `packageRoot` = repository root (`.`).
 
@@ -47,20 +50,20 @@ python3 .agent/scripts/bootstrap_meridian_db.py .
 python3 .agent/scripts/migrate_md_to_sqlite.py .   # one-time if legacy .md exist
 
 # 2. Discover (no full bodies)
-python3 .agent/scripts/meridian_db_cli.py counts .
-python3 .agent/scripts/meridian_db_cli.py list user_stories --version v10 --status ❌
-python3 .agent/scripts/meridian_db_cli.py search "parity" --entity user_stories
+python3 .agent/scripts/meridian_delivery.py counts .
+python3 .agent/scripts/meridian_delivery.py list user_stories --version v10 --status ❌
+python3 .agent/scripts/meridian_delivery.py search "parity" --entity user_stories
 
 # 3. Read summary, then full only if implementing
-python3 .agent/scripts/meridian_db_cli.py show US-0115
-python3 .agent/scripts/meridian_db_cli.py show US-0115 --full
+python3 .agent/scripts/meridian_delivery.py show US-0115
+python3 .agent/scripts/meridian_delivery.py show US-0115 --full
 
 # 4. Write (never create docs/us/*.md when DB exists)
-python3 .agent/scripts/meridian_db_cli.py create-version --id v11 --title "Release name"
-python3 .agent/scripts/meridian_db_cli.py create-epic --title "Capability name" --versions "[v11]"
-python3 .agent/scripts/meridian_db_cli.py create-sprint --version v11 --title "Sprint name" --stories US-0001
-python3 .agent/scripts/meridian_db_cli.py create-us --title "..." --epic EPIC-15 --version v10
-python3 .agent/scripts/meridian_db_cli.py update-us US-0115 --from-file /tmp/us.md
+python3 .agent/scripts/meridian_delivery.py create-version --id v11 --title "Release name"
+python3 .agent/scripts/meridian_delivery.py create-epic --title "Capability name" --versions "[v11]"
+python3 .agent/scripts/meridian_delivery.py create-sprint --version v11 --title "Sprint name" --stories US-0001
+python3 .agent/scripts/meridian_delivery.py create-us --title "..." --epic EPIC-15 --version v10
+python3 .agent/scripts/meridian_delivery.py update-us US-0115 --from-file /tmp/us.md
 
 # 4b. Structured form (extension + agents — preferred)
 python3 .agent/scripts/meridian_db_export.py . --entity us --id US-0115 --format form
@@ -68,10 +71,10 @@ python3 .agent/scripts/meridian_db_export.py . --entity epics --id EPIC-15 --for
 # stdin: JSON { frontmatter, preamble, sections } — see meridian_delivery_form.py
 python3 .agent/scripts/meridian_db_export.py . --entity us --id US-0115 --write-form < form.json
 
-python3 .agent/scripts/meridian_db_cli.py implement-gate US-0115
-python3 .agent/scripts/meridian_db_cli.py implement-gate US-0115 --json
-python3 .agent/scripts/meridian_db_cli.py set-ready US-0115 --ready true
-python3 .agent/scripts/meridian_db_cli.py set-summary US-0115 --text "4-8 sentence summary"
+python3 .agent/scripts/meridian_delivery.py implement-gate US-0115
+python3 .agent/scripts/meridian_delivery.py implement-gate US-0115 --json
+python3 .agent/scripts/meridian_delivery.py set-ready US-0115 --ready true
+python3 .agent/scripts/meridian_delivery.py set-summary US-0115 --text "4-8 sentence summary"
 
 # 5. Validate
 python3 .agent/scripts/validate_meridian.py .

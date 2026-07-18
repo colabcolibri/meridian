@@ -18,25 +18,25 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 
 ## Preconditions
 
-- Parent version exists in SQLite (`meridian_db_cli.py list versions`).
+- Parent version exists in SQLite (`meridian_delivery.py list versions`).
 - Referenced version is `planned` or `active`.
 - `05_architecture.md` `approved` before creating new US.
 
-## CLI (v11)
+## Delivery commands
 
 ```bash
-python3 .agent/scripts/meridian_db_cli.py list versions
-python3 .agent/scripts/meridian_db_cli.py list sprints --version vX
-python3 .agent/scripts/meridian_db_cli.py create-sprint --version vX --title "..." --stories US-0001,US-0002
+python3 .agent/scripts/meridian_delivery.py list versions
+python3 .agent/scripts/meridian_delivery.py list sprints --version vX
+python3 .agent/scripts/meridian_delivery.py create-sprint --version vX --title "..." --stories US-0001,US-0002
 python3 .agent/scripts/meridian_db_export.py . --entity sprints --id vX-SY --write-form < form.json
 ```
 
 ## Procedure
 
 1. Read `INDEX.md`, `sqlite-delivery-operations.md`, and **full** `sprint-template.md`.
-2. List sprints for version (`meridian_db_cli.py list sprints --version vX`) → next SY = highest + 1.
+2. List sprints for version (`meridian_delivery.py list sprints --version vX`) → next SY = highest + 1.
 3. Fill template with `stories: [US-XXXX, …]` (existing PKs only).
-4. Upsert via `meridian_db_cli.py create-sprint` or `meridian_db_export.py --write-form`.
+4. Upsert via `meridian_delivery.py create-sprint` or `meridian_db_export.py --write-form`.
 5. New US for this sprint → `/create-us` after gates (extension refreshes on DB write).
 
 ## Output

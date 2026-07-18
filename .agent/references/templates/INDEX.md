@@ -13,6 +13,7 @@ Templates are mirrored here from skills (`references/`) so every agent uses the 
 | Phase docs `00`–`11` | `doc-templates.md` | `technical-writer` / `product-owner` (`00`) | `init-project` | `/init-meridian` |
 | As-is inventory `docs/inventory/as-is.md` | `as-is-inventory-template.md` | `technical-writer` | `init-project` (Mode B) | `/init-meridian` |
 | Projects manifest `.meridian/projects.json` | `projects-manifest-template.md` | `scrum-master` | `init-project` | `/init-meridian`, `/status` |
+| Delivery connector `.meridian/delivery.json` | `delivery-connector-schema.md` | `scrum-master` | `init-project` | `/init-meridian`, all delivery verbs |
 | Epic (SQLite `epics`) | `epic-template.md` + **`writing-guide.md`** | `product-owner` | `create-epic` | `/create-epic` |
 | Version (SQLite `versions`) | `version-template.md` + **`writing-guide.md`** | `sprint-planner` | `create-version` | `/create-version` |
 | Sprint (SQLite `sprints`) | `sprint-template.md` | `sprint-planner` | `create-sprint` | `/plan-sprint` |
@@ -51,7 +52,7 @@ When an agent from the table is activated:
 
 If the request is **implement code** for a US (`developer` + gate):
 
-1. Read `implement-gate-checklist.md` + `meridian_db_cli.py show US-XXXX --full`.
+1. Read `implement-gate-checklist.md` + `meridian_delivery.py show US-XXXX --full`.
 2. Block if `ready` is not `true` → `/refine-us` first.
 3. Block if `## Plan` is empty or only placeholders.
 4. Read every path listed under Plan / **Architecture refs** before writing code.

@@ -49,7 +49,7 @@ __pycache__/
 **/docs/kanban/board.json
 ```
 
-**Nota `.meridian/`:** ignore só o **banco** (`meridian.db` e sidecars WAL). **`projects.json`** (manifest multi-produto) **pode** ir no git — é configuração, não delivery runtime.
+**Nota `.meridian/`:** ignore só o **banco** (`meridian.db` e sidecars WAL). **`delivery.json`** e **`projects.json`** podem ir no git — configuração versionada, não runtime.
 
 Rules:
 

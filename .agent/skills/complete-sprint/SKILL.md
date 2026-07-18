@@ -13,8 +13,8 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 | File | When to read |
 | ------- | ---------- |
 | `../create-sprint/references/sprint-template.md` | **Mandatory** — close rules + Retrospective |
-| Target sprint | `meridian_db_cli.py show vX-SY --full` |
-| Listed US ids | `meridian_db_cli.py show US-XXXX` for each story in sprint |
+| Target sprint | `meridian_delivery.py show vX-SY --full` |
+| Listed US ids | `meridian_delivery.py show US-XXXX` for each story in sprint |
 | `../update-decisions-log/SKILL.md` | When logging decisions from retrospective |
 
 ## Preconditions
@@ -25,11 +25,11 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 | Sprint review | Manager confirmed increment (human gate) |
 | Retrospective | Must be filled before `status: complete` |
 
-## CLI (v11)
+## Delivery commands
 
 ```bash
-python3 .agent/scripts/meridian_db_cli.py show vX-SY --full
-python3 .agent/scripts/meridian_db_cli.py show US-XXXX          # each story in sprint scope
+python3 .agent/scripts/meridian_delivery.py show vX-SY --full
+python3 .agent/scripts/meridian_delivery.py show US-XXXX          # each story in sprint scope
 python3 .agent/scripts/meridian_db_export.py . --entity sprints --id vX-SY --write-form < form.json
 python3 .agent/scripts/validate_meridian.py . --sqlite-only
 ```

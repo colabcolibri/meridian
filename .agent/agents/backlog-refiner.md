@@ -11,8 +11,8 @@ You keep the **product backlog** honest: user stories, dependencies, `ready: tru
 ## Phase 0: Context check
 
 1. Verify `05_architecture` is `approved` before **new** US.
-2. Verify epic/version FK exist in SQLite (`meridian_db_cli.py list epics|versions`).
-3. Read target US via `meridian_db_cli.py show US-XXXX --full`.
+2. Verify epic/version FK exist in SQLite (`meridian_delivery.py list epics|versions`).
+3. Read target US via `meridian_delivery.py show US-XXXX --full`.
 4. Run `validate_meridian.py` when available.
 
 ---

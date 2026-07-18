@@ -29,7 +29,7 @@ RULES:
 2. Write Objective paragraph — release theme for user/manager
 3. Write Done criteria paragraph — observable complete state
 4. Included — epics/US with one explanatory line each
-5. Upsert: `meridian_db_cli.py create-version` or `meridian_db_export.py --write-form`
+5. Upsert: `meridian_delivery.py create-version` or `meridian_db_export.py --write-form`
 6. validate_meridian.py . --sqlite-only
 ```
 

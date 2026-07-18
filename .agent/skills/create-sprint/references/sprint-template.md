@@ -1,6 +1,6 @@
 # Sprint template
 
-> **v11 delivery:** shape of `sprints.body_markdown` plus frontmatter mapped to SQLite (`stories` / junction via CLI). **Not** `docs/sprints/vX-SY.md`. Persist with `meridian_db_cli.py create-sprint` or `--write-form`.
+> **v11 delivery:** shape of `sprints.body_markdown` plus frontmatter mapped to SQLite (`stories` / junction via CLI). **Not** `docs/sprints/vX-SY.md`. Persist with `meridian_delivery.py create-sprint` or `--write-form`.
 >
 > A sprint is a time-boxed delivery unit within a version. It has a clear goal, a defined scope, and a done condition. Do not use it as a task list — use it to communicate intent and measure delivery.
 
@@ -49,7 +49,7 @@ _(fill at sprint close)_
 - **`stories:` order** in sprint metadata is the sprint priority (top first) — no separate priority field on US.
 - While `status: active`, do not add US to the sprint without manager request; new work goes to backlog or next sprint (see `scrum-meridian-map.md`).
 - Before `status: complete`, manager performs **sprint review** (increment vs `goal` and US Acceptance) then fills **Retrospective**.
-- `version` must exist in SQLite `versions` table (`meridian_db_cli.py list versions`).
+- `version` must exist in SQLite `versions` table (`meridian_delivery.py list versions`).
 - `goal` is one measurable sentence — not a copy of the version objective.
 - `stories` in frontmatter is the canonical list used by validation; body table is for human readability.
 - `status`: `planned` → `active` → `complete`.

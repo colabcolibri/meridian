@@ -12,7 +12,7 @@ $ARGUMENTS
 
 1. Use `design-system-owner` + `@[skills/design-system]`
 2. Read `design-system-checklist.md` before Write on `09_design_system.md`
-3. If argument is `US-XXXX` — load US via `meridian_db_cli.py show US-XXXX --full`; suggest Plan Architecture refs to `09_design_system.md`
+3. If argument is `US-XXXX` — load US via `meridian_delivery.py show US-XXXX --full`; suggest Plan Architecture refs to `09_design_system.md`
 4. Do not implement product code in this workflow
 5. Human sets `status: approved` on `09_design_system.md`
 

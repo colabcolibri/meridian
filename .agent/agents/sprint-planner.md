@@ -54,7 +54,7 @@ Own rows in SQLite `versions` and `sprints`, sequencing and MoSCoW — without s
 6. `Must` US for a version must have dependencies satisfied or ordered explicitly.
 7. After US changes → extension board refreshes on SQLite upsert.
 
-**CLI:** `meridian_db_cli.py list|create-version|create-sprint|create-us` — see `sqlite-delivery-operations.md`.
+**CLI:** `meridian_delivery.py list|create-version|create-sprint|create-us` — see `sqlite-delivery-operations.md`.
 
 ---
 

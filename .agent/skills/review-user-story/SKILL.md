@@ -6,7 +6,7 @@ allowed-tools: Read, Glob, Grep, Bash
 
 # Review user story (Meridian)
 
-> **v11:** load US via `meridian_db_cli.py show US-XXXX --full` — compare `body_markdown` to templates and checklists; output a gap report. Do **not** set `ready: true`, edit the US, or write product code unless the manager explicitly asks to fix in the same turn.
+> **v11:** load US via `meridian_delivery.py show US-XXXX --full` — compare `body_markdown` to templates and checklists; output a gap report. Do **not** set `ready: true`, edit the US, or write product code unless the manager explicitly asks to fix in the same turn.
 
 ## Selective reading
 
@@ -19,7 +19,7 @@ allowed-tools: Read, Glob, Grep, Bash
 | `references/review-checklist.md` | **Mandatory** — audit rubric |
 | `../create-user-story/references/us-template.md` | Expected `body_markdown` shape |
 | `.agent/skills/refine-user-story/references/refine-checklist.md` | Same gates `/refine-us` uses — cite failures here |
-| Target US | `meridian_db_cli.py show US-XXXX --full` |
+| Target US | `meridian_delivery.py show US-XXXX --full` |
 
 ## When to trigger
 
@@ -40,10 +40,10 @@ allowed-tools: Read, Glob, Grep, Bash
 
 If review finds blockers → recommend `/refine-us US-XXXX`. If review passes all refine gates → say “ready for `/refine-us` to set ready: true” (refine still required for the flag).
 
-## CLI (v11) — read only
+## Delivery commands — read only
 
 ```bash
-python3 .agent/scripts/meridian_db_cli.py show US-XXXX --full
+python3 .agent/scripts/meridian_delivery.py show US-XXXX --full
 python3 .agent/scripts/validate_meridian.py <package-root> --sqlite-only
 ```
 

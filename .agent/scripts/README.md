@@ -22,8 +22,9 @@
 | `lib/meridian_markdown_parse.py` | Library: frontmatter + section parsing |
 | `lib/meridian_section_contracts.py` | Library: structural validation helpers |
 | `lib/meridian_delivery_form.py` | Library: form ↔ markdown (extension) |
-| `bootstrap_meridian_db.py` | Create/upgrade `.meridian/meridian.db` |
-| `meridian_db_cli.py` | **Agent CLI:** counts, list, show, search, create-us/epic/version/sprint, update-us, set-ready, set-summary, implement-gate |
+| `bootstrap_meridian_db.py` | Create/upgrade `.meridian/meridian.db` + `delivery.json` |
+| `meridian_delivery.py` | **Agent facade** — reads `delivery.json`, dispatches connector (`counts`, `show`, `create-us`, …) |
+| `meridian_db_cli.py` | SQLite driver (implementation; facade calls this) |
 | `meridian_db_export.py` | JSON export for extension (`--format planning`; `--write-form`) |
 | `validate_meridian.py` | Governance validator (`--strict-kit-md`, `--json`; deprecated-agent check always on kit) |
 | `meridian_delivery_form.py` | Shim — re-exports `lib/meridian_delivery_form.py` for extension path checks |
@@ -67,7 +68,7 @@ Run once per project when importing from branch `meridian-v1-old`:
 
 | Consumer | Scripts |
 | -------- | ------- |
-| **Cursor / Claude agents** | `meridian_db_cli.py`, `validate_meridian.py` |
+| **Cursor / Claude agents** | `meridian_delivery.py`, `validate_meridian.py` |
 | **VS Code extension** | `validate_meridian.py`, `meridian_db_export.py`, `meridian_delivery_form.py` (path check) |
 | **GitHub Actions** | `validate_meridian.py --strict-kit-md`, `test_*.py` shims |
 | **Pre-commit** | `validate_meridian.py` |

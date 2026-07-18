@@ -1,6 +1,6 @@
 # Review checklist — audit US quality (read-only)
 
-> **v11:** read-only — `meridian_db_cli.py show US-XXXX --full`. Do **not** `update-us` unless manager explicitly asks to fix in the same turn.
+> **v11:** read-only — `meridian_delivery.py show US-XXXX --full`. Do **not** `update-us` unless manager explicitly asks to fix in the same turn.
 
 Use with skill `review-user-story` and workflow `/review-us`.
 

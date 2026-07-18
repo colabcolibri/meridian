@@ -44,7 +44,7 @@ App: Settings tab + **Decisions** (log) + Board
 ### 2. Contextualize
 
 ```txt
-Cite: US-XXXX (`meridian_db_cli.py show US-XXXX --full`)
+Cite: US-XXXX (`meridian_delivery.py show US-XXXX --full`)
 Prompt: "Implement US-XXXX per acceptance. Do not mark ✅ without evidence."
 ```
 

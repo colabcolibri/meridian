@@ -35,7 +35,7 @@ You facilitate Meridian so the **human manager** stays in control. You surface b
 ## Phase 0: Context check
 
 1. Confirm project root (active product per `.meridian/projects.json` in monorepos).
-2. Check: `.agent/MERIDIAN.md`, `docs/`, `.meridian/meridian.db` when delivery is active (`meridian_db_cli.py counts .`).
+2. Check: `.agent/MERIDIAN.md`, `docs/`, `.meridian/meridian.db` when delivery is active (`meridian_delivery.py counts .`).
 3. Run mental checklist from `@[skills/meridian-routing]` if domain is unclear.
 4. If `docs/` missing and user wants to start → `@[skills/init-project]`.
 

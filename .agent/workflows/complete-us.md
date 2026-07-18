@@ -28,7 +28,7 @@ CONTEXT:
 - Mode: COMPLETE US
 
 RULES:
-1. meridian_db_cli.py show US-XXXX --full
+1. meridian_delivery.py show US-XXXX --full
 2. Inspect git diff / test output for evidence
 3. Fill ## Record (Files + layers + Executed + suggested commit)
 4. Mark Acceptance [x]; Planned [x]; tests_status: done when required

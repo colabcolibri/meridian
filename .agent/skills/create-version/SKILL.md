@@ -24,11 +24,11 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 | `05_architecture.md` | `approved` |
 | `00_scope.md`, `03_user_types.md` | aligned with release |
 
-## CLI (v11)
+## Delivery commands
 
 ```bash
-python3 .agent/scripts/meridian_db_cli.py list versions
-python3 .agent/scripts/meridian_db_cli.py create-version --id vX --title "..."
+python3 .agent/scripts/meridian_delivery.py list versions
+python3 .agent/scripts/meridian_delivery.py create-version --id vX --title "..."
 python3 .agent/scripts/meridian_db_export.py . --entity versions --id vX --write-form < form.json
 python3 .agent/scripts/validate_meridian.py . --sqlite-only
 ```
@@ -36,9 +36,9 @@ python3 .agent/scripts/validate_meridian.py . --sqlite-only
 ## Procedure
 
 1. Read `sqlite-delivery-operations.md` + `writing-guide.md` + `version-template.md`.
-2. Next `vX` id (`meridian_db_cli.py list versions`).
+2. Next `vX` id (`meridian_delivery.py list versions`).
 3. Compose version markdown per template.
-4. Upsert via `meridian_db_cli.py create-version --id vX --title "..."` or `meridian_db_export.py . --entity versions --id vX --write-form`.
+4. Upsert via `meridian_delivery.py create-version --id vX --title "..."` or `meridian_db_export.py . --entity versions --id vX --write-form`.
 5. `update-decisions-log` if boundaries change.
 6. `validate_meridian.py . --sqlite-only`
 

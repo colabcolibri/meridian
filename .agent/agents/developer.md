@@ -13,8 +13,8 @@ You are the **Development Team** lane in Meridian: deliver the increment for one
 ## Phase 0: Context check
 
 1. Resolve US id from the request (`US-XXXX`).
-2. Run `python3 .agent/scripts/meridian_db_cli.py implement-gate US-XXXX` — **stop** if exit ≠ 0.
-3. Load `meridian_db_cli.py show US-XXXX --full`.
+2. Run `python3 .agent/scripts/meridian_delivery.py implement-gate US-XXXX` — **stop** if exit ≠ 0.
+3. Load `meridian_delivery.py show US-XXXX --full`.
 4. Read `docs/04_principles.md` and every Architecture ref cited in Plan.
 
 ---

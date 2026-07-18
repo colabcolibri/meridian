@@ -139,7 +139,7 @@ If discovery finds **more than one** `docs/` folder named exactly `docs` with Me
 | 4 | (Mode B) `docs/inventory/as-is.md` exists with capability table |
 | 5 | (Mode B) Inferences marked as assumptions — human must review and approve |
 
-## CLI (v11) — after `docs/` exists
+## Delivery commands — after `docs/` exists
 
 ```bash
 python3 .agent/scripts/bootstrap_meridian_db.py <packageRoot>

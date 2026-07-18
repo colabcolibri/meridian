@@ -6,7 +6,7 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 
 # Refine user story (Meridian)
 
-> **v11:** edit via `meridian_db_cli.py update-us` or `meridian_db_export.py --write-form` — do **not** create `docs/us/*.md` when `.meridian/meridian.db` exists.
+> **v11:** edit via `meridian_delivery.py update-us` or `meridian_db_export.py --write-form` — do **not** create `docs/us/*.md` when `.meridian/meridian.db` exists.
 
 ## Selective reading
 
@@ -30,13 +30,13 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 
 **Do not** mark `✅` — use `complete-user-story` after code.
 
-## CLI (v11)
+## Delivery commands
 
 ```bash
-python3 .agent/scripts/meridian_db_cli.py show US-XXXX --full
-python3 .agent/scripts/meridian_db_cli.py update-us US-XXXX --from-file /tmp/us-refined.md
+python3 .agent/scripts/meridian_delivery.py show US-XXXX --full
+python3 .agent/scripts/meridian_delivery.py update-us US-XXXX --from-file /tmp/us-refined.md
 # or: meridian_db_export.py . --entity us --id US-XXXX --write-form < form.json
-python3 .agent/scripts/meridian_db_cli.py set-ready US-XXXX --ready true   # only after checklist passes
+python3 .agent/scripts/meridian_delivery.py set-ready US-XXXX --ready true   # only after checklist passes
 ```
 
 ## Procedure
@@ -52,7 +52,7 @@ python3 .agent/scripts/meridian_db_cli.py set-ready US-XXXX --ready true   # onl
 6. Fill API/DB/Security/Decisions with short phrases when not `_n/a_`.
 7. Replace generic **Tests / Planned** with numbered steps or exact commands.
 8. Tighten **Acceptance** if vague (keep `[ ]`).
-9. Set `ready: true` only when checklist passes (including DRY + SRP rows) via `meridian_db_cli.py set-ready US-XXXX --ready true`.
+9. Set `ready: true` only when checklist passes (including DRY + SRP rows) via `meridian_delivery.py set-ready US-XXXX --ready true`.
 10. `update-decisions-log` if scope changed.
 
 ## Approach — refine quality bar

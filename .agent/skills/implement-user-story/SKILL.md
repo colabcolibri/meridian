@@ -30,12 +30,12 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 
 **Do not** use to close a US — use `complete-user-story` / `/complete-us`.
 
-## CLI (v11)
+## Delivery commands
 
 ```bash
-python3 .agent/scripts/meridian_db_cli.py implement-gate US-XXXX
-python3 .agent/scripts/meridian_db_cli.py implement-gate US-XXXX --json
-python3 .agent/scripts/meridian_db_cli.py show US-XXXX --full
+python3 .agent/scripts/meridian_delivery.py implement-gate US-XXXX
+python3 .agent/scripts/meridian_delivery.py implement-gate US-XXXX --json
+python3 .agent/scripts/meridian_delivery.py show US-XXXX --full
 ```
 
 Exit `0` on gate = pass; exit `1` = blocked. Full reference: `sqlite-delivery-operations.md`.

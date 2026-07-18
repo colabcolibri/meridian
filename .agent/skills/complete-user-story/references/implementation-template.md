@@ -1,6 +1,6 @@
 # Template — Record (fill in on completion)
 
-> **v11 delivery:** the `## Record` block lives **inside** `user_stories.body_markdown` in SQLite. On `/complete-us`, update via `meridian_db_cli.py update-us` or `--write-form` — not a separate `.md` file.
+> **v11 delivery:** the `## Record` block lives **inside** `user_stories.body_markdown` in SQLite. On `/complete-us`, update via `meridian_delivery.py update-us` or `--write-form` — not a separate `.md` file.
 >
 > **US creation:** placeholders under `## Record`.  
 > **Closure (`✅`):** replace with real record of what was delivered.
@@ -75,7 +75,7 @@ _(pending until close)_
 | Global decisions | Register in `docs/decisions/YYYY-MM-DD.json`; local US record stays here |
 | Git | US ✅ = row updated in SQLite; **commit is human after** `/complete-us` — see `commit-after-us-close.md`. On close: **suggested commit** in `### Executed`. After commit: optional **git commit** line with SHA + subject |
 
-**Persist:** `meridian_db_cli.py update-us US-XXXX --from-file` or `meridian_db_export.py --write-form` — see skill `complete-user-story` § CLI.
+**Persist:** `meridian_delivery.py update-us US-XXXX --from-file` or `meridian_db_export.py --write-form` — see skill `complete-user-story` § CLI.
 
 ## Anti-patterns (block `✅`)
 

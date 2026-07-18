@@ -1,6 +1,6 @@
 # Full user story template
 
-> **v11 delivery:** shape of `user_stories.body_markdown` plus frontmatter fields mapped to SQLite columns (`id`, `title`, `epic_id`, `version_id`, `status`, `ready`, …). **Not** a file at `docs/us/US-XXXX.md`. Persist with `meridian_db_cli.py create-us` / `update-us` or `meridian_db_export.py --write-form`.
+> **v11 delivery:** shape of `user_stories.body_markdown` plus frontmatter fields mapped to SQLite columns (`id`, `title`, `epic_id`, `version_id`, `status`, `ready`, …). **Not** a file at `docs/us/US-XXXX.md`. Persist with `meridian_delivery.py create-us` / `update-us` or `meridian_db_export.py --write-form`.
 >
 > **Writing quality:** read `.agent/references/templates/writing-guide.md` before drafting. Explain the slice; do not paste epic body.
 

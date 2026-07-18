@@ -1,6 +1,6 @@
 # Design system checklist
 
-> **v11:** UI stories live in SQLite (`meridian_db_cli.py show US-XXXX --full`). Cite `09_design_system.md` sections in Plan Architecture refs — not separate US files.
+> **v11:** UI stories live in SQLite (`meridian_delivery.py show US-XXXX --full`). Cite `09_design_system.md` sections in Plan Architecture refs — not separate US files.
 
 Use when creating or reviewing `docs/09_design_system.md`.
 

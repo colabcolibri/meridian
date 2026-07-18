@@ -70,11 +70,13 @@ Delivery skills (`create-us`, `create-epic`, `refine-us`, `complete-us`, …) ke
 | --------------------------------- | ----------------- |
 | `us-template.md`, `epic-template.md`, … | Shape of `body_markdown` + which frontmatter fields map to DB columns |
 | `implementation-template.md` | Shape of the `## Record` section inside `body_markdown` |
-| `refine-checklist.md`, `review-checklist.md` | Audit rubric — load US with `meridian_db_cli.py show --full` |
+| `refine-checklist.md`, `review-checklist.md` | Audit rubric — load US with `meridian_delivery.py show --full` |
 
-**Do not** interpret templates as “create `docs/us/US-XXXX.md`”. Persist with `meridian_db_cli.py` or `meridian_db_export.py --write-form` (see `sqlite-delivery-operations.md`).
+**Do not** interpret templates as “create `docs/us/US-XXXX.md`”. Persist with **`meridian_delivery.py`** (reads `.meridian/delivery.json`) or `meridian_db_export.py --write-form` (see `delivery-connector-schema.md`).
 
 Central registry symlinks: `.agent/references/templates/us-template.md` → skill `references/` (single source).
+
+**Connector profile:** `.meridian/delivery.json` — see `delivery-connector-schema.md`. Skills call `meridian_delivery.py`; do not hardcode `meridian_db_cli.py` in new prose.
 
 ---
 
