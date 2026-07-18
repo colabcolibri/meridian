@@ -6,7 +6,8 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 
 # Create user story (Meridian)
 
-> **v11:** delivery lives in `.meridian/meridian.db` — never create `docs/us/*.md`.
+> **v11:** delivery lives in `.meridian/meridian.db` — never create `docs/us/*.md`.  
+> **Forbidden:** `.meridian/drafts/`, `us-*-refine.md`, `us-*-complete.md`. “Draft” = `ready: false` in SQLite. Ephemeral `/tmp/us.md` → `update-us --from-file` only.
 
 ## Selective reading
 

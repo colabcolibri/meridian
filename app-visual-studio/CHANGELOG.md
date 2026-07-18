@@ -4,6 +4,13 @@ All notable changes to the **Meridian** VS Code extension (`meridian-vscode`).
 
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.1.24] - 2026-07-19
+
+### Changed
+
+- **Bundled kit:** explicit **Forbidden** rule — US “draft” = `ready: false` in SQLite only; no `.meridian/drafts/`, `us-*-refine.md`, or `docs/us/*.md` (protocol failure)
+- **Bundled kit:** `create-us`, `create-user-story`, `refine-user-story`, `us-template`, `start-here`, P0 rules updated
+
 ## [1.1.23] - 2026-07-18
 
 ### Added

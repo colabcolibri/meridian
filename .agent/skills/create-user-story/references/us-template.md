@@ -134,6 +134,8 @@ Full rules: `section-contracts.md`. Golden examples: `writing-guide.md`.
 
 ## Ready (frontmatter)
 
+**Forbidden:** `.meridian/drafts/`, `us-*-refine.md`, `us-*-complete.md`, delivery markdown under `.meridian/` or `docs/us/`. “Narrative draft” / “Plan draft” = **`ready: false`** and incomplete Plan in **`user_stories` (SQLite)** — persist only with `update-us --from-file`. Ephemeral CLI staging (e.g. `/tmp/us.md`) is allowed; discard after upsert.
+
 | Value | Meaning |
 | ----- | ------- |
 | `false` | Default on `/create-us` — narrative draft; implement blocked |

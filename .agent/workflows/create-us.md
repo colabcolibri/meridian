@@ -16,7 +16,8 @@ $ARGUMENTS
 4. Write **Intent** (Why, Where, Acceptance) + **Plan** draft (refs, Planned) — see writing-guide
 5. **One slice (SRP)** — split or narrow if request bundles unrelated layers; fill **Out of scope**
 6. `ready: false` — never implement in same turn
-7. Next step always: `/refine-us US-XXXX` (optional: `/review-us US-XXXX` first for audit)
+7. **Forbidden:** do not `Write` `.meridian/drafts/`, `us-*-refine.md`, `us-*-complete.md`, or delivery `.md` under `.meridian/` or `docs/us/`. “Narrative draft” = `ready: false` in SQLite after `update-us --from-file` (ephemeral `/tmp/us.md` ok → upsert → discard).
+8. Next step always: `/refine-us US-XXXX` (optional: `/review-us US-XXXX` first for audit)
 
 ---
 

@@ -10,6 +10,9 @@
 | Item | Path |
 | ---- | ---- |
 | Database | `{packageRoot}/.meridian/meridian.db` |
+
+**Forbidden:** `.meridian/drafts/`, `us-*-refine.md`, `us-*-complete.md`, `docs/us/*.md`. Kit “narrative draft” / “Plan draft” = `ready: false` in `user_stories`. Persist: ephemeral markdown → `update-us --from-file` → SQLite.
+
 | Migrations | `.agent/migrations/YYYYMMDDHHMMSS_*.sql` |
 | Access layer | `.agent/scripts/lib/meridian_db.py` |
 | CLI | `.agent/scripts/meridian_delivery.py` (facade) → `meridian_db_cli.py` (sqlite driver) |

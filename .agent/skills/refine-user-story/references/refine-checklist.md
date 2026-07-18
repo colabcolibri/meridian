@@ -49,9 +49,11 @@ See `.agent/references/scrum-meridian-map.md` for bugs/spikes (no extra artifact
 ## Frontmatter
 
 ```yaml
-ready: false   # /create-us — narrative draft
+ready: false   # /create-us — narrative draft (`ready` flag in SQLite; not a draft file)
 ready: true    # /refine-us — implement allowed
 ```
+
+**Forbidden:** `.meridian/drafts/`, `us-*-refine.md` — persist with `update-us --from-file` only.
 
 ---
 

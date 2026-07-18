@@ -21,6 +21,7 @@ Priority: **P0 rules > P1 agent + MERIDIAN.md > P2 skills**.
 
 - Phase docs: `docs/` of the **active Meridian product** (monorepos: `.meridian/projects.json`).
 - Delivery backlog: `.meridian/meridian.db` (epics, versions, sprints, US, decisions).
+- **Forbidden:** `.meridian/drafts/`, `us-*-refine.md`, `us-*-complete.md`, `docs/us/*.md` — US “draft” = `ready: false` in SQLite; persist via `update-us --from-file` only (`/tmp/us.md` staging ok).
 - Board UI: `meridian_db_export --format planning`; `board_snapshots` on every upsert.
 - Documentation precedes product code.
 - Do not create US before `05_architecture` `approved`.

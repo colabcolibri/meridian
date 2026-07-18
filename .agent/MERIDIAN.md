@@ -192,7 +192,7 @@ Strict US also require `ready: true | false`.
 ### US lifecycle
 
 ```txt
-/create-us     → Intent + Plan draft, ready: false
+/create-us     → Intent + Plan draft, ready: false   (forbidden: draft files — SQLite only)
 /review-us     → optional audit (no edits, no ready)
 /refine-us     → deepen Plan + Approach (required), ready: true
 implement      → developer gate: ready + Plan filled

@@ -155,6 +155,8 @@ A user story is not a ticket. It is a document with a full lifecycle:
 | `ready: true` | Refined — Plan complete, Approach written, tests concrete. Ready to implement. |
 | `status: ✅` | Complete — Record filled, acceptance evidenced, tests done. |
 
+**Forbidden:** `.meridian/drafts/`, `us-*-refine.md`, `us-*-complete.md`, `docs/us/*.md`. “Plan drafted” / “narrative draft” = `ready: false` in **SQLite** (`user_stories`) — not files on disk.
+
 The story has four sections:
 
 - **Intent** — why this slice exists, what the user can do after it, where it sits in the release
