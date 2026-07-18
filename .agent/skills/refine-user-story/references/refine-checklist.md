@@ -1,6 +1,8 @@
 # Refine checklist — US ready for implementation
 
-Use after `/create-us`, before any product code. Mark `ready: true` only when **every** required row passes.
+> **v11:** edit `user_stories.body_markdown` via `update-us` / `--write-form`; set `ready: true` with `set-ready` only when every row below passes.
+
+Use after `/create-us`, before any product code.
 
 Read `writing-guide.md` for tone: Approach bullets must **explain**, not telegraph.
 
@@ -32,8 +34,8 @@ See `.agent/references/scrum-meridian-map.md` for bugs/spikes (no extra artifact
 | Bad | Good |
 | --- | ---- |
 | `- KanbanView.tsx` | `- Update KanbanView to filter stories before column split so v0 cards never render when v1 is selected.` |
-| `- see architecture` | `- Reuse monitor filter context so Deliverables (US-0025) shares version state without a second source of truth.` |
-| `- implement filter` | `- Add VersionFilterBar above columns; persist selection in MonitorVersionFilterContext when switching tabs.` |
+| `- see architecture` | `- Reuse VersionFilterContext so Epics webview (US-0025) shares version state without a second source of truth.` |
+| `- implement filter` | `- Add VersionFilterBar above board columns; persist selection in VersionFilterContext when switching webviews.` |
 
 ---
 

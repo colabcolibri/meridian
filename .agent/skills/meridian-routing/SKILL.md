@@ -7,7 +7,7 @@ version: 2.0.0
 
 # Meridian intelligent routing
 
-> Route to the **Scrum-aligned** agent. Legacy `@` slugs: § **Legacy aliases** below + `references/agent-aliases-h2.md` (H2 deletes `.md` files; routing table stays).
+> Route to the **Scrum-aligned** agent. Legacy `@` slugs: § **Legacy aliases** below + `references/agent-aliases-h2.md` (H2 ✅ — arquivos `.md` removidos; tabela permanece).
 
 ## Principle
 

@@ -6,10 +6,13 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 
 # Implement user story (Meridian)
 
+> **v11:** gate + read US from `.meridian/meridian.db` — `implement-gate` then `show --full`. Never read `docs/us/*.md` when SQLite is active.
+
 ## Selective reading
 
 | File | When to read |
 | ------- | ---------- |
+| `.agent/references/templates/sqlite-delivery-operations.md` | **Mandatory** — upsert path |
 | `references/implement-gate-checklist.md` | **Mandatory** — gate before code |
 | `.agent/references/templates/code-quality-at-us-time.md` | **Mandatory** — DRY, SRP during coding |
 | Target US (`show --full`) | Full Intent + Plan from SQLite |
@@ -27,20 +30,15 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 
 **Do not** use to close a US — use `complete-user-story` / `/complete-us`.
 
-## Gate CLI (run first)
+## CLI (v11)
 
 ```bash
 python3 .agent/scripts/meridian_db_cli.py implement-gate US-XXXX
 python3 .agent/scripts/meridian_db_cli.py implement-gate US-XXXX --json
-```
-
-Exit `0` = pass; exit `1` = blocked (see checklist output).
-
-Load US body:
-
-```bash
 python3 .agent/scripts/meridian_db_cli.py show US-XXXX --full
 ```
+
+Exit `0` on gate = pass; exit `1` = blocked. Full reference: `sqlite-delivery-operations.md`.
 
 ## Hard gate (block product code if any fail)
 

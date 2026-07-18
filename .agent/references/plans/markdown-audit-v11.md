@@ -1,7 +1,6 @@
 # Audit markdown v11 — review completo para estrutura SQLite
 
-> **Status:** onda G fechada — jul/2026  
-> **Última atualização:** H2 ✅ · G1–G6 ✅ · dogfood `02`/`03`/`01` refinado
+> **Status:** onda G + **G7** ✅ — inventário em [`skill-references-audit-v11.md`](./skill-references-audit-v11.md)
 > **Gatilho:** onda A marcou skills como ✅, mas dezenas de `.md` ainda descreviam delivery como arquivos `docs/us/*.md`, `app-desktop`, `/sync-board`, ou “US file”.  
 > **Objetivo:** um agente ou humano consegue seguir **qualquer** markdown do kit sem ambiguidade v1 vs v11.
 
@@ -17,6 +16,7 @@
 | **G5** | ✅ | PR template, SECURITY, README |
 | **G4** | ✅ | `docs/01_tech_stack.md` → extension + SQLite |
 | **G6** | ✅ | `validate_kit_markdown_v11` + `--strict-kit-md` no CI |
+| **G7** | ✅ | ver [`skill-references-audit-v11.md`](./skill-references-audit-v11.md) |
 
 **Skills novas:** seguir `.agent/skills/doc.md` + padrão create-skill (description 3ª pessoa com WHAT/WHEN, tabela selective reading, corpo &lt;500 linhas, detalhes em `references/`).
 
@@ -31,7 +31,7 @@
 | Onda C ✅ — sem `docs/templates/` | **OK** no repo |
 | Onda D/E ✅ — scripts | **OK** |
 
-**Conclusão:** onda **G** fechada — manutenção contínua via `--strict-kit-md` no CI.
+**Conclusão:** onda **G** fechada (protocolo/dogfood + **G7** skills/references/workflows/agents).
 
 ---
 
@@ -172,33 +172,21 @@ Marque `[x]` quando **v11-operacional** (sem P0; P1 aceito ou corrigido).
 - [x] Todos workflows operacionais — **H1** (incl. `design-pass.md`)
 - [x] `discover.md`, `update-decisions-log.md` — v11 OK
 
-### 7.7 Skills — SKILL.md (17)
+### 7.7 Skills — SKILL.md
 
-- [x] `skills/create-user-story/SKILL.md` — G2
-- [x] `skills/meridian-routing/SKILL.md` — H1
-- [x] `skills/design-system/SKILL.md` — H1 + create-skill pattern
-- [x] `skills/discover-product/SKILL.md` — H1
-- [x] `skills/create-epic/SKILL.md` — v11 note OK
-- [x] `skills/create-version/SKILL.md` — G2
-- [x] `skills/create-sprint/SKILL.md` — G2
-- [x] `skills/complete-sprint/SKILL.md` — v11 OK
-- [x] `skills/implement-user-story/SKILL.md` — v11 OK
-- [x] `skills/init-project/SKILL.md` — v11 OK
-- [x] `skills/review-user-story/SKILL.md` — v11 SQLite
-- [x] `skills/refine-user-story/SKILL.md` — v11 SQLite
-- [x] `skills/complete-user-story/SKILL.md` — v11 SQLite
-- [x] `skills/security-review/SKILL.md` — v11 OK
-- [x] `skills/update-decisions-log/SKILL.md` — v11 OK
-- [x] `skills/doc.md` — v11 OK
+> **Inventário arquivo a arquivo (honesto):** [`skill-references-audit-v11.md`](./skill-references-audit-v11.md) §1–§2.  
+> Resumo: 9 skills delivery ✅ CLI; 5 skills phase/routing 👁 grep; `implement-user-story` banner ✅ G7.
+
+- [x] Delivery skills (create → complete + epic/version/sprint) — [`skill-references-audit-v11.md`](./skill-references-audit-v11.md) §1
+- [x] G7 fechado — §5 skill-references-audit ✅
 
 ### 7.8 Skills — references/
 
-- [x] `create-version/references/version-template.md` — G2
-- [x] `create-sprint/references/sprint-template.md` — G2
-- [x] `complete-user-story/references/implementation-template.md` — G2
-- [x] `review-user-story/references/review-checklist.md` — H1
-- [x] `discover-product/references/*` — H1
-- [x] demais refs — grep §3 limpo (skill refs v11)
+> Tabela completa: [`skill-references-audit-v11.md`](./skill-references-audit-v11.md) §2.
+
+- [x] 9 arquivos delivery (us, epic, version, sprint, implementation, 3 checklists) — cabeçalho v11
+- [x] `init-project/references/doc-templates.md` — grep OK
+- [x] `security-review` + `design-system` refs — cabeçalho v11 G7
 
 ### 7.9 Scripts docs
 
@@ -237,9 +225,10 @@ G3 — Agents/workflows grep     ✅
 G5 — Repo root, CI, SECURITY   ✅
 G4 — Dogfood docs/00–11               ✅
 G6 — Guardrail CI grep               ✅
+G7 — Skills + references + CLI       ✅
 ```
 
-**Ordem por arquivo:** checklist §7 → grep P0 patterns → substituir vocabulário §10 → `validate_meridian.py . --sqlite-only`
+**Inventário G7 (arquivo a arquivo):** [`skill-references-audit-v11.md`](./skill-references-audit-v11.md) — não duplicar checklist §7 aqui.
 
 ---
 
@@ -289,7 +278,7 @@ python3 .agent/scripts/validate_meridian.py . --strict-kit-md
 
 ## 11. Critério de “pronto” (onda G)
 
-- [x] Checklist §7 — 100% `[x]`
+- [x] G7 skills/references — [`skill-references-audit-v11.md`](./skill-references-audit-v11.md) §5 ✅
 - [x] Zero P0 no grep com allowlist (guardrail CI)
 - [x] Vocabulário de agentes alinhado com **`agent-roster-and-workflow-v11.md`** (H1 ✅)
 - [x] Guardrail G6 no CI (`--strict-kit-md`)

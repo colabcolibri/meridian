@@ -6,14 +6,36 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 
 # Create user story (Meridian)
 
+> **v11:** insert row in `.meridian/meridian.db` — **never** `docs/us/US-XXXX.md` when the DB exists.
+
 ## Selective reading
 
 | File | When to read |
 | ------- | ---------- |
-| `.agent/references/templates/writing-guide.md` | **Mandatory** — how to write explanatory US prose |
-| `.agent/references/templates/code-quality-at-us-time.md` | **Mandatory** — DRY, SRP, link to `04_principles` |
-| `.agent/references/templates/INDEX.md` | Agent protocol |
-| `.agent/references/templates/sqlite-delivery-operations.md` | **Mandatory** — CLI writes to SQLite |
+| `.agent/references/templates/sqlite-delivery-operations.md` | **Mandatory** — CLI writes |
+| `.agent/references/templates/writing-guide.md` | **Mandatory** — prose |
+| `.agent/references/templates/code-quality-at-us-time.md` | **Mandatory** — DRY, SRP |
+| `.agent/references/templates/INDEX.md` | Protocol |
+| `references/us-template.md` | **Mandatory** — `body_markdown` shape |
+
+## CLI (v11)
+
+```bash
+# Discover parents + next id
+python3 .agent/scripts/meridian_db_cli.py list epics
+python3 .agent/scripts/meridian_db_cli.py list versions
+python3 .agent/scripts/meridian_db_cli.py list user_stories
+
+# Read context
+python3 .agent/scripts/meridian_db_cli.py show EPIC-XX --full
+python3 .agent/scripts/meridian_db_cli.py show US-YYYY --full   # depends_on
+
+# Create (pick one)
+python3 .agent/scripts/meridian_db_cli.py create-us --title "..." --epic EPIC-XX --version vX
+python3 .agent/scripts/meridian_db_export.py . --entity us --id US-XXXX --write-form < form.json
+```
+
+Assign next `US-XXXX` = highest existing id + 1. Set `ready: false` on create.
 
 ## Preconditions (hard gate)
 
@@ -75,12 +97,12 @@ Forbidden: telegraphic stubs, repeating acceptance under Approach, “see EPIC-X
 
 ```txt
 US created:
-File:
-Epic:
-Version:
+ID: US-XXXX
+Epic: EPIC-XX
+Version: vX
 Depends on:
 Narrative complete: yes | needs refine
-Board updated:
+SQLite saved: yes | no
 Open questions:
 Next: /refine-us US-XXXX
 ```

@@ -62,6 +62,22 @@ Every `SKILL.md` with references must include:
 
 ---
 
+## References vs SQLite (v11)
+
+Delivery skills (`create-us`, `create-epic`, `refine-us`, `complete-us`, …) keep **Markdown templates** under `references/`. That is intentional:
+
+| What you see in `references/*.md` | What it is in v11 |
+| --------------------------------- | ----------------- |
+| `us-template.md`, `epic-template.md`, … | Shape of `body_markdown` + which frontmatter fields map to DB columns |
+| `implementation-template.md` | Shape of the `## Record` section inside `body_markdown` |
+| `refine-checklist.md`, `review-checklist.md` | Audit rubric — load US with `meridian_db_cli.py show --full` |
+
+**Do not** interpret templates as “create `docs/us/US-XXXX.md`”. Persist with `meridian_db_cli.py` or `meridian_db_export.py --write-form` (see `sqlite-delivery-operations.md`).
+
+Central registry symlinks: `.agent/references/templates/us-template.md` → skill `references/` (single source).
+
+---
+
 ## Agents vs skills
 
 | Layer | Role |

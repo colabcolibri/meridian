@@ -44,10 +44,11 @@ RULES:
 
 ```txt
 US refined:
-File:
+ID: US-XXXX
 Ready: yes | no
+SQLite saved: yes | no
 DRY / SRP: pass | fail
 Approach quality: explanatory | still thin
 Tests: concrete | generic
-Next: implement | /refine-us again
+Next: /implement-us US-XXXX | /refine-us again
 ```

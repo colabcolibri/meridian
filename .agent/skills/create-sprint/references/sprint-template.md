@@ -1,5 +1,7 @@
 # Sprint template
 
+> **v11 delivery:** shape of `sprints.body_markdown` plus frontmatter mapped to SQLite (`stories` / junction via CLI). **Not** `docs/sprints/vX-SY.md`. Persist with `meridian_db_cli.py create-sprint` or `--write-form`.
+>
 > A sprint is a time-boxed delivery unit within a version. It has a clear goal, a defined scope, and a done condition. Do not use it as a task list — use it to communicate intent and measure delivery.
 
 ```md

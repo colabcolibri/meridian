@@ -133,19 +133,28 @@ If discovery finds **more than one** `docs/` folder named exactly `docs` with Me
 
 | # | Check |
 | - | ----------- |
-| 1 | `docs/`, `decisions/`, `architecture/`, `epics/`, `versions/`, `sprints/`, `.meridian/meridian.db`, `11_decisions`, `00_scope` exist |
+| 1 | `docs/` phase tree (`00`–`11`, `decisions/`, `architecture/`, `discovery/`, `inventory/`) + `.meridian/meridian.db` bootstrapped |
 | 2 | `.env*` protected in `.gitignore` |
 | 3 | No product code created |
 | 4 | (Mode B) `docs/inventory/as-is.md` exists with capability table |
 | 5 | (Mode B) Inferences marked as assumptions — human must review and approve |
+
+## CLI (v11) — after `docs/` exists
+
+```bash
+python3 .agent/scripts/bootstrap_meridian_db.py <packageRoot>
+python3 .agent/scripts/validate_meridian.py <packageRoot> --sqlite-only
+```
+
+Delivery rows (epics, versions, sprints, US) go in SQLite — **not** `docs/us/`, `docs/epics/`, etc.
 
 ## Prohibitions
 
 | Forbidden | Allowed |
 | -------- | --------- |
 | Mark phase docs as `approved` without human | `draft` + assumptions |
-| Create US | Empty `us/` structure |
-| Create retroactive US with `✅` for legacy | Inventory + epics `complete` + optional v0 |
+| Create US | Bootstrap empty SQLite schema |
+| Create retroactive US with `✅` for legacy | Inventory + epics in SQLite when migrated |
 | Implement features | Docs + initial decision |
 | (Mode B) Replace existing README | Add `docs/README.md` alongside |
 | (Mode B) Keep inventory after `05_architecture` approved | Archive or delete after promotion |

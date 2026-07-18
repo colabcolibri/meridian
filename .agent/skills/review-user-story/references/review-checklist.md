@@ -1,6 +1,8 @@
 # Review checklist — audit US quality (read-only)
 
-Use with skill `review-user-story` and workflow `/review-us`. **Do not edit the US** unless the manager explicitly asks to fix in the same turn.
+> **v11:** read-only — `meridian_db_cli.py show US-XXXX --full`. Do **not** `update-us` unless manager explicitly asks to fix in the same turn.
+
+Use with skill `review-user-story` and workflow `/review-us`.
 
 **Canonical refine gates:** `.agent/skills/refine-user-story/references/refine-checklist.md` (same rows — review reports pass/fail; refine fixes and sets `ready: true`).
 
@@ -44,7 +46,7 @@ Same list as refine-checklist: `_(fill in`, `§ [section name`, `path/to/…`, `
 | Situation | Next step |
 | --------- | --------- |
 | R3–R9 failures, `ready: false` | `/refine-us US-XXXX` |
-| All R3–R9 pass, `ready: false` | `/refine-us US-XXXX` (to set ready and sync board) |
+| All R3–R9 pass, `ready: false` | `/refine-us US-XXXX` (to set `ready: true` via `set-ready` / `update-us`) |
 | All pass, `ready: true`, status ❌ | Implement (`developer` + `/implement-us` gate) |
 | Code done, R13 fail | `/complete-us US-XXXX` |
 | Structural errors (R1/R2) | Fix structure first; may need manual edit + re-review |

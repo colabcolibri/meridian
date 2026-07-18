@@ -50,10 +50,10 @@ RULES:
 
 ```txt
 US created:
-File:
+ID: US-XXXX
 Summary (one line):
 Why written: yes | thin — needs refine
-Board updated:
+SQLite saved: yes | no
 Next: /review-us US-XXXX (optional) | /refine-us US-XXXX | then /implement-us after ready
 ```
 

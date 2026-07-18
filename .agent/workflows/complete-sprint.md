@@ -43,8 +43,9 @@ RULES:
 
 ```txt
 Sprint completed:
-File:
+Id: vX-SY
 Status: complete
+SQLite saved: yes | no
 US summary: (✅ / 🔶 / ❌ counts)
 Retrospective filled: yes | no
 Decisions logged: yes | no

@@ -1,5 +1,7 @@
 # Implement gate checklist — before product code
 
+> **v11:** load US from SQLite (`meridian_db_cli.py show US-XXXX --full`). Gate CLI: `implement-gate US-XXXX`.
+
 Use with `/implement-us US-XXXX` **before** any Write on product code for that story.
 
 **Automated:** `python3 .agent/scripts/meridian_db_cli.py implement-gate US-XXXX` (checks 1–7 except session scope and principles read).

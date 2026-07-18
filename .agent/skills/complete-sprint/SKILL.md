@@ -25,6 +25,15 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 | Sprint review | Manager confirmed increment (human gate) |
 | Retrospective | Must be filled before `status: complete` |
 
+## CLI (v11)
+
+```bash
+python3 .agent/scripts/meridian_db_cli.py show vX-SY --full
+python3 .agent/scripts/meridian_db_cli.py show US-XXXX          # each story in sprint scope
+python3 .agent/scripts/meridian_db_export.py . --entity sprints --id vX-SY --write-form < form.json
+python3 .agent/scripts/validate_meridian.py . --sqlite-only
+```
+
 ## Procedure
 
 1. Read sprint template + `show vX-SY --full`.
@@ -41,6 +50,7 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 Sprint completed:
 Id: vX-SY
 Status: complete
+SQLite saved: yes | no
 US delivered: N ✅ / N 🔶 / N ❌
 Retrospective filled: yes | no
 Decisions logged: yes | no

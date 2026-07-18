@@ -14,8 +14,9 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 | ------- | ---------- |
 | `.agent/references/templates/writing-guide.md` | Refine example — Approach depth, tests |
 | `.agent/references/templates/code-quality-at-us-time.md` | **Mandatory** — DRY, SRP before `ready: true` |
+| `.agent/references/templates/sqlite-delivery-operations.md` | **Mandatory** — update path |
 | `references/refine-checklist.md` | **Mandatory** — ready gate |
-| `references/us-template.md` | Full structure |
+| `../create-user-story/references/us-template.md` | Full `body_markdown` structure |
 | Target US + `depends_on` US | What already exists |
 | `docs/05_architecture.md` | Sections cited in Architecture refs |
 | `docs/architecture/*.md` | When US cites detail files directly |
@@ -28,6 +29,15 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 - Workflow `/refine-us US-XXXX`.
 
 **Do not** mark `✅` — use `complete-user-story` after code.
+
+## CLI (v11)
+
+```bash
+python3 .agent/scripts/meridian_db_cli.py show US-XXXX --full
+python3 .agent/scripts/meridian_db_cli.py update-us US-XXXX --from-file /tmp/us-refined.md
+# or: meridian_db_export.py . --entity us --id US-XXXX --write-form < form.json
+python3 .agent/scripts/meridian_db_cli.py set-ready US-XXXX --ready true   # only after checklist passes
+```
 
 ## Procedure
 

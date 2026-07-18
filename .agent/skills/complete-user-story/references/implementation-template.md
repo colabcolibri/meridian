@@ -1,5 +1,7 @@
 # Template — Record (fill in on completion)
 
+> **v11 delivery:** the `## Record` block lives **inside** `user_stories.body_markdown` in SQLite. On `/complete-us`, update via `meridian_db_cli.py update-us` or `--write-form` — not a separate `.md` file.
+>
 > **US creation:** placeholders under `## Record`.  
 > **Closure (`✅`):** replace with real record of what was delivered.
 
@@ -36,9 +38,9 @@ _(pending until close)_
 
 ### Files
 
-- `src/features/monitor/VersionFilterBar.tsx` — shared filter bar
-- `src/context/MonitorVersionFilterContext.tsx` — version state across tabs
-- `src/features/monitor/MonitorDashboard.tsx` — provider wiring
+- `app-visual-studio/src/webviews/board/VersionFilterBar.tsx` — shared filter bar
+- `app-visual-studio/src/context/VersionFilterContext.tsx` — version state across webviews
+- `app-visual-studio/src/webviews/board/BoardView.tsx` — provider wiring
 
 ### Backend
 
@@ -46,9 +48,9 @@ _(pending until close)_
 
 ### Frontend
 
-- Shared React context across Delivery and Board tabs.
-- Selected version persists when switching tabs.
-- Default: `active` version; fallback last version with US in folder.
+- Shared React context across Board and Epics webviews.
+- Selected version persists when switching views.
+- Default: `active` version; fallback last version with US in sprint scope.
 
 ### Scripts / Docs
 
@@ -71,7 +73,9 @@ _(pending until close)_
 | Empty layers | `_n/a_` — do not omit heading |
 | Plan vs delivery | On completion, remove bullets describing unimplemented intent |
 | Global decisions | Register in `docs/decisions/YYYY-MM-DD.json`; local US record stays here |
-| Git | US ✅ = docs closed; **commit is human after** `/complete-us` + board sync — see `commit-after-us-close.md`. On close: **suggested commit** in `### Executed`. After commit: optional **git commit** line with SHA + subject; omit until then |
+| Git | US ✅ = row updated in SQLite; **commit is human after** `/complete-us` — see `commit-after-us-close.md`. On close: **suggested commit** in `### Executed`. After commit: optional **git commit** line with SHA + subject |
+
+**Persist:** `meridian_db_cli.py update-us US-XXXX --from-file` or `meridian_db_export.py --write-form` — see skill `complete-user-story` § CLI.
 
 ## Anti-patterns (block `✅`)
 

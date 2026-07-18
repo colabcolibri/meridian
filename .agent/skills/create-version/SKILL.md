@@ -24,6 +24,15 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 | `05_architecture.md` | `approved` |
 | `00_scope.md`, `03_user_types.md` | aligned with release |
 
+## CLI (v11)
+
+```bash
+python3 .agent/scripts/meridian_db_cli.py list versions
+python3 .agent/scripts/meridian_db_cli.py create-version --id vX --title "..."
+python3 .agent/scripts/meridian_db_export.py . --entity versions --id vX --write-form < form.json
+python3 .agent/scripts/validate_meridian.py . --sqlite-only
+```
+
 ## Procedure
 
 1. Read `sqlite-delivery-operations.md` + `writing-guide.md` + `version-template.md`.

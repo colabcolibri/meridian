@@ -39,6 +39,15 @@ Epic = **product capability**, not a folder in `src/`.
 
 Forbidden: feature bullet list without problem narrative; module names as capability.
 
+## CLI (v11)
+
+```bash
+python3 .agent/scripts/meridian_db_cli.py list epics
+python3 .agent/scripts/meridian_db_cli.py list versions
+python3 .agent/scripts/meridian_db_cli.py create-epic --title "..." --versions "[vX]"
+python3 .agent/scripts/meridian_db_export.py . --entity epics --id EPIC-XX --write-form < form.json
+```
+
 ## Procedure
 
 1. Read `sqlite-delivery-operations.md` + `writing-guide.md` + `epic-template.md`.

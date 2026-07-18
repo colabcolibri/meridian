@@ -15,8 +15,9 @@ allowed-tools: Read, Glob, Grep, Bash
 | `.agent/references/templates/TEMPLATE_SOURCES.md` | When unsure which file is canonical |
 | `.agent/references/templates/writing-guide.md` | Prose quality bar (Why / Where / Approach) |
 | `.agent/references/templates/section-contracts.md` | Fixed `##` / `###` structure |
-| `references/review-checklist.md` | **Mandatory** — audit rubric and output format |
-| `references/us-template.md` | Expected full US shape |
+| `.agent/references/templates/sqlite-delivery-operations.md` | Read path — no Write on US |
+| `references/review-checklist.md` | **Mandatory** — audit rubric |
+| `../create-user-story/references/us-template.md` | Expected `body_markdown` shape |
 | `.agent/skills/refine-user-story/references/refine-checklist.md` | Same gates `/refine-us` uses — cite failures here |
 | Target US | `meridian_db_cli.py show US-XXXX --full` |
 
@@ -38,6 +39,15 @@ allowed-tools: Read, Glob, Grep, Bash
 | Output | Gap report + recommendation | Updated US row (`update-us` / `--write-form`) |
 
 If review finds blockers → recommend `/refine-us US-XXXX`. If review passes all refine gates → say “ready for `/refine-us` to set ready: true” (refine still required for the flag).
+
+## CLI (v11) — read only
+
+```bash
+python3 .agent/scripts/meridian_db_cli.py show US-XXXX --full
+python3 .agent/scripts/validate_meridian.py <package-root> --sqlite-only
+```
+
+**Do not** call `update-us`, `set-ready`, or `--write-form` unless the manager explicitly asks to fix in the same turn.
 
 ## Procedure
 

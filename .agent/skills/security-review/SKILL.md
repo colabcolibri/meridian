@@ -6,6 +6,8 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 
 # Security review (Meridian)
 
+> **Escopo:** phase doc `docs/02_security.md` (Markdown no disco). Delivery (US/epic) fica em SQLite — não auditar `docs/us/` como path de Write.
+
 > Security before architecture and before agents execute sensitive work.
 
 ## Selective reading

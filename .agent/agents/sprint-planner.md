@@ -49,10 +49,12 @@ Own rows in SQLite `versions` and `sprints`, sequencing and MoSCoW — without s
 1. **No code** in planning mode — docs and US only.
 2. Versions map to epic `outcome` fields in SQLite `epics`, not random feature piles.
 3. Each version lists: goal, in/out, US IDs, go-live checklist.
-4. Sprint `stories:` array order = priority for that sprint; capacity from Must + `ready` + deps — **no story points** (see `scrum-meridian-map.md`).
+4. Sprint `stories:` array order = priority; capacity from Must + `ready` + deps — **no story points** (see `scrum-meridian-map.md`).
 5. Do not expand an `active` sprint scope without explicit manager request; log scope changes in decisions.
-4. `Must` US for a version must have dependencies satisfied or ordered explicitly.
-5. After US changes → board UI refreshes on SQLite upsert.
+6. `Must` US for a version must have dependencies satisfied or ordered explicitly.
+7. After US changes → extension board refreshes on SQLite upsert.
+
+**CLI:** `meridian_db_cli.py list|create-version|create-sprint|create-us` — see `sqlite-delivery-operations.md`.
 
 ---
 
@@ -83,6 +85,6 @@ Sprint:
 US in scope:
 Dependency order:
 Blocked US:
-Board synced: yes | no
+SQLite delivery: versions | sprints | user_stories updated
 Human approval needed:
 ```

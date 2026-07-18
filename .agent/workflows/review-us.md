@@ -41,14 +41,14 @@ RULES:
 
 ```txt
 US review:
-File:
+ID: US-XXXX
 Validator:
 Checklist: X/13 pass
 
 Failures:
 Warnings:
-ready in file: true | false | unset
-Recommendation: /refine-us | /complete-us | implement | human
+ready in DB: true | false | unset
+Recommendation: /refine-us | /complete-us | /implement-us | human
 ```
 
 ---
@@ -57,7 +57,7 @@ Recommendation: /refine-us | /complete-us | implement | human
 
 | `/review-us` | `/refine-us` |
 | --- | --- |
-| Report gaps | Fix gaps in file |
+| Report gaps | Fix gaps in SQLite row |
 | Never sets ready | Sets ready: true when checklist passes |
 
 Typical flow: `/create-us` → `/review-us` (optional) → `/refine-us` → implement.

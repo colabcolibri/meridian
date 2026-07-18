@@ -1,5 +1,7 @@
 # Version template (release)
 
+> **v11 delivery:** shape of `versions.body_markdown` plus frontmatter mapped to SQLite. **Not** `docs/versions/vX.md`. Persist with `meridian_db_cli.py create-version` or `--write-form`.
+>
 > **Writing quality:** read `.agent/references/templates/writing-guide.md`. Objective and Done criteria are **paragraphs** explaining the release theme.
 
 ```md

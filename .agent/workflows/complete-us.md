@@ -1,5 +1,5 @@
 ---
-description: Close a Meridian user story after implementation — fill technical summary, acceptance and status.
+description: Close a Meridian user story after implementation — fill Record, acceptance and status in SQLite.
 ---
 
 # /complete-us — close user story
@@ -11,12 +11,12 @@ $ARGUMENTS
 ## Critical rules
 
 1. Use `backlog-refiner` + `@[skills/complete-user-story]`
-2. **Gate:** implementation delivered; applicable tests passed; `depends_on` at `✅`
-3. **Mandatory read:** `implementation-template.md` + `us-template.md` + `section-contracts.md` + target US **before** editing status
+2. **Mandatory read:** `sqlite-delivery-operations.md` + `implementation-template.md` + `section-contracts.md`
+3. **Gate:** implementation delivered; tests passed; `depends_on` at `✅`
 4. **Do not** mark `✅` with placeholder in `## Record`
-5. Save via `meridian_db_cli.py update-us` — board UI refreshes on DB write
-6. `update-decisions-log` only if cross-cutting decision — **read** `@[skills/update-decisions-log]` and run `date +"%Y-%m-%d"` + `date +"%H:%M"` before Write
-7. Add **suggested commit** in `### Executed` — do **not** `git commit` unless manager explicitly asks (see `commit-after-us-close.md`)
+5. **CLI (v11):** `show US-XXXX --full` → edit body → `update-us --from-file` or `--write-form` — never `docs/us/*.md`
+6. `update-decisions-log` only if cross-cutting — run `date` before Write
+7. **suggested commit** in `### Executed` — human commits per `commit-after-us-close.md`
 
 ---
 
@@ -28,14 +28,13 @@ CONTEXT:
 - Mode: COMPLETE US
 
 RULES:
-1. backlog-refiner Phase 0 — verify US id and dependencies
-2. Inspect git diff / files touched for evidence
-3. Fill ## Record (Files + layers + Executed)
-4. Mark Intent/Acceptance [x]; update Plan/Planned [x]; set tests_status: done
-5. Set status ✅ (or 🔶 + Missing: if partial) — only ✅ if tests: none or tests_status: done
-6. update-us with Record + status ✅
-7. update-decisions-log if protocol/architecture changed — read skill + run date before Write
-8. suggested commit line in ### Executed (human commits per commit-after-us-close.md)
+1. meridian_db_cli.py show US-XXXX --full
+2. Inspect git diff / test output for evidence
+3. Fill ## Record (Files + layers + Executed + suggested commit)
+4. Mark Acceptance [x]; Planned [x]; tests_status: done when required
+5. status ✅ (or 🔶 + Missing:)
+6. update-us or --write-form
+7. validate_meridian.py . --sqlite-only when kit changed
 ```
 
 ---
@@ -44,12 +43,12 @@ RULES:
 
 ```txt
 US completed:
-File:
+ID: US-XXXX
 Status:
+SQLite saved: yes | no
 Implementation summary:
 Files touched:
 Tests run:
-Board updated:
 Decisions logged:
 Suggested commit:
 Next (human): commit per commit-after-us-close.md
@@ -62,6 +61,6 @@ Open items:
 
 | Request | Result |
 | ------ | --------- |
-| `/complete-us US-0034` | US-0034 with technical implementation + ✅ + board |
-| `/complete-us` without id | Ask which US or infer from implementation session |
-| Partial implementation | Status 🔶 + explicit Missing:; do not force ✅ |
+| `/complete-us US-0034` | US-0034 Record + ✅ in SQLite |
+| `/complete-us` without id | Ask which US or infer from session |
+| Partial implementation | 🔶 + Missing:; do not force ✅ |

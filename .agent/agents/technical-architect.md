@@ -38,7 +38,7 @@ Create and maintain:
 ## Phase 1: Consistency pass
 
 1. Read `architecture-folder-guide.md` when splitting detail files.
-2. Cross-check epics/versions for scope fit.
+2. Cross-check epics/versions in SQLite for scope fit.
 3. Cross-check `02_security` for auth, data classification, agent boundaries.
 4. Cross-check `06_database` / `07_api_contracts` when they exist.
 5. Cross-check `04_principles` for layer boundaries.

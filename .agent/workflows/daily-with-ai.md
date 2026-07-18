@@ -12,7 +12,7 @@ $ARGUMENTS
 
 1. Human manager approves; agents execute within `docs/`.
 2. One US per implementation cycle when possible.
-3. Code only with minimum docs: `05_architecture` approved; epic/version in folders; US with `ready: true`.
+3. Code only with minimum docs: `05_architecture` approved; epic/version in SQLite; US with `ready: true`.
 4. **Refine before implement** — `/refine-us` after `/create-us`; never skip to code with `ready: false`.
 5. **Implement only via gate** — `/implement-us US-XXXX` after `ready: true`; agent blocks otherwise.
 5. Always close with `complete-user-story` or `/complete-us` — never ✅ in chat only.
@@ -103,9 +103,8 @@ Reference: .agent/references/commit-after-us-close.md
 
 ### 6. Review
 
-- App: Board tab — US in correct column?
+- Extension board reflects US status after SQLite upsert?
 - Record consistent with what was tested?
-- Optional later: monitor last commit touching delivery for a US
 
 ---
 
@@ -145,7 +144,7 @@ Reference: .agent/references/commit-after-us-close.md
 Session:
 US worked:
 Final status:
-Board updated: yes | no
+Board updated: yes | no (extension reads `meridian.db` after upsert)
 Commit: done | pending (human)
 Suggested commit: (from Record if any)
 Remaining blockers:

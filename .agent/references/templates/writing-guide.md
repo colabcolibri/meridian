@@ -136,7 +136,7 @@ v11 is `complete` when the extension loads in Extension Development Host, at lea
 
 | Artifact | Ask yourself |
 | -------- | ------------ |
-| Epic | Would a new PM understand the user problem and “done” without reading US files? |
+| Epic | Would a new PM understand the user problem and “done” without reading US rows in SQLite? |
 | Version | Is the release theme clear in prose, not only a bullet list of US ids? |
 | US create | Can someone explain this slice in one minute using only Why + Where? |
 | US refine | Could an AI implement without guessing file names or test steps? (optional ### Approach helps) |

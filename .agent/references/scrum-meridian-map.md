@@ -121,7 +121,7 @@ Use at `/review-us` and `/refine-us` — qualitative, no story points:
 | **S**mall | Fits one implementation session; else split US |
 | **T**estable | Observable Acceptance + Planned steps |
 
-If a story feels like 13+ points in Scrum terms → split into multiple US files.
+If a story feels like 13+ points in Scrum terms → split into multiple US rows in SQLite.
 
 ---
 

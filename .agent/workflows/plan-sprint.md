@@ -17,7 +17,7 @@ $ARGUMENTS
 5. New US only with epic/version referenced in SQLite
 6. Sprints in **`sprints` table** — one row per sprint
 7. Log scope shifts → read `@[skills/update-decisions-log]` + run `date` before Write
-8. After changing US → board refreshes on DB save
+8. After changing US → extension refreshes on `meridian.db` save
 9. `validate_meridian.py` on project folder when available
 
 ---
@@ -63,7 +63,7 @@ Sprint:
 US in scope:
 Dependency order:
 Blocked US:
-Board synced: n/a (auto on DB save)
+SQLite saved: yes | no (versions/sprints/US rows)
 Human approval needed:
 ```
 

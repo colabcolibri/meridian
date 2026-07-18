@@ -6,6 +6,8 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 
 # Design system (Meridian)
 
+> **Escopo:** phase doc `docs/09_design_system.md`. US com UI: carregar corpo via `meridian_db_cli.py show US-XXXX --full` — não `docs/us/`.
+
 > Authoring pattern: `.agent/skills/doc.md` (selective reading + `references/`). Discovery via `description` triggers above.
 
 ## Selective reading
