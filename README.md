@@ -127,7 +127,7 @@ Publisher: **colabcolibri** · [GitHub](https://github.com/colabcolibri/meridian
 | **v11** | Board só SQLite — sem `board.json` nem `/sync-board` | Shipped |
 | v5+ | Write commands, wizards | Planned |
 
-Details in [`docs/versions/`](docs/versions/).
+Details in [`MERIDIAN_V2_CUTOVER.md`](MERIDIAN_V2_CUTOVER.md) and release rows in SQLite (`meridian_db_cli.py list versions`) when dogfood DB exists.
 
 ## Reference (not the home page)
 
@@ -135,7 +135,7 @@ Details in [`docs/versions/`](docs/versions/).
 - [Usage guide and commands](.agent/references/usage-guide.md)
 - [Agents & commands help — groups and steps](.agent/references/agents-help.md)
 - [Scrum ↔ Meridian map](.agent/references/scrum-meridian-map.md)
-- [Validate a project](.agent/scripts/validate_meridian.py): `python3 .agent/scripts/validate_meridian.py <project-folder>`
+- [Validate a project](.agent/scripts/validate_meridian.py): `python3 .agent/scripts/validate_meridian.py . --sqlite-only`
 - [IDE adapters](.agent/IDE_ADAPTERS.md) — Antigravity native; Cursor/Claude via sync script
 
 ## Contributing · license

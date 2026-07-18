@@ -12,9 +12,9 @@
 | **G1** | ✅ | rules, lifecycle, start-here, instruction-surfaces, docs/README |
 | **H1** | ✅ | 9 agentes Scrum, `/design-pass`, routing v2, workflows |
 | **H2** | ⏳ | gate `--h2-ready` + `agent-aliases-h2.md` — delete 6 legacy files |
-| **G2** | 🔄 | INDEX, discovery, as-is, projects-manifest, version/sprint refs, implementation-template |
-| **G3** | 🔄 | agents + workflows + meridian-routing + agents-help + MERIDIAN §9 |
-| **G4–G6** | ⏳ | dogfood docs, repo root/CI, guardrail grep |
+| **G2** | ✅ | templates P0 + writing-guide |
+| **G3** | ✅ | MERIDIAN, usage-guide, agents/workflows H1 |
+| **G5** | 🔄 | PR template, SECURITY, README ✅ |
 
 **Skills novas:** seguir `.agent/skills/doc.md` + padrão create-skill (description 3ª pessoa com WHAT/WHEN, tabela selective reading, corpo &lt;500 linhas, detalhes em `references/`).
 
@@ -76,10 +76,11 @@ Protocolo      → .agent/MERIDIAN.md, rules/, agents/, skills/, workflows/
 | `complete-user-story/.../implementation-template.md` | feat(app-desktop) | ✅ G2 |
 | `docs/README.md` | app-desktop | ✅ G1 |
 | `docs/04_principles.md` | tokens app-desktop | ✅ G4 parcial |
-| `.github/pull_request_template.md` | app-desktop | ⏳ G5 |
-| `SECURITY.md` | app-desktop | ⏳ G5 |
+| `.github/pull_request_template.md` | app-desktop | ✅ G5 |
+| `SECURITY.md` | app-desktop | ✅ G5 |
+| `README.md` | link docs/versions | ✅ G5 |
 | `.agent/rules/AGENTS.md` | app-desktop dogfood | ✅ G2 |
-| `.agent/skills/generate-board-json/` | skill morta | ✅ removida (confirmar zero cópia) |
+| `.agent/skills/generate-board-json/` | skill morta | ✅ removida |
 
 ---
 
@@ -87,11 +88,11 @@ Protocolo      → .agent/MERIDIAN.md, rules/, agents/, skills/, workflows/
 
 | Arquivo | Ação | Status |
 | ------- | ---- | ------ |
-| `.agent/MERIDIAN.md` | extensão vs monitor | 🔄 G3 parcial |
-| `.agent/references/usage-guide.md` | app-desktop UI | ⏳ |
-| `.agent/references/templates/writing-guide.md` | anti-pattern paths | ⏳ |
-| `README.md` | link docs/versions | ⏳ G5 |
-| Skills `create-epic/version` | padronizar wording | ⏳ |
+| `.agent/MERIDIAN.md` | extensão vs monitor | ✅ G3 |
+| `.agent/references/usage-guide.md` | app-desktop UI | ✅ G3 |
+| `.agent/references/templates/writing-guide.md` | anti-pattern paths | ✅ G2 |
+| `README.md` | link docs/versions | ✅ G5 |
+| Skills `create-epic/version` | padronizar wording | ✅ G2 |
 
 ---
 
@@ -127,7 +128,7 @@ Marque `[x]` quando **v11-operacional** (sem P0; P1 aceito ou corrigido).
 ### 7.3 References (guias)
 
 - [x] `references/start-here.md` — G1
-- [ ] `references/usage-guide.md`
+- [x] `references/usage-guide.md` — G3
 - [x] `references/agents-help.md` — H1
 - [ ] `references/commit-after-us-close.md`
 - [x] `references/instruction-surfaces.md` — G1
@@ -175,9 +176,12 @@ Marque `[x]` quando **v11-operacional** (sem P0; P1 aceito ou corrigido).
 - [x] `skills/meridian-routing/SKILL.md` — H1
 - [x] `skills/design-system/SKILL.md` — H1 + create-skill pattern
 - [x] `skills/discover-product/SKILL.md` — H1
-- [ ] `skills/create-epic/SKILL.md`
-- [ ] `skills/create-version/SKILL.md`
-- [ ] `skills/create-sprint/SKILL.md`
+- [x] `skills/create-epic/SKILL.md` — v11 note OK
+- [x] `skills/create-version/SKILL.md` — G2
+- [x] `skills/create-sprint/SKILL.md` — G2
+- [x] `skills/complete-sprint/SKILL.md` — v11 OK
+- [x] `skills/implement-user-story/SKILL.md` — v11 OK
+- [x] `skills/init-project/SKILL.md` — v11 OK
 - [ ] `skills/review-user-story/SKILL.md`
 - [ ] `skills/refine-user-story/SKILL.md`
 - [ ] `skills/implement-user-story/SKILL.md`
@@ -199,7 +203,7 @@ Marque `[x]` quando **v11-operacional** (sem P0; P1 aceito ou corrigido).
 
 ### 7.9 Scripts docs
 
-- [ ] `scripts/README.md`
+- [x] `scripts/README.md` — H2 `--h2-ready` documented
 - [ ] `scripts/migrate/archive/README.md` (P2 OK)
 
 ### 7.10 Dogfood `docs/`
@@ -212,7 +216,9 @@ Marque `[x]` quando **v11-operacional** (sem P0; P1 aceito ou corrigido).
 
 ### 7.11 Repo root / CI / extensão
 
-- [ ] `README.md`, `SECURITY.md`, `.github/pull_request_template.md` — G5
+- [ ] `README.md` — G5 parcial (versions link ✅)
+- [x] `SECURITY.md` — G5
+- [x] `.github/pull_request_template.md` — G5
 
 ---
 
@@ -223,9 +229,9 @@ G1 — P0 bloqueantes          ✅
 H1 — roster Scrum              ✅
 G2 — Templates + skill refs    🔄 (esta sessão)
 G3 — Agents/workflows grep     🔄 (maioria H1)
-G4 — Dogfood docs/00–11
-G5 — Repo root, CI, SECURITY
-G6 — Guardrail CI grep
+G5 — Repo root, CI, SECURITY          🔄
+G4 — Dogfood docs/00–11               ⏳
+G6 — Guardrail CI grep               ⏳
 ```
 
 **Ordem por arquivo:** checklist §7 → grep P0 patterns → substituir vocabulário §10 → `validate_meridian.py . --sqlite-only`

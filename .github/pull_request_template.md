@@ -17,8 +17,8 @@
 
 ## Checklist
 
-- [ ] Ran `python3 .agent/scripts/validate_meridian.py app-desktop` (if applicable)
-- [ ] Ran `pnpm lint`, `pnpm test`, and `pnpm build` in `app-desktop/` (if applicable)
+- [ ] Ran `python3 .agent/scripts/validate_meridian.py . --sqlite-only` (kit or dogfood root)
+- [ ] Ran `pnpm lint`, `pnpm test`, and `pnpm build` in `app-visual-studio/` (if extension changed)
 - [ ] Edited `.agent/` (not `.cursor/`) for kit changes
 - [ ] Prepended to `docs/decisions/YYYY-MM-DD.json` if scope, stack, or architecture changed
 - [ ] Did not include secrets, `.env`, or `node_modules/`

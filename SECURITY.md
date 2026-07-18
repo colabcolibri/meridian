@@ -29,17 +29,16 @@ Include:
 This repository includes:
 
 - Agent kit (`.agent/`)
-- Vite desktop app (`app-desktop/`) — local folder reading via File System Access API
+- VS Code / Cursor extension (`app-visual-studio/`) — reads local `docs/` and `.meridian/meridian.db` in the workspace
 
-Out of immediate scope: cloud integrations, multi-user authentication, VS Code extension (planned).
+Out of immediate scope: cloud backends, multi-user authentication, hosted Meridian services.
 
 ## Best practices for kit users
 
 - **Never** commit `.env` or credentials — baseline is in `.agent/skills/init-project/references/gitignore-baseline.md`.
-- The desktop app reads **local** files you authorize in the browser; it does not send data to Meridian servers (there is no backend).
+- The extension reads **local** project files only; it does not send your docs to Meridian servers (there is no backend).
 - Review agent-generated content before merge — the kit guides governance but does not replace human review.
-- Keep dependencies updated (`pnpm audit` in `app-desktop/`).
 
-## Responsible disclosure
+## Response
 
-We ask for reasonable time to investigate and fix before public disclosure. We appreciate constructive reports.
+Maintainers will acknowledge reports when possible and coordinate fixes on `main`. No SLA is guaranteed during the experimental phase.

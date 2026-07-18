@@ -6,7 +6,7 @@ For concepts (what is an epic, how phases work, what `ready` means), read **[sta
 
 For **agent groups, who serves what, and the numbered step sequence**, read **[agents-help.md](./agents-help.md)**.
 
-**Kit maintainers:** **[instruction-surfaces.md](./instruction-surfaces.md)** — every place that carries instructions (kit, app-desktop UI, extension, mirrors).
+**Kit maintainers:** **[instruction-surfaces.md](./instruction-surfaces.md)** — every place that carries instructions (kit, extension UI, mirrors).
 
 **Scrum ↔ Meridian:** [scrum-meridian-map.md](./scrum-meridian-map.md) (operational). Optional deep dive: [scrum-guide-complete.md](./scrum-guide-complete.md).
 

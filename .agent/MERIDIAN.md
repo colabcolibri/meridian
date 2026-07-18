@@ -313,7 +313,7 @@ Delivery is done when:
 
 ## 13. Management tools
 
-Meridian works without any app. Optional tools (e.g. app-desktop monitor) read the same folder — they are not the source of truth.
+Meridian works without any app. Optional **Meridian Harness** extension (`app-visual-studio/`) reads the same `docs/` and `.meridian/meridian.db` — not the source of truth.
 
 ---
 
