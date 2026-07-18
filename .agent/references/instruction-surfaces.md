@@ -8,10 +8,13 @@
 
 ## Golden rules
 
-1. **Edit `.agent/` first** — never start in `.cursor/` or IDE adapters.
-2. **Run** `./.agent/scripts/sync_cursor_kit.sh` — refreshes `.cursor/`, `.claude/`, Codex adapters (not `docs/templates/`).
-3. **Extension UI** — Help panels read `.agent/references/*.md` at runtime after kit install; `command-catalog.ts` and `help-webview-html.ts` are separate edits when commands change.
-4. **Record the change** — prepend `docs/decisions/YYYY-MM-DD.json` in this repo when the protocol itself changes.
+1. **Edit `.agent/` first** — never start in `.cursor/`, `app-desktop/docs/templates/`, or IDE adapters.
+2. **Run** `./.agent/scripts/sync_cursor_kit.sh` — refreshes `.cursor/`, `.claude/`, Codex adapters, `app-desktop/docs/templates/`.
+3. **Update duplicated UI** — app-desktop Learn/Commands tabs do not auto-sync from markdown.
+4. **VS Code extension** — Help panels that read `.agent/references/*.md` at runtime pick up kit changes after install/upgrade; command catalog and README are separate edits.
+5. **Record the change** — prepend `docs/decisions/YYYY-MM-DD.json` in this repo when the protocol itself changes.
+
+---
 
 ## Layers at a glance
 
@@ -19,11 +22,9 @@
 | ----- | ---- | -------- | --------- | -------- |
 | Master protocol | `.agent/MERIDIAN.md` | Agents + managers | **Canonical** | P0 |
 | P0 rules | `.agent/rules/MERIDIAN.md`, `.agent/rules/meridian.mdc` | Agents (always-on) | **Canonical** | P0 |
-| Human entry | `.agent/references/how-to-use.md` | Manager | **Canonical** | P0 |
-| Concepts | `.agent/references/start-here.md` | Manager | **Canonical** | P0 |
-| Day-to-day recipes | `.agent/references/usage-guide.md` | Manager | **Canonical** | P0 |
+| Human onboarding | `.agent/references/start-here.md` | Manager | **Canonical** | P0 |
+| Day-to-day guide | `.agent/references/usage-guide.md` | Manager | **Canonical** | P0 |
 | Commands & steps | `.agent/references/agents-help.md` | Manager + agents | **Canonical** | P0 |
-| Artifact fields | `.agent/references/artifact-reference.md` | Manager + agents | **Canonical** | P1 |
 | Artifact templates | `.agent/references/templates/` + `TEMPLATE_SOURCES.md` | Agents | **Canonical** (see TEMPLATE_SOURCES for edit path) | P0 |
 | Agent personas | `.agent/agents/*.md` | Agents | **Canonical** | P0 |
 | Skills (procedures) | `.agent/skills/*/SKILL.md` + `references/` | Agents | **Canonical** | P0 |
@@ -33,8 +34,11 @@
 | Distribution | `.agent/KIT_README.md`, `.agent/DISTRIBUTION.md` | Humans installing kit | **Canonical** | P2 |
 | Repo README | `README.md` | GitHub visitors | **Canonical** | P2 |
 | IDE adapters | `.cursor/`, `.claude/`, `.agents/skills/`, `.codex/` | Cursor / Claude Code / Codex | **Mirror** — sync only | — |
-| Template registry | `.agent/references/templates/` | Agents + humans (via kit) | **Canonical** | `INDEX.md`, `TEMPLATE_SOURCES.md` |
-| VS Code help (runtime) | `.agent/references/{how-to-use,start-here,usage-guide,agents-help,artifact-reference}.md` | Extension user | Same as kit refs — edit `.agent/` | P0 |
+| Desktop template mirror | `app-desktop/docs/templates/` | Humans in monitor | **Mirror** — sync only | — |
+| **Desktop UI copy** | `app-desktop/src/features/monitor/content/meridian-concepts.ts` | Manager in Learn/Commands tabs | **Duplicate** — edit by hand | P0 |
+| Desktop tab hints | `app-desktop/src/.../MonitorTabs.tsx`, `monitor-views.ts` | Manager | **Duplicate** — edit by hand | P2 |
+| Desktop project docs | `app-desktop/docs/README.md` | Desktop dogfood | **Canonical** for app-desktop only | P1 |
+| VS Code help (runtime) | `.agent/references/{agents-help,usage-guide,start-here}.md` | Extension user | Same as kit refs — edit `.agent/`; panels: How to Use (static), Start Here, Usage Guide, Agents Help | P0 |
 | VS Code command catalog | `app-visual-studio/src/command-catalog.ts` | Extension user | **Canonical** for extension UX | P1 |
 | VS Code README | `app-visual-studio/README.md` | Marketplace / GitHub | **Canonical** for extension | P2 |
 | Validators | `.agent/scripts/validate_meridian.py`, `meridian_section_contracts.py` | CI + agents | **Canonical** when structure changes | P1 |
@@ -60,27 +64,38 @@
 
 | What | Where | When to touch |
 | ---- | ----- | ------------- |
-| Concepts & phases | `.agent/references/start-here.md` | Phases, gates, folders only |
-| Human entry | `.agent/references/how-to-use.md` | Surfaces, layering, setup, reading order |
-| Situations & sequences | `.agent/references/usage-guide.md` | Recipe per situation |
+| Concepts & phases | `.agent/references/start-here.md` | New phases, artifacts, folder tree |
+| Situations & sequences | `.agent/references/usage-guide.md` | New workflows (migrate, close US, etc.) |
 | Numbered steps | `.agent/references/agents-help.md` | New slash commands or groups |
 
-### P0 — VS Code extension (runtime + catalog)
+### P0 — app-desktop duplicated UI (must edit manually)
+
+| What | Where | Mirrors |
+| ---- | ----- | ------- |
+| Learn tab (concepts, journey, folder tree) | `app-desktop/src/features/monitor/content/meridian-concepts.ts` | `start-here.md` (paraphrased) |
+| Commands tab (getting started, workflows) | same file — `gettingStartedSteps`, `documentWorkflowSteps`, etc. | `usage-guide.md` (paraphrased) |
+| Situation → command map | same file — `usageSituations` | `usage-guide.md` table |
+| Slash command reference | same file — `slashCommands` | `agents-help.md` |
+
+> **Gap risk:** If you only update `.agent/references/*.md`, the desktop app **will drift** until `meridian-concepts.ts` is updated.
+
+### P1 — VS Code extension
 
 | What | Where | Notes |
 | ---- | ----- | ----- |
 | Agents Help / Usage / Start Here panels | Reads `.agent/references/*.md` via `kit-references.ts` | Updates when kit is installed/upgraded |
-| Command palette help | `app-visual-studio/src/command-catalog.ts` | Per-command summaries — edit when commands ship |
-| Extension guide panels | `app-visual-studio/src/kit-reference-panels.ts`, `help-webview-html.ts` | Onboarding UX |
+| Command palette help | `app-visual-studio/src/command-catalog.ts` | Per-command summaries — edit when commands ship; `guides` group first |
+| Extension guide panels | `app-visual-studio/src/kit-reference-panels.ts`, `help-webview-html.ts` | Onboarding UX — edit when guide flow changes |
 | Extension onboarding | `app-visual-studio/README.md` | Install, F5, kit sync |
 
-### P1 — mirrors & distribution
+### Mirrors (do not edit)
 
 | Path | Regenerated by |
 | ---- | -------------- |
 | `.cursor/commands/`, `.cursor/skills/`, `.cursor/agents/`, `.cursor/rules/` | `sync_cursor_kit.sh` |
 | `.claude/commands/`, `.claude/agents/` | `sync_cursor_kit.sh` |
 | `.agents/skills/` (incl. `workflow-*`), `.codex/agents/*.toml`, `AGENTS.md` (symlink) | `sync_cursor_kit.sh` |
+| `app-desktop/docs/templates/*` | `sync_cursor_kit.sh` |
 
 ---
 
@@ -94,7 +109,6 @@ Use this when adding or changing protocol behavior (example: **as-is inventory**
 - [ ] `.agent/skills/init-project/SKILL.md` — procedure
 - [ ] `.agent/workflows/init-meridian.md` — deliverables + next steps
 - [ ] New template if needed — `.agent/references/templates/` + `INDEX.md` + `TEMPLATE_SOURCES.md`
-- [ ] `.agent/references/how-to-use.md` — entry + reading order
 - [ ] `.agent/references/start-here.md` — concepts + `docs/` tree
 - [ ] `.agent/references/usage-guide.md` — situations + step table
 - [ ] `.agent/references/agents-help.md` — command group row
@@ -106,16 +120,25 @@ Use this when adding or changing protocol behavior (example: **as-is inventory**
 
 - [ ] `./.agent/scripts/sync_cursor_kit.sh`
 
-### 3. Extension (P0 when user-visible)
+### 3. Duplicated UI (P0 for user-visible flows)
 
-- [ ] `app-visual-studio/src/command-catalog.ts` — new or renamed command
-- [ ] `help-webview-html.ts` / `webview-common.ts` — if copy is hardcoded
+- [ ] `app-desktop/src/features/monitor/content/meridian-concepts.ts`
+  - `gettingStartedSteps` (migration)
+  - `folderStructure.items` (new `docs/` paths)
+  - `usageSituations` if new situation
+  - `slashCommands` / command groups if new slash command
 
-### 4. Validation & dogfood
+### 4. Extension & onboarding (P1–P2)
+
+- [ ] `app-visual-studio/src/command-catalog.ts` — if new shipped command
+- [ ] `README.md` — one-line mention if user-facing
+- [ ] `.agent/ARCHITECTURE.md` — if new layer or skill
+
+### 5. Validation & dogfood
 
 - [ ] `.agent/scripts/validate_meridian.py` — only if new required paths
-- [ ] `python3 .agent/scripts/validate_meridian.py . --sqlite-only`
-- [ ] Decision log entry in `docs/decisions/` (dogfood repo root)
+- [ ] `python3 .agent/scripts/validate_meridian.py app-desktop`
+- [ ] Decision log entry in `app-desktop/docs/decisions/`
 
 ---
 
@@ -123,12 +146,14 @@ Use this when adding or changing protocol behavior (example: **as-is inventory**
 
 | Change | Edit first | Also update |
 | ------ | ---------- | ----------- |
-| New slash command | `.agent/workflows/{name}.md` + skill | `agents-help.md`, `meridian.mdc` table, `command-catalog.ts`, `sync_cursor_kit.sh` |
+| New slash command | `.agent/workflows/{name}.md` + skill | `agents-help.md`, `meridian.mdc` table, `meridian-concepts.ts`, `sync_cursor_kit.sh` |
 | New delivery artifact | Template + skill + `INDEX.md` | `start-here.md`, `lifecycle.md`, validator if required |
-| Migration / bootstrap step | `init-project/SKILL.md`, `init-meridian.md` | `usage-guide.md`, `start-here.md` |
-| New agent (onda H) | `.agent/agents/{name}.md` + routing | `ARCHITECTURE.md`, `agents-help.md`, `sync_cursor_kit.sh`, `.codex/agents/*.toml` |
+| Migration / bootstrap step | `init-project/SKILL.md`, `init-meridian.md` | `usage-guide.md`, `start-here.md`, `meridian-concepts.ts` |
+| New `docs/` folder (optional) | `start-here.md`, `doc-templates.md` | `meridian-concepts.ts` `folderStructure`, init skill |
+| Multi-product / monorepo (resolver) | `projects-manifest-template.md`, `usage-guide.md`, `start-here.md`, `MERIDIAN.md` | `resolve-meridian-projects.ts`, `meridian-workspace.ts`, `meridian-workspace-picker.ts`, `meridian-context.ts`, `package.json`, `command-catalog.ts`, `meridian-concepts.ts`, `05_architecture.md` |
+| Multi-product UI context (v2.04) | `usage-guide.md`, `start-here.md`, `agents-help.md`, `projects-manifest-template.md` | `webview-project-context.ts`, all `*-webview-html.ts`, `planning-panels.ts`, `board-editor-panel.ts`, `command-catalog.ts` (Board + views), `meridian-concepts.ts`, `app-visual-studio/README.md`, `05_architecture.md` § UI structure |
 | Agent behavior only | `.agent/agents/{name}.md` | Usually nothing else |
-| Extension / kit feature | `app-visual-studio/` + phase docs | Not kit unless protocol changes |
+| Desktop-only feature | `app-desktop/docs/us/` + phase docs | Not kit unless protocol changes |
 
 ---
 
@@ -157,8 +182,11 @@ When changing **several `docs/` trees in one repo** or **project context in the 
 
 ### Dogfood architecture (P1)
 
-- [ ] `docs/05_architecture.md` — kit + extension boundaries
-- [ ] `docs/README.md` — phase table and delivery pointers
+- [ ] `app-desktop/docs/05_architecture.md` — § Activation and `docs/` resolution + § UI structure
+
+### Duplicated UI (P0 — manual)
+
+- [ ] `app-desktop/src/features/monitor/content/meridian-concepts.ts` — `folderStructure`, `usageSituations`
 
 ### Mirrors
 

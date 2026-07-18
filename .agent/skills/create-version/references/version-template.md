@@ -1,7 +1,5 @@
 # Version template (release)
 
-> **v11 delivery:** shape of `versions.body_markdown` plus frontmatter mapped to SQLite. **Not** `docs/versions/vX.md`. Persist with `meridian_delivery.py create-version` or `--write-form`.
->
 > **Writing quality:** read `.agent/references/templates/writing-guide.md`. Objective and Done criteria are **paragraphs** explaining the release theme.
 
 ```md
@@ -43,7 +41,7 @@ Bullets with short rationale — what waits for a later version and why.
 
 ## Sprints
 
-- `vX-S1` — theme of sprint in a phrase (row in SQLite `sprints` table)
+- `vX-S1` — theme of sprint in a phrase (file in docs/sprints/)
 ```
 
 ## Status
@@ -56,6 +54,6 @@ Bullets with short rationale — what waits for a later version and why.
 
 ## Relationship with US and epics
 
-- US uses `version_id` FK in SQLite (`user_stories.version_id`).
-- Epic uses `versions` junction / epic metadata in DB.
-- Release narrative lives in version `body_markdown` (and optional phase doc cross-links).
+- US uses `version: vX` in frontmatter.
+- Epic uses `versions: [vX]`.
+- Release narrative lives **only** in this file.

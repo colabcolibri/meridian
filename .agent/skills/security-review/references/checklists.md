@@ -1,7 +1,5 @@
 # Meridian security checklists
 
-> **Escopo:** `docs/02_security.md` e superfícies do produto. **Delivery v11:** user stories em `.meridian/meridian.db` — agentes não devem escrever `docs/us/*.md`; validar extensão/CLI contra `01_tech_stack` e `02_security` § extension.
-
 Use with `02_security.md`. Mark each item in the doc or report gaps explicitly.
 
 Every item must have a clear pass/fail. If an item does not apply, mark N/A and state why — "N/A" alone is not acceptable.

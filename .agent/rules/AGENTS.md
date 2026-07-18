@@ -1,17 +1,17 @@
 # Meridian protocol
 
-This repository uses the [Meridian](https://github.com/colabcolibri/meridian) protocol. The kit source of truth is `.agent/`; product docs live under `docs/` of the **active Meridian product** (in monorepos: see `.meridian/projects.json`).
+This repository uses the [Meridian](https://github.com/colabcolibri/meridian) protocol. The kit source of truth is `.agent/`; product docs live under `docs/` of the **active Meridian product** (in monorepos: see `.meridian/projects.json` and `app-desktop/docs/` for dogfood).
 
 ## How to invoke (you type workflows, not agents)
 
 ```txt
 YOU  →  /create-us  or  $workflow-create-us     (workflow)
          ↓
-Agent (@backlog-refiner, …)                          (routed by workflow — override with @name if needed)
+Agent (@board-keeper, …)                          (routed by workflow — override with @name if needed)
          ↓
 Skill (create-user-story, …)                      (loaded by agent — rarely typed by human)
          ↓
-docs/ + .meridian/meridian.db                     (source of truth)
+docs/                                             (source of truth)
 ```
 
 | IDE | You invoke | Adapter (local, gitignored) |
@@ -25,12 +25,9 @@ After **Install Harness** or clone: run `./.agent/scripts/sync_cursor_kit.sh` to
 
 ## Human guides (read in order)
 
-1. `.agent/references/how-to-use.md` — entry: extension vs chat, layering, setup
-2. `.agent/references/start-here.md` — concepts: phases, gates, folders
-3. `.agent/references/usage-guide.md` — recipes by situation
-4. `.agent/references/agents-help.md` — command reference (lookup, steps 1–20)
-
-Field detail: `.agent/references/artifact-reference.md`
+1. `.agent/references/start-here.md` — concepts, phases, gates
+2. `.agent/references/usage-guide.md` — day-to-day situations
+3. `.agent/references/agents-help.md` — agents, slash commands, steps 1–17
 
 ## Required reading (agents)
 
@@ -48,7 +45,7 @@ Field detail: `.agent/references/artifact-reference.md`
 
 - Documentation precedes product code.
 - Do not create US before `05_architecture` `approved`.
-- Delivery lives in `.meridian/meridian.db` when the harness is bootstrapped.
+- `docs/kanban/board.json` is derived from `docs/us/*.md`.
 - Never `✅` without evidence; never `🔶` without `Missing:` in acceptance.
 - Never `✅` without filled `## Record` on the US (skill `complete-user-story`).
 - Product code for a US requires `ready: true` — run `/implement-us US-XXXX` before coding.
@@ -61,4 +58,4 @@ Field detail: `.agent/references/artifact-reference.md`
 python3 .agent/scripts/validate_meridian.py <project-folder>
 ```
 
-Monorepo dogfood: `python3 .agent/scripts/validate_meridian.py . --sqlite-only`
+Monorepo dogfood: `python3 .agent/scripts/validate_meridian.py app-desktop`

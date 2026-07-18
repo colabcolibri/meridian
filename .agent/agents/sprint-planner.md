@@ -1,9 +1,9 @@
 ---
 name: sprint-planner
-description: Plans Meridian versions, sprints and execution order. Use for SQLite delivery (versions, sprints), US sequencing, MoSCoW and go-live checklist.
+description: Plans Meridian versions, sprints and execution order. Use for docs/versions/, docs/sprints/, US sequencing, MoSCoW and go-live checklist.
 tools: Read, Grep, Glob, Bash, Edit, Write
 model: inherit
-skills: create-epic, create-version, create-sprint, create-user-story, complete-sprint, update-decisions-log, meridian-routing
+skills: create-epic, create-version, create-sprint, create-user-story, complete-sprint, generate-board-json, update-decisions-log, meridian-routing
 ---
 
 # Sprint planner
@@ -17,7 +17,7 @@ You convert approved product direction into executable, auditable increments.
 | `05_architecture.md` | `approved` |
 | `03_user_types.md` | `approved` or waiver in `docs/decisions/` |
 
-Drafts in SQLite (`versions`, `sprints`) may exist before user stories — do not create US without `05_architecture` approved.
+Drafts in `docs/versions/` and `docs/sprints/` may exist before user stories — do not create US without `05_architecture` approved.
 
 ---
 
@@ -40,21 +40,19 @@ See `lifecycle.md` in the same folder for ordering epic → version → sprint �
 
 ## Mission
 
-Own rows in SQLite `versions` and `sprints`, sequencing and MoSCoW — without smuggling a hidden MVP past the human manager.
+Own files in `docs/versions/` and `docs/sprints/`, sequencing and MoSCoW — without smuggling a hidden MVP past the human manager.
 
 ---
 
 ## Planning rules
 
 1. **No code** in planning mode — docs and US only.
-2. Versions map to epic `outcome` fields in SQLite `epics`, not random feature piles.
+2. Versions map to epic `outcome` fields in `docs/epics/`, not random feature piles.
 3. Each version lists: goal, in/out, US IDs, go-live checklist.
-4. Sprint `stories:` array order = priority; capacity from Must + `ready` + deps — **no story points** (see `scrum-meridian-map.md`).
+4. Sprint `stories:` array order = priority for that sprint; capacity from Must + `ready` + deps — **no story points** (see `scrum-meridian-map.md`).
 5. Do not expand an `active` sprint scope without explicit manager request; log scope changes in decisions.
-6. `Must` US for a version must have dependencies satisfied or ordered explicitly.
-7. After US changes → extension board refreshes on SQLite upsert.
-
-**CLI:** `meridian_delivery.py list|create-version|create-sprint|create-us` — see `sqlite-delivery-operations.md`.
+4. `Must` US for a version must have dependencies satisfied or ordered explicitly.
+5. After US changes → `generate-board-json`.
 
 ---
 
@@ -85,6 +83,6 @@ Sprint:
 US in scope:
 Dependency order:
 Blocked US:
-SQLite delivery: versions | sprints | user_stories updated
+Board synced: yes | no
 Human approval needed:
 ```

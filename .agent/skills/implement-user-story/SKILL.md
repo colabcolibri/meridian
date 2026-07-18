@@ -6,17 +6,14 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 
 # Implement user story (Meridian)
 
-> **v11:** gate + read US from `.meridian/meridian.db` — `implement-gate` then `show --full`. Never read `docs/us/*.md` when SQLite is active.
-
 ## Selective reading
 
 | File | When to read |
 | ------- | ---------- |
-| `.agent/references/templates/sqlite-delivery-operations.md` | **Mandatory** — upsert path |
 | `references/implement-gate-checklist.md` | **Mandatory** — gate before code |
 | `.agent/references/templates/code-quality-at-us-time.md` | **Mandatory** — DRY, SRP during coding |
-| Target US (`show --full`) | Full Intent + Plan from SQLite |
-| `depends_on` US rows | Dependency status in DB |
+| Target `docs/us/US-XXXX.md` | Full Intent + Plan |
+| `depends_on` US files | Dependency status |
 | `docs/05_architecture.md` | Sections cited in Architecture refs |
 | `docs/architecture/*.md` | When US cites detail files directly |
 | `docs/04_principles.md` | DRY, SRP, layer table — mandatory this session |
@@ -30,36 +27,28 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 
 **Do not** use to close a US — use `complete-user-story` / `/complete-us`.
 
-## Delivery commands
-
-```bash
-python3 .agent/scripts/meridian_delivery.py implement-gate US-XXXX
-python3 .agent/scripts/meridian_delivery.py implement-gate US-XXXX --json
-python3 .agent/scripts/meridian_delivery.py show US-XXXX --full
-```
-
-Exit `0` on gate = pass; exit `1` = blocked. Full reference: `sqlite-delivery-operations.md`.
-
 ## Hard gate (block product code if any fail)
 
 | Check | Requirement |
 | ----------- | --------- |
 | Architecture | `05_architecture.md` `approved` |
-| US row | Exists in SQLite |
-| `ready` | `ready: true` |
-| Plan | Approach with ≥2 bullets; not placeholder |
-| Dependencies | All `depends_on` at `✅` (`implement-gate` / `check_story_dependencies_satisfied`) |
-| Status | `❌` or `🔶` (not ✅; not 🧊` without manager waiver) |
+| US file | `docs/us/US-XXXX.md` exists |
+| `ready` | Frontmatter `ready: true` |
+| Plan | `## Plan` filled; Approach not placeholder |
+| Dependencies | All `depends_on` at `✅` |
+| Status | Not `✅` (use `/complete-us` instead); not `🧊` without manager waiver |
 
 If `ready` is not `true` → **stop**; output blocker; recommend `/refine-us US-XXXX`.
 
+Optional: run `validate_meridian.py` — treat `ready is not true` errors as blocking.
+
 ## Procedure
 
-1. Run `implement-gate US-XXXX`; if blocked → stop.
-2. Read `implement-gate-checklist.md`, `code-quality-at-us-time.md`, `show --full` output, `04_principles`, dependency US summaries, architecture sections.
-3. Report pass/fail per automated check + manual rows (session scope, principles read).
-4. If **passed** → implement per Acceptance and Planned with **DRY + SRP**.
-5. One US per session; cite `US-XXXX` in responses.
+1. Read `implement-gate-checklist.md`, `code-quality-at-us-time.md`, target US, `04_principles`, dependency US, architecture sections.
+2. Run gate checklist; report pass/fail per row.
+3. If **blocked** → no product code; state smallest fix.
+4. If **passed** → announce gate passed; read Architecture refs; implement per Acceptance and Planned with **DRY + SRP** (reuse per `04_principles`; one concern per change).
+5. One US per session; cite file path in responses.
 6. After delivery → manager reviews diff → `/complete-us` (do not self-close without evidence).
 
 ## Output

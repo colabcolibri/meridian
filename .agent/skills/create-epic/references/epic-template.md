@@ -1,7 +1,5 @@
 # Full epic template
 
-> **v11 delivery:** shape of `epics.body_markdown` plus frontmatter mapped to SQLite (`id`, `title`, `status`, `versions`, …). **Not** `docs/epics/EPIC-XX.md`. Persist with `meridian_delivery.py create-epic` or `--write-form`.
->
 > **Writing quality:** read `.agent/references/templates/writing-guide.md`. Capability and Expected outcome are **prose paragraphs**, not feature lists.
 
 ```md

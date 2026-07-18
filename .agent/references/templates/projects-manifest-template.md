@@ -63,7 +63,7 @@ Relative to kit root (where `.agent/MERIDIAN.md` lives).
 ### `docs` path rules
 
 - Must point to a directory whose **name is exactly** `docs`
-- Examples: `docs`, `apps/my-app/docs`, `sistema-phomenta/docs`
+- Examples: `docs`, `app-desktop/docs`, `apps/app-osc/docs`, `sistema-phomenta/docs`
 - **Not** `docs-extra`, `documentation`, `doc` — those are ignored by discovery
 
 ---
@@ -75,7 +75,7 @@ When the manifest is absent or incomplete, scan kit root for folders named **`do
 1. Walk the tree (depth limit, skip `node_modules`, `.git`, etc.)
 2. For each `…/docs`, apply Meridian fingerprint:
    - `00_scope.md` exists, **or**
-   - `.meridian/meridian.db` exists with `user_stories` rows, **or** (legacy v1) `us/US-XXXX.md` exists
+   - `us/US-XXXX.md` exists
 3. Add to project list with inferred `id` / `name` from parent folder
 
 `docs-extra` is never discovered (wrong folder name).

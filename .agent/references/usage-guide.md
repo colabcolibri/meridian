@@ -1,155 +1,328 @@
-# Usage guide — recipes
+# Usage guide
 
-> **If you know what you want to do, open this file.** Situation → steps.  
-> **Not this file:** layering (workflow/agent/skill) → [how-to-use.md](./how-to-use.md). Concepts → [start-here.md](./start-here.md). Command index → [agents-help.md](./agents-help.md).
+How to work with Meridian day-to-day. This file covers commands, checks, and the sequence of actions for each situation.
 
-Run **`/status`** anytime for blockers and suggested next action.
+For concepts (what is an epic, how phases work, what `ready` means), read **[start-here.md](./start-here.md)** first.
 
----
+For **agent groups, who serves what, and the numbered step sequence**, read **[agents-help.md](./agents-help.md)**.
 
-## Where are you?
+**Kit maintainers:** **[instruction-surfaces.md](./instruction-surfaces.md)** — every place that carries instructions (kit, app-desktop UI, extension, mirrors).
 
-| Situation | Section |
-| --------- | ------- |
-| No `docs/` yet (greenfield) | [New project](#new-project) |
-| Code exists, no `docs/` | [Brownfield](#brownfield) |
-| `docs/` thin or outdated | [Audit docs](#audit-docs) |
-| Phase docs incomplete | [Phase documents](#phase-documents) |
-| `05` approved, no backlog | [Backlog](#backlog) |
-| Ready to code a US | [Implement](#implement) |
-| Done coding, not closed | [Close US](#close-us) |
-| Several `docs/` trees | [Monorepo](#multiple-meridian-projects) |
+**Scrum ↔ Meridian:** [scrum-meridian-map.md](./scrum-meridian-map.md) (operational). Optional deep dive: [scrum-guide-complete.md](./scrum-guide-complete.md).
 
 ---
 
-## New project
+## VS Code extension (Meridian Harness)
 
-```txt
-/discover          optional — fuzzy idea
-/init-meridian      interview + docs/ 00–08 + bootstrap
-/audit-docs        optional — before you approve
-```
+The **extension** shows and validates `docs/`. **Chat slash commands** create and change them. You are the manager in both.
 
-Approve `00` → `01` → `02` → `03` → `04` → `/architecture` → approve `05` → [Backlog](#backlog).
+| You want to… | Use | Not |
+| ------------ | --- | --- |
+| See kanban, versions, epics | Extension: **Open Board**, **Open Versions**, … | `/create-us` |
+| Validate or sync `board.json` | Extension: **Validate Project**, **Sync Board** | Manual JSON edit |
+| Bootstrap or change docs | Chat: `/init-meridian`, `/create-us`, `/complete-us`, … | Extension forms (v5) |
+| Health check | Chat: `/status` | — |
 
----
+**Reading order in the IDE** (Meridian sidebar → Commands):
 
-## Brownfield
+1. **How to use** — extension vs chat, workflow vs agent
+2. **Start here** — concepts (this file’s companion)
+3. **Usage guide** — situations below
+4. **Agents & slash commands** — full command map
 
-```txt
-/init-meridian       docs/ tree + bootstrap only
-/document-project    inventory + phase docs from code (no US/epics for legacy)
-/audit-docs          optional
-```
-
-Review `docs/inventory/as-is.md` and phase docs. Approve docs. Forward backlog only (`/create-epic` … `/create-us`) — **no retroactive ✅** for shipped work. Optional `v0` version for baseline; archive inventory after `05` approved.
+**Setup:** Install extension → **Install Harness** → `/init-meridian` if no `docs/` → **Open Board**.
 
 ---
 
-## Audit docs
+## Where are you right now?
 
-```txt
-/audit-docs          report only
-/audit-docs apply    draft fixes (still not approved)
-```
+Run `/status` at any point to get blockers, current state, and suggested next action.
 
-Works for Meridian-started and brownfield projects. Anytime docs feel thin or drifted from code.
-
----
-
-## Phase documents
-
-Order:
-
-```txt
-00_scope → 01 → 02 → 03 → 04 → 05 (gate) → 06 → 07 → 08
-```
-
-Per document:
-
-1. `/status` — what is next
-2. One doc per conversation
-3. Specialized passes: `/security-pass` (`02`), `/architecture` (`05`), `/design-pass` (`09`)
-4. You set `review` then **`approved`** — agent never approves
-
-**Backlog blocked?** Almost always `05_architecture` not `approved`.
-
-Decisions: **`/update-decisions-log`** — prepend JSON; never edit old entries.
-
----
-
-## Backlog
-
-**Gate:** `05_architecture.md` = `approved`.
-
-```txt
-/create-epic → /create-version → /plan-sprint (optional) → /create-us
-```
-
-After create: `/review-us` (optional) → **`/refine-us`** → `ready: true` → `/implement-us`.
-
-Bugs = US with fix acceptance. Spikes = US + timebox + decision log. See [scrum-meridian-map.md](./scrum-meridian-map.md).
-
----
-
-## Implement
-
-1. Pick US with `ready: true` and satisfied `depends_on`
-2. **`/implement-us US-XXXX`** — one US per session
-3. Review diff and tests
-4. Partial → `🔶` + `Missing:` in acceptance; not `/complete-us` yet
-
----
-
-## Close US
-
-**`/complete-us US-XXXX`** when:
-
-- `depends_on` satisfied
-- Acceptance evidenced
-- Tests run if `tests: required`
-
-Then **you commit** — one commit per closed US. See [commit-after-us-close.md](./commit-after-us-close.md).
-
----
-
-## Daily loop
-
-**`/daily-with-ai`** — guided session.
-
-Manual: `/status` → one focus → `/complete-us` → commit.
+| Situation | What to do |
+| --------- | ---------- |
+| No `docs/` folder yet | [Start a new project](#start-a-new-project) |
+| Existing codebase, no `docs/` | [Migrate an existing project](#migrate-an-existing-project) |
+| `docs/` exists, phase docs incomplete | [Work through the phase documents](#work-through-the-phase-documents) |
+| Architecture approved, no backlog yet | [Build the backlog](#build-the-backlog) |
+| Backlog exists, ready to implement | [Implement a user story](#implement-a-user-story) |
+| Implementation done, not recorded | [Close a user story](#close-a-user-story) |
+| Monorepo with several `docs/` trees | [Multiple Meridian projects](#multiple-meridian-projects) |
 
 ---
 
 ## Multiple Meridian projects
 
-Several folders named **`docs`** with Meridian fingerprint:
+When the repo has **more than one** folder named exactly `docs` with Meridian content (any layout — root `docs/`, `apps/pkg/docs`, etc.):
 
-- Optional `.meridian/projects.json` at kit root
-- Extension toolbar **Project** row — switch active `docs/`
-- `/status` lists projects before US work
-- Validate: `python3 .agent/scripts/validate_meridian.py <package-folder> --sqlite-only`
+1. **Discovery (B)** — tools scan for `docs/` + fingerprint (`00_scope.md` or `us/US-*.md`). `docs-extra` and other names are ignored.
+2. **Manifest (A)** — optional `.meridian/projects.json` at kit root: ids, names, `default`, `exclude`.
+3. **Active project** — one `docs/` at a time for board, validate, `/status`, and US work. Choice is **saved** (`workspaceState` per kit root + optional VS Code setting `meridian.activeProject`) — reopening Board does **not** ask again.
 
-Template: `projects-manifest-template.md`.
+| Action | How |
+| ------ | --- |
+| Declare products | Create `.meridian/projects.json` (see `projects-manifest-template.md`) |
+| See which `docs/` is on screen | **Board / Versions / Sprints / Epics** — first toolbar row **Project** (name, path, US count) |
+| Switch in IDE | Dropdown in that toolbar, **Meridian: Select Active Project**, or status bar when N>1 |
+| First visit only | Quick Pick when N>1 and no saved choice — once; then silent until you switch |
+| Validate | `python3 .agent/scripts/validate_meridian.py <package-folder>` — folder that **owns** `docs/`, not always repo root |
+| Agent | `/status` lists projects; confirm active `docs/` before creating or editing US |
 
 ---
 
-## Validate
+## Start a new project
 
-```bash
-python3 .agent/scripts/validate_meridian.py <project-folder> --sqlite-only
+Run: **`/init-meridian`**
+
+The agent will ask up to 5 questions about the product — problem, users, scope, technology, and security constraints. Answer what you know; leave gaps for later.
+
+What gets created:
+- `docs/` folder tree with all phase document stubs
+- `docs/00_scope.md` populated with your answers
+- `docs/decisions/YYYY-MM-DD.json` with the initial decision entry
+- `docs/kanban/board.json` empty
+
+After this, go to [Work through the phase documents](#work-through-the-phase-documents).
+
+---
+
+## Migrate an existing project
+
+Run: **`/init-meridian`** with your codebase open in the IDE.
+
+The agent reads the codebase first — package files, folder structure, README, any existing docs. Then it asks only what it could not infer.
+
+What gets created:
+
+- Same `docs/` tree as a new project, but phase documents are populated from the code — not blank
+- **`docs/inventory/as-is.md`** — transitional map of existing capabilities (table with evidence, confidence, epic candidates)
+- Every inference marked as an assumption for your review
+
+### Migration sequence (existing codebase)
+
+```
+/init-meridian → review inventory → approve phase docs → epics (+ optional v0) → US for new work only
 ```
 
-Or extension: **Meridian: Validate Project**.
+| Step | You do | Result |
+| ---- | ------ | ------ |
+| 1 | Run `/init-meridian` | `docs/inventory/as-is.md` + draft phase docs |
+| 2 | Review inventory table — fix confidence and gaps | Validated as-is map |
+| 3 | Promote rows into `00_scope`, `05_architecture`, etc. | Phase docs reflect reality |
+| 4 | Approve `05_architecture` (human) | Backlog gate unlocked |
+| 5 | `/create-epic` for major existing capabilities; optional **`v0`** baseline version | Epics `complete` where already shipped — **no retroactive US** |
+| 6 | `/create-version` **v1**+ and `/create-us` | Forward work only |
+| 7 | Archive or delete `docs/inventory/as-is.md` | Single source of truth in phase docs |
+
+After step 2, review `docs/00_scope.md` and `docs/05_architecture.md` — correct anything the agent got wrong, then follow the same path as a new project.
 
 ---
 
-## Anti-patterns
+## Work through the phase documents
 
-- Implement without `ready: true`
-- `✅` in chat without `/complete-us`
-- US before `05` approved
-- Mix doc work + implement in one thread
-- `approved` without reading the doc
+Phase documents must be completed in order. Each one unlocks the next.
 
-Full command list: [agents-help.md](./agents-help.md).
+```
+00_scope → 01_tech_stack → 02_security → 03_user_types
+         → 04_principles → 05_architecture (gate)
+         → 06_database → 07_api_contracts → 08_environments
+```
+
+### Working on a phase document
+
+1. Run `/status` to see which document is next and what is blocking it.
+2. Open one document per conversation — do not mix documents.
+3. Ask the agent to draft, fill gaps, or review a specific section.
+4. Use specialized commands when available:
+   - **`/architecture`** — draft or review `05_architecture.md`
+   - **`/security-pass`** — draft or review `02_security.md`
+5. When a document is ready, **you** set `status: review` in the frontmatter.
+6. After your review, **you** set `status: approved`. The agent never sets `approved`.
+
+### The architecture gate
+
+`05_architecture.md` must be `approved` before you can create epics, versions, or user stories. If `/status` shows the backlog is blocked, this is almost always why.
+
+### Decisions
+
+Any significant decision made while working on a document — technology choice, architectural tradeoff, security posture — should be logged:
+
+- Run **`/update-decisions-log`** or ask the agent to prepend an entry to `docs/decisions/YYYY-MM-DD.json` (agent must run `date +"%Y-%m-%d"` and `date +"%H:%M"` first).
+- Never edit existing entries.
+
+---
+
+## Build the backlog
+
+**Gate:** `docs/05_architecture.md` must be `approved`.
+
+### Sequence
+
+Create in this order — each one is required before the next:
+
+1. **Epic** — a product capability: `/create-epic`
+2. **Version** — a release that groups epics: `/create-version`
+3. **Sprint** *(optional but recommended)* — a time-boxed unit within a version: `/plan-sprint`
+4. **User story** — an executable task: `/create-us`
+
+### Create a user story
+
+Run: **`/create-us`**
+
+The agent will ask what user, what action, and what slice. It creates the file with Intent (Why + Where) filled and Plan drafted. The story is saved with `ready: false` — it is not ready to implement yet.
+
+After creating, run **`/review-us US-XXXX`** to get a quality audit of the story before refining it.
+
+### Refine a user story
+
+Run: **`/refine-us US-XXXX`**
+
+This is the step between creation and implementation. The agent:
+- Writes the **Approach** (minimum 2 explanatory bullets — the technical direction)
+- Sets exact architecture section references
+- Writes concrete test steps under Planned
+- Sets `ready: true` when all checks pass
+
+A story without `ready: true` cannot be implemented.
+
+### Sprint priority and scope
+
+- Order of work in a sprint = `stories: [US-…]` in the sprint frontmatter (first = highest priority).
+- While a sprint is `active`, new requests go to the backlog or the next sprint — not silently appended mid-sprint unless you decide and log it.
+- Close a sprint with **Retrospective** filled and sprint review — run **`/complete-sprint vX-SY`**, not only a manual status edit.
+
+### Bugs and spikes
+
+- **Bug:** create a US with fix acceptance (or fix inside the current US if introduced this session). No `docs/bugs/` folder.
+- **Spike:** US with timebox in Notes and knowledge outcome → decision log; no production deliverable required.
+
+Details: [scrum-meridian-map.md](./scrum-meridian-map.md).
+
+### After backlog changes
+
+Run **`/sync-board`** to regenerate `docs/kanban/board.json` from the US files.
+
+---
+
+## Implement a user story
+
+### Choose the story
+
+Pick a Must story with `ready: true` and no pending `depends_on`. Run `/status` if unsure.
+
+One US per implementation session. Do not mix stories in one conversation.
+
+### Ask the agent to implement
+
+Run: **`/implement-us US-XXXX`**
+
+The workflow gates on `ready: true`, filled Plan, and satisfied `depends_on`, then implements. If blocked, run **`/refine-us US-XXXX`** first.
+
+You can also ask in natural language — the agent must run the same gate before coding:
+
+> "Run `/implement-us US-0017`" or "Implement `docs/us/US-0017.md` per Acceptance."
+
+### Review the output
+
+- Review the diff in the IDE.
+- Run build and tests.
+- If partially complete: mark `status: 🔶` with `Missing:` in Acceptance. Do not use `/complete-us` yet.
+- If complete with evidence: go to [Close a user story](#close-a-user-story).
+
+---
+
+## Close a user story
+
+Run: **`/complete-us US-XXXX`**
+
+**Before running, confirm:**
+- All `depends_on` stories are `✅`
+- Acceptance criteria are verifiable with evidence (not just "it works")
+- If `tests: required` — tests have been run and passed
+
+**What the agent writes in the story file:**
+- `## Record` — real file paths changed, layer summary, executed test output
+- Acceptance items checked `[x]`
+- Frontmatter: `status: ✅`, `tests_status: done`
+- If there was a cross-cutting decision, it prepends `docs/decisions/YYYY-MM-DD.json`
+
+**After closing:**
+- Run **`/sync-board`** to regenerate the board
+- Verify the story appears in the correct column in the monitor
+- Go to [Commit after close](#commit-after-close) — human step; not part of `/complete-us`
+
+---
+
+## Commit after close
+
+Full rules: **`commit-after-us-close.md`** in this folder.
+
+After **`/complete-us`** and **`/sync-board`** for one US:
+
+1. Review `git diff` — scope must match `## Record` / `### Files` (one US only).
+2. Confirm lint/build and `validate_meridian.py` if `docs/` changed.
+3. **You** run `git add` + `git commit` (or ask the agent explicitly: “commita com a mensagem sugerida”).
+4. Message: `type(scope): summary (US-XXXX)` — the agent may have written **suggested commit** under `### Executed`.
+
+Agents do **not** commit when marking ✅. Partial work (`🔶`) — no delivery commit until close.
+
+---
+
+## Daily session loop
+
+For experienced users, **`/daily-with-ai`** runs a guided session: checks status, surfaces the right story, and walks through the appropriate workflow.
+
+If you prefer to drive manually:
+1. `/status` — what is blocked, what is next
+2. One focused conversation per concern (document, backlog, implement — not mixed)
+3. `/complete-us` + `/sync-board` when a slice is done
+4. **Commit** — one commit per closed US (see [Commit after close](#commit-after-close))
+5. `/sync-board` after any US change that did not already sync on close
+
+---
+
+## Validate the structure
+
+```bash
+python3 .agent/scripts/validate_meridian.py <project-folder>
+python3 .agent/scripts/validate_meridian.py <project-folder> --json   # machine-readable
+```
+
+Run at the project root. Fix errors before creating US or marking docs `approved`.
+
+---
+
+## Slash command reference
+
+| Command | What it does |
+| ------- | ------------ |
+| `/init-meridian` | Start or migrate a project — creates `docs/` and governance |
+| `/status` | Session start — blockers, current state, next action |
+| `/architecture` | Draft or review `05_architecture.md` |
+| `/security-pass` | Draft or review `02_security.md` |
+| `/create-epic` | New product capability in `docs/epics/` |
+| `/create-version` | New release in `docs/versions/` |
+| `/plan-sprint` | New sprint in `docs/sprints/` |
+| `/complete-sprint vX-SY` | Close sprint — retrospective + status complete |
+| `/create-us` | New user story (gates: architecture approved + epic + version exist) |
+| `/review-us US-XXXX` | Quality audit — read-only, no changes, no `ready` |
+| `/refine-us US-XXXX` | Deepen Plan and Approach — sets `ready: true` when checklist passes |
+| `/implement-us US-XXXX` | Gate + implement — requires `ready: true` |
+| `/complete-us US-XXXX` | Close story — fills Record, marks `✅`, syncs board |
+| `/sync-board` | Regenerate `docs/kanban/board.json` from US files |
+| `/daily-with-ai` | Full guided session loop |
+| `/agents-help` | Agent groups, slash command groups, numbered steps — open `.agent/references/agents-help.md` |
+| `/update-decisions-log` | Prepend a decision entry to `docs/decisions/YYYY-MM-DD.json` |
+
+---
+
+## Things that will not work
+
+- Asking the agent to implement without a `ready: true` story
+- Marking `✅` in chat without running `/complete-us` in the files
+- Editing `board.json` directly — it is always generated
+- Creating US before `05_architecture.md` is `approved`
+- Mixing document work, backlog work, and implementation in one conversation
+- Setting `approved` on a document you did not read
+- Using `status: ✅` without a filled `## Record`
+- Marking ✅ and moving to the next US without committing the closed slice (unless you batch commits intentionally)
+- Letting the agent `git commit` without your explicit request

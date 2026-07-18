@@ -34,24 +34,19 @@ Before any action, classify:
 | Type | Triggers | Outcome |
 | ---- | -------- | ------- |
 | **QUESTION** | "what is", "how does", "explain" | Text answer; do not change docs |
-| **STATUS** | "status", "where are we", "blockers", `/daily-with-ai` | `scrum-master` + `/status` |
-| **DOC / PHASE** | "tech stack", "principles", `01_`–`08_`, `11_` | `technical-writer` |
-| **SCOPE / EPIC** | "scope", "in scope", `/discover`, `/create-epic`, `00_scope` | `product-owner` |
-| **ARCHITECTURE** | "architecture", `/architecture`, `05_architecture` | `technical-architect` |
-| **US / BACKLOG** | "user story", "US-", "kanban", `/create-us` | `backlog-refiner` or `sprint-planner` |
-| **IMPLEMENT US** | "implement US", "build", "code for US", `/implement-us` | `developer` + `implement-user-story` — **block** if `ready` not true |
-| **REFINE US** | "refine US", `/refine-us` | `backlog-refiner` + `refine-user-story` |
-| **REVIEW US** | "review US", `/review-us` | `backlog-refiner` + `review-user-story` |
-| **CLOSE US** | "complete US", `/complete-us` | `backlog-refiner` + `complete-user-story` |
-| **CLOSE SPRINT** | "complete sprint", `/complete-sprint` | `sprint-planner` + `complete-sprint` |
-| **LOG DECISION** | "decision log", `/update-decisions-log` | `update-decisions-log` + `date` before Write |
-| **DESIGN** | "design system", "UI", `/design-pass`, `09_design` | `design-system-owner` |
-| **START PROJECT** | "start", `/init-meridian` | `scrum-master` + `init-project` |
-| **DOCUMENT AS-IS** | `/document-project`, brownfield, inventory | `technical-writer` + `document-existing-project` |
-| **AUDIT DOCS** | `/audit-docs`, audit phase docs, refine scope | `technical-writer` + `audit-phase-docs` |
-| **SECURITY** | "security", "OWASP", `/security-pass`, `02_security` | `security-champion` |
-| **CODE** | "fix", "refactor" (sem US clara) | Block → `/create-us` ou `/implement-us US-XXXX` |
-| **SLASH** | workflows Meridian | Corresponding workflow file |
+| **STATUS** | "status", "where are we", "blockers" | `process-manager` + `/status` |
+| **DOC / PHASE** | "scope", "epic", "version", "architecture", `00_`–`11_` | Documentation agent per matrix |
+| **US / BOARD** | "user story", "US-", "kanban", "board" | `board-keeper` or `sprint-planner` |
+| **IMPLEMENT US** | "implement US", "build", "code for US", `/implement-us` | `process-manager` + `implement-user-story` — **block** if `ready` not true |
+| **REFINE US** | "refine US", `/refine-us`, "ready for implement" | `board-keeper` + `refine-user-story` |
+| **REVIEW US** | "review US", `/review-us`, "audit US", "check story" | `board-keeper` + `review-user-story` |
+| **CLOSE US** | "complete US", "mark done", "record", `/complete-us` | `board-keeper` + `complete-user-story` |
+| **CLOSE SPRINT** | "complete sprint", "close sprint", `/complete-sprint` | `sprint-planner` + `complete-sprint` |
+| **LOG DECISION** | "log decision", "decision log", `/update-decisions-log`, `docs/decisions/` | read `update-decisions-log` + run `date` before Write |
+| **SECURITY** | "security", "OWASP", "secrets", `02_security` | `security-steward` |
+| **START PROJECT** | "start", "meridian setup", "create docs" | `process-manager` + `init-project` |
+| **CODE** | "implement", "create app", "fix", "refactor" | `/implement-us US-XXXX` or equivalent gate; US `ready: true` required |
+| **SLASH** | `/init-meridian`, `/create-epic`, `/create-us`, `/complete-us`, `/daily-with-ai`, etc. | Corresponding workflow |
 
 > For automatic agent routing, follow `@[skills/meridian-routing]`.
 
@@ -69,7 +64,7 @@ Before any action, classify:
 [specialized response]
 ```
 
-4. **Respect override:** explicit `@agent` wins — use v11 slugs only (`scrum-master`, `backlog-refiner`, `developer`, …).
+4. **Respect override:** if the user cites `@scope-architect`, use that agent.
 
 ### Checklist before code or US
 
@@ -96,8 +91,8 @@ Before any action, classify:
 
 ### Source of truth
 
-- `docs/` is the source of truth for **phase docs** (`00`–`11`, decisions, architecture, discovery) of the **target project** (`packageRoot` — in monorepos see `.meridian/projects.json`).
-- Delivery (US, epic, version, sprint) lives in `.meridian/meridian.db` — see `sqlite-delivery-operations.md`.
+- `docs/` is the source of truth of the **target project** (do not confuse with this repo's `app-desktop/docs/` unless context is explicit).
+- `docs/kanban/board.json` is **derived** from `docs/us/*.md`.
 - Read `.agent/MERIDIAN.md` before changing project structure.
 
 ### Documentation precedes code
@@ -121,7 +116,7 @@ Do not write product code until required docs for the current phase exist (see `
 - Protect `.env`, `.env.*`, logs, builds, `node_modules`, caches.
 - Do not expose secrets; do not run destructive commands without approval.
 - Security changes require a decision in `docs/decisions/YYYY-MM-DD.json`.
-- After `/complete-us`, the **manager** commits (one US per commit by default). Agents may suggest a message in `### Executed`; they do not `git commit` unless explicitly asked. See `.agent/references/commit-after-us-close.md`.
+- After `/complete-us` + `/sync-board`, the **manager** commits (one US per commit by default). Agents may suggest a message in `### Executed`; they do not `git commit` unless explicitly asked. See `.agent/references/commit-after-us-close.md`.
 
 ### Human manager
 
@@ -133,17 +128,22 @@ The person is manager of the process. Agents report blockers, next step, and pen
 
 | Artifact | Primary agent | Skill |
 | -------- | ------------- | ----- |
-| `docs/` structure | `scrum-master` | `init-project` |
-| `docs/inventory/as-is.md` (Mode B) | `technical-writer` | `init-project` |
-| `.meridian/projects.json` (multi-product) | `scrum-master` | `init-project` |
-| `00_scope.md`, discovery, epics (SQLite) | `product-owner` | `discover-product`, `create-epic` |
-| `01`–`08`, `11` (phase) | `technical-writer` | `init-project`, `update-decisions-log` |
-| `02_security.md` | `security-champion` | `security-review` |
-| `05_architecture.md` | `technical-architect` | `architecture-folder-guide` + `security-review` |
-| `09_design_system.md` | `design-system-owner` | `design-system` _(H1)_ |
-| Versions / sprints (SQLite) | `sprint-planner` | `create-version`, `create-sprint`, `complete-sprint` |
-| Delivery US (create → close, not implement) | `backlog-refiner` | `create-user-story`, `review-user-story`, `refine-user-story`, `complete-user-story` |
-| Delivery US (implement) | `developer` | `implement-user-story` |
+| `docs/` structure | `process-manager` | `init-project` |
+| `docs/inventory/as-is.md` (Mode B) | `documentation-strategist` | `init-project` |
+| `.meridian/projects.json` (multi-product) | `process-manager` | `init-project` |
+| `00_scope.md` | `scope-architect` | `init-project` |
+| `01`–`08`, `11` (phase) | `documentation-strategist` | `update-decisions-log` |
+| `02_security.md` | `security-steward` | `security-review` |
+| `05_architecture.md` | `architecture-guardian` | `architecture-folder-guide.md` + `security-review` |
+| `docs/architecture/*.md` | `architecture-guardian` | indexed from `05`; gate stays on `05` only |
+| `docs/versions/`, `docs/sprints/` (create/plan) | `sprint-planner` | `create-sprint`, `create-version` |
+| `docs/sprints/` (close) | `sprint-planner` | `complete-sprint` |
+| `docs/us/*.md` (create) | `board-keeper` | `create-user-story` + `code-quality-at-us-time.md` |
+| `docs/us/*.md` (review) | `board-keeper` | `review-user-story` |
+| `docs/us/*.md` (refine) | `board-keeper` | `refine-user-story` + `code-quality-at-us-time.md` + `04_principles.md` |
+| `docs/us/*.md` (implement) | `process-manager` | `implement-user-story` + `code-quality-at-us-time.md` + `04_principles.md` |
+| `docs/us/*.md` (close) | `board-keeper` | `complete-user-story` |
+| `board.json` | `board-keeper` | `generate-board-json` |
 | `11_decisions.md` (stub) + `docs/decisions/` | any relevant agent | `update-decisions-log` |
 
 ---
@@ -165,13 +165,11 @@ The person is manager of the process. Agents report blockers, next step, and pen
 
 ## Quick reference
 
-- **Governance / daily:** `scrum-master`
-- **Product / scope / epic:** `product-owner`
-- **Phase docs:** `technical-writer`
-- **Security:** `security-champion`
-- **Architecture:** `technical-architect`
-- **Design system:** `design-system-owner`
-- **Sprint planning:** `sprint-planner`
-- **Backlog / US (not code):** `backlog-refiner`
-- **Implement US:** `developer`
+- **Governance:** `process-manager`
+- **Scope:** `scope-architect`
+- **Phase docs:** `documentation-strategist`
+- **Security:** `security-steward`
+- **Architecture:** `architecture-guardian`
+- **Versions/sprints:** `sprint-planner`
+- **US/board:** `board-keeper`
 - **Routing:** `meridian-routing`

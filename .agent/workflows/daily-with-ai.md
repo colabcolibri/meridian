@@ -12,12 +12,12 @@ $ARGUMENTS
 
 1. Human manager approves; agents execute within `docs/`.
 2. One US per implementation cycle when possible.
-3. Code only with minimum docs: `05_architecture` approved; epic/version in SQLite; US with `ready: true`.
+3. Code only with minimum docs: `05_architecture` approved; epic/version in folders; US with `ready: true`.
 4. **Refine before implement** — `/refine-us` after `/create-us`; never skip to code with `ready: false`.
 5. **Implement only via gate** — `/implement-us US-XXXX` after `ready: true`; agent blocks otherwise.
 5. Always close with `complete-user-story` or `/complete-us` — never ✅ in chat only.
-6. Board UI refreshes automatically when delivery rows change in SQLite.
-7. **Commit after close** — human step after `/complete-us`; one commit per US. See `commit-after-us-close.md`. Agents suggest message only unless you explicitly ask them to commit.
+6. `board.json` is derived — use `/sync-board` after changing US.
+7. **Commit after close** — human step after `/complete-us` + `/sync-board`; one commit per US. See `commit-after-us-close.md`. Agents suggest message only unless you explicitly ask them to commit.
 
 ---
 
@@ -32,7 +32,7 @@ People who have already read **Start here** and **Usage guide** in the app (four
 ### 1. Orient
 
 ```txt
-Agent: scrum-master
+Agent: process-manager
 Skill: meridian-routing (optional)
 Command: /status
 App: Settings tab + **Decisions** (log) + Board
@@ -44,7 +44,7 @@ App: Settings tab + **Decisions** (log) + Board
 ### 2. Contextualize
 
 ```txt
-Cite: US-XXXX (`meridian_delivery.py show US-XXXX --full`)
+Cite: US-XXXX or docs/us/US-XXXX.md
 Prompt: "Implement US-XXXX per acceptance. Do not mark ✅ without evidence."
 ```
 
@@ -55,7 +55,7 @@ Prompt: "Implement US-XXXX per acceptance. Do not mark ✅ without evidence."
 ### 2b. Refine (if needed)
 
 ```txt
-Agent: backlog-refiner
+Agent: board-keeper
 Skill: refine-user-story
 Command: /refine-us US-XXXX
 ```
@@ -67,7 +67,7 @@ Command: /refine-us US-XXXX
 ### 3. Implement
 
 ```txt
-Agent: developer
+Agent: process-manager
 Skill: implement-user-story
 Command: /implement-us US-XXXX
 ```
@@ -80,9 +80,10 @@ Command: /implement-us US-XXXX
 ### 4. Close
 
 ```txt
-Agent: backlog-refiner
+Agent: board-keeper
 Skill: complete-user-story
 Command: /complete-us US-XXXX
+Then: /sync-board
 ```
 
 - Fill `## Record` (Files + layers + Executed).
@@ -92,7 +93,7 @@ Command: /complete-us US-XXXX
 ### 5. Commit (human)
 
 ```txt
-After: /complete-us for US-XXXX
+After: /complete-us + /sync-board for US-XXXX
 Reference: .agent/references/commit-after-us-close.md
 ```
 
@@ -103,8 +104,9 @@ Reference: .agent/references/commit-after-us-close.md
 
 ### 6. Review
 
-- Extension board reflects US status after SQLite upsert?
+- App: Board tab — US in correct column?
 - Record consistent with what was tested?
+- Optional later: monitor US-0071 — last commit touching `docs/us/`
 
 ---
 
@@ -118,6 +120,7 @@ Reference: .agent/references/commit-after-us-close.md
 | `/implement-us` | Gate + implement — requires `ready: true` |
 | `/complete-us` | Close US after implementation |
 | `/complete-sprint` | Close sprint — retrospective + status complete |
+| `/sync-board` | Regenerate kanban JSON |
 | `/update-decisions-log` | Prepend decision entry (real date + clock) |
 | `/plan-sprint` | Work slice in version |
 | `/create-epic` | New product capability |
@@ -129,8 +132,8 @@ Reference: .agent/references/commit-after-us-close.md
 ## Anti-patterns
 
 - Code without US, `ready: false`, or skipping `/implement-us` gate.
-- ✅ in chat without updating the US in SQLite.
-- Hand-editing delivery outside CLI/form when `meridian.db` exists.
+- ✅ in chat without updating `docs/us/US-XXXX.md`.
+- Editing `board.json` by hand.
 - Single conversation mixing many features.
 - `approved` on phase doc without human review.
 - ✅ in US with uncommitted git changes left indefinitely.
@@ -144,7 +147,7 @@ Reference: .agent/references/commit-after-us-close.md
 Session:
 US worked:
 Final status:
-Board updated: yes | no (extension reads `meridian.db` after upsert)
+Board updated: yes | no
 Commit: done | pending (human)
 Suggested commit: (from Record if any)
 Remaining blockers:

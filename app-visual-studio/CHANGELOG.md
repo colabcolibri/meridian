@@ -4,6 +4,17 @@ All notable changes to the **Meridian** VS Code extension (`meridian-vscode`).
 
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.1.17] - 2026-07-18
+
+### Added
+
+- **`publish:marketplace:env`** — reads `VSCE_PAT` from local `.env` (gitignored) for Marketplace publish
+
+### Changed
+
+- **Bundled kit:** refreshed from monorepo `.agent/`
+- **Packaging:** `.env` excluded from VSIX via `.vscodeignore`
+
 ## [1.1.16] - 2026-06-11
 
 ### Added

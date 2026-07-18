@@ -10,8 +10,8 @@ $ARGUMENTS
 
 ## Critical rules
 
-1. Use `backlog-refiner` + `@[skills/review-user-story]`
-2. **Read-only** — do not edit the US in SQLite unless manager explicitly asks to fix in the same turn
+1. Use `board-keeper` + `@[skills/review-user-story]`
+2. **Read-only** — do not edit `docs/us/US-XXXX.md` unless manager explicitly asks to fix in the same turn
 3. **Never** set `ready: true` — only `/refine-us` does that
 4. **NO product code**
 5. **Mandatory read:** `TEMPLATE_SOURCES.md` (if path confusion) + `writing-guide.md` + `review-checklist.md` + target US
@@ -41,14 +41,14 @@ RULES:
 
 ```txt
 US review:
-ID: US-XXXX
+File:
 Validator:
 Checklist: X/13 pass
 
 Failures:
 Warnings:
-ready in DB: true | false | unset
-Recommendation: /refine-us | /complete-us | /implement-us | human
+ready in file: true | false | unset
+Recommendation: /refine-us | /complete-us | implement | human
 ```
 
 ---
@@ -57,7 +57,7 @@ Recommendation: /refine-us | /complete-us | /implement-us | human
 
 | `/review-us` | `/refine-us` |
 | --- | --- |
-| Report gaps | Fix gaps in SQLite row |
+| Report gaps | Fix gaps in file |
 | Never sets ready | Sets ready: true when checklist passes |
 
 Typical flow: `/create-us` → `/review-us` (optional) → `/refine-us` → implement.

@@ -13,9 +13,8 @@ import sys
 from pathlib import Path
 
 _SCRIPT_DIR = Path(__file__).resolve().parent
-_LIB_DIR = _SCRIPT_DIR / "lib"
-if str(_LIB_DIR) not in sys.path:
-    sys.path.insert(0, str(_LIB_DIR))
+if str(_SCRIPT_DIR) not in sys.path:
+    sys.path.insert(0, str(_SCRIPT_DIR))
 
 from meridian_section_contracts import (  # noqa: E402
     extract_section_body,
@@ -23,7 +22,6 @@ from meridian_section_contracts import (  # noqa: E402
     validate_us_structure,
     validate_version_structure,
 )
-from meridian_db import db_exists  # noqa: E402
 
 
 PHASE_DOCS = [
@@ -51,255 +49,14 @@ AGENT_KIT_PATHS = [
 ]
 
 REQUIRED_AGENTS = [
-    "scrum-master.md",
-    "product-owner.md",
-    "technical-writer.md",
-    "security-champion.md",
-    "technical-architect.md",
-    "design-system-owner.md",
-    "sprint-planner.md",
-    "backlog-refiner.md",
-    "developer.md",
-]
-
-DEPRECATED_AGENT_FILES = [
     "process-manager.md",
-    "board-keeper.md",
     "scope-architect.md",
     "documentation-strategist.md",
-    "architecture-guardian.md",
     "security-steward.md",
+    "architecture-guardian.md",
+    "sprint-planner.md",
+    "board-keeper.md",
 ]
-
-DEPRECATED_AGENT_SLUGS = [name.removesuffix(".md") for name in DEPRECATED_AGENT_FILES]
-
-# Paths under .agent/ that may mention old slugs (historical plans only)
-DEPRECATED_SLUG_SCAN_SKIP_PREFIXES = (
-    "references/plans/",
-)
-
-H2_SCAN_REL_PREFIXES = (
-    "agents/",
-    "workflows/",
-    "skills/",
-    "rules/",
-    "references/",
-)
-
-H2_SCAN_EXTRA_PATHS = (
-    "app-visual-studio/README.md",
-    "app-visual-studio/src/help-webview-html.ts",
-    "app-visual-studio/src/command-catalog.ts",
-)
-
-H2_LEGACY_LINE_MARKERS = (
-    "deprecated",
-    "legacy",
-    "alias",
-    "substitui",
-    "evitar (v1)",
-    "replaced-by",
-    "h1",
-    "h2",
-    "→",
-    "until h2",
-    "até h2",
-)
-
-
-def _line_mentions_deprecated_slug(line: str, slug: str) -> bool:
-    if slug not in line:
-        return False
-    if any(marker in line.lower() for marker in H2_LEGACY_LINE_MARKERS):
-        return False
-    return True
-
-
-def validate_deprecated_agents_removed(
-    kit_root: Path,
-    errors: list[str],
-) -> None:
-    """Ensure legacy agent files and operational slug refs are gone (H2/H3)."""
-    agent_dir = kit_root / ".agent"
-    if not agent_dir.is_dir():
-        return
-
-    deprecated_present = [
-        name
-        for name in DEPRECATED_AGENT_FILES
-        if (agent_dir / "agents" / name).exists()
-    ]
-    if deprecated_present:
-        errors.append(
-            "Deprecated agent files still present: "
-            + ", ".join(deprecated_present)
-            + " — delete; v11 roster only"
-        )
-
-    violations: list[str] = []
-
-    def scan_file(path: Path, rel: str) -> None:
-        if any(rel.startswith(prefix) for prefix in DEPRECATED_SLUG_SCAN_SKIP_PREFIXES):
-            return
-        try:
-            lines = path.read_text(encoding="utf-8").splitlines()
-        except OSError:
-            return
-        for line_no, line in enumerate(lines, start=1):
-            for slug in DEPRECATED_AGENT_SLUGS:
-                if _line_mentions_deprecated_slug(line, slug):
-                    violations.append(f"{rel}:{line_no}: legacy slug `{slug}`")
-                    break
-
-    for prefix in H2_SCAN_REL_PREFIXES:
-        base = agent_dir / prefix.rstrip("/")
-        if not base.is_dir():
-            continue
-        for path in sorted(base.rglob("*.md")):
-            rel = path.relative_to(agent_dir).as_posix()
-            scan_file(path, rel)
-
-    for extra in H2_SCAN_EXTRA_PATHS:
-        path = kit_root / extra
-        if path.is_file():
-            scan_file(path, extra)
-
-    if violations:
-        sample = "; ".join(violations[:8])
-        suffix = f" (+{len(violations) - 8} more)" if len(violations) > 8 else ""
-        errors.append(
-            f"Legacy agent slug in operational docs ({len(violations)}): "
-            f"{sample}{suffix}"
-        )
-
-
-KIT_MD_LEGACY_ALLOWLIST_SUFFIXES = (
-    "references/templates/sqlite-delivery-operations.md",
-    "references/templates/board-schema.md",
-    "references/plans/kit-improvement-plan.md",
-    "references/plans/markdown-audit-v11.md",
-    "references/plans/agent-roster-and-workflow-v11.md",
-    "MERIDIAN_V2_CUTOVER.md",
-    "references/scrum-meridian-map.md",
-    "references/start-here.md",
-    *{f"agents/{name}" for name in DEPRECATED_AGENT_FILES},
-)
-
-KIT_MD_LINE_ALLOW_MARKERS = (
-    "never",
-    "do not",
-    "don't",
-    "não",
-    "legacy",
-    "v1-old",
-    "removed",
-    "superseded",
-    "**no**",
-    "not ",
-    "proib",
-    "anti-pattern",
-    "evitar",
-    "avoid",
-    "→",
-    "substitui",
-    "sem ",
-    "without ",
-    "_(removido",
-    "branch ",
-)
-
-KIT_MD_P0_PATTERNS: list[tuple[re.Pattern[str], str]] = [
-    (re.compile(r"validate_meridian\.py\s+app-desktop"), "validate app-desktop"),
-    (re.compile(r"/sync-board"), "sync-board command"),
-    (re.compile(r"generate-board-json"), "generate-board-json skill"),
-    (re.compile(r"must match filename"), "must match filename"),
-    (
-        re.compile(
-            r"(?i)(write|create|edit|open|glob).{0,80}docs/(us|epics|versions|sprints)/"
-        ),
-        "docs delivery folder as write path",
-    ),
-]
-
-KIT_MD_APP_DESKTOP_BAD = re.compile(r"app-desktop")
-
-
-def _kit_md_path_allowed(rel_posix: str) -> bool:
-    rel = rel_posix.replace("\\", "/")
-    if rel.startswith("references/plans/"):
-        return True
-    for allowed in KIT_MD_LEGACY_ALLOWLIST_SUFFIXES:
-        if rel == allowed or rel.endswith("/" + allowed):
-            return True
-    return False
-
-
-def _kit_md_line_allowed(line: str) -> bool:
-    # Strip inline markdown so "Do **not**" matches "do not"
-    plain = re.sub(r"\*+|`+", "", line).lower()
-    return any(marker in plain for marker in KIT_MD_LINE_ALLOW_MARKERS)
-
-
-def validate_kit_markdown_v11(
-    kit_root: Path,
-    errors: list[str],
-    warnings: list[str],
-    *,
-    strict: bool,
-) -> None:
-    """G6 — flag v1 delivery paths and dead commands in kit markdown."""
-    agent_dir = kit_root / ".agent"
-    if not agent_dir.is_dir():
-        return
-
-    violations: list[str] = []
-
-    def scan_file(path: Path, rel: str) -> None:
-        if _kit_md_path_allowed(rel):
-            return
-        try:
-            lines = path.read_text(encoding="utf-8").splitlines()
-        except OSError:
-            return
-        for line_no, line in enumerate(lines, start=1):
-            if _kit_md_line_allowed(line):
-                continue
-            for pattern, label in KIT_MD_P0_PATTERNS:
-                if pattern.search(line):
-                    violations.append(f"{rel}:{line_no}: {label}")
-                    break
-            else:
-                if KIT_MD_APP_DESKTOP_BAD.search(line) and not _kit_md_line_allowed(line):
-                    violations.append(f"{rel}:{line_no}: app-desktop as active product")
-
-    scan_roots = [
-        agent_dir / "references",
-        agent_dir / "agents",
-        agent_dir / "workflows",
-        agent_dir / "skills",
-        agent_dir / "rules",
-    ]
-    for base in scan_roots:
-        if not base.is_dir():
-            continue
-        for path in sorted(base.rglob("*.md")):
-            rel = path.relative_to(agent_dir).as_posix()
-            scan_file(path, rel)
-
-    docs_dir = kit_root / "docs"
-    if docs_dir.is_dir():
-        for path in sorted(docs_dir.rglob("*.md")):
-            rel = path.relative_to(kit_root).as_posix()
-            scan_file(path, rel)
-
-    if violations:
-        sample = "; ".join(violations[:8])
-        suffix = f" (+{len(violations) - 8} more)" if len(violations) > 8 else ""
-        msg = f"Kit markdown v11 ({len(violations)}): {sample}{suffix}"
-        if strict:
-            errors.append(msg)
-        else:
-            warnings.append(msg)
 
 
 def validate_cursor_adapter(repo_root: Path, warnings: list[str]) -> None:
@@ -448,6 +205,11 @@ def validate_us_semantics(
             )
 
 
+def sqlite_delivery_active(root: Path) -> bool:
+    """True when delivery lives in .meridian/meridian.db (SQLite-only workflow)."""
+    return (root / ".meridian" / "meridian.db").is_file()
+
+
 def read_frontmatter(path: Path) -> dict[str, str]:
     text = path.read_text(encoding="utf-8")
     if not text.startswith("---\n"):
@@ -467,21 +229,13 @@ def read_frontmatter(path: Path) -> dict[str, str]:
 def main() -> int:
     argv = sys.argv[1:]
     json_output = False
-    h2_ready = False
-    strict_kit_md = False
     if "--json" in argv:
         json_output = True
         argv = [arg for arg in argv if arg != "--json"]
-    if "--h2-ready" in argv:
-        h2_ready = True
-        argv = [arg for arg in argv if arg != "--h2-ready"]
-    if "--strict-kit-md" in argv:
-        strict_kit_md = True
-        argv = [arg for arg in argv if arg != "--strict-kit-md"]
 
     root = Path(argv[0]).resolve() if argv else Path.cwd()
     docs = root / "docs"
-    sqlite_delivery = db_exists(root)
+    sqlite_delivery = sqlite_delivery_active(root)
     errors: list[str] = []
     warnings: list[str] = []
 
@@ -494,8 +248,6 @@ def main() -> int:
         if not (kit_root / "README.md").exists():
             warnings.append("Missing README.md at kit repository root.")
         validate_agent_kit(kit_root, errors, warnings)
-        validate_deprecated_agents_removed(kit_root, errors)
-        validate_kit_markdown_v11(kit_root, errors, warnings, strict=strict_kit_md)
         validate_cursor_adapter(kit_root, warnings)
         validate_codex_adapter(kit_root, warnings)
 

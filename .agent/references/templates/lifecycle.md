@@ -3,20 +3,12 @@
 Each phase uses a **fixed template**. Agents must not skip phases or merge them in one conversation without explicit manager approval.
 
 ```txt
-Greenfield:
-  /discover (optional) → product-brief
-  /init-meridian Mode A → doc-templates + phase-docs → docs/00–08, 11
-  /audit-docs (optional)
-  ↓ approve 00→04
-  /architecture → 05 approved → backlog
+Existing codebase only (Mode B):
+  Codebase → as-is-inventory-template.md → docs/inventory/as-is.md
+  ↓ human review + promote rows
+  ↓ archive inventory after 05 approved
 
-Existing codebase:
-  /init-meridian Mode B → docs/ tree + bootstrap
-  /document-project → as-is-inventory + phase-docs from code (no US)
-  /audit-docs
-  ↓ human review → approve docs → forward backlog only
-
-Phase docs (doc-templates.md + phase-docs/; optional docs/architecture/)
+Phase docs (doc-templates.md; optional docs/architecture/ indexed from 05)
   ↓ 05_architecture approved
 Epic (epic-template.md)
   ↓
@@ -32,9 +24,9 @@ User story create (us-template.md + writing-guide.md + code-quality-at-us-time.m
   ↓
 /implement-us (implement-gate-checklist.md + code-quality-at-us-time.md) — gate then code; DRY/SRP; requires ready true
   ↓
-User story close (implementation-template.md) — Record + status ✅ in SQLite
+User story close (implementation-template.md) — Record + status ✅
   ↓
-Board refresh (automático — upsert em meridian.db; ver board-schema.md)
+Board sync (board-schema.md)
   ↓
 Commit (human) — one commit per closed US; see commit-after-us-close.md
   ↓
@@ -52,7 +44,7 @@ Scrum mapping (bugs, spikes, ceremonies, no story points): `.agent/references/sc
 | **Create** (`/create-us`) | `us-template.md` + `writing-guide.md` + `code-quality-at-us-time.md` | Intent (Why/Where) + Plan draft; one slice (SRP); `ready: false` |
 | **Review** (`/review-us`) | `review-checklist.md` + `section-contracts.md` | Gap report; **no edits**, **no `ready`** |
 | **Refine** (`/refine-us`) | `refine-checklist.md` + `code-quality-at-us-time.md` + `04_principles.md` | Plan concrete; DRY/SRP in Approach; `ready: true` |
-| **Implement** (`/implement-us`) | `implement-gate-checklist.md` + `code-quality-at-us-time.md` + `04_principles.md` | Agent: `implementation-specialist` (H1); gate pass; product code |
+| **Implement** (`/implement-us`) | `implement-gate-checklist.md` + `code-quality-at-us-time.md` + `04_principles.md` | Gate pass; product code with DRY/SRP |
 | **Close** (`/complete-us`) | `implementation-template.md` | `## Record` filled; `status: ✅` |
 
 ## Sprint — close
@@ -63,7 +55,7 @@ Scrum mapping (bugs, spikes, ceremonies, no story points): `.agent/references/sc
 
 Epic and version **close** remain manual (`status: complete` in frontmatter when outcome reached) — no separate refine workflow.
 
-Between create and close, the **US row in SQLite** (`user_stories.body_markdown` + section columns) is the contract for implementation. Structure is enforced by `section-contracts.md` (validator + `meridian_delivery_form`). If Plan or Planned tests are still generic placeholders, the agent must **not** implement — run `/refine-us` first.
+Between create and close, the US file is the **contract for implementation**. Structure is enforced by `section-contracts.md` (Python + monitor). If Plan or Planned tests are still generic placeholders, the agent must **not** implement — run `/refine-us` first.
 
 ---
 

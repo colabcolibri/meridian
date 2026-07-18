@@ -62,24 +62,6 @@ Every `SKILL.md` with references must include:
 
 ---
 
-## References vs SQLite (v11)
-
-Delivery skills (`create-us`, `create-epic`, `refine-us`, `complete-us`, …) keep **Markdown templates** under `references/`. That is intentional:
-
-| What you see in `references/*.md` | What it is in v11 |
-| --------------------------------- | ----------------- |
-| `us-template.md`, `epic-template.md`, … | Shape of `body_markdown` + which frontmatter fields map to DB columns |
-| `implementation-template.md` | Shape of the `## Record` section inside `body_markdown` |
-| `refine-checklist.md`, `review-checklist.md` | Audit rubric — load US with `meridian_delivery.py show --full` |
-
-**Do not** interpret templates as “create `docs/us/US-XXXX.md`”. Persist with **`meridian_delivery.py`** (reads `.meridian/delivery.json`) or `meridian_db_export.py --write-form` (see `delivery-connector-schema.md`).
-
-Central registry symlinks: `.agent/references/templates/us-template.md` → skill `references/` (single source).
-
-**Connector profile:** `.meridian/delivery.json` — see `delivery-connector-schema.md`. Skills call `meridian_delivery.py`; do not hardcode `meridian_db_cli.py` in new prose.
-
----
-
 ## Agents vs skills
 
 | Layer | Role |
@@ -146,6 +128,7 @@ allowed-tools: Read, Glob, Grep
 | `review-user-story` | `review-user-story/` |
 | `refine-user-story` | `refine-user-story/` |
 | `complete-user-story` | `complete-user-story/` |
+| `generate-board-json` | `generate-board-json/` |
 | `update-decisions-log` | `update-decisions-log/` |
 | `security-review` | `security-review/` |
 | `meridian-routing` | `meridian-routing/` |

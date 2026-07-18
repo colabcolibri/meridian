@@ -31,7 +31,7 @@ Meridian is not a mesh of autonomous agents. It is a minimal, auditable loop.
 | 1 | Documentation precedes product code |
 | 2 | Status reflects evidence, not optimism |
 | 3 | Decisions live in `docs/decisions/YYYY-MM-DD.json` (prepend; never edit old entries). **Clock:** run `date +"%Y-%m-%d"` and `date +"%H:%M"` before Write — workflow `/update-decisions-log` |
-| 4 | Kanban board reads `.meridian/meridian.db` — never a derived JSON file in `docs/` |
+| 4 | `docs/kanban/board.json` is **derived** from `docs/us/*.md` — never the primary source |
 | 5 | Simplicity over bureaucracy — use agents/skills for detail, not duplicate specs here |
 
 ---
@@ -59,21 +59,19 @@ See `.agent/ARCHITECTURE.md` for the full map. Minimum:
   MERIDIAN.md              ← this manifest
   rules/MERIDIAN.md        ← P0 always-on
   ARCHITECTURE.md          ← kit structure
-  agents/                  ← personas (scrum-master, product-owner, backlog-refiner, developer, …)
+  agents/                  ← personas (board-keeper, process-manager, …)
   skills/                  ← procedures (create-user-story, …)
   workflows/               ← slash commands (/create-us, …)
   references/templates/    ← INDEX, section-contracts, us-template, …
   scripts/
-    lib/                     ← meridian_db, parsers, form
-    migrate/                 ← v1 → SQLite one-shot
-    meridian_delivery.py     ← agent facade
-    meridian_db_cli.py       ← sqlite driver
     validate_meridian.py
+    migrate_us_v2_structure.py   # one-off US schema migration
     sync_cursor_kit.sh
 
 docs/                        ← one product's source of truth (path varies in monorepos)
   00_scope.md … 11_decisions.md
-  epics/  versions/  sprints/  decisions/   (removed from dogfood — delivery in .meridian/)
+  epics/  versions/  sprints/  us/  kanban/board.json  decisions/
+  templates/                 ← symlinks to kit templates (human mirror)
 
 .meridian/projects.json      ← optional — several docs/ trees in one repo (A + discovery B)
 ```
@@ -122,16 +120,15 @@ blocks: []
 
 | Document | Agent | Template / skill |
 | -------- | ----- | ---------------- |
-| `00_scope.md` | `product-owner` | `discover-product`, `init-project` → `doc-templates.md` |
-| `01_tech_stack.md` | `technical-writer` | `doc-templates.md` |
-| `02_security.md` | `security-champion` | `doc-templates.md` + `security-review` |
-| `03_user_types.md` | `technical-writer` | `doc-templates.md` |
-| `04_principles.md` | `technical-writer` | `doc-templates.md` |
-| `05_architecture.md` | `technical-architect` | `doc-templates.md` + `architecture-folder-guide.md` + `security-review` |
-| `06_database.md` | `technical-writer` | `doc-templates.md` |
-| `07_api_contracts.md` | `technical-writer` | `doc-templates.md` |
-| `08_environments.md` | `technical-writer` | `doc-templates.md` |
-| `09_design_system.md` | `design-system-owner` | `design-system` |
+| `00_scope.md` | `scope-architect` | `init-project` → `doc-templates.md` |
+| `01_tech_stack.md` | `documentation-strategist` | `doc-templates.md` |
+| `02_security.md` | `security-steward` | `doc-templates.md` + `security-review` |
+| `03_user_types.md` | `documentation-strategist` | `doc-templates.md` |
+| `04_principles.md` | `documentation-strategist` | `doc-templates.md` |
+| `05_architecture.md` | `architecture-guardian` | `doc-templates.md` + `architecture-folder-guide.md` + `security-review` |
+| `06_database.md` | `documentation-strategist` | `doc-templates.md` |
+| `07_api_contracts.md` | `documentation-strategist` | `doc-templates.md` |
+| `08_environments.md` | `documentation-strategist` | `doc-templates.md` |
 | `11_decisions.md` | any | stub + `decision-template.md` |
 
 ---
@@ -142,11 +139,11 @@ After `05_architecture` is `approved`:
 
 | Artifact | Path | Create | Close |
 | -------- | ---- | ------ | ----- |
-| Epic | SQLite `epics` | `/create-epic` | — |
-| Version | SQLite `versions` | `/create-version` | go-live checklist |
-| Sprint | SQLite `sprints` | `/plan-sprint` | — |
-| User story | SQLite `user_stories` | `/create-us` | `/complete-us` |
-| Board (UI) | `meridian_db_export --format planning` | auto on DB save | read-only |
+| Epic | `docs/epics/EPIC-XX.md` | `/create-epic` | — |
+| Version | `docs/versions/vX.md` | `/create-version` | go-live checklist |
+| Sprint | `docs/sprints/vX-SY.md` | `/plan-sprint` | — |
+| User story | `docs/us/US-XXXX.md` | `/create-us` | `/complete-us` |
+| Board | `docs/kanban/board.json` | `/sync-board` | derived only |
 
 Templates registry: `.agent/references/templates/INDEX.md`  
 Canonical edit paths: `TEMPLATE_SOURCES.md`  
@@ -194,18 +191,19 @@ Strict US also require `ready: true | false`.
 /create-us     → Intent + Plan draft, ready: false
 /review-us     → optional audit (no edits, no ready)
 /refine-us     → deepen Plan + Approach (required), ready: true
-implement      → developer gate: ready + Plan filled
+implement      → process-manager gate: ready + Plan filled
 /complete-us   → Record + status ✅
-commit (human) → after close; one commit per US — see commit-after-us-close.md
+/sync-board    → regenerate board.json
+commit (human) → after close + board sync; one commit per US — see commit-after-us-close.md
 ```
 
-Agent: `backlog-refiner` (create/review/refine/close). Skills: `create-user-story`, `review-user-story`, `refine-user-story`, `complete-user-story`. Implement: `developer` + `implement-user-story`.
+Agent: `board-keeper`. Skills: `create-user-story`, `review-user-story`, `refine-user-story`, `complete-user-story`, `generate-board-json`.
 
 ---
 
-## 8. Board (SQLite)
+## 8. Board JSON
 
-Kanban card shape: `board-schema.md`. Extension and CLI read `meridian_db_export.py --format planning` from `.meridian/meridian.db`. Optional audit rows in `board_snapshots` on upsert.
+Schema: `board-schema.md`. Generated from US frontmatter — never maintained by hand as source of truth.
 
 ```bash
 python3 .agent/scripts/validate_meridian.py <project-folder>
@@ -224,15 +222,14 @@ python3 .agent/scripts/validate_meridian.py <project-folder> --json
 
 | Need | Agent | Entry |
 | ---- | ----- | ----- |
-| Status / gates | `scrum-master` | `/status`, `/daily-with-ai` |
-| Discovery / scope / epic | `product-owner` | `/discover`, `/create-epic` |
-| Phase docs | `technical-writer` | — |
-| Security | `security-champion` | `/security-pass` |
-| Architecture | `technical-architect` | `/architecture` |
-| Design system | `design-system-owner` | `/design-pass` |
+| Status / gates | `process-manager` | `/status` |
+| Scope | `scope-architect` | `/init-meridian` |
+| Phase docs | `documentation-strategist` | — |
+| Security | `security-steward` | `/security-pass` |
+| Architecture | `architecture-guardian` | `/architecture` |
 | Versions / sprints | `sprint-planner` | `/create-version`, `/plan-sprint`, `/complete-sprint` |
-| US backlog | `backlog-refiner` | `/create-us`, `/refine-us`, `/complete-us` |
-| US implement | `developer` | `/implement-us` (requires `ready: true`) |
+| US / board | `board-keeper` | `/create-us`, `/refine-us`, `/complete-us`, `/sync-board` |
+| US implement | `process-manager` | `/implement-us` (requires `ready: true`) |
 | Decisions | any relevant agent | `/update-decisions-log` |
 | Auto-pick | `meridian-routing` skill | — |
 
@@ -249,7 +246,7 @@ Create drafts, suggest decisions, implement approved US, run tests, update docs,
 - Mark `✅` without evidence or filled Record
 - Edit old decision log entries
 - Write to `docs/decisions/` without running `date +"%Y-%m-%d"` and `date +"%H:%M"` first
-- Edit delivery outside SQLite / CLI when `meridian.db` exists
+- Edit `board.json` as primary source
 - Expose secrets or run destructive commands without confirmation
 
 If documentation is missing, report: what blocks, why, smallest fix, offer draft.
@@ -260,11 +257,9 @@ If documentation is missing, report: what blocks, why, smallest fix, offer draft
 
 Use workflow `/init-meridian` and skill `init-project`. Two modes:
 
-**Mode A — New project:** interview (`init-interview-guide.md`), then create **all** phase docs `00`–`08` from `phase-docs/` templates — not heading-only stubs.
+**Mode A — New project:** agent interviews user (up to 5 questions), creates `docs/` from answers.
 
-**Mode B — Existing codebase:** `/init-meridian` creates structure + bootstrap; run **`/document-project`** (skill `document-existing-project`) for `as-is` inventory + phase docs from code. No retroactive US with `✅`.
-
-**Hygiene:** `/audit-docs` audits phase docs anytime (Meridian-started or brownfield).
+**Mode B — Existing codebase:** agent reads code first, creates `docs/inventory/as-is.md` (capability table with evidence), infers scope and tech, asks only what is unclear, populates phase docs from inventory + observations. All inferences marked as assumptions for human review. No retroactive US with `✅`; optional baseline version `v0` for pre-Meridian epics.
 
 Both modes:
 
@@ -272,7 +267,7 @@ Both modes:
 2. Stub `11_decisions.md`; initial decision entry
 3. Draft `00_scope.md`; populated, not blank
 4. Follow dependency order for remaining phase docs
-5. Bootstrap `.meridian/meridian.db`; add epics/versions after architecture approved
+5. Empty `board.json`; add epics/versions after architecture approved
 6. `.gitignore` before secrets or dependencies land
 
 Human guide: `.agent/references/start-here.md`  
@@ -307,16 +302,17 @@ Delivery is done when:
 - Intent/Acceptance marked `[x]` (or `🔶` + Missing:)
 - `## Record` filled (Files + layers + Executed when tests required)
 - `tests_status: done` when `tests: required`
-- `status: ✅` in SQLite row
+- `status: ✅` in frontmatter
+- `board.json` regenerated
 - Cross-cutting changes in decision log (skill `update-decisions-log` + real clock)
 
-**Repository (human, after the above):** one git commit per closed US — code + delivery DB change + decisions in scope. Agents suggest message on close; they do not commit unless the manager explicitly asks. See `.agent/references/commit-after-us-close.md`.
+**Repository (human, after the above):** one git commit per closed US — code + `docs/us/US-XXXX.md` + board/decisions in scope. Agents suggest message on close; they do not commit unless the manager explicitly asks. See `.agent/references/commit-after-us-close.md`.
 
 ---
 
 ## 13. Management tools
 
-Meridian works without any app. Optional **Meridian Harness** extension (`app-visual-studio/`) reads the same `docs/` and `.meridian/meridian.db` — not the source of truth.
+Meridian works without any app. Optional tools (e.g. app-desktop monitor) read the same folder — they are not the source of truth.
 
 ---
 

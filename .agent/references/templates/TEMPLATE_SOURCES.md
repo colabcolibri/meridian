@@ -7,14 +7,14 @@
 ## How the mirror works
 
 ```txt
-CANONICAL (edit here)          REGISTRY (agents read)              IDE adapter (read-only)
-.agent/skills/.../references/  →  .agent/references/templates/  →  .cursor/references/templates/
+CANONICAL (edit here)          REGISTRY (agents read)              HUMAN / CURSOR (read-only mirrors)
+.agent/skills/.../references/  →  .agent/references/templates/  →  app-desktop/docs/templates/
+                                                              →  .cursor/references/templates/
 ```
 
-- **Registry** = symlinks + kit-owned files (`INDEX.md`, `writing-guide.md`, `section-contracts.md`, `lifecycle.md`, `TEMPLATE_SOURCES.md`).
-- **Never** edit symlinks in `.cursor/references/templates/` — they point at `.agent/`.
-- **Do not** create `docs/templates/` in product projects (v11). Templates are kit instructions, not delivery artifacts.
-- After adding a new template file, update `INDEX.md` and run `./.agent/scripts/sync_cursor_kit.sh` (syncs `.cursor/references/templates/` only).
+- **Registry** = symlinks + 4 kit-owned files (`INDEX.md`, `writing-guide.md`, `section-contracts.md`, `lifecycle.md`, `TEMPLATE_SOURCES.md`).
+- **Never** edit symlinks in `docs/templates/` or `.cursor/` — they point at `.agent/`.
+- After adding a new template file, update `INDEX.md`, run `./.agent/scripts/sync_cursor_kit.sh` (syncs `.cursor/` + `app-desktop/docs/templates/`), and `docs/templates/README.md` in target projects.
 
 ---
 
@@ -30,13 +30,11 @@ CANONICAL (edit here)          REGISTRY (agents read)              IDE adapter (
 | `epic-template.md` | `.agent/skills/create-epic/references/epic-template.md` | `.agent/references/templates/epic-template.md` | `/create-epic` |
 | `version-template.md` | `.agent/skills/create-version/references/version-template.md` | `.agent/references/templates/version-template.md` | `/create-version` |
 | `sprint-template.md` | `.agent/skills/create-sprint/references/sprint-template.md` | `.agent/references/templates/sprint-template.md` | `/plan-sprint` |
-| `board-schema.md` | `.agent/references/templates/board-schema.md` | `.agent/references/templates/board-schema.md` | kanban card shape (SQLite) |
+| `board-schema.md` | `.agent/skills/generate-board-json/references/board-schema.md` | `.agent/references/templates/board-schema.md` | `/sync-board` |
 | `decision-template.md` | `.agent/skills/update-decisions-log/references/decision-template.md` | `.agent/references/templates/decision-template.md` | `update-decisions-log` |
 | `decision-schema.md` | `.agent/skills/update-decisions-log/references/decision-schema.md` | `.agent/references/templates/decision-schema.md` | `update-decisions-log` (validation) |
 | `doc-templates.md` | `.agent/skills/init-project/references/doc-templates.md` | `.agent/references/templates/doc-templates.md` | `/init-meridian` |
-| `phase-docs/*.md` | *(kit-owned)* | `.agent/references/templates/phase-docs/` | `/init-meridian`, `/document-project`, `/audit-docs` |
-| `init-interview-guide.md` | *(kit-owned)* | `.agent/references/templates/init-interview-guide.md` | `/init-meridian`, `/discover`, `/document-project` |
-| `as-is-inventory-template.md` | *(kit-owned — edit in registry)* | `.agent/references/templates/as-is-inventory-template.md` | `/document-project` |
+| `as-is-inventory-template.md` | *(kit-owned — edit in registry)* | `.agent/references/templates/as-is-inventory-template.md` | `/init-meridian` (Mode B) |
 
 ---
 
@@ -44,8 +42,7 @@ CANONICAL (edit here)          REGISTRY (agents read)              IDE adapter (
 
 | File | Purpose |
 | ---- | ------- |
-| `.agent/references/templates/init-interview-guide.md` | Interview gate + question banks |
-| `.agent/references/templates/phase-docs/` | Per-doc section contracts + depth bar |
+| `.agent/references/templates/as-is-inventory-template.md` | Mode B as-is map — `docs/inventory/as-is.md` |
 | `.agent/references/templates/projects-manifest-template.md` | Multi-product monorepo — `.meridian/projects.json` |
 | `.agent/references/templates/INDEX.md` | Registry table artifact → template → agent → workflow |
 | `.agent/references/templates/writing-guide.md` | Prose quality — Intent, Plan, epic paragraphs |
@@ -54,7 +51,6 @@ CANONICAL (edit here)          REGISTRY (agents read)              IDE adapter (
 | `.agent/references/templates/section-contracts.md` | Fixed headings — validated by Python + monitor |
 | `.agent/references/templates/lifecycle.md` | create → review → refine → implement → close |
 | `.agent/references/templates/TEMPLATE_SOURCES.md` | This file — canonical paths |
-| `.agent/references/templates/sqlite-delivery-operations.md` | Agent SQLite write guide (v10) |
 
 ---
 
@@ -65,7 +61,7 @@ CANONICAL (edit here)          REGISTRY (agents read)              IDE adapter (
 | Create | `/create-us` | `writing-guide.md` + `code-quality-at-us-time.md` + `us-template.md` |
 | Review | `/review-us` | `review-checklist.md` + `writing-guide.md` + `section-contracts.md` + `us-template.md` |
 | Refine | `/refine-us` | `refine-checklist.md` + `writing-guide.md` + `code-quality-at-us-time.md` + `us-template.md` + `04_principles.md` |
-| Implement | `/implement-us` | `implement-gate-checklist.md` + `meridian_delivery.py implement-gate` + target US (`show --full`) + `04_principles.md` |
+| Implement | `/implement-us` | `implement-gate-checklist.md` + `code-quality-at-us-time.md` + target US + `04_principles.md` |
 | Architecture | `/architecture` | `architecture-folder-guide.md` + phase docs 00–04 |
 | Close | `/complete-us` | `implementation-template.md` + `us-template.md` + `section-contracts.md` |
 
@@ -73,7 +69,11 @@ CANONICAL (edit here)          REGISTRY (agents read)              IDE adapter (
 
 ---
 
-## Regenerate Cursor mirrors after clone
+## Dogfooding copy
+
+In this repo, human-readable mirrors live at `app-desktop/docs/templates/` (symlinks to registry). Open [README.md](../../../app-desktop/docs/templates/README.md) in the monitor **Templates** section.
+
+Regenerate Cursor mirrors after clone:
 
 ```bash
 ./.agent/scripts/sync_cursor_kit.sh

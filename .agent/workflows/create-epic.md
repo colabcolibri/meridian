@@ -1,5 +1,5 @@
 ---
-description: Create a Meridian epic in SQLite.
+description: Create a Meridian epic file in docs/epics.
 ---
 
 # /create-epic — create epic
@@ -10,7 +10,7 @@ $ARGUMENTS
 
 ## Critical rules
 
-1. Use `product-owner` + `@[skills/create-epic]`
+1. Use `documentation-strategist` + `@[skills/create-epic]`
 2. **Mandatory read:** `writing-guide.md` + `epic-template.md` **before** Write
 3. **Gate:** `05_architecture.md` + `03_user_types.md` approved
 4. Capability = **≥2 paragraphs** (problem → product behavior)
@@ -31,8 +31,8 @@ RULES:
 2. Next EPIC-XX id
 3. Write prose Capability + Expected outcome (see writing-guide golden example)
 4. Out of scope — bullets with rationale
-5. Upsert: `meridian_delivery.py create-epic` or `meridian_db_export.py --write-form`
-6. validate_meridian.py . --sqlite-only
+5. Save docs/epics/EPIC-XX.md
+6. validate_meridian.py
 ```
 
 ---
@@ -41,8 +41,7 @@ RULES:
 
 ```txt
 Epic created:
-Id: EPIC-XX
-SQLite saved: yes | no
+File:
 Problem summarized (one line):
 Outcome:
 Next: /create-us for executable slices

@@ -10,8 +10,8 @@ $ARGUMENTS
 
 ## Critical rules
 
-1. Use `backlog-refiner` + `@[skills/create-user-story]`
-2. **Mandatory read:** `writing-guide.md` + `code-quality-at-us-time.md` + `docs/04_principles.md` + `us-template.md` **before** Write
+1. Use `board-keeper` + `@[skills/create-user-story]`
+2. **Mandatory read:** `writing-guide.md` + `code-quality-at-us-time.md` + `us-template.md` **before** Write
 3. **Gate:** `05_architecture` = `approved`; epic + version exist
 4. Write **Intent** (Why, Where, Acceptance) + **Plan** draft (refs, Planned) — see writing-guide
 5. **One slice (SRP)** — split or narrow if request bundles unrelated layers; fill **Out of scope**
@@ -40,7 +40,7 @@ RULES:
    - Plan / Architecture refs — ok with § TBD until refine
    - Plan / Planned — draft test steps
 5. ready: false
-6. Save via `meridian_delivery.py create-us` or `--write-form`
+6. generate-board-json
 7. Tell user: run /refine-us before implement
 ```
 
@@ -50,10 +50,10 @@ RULES:
 
 ```txt
 US created:
-ID: US-XXXX
+File:
 Summary (one line):
 Why written: yes | thin — needs refine
-SQLite saved: yes | no
+Board updated:
 Next: /review-us US-XXXX (optional) | /refine-us US-XXXX | then /implement-us after ready
 ```
 

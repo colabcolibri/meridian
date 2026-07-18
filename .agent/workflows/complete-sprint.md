@@ -11,7 +11,7 @@ $ARGUMENTS
 ## Critical rules
 
 1. Use `sprint-planner` + `@[skills/complete-sprint]`
-2. **Mandatory read:** `sprint-template.md` + `meridian_delivery.py show vX-SY --full` **before** editing status
+2. **Mandatory read:** `sprint-template.md` + target `docs/sprints/vX-SY.md` **before** editing status
 3. **Gate:** manager confirms increment vs sprint `goal` and US Acceptance (sprint review)
 4. Fill `## Retrospective` — mandatory even one line per field
 5. Set `status: complete` only when retrospective is filled
@@ -29,7 +29,7 @@ CONTEXT:
 
 RULES:
 1. Resolve sprint id from $ARGUMENTS or ask
-2. Read sprint row + listed US statuses via `meridian_delivery.py show`
+2. Read sprint file + listed US statuses in docs/us/
 3. Report open US (❌ or 🔶 without Missing:) — do not force complete if Must US unfinished unless manager explicitly accepts
 4. Fill Retrospective: What worked / What to improve / Decisions to log
 5. Set status: complete in frontmatter
@@ -43,9 +43,8 @@ RULES:
 
 ```txt
 Sprint completed:
-Id: vX-SY
+File:
 Status: complete
-SQLite saved: yes | no
 US summary: (✅ / 🔶 / ❌ counts)
 Retrospective filled: yes | no
 Decisions logged: yes | no

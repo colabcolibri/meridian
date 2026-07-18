@@ -6,17 +6,14 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 
 # Refine user story (Meridian)
 
-> **v11:** edit via `meridian_delivery.py update-us` or `meridian_db_export.py --write-form` — do **not** create `docs/us/*.md` when `.meridian/meridian.db` exists.
-
 ## Selective reading
 
 | File | When to read |
 | ------- | ---------- |
 | `.agent/references/templates/writing-guide.md` | Refine example — Approach depth, tests |
 | `.agent/references/templates/code-quality-at-us-time.md` | **Mandatory** — DRY, SRP before `ready: true` |
-| `.agent/references/templates/sqlite-delivery-operations.md` | **Mandatory** — update path |
 | `references/refine-checklist.md` | **Mandatory** — ready gate |
-| `../create-user-story/references/us-template.md` | Full `body_markdown` structure |
+| `references/us-template.md` | Full structure |
 | Target US + `depends_on` US | What already exists |
 | `docs/05_architecture.md` | Sections cited in Architecture refs |
 | `docs/architecture/*.md` | When US cites detail files directly |
@@ -29,15 +26,6 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 - Workflow `/refine-us US-XXXX`.
 
 **Do not** mark `✅` — use `complete-user-story` after code.
-
-## Delivery commands
-
-```bash
-python3 .agent/scripts/meridian_delivery.py show US-XXXX --full
-python3 .agent/scripts/meridian_delivery.py update-us US-XXXX --from-file /tmp/us-refined.md
-# or: meridian_db_export.py . --entity us --id US-XXXX --write-form < form.json
-python3 .agent/scripts/meridian_delivery.py set-ready US-XXXX --ready true   # only after checklist passes
-```
 
 ## Procedure
 
@@ -52,8 +40,8 @@ python3 .agent/scripts/meridian_delivery.py set-ready US-XXXX --ready true   # o
 6. Fill API/DB/Security/Decisions with short phrases when not `_n/a_`.
 7. Replace generic **Tests / Planned** with numbered steps or exact commands.
 8. Tighten **Acceptance** if vague (keep `[ ]`).
-9. Set `ready: true` only when checklist passes (including DRY + SRP rows) via `meridian_delivery.py set-ready US-XXXX --ready true`.
-10. `update-decisions-log` if scope changed.
+9. Set `ready: true` only when checklist passes (including DRY + SRP rows).
+10. `generate-board-json`; `update-decisions-log` if scope changed.
 
 ## Approach — refine quality bar
 
@@ -65,13 +53,13 @@ Minimum 2 bullets. Each bullet ≥ one full sentence. Example pattern:
 
 ```txt
 US refined:
-ID: US-XXXX
+File:
 Ready for implementation: yes | no
 Approach explanatory: yes | no
 Architecture § exact: yes | no
 DRY / SRP in Approach: yes | no
 Tests concrete: yes | no
-Board updated: (planning export refresh if extension open)
+Board updated:
 Blockers:
 Next: implement US-XXXX | /refine-us again
 ```

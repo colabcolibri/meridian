@@ -16,7 +16,7 @@
 | Operations | `.agent/agents`, `skills`, `workflows` | Personas and procedures |
 | Human references | `.agent/references/` | `start-here`, `usage-guide`, `agents-help`, `instruction-surfaces`, `scrum-meridian-map`, optional `scrum-guide-complete` |
 
-The VS Code extension (`app-visual-studio/`) monitors Meridian projects; it is not the source of truth. Help UI copy lives in `app-visual-studio/src/help-webview-html.ts` and `command-catalog.ts` — see [instruction-surfaces.md](./references/instruction-surfaces.md) when the protocol changes.
+The desktop app (`app-desktop/`) monitors Meridian folders; it is not the source of truth. Learn/Commands UI copy lives in `app-desktop/src/features/monitor/content/meridian-concepts.ts` — see [instruction-surfaces.md](./references/instruction-surfaces.md) when the protocol changes.
 
 ### Why `.agent` and `.cursor`?
 
@@ -37,13 +37,8 @@ The VS Code extension (`app-visual-studio/`) monitors Meridian projects; it is n
   skills/
   workflows/
   scripts/
-    lib/                   # meridian_db, parsers, contracts, form, implement_gate
-    migrate/               # v1 → SQLite one-shot
-    test/                  # smoke tests (root shims for CI)
-    dev/                   # meridian-teste seed
-    meridian_delivery.py     ← agent facade (reads delivery.json)
-    meridian_db_cli.py       ← sqlite driver (implementation)
     validate_meridian.py
+    migrate_us_v2_structure.py
     sync_cursor_kit.sh
   references/templates/      # delivery templates (INDEX, writing-guide, section-contracts, …)
 
@@ -68,21 +63,17 @@ Workflows orchestrate agents; they do not replace the master protocol.
 
 ---
 
-## Agents (v11 Scrum roster)
+## Agents
 
 | Agent | Purpose | Skills |
 | ----- | ------- | ------ |
-| `scrum-master` | Process, status, init — **no product code** | init-project, update-decisions-log, meridian-routing |
-| `product-owner` | Discovery, `00_scope`, epics | discover-product, create-epic, init-project, update-decisions-log, meridian-routing |
-| `technical-writer` | Phase docs `01`–`08`, `11`, as-is documentation | init-project, document-existing-project, audit-phase-docs, update-decisions-log, meridian-routing |
-| `security-champion` | `02_security.md` | security-review, update-decisions-log, meridian-routing |
-| `technical-architect` | `05_architecture.md` | security-review, update-decisions-log, meridian-routing |
-| `design-system-owner` | `09_design_system.md` | design-system, update-decisions-log, meridian-routing |
-| `sprint-planner` | SQLite `versions`, `sprints` | create-version, create-sprint, complete-sprint, … |
-| `backlog-refiner` | US lifecycle (not implement) | create-user-story, review-user-story, refine-user-story, complete-user-story, … |
-| `developer` | `/implement-us` gate + code | implement-user-story, update-decisions-log, meridian-routing |
-
-**Agents:** 9 v11 slugs in `.agent/agents/` — no legacy files or chat aliases (H3 ✅).
+| `process-manager` | Governance, status, gates, **implement US** | init-project, implement-user-story, update-decisions-log, generate-board-json, meridian-routing |
+| `scope-architect` | `00_scope.md` | init-project, update-decisions-log, meridian-routing |
+| `documentation-strategist` | Phase docs `01`–`05`, `08`–`10`, `docs/epics/` | init-project, create-epic, create-user-story, update-decisions-log, meridian-routing |
+| `security-steward` | `02_security.md` | security-review, update-decisions-log, meridian-routing |
+| `architecture-guardian` | `05_architecture.md` | security-review, update-decisions-log, meridian-routing |
+| `sprint-planner` | `docs/versions/`, `docs/sprints/` | create-version, create-sprint, complete-sprint, create-user-story, … |
+| `board-keeper` | US + `board.json` | create-user-story, review-user-story, refine-user-story, complete-user-story, generate-board-json, update-decisions-log, meridian-routing |
 
 Each agent includes: phases 0/-1, mission, prohibitions, output format, delegation.
 
@@ -92,9 +83,7 @@ Each agent includes: phases 0/-1, mission, prohibitions, output format, delegati
 
 | Skill | References |
 | ----- | ---------- |
-| `init-project` | `doc-templates.md`, `phase-docs/`, `init-interview-guide.md`, `gitignore-baseline.md` |
-| `document-existing-project` | `as-is-inventory-template.md`, `phase-docs/` |
-| `audit-phase-docs` | `phase-docs/`, `doc-templates.md` |
+| `init-project` | `doc-templates.md`, `gitignore-baseline.md` |
 | `create-epic` | `epic-template.md`, `writing-guide.md` |
 | `create-version` | `version-template.md`, `writing-guide.md` |
 | `create-sprint` | `sprint-template.md` |
@@ -104,9 +93,9 @@ Each agent includes: phases 0/-1, mission, prohibitions, output format, delegati
 | `refine-user-story` | `refine-checklist.md`, `writing-guide.md` |
 | `implement-user-story` | `implement-gate-checklist.md` |
 | `complete-user-story` | `implementation-template.md` |
+| `generate-board-json` | `board-schema.md` |
 | `update-decisions-log` | `decision-template.md`, `decision-schema.md` |
 | `security-review` | `checklists.md` |
-| `design-system` | `design-system-checklist.md` |
 | `meridian-routing` | — (inline matrix) |
 
 **Agent mirror:** all delivery templates are symlinked under `.agent/references/templates/` with registry `INDEX.md`. Agents must read INDEX + full template before Write — see each agent's **Template protocol** section.
@@ -119,24 +108,20 @@ See `.agent/skills/doc.md` to create new skills.
 
 | Workflow | Agent | Mode |
 | -------- | ----- | ---- |
-| `init-meridian` | scrum-master | init, no code |
-| `document-project` | technical-writer | as-is + phase docs, no US |
-| `audit-docs` | technical-writer | audit phase docs |
-| `status` | scrum-master | read-only |
+| `init-meridian` | process-manager | init, no code |
+| `status` | process-manager | read-only |
 | `plan-sprint` | sprint-planner | planning |
-| `create-version` | sprint-planner | create release in SQLite |
-| `create-us` | backlog-refiner | create US |
-| `review-us` | backlog-refiner | audit US — report only |
-| `refine-us` | backlog-refiner | refine US before implement |
-| `implement-us` | developer | gate + implement when `ready: true` |
-| `complete-us` | backlog-refiner | close US after implementation |
-| `create-epic` | product-owner | create epic in SQLite |
-| `architecture` | technical-architect | doc 05 |
-| `security-pass` | security-champion | doc 02 |
-| `design-pass` | design-system-owner | doc 09 |
-| `discover` | product-owner | discovery brief |
-| `migrate-delivery` | scrum-master | v1 Markdown → SQLite |
-| `daily-with-ai` | scrum-master | daily manager + AI routine |
+| `create-version` | sprint-planner | create release in `docs/versions/` |
+| `create-us` | board-keeper | create US |
+| `review-us` | board-keeper | audit US — report only |
+| `refine-us` | board-keeper | refine US before implement |
+| `implement-us` | process-manager | gate + implement when `ready: true` |
+| `complete-us` | board-keeper | close US after implementation |
+| `create-epic` | documentation-strategist | create epic in `docs/epics/` |
+| `architecture` | architecture-guardian | doc 05 |
+| `security-pass` | security-steward | doc 02 |
+| `sync-board` | board-keeper | derive JSON |
+| `daily-with-ai` | process-manager | daily manager + AI routine |
 
 All support `$ARGUMENTS` and a critical rules section.
 
@@ -145,22 +130,13 @@ All support `$ARGUMENTS` and a critical rules section.
 ## Scripts
 
 ```bash
-# Structure + semantic validation
+# Structure + semantic validation (US Plan/Record, epic prose, board sync hints)
 python3 .agent/scripts/validate_meridian.py <project-root>
-python3 .agent/scripts/validate_meridian.py <project-root> --sqlite-only
 python3 .agent/scripts/validate_meridian.py <project-root> --json   # CI
 
-# Delivery CLI (facade + sqlite driver)
-python3 .agent/scripts/meridian_delivery.py counts
-python3 .agent/scripts/meridian_delivery.py create-epic --title "..." --versions "[v1]"
-python3 .agent/scripts/meridian_delivery.py create-version --id v1 --title "..."
-python3 .agent/scripts/meridian_delivery.py create-sprint --version v1 --title "..."
-
-# Legacy v1 import (one-shot) — /migrate-delivery or:
-python3 .agent/scripts/migrate_md_to_sqlite.py <project-root>
-
-# Legacy v1 import (one-shot) — see scripts/migrate/
-python3 .agent/scripts/migrate_md_to_sqlite.py <project-root>
+# One-time US schema migration (flat sections → Intent/Plan/Record/Boundaries)
+python3 .agent/scripts/migrate_us_v2_structure.py <project-root>
+python3 .agent/scripts/migrate_us_v2_structure.py <project-root> --restore-preamble
 
 # IDE adapters (after clone or kit changes)
 ./.agent/scripts/sync_cursor_kit.sh

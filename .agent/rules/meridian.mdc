@@ -22,7 +22,7 @@ Priority: **P0 rules > P1 agent + MERIDIAN.md > P2 skills**.
 - `docs/` of the **active Meridian product** is the source of truth (monorepos may have several `docs/` trees — see `.meridian/projects.json` and `projects-manifest-template.md`).
 - Documentation precedes product code.
 - Do not create US before `05_architecture` `approved`.
-- Delivery (US, epic, version, sprint) lives in `.meridian/meridian.db` — see `sqlite-delivery-operations.md`.
+- `docs/kanban/board.json` is derived from `docs/us/*.md`.
 - Never `✅` without evidence; never `🔶` without `Missing:` in acceptance.
 - Never `✅` without filled `## Record` on the US (skill `complete-user-story`).
 - Product code for a US requires `ready: true` — use `/implement-us US-XXXX` (skill `implement-user-story`) before coding.
@@ -35,10 +35,7 @@ Priority: **P0 rules > P1 agent + MERIDIAN.md > P2 skills**.
 
 | Command | File |
 | ------- | ---- |
-| `/migrate-delivery` | `.cursor/commands/migrate-delivery.md` |
 | `/init-meridian` | `.cursor/commands/init-meridian.md` |
-| `/document-project` | `.cursor/commands/document-project.md` |
-| `/audit-docs` | `.cursor/commands/audit-docs.md` |
 | `/status` | `.cursor/commands/status.md` |
 | `/plan-sprint` | `.cursor/commands/plan-sprint.md` |
 | `/create-version` | `.cursor/commands/create-version.md` |
@@ -49,10 +46,9 @@ Priority: **P0 rules > P1 agent + MERIDIAN.md > P2 skills**.
 | `/implement-us` | `.cursor/commands/implement-us.md` |
 | `/complete-us` | `.cursor/commands/complete-us.md` |
 | `/complete-sprint` | `.cursor/commands/complete-sprint.md` |
-| `/discover` | `.cursor/commands/discover.md` |
-| `/design-pass` | `.cursor/commands/design-pass.md` |
 | `/architecture` | `.cursor/commands/architecture.md` |
 | `/security-pass` | `.cursor/commands/security-pass.md` |
+| `/sync-board` | `.cursor/commands/sync-board.md` |
 | `/update-decisions-log` | `.cursor/commands/update-decisions-log.md` |
 | `/daily-with-ai` | `.cursor/commands/daily-with-ai.md` |
 | `/agents-help` | `.cursor/commands/agents-help.md` |
@@ -65,6 +61,5 @@ Maintainer map (protocol change → which files to edit): `.agent/references/ins
 
 ```bash
 python3 .agent/scripts/validate_meridian.py <project-folder>
-python3 .agent/scripts/validate_meridian.py <project-folder> --sqlite-only
-python3 .agent/scripts/validate_meridian.py <kit-root> --strict-kit-md
+python3 .agent/scripts/validate_meridian.py <project-folder> --json
 ```

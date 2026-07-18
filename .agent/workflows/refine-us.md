@@ -10,7 +10,7 @@ $ARGUMENTS
 
 ## Critical rules
 
-1. Use `backlog-refiner` + `@[skills/refine-user-story]`
+1. Use `board-keeper` + `@[skills/refine-user-story]`
 2. **Mandatory read:** `writing-guide.md` + `code-quality-at-us-time.md` + `refine-checklist.md`
 3. **Mandatory read:** `docs/04_principles.md` (DRY, SRP) this session
 4. **NO product code** — docs only
@@ -35,7 +35,7 @@ RULES:
 5. Concrete Plan/Planned — numbered manual steps or commands
 6. Fix Why/Where only if create left real gaps
 7. ready: true iff checklist passes (rows 11–12 included)
-8. `set-ready` when checklist passes
+8. generate-board-json
 ```
 
 ---
@@ -44,11 +44,10 @@ RULES:
 
 ```txt
 US refined:
-ID: US-XXXX
+File:
 Ready: yes | no
-SQLite saved: yes | no
 DRY / SRP: pass | fail
 Approach quality: explanatory | still thin
 Tests: concrete | generic
-Next: /implement-us US-XXXX | /refine-us again
+Next: implement | /refine-us again
 ```

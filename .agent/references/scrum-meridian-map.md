@@ -9,7 +9,7 @@ Meridian is **Scrum-inspired governance for AI-assisted delivery**, not a co-loc
 
 ## Synthesis (visual)
 
-> **Extension** renders the Mermaid block below in kit docs. Keep this fence aligned with `scrum-meridian-map.md` when the protocol changes.
+> **app-desktop monitor** renders the same Mermaid block below via `MermaidDiagram` (mermaid **11.12.0**, **Dagre** default — same as VS Code/Cursor Markdown preview). Source of truth for the app: `app-desktop/src/features/monitor/content/scrum-meridian-mermaid.ts` (`SCRUM_MERIDIAN_MERMAID`). Keep this fence identical; `pnpm test` in app-desktop verifies parity.
 
 ```mermaid
 flowchart TB
@@ -28,7 +28,7 @@ flowchart TB
     S[Sprint]
     USm[US Intent/Plan/Record]
     A[Agents + skills + validate]
-    B[SQLite + extension board]
+    B[board.json derived]
   end
 
   E --> EP
@@ -45,14 +45,14 @@ ASCII equivalent (IDEs without Mermaid preview):
 ```txt
 Scrum (top, reference)  → maps ↓  Meridian (below, top → bottom)
 ──────────────────────────────────────────────────────────────
-Épico                 →   SQLite `epics` (v11) — legacy: docs/epics/EPIC-XX.md (v1 branch)
+Épico                 →   docs/epics/EPIC-XX.md
 Feature (opcional)    →   (omit — épico → US)
-User Story            →   SQLite `user_stories` — legacy: docs/us/US-XXXX.md
+User Story            →   docs/us/US-XXXX.md
 Task / Subtask        →   ## Plan (Approach + Planned) — no tasks/ folder
 Bug                   →   US de correção ou fix na US da sprint
 Spike                 →   US com timebox em Notes OU decisão no log
-Product Backlog       →   user_stories + epics (MoSCoW, depends_on)
-Sprint Backlog        →   sprint `stories_json` / junction (ordem = prioridade)
+Product Backlog       →   docs/us/*.md + épicos (MoSCoW, depends_on)
+Sprint Backlog        →   sprint frontmatter stories: [...] (ordem = prioridade da sprint)
 Cerimônias            →   comandos abaixo (assíncrono, sem timebox rígido)
 PO / priorização      →   gestor humano (agentes não priorizam sozinhos)
 Velocity / burndown   →   não usados (capacidade = julgamento + Must + deps)
@@ -65,17 +65,17 @@ Velocity / burndown   →   não usados (capacidade = julgamento + Must + deps)
 | Scrum / Jira concept | Meridian | Notes |
 | -------------------- | -------- | ----- |
 | Product | `docs/` + phase `00`–`11` | Spec before code |
-| Epic | SQLite `epics` | Legacy v1: `docs/epics/EPIC-XX.md` on branch `meridian-v1-old` |
+| Epic | `docs/epics/EPIC-XX.md` | May span versions; prefer **new epic** over reopening `complete` |
 | Feature | — | Intentionally skipped for small products (valid in Scrum too) |
-| User story | SQLite `user_stories` | Schema v2 body in `body_markdown`: Intent / Plan / Record / Boundaries |
+| User story | `docs/us/US-XXXX.md` | Schema v2: Intent / Plan / Record / Boundaries |
 | Task / subtask | `## Plan` → Approach, Planned | No separate task files |
 | Bug | US with fix acceptance | In-sprint bug: fix inside current US; production: new US + version patch |
 | Spike | US (Notes: timebox) or decision log | Outcome = knowledge, not production code |
-| Release / version | SQLite `versions` | Hotfix versions (v1.1) allowed anytime |
-| Sprint | SQLite `sprints` | Optional; story order via `sprint_stories` |
-| Product backlog | `user_stories` + epics | Manager orders via sprint scope + MoSCoW |
-| Sprint backlog | Sprint scope + active sprint | New work mid-sprint → backlog, not silent scope creep |
-| Kanban board | Extension reads SQLite (`planning` export) | **Never** primary JSON file in v11 |
+| Release / version | `docs/versions/vX.md` | Hotfix versions (v1.1) allowed anytime |
+| Sprint | `docs/sprints/vX-SY.md` | Optional; `stories:` order = sprint priority |
+| Product backlog | `docs/us/` + epics | Manager orders via sprint scope + MoSCoW |
+| Sprint backlog | Sprint `stories:` + active sprint | New work mid-sprint → backlog, not silent scope creep |
+| Kanban board | `docs/kanban/board.json` | **Derived** — never primary |
 | Definition of Done | `04_principles.md` + `/complete-us` | Global DoD in principles; CA per US in Intent |
 | Story points / velocity | — | Not in Meridian (simplicity) |
 
@@ -85,11 +85,12 @@ Velocity / burndown   →   não usados (capacidade = julgamento + Must + deps)
 
 | Scrum ceremony | Meridian equivalent | Who |
 | -------------- | ------------------- | --- |
-| Backlog refinement | `/create-us`, `/review-us`, `/refine-us` | Manager + `backlog-refiner` |
+| Backlog refinement | `/create-us`, `/review-us`, `/refine-us` | Manager + `board-keeper` |
 | Sprint planning | `/plan-sprint` + sprint `stories:` order | Manager + `sprint-planner` |
 | Daily Scrum | `/daily-with-ai` or `/status` + Commands tab in app | Manager |
 | Sprint review (demo) | Manager reviews increment against Acceptance + Planned | Manager |
-| Sprint retrospective | `/complete-sprint` — fill Retrospective, `status: complete` | Manager + `sprint-planner` |
+| Sprint retrospective | `/complete-sprint` — fill `## Retrospective`, `status: complete` | Manager + `sprint-planner` |
+| — | `/sync-board` after US changes | Agent or manager |
 
 No fixed 15-minute daily or 8-hour planning timeboxes — async manager + AI sessions.
 
@@ -100,8 +101,8 @@ No fixed 15-minute daily or 8-hour planning timeboxes — async manager + AI ses
 | Scrum role | Meridian |
 | ---------- | -------- |
 | Product Owner | **Human manager** — priority, scope, accepts release |
-| Scrum Master | **`scrum-master`** — gates, blockers, routing (not task assignment, not code) |
-| Development team | **`developer`** — increment via `/implement-us`; manager reviews diff |
+| Scrum Master | **`process-manager`** — gates, blockers, routing (not task assignment) |
+| Development team | Implementing agent + manager reviews diff |
 | Stakeholders | Outside agents — Sprint review is human |
 
 **Agents must not:** auto-prioritize backlog, mark `approved` on phase docs, or mark `✅` without evidence and filled `## Record`.
@@ -121,7 +122,7 @@ Use at `/review-us` and `/refine-us` — qualitative, no story points:
 | **S**mall | Fits one implementation session; else split US |
 | **T**estable | Observable Acceptance + Planned steps |
 
-If a story feels like 13+ points in Scrum terms → split into multiple US rows in SQLite.
+If a story feels like 13+ points in Scrum terms → split into multiple US files.
 
 ---
 
@@ -154,10 +155,10 @@ When more work appears after `status: complete`:
 
 ## Sprint scope (active sprint)
 
-When a sprint row in SQLite has `status: active`:
+When `docs/sprints/vX-SY.md` has `status: active`:
 
 - **Manager** owns the commitment; agents do not add US to the sprint file without explicit request.
-- New urgent items → product backlog in SQLite or next sprint; log scope change in decisions if the sprint goal shifts.
+- New urgent items → Product backlog (`docs/us/`) or next sprint; log scope change in decisions if the sprint goal shifts.
 - **Sprint review:** before `status: complete`, manager confirms increment against sprint `goal` and US Acceptance.
 - **Retrospective:** mandatory fields on sprint close (even one line each).
 
@@ -173,7 +174,7 @@ Record the team’s global DoD in **`docs/04_principles.md`** (section “Defini
 - Build/lint/test per `04_principles` and US `tests`
 - `## Record` filled with real paths; `tests_status: done` when required
 - `status: ✅` only via `/complete-us`
-- Human git commit per closed US (unless batched intentionally)
+- `board.json` regenerated; human git commit per closed US (unless batched intentionally)
 - Cross-cutting changes in decision log
 
 Per-story criteria stay in **Intent / Acceptance** — not duplicated as global DoD.
