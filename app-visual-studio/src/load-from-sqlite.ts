@@ -7,6 +7,7 @@ import type { SprintSummary } from "./load-sprints.js"
 import type { VersionSummary } from "./load-versions.js"
 import type { UserStory } from "./domain/types.js"
 import type { PlanningPayload } from "./planning-payload.js"
+import { resolveExportScriptPath } from "./resolve-kit-scripts.js"
 
 type PlanningExport = {
   userStories: Array<{
@@ -89,16 +90,16 @@ export function loadPlanningPayloadFromSqlite(packageRoot: string): PlanningPayl
 
 export function loadPlanningPayloadFromSqliteDetailed(
   packageRoot: string,
+  extensionPath?: string,
 ): SqlitePlanningResult {
   if (!sqliteDbExists(packageRoot)) {
     return { payload: null, error: null }
   }
-  const kitRoot = kitRootFromPackageRoot(packageRoot)
-  const script = path.join(kitRoot, ".agent", "scripts", "meridian_db_export.py")
-  if (!fs.existsSync(script)) {
+  const script = resolveExportScriptPath(packageRoot, extensionPath)
+  if (!script) {
     return {
       payload: null,
-      error: `Kit script not found: ${script}`,
+      error: `Kit script not found for ${packageRoot}`,
     }
   }
   const python = resolvePythonCommand()

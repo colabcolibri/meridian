@@ -1710,5 +1710,65 @@
     "tests": "required",
     "tests_status": "pending",
     "ready": true
+  },
+  {
+    "id": "US-0127",
+    "title": "Kit Python structured delivery form API",
+    "epic": "EPIC-15",
+    "version": "v10",
+    "status": "\u274c",
+    "moscow": "Must",
+    "depends_on": [
+      "US-0126"
+    ],
+    "done_when": "meridian_db_export.py exposes --format form and --write-form with section-contract validation before upsert for us, epics, versions, and sprints.",
+    "tests": "required",
+    "tests_status": "pending",
+    "ready": false
+  },
+  {
+    "id": "US-0128",
+    "title": "Extension structured delivery form editor for all entities",
+    "epic": "EPIC-15",
+    "version": "v10",
+    "status": "\u274c",
+    "moscow": "Must",
+    "depends_on": [
+      "US-0127"
+    ],
+    "done_when": "Board and planning click-to-open uses HTML preview plus schema-driven form fields for US, epics, versions, and sprints (no default raw markdown editor).",
+    "tests": "required",
+    "tests_status": "pending",
+    "ready": false
+  },
+  {
+    "id": "US-0129",
+    "title": "Validated form save as default delivery edit path",
+    "epic": "EPIC-15",
+    "version": "v10",
+    "status": "\u274c",
+    "moscow": "Must",
+    "depends_on": [
+      "US-0128"
+    ],
+    "done_when": "Extension saves delivery only through `--write-form` by default; raw markdown save requires Advanced + modal confirm.",
+    "tests": "required",
+    "tests_status": "pending",
+    "ready": false
+  },
+  {
+    "id": "US-0130",
+    "title": "Document structured delivery form API in kit docs",
+    "epic": "EPIC-15",
+    "version": "v10",
+    "status": "\u274c",
+    "moscow": "Must",
+    "depends_on": [
+      "US-0127"
+    ],
+    "done_when": "`docs/06_database.md` and `sqlite-delivery-operations.md` describe form export/import CLI and extension contract.",
+    "tests": "required",
+    "tests_status": "pending",
+    "ready": false
   }
 ]

@@ -314,9 +314,10 @@ python3 .agent/scripts/validate_meridian.py . --sqlite-only
 | -------- | --------- | ---- |
 | Board / planning lists | `meridian_db_export.py --format planning` | Structured JSON (no `body_markdown` in payload) |
 | Click-to-open artifact | `meridian_db_export.py --entity us --id US-XXXX` | Single `body_markdown` row |
+| Structured edit (form) | `meridian_db_export.py --format form` / `--write-form` | JSON fields → build markdown → validate → upsert |
 | Sync board | `generate_board.py` | Writes `docs/kanban/board.json` + `board_snapshots` |
 
-Extension uses Python subprocess to SQLite (stdlib kit) — no native SQLite driver in TypeScript.
+Extension: **View** = HTML preview; **Edit** = schema-driven form (all entity types); **Advanced** = raw markdown with confirm.
 
 ## Summary column (progressive disclosure)
 
@@ -372,7 +373,8 @@ Fresh clone: `bootstrap` creates empty schema; import data via `migrate_md_to_sq
 | ------ | ---- |
 | `meridian_db.py` | `connect`, `upsert_*`, `export_planning_json`, migrations |
 | `meridian_db_cli.py` | Human/agent query and write CLI |
-| `meridian_db_export.py` | JSON for extension (`--format planning`; `--entity us --id US-XXXX` for one body) |
+| `meridian_db_export.py` | JSON for extension (`--format planning`; `--format form`; `--write-form`) |
+| `meridian_delivery_form.py` | Build markdown from form fields; validate before upsert |
 | `verify_md_sqlite_parity.py` | Pre-purge gate |
 | `purge_delivery_md.py` | Remove legacy delivery files |
 | `backfill_summaries.py` | Populate `summary` column |

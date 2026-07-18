@@ -3,16 +3,12 @@ import { esc, markdownToHtml } from "./markdown-to-html.js"
 import { MARKDOWN_CONTENT_STYLES } from "./markdown-content-styles.js"
 import { frontmatterBadgeKeys } from "./parse-delivery-markdown.js"
 
-export type DeliveryViewerMode = "view" | "edit"
-
 export type DeliveryViewerModel = {
   relativePath: string
   entityLabel: string
   folder: DeliveryFolder
   frontmatter: Record<string, string>
   bodyMarkdown: string
-  fullMarkdown: string
-  mode: DeliveryViewerMode
   saveError?: string
   saveOk?: boolean
 }
@@ -37,16 +33,6 @@ export function buildDeliveryViewerHtml(model: DeliveryViewerModel): string {
     : model.saveOk
       ? `<p class="banner ok">Saved to SQLite.</p>`
       : ""
-
-  const editorBlock =
-    model.mode === "edit"
-      ? `<textarea id="editor" class="editor" spellcheck="false">${esc(model.fullMarkdown)}</textarea>`
-      : ""
-
-  const viewBlock =
-    model.mode === "view"
-      ? `<div class="content">${bodyHtml}</div>`
-      : `<p class="edit-hint">Edit the full markdown (frontmatter + body). Save writes to <code>.meridian/meridian.db</code>.</p>`
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -105,7 +91,6 @@ export function buildDeliveryViewerHtml(model: DeliveryViewerModel): string {
       color: var(--vscode-button-foreground);
     }
     .btn.primary:hover { background: var(--vscode-button-hoverBackground); }
-    .btn:disabled { opacity: 0.5; cursor: default; }
     .main {
       flex: 1;
       padding: 16px 18px 28px;
@@ -173,24 +158,6 @@ export function buildDeliveryViewerHtml(model: DeliveryViewerModel): string {
       color: var(--vscode-foreground);
       border: 1px solid var(--vscode-panel-border);
     }
-    .edit-hint {
-      margin: 0 0 10px;
-      font-size: 12px;
-      color: var(--vscode-descriptionForeground);
-    }
-    .editor {
-      width: 100%;
-      min-height: 70vh;
-      resize: vertical;
-      font-family: var(--vscode-editor-font-family, monospace);
-      font-size: calc(var(--vscode-editor-font-size, 13px) * 0.95);
-      line-height: 1.45;
-      color: var(--vscode-editor-foreground);
-      background: var(--vscode-editor-background);
-      border: 1px solid var(--vscode-panel-border);
-      border-radius: 8px;
-      padding: 12px 14px;
-    }
     ${MARKDOWN_CONTENT_STYLES}
   </style>
 </head>
@@ -198,12 +165,7 @@ export function buildDeliveryViewerHtml(model: DeliveryViewerModel): string {
   <header class="toolbar">
     <div class="toolbar-title">${esc(title)}</div>
     <div class="toolbar-actions">
-      ${
-        model.mode === "view"
-          ? `<button type="button" class="btn primary" id="editBtn">Edit</button>`
-          : `<button type="button" class="btn" id="cancelBtn">Cancel</button>
-             <button type="button" class="btn primary" id="saveBtn">Save</button>`
-      }
+      <button type="button" class="btn primary" id="editBtn">Edit</button>
     </div>
   </header>
   <main class="main">
@@ -213,27 +175,11 @@ export function buildDeliveryViewerHtml(model: DeliveryViewerModel): string {
       <div class="source">SQLite · ${esc(model.relativePath)}</div>
     </div>
     ${statusMsg}
-    ${viewBlock}
-    ${editorBlock}
+    <div class="content">${bodyHtml}</div>
   </main>
   <script>
     const vscode = acquireVsCodeApi();
-    const editBtn = document.getElementById("editBtn");
-    const cancelBtn = document.getElementById("cancelBtn");
-    const saveBtn = document.getElementById("saveBtn");
-    const editor = document.getElementById("editor");
-    if (editBtn) {
-      editBtn.onclick = () => vscode.postMessage({ type: "edit" });
-    }
-    if (cancelBtn) {
-      cancelBtn.onclick = () => {
-        const dirty = editor && editor.value !== ${JSON.stringify(model.fullMarkdown)};
-        vscode.postMessage({ type: "cancel", dirty: !!dirty });
-      };
-    }
-    if (saveBtn && editor) {
-      saveBtn.onclick = () => vscode.postMessage({ type: "save", markdown: editor.value });
-    }
+    document.getElementById("editBtn").onclick = () => vscode.postMessage({ type: "edit" });
   </script>
 </body>
 </html>`

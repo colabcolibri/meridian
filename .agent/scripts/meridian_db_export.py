@@ -17,6 +17,10 @@ from meridian_db import (  # noqa: E402
     export_planning_json,
     upsert_delivery_from_markdown,
 )
+from meridian_delivery_form import (  # noqa: E402
+    export_entity_form,
+    import_entity_form_json,
+)
 
 
 def main() -> int:
@@ -27,9 +31,9 @@ def main() -> int:
     parser.add_argument("--probe", action="store_true", help="Exit 0 if DB exists")
     parser.add_argument(
         "--format",
-        choices=["raw", "planning"],
+        choices=["raw", "planning", "form"],
         default="raw",
-        help="raw=markdown bodies; planning=structured for extension",
+        help="raw=markdown bodies; planning=structured for extension; form=editable fields",
     )
     parser.add_argument(
         "--entity",
@@ -40,7 +44,12 @@ def main() -> int:
     parser.add_argument(
         "--write",
         action="store_true",
-        help="upsert body_markdown from stdin (requires --entity and --id)",
+        help="upsert raw markdown from stdin (advanced; requires --entity and --id)",
+    )
+    parser.add_argument(
+        "--write-form",
+        action="store_true",
+        help="upsert from structured JSON stdin (requires --entity and --id)",
     )
     args = parser.parse_args()
     root = Path(args.package_root).resolve()
@@ -56,6 +65,15 @@ def main() -> int:
         if not args.entity or not args.id:
             print(json.dumps({"error": "both --entity and --id are required"}))
             return 1
+        if args.write_form:
+            json_text = sys.stdin.read()
+            try:
+                row = import_entity_form_json(root, args.entity, args.id, json_text)
+            except (ValueError, json.JSONDecodeError) as exc:
+                print(json.dumps({"ok": False, "error": str(exc)}))
+                return 1
+            print(json.dumps({"ok": True, **row}, ensure_ascii=False))
+            return 0
         if args.write:
             markdown_text = sys.stdin.read()
             try:
@@ -66,7 +84,10 @@ def main() -> int:
             print(json.dumps({"ok": True, **row}, ensure_ascii=False))
             return 0
         try:
-            row = export_entity_markdown(root, args.entity, args.id)
+            if args.format == "form":
+                row = export_entity_form(root, args.entity, args.id)
+            else:
+                row = export_entity_markdown(root, args.entity, args.id)
         except ValueError as exc:
             print(json.dumps({"error": str(exc)}))
             return 1

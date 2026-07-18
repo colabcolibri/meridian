@@ -1,20 +1,13 @@
 import { execFileSync } from "node:child_process"
-import * as fs from "node:fs"
-import * as path from "node:path"
 
 import { parseDeliveryRelativePath } from "./delivery-path.js"
-import { kitRootFromPackageRoot, resolvePythonCommand, sqliteDbExists } from "./load-from-sqlite.js"
+import { resolvePythonCommand, sqliteDbExists } from "./load-from-sqlite.js"
+import { resolveExportScriptPath } from "./resolve-kit-scripts.js"
 
 type WriteExport = {
   ok?: boolean
   error?: string
   id?: string
-}
-
-function exportScriptPath(packageRoot: string): string | null {
-  const kitRoot = kitRootFromPackageRoot(packageRoot)
-  const script = path.join(kitRoot, ".agent", "scripts", "meridian_db_export.py")
-  return fs.existsSync(script) ? script : null
 }
 
 export type SaveDeliveryResult =
@@ -25,12 +18,13 @@ export function saveDeliveryMarkdownToSqlite(
   packageRoot: string,
   relativePath: string,
   markdown: string,
+  extensionPath?: string,
 ): SaveDeliveryResult {
   const parsed = parseDeliveryRelativePath(relativePath)
   if (!parsed || !sqliteDbExists(packageRoot)) {
     return { ok: false, error: "Delivery path or SQLite database not found." }
   }
-  const script = exportScriptPath(packageRoot)
+  const script = resolveExportScriptPath(packageRoot, extensionPath)
   if (!script) {
     return { ok: false, error: "meridian_db_export.py not found in kit." }
   }

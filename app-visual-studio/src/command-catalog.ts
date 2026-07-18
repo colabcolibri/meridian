@@ -123,7 +123,7 @@ export const MERIDIAN_COMMAND_CATALOG: CommandHelpEntry[] = [
       "Use the board to see status — not to edit stories (edit via kit CLI or slash commands).",
       "Project row (first toolbar line): active name, docs/ path, US count; dropdown when several products.",
       "Columns: Todo, Partial, Tests, Done, and Frozen (toggle).",
-      "Click a card to open the full US markdown (SQLite body_markdown or docs/us file).",
+      "Click a card to open HTML preview; Edit opens a structured form backed by SQLite (US, epics, versions, sprints).",
     ],
     icon: "$(layout)",
     status: "shipped",

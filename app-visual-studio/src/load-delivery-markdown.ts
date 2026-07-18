@@ -1,9 +1,8 @@
 import { execFileSync } from "node:child_process"
-import * as fs from "node:fs"
-import * as path from "node:path"
 
 import { parseDeliveryRelativePath } from "./delivery-path.js"
-import { kitRootFromPackageRoot, resolvePythonCommand, sqliteDbExists } from "./load-from-sqlite.js"
+import { resolvePythonCommand, sqliteDbExists } from "./load-from-sqlite.js"
+import { resolveExportScriptPath } from "./resolve-kit-scripts.js"
 
 type EntityExport = {
   id: string
@@ -11,21 +10,16 @@ type EntityExport = {
   error?: string
 }
 
-function exportScriptPath(packageRoot: string): string | null {
-  const kitRoot = kitRootFromPackageRoot(packageRoot)
-  const script = path.join(kitRoot, ".agent", "scripts", "meridian_db_export.py")
-  return fs.existsSync(script) ? script : null
-}
-
 export function loadDeliveryMarkdownFromSqlite(
   packageRoot: string,
   relativePath: string,
+  extensionPath?: string,
 ): string | null {
   const parsed = parseDeliveryRelativePath(relativePath)
   if (!parsed || !sqliteDbExists(packageRoot)) {
     return null
   }
-  const script = exportScriptPath(packageRoot)
+  const script = resolveExportScriptPath(packageRoot, extensionPath)
   if (!script) {
     return null
   }

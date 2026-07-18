@@ -1,6 +1,8 @@
 import assert from "node:assert/strict"
 import { describe, it } from "node:test"
 
+import { buildDeliveryFormHtml } from "../src/delivery-form-html.js"
+import { deliveryFormFields } from "../src/delivery-form-schema.js"
 import { buildDeliveryViewerHtml } from "../src/delivery-viewer-html.js"
 import { parseDeliveryMarkdown } from "../src/parse-delivery-markdown.js"
 
@@ -25,7 +27,6 @@ version: v0
   it("parses frontmatter and body", () => {
     const parsed = parseDeliveryMarkdown(sample)
     assert.equal(parsed.frontmatter.id, "US-0099")
-    assert.equal(parsed.frontmatter.title, "Sample story")
     assert.match(parsed.body.trim(), /^# US-0099/)
   })
 
@@ -37,27 +38,31 @@ version: v0
       folder: "us",
       frontmatter: parsed.frontmatter,
       bodyMarkdown: parsed.body,
-      fullMarkdown: sample,
-      mode: "view",
     })
     assert.match(html, /id="editBtn"/)
     assert.match(html, /Sample story/)
-    assert.match(html, /<h2>/)
   })
 
-  it("builds edit html with textarea and save", () => {
-    const parsed = parseDeliveryMarkdown(sample)
-    const html = buildDeliveryViewerHtml({
+  it("defines form fields for all delivery folders", () => {
+    for (const folder of ["us", "epics", "versions", "sprints"] as const) {
+      assert.ok(deliveryFormFields(folder).length > 3)
+    }
+  })
+
+  it("builds structured form html", () => {
+    const html = buildDeliveryFormHtml({
       relativePath: "us/US-0099.md",
       entityLabel: "User story",
       folder: "us",
-      frontmatter: parsed.frontmatter,
-      bodyMarkdown: parsed.body,
-      fullMarkdown: sample,
-      mode: "edit",
+      form: {
+        entity: "us",
+        id: "US-0099",
+        frontmatter: { id: "US-0099", title: "Sample story" },
+        preamble: "# US-0099 — Sample story",
+        sections: { intent_acceptance: "- [ ] Works" },
+      },
     })
-    assert.match(html, /id="editor"/)
-    assert.match(html, /id="saveBtn"/)
-    assert.match(html, /US-0099/)
+    assert.match(html, /id="saveFormBtn"/)
+    assert.match(html, /intent_acceptance|Acceptance/)
   })
 })

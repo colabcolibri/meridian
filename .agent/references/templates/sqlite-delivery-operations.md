@@ -55,6 +55,13 @@ python3 .agent/scripts/meridian_db_cli.py show US-0115 --full
 # 4. Write (never create docs/us/*.md when DB exists)
 python3 .agent/scripts/meridian_db_cli.py create-us --title "..." --epic EPIC-15 --version v10
 python3 .agent/scripts/meridian_db_cli.py update-us US-0115 --from-file /tmp/us.md
+
+# 4b. Structured form (extension + agents — preferred)
+python3 .agent/scripts/meridian_db_export.py . --entity us --id US-0115 --format form
+python3 .agent/scripts/meridian_db_export.py . --entity epics --id EPIC-15 --format form
+# stdin: JSON { frontmatter, preamble, sections } — see meridian_delivery_form.py
+python3 .agent/scripts/meridian_db_export.py . --entity us --id US-0115 --write-form < form.json
+
 python3 .agent/scripts/meridian_db_cli.py set-ready US-0115 --ready true
 python3 .agent/scripts/meridian_db_cli.py set-summary US-0115 --text "4-8 sentence summary"
 
@@ -130,3 +137,17 @@ python3 .agent/scripts/purge_delivery_md.py . --require-verify
 | Sprint | `.agent/skills/create-sprint/references/sprint-template.md` |
 
 Parse → upsert via CLI; do not hand-edit SQL for narrative bodies unless emergency.
+
+## Structured form API (v10 extension)
+
+| Step | Command / module |
+| ---- | ---------------- |
+| Export fields | `meridian_db_export.py --entity {us\|epics\|versions\|sprints} --id ID --format form` |
+| Import + validate | `meridian_db_export.py … --write-form` (JSON stdin) |
+| Build/validate | `.agent/scripts/meridian_delivery_form.py` |
+
+JSON shape: `{ "frontmatter": {…}, "preamble": "…", "sections": { column_key: "markdown body" } }`.
+
+Section keys match `extract_*_sections` in `meridian_markdown_parse.py` (e.g. US `intent_acceptance`, epic `capability`). Save runs `validate_*_structure` before upsert — invalid templates are rejected.
+
+Extension: primary **Edit** uses `--write-form`; raw `--write` only under **Advanced** with confirmation.
