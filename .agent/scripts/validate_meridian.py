@@ -73,16 +73,9 @@ DEPRECATED_AGENT_FILES = [
 
 DEPRECATED_AGENT_SLUGS = [name.removesuffix(".md") for name in DEPRECATED_AGENT_FILES]
 
-# Paths under .agent/ that may mention legacy slugs (migration docs + routing + files until H2 delete)
-H2_LEGACY_REF_ALLOWLIST = (
-    "references/agent-aliases-h2.md",
-    "references/plans/agent-roster-and-workflow-v11.md",
-    "references/plans/markdown-audit-v11.md",
-    "references/plans/kit-improvement-plan.md",
-    "skills/meridian-routing/SKILL.md",
-    "ARCHITECTURE.md",
-    "MERIDIAN_V2_CUTOVER.md",
-    *{f"agents/{name}" for name in DEPRECATED_AGENT_FILES},
+# Paths under .agent/ that may mention old slugs (historical plans only)
+DEPRECATED_SLUG_SCAN_SKIP_PREFIXES = (
+    "references/plans/",
 )
 
 H2_SCAN_REL_PREFIXES = (
@@ -114,14 +107,6 @@ H2_LEGACY_LINE_MARKERS = (
 )
 
 
-def _path_allowed_legacy_ref(rel_posix: str) -> bool:
-    rel = rel_posix.replace("\\", "/")
-    for allowed in H2_LEGACY_REF_ALLOWLIST:
-        if rel == allowed or rel.endswith("/" + allowed):
-            return True
-    return False
-
-
 def _line_mentions_deprecated_slug(line: str, slug: str) -> bool:
     if slug not in line:
         return False
@@ -130,14 +115,11 @@ def _line_mentions_deprecated_slug(line: str, slug: str) -> bool:
     return True
 
 
-def validate_h2_agent_cleanup(
+def validate_deprecated_agents_removed(
     kit_root: Path,
     errors: list[str],
-    warnings: list[str],
-    *,
-    h2_ready: bool,
 ) -> None:
-    """H1: warn on operational legacy slug refs. H2 gate (--h2-ready): error + require files deleted."""
+    """Ensure legacy agent files and operational slug refs are gone (H2/H3)."""
     agent_dir = kit_root / ".agent"
     if not agent_dir.is_dir():
         return
@@ -147,11 +129,17 @@ def validate_h2_agent_cleanup(
         for name in DEPRECATED_AGENT_FILES
         if (agent_dir / "agents" / name).exists()
     ]
+    if deprecated_present:
+        errors.append(
+            "Deprecated agent files still present: "
+            + ", ".join(deprecated_present)
+            + " — delete; v11 roster only"
+        )
 
     violations: list[str] = []
 
     def scan_file(path: Path, rel: str) -> None:
-        if _path_allowed_legacy_ref(rel):
+        if any(rel.startswith(prefix) for prefix in DEPRECATED_SLUG_SCAN_SKIP_PREFIXES):
             return
         try:
             lines = path.read_text(encoding="utf-8").splitlines()
@@ -169,8 +157,6 @@ def validate_h2_agent_cleanup(
             continue
         for path in sorted(base.rglob("*.md")):
             rel = path.relative_to(agent_dir).as_posix()
-            if rel.startswith("references/plans/"):
-                continue
             scan_file(path, rel)
 
     for extra in H2_SCAN_EXTRA_PATHS:
@@ -181,26 +167,9 @@ def validate_h2_agent_cleanup(
     if violations:
         sample = "; ".join(violations[:8])
         suffix = f" (+{len(violations) - 8} more)" if len(violations) > 8 else ""
-        msg = (
-            f"H2 blocker: legacy agent slug in operational docs ({len(violations)}): "
-            f"{sample}{suffix}. Fix or allowlist in agent-aliases-h2.md"
-        )
-        if h2_ready:
-            errors.append(msg)
-        else:
-            warnings.append(msg)
-
-    if h2_ready:
-        if deprecated_present:
-            errors.append(
-                "H2 blocker: deprecated agent files still present: "
-                + ", ".join(deprecated_present)
-                + " — delete per .agent/references/agent-aliases-h2.md"
-            )
-    elif deprecated_present:
-        warnings.append(
-            f"H2 pending: {len(deprecated_present)} legacy agent file(s) "
-            f"(OK until delete). Gate: validate_meridian.py . --h2-ready"
+        errors.append(
+            f"Legacy agent slug in operational docs ({len(violations)}): "
+            f"{sample}{suffix}"
         )
 
 
@@ -210,9 +179,7 @@ KIT_MD_LEGACY_ALLOWLIST_SUFFIXES = (
     "references/plans/kit-improvement-plan.md",
     "references/plans/markdown-audit-v11.md",
     "references/plans/agent-roster-and-workflow-v11.md",
-    "references/agent-aliases-h2.md",
     "MERIDIAN_V2_CUTOVER.md",
-    "scripts/migrate/archive/README.md",
     "references/scrum-meridian-map.md",
     "references/start-here.md",
     *{f"agents/{name}" for name in DEPRECATED_AGENT_FILES},
@@ -527,7 +494,7 @@ def main() -> int:
         if not (kit_root / "README.md").exists():
             warnings.append("Missing README.md at kit repository root.")
         validate_agent_kit(kit_root, errors, warnings)
-        validate_h2_agent_cleanup(kit_root, errors, warnings, h2_ready=h2_ready)
+        validate_deprecated_agents_removed(kit_root, errors)
         validate_kit_markdown_v11(kit_root, errors, warnings, strict=strict_kit_md)
         validate_cursor_adapter(kit_root, warnings)
         validate_codex_adapter(kit_root, warnings)

@@ -124,7 +124,7 @@ Sub-ondas: G1 ✅ · H1 ✅ · H2 ✅ · G2–G7 ✅ · G6 guardrail CI ✅
 
 ### Onda H — Agent roster e workflow — **✅ H1 + H2 concluídas**
 
-Roster Scrum v11 — ver `agent-roster-and-workflow-v11.md`. H2 = 6 agentes legacy removidos (`--h2-ready`).
+Roster Scrum v11 — ver `agent-roster-and-workflow-v11.md`. H2/H3 = legacy removido (arquivos + aliases).
 
 | Entregável | Status |
 | ---------- | ------ |

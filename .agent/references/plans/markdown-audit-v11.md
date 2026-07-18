@@ -104,7 +104,7 @@ Protocolo      → .agent/MERIDIAN.md, rules/, agents/, skills/, workflows/
 | ------- | ------- |
 | `MERIDIAN_V2_CUTOVER.md` | histórico |
 | `sqlite-delivery-operations.md` | lista o que **não** Write |
-| `board-keeper.md` / legacy agents | ~~anti-patterns H1~~ **deletados H2** |
+| `board-keeper.md` / legacy agents | deletados H2; aliases removidos H3 |
 | `kit-improvement-plan.md` | diário de ondas |
 
 ---
@@ -190,8 +190,7 @@ Marque `[x]` quando **v11-operacional** (sem P0; P1 aceito ou corrigido).
 
 ### 7.9 Scripts docs
 
-- [x] `scripts/README.md` — H2 `--h2-ready` documented
-- [x] `scripts/migrate/archive/README.md` — P2 histórico
+- [x] `scripts/README.md` — validator + migrate lane documented
 
 ### 7.10 Dogfood `docs/`
 
@@ -245,7 +244,7 @@ Função `validate_kit_markdown_v11()` em `validate_meridian.py`:
 
 **Flags:** default = WARN; `--strict-kit-md` = ERROR (usado no CI).
 
-**Allowlist:** `references/plans/*`, `agent-aliases-h2.md`, templates históricos, agentes deprecated H1, linhas com `never` / `do not` / `removed` / `→` (markdown bold ignorado).
+**Allowlist:** `references/plans/*`, templates históricos, linhas com `never` / `do not` / `removed` / `→` (markdown bold ignorado).
 
 ```bash
 python3 .agent/scripts/validate_meridian.py . --strict-kit-md
@@ -298,24 +297,21 @@ python3 .agent/scripts/validate_meridian.py . --strict-kit-md
 | `backlog-refiner` | Backlog refinement | `/create-us` … `/complete-us` |
 | `product-owner` | Discovery + scope + epic | `/discover`, `/create-epic` |
 
-**H2 pendente:** ~~remover 6 arquivos legacy~~ **✅ concluída** — gate `validate_meridian.py . --h2-ready`.
+**H2/H3 ✅** — 6 agentes legacy deletados; aliases de chat removidos; validator sempre ativo no kit.
 
 ---
 
-## 13. H2 — remoção de agentes deprecated
+## 13. H2 + H3 — remoção de legado
 
-| Item | Detalhe |
-| ---- | ------- |
-| Contrato | `references/agent-aliases-h2.md` |
-| Gate CLI | `python3 .agent/scripts/validate_meridian.py . --h2-ready` |
-| Manter após delete | `meridian-routing` § Legacy aliases (chat routing) |
-| Quebra | `@process-manager` no IDE picklist — usar `@scrum-master` |
-| Não quebra | workflows, `REQUIRED_AGENTS`, `sync_cursor_kit` prune |
+| Onda | Status |
+| ---- | ------ |
+| H2 | 6 arquivos `agents/*` legacy deletados |
+| H3 | `agent-aliases-h2.md` deletado; aliases removidos de `meridian-routing` |
+| Gate | `validate_meridian.py` — checagem de arquivos + slugs em docs operacionais (sempre no kit) |
 
-- [x] `--h2-ready` sem erros de refs operacionais
-- [x] 6 arquivos `agents/*` legacy deletados
-- [x] `sync_cursor_kit.sh` executado
-- [x] `--h2-ready` com zero legacy files
+- [x] `--strict-kit-md` sem erros
+- [x] Zero arquivos legacy em `agents/`
+- [x] Zero aliases de chat (H3)
 
 ---
 

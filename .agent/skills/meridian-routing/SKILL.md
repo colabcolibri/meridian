@@ -7,24 +7,11 @@ version: 2.0.0
 
 # Meridian intelligent routing
 
-> Route to the **Scrum-aligned** agent. Legacy `@` slugs: § **Legacy aliases** below + `references/agent-aliases-h2.md` (H2 ✅ — arquivos `.md` removidos; tabela permanece).
+> Route to one of the **9 Scrum-aligned** agents (v11 slugs only). User `@agent` override wins.
 
 ## Principle
 
 Before responding, classify the request and select the correct Meridian agent. State which expertise is active.
-
-## Legacy aliases (H1 — resolve to new slug)
-
-| User cites | Route to |
-| ---------- | -------- |
-| `@process-manager` | `scrum-master` |
-| `@board-keeper` | `backlog-refiner` |
-| `@scope-architect` | `product-owner` |
-| `@documentation-strategist` | `technical-writer` |
-| `@architecture-guardian` | `technical-architect` |
-| `@security-steward` | `security-champion` |
-
-Announce the **new** slug in `🤖 Applying knowledge from @[slug]...`. After H2, legacy `@` files are removed — chat text still maps via this table.
 
 ## Selection matrix
 
@@ -70,7 +57,7 @@ Announce the **new** slug in `🤖 Applying knowledge from @[slug]...`. After H2
 ## Rules
 
 1. **Silent analysis** — do not narrate long routing prose.
-2. **User override** — `@agent` wins; apply alias table if legacy slug.
+2. **User override** — explicit `@agent` wins (v11 slugs only).
 3. **Code without docs** — `scrum-master` reports blocker; no MVP in code.
 4. **Decisions** — `update-decisions-log` + real `date` commands before Write.
 5. **Scrum concepts** — `scrum-meridian-map.md` only unless manager asks for full guide.

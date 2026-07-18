@@ -25,7 +25,7 @@
 | `bootstrap_meridian_db.py` | Create/upgrade `.meridian/meridian.db` |
 | `meridian_db_cli.py` | **Agent CLI:** counts, list, show, search, create-us/epic/version/sprint, update-us, set-ready, set-summary, implement-gate |
 | `meridian_db_export.py` | JSON export for extension (`--format planning`; `--write-form`) |
-| `validate_meridian.py` | Governance validator (`--h2-ready`, `--strict-kit-md`, `--json`) |
+| `validate_meridian.py` | Governance validator (`--strict-kit-md`, `--json`; deprecated-agent check always on kit) |
 | `meridian_delivery_form.py` | Shim — re-exports `lib/meridian_delivery_form.py` for extension path checks |
 
 ## Shell (maintainers)
@@ -56,7 +56,6 @@ Run once per project when importing from branch `meridian-v1-old`:
 | `verify_md_sqlite_parity.py` | Gate before purge |
 | `purge_delivery_md.py` | Remove delivery `.md` after verify |
 | `backfill_summaries.py` | Fill empty `summary` columns |
-| `archive/migrate_us_v2_structure.py` | Pre-SQLite US section rewrite (archived) |
 
 ## Dev (`dev/`)
 

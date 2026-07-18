@@ -201,7 +201,9 @@ flowchart TB
 | _(novo)_ | `developer` | criar |
 | _(novo)_ | `design-system-owner` | criar |
 
-**Compatibilidade:** `meridian-routing` redireciona `@process-manager` / `@board-keeper` no chat (H2 ✅ — arquivos legacy removidos).
+**Compatibilidade:** H3 ✅ — sem aliases de chat; use slugs v11.
+
+Contrato histórico H2: removido (`agent-aliases-h2.md` deletado).
 
 ---
 
@@ -229,16 +231,14 @@ flowchart TB
 - [x] Expandir `agents/product-owner.md` (scope + epic)
 - [x] `skills/design-system/SKILL.md`, `workflows/design-pass.md`
 - [x] Routing matrix + `agents-help.md` + `scrum-meridian-map.md` § Ceremonies
-- [x] Aliases `@process-manager` → `scrum-master` em routing (1 release)
+- [x] H2: 6 arquivos legacy deletados
+- [x] H3: aliases de chat removidos (`agent-aliases-h2.md` deletado)
 
-### H2 — Limpeza ✅
+### H2 + H3 — Limpeza ✅
 
-Contrato: **`.agent/references/agent-aliases-h2.md`**
-
-- [x] `validate_meridian.py --h2-ready` sem blockers de refs
-- [x] Deletar 6 arquivos legacy
+- [x] `validate_meridian.py` bloqueia arquivos legacy e slugs em docs operacionais
+- [x] Deletar 6 arquivos legacy + `agent-aliases-h2.md`
 - [x] `sync_cursor_kit.sh`
-- [x] Remover notas “until H2” de `MERIDIAN` / `ARCHITECTURE`
 - [ ] Validator warning: UI US sem ref `09_design_system` (opcional)
 
 ---

@@ -67,7 +67,7 @@ Before any action, classify:
 [specialized response]
 ```
 
-4. **Respect override:** explicit `@agent` wins. Legacy chat slugs (`@process-manager`, …) → alias table in `meridian-routing` — see `.agent/references/agent-aliases-h2.md` (IDE picklist: v11 slugs only).
+4. **Respect override:** explicit `@agent` wins — use v11 slugs only (`scrum-master`, `backlog-refiner`, `developer`, …).
 
 ### Checklist before code or US
 
