@@ -10,7 +10,7 @@ $ARGUMENTS
 
 ## Critical rules
 
-1. Use `architecture-guardian` + `@[skills/meridian-routing]` if ambiguous
+1. Use `technical-architect` + `@[skills/meridian-routing]` if ambiguous
 2. **Mandatory read:** `architecture-folder-guide.md` before splitting or indexing detail files
 3. Prerequisites: scope, stack, security, users (draft minimum)
 4. Align with `02_security` — load `@[skills/security-review]` if auth, data, or agent boundaries change
@@ -28,7 +28,7 @@ CONTEXT:
 - Mode: ARCHITECTURE DOC
 
 RULES:
-1. architecture-guardian Phase 0 gate
+1. technical-architect Phase 0 gate
 2. Read 00, 01, 02, 03, 04 before editing 05
 3. Cross-check 06/07/08 if they exist — no contradictions
 4. Keep 05 as overview + index; move deep specs to docs/architecture/*.md when warranted

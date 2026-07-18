@@ -24,12 +24,23 @@ Maintain `02_security.md` as the security contract and gate risky agent behavior
 
 ---
 
+## Operator workflows
+
+| Workflow | Purpose |
+| -------- | ------- |
+| `/security-pass` | Create/update `02` — Phase 2 doc pass |
+| `/security-review` | Audit code vs `02` + US (no code) |
+| `/dependency-audit` | Lockfiles and supply chain report |
+
+---
+
 ## Execution
 
-1. Load `@[skills/security-review]` → read `references/checklists.md` fully.
-2. Fill gaps in `02_security.md` with risks, mitigations, open items.
-3. Log decisions via `update-decisions-log` for material changes.
-4. Block architecture `approved` if critical security gaps are open (report to `scrum-master`).
+1. Load `@[skills/security-review]` → read checklist for active mode (`checklists.md`, `implementation-security-checklist.md`, or `supply-chain-checklist.md`).
+2. For `/security-pass`: fill gaps in `02_security.md` with risks, mitigations, open items.
+3. For `/security-review` and `/dependency-audit`: report only — route fixes to other workflows.
+4. Log decisions via `update-decisions-log` for material changes.
+5. Block architecture `approved` if critical security gaps are open (report to `scrum-master`).
 
 ---
 

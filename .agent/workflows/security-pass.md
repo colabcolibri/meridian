@@ -1,8 +1,8 @@
 ---
-description: Review and deepen security documentation before architecture or implementation.
+description: Create or update docs/02_security.md — bootstrap, full pass, or US alignment.
 ---
 
-# /security-pass — security review
+# /security-pass — security contract
 
 $ARGUMENTS
 
@@ -10,11 +10,21 @@ $ARGUMENTS
 
 ## Critical rules
 
-1. Use `security-steward` + `@[skills/security-review]`
-2. Read `references/checklists.md` in full
-3. Update `02_security.md`
+1. Use `security-champion` + `@[skills/security-review]`
+2. If creating `02` from scratch → copy § Document stub from `.agent/references/templates/phase-docs/02-security.md`
+3. Read checklist for active mode before Write on `02_security.md`
 4. Relevant decisions → `prepend-decision` (read `update-decisions-log` skill)
 5. Do not silently approve architecture `approved` if critical gaps remain open
+
+---
+
+## Modes (`$ARGUMENTS`)
+
+| Argument | Mode | Action |
+| -------- | ---- | ------ |
+| _(empty)_ | **full** | `checklists.md` + `security-doc-checklist.md` on entire `02` |
+| `bootstrap` | **bootstrap** | Read `01_tech_stack.md` → `security-bootstrap.md` → fill `02` sections |
+| `US-XXXX` | **us-align** | Load US `--full`; map security Acceptance → `02` sections |
 
 ---
 
@@ -23,14 +33,14 @@ $ARGUMENTS
 ```txt
 CONTEXT:
 - User Request: $ARGUMENTS
-- Mode: SECURITY REVIEW
+- Mode: SECURITY PASS
 
 RULES:
-1. security-steward Phase 0
-2. Full checklist pass
+1. security-champion Phase 0
+2. Run mode procedure (full | bootstrap | us-align)
 3. Document risks, mitigations, AI-agent rules for project
 4. No weakening controls without logged decision
-5. Report blockers to process-manager if needed
+5. Report blockers to scrum-master if needed
 ```
 
 ---
@@ -38,11 +48,14 @@ RULES:
 ## Output
 
 ```txt
+Mode: full | bootstrap | us-align
 02_security status:
+Sections updated:
 Critical findings:
 Mitigations proposed:
 Blocked docs/phases:
 Decisions logged:
+Next: human review → approved | /security-review | /refine-us US-XXXX
 ```
 
 ---

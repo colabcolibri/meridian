@@ -10,7 +10,7 @@ $ARGUMENTS
 
 ## Critical rules
 
-1. Use `process-manager` + `@[skills/init-project]`
+1. Use `scrum-master` + `@[skills/init-project]`
 2. **Mandatory read:** `doc-templates.md` before creating phase files
 3. Run `meridian_delivery.py bootstrap` for SQLite delivery store
 4. Register initial decision via `prepend-decision` (not JSON)

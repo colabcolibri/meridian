@@ -4,6 +4,19 @@ All notable changes to the **Meridian** VS Code extension (`meridian-vscode`).
 
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.1.22] - 2026-07-18
+
+### Added
+
+- **Bundled kit:** quality operator — `quality-owner` agent, `/test-pass`, `/test-review`, `10_test_strategy` phase doc template
+- **Bundled kit:** security operator — `/security-review`, `/dependency-audit`, security bootstrap and implementation checklists
+- **Bundled kit:** phase-docs `00`–`11` + `docs-readme` — agent guides (what/how/when/revisit), depth checklists, mid-project review procedure; single source for init and `/audit-docs`
+
+### Changed
+
+- **Bundled kit:** removed legacy agents (`board-keeper`, `process-manager`, `security-steward`, `architecture-guardian`, `documentation-strategist`, `scope-architect`); routing and `agents-help` updated
+- **Bundled kit:** `validate_meridian.py` warnings for thin `02_security` / `10_test_strategy`; init copies stubs only from `phase-docs/`
+
 ## [1.1.21] - 2026-07-18
 
 ### Added

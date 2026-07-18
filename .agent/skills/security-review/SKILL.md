@@ -8,26 +8,42 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 
 > Security before architecture and before agents execute sensitive work.
 
+## Operator workflows
+
+| Workflow | Purpose |
+| -------- | ------- |
+| `/security-pass` | Create/update `02` — Phase 2 doc pass |
+| `/security-review` | Audit code vs `02` + US (no code) |
+| `/dependency-audit` | Lockfiles and supply chain report |
+
 ## Selective reading
 
 | File | When to read |
 | ------- | ---------- |
-| `references/checklists.md` | During full review or `02_security.md` creation |
+| `.agent/references/templates/phase-docs/02-security.md` | **Init** — § Document stub to create `docs/02_security.md` |
+| `references/security-doc-checklist.md` | **Mandatory** — structure of `02` at init and pass |
+| `references/security-bootstrap.md` | **Mandatory** — `/security-pass bootstrap` |
+| `references/checklists.md` | `/security-pass full` or deep `02` review |
+| `references/implementation-security-checklist.md` | **Mandatory** — `/security-review` |
+| `references/supply-chain-checklist.md` | **Mandatory** — `/dependency-audit` |
 
 ## When to trigger
 
+- `/security-pass`, `/security-review`, `/dependency-audit`
 - Create or review `02_security.md`
 - Threat model, secrets, OWASP, supply chain request
 - Before `05_architecture.md` goes to `approved`
 - Suspected agent violation (destructive command, leak)
+- Before `/complete-us` on Must US with security acceptance
 
 ## Procedure
 
 1. Read `00_scope.md`, `01_tech_stack.md`, `03_user_types.md` (context).
-2. Go through **all** sections of `references/checklists.md`.
-3. Update `02_security.md` with risks, mitigations, open items, out of scope.
-4. Register relevant decisions via `update-decisions-log`.
-5. Do not weaken auth/validation/logging without explicit decision.
+2. **security-pass:** go through **all** sections of `references/checklists.md`; update `02_security.md`.
+3. **security-review:** read `implementation-security-checklist.md`; report gaps only.
+4. **dependency-audit:** read `supply-chain-checklist.md`; report gaps only.
+5. Register relevant decisions via `update-decisions-log`.
+6. Do not weaken auth/validation/logging without explicit decision.
 
 ## Result in `02_security.md`
 

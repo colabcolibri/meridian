@@ -50,6 +50,10 @@ Documents produced:
 
 **Design operator (UI products):** after `01_tech_stack` is drafted → `/design-pass bootstrap` → human approves `09` → `/design-showcase` → refine UI US → `/design-review` before close.
 
+**Security operator:** `/security-pass` deepens `02` → after `/implement-us` run `/security-review` (and `/dependency-audit` when deps change) before close on sensitive US.
+
+**Quality operator:** `/test-pass bootstrap` deepens `10_test_strategy.md` when tests in scope → `/test-review` before `/complete-us` on Must US with `tests: required`.
+
 ### Phase 3 — Backlog definition
 
 With the architecture approved, define what will be built and in what order.

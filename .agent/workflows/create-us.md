@@ -10,7 +10,7 @@ $ARGUMENTS
 
 ## Critical rules
 
-1. Use `board-keeper` + `@[skills/create-user-story]`
+1. Use `backlog-refiner` + `@[skills/create-user-story]`
 2. **Mandatory read:** `writing-guide.md` + `code-quality-at-us-time.md` + `us-template.md` **before** Write
 3. **Gate:** `05_architecture` = `approved`; epic + version exist
 4. Write **Intent** (Why, Where, Acceptance) + **Plan** draft (refs, Planned) — see writing-guide

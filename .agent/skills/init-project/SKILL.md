@@ -12,10 +12,11 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 
 | File | When to read |
 | ------- | ---------- |
-| `.agent/references/templates/INDEX.md` | Before creating phase docs or pointing manager to templates |
-| `.agent/references/templates/as-is-inventory-template.md` | **Mode B only** — before creating `docs/inventory/as-is.md` |
-| `references/doc-templates.md` | **Mandatory** before creating phase files and first decision |
-| `references/gitignore-baseline.md` | Before `npm install` or first commit |
+| `references/doc-templates.md` | **Mandatory** — init registry and copy procedure |
+| `.agent/references/templates/phase-docs/{doc}.md` | **Mandatory** — read **agent guide** (top), then copy § Document stub |
+| `.agent/references/templates/init-interview-guide.md` | Before Phase 0 interview |
+| `.agent/references/templates/as-is-inventory-template.md` | **Mode B only** — `docs/inventory/as-is.md` |
+| `references/gitignore-baseline.md` | Before first commit |
 
 ## When to trigger
 
@@ -62,10 +63,10 @@ docs/
 python3 .agent/scripts/meridian_delivery.py bootstrap
 ```
 
-4. Apply frontmatter from `references/doc-templates.md` on each phase doc (`status: draft`, except initial decision).
-5. **UI products:** if `01_tech_stack.md` (or Phase 0 answers) indicates UI surfaces (web, extension webviews, mobile, desktop GUI), create `docs/09_design_system.md` from `references/09-design-system-stub.md`. **Skip** for CLI-only, API-only, or library backends with no UI.
-6. `11_decisions.md` (stub) + initial decision via `prepend-decision` ("Project started with Meridian").
-7. `00_scope.md`: populate with answers from Phase 0 questions — do not leave it blank.
+4. **Phase docs:** for each template in `references/doc-templates.md`, read the **agent guide** in `phase-docs/{doc}.md` (sections *What / When / How / Depth checklist*), copy **§ Document stub** to the product path, and fill using *How to complete each section* — not blank headings. Do not copy the agent guide into `docs/`.
+5. **UI products:** if stack has UI surfaces, also copy § Document stub from `phase-docs/09-design-system.md` → `docs/09_design_system.md`. Skip for CLI-only backends.
+6. **Tested products:** if scope includes automated tests, copy § Document stub from `phase-docs/10-test-strategy.md` → `docs/10_test_strategy.md`. Skip for throwaway prototypes.
+7. `11_decisions.md` stub + initial decision via `prepend-decision` ("Project started with Meridian").
 8. Validate `.gitignore` with `references/gitignore-baseline.md`.
 9. **Do not** create US, epics, versions, sprints, `docs/templates/`, `docs/kanban/board.json`, app, API, database or migrations.
 
@@ -107,7 +108,7 @@ Read `as-is-inventory-template.md`, then create `docs/inventory/as-is.md`:
 
 ### Phase 3 — generate docs from code
 
-Populate phase docs from inventory + observations (not blank templates):
+Populate phase docs from inventory + observations — use **§ Document stub** from `phase-docs/*.md` as structure, replace placeholders with evidence (not blank headings):
 
 1. `00_scope.md` — derive from README + inventory + interview answers. Include **current product state** from high-confidence rows.
 2. `01_tech_stack.md` — list what was found (languages, frameworks, infra). Mark `status: draft`.

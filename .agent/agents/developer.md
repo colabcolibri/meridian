@@ -59,6 +59,7 @@ Before product code:
 | Blocked deps or architecture | `scrum-master` → `/status` |
 | Security gap in design | `security-champion` |
 | UI tokens / design system | `design-system-owner` |
+| Test strategy / test review | `quality-owner` |
 | Close US with Record | `backlog-refiner` → `/complete-us` |
 
 ---

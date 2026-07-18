@@ -10,7 +10,7 @@ $ARGUMENTS
 
 ## Critical rules
 
-1. Use `board-keeper` + `@[skills/complete-user-story]`
+1. Use `backlog-refiner` + `@[skills/complete-user-story]`
 2. **Gate:** implementation delivered; applicable tests passed; `depends_on` at `✅`
 3. **Mandatory read:** `implementation-template.md` + `us-template.md` + `section-contracts.md` + target US **before** editing status
 4. **Do not** mark `✅` with placeholder in `## Record`
@@ -27,7 +27,7 @@ CONTEXT:
 - Mode: COMPLETE US
 
 RULES:
-1. board-keeper Phase 0 — verify US id and dependencies
+1. backlog-refiner Phase 0 — verify US id and dependencies
 2. Inspect git diff / files touched for evidence
 3. Fill ## Record (Files + layers + Executed)
 4. Mark Intent/Acceptance [x]; update Plan/Planned [x]; set tests_status: done

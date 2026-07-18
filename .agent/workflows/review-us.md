@@ -10,7 +10,7 @@ $ARGUMENTS
 
 ## Critical rules
 
-1. Use `board-keeper` + `@[skills/review-user-story]`
+1. Use `backlog-refiner` + `@[skills/review-user-story]`
 2. **Read-only** — do not upsert US unless manager explicitly asks to fix in the same turn
 3. **Never** set `ready: true` — only `/refine-us` does that
 4. **NO product code**

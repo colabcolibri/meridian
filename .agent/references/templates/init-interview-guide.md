@@ -56,7 +56,7 @@ Present inferences first: “From the repo I see [X]. Correct?”
 | 4 | `/document-project` | `docs/inventory/as-is.md` + populate phase docs from code (**no US**) |
 | 5 | Human review | Approve docs in order: `00` → `01` → `02` → `03` → `04` |
 | 6 | `/architecture`, `/security-pass` | Deepen `05`, `02` |
-| 7 | `/audit-docs` | Gap report + optional draft fixes (any time docs drift) |
+| 7 | `/audit-docs` | Gap report vs `phase-docs/` guides; optional draft fixes when docs drift mid-project |
 
 ---
 

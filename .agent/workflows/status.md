@@ -11,7 +11,7 @@ $ARGUMENTS
 ## Critical rules
 
 1. **Read-only** — do not change docs without explicit request in `$ARGUMENTS`
-2. Use `process-manager`
+2. Use `scrum-master`
 3. Read `docs/README.md` and frontmatter of `00`–`11`
 4. Optional: `python3 .agent/scripts/validate_meridian.py <root>` (append `--json` for CI)
 

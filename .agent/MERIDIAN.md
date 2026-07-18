@@ -59,7 +59,7 @@ See `.agent/ARCHITECTURE.md` for the full map. Minimum:
   MERIDIAN.md              ← this manifest
   rules/MERIDIAN.md        ← P0 always-on
   ARCHITECTURE.md          ← kit structure
-  agents/                  ← personas (board-keeper, process-manager, …)
+  agents/                  ← personas (backlog-refiner, scrum-master, …)
   skills/                  ← procedures (create-user-story, …)
   workflows/               ← slash commands (/create-us, …)
   references/templates/    ← INDEX, section-contracts, us-template, …
@@ -121,15 +121,15 @@ blocks: []
 
 | Document | Agent | Template / skill |
 | -------- | ----- | ---------------- |
-| `00_scope.md` | `scope-architect` | `init-project` → `doc-templates.md` |
-| `01_tech_stack.md` | `documentation-strategist` | `doc-templates.md` |
-| `02_security.md` | `security-steward` | `doc-templates.md` + `security-review` |
-| `03_user_types.md` | `documentation-strategist` | `doc-templates.md` |
-| `04_principles.md` | `documentation-strategist` | `doc-templates.md` |
-| `05_architecture.md` | `architecture-guardian` | `doc-templates.md` + `architecture-folder-guide.md` + `security-review` |
-| `06_database.md` | `documentation-strategist` | `doc-templates.md` |
-| `07_api_contracts.md` | `documentation-strategist` | `doc-templates.md` |
-| `08_environments.md` | `documentation-strategist` | `doc-templates.md` |
+| `00_scope.md` | `product-owner` | `init-project` → `doc-templates.md` |
+| `01_tech_stack.md` | `technical-writer` | `doc-templates.md` |
+| `02_security.md` | `security-champion` | `doc-templates.md` + `security-review` |
+| `03_user_types.md` | `technical-writer` | `doc-templates.md` |
+| `04_principles.md` | `technical-writer` | `doc-templates.md` |
+| `05_architecture.md` | `technical-architect` | `doc-templates.md` + `architecture-folder-guide.md` + `security-review` |
+| `06_database.md` | `technical-writer` | `doc-templates.md` |
+| `07_api_contracts.md` | `technical-writer` | `doc-templates.md` |
+| `08_environments.md` | `technical-writer` | `doc-templates.md` |
 | `11_decisions.md` | any | stub + `decision-template.md` |
 
 ---
@@ -195,13 +195,13 @@ Strict US also require `ready: true | false`.
 /create-us     → Intent + Plan draft, ready: false
 /review-us     → optional audit (no edits, no ready)
 /refine-us     → deepen Plan + Approach (required), ready: true
-implement      → process-manager gate: ready + Plan filled
+implement      → developer gate: ready + Plan filled
 /complete-us   → Record + status ✅
 /sync-board    → removed in v11 (board reads SQLite)
 commit (human) → after close + board sync; one commit per US — see commit-after-us-close.md
 ```
 
-Agent: `board-keeper`. Skills: `create-user-story`, `review-user-story`, `refine-user-story`, `complete-user-story`.
+Agent: `backlog-refiner`. Skills: `create-user-story`, `review-user-story`, `refine-user-story`, `complete-user-story`.
 
 ---
 
@@ -227,14 +227,16 @@ python3 .agent/scripts/validate_meridian.py <project-folder> --json
 
 | Need | Agent | Entry |
 | ---- | ----- | ----- |
-| Status / gates | `process-manager` | `/status` |
-| Scope | `scope-architect` | `/init-meridian` |
-| Phase docs | `documentation-strategist` | — |
-| Security | `security-steward` | `/security-pass` |
-| Architecture | `architecture-guardian` | `/architecture` |
+| Status / gates | `scrum-master` | `/status` |
+| Scope | `product-owner` | `/init-meridian` |
+| Phase docs | `technical-writer` | — |
+| Security | `security-champion` | `/security-pass`, `/security-review`, `/dependency-audit` |
+| Architecture | `technical-architect` | `/architecture` |
+| Design system | `design-system-owner` | `/design-pass`, `/design-showcase`, `/design-review` |
+| Quality / tests | `quality-owner` | `/test-pass`, `/test-review` |
 | Versions / sprints | `sprint-planner` | `/create-version`, `/plan-sprint`, `/complete-sprint` |
-| US / board | `board-keeper` | `/create-us`, `/refine-us`, `/complete-us` |
-| US implement | `process-manager` | `/implement-us` (requires `ready: true`) |
+| US / board | `backlog-refiner` | `/create-us`, `/refine-us`, `/complete-us` |
+| US implement | `developer` | `/implement-us` (requires `ready: true`) |
 | Decisions | any relevant agent | `/update-decisions-log` |
 | Auto-pick | `meridian-routing` skill | — |
 

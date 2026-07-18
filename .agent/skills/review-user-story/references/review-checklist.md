@@ -45,7 +45,7 @@ Same list as refine-checklist: `_(fill in`, `§ [section name`, `path/to/…`, `
 | --------- | --------- |
 | R3–R9 failures, `ready: false` | `/refine-us US-XXXX` |
 | All R3–R9 pass, `ready: false` | `/refine-us US-XXXX` (to set ready and sync board) |
-| All pass, `ready: true`, status ❌ | Implement (process-manager gate) |
+| All pass, `ready: true`, status ❌ | Implement (`developer` gate) |
 | Code done, R13 fail | `/complete-us US-XXXX` |
 | Structural errors (R1/R2) | Fix structure first; may need manual edit + re-review |
 

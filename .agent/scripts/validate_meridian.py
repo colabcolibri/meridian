@@ -49,12 +49,24 @@ AGENT_KIT_PATHS = [
 ]
 
 REQUIRED_AGENTS = [
+    "product-owner.md",
+    "technical-writer.md",
+    "security-champion.md",
+    "technical-architect.md",
+    "design-system-owner.md",
+    "quality-owner.md",
+    "sprint-planner.md",
+    "backlog-refiner.md",
+    "developer.md",
+    "scrum-master.md",
+]
+
+LEGACY_AGENTS = [
     "process-manager.md",
     "scope-architect.md",
     "documentation-strategist.md",
     "security-steward.md",
     "architecture-guardian.md",
-    "sprint-planner.md",
     "board-keeper.md",
 ]
 
@@ -86,7 +98,9 @@ def validate_codex_adapter(repo_root: Path, warnings: list[str]) -> None:
         warnings.append("Missing .codex/agents/ — run sync_cursor_kit.sh")
 
 
-def validate_agent_kit(repo_root: Path, errors: list[str], warnings: list[str]) -> None:
+def validate_agent_kit(
+    repo_root: Path, errors: list[str], warnings: list[str], *, strict: bool = False
+) -> None:
     agent_dir = repo_root / ".agent"
     if not agent_dir.is_dir():
         return
@@ -101,6 +115,14 @@ def validate_agent_kit(repo_root: Path, errors: list[str], warnings: list[str]) 
         for name in REQUIRED_AGENTS:
             if not (agents_dir / name).exists():
                 warnings.append(f"Missing .agent/agents/{name}")
+        for legacy in LEGACY_AGENTS:
+            legacy_path = agents_dir / legacy
+            if legacy_path.exists():
+                msg = f"Legacy agent file still present: .agent/agents/{legacy}"
+                if strict:
+                    errors.append(msg)
+                else:
+                    warnings.append(msg)
 
 
 CONTEXT_PLACEHOLDER_MARKERS = (
@@ -215,6 +237,96 @@ UI_ACCEPTANCE_RE = re.compile(
     r"design system|breakpoint|webview|dialog|button|form field)\b",
     re.IGNORECASE,
 )
+
+
+SECURITY_ACCEPTANCE_RE = re.compile(
+    r"\b(auth|security|secret|owasp|encrypt|csrf|xss|injection|token|password|"
+    r"permission|rbac|pii|vulnerability)\b",
+    re.IGNORECASE,
+)
+
+
+def validate_sqlite_security_refs(
+    root: Path,
+    docs: Path,
+    warnings: list[str],
+) -> None:
+    """Warn when open Must US with security acceptance lack 02_security Plan refs."""
+    db_path = root / ".meridian" / "meridian.db"
+    security_path = docs / "02_security.md"
+    if not db_path.is_file() or not security_path.is_file():
+        return
+    if read_frontmatter(security_path).get("status") != "approved":
+        return
+
+    import sqlite3
+
+    conn = sqlite3.connect(db_path)
+    conn.row_factory = sqlite3.Row
+    try:
+        rows = conn.execute(
+            """
+            SELECT id, moscow, status, body_markdown, plan_architecture_refs
+            FROM user_stories
+            WHERE status IN ('❌', '🔶')
+            """
+        ).fetchall()
+    finally:
+        conn.close()
+
+    for row in rows:
+        if (row["moscow"] or "").strip() != "Must":
+            continue
+        body = row["body_markdown"] or ""
+        if not SECURITY_ACCEPTANCE_RE.search(body):
+            continue
+        refs = row["plan_architecture_refs"] or ""
+        if "02_security" not in refs:
+            warnings.append(
+                f"{row['id']}: Must security US missing 02_security in Plan Architecture "
+                "refs — run /security-pass or /refine-us"
+            )
+
+
+def validate_sqlite_test_strategy_refs(
+    root: Path,
+    docs: Path,
+    warnings: list[str],
+) -> None:
+    """Warn when open Must US with tests required lack 10_test_strategy Plan refs."""
+    db_path = root / ".meridian" / "meridian.db"
+    strategy_path = docs / "10_test_strategy.md"
+    if not db_path.is_file() or not strategy_path.is_file():
+        return
+    if read_frontmatter(strategy_path).get("status") != "approved":
+        return
+
+    import sqlite3
+
+    conn = sqlite3.connect(db_path)
+    conn.row_factory = sqlite3.Row
+    try:
+        rows = conn.execute(
+            """
+            SELECT id, moscow, status, body_markdown, plan_architecture_refs, tests
+            FROM user_stories
+            WHERE status IN ('❌', '🔶')
+            """
+        ).fetchall()
+    finally:
+        conn.close()
+
+    for row in rows:
+        if (row["moscow"] or "").strip() != "Must":
+            continue
+        if (row["tests"] or "").strip() != "required":
+            continue
+        refs = row["plan_architecture_refs"] or ""
+        if "10_test_strategy" not in refs:
+            warnings.append(
+                f"{row['id']}: Must US with tests: required missing 10_test_strategy in "
+                "Plan Architecture refs — run /test-pass or /refine-us"
+            )
 
 
 def validate_sqlite_design_system_refs(
@@ -349,6 +461,12 @@ def validate_kit_markdown_v11(kit_root: Path, errors: list[str], warnings: list[
         (r"6\. generate-board-json", "workflow step generate-board-json"),
         (r"app-desktop/", "app-desktop (removed — use app-visual-studio)"),
         (r"meridian_db_export\.py[^\n]*--write(?!-form)", "meridian_db_export --write (use meridian_delivery update-*)"),
+        (r"`process-manager`", "legacy agent process-manager"),
+        (r"`board-keeper`", "legacy agent board-keeper"),
+        (r"`security-steward`", "legacy agent security-steward"),
+        (r"`architecture-guardian`", "legacy agent architecture-guardian"),
+        (r"`documentation-strategist`", "legacy agent documentation-strategist"),
+        (r"`scope-architect`", "legacy agent scope-architect"),
     ]
     scan_roots = [
         kit_root / "skills",
@@ -412,7 +530,7 @@ def main() -> int:
     if kit_root is not None:
         if not (kit_root / "README.md").exists():
             warnings.append("Missing README.md at kit repository root.")
-        validate_agent_kit(kit_root, errors, warnings)
+        validate_agent_kit(kit_root, errors, warnings, strict=strict_kit_md)
         validate_cursor_adapter(kit_root, warnings)
         validate_codex_adapter(kit_root, warnings)
         validate_kit_markdown_v11(kit_root, errors, warnings, strict=strict_kit_md)
@@ -691,6 +809,8 @@ def main() -> int:
 
     if sqlite_delivery and docs.exists():
         validate_sqlite_design_system_refs(root, docs, warnings)
+        validate_sqlite_security_refs(root, docs, warnings)
+        validate_sqlite_test_strategy_refs(root, docs, warnings)
 
     if board_path.exists():
         if sqlite_delivery or sqlite_only_flag:

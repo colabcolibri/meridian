@@ -12,7 +12,7 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 
 | File | When to read |
 | ------- | ---------- |
-| `.agent/references/templates/phase-docs/*.md` | Depth bar per doc |
+| `.agent/references/templates/phase-docs/{doc}.md` | **Mandatory** — read full guide (what/for/how/revisit) + compare product `docs/` to stub |
 | `.agent/skills/init-project/references/doc-templates.md` | Global rules |
 | All `docs/0X_*.md` present | **Mandatory** |
 | `docs/inventory/as-is.md` | If exists |
@@ -35,12 +35,13 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 
 | # | Dimension | Check |
 | - | --------- | ----- |
-| 1 | **Depth bar** | Empty `##`, placeholder-only sections |
-| 2 | **Dependency order** | `depends_on` / `blocks` frontmatter |
-| 3 | **Cross-doc** | Scope users ↔ `03`; stack ↔ `01`; layers `04` ↔ `05` |
-| 4 | **Evidence** | Mode B claims have paths; stale paths flagged |
-| 5 | **Gates** | `05` not approved while `04` empty; security gaps |
-| 6 | **Inventory** | High rows promoted or explained in scope/architecture |
+| 1 | **Guide compliance** | Product doc matches template guide: sections filled, no silent TBD |
+| 2 | **Depth checklist** | Template depth checklist + empty `##` |
+| 3 | **Dependency order** | `depends_on` / `blocks` frontmatter |
+| 4 | **Cross-doc** | Scope users ↔ `03`; stack ↔ `01`; layers `04` ↔ `05` |
+| 5 | **Evidence** | Mode B claims have paths; stale paths flagged |
+| 6 | **Gates** | `05` not approved while `04` empty; security gaps |
+| 7 | **Inventory** | High rows promoted or explained in scope/architecture |
 
 ---
 

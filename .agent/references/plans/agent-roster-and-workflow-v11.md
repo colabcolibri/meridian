@@ -21,16 +21,17 @@
 
 ---
 
-## 2. Roster alvo — 9 agentes
+## 2. Roster alvo — 10 agentes (+ enablers)
 
 ```txt
 CAMADA SCRUM          AGENTE (slug)           ARTEFATOS / COMANDOS
 ────────────────────────────────────────────────────────────────────
 Product Owner         product-owner           00_scope, discovery/, /discover, /create-epic
 Enabler (docs)        technical-writer        01–08, 11 (phase docs)
-Enabler (security)    security-champion       02_security, /security-pass
+Enabler (security)    security-champion       02_security, /security-pass, /security-review, /dependency-audit
 Enabler (architecture) technical-architect    05_architecture, docs/architecture/, /architecture
-Enabler (design)      design-system-owner     09_design_system, /design-pass
+Enabler (design)      design-system-owner     09_design_system, /design-pass, /design-showcase, /design-review
+Enabler (quality)     quality-owner           10_test_strategy, /test-pass, /test-review
 Sprint planning       sprint-planner          versions, sprints, /create-version, /plan-sprint, /complete-sprint
 Backlog refinement    backlog-refiner         /create-us, /review-us, /refine-us, /complete-us
 Development Team      developer               /implement-us (gate + código)
@@ -49,8 +50,9 @@ Scrum Master          scrum-master            /status, /daily-with-ai, /init-mer
 | Definição de produto (escopo) | `00_scope.md` | `product-owner` |
 | Enabler: especificação técnica | phase docs | `technical-writer` |
 | Enabler: arquitetura | `/architecture` | `technical-architect` |
-| Enabler: segurança | `/security-pass` | `security-champion` |
-| Enabler: design system | `/design-pass` | `design-system-owner` |
+| Enabler: segurança | `/security-pass`, `/security-review`, `/dependency-audit` | `security-champion` |
+| Enabler: design system | `/design-pass`, `/design-showcase`, `/design-review` | `design-system-owner` |
+| Enabler: qualidade | `/test-pass`, `/test-review` | `quality-owner` |
 | Release / versão | `/create-version` | `sprint-planner` |
 | Sprint planning | `/plan-sprint`, `/create-sprint` | `sprint-planner` |
 | Backlog refinement | `/create-us`, `/review-us`, `/refine-us` | `backlog-refiner` |
@@ -109,6 +111,16 @@ Absorve o antigo `scope-architect` (`00_scope` é charter do produto — trabalh
 | **Skills** | `design-system` (novo), `update-decisions-log` |
 | **Workflow** | `/design-pass` — **recomendado** quando Acceptance menciona UI/layout/visual; não obrigatório para US só backend |
 | **Gate** | US Must com critérios visuais → Plan cita `09_design_system.md` (após doc `approved`) |
+
+### 4.5b `quality-owner`
+
+| | |
+| - | - |
+| **Scrum** | Enabler (qualidade / test strategy) |
+| **Missão** | `docs/10_test_strategy.md` — pirâmide, runners, cobertura; `/test-pass`, `/test-review` |
+| **Skills** | `test-strategy`, `update-decisions-log` |
+| **Workflow** | `/test-pass` — quando `tests: required` em Must US ou CI no escopo |
+| **Gate** | US Must com `tests: required` → Plan cita `10_test_strategy.md` (após doc `approved`) |
 
 ### 4.6 `sprint-planner`
 

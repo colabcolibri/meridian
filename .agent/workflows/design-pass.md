@@ -36,7 +36,7 @@ CONTEXT:
 - Mode: DESIGN PASS
 
 RULES:
-1. If no 09_design_system.md → copy stub from init-project references/09-design-system-stub.md
+1. If no 09_design_system.md → copy § Document stub from `.agent/references/templates/phase-docs/09-design-system.md`
 2. Run mode procedure (full | bootstrap | us-align)
 3. Walk design-system-checklist.md
 4. Recommend /refine-us if Must UI US Plan missing 09 refs

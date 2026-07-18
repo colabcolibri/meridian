@@ -10,7 +10,7 @@ $ARGUMENTS
 
 ## Critical rules
 
-1. Use `process-manager` + `@[skills/implement-user-story]`
+1. Use `developer` + `@[skills/implement-user-story]`
 2. **Mandatory read:** `implement-gate-checklist.md` + `code-quality-at-us-time.md` + target US **before** product code
 3. **Mandatory read:** `docs/04_principles.md` (DRY, SRP) before Write on code
 4. **Hard block:** `ready: true` required — if false → stop; recommend `/refine-us`

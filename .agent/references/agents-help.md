@@ -18,7 +18,7 @@ Human (manager)
     ↓ approves direction, sets approved / ✅
 Slash command (/create-us)  →  opens workflow in .agent/workflows/
     ↓ assigns persona
-Agent (@board-keeper)       →  .agent/agents/{name}.md
+Agent (@backlog-refiner)       →  .agent/agents/{name}.md
     ↓ executes procedure
 Skill (create-user-story)   →  .agent/skills/{name}/SKILL.md
     ↓ writes artifacts
@@ -31,7 +31,7 @@ docs/                       →  source of truth
 | **Agent** | Domain persona with gates and output format | Automatic routing or `@agent-name` |
 | **Skill** | Repeatable procedure (templates, scripts) | Used by agent — rarely typed by human |
 
-**Routing:** describe the task in chat → agent announces `Applying knowledge from @[agent]…`. Override anytime with `@process-manager`, `@board-keeper`, etc.
+**Routing:** describe the task in chat → agent announces `Applying knowledge from @[agent]…`. Override anytime with `@scrum-master`, `@backlog-refiner`, etc.
 
 **Priority:** P0 rules → MERIDIAN.md → agent → skill → templates.
 
@@ -47,7 +47,7 @@ Keeps you as manager. Gates phases, reports blockers, decides what can move next
 
 | Agent | Serves for | Primary artifacts | Does not |
 | ----- | ---------- | ----------------- | -------- |
-| **`process-manager`** | Project health, phase progression, “can we advance?”, init, daily loop | All `docs/` (read), decision log | Invent MVP code; approve docs; mark ✅ without Record |
+| **`scrum-master`** | Project health, phase progression, “can we advance?”, init, daily loop | All `docs/` (read), decision log | Invent MVP code; approve docs; mark ✅ without Record |
 
 **When to use:** `/status`, `/init-meridian`, `/daily-with-ai`, vague “what next?”, before any implementation.
 
@@ -61,7 +61,7 @@ Defines *what the product is* before structure and code.
 
 | Agent | Serves for | Primary artifacts | Does not |
 | ----- | ---------- | ----------------- | -------- |
-| **`scope-architect`** | Problem, users, in/out of scope, assumptions, risks | `docs/00_scope.md`, scope decisions | Tech stack, architecture, US |
+| **`product-owner`** | Problem, users, in/out of scope, assumptions, risks | `docs/00_scope.md`, scope decisions | Tech stack, architecture, US |
 
 **When to use:** drafting or challenging `00_scope`, scope arguments, “is this in scope?”
 
@@ -75,7 +75,7 @@ Writes and reviews phase documents and product-facing docs agents can execute.
 
 | Agent | Serves for | Primary artifacts | Does not |
 | ----- | ---------- | ----------------- | -------- |
-| **`documentation-strategist`** | Phase docs `01`–`04`, `06`–`08`, `11`; epic drafting | `docs/01_*` … `docs/08_*` | Approve `status: approved`; implement code |
+| **`technical-writer`** | Phase docs `01`–`04`, `06`–`08`, `11`; epic drafting | `docs/01_*` … `docs/08_*` | Approve `status: approved`; implement code |
 
 **When to use:** filling tech stack, principles, environments; `/create-epic` (with templates).
 
@@ -89,14 +89,14 @@ Hardens structure before backlog and implementation.
 
 | Agent | Serves for | Primary artifacts | Does not |
 | ----- | ---------- | ----------------- | -------- |
-| **`security-steward`** | Threat model, secrets, OWASP, AI-agent safety, Git hygiene | `docs/02_security.md` | Skip security to ship faster |
-| **`architecture-guardian`** | System boundaries, modules, integrations, consistency | `docs/05_architecture.md` | Architecture before scope/security drafts exist |
+| **`security-champion`** | Threat model, secrets, OWASP, AI-agent safety, Git hygiene | `docs/02_security.md` | Skip security to ship faster |
+| **`technical-architect`** | System boundaries, modules, integrations, consistency | `docs/05_architecture.md` | Architecture before scope/security drafts exist |
 
 **When to use:** `/security-pass`, `/architecture`, security review before merge.
 
-**Skills:** `security-review`, `update-decisions-log`, `meridian-routing` (+ `security-review` on architecture-guardian)
+**Skills:** `security-review`, `update-decisions-log`, `meridian-routing` (+ `security-review` on technical-architect)
 
-**Gate:** `05_architecture.md` must be **`approved`** before epics/versions/US (enforced by `sprint-planner` and `board-keeper`).
+**Gate:** `05_architecture.md` must be **`approved`** before epics/versions/US (enforced by `sprint-planner` and `backlog-refiner`).
 
 ---
 
@@ -120,7 +120,7 @@ Owns the executable backlog and honest execution state.
 
 | Agent | Serves for | Primary artifacts | Does not |
 | ----- | ---------- | ----------------- | -------- |
-| **`board-keeper`** | US lifecycle, dependencies, close with evidence | SQLite `user_stories` | Implement without `ready: true`; mark ✅ without Record |
+| **`backlog-refiner`** | US lifecycle, dependencies, close with evidence | SQLite `user_stories` | Implement without `ready: true`; mark ✅ without Record |
 
 **When to use:** `/create-us`, `/review-us`, `/refine-us`, `/complete-us`, kanban consistency.
 
@@ -136,7 +136,7 @@ Slash command groups — workflows in **six groups**. Each maps to one primary a
 
 | Step | Command | Agent | What it does |
 | ---- | ------- | ----- | ------------ |
-| A1 | **`/init-meridian`** | `process-manager` | Creates `docs/` tree, initial scope, decision log, empty board. **Mode B (existing codebase):** also `docs/inventory/as-is.md` — transitional capability map; no retroactive US. **No product code.** |
+| A1 | **`/init-meridian`** | `scrum-master` | Creates `docs/` tree, initial scope, decision log, empty board. **Mode B (existing codebase):** also `docs/inventory/as-is.md` — transitional capability map; no retroactive US. **No product code.** |
 
 ---
 
@@ -144,9 +144,9 @@ Slash command groups — workflows in **six groups**. Each maps to one primary a
 
 | Step | Command | Agent | What it does |
 | ---- | ------- | ----- | ------------ |
-| B1 | **`/status`** | `process-manager` | Read-only health: kit root, Meridian projects (multi-`docs/` repos), active product, phase doc statuses, US counts, blockers. |
-| B2 | **`/daily-with-ai`** | `process-manager` | Guided session: status → pick story → implement → close → sync. |
-| B3 | **`/agents-help`** | `process-manager` | Opens this reference; summarizes groups and current-step hints. |
+| B1 | **`/status`** | `scrum-master` | Read-only health: kit root, Meridian projects (multi-`docs/` repos), active product, phase doc statuses, US counts, blockers. |
+| B2 | **`/daily-with-ai`** | `scrum-master` | Guided session: status → pick story → implement → close → sync. |
+| B3 | **`/agents-help`** | `scrum-master` | Opens this reference; summarizes groups and current-step hints. |
 
 ---
 
@@ -156,15 +156,21 @@ Complete in order: `00` → `01` → `02` → `03` → `04` → **`05`** → `06
 
 | Step | Command | Agent | Target doc | What it does |
 | ---- | ------- | ----- | ---------- | ------------ |
-| C1 | *(conversation)* | `scope-architect` | `00_scope.md` | Scope, users, out of scope. |
-| C2 | *(conversation)* | `documentation-strategist` | `01`, `03`, `04`, `06`–`08` | Draft phase documents. |
-| C3 | **`/security-pass`** | `security-steward` | `02_security.md` | Threat model, secrets, OWASP, agent safety. |
-| C4 | **`/architecture`** | `architecture-guardian` | `05_architecture.md` + optional `docs/architecture/` | Overview, index, detail files; gate for backlog. |
+| C1 | *(conversation)* | `product-owner` | `00_scope.md` | Scope, users, out of scope. |
+| C2 | *(conversation)* | `technical-writer` | `01`, `03`, `04`, `06`–`08` | Draft phase documents. |
+| C3 | **`/security-pass`** | `security-champion` | `02_security.md` | Threat model, secrets, OWASP, agent safety. |
+| C4 | **`/architecture`** | `technical-architect` | `05_architecture.md` + optional `docs/architecture/` | Overview, index, detail files; gate for backlog. |
 | C5 | **`/design-pass`** | `design-system-owner` | `09_design_system.md` | Contract: tokens, stack, components. Modes: `bootstrap`, `US-XXXX`. **Doc only.** |
 | C6 | **`/design-showcase`** | `design-system-owner` | `09` § Showcase + US drafts | Plan catalog routes; creates showcase US for `developer`. **No code.** |
 | C7 | **`/design-review`** | `design-system-owner` | Report | Audit live UI vs `09` + showcase. **No code.** |
+| C8 | **`/security-review`** | `security-champion` | Report | Audit code vs `02` + US security acceptance. **No code.** |
+| C9 | **`/dependency-audit`** | `security-champion` | Report | Lockfiles and supply chain hygiene. **No code.** |
+| C10 | **`/test-pass`** | `quality-owner` | `10_test_strategy.md` | Pyramid, runners, coverage. Modes: `bootstrap`, `US-XXXX`. **Doc only.** |
+| C11 | **`/test-review`** | `quality-owner` | Report | Audit US tests vs strategy before close. **No code.** |
 
 **UI products:** create `09` stub at `/init-meridian` when stack has UI. Run `/design-pass bootstrap` after `01_tech_stack`. Human approves `09` before Must UI US ship.
+
+**Tested products:** create `10` stub when automated tests in scope. Run `/test-pass bootstrap` after `01_tech_stack`.
 
 **Human gate:** you set `status: approved` on each doc. Agent never sets `approved`.
 
@@ -176,7 +182,7 @@ Complete in order: `00` → `01` → `02` → `03` → `04` → **`05`** → `06
 
 | Step | Command | Agent | Output | What it does |
 | ---- | ------- | ----- | ------ | ------------ |
-| D1 | **`/create-epic`** | `documentation-strategist` | `EPIC-XX` in SQLite | Product capability block. |
+| D1 | **`/create-epic`** | `product-owner` | `EPIC-XX` in SQLite | Product capability block. |
 | D2 | **`/create-version`** | `sprint-planner` | `vX` in SQLite | Release grouping epics/US. |
 | D3 | **`/plan-sprint`** | `sprint-planner` | `vX-SY` in SQLite | Time-boxed goal + story list. |
 | D4 | **`/complete-sprint vX-SY`** | `sprint-planner` | sprint `status: complete` | Sprint review + Retrospective filled. |
@@ -191,12 +197,12 @@ Epic/version **close:** set `status: complete` manually when outcome reached (no
 
 | Step | Command | Agent | US state after | What it does |
 | ---- | ------- | ----- | -------------- | ------------ |
-| E1 | **`/create-us`** | `board-keeper` | `ready: false` | New US: Intent + draft Plan. |
-| E2 | **`/review-us US-XXXX`** | `board-keeper` | unchanged | Read-only quality audit. No `ready` change. |
-| E3 | **`/refine-us US-XXXX`** | `board-keeper` | `ready: true` | Approach, arch refs, concrete tests. **Gate for code.** |
-| E4 | **`/implement-us US-XXXX`** | `process-manager` | — | Gate: `ready: true`, deps, Plan; then product code. **Block if not refined.** |
+| E1 | **`/create-us`** | `backlog-refiner` | `ready: false` | New US: Intent + draft Plan. |
+| E2 | **`/review-us US-XXXX`** | `backlog-refiner` | unchanged | Read-only quality audit. No `ready` change. |
+| E3 | **`/refine-us US-XXXX`** | `backlog-refiner` | `ready: true` | Approach, arch refs, concrete tests. **Gate for code.** |
+| E4 | **`/implement-us US-XXXX`** | `developer` | — | Gate: `ready: true`, deps, Plan; then product code. **Block if not refined.** |
 | E5 | *(manager review)* | human | — | Review diff and run tests. |
-| E6 | **`/complete-us US-XXXX`** | `board-keeper` | `status: ✅` | Fills Record, checks acceptance (SQLite upsert). |
+| E6 | **`/complete-us US-XXXX`** | `backlog-refiner` | `status: ✅` | Fills Record, checks acceptance (SQLite upsert). |
 
 **Rules:** no code without E3 (`ready: true`) **and** E4 gate. No ✅ without E6 (`## Record` + evidence).
 
@@ -217,26 +223,28 @@ Epic/version **close:** set `status: complete` manually when outcome reached (no
 Use this as the canonical sequence. Skip steps only when the artifact already exists and is approved.
 
 ```txt
- 1. /init-meridian                          [Group A]  process-manager
- 2. Complete 00_scope → approve             [Group C]  scope-architect
- 3. Complete 01, 03, 04 (draft → approve)  [Group C]  documentation-strategist
- 4. /security-pass → approve 02             [Group C]  security-steward
- 5. /architecture → approve 05              [Group C]  architecture-guardian  ← GATE
+ 1. /init-meridian                          [Group A]  scrum-master
+ 2. Complete 00_scope → approve             [Group C]  product-owner
+ 3. Complete 01, 03, 04 (draft → approve)  [Group C]  technical-writer
+ 4. /security-pass → approve 02             [Group C]  security-champion
+ 5. /architecture → approve 05              [Group C]  technical-architect  ← GATE
  5b. /design-pass bootstrap → approve 09     [Group C]  design-system-owner    (UI products)
  5c. /design-showcase (catalog US)          [Group C]  design-system-owner    (UI products)
- 6. Complete 06, 07, 08 as needed          [Group C]  documentation-strategist
- 7. /create-epic                            [Group D]  documentation-strategist
+ 6. Complete 06, 07, 08 as needed          [Group C]  technical-writer
+ 7. /create-epic                            [Group D]  product-owner
  8. /create-version                         [Group D]  sprint-planner
  9. /plan-sprint                            [Group D]  sprint-planner
-10. /create-us                               [Group E]  board-keeper
-11. /review-us US-XXXX                       [Group E]  board-keeper  (optional)
-12. /refine-us US-XXXX                       [Group E]  board-keeper  → ready: true
-13. /implement-us US-XXXX                    [Group E]  process-manager → gate then code
+10. /create-us                               [Group E]  backlog-refiner
+11. /review-us US-XXXX                       [Group E]  backlog-refiner  (optional)
+12. /refine-us US-XXXX                       [Group E]  backlog-refiner  → ready: true
+13. /implement-us US-XXXX                    [Group E]  developer → gate then code
 14. /design-review (UI US)                   [Group C]  design-system-owner → before close
+14b. /security-review (sensitive US)          [Group C]  security-champion → before close
+14c. /test-review (tests: required)           [Group C]  quality-owner → before close
 15. Manager review diff + tests              [Group E]  human
-16. /complete-us US-XXXX                     [Group E]  board-keeper
+16. /complete-us US-XXXX                     [Group E]  backlog-refiner
 17. git commit (human)                       [Group F]  you — one US per commit
-18. /status or /daily-with-ai                [Group B]  process-manager → back to step 10
+18. /status or /daily-with-ai                [Group B]  scrum-master → back to step 10
 19. /complete-sprint vX-SY (when sprint done) [Group D]  sprint-planner — after US in sprint closed
 ```
 
@@ -251,34 +259,35 @@ Skills are procedures agents load automatically. Grouped by purpose.
 | Skill | Used by | Purpose |
 | ----- | ------- | ------- |
 | `meridian-routing` | all agents | Pick correct agent from intent |
-| `init-project` | process-manager, scope-architect, documentation-strategist | Bootstrap `docs/` |
+| `init-project` | scrum-master, product-owner, technical-writer | Bootstrap `docs/` |
 | `update-decisions-log` | most agents | Prepend decision JSON (real `date` commands) |
 
 ### Delivery authoring
 
 | Skill | Used by | Purpose |
 | ----- | ------- | ------- |
-| `create-epic` | documentation-strategist, sprint-planner | Epic file from template |
+| `create-epic` | technical-writer, sprint-planner | Epic file from template |
 | `create-version` | sprint-planner | Version file |
 | `create-sprint` | sprint-planner | Sprint file |
 | `complete-sprint` | sprint-planner | Sprint close + Retrospective |
-| `create-user-story` | documentation-strategist, board-keeper | US file at create |
+| `create-user-story` | technical-writer, backlog-refiner | US file at create |
 
 ### User story quality & close
 
 | Skill | Used by | Purpose |
 | ----- | ------- | ------- |
-| `review-user-story` | board-keeper | Read-only US audit |
-| `refine-user-story` | board-keeper | Approach + `ready: true` |
-| `implement-user-story` | process-manager | Gate + implement when `ready: true` |
-| `complete-user-story` | board-keeper | Record + ✅ + board sync |
+| `review-user-story` | backlog-refiner | Read-only US audit |
+| `refine-user-story` | backlog-refiner | Approach + `ready: true` |
+| `implement-user-story` | developer | Gate + implement when `ready: true` |
+| `complete-user-story` | backlog-refiner | Record + ✅ + board sync |
 
 ### Board & security
 
 | Skill | Used by | Purpose |
 | ----- | ------- | ------- |
 | _(removed)_ | — | v11: `board_snapshots` in SQLite |
-| `security-review` | security-steward, architecture-guardian | Security doc pass |
+| `security-review` | security-champion, technical-architect | Security pass, review, dependency audit |
+| `test-strategy` | quality-owner | `10`, test pass/review checklists |
 | `design-system` | design-system-owner | `09`, stack bootstrap, showcase, review checklists |
 
 ---
@@ -287,17 +296,20 @@ Skills are procedures agents load automatically. Grouped by purpose.
 
 | You want to… | Group | Agent | Command |
 | ------------ | ----- | ----- | ------- |
-| Start or migrate project | A | `process-manager` | `/init-meridian` |
-| See blockers and next step | B | `process-manager` | `/status` |
-| Full guided day | B | `process-manager` | `/daily-with-ai` |
-| Open this manual | B | `process-manager` | `/agents-help` |
-| Define scope | C | `scope-architect` | chat + `00_scope` |
-| Draft phase docs | C | `documentation-strategist` | chat |
-| Security doc | C | `security-steward` | `/security-pass` |
-| Architecture doc | C | `architecture-guardian` | `/architecture` |
-| New epic | D | `documentation-strategist` | `/create-epic` |
+| Start or migrate project | A | `scrum-master` | `/init-meridian` |
+| See blockers and next step | B | `scrum-master` | `/status` |
+| Full guided day | B | `scrum-master` | `/daily-with-ai` |
+| Open this manual | B | `scrum-master` | `/agents-help` |
+| Define scope | C | `product-owner` | chat + `00_scope` |
+| Draft phase docs | C | `technical-writer` | chat |
+| Security doc | C | `security-champion` | `/security-pass` |
+| Security code audit | C | `security-champion` | `/security-review`, `/dependency-audit` |
+| Test strategy | C | `quality-owner` | `/test-pass`, `/test-pass bootstrap` |
+| Test audit | C | `quality-owner` | `/test-review` |
+| Architecture doc | C | `technical-architect` | `/architecture` |
+| New epic | D | `product-owner` | `/create-epic` |
 | New version / sprint | D | `sprint-planner` | `/create-version`, `/plan-sprint`, `/complete-sprint` |
-| New / refine / implement / close US | E | `board-keeper` / `process-manager` | `/create-us`, `/refine-us`, `/implement-us`, `/complete-us` |
+| New / refine / implement / close US | E | `backlog-refiner` / `developer` | `/create-us`, `/refine-us`, `/implement-us`, `/complete-us` |
 | Board refresh | — | Extension reads SQLite on save |
 | Log a decision | F | any | `/update-decisions-log` |
 | Design contract (`09`) | C | `design-system-owner` | `/design-pass`, `/design-pass bootstrap` |
@@ -326,7 +338,7 @@ These are **not** agents. They read the **active** `docs/` in the editor (extens
 | Method | Example | When |
 | ------ | ------- | ---- |
 | Slash command | `/refine-us US-0017` | Known workflow step |
-| Explicit agent | `@board-keeper refine US-0017` | Override routing |
+| Explicit agent | `@backlog-refiner refine US-0017` | Override routing |
 | Natural language | “Implement US-0017” | Run `/implement-us US-0017` if `ready: true`; else block |
 | Read-only check | `/status` | Start of every session |
 
