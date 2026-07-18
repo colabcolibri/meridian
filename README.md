@@ -14,7 +14,9 @@
 </p>
 
 > Very early personal experiment. Rules, structure, and APIs will change.  
-> [Live demo](https://colabcolibri.github.io/meridian/) · [Full protocol](.agent/MERIDIAN.md)
+> [Full protocol](.agent/MERIDIAN.md)
+
+> **Branch archive (`meridian-v1-old`):** este branch preserva o Meridian **v1** — delivery em Markdown (`docs/us/`, `docs/epics/`, `docs/kanban/board.json`, `/sync-board`). O desenvolvimento atual está em **[`main`](https://github.com/colabcolibri/meridian/tree/main)** — Meridian 2.0+ com SQLite (`.meridian/meridian.db`), sem `board.json` em disco (v11), extensão VS Code. Veja [MERIDIAN_V2_CUTOVER.md](MERIDIAN_V2_CUTOVER.md).
 
 # Meridian
 
@@ -31,6 +33,15 @@ AI agents in the IDE ship code fast — but without a written spec, scope drifts
 - Does the harness — guides, sensors, `ready` / `Record` gates, phase docs — actually ship functional, organized, secure, **documented** software, not just fast code?
 
 Still open questions. This repository is my lab.
+
+## Repository lineage
+
+| Branch | Model |
+| ------ | ----- |
+| **`meridian-v1-old`** (this branch) | v1 — file-per-artifact Markdown under `docs/us/`, `docs/epics/`, derived `docs/kanban/board.json` |
+| [`main`](https://github.com/colabcolibri/meridian/tree/main) | v2/v11 — SQLite delivery (`.meridian/meridian.db`), phase docs in Markdown, VS Code extension |
+
+Migration and current protocol: [MERIDIAN_V2_CUTOVER.md](MERIDIAN_V2_CUTOVER.md).
 
 ## The loop I'm testing
 
