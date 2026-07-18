@@ -9,22 +9,22 @@ blocks: [02_security.md, 04_principles.md, 08_environments.md]
 
 # 01 — Tech Stack
 
-## Frontend
+## Frontend (extension webviews — `app-visual-studio/`)
 
 - Framework: React
 - Language: TypeScript
-- Bundler: Vite
+- Bundler: Vite (webview bundles only)
 - Styling: Tailwind CSS
 - Components: shadcn/ui
 - Icons: lucide-react
 
-**Rationale:** React with Vite delivers a lightweight, fast base that is simple to run locally with `pnpm`. shadcn/ui offers professional, customizable components compatible with Tailwind, without locking the project into a closed library.
+**Rationale:** React + Vite inside the extension host for Board/Epics/Versions/Sprints webviews. Not a standalone browser app (monitor removed v10).
 
 **Discarded alternatives:**
 
-- Next.js: powerful, but unnecessary for the first local version.
-- Vue/Svelte: valid, but React pairs better with shadcn/ui and the ecosystem expected for the future extension.
-- Plain CSS: less consistent for an operational interface with many states.
+- Next.js: unnecessary for embedded webviews.
+- Vue/Svelte: valid, but React pairs with shadcn/ui in the extension codebase.
+- Plain CSS: less consistent for dense planning UI.
 
 ## VS Code extension (`app-visual-studio/` — v4)
 
@@ -56,15 +56,14 @@ The extension reads/writes local `docs/` and `.meridian/meridian.db` via kit Pyt
 
 ## Infrastructure
 
-- Local run: `pnpm dev`
-- Local build: `pnpm build`
-- Local preview: `pnpm preview`
-- Deploy: out of initial scope
+- Extension dev: `cd app-visual-studio && pnpm install && pnpm compile` (or `pnpm watch`)
+- Extension package: `@vscode/vsce` when publishing
+- Deploy: marketplace VSIX; harness kit via tarball / git clone
 
 ## DX
 
-- Strict TypeScript when feasible.
-- ESLint per Vite template.
+- Strict TypeScript in `app-visual-studio/`.
+- ESLint per extension template.
 - Prettier as the default formatter.
 - Husky for local Git hooks.
 - lint-staged to format and lint only staged files.

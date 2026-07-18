@@ -1,40 +1,39 @@
 ---
 title: User Types
 status: approved
-version: 1.0
-updated: 2026-06-02
+version: 1.1
+updated: 2026-07-18
 depends_on: [02_security.md]
 blocks: [04_principles.md, 05_architecture.md, 06_database.md, 07_api_contracts.md]
 ---
 
 # 03 — User Types
 
-## Process Manager
+## Meridian manager (human)
 
-- **Description:** person responsible for conducting the development flow with AI agents, maintaining visibility, consistency, and documented decisions. May be a dev, founder, product manager, designer, tech lead, or someone from another area.
-- **Origin:** direct access to the local app.
-- **Permissions:** view documents, understand blockers, review maturity, track US, consult templates, decide next steps, and guide AI agents with documented context.
-- **Restrictions:** does not delegate the process to autonomous agents without registration, review, explicit criteria, and updated documentation.
+- **Description:** person responsible for conducting the development flow with AI agents — scope, priorities, approvals, and commits. May be a developer, founder, product lead, designer, or tech lead.
+- **Origin:** local workspace (Cursor, Claude Code, or VS Code with Meridian Harness).
+- **Permissions:** approve phase docs (`00`–`11`), run slash workflows, set sprint scope, mark US `ready` / `✅`, commit to Git, direct agents with `@` mentions.
+- **Restrictions:** does not skip harness gates (`05_architecture` approved, `ready: true` before code, `Record` before `✅`); does not delegate unreviewed scope to agents.
 - **Session:** no authenticated session.
-- **Visible data:** all data loaded locally in the app.
-- **Edge cases:** project without documentation, excess of documents without approval, agent suggesting changes outside the flow, agents working without clear acceptance, unrecorded decisions.
+- **Visible data:** phase docs, `.meridian/meridian.db` planning export, Git history, validator output.
+- **Edge cases:** project without `docs/`, architecture not approved, agents suggesting code before `ready`, unrecorded cross-cutting decisions.
 
-## Local Operator
+## Extension operator (same human, IDE board)
 
-- **Description:** person using the local Vite app to organize and validate a project's Meridian documentation.
-- **Origin:** direct access to the local app.
-- **Permissions:** view documents, simulate status changes, see blockers, consult templates, and operate local user stories.
-- **Restrictions:** does not sync data remotely and does not write real files in the first version.
+- **Description:** person using the **Meridian Harness** extension webviews (Board, Epics, Versions, Sprints) inside VS Code or Cursor.
+- **Origin:** extension install + workspace with kit (`.agent/`) and `docs/`.
+- **Permissions:** view planning data from SQLite, open phase docs, run kit commands exposed by the extension, edit delivery via forms that call `meridian_db_export.py --write-form`.
+- **Restrictions:** no remote sync; delivery writes go through kit scripts (not hand-edited `docs/us/*.md` in v11).
 - **Session:** no authenticated session.
-- **Visible data:** all data loaded locally in the app.
-- **Edge cases:** project without `/docs`, incomplete documents, unapproved dependencies, US with invalid frontmatter.
+- **Visible data:** workspace files, planning export, validator status.
+- **Edge cases:** missing `meridian.db` (run `bootstrap_meridian_db.py`), stale webview after external CLI edits (refresh board).
 
-## Future VSCode User
+## AI agent (kit actor)
 
-- **Description:** person using the future extension inside VSCode to create and maintain real Meridian files.
-- **Origin:** extension installation.
-- **Permissions:** initialize templates, edit documents, generate kanban, receive alerts, and record decisions.
-- **Restrictions:** respects local workspace permissions.
-- **Session:** no mandatory session planned.
-- **Visible data:** files from the workspace open in VSCode.
-- **Edge cases:** workspace without write permission, files modified outside the extension, Git conflicts, and manually edited approved documents.
+- **Description:** IDE agent following `.agent/` rules, specialized agents, skills, and workflows — not an end-user persona with login.
+- **Origin:** invoked by manager via chat or slash command.
+- **Permissions:** read phase docs and US rows; write delivery via `meridian_db_cli.py` when skill allows; product code only after `/implement-us` gate.
+- **Restrictions:** no autonomous commits; no `✅` without evidence; routing via `meridian-routing` (v11 slugs; legacy chat aliases redirect).
+- **Visible data:** same workspace as manager, minus secrets.
+- **Edge cases:** wrong agent for task, legacy v1 paths in prompt, attempting Write on `docs/us/` when SQLite active.

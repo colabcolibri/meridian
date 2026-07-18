@@ -9,12 +9,12 @@
 
 | Slug legado (H1) | Slug v11 | Arquivo H2 |
 | ---------------- | -------- | ---------- |
-| `process-manager` | `scrum-master` | **deletar** `agents/process-manager.md` |
-| `board-keeper` | `backlog-refiner` | **deletar** `agents/board-keeper.md` |
-| `scope-architect` | `product-owner` | **deletar** `agents/scope-architect.md` |
-| `documentation-strategist` | `technical-writer` | **deletar** `agents/documentation-strategist.md` |
-| `architecture-guardian` | `technical-architect` | **deletar** `agents/architecture-guardian.md` |
-| `security-steward` | `security-champion` | **deletar** `agents/security-steward.md` |
+| `process-manager` | `scrum-master` | ~~deletado~~ |
+| `board-keeper` | `backlog-refiner` | ~~deletado~~ |
+| `scope-architect` | `product-owner` | ~~deletado~~ |
+| `documentation-strategist` | `technical-writer` | ~~deletado~~ |
+| `architecture-guardian` | `technical-architect` | ~~deletado~~ |
+| `security-steward` | `security-champion` | ~~deletado~~ |
 
 **Manter (9 agentes):** `scrum-master`, `product-owner`, `technical-writer`, `security-champion`, `technical-architect`, `design-system-owner`, `sprint-planner`, `backlog-refiner`, `developer`.
 
@@ -30,42 +30,18 @@
 | `@process-manager` no IDE picklist | ❌ arquivo sumiu — usar `@scrum-master` ou texto “status do projeto” |
 | Chat “como process-manager, /status” | ✅ `meridian-routing` redireciona para `scrum-master` |
 | Workflows `/implement-us` | ✅ apontam para `developer` |
-| `sync_cursor_kit.sh` | ✅ remove symlinks `.cursor/agents/process-manager.md` via `prune_orphans` |
+| `sync_cursor_kit.sh` | ✅ remove symlinks órfãos via `prune_orphans` |
 | Codex `.codex/agents/*.toml` | ✅ `prune_codex_agents` remove TOMLs órfãos |
 | `validate_meridian.py` | ✅ só exige `REQUIRED_AGENTS` (v11) |
 
 ---
 
-## 3. Gate antes de deletar (obrigatório)
+## 3. Gate pós-H2 (verificação)
 
 ```bash
-# Deve passar com ZERO erros (warnings de projeto dogfood OK)
 python3 .agent/scripts/validate_meridian.py . --h2-ready
-
-# Depois
-rm .agent/agents/process-manager.md \
-   .agent/agents/board-keeper.md \
-   .agent/agents/scope-architect.md \
-   .agent/agents/documentation-strategist.md \
-   .agent/agents/architecture-guardian.md \
-   .agent/agents/security-steward.md
-
-./.agent/scripts/sync_cursor_kit.sh
-python3 .agent/scripts/validate_meridian.py .
-```
-
-`--h2-ready` falha se:
-
-1. Qualquer arquivo em `DEPRECATED_AGENT_FILES` ainda existir **e** você rodou em modo strict — na verdade: `--h2-ready` verifica que **não há refs operacionais** a slugs legados fora da allowlist; **antes** do delete, rodar para listar blockers. Após corrigir blockers, deletar, rodar de novo — aí `--h2-ready` exige que legacy files **não** existam.
-
-Fluxo correto:
-
-```txt
-1. validate . --h2-ready   → lista refs operacionais proibidas (corrigir até passar refs)
-2. deletar 6 arquivos
-3. sync_cursor_kit.sh
-4. validate . --h2-ready   → confirma zero legacy files + zero refs proibidas
-5. validate .              → kit OK
+python3 .agent/scripts/validate_meridian.py . --strict-kit-md
+./.agent/scripts/sync_cursor_kit.sh   # após qualquer mudança em agents/
 ```
 
 ---
@@ -80,13 +56,12 @@ Só estes paths podem citar slugs legados **como nome histórico**:
 | `references/plans/agent-roster-and-workflow-v11.md` | migração |
 | `references/plans/markdown-audit-v11.md` | vocabulário §10 |
 | `skills/meridian-routing/SKILL.md` | tabela alias (permanente) |
-| `agents/process-manager.md` … (6 legacy) | ~~até delete H2~~ **deletados** |
 
-**Proibido após H1 em:** workflows, skills (exceto routing), agents v11, `app-visual-studio/`, `rules/` (exceto nota única apontando para este doc).
+**Proibido em:** workflows, skills (exceto routing), agents v11, `app-visual-studio/`, `rules/` (exceto nota única apontando para este doc).
 
 ---
 
-## 5. Checklist H2 (maintainer)
+## 5. Checklist H2 (maintainer) — concluído
 
 - [x] `validate_meridian.py . --h2-ready` sem erros de refs operacionais
 - [x] `app-visual-studio` help/catalog sem slugs legados como primários
@@ -95,11 +70,5 @@ Só estes paths podem citar slugs legados **como nome histórico**:
 - [x] `sync_cursor_kit.sh`
 - [x] `validate_meridian.py . --h2-ready` (legacy files gone)
 - [x] Atualizar `ARCHITECTURE.md` — nota H2
-- [x] Atualizar `agents-help.md` — picklist v11
+- [x] `agents-help.md` — picklist v11
 - [x] Marcar H2 ✅ em `agent-roster-and-workflow-v11.md`
-
----
-
-## 6. Frontmatter legacy (H1)
-
-Arquivos deprecated têm `deprecated: true` e `replaced-by:` no frontmatter — **não** usar em novos fluxos; só existem para `@mention` IDE até H2.

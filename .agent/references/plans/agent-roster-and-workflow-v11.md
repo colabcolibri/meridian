@@ -201,7 +201,7 @@ flowchart TB
 | _(novo)_ | `developer` | criar |
 | _(novo)_ | `design-system-owner` | criar |
 
-**Compatibilidade:** `meridian-routing` e `@process-manager` / `@board-keeper` respondem com redirect até H2.
+**Compatibilidade:** `meridian-routing` redireciona `@process-manager` / `@board-keeper` no chat (H2 ✅ — arquivos legacy removidos).
 
 ---
 

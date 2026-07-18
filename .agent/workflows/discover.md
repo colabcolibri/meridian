@@ -57,7 +57,7 @@ Next: /init-meridian | review 00_scope | /discover promote
 
 | `/discover` | `/init-meridian` |
 | ----------- | ---------------- |
-| PO — what & why | PM — docs/ structure & governance |
+| PO — what & why | `scrum-master` — docs/ structure & governance |
 | product-brief.md | phase docs, decisions, board |
 | May run with no full docs/ | Creates full docs/ tree |
 | No decision log required first | First decision log entry |

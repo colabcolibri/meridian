@@ -22,7 +22,7 @@
 
 AI agents in the IDE ship code fast — but without a written spec, scope drifts in chat, decisions get lost, and "done" means whatever the model said five messages ago.
 
-**I'm testing another approach:** a thin harness layer on top of Cursor or Claude Code — `docs/` for versions, sprints, and task specs, `.agent/` for guides and workflows, validators as sensors. I plan the project and work solo with the agent, but I also want to see if it can run longer autonomous stretches on the open backlog without breaking the flow. Chat does not persist. Files do.
+**I'm testing another approach:** a thin harness layer on top of Cursor or Claude Code — phase docs in `docs/`, delivery in `.meridian/meridian.db`, `.agent/` for guides and workflows, validators as sensors. I plan the project and work solo with the agent, but I also want to see if it can run longer autonomous stretches on the open backlog without breaking the flow. Chat does not persist. Files do.
 
 ## What I'm learning
 
