@@ -22,7 +22,7 @@
 
 | Problema | Status |
 | -------- | ------ |
-| Skills citam `docs/us/*.md` como write path | **Onda A — ✅ concluída** |
+| Skills citam `docs/us/*.md` como write path | **Onda A — ⚠️ parcial** (skills; templates/agents pendentes — **onda G**) |
 | `docs/templates/` espelho frágil | **Onda C — ✅ concluída** |
 | Gate só em checklist | **Onda B — ✅ concluída** |
 | `board.json` + `/sync-board` + `generate_board.py` | **Onda F2 — ✅ concluída (removidos)** |
@@ -88,9 +88,9 @@ Scripts                     .agent/scripts/              CLI, CI, extension
 
 ## 4. Ondas de execução
 
-### Onda A — Verdade única SQLite (skills + workflows) — **✅ concluída (jul/2026)**
+### Onda A — Verdade única SQLite (skills + workflows) — **⚠️ parcial**
 
-Atualizar todo texto que cite `Write docs/us/`, `generate-board-json`, `/sync-board`.
+Paths nos skills/workflows principais atualizados. **Revisão de conteúdo completa → onda G** (`markdown-audit-v11.md`).
 
 | Arquivo | Mudança |
 | ------- | ------- |
@@ -115,6 +115,24 @@ Subpastas `lib/`, `migrate/`, `test/`, `dev/` com shims na raiz para CI/extensã
 ### Onda E — Epic / version / sprint no CLI — **✅ concluída (jul/2026)**
 
 `meridian_db_cli.py create-epic`, `create-version`, `create-sprint`.
+
+### Onda G — Audit markdown v11 — **P0 (em execução)**
+
+Revisão sistemática de ~107 arquivos `.md` — ver `markdown-audit-v11.md`.
+
+Sub-ondas: G1 P0 bloqueantes → G2 templates → G3 agents/workflows → G4 dogfood docs → G5 repo/CI → G6 guardrail grep.
+
+### Onda H — Agent roster e workflow — **P0 (planejado, paralelo a G)**
+
+Novos agentes + redesign de responsabilidades — ver `agent-roster-and-workflow-v11.md`.
+
+| Entregável | Status |
+| ---------- | ------ |
+| `implementation-specialist` — dono de `/implement-us` | pendente H1 |
+| `design-steward` — `docs/09_design_system.md` | pendente H1 |
+| `process-manager` sem código de produto | pendente H1 |
+| Workflow `/design-pass` | pendente H1 |
+| Routing + agents-help atualizados | pendente H1 |
 
 ### Onda F — Board só SQLite — **✅ F2 concluída**
 
@@ -170,6 +188,8 @@ Subpastas `lib/`, `migrate/`, `test/`, `dev/` com shims na raiz para CI/extensã
 4. Onda A — skills/workflows SQLite     ✅
 5. Onda D — reorganizar scripts            ✅
 6. Onda E — CLI epic/version/sprint        ✅
+7. Onda G — audit markdown v11 (completo)  ← em execução
+8. Onda H — agent roster + workflow       ← paralelo (G3 + H1)
 ```
 
 ---
@@ -199,9 +219,11 @@ Subpastas `lib/`, `migrate/`, `test/`, `dev/` com shims na raiz para CI/extensã
 
 ## 9. Próximo passo imediato
 
-1. Validar extensão contra `meridian-teste` (board + form + save).
-2. `/discover` em `agents-help` (pendente onda A residual).
-3. Pergunta aberta: CLI único `meridian` com subcomandos vs scripts na raiz.
+1. **G1** — P0 markdown: `rules/MERIDIAN.md`, `lifecycle.md`, `start-here.md`, `instruction-surfaces.md`, `docs/README.md`
+2. **H1** — skeleton: `implementation-specialist`, `design-steward`, `/design-pass`, routing (ver `agent-roster-and-workflow-v11.md`)
+3. **G2–G3** — templates + agents/workflows (vocabulário SQLite + novos agentes)
+4. **G6** — guardrail CI
+5. Validar extensão contra `meridian-teste`
 
 ---
 
