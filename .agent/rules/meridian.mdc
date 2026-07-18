@@ -62,5 +62,6 @@ Maintainer map (protocol change → which files to edit): `.agent/references/ins
 
 ```bash
 python3 .agent/scripts/validate_meridian.py <project-folder>
-python3 .agent/scripts/validate_meridian.py <project-folder> --json
+python3 .agent/scripts/validate_meridian.py <project-folder> --sqlite-only
+python3 .agent/scripts/validate_meridian.py <kit-root> --h2-ready   # gate before deleting legacy agents
 ```

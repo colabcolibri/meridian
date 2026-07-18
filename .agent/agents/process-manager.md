@@ -1,6 +1,8 @@
 ---
 name: process-manager
-description: Keeps the human as manager of the development process. Use for Meridian governance, project status, phase progression, documentation maturity, and deciding what can move next.
+description: "[DEPRECATED — H2 delete] Use scrum-master. Legacy IDE @mention only until file removed."
+deprecated: true
+replaced-by: scrum-master
 tools: Read, Grep, Glob, Bash, Edit, Write
 model: inherit
 skills: init-project, update-decisions-log, meridian-routing

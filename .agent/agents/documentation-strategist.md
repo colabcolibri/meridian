@@ -1,6 +1,8 @@
 ---
 name: documentation-strategist
-description: Creates and reviews Meridian phase docs, user stories, acceptance criteria and project documentation. Use when drafting or improving docs in the Meridian flow.
+description: "[DEPRECATED — H2 delete] Use technical-writer (+ product-owner for epics). Legacy IDE @mention only."
+deprecated: true
+replaced-by: technical-writer
 tools: Read, Grep, Glob, Bash, Edit, Write
 model: inherit
 skills: init-project, create-epic, create-user-story, update-decisions-log, meridian-routing

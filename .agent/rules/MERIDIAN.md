@@ -67,7 +67,7 @@ Before any action, classify:
 [specialized response]
 ```
 
-4. **Respect override:** if the user cites `@board-keeper` or `@process-manager`, route via alias table in `meridian-routing` (H1).
+4. **Respect override:** explicit `@agent` wins. Legacy slugs (`@process-manager`, …) → alias table in `meridian-routing` until H2 file delete — see `.agent/references/agent-aliases-h2.md`.
 
 ### Checklist before code or US
 

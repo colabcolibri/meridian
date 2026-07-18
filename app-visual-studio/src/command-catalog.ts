@@ -73,7 +73,7 @@ export const MERIDIAN_COMMAND_CATALOG: CommandHelpEntry[] = [
     summary: "Workflows, agents, skills, and steps 1–17",
     details: [
       "Slash commands (/status, /create-us) are workflows — you invoke these in chat.",
-      "Agents (process-manager, board-keeper, …) are personas — routed by the workflow, or override with @agent.",
+      "Agents (scrum-master, backlog-refiner, developer, …) are personas — routed by the workflow, or override with @agent.",
       "Skills are internal procedures — agents load them; you rarely type skill names.",
       "Kit file: .agent/references/agents-help.md",
     ],

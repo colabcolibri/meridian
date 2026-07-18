@@ -31,7 +31,7 @@ docs/                       →  phase docs + SQLite delivery (.meridian/meridia
 | **Agent** | Domain persona with gates and output format | Automatic routing or `@agent-name` |
 | **Skill** | Repeatable procedure (templates, scripts) | Used by agent — rarely typed by human |
 
-**Routing:** describe the task in chat → agent announces `Applying knowledge from @[agent]…`. Override anytime with `@scrum-master`, `@backlog-refiner`, `@developer`, etc. Legacy `@process-manager` / `@board-keeper` still route via alias (H1).
+**Routing:** describe the task in chat → agent announces `Applying knowledge from @[agent]…`. Override with `@scrum-master`, `@backlog-refiner`, `@developer`, etc. Legacy chat slugs: `meridian-routing` alias table (IDE `@` picklist: use v11 slugs — see `agent-aliases-h2.md`).
 
 **Priority:** P0 rules → MERIDIAN.md → agent → skill → templates.
 

@@ -11,6 +11,7 @@
 | ---- | ------ | ----- |
 | **G1** | ✅ | rules, lifecycle, start-here, instruction-surfaces, docs/README |
 | **H1** | ✅ | 9 agentes Scrum, `/design-pass`, routing v2, workflows |
+| **H2** | ⏳ | gate `--h2-ready` + `agent-aliases-h2.md` — delete 6 legacy files |
 | **G2** | 🔄 | INDEX, discovery, as-is, projects-manifest, version/sprint refs, implementation-template |
 | **G3** | 🔄 | agents + workflows + meridian-routing + agents-help + MERIDIAN §9 |
 | **G4–G6** | ⏳ | dogfood docs, repo root/CI, guardrail grep |
@@ -282,8 +283,22 @@ _(inalterado — ver commit anterior)_
 | `backlog-refiner` | Backlog refinement | `/create-us` … `/complete-us` |
 | `product-owner` | Discovery + scope + epic | `/discover`, `/create-epic` |
 
-**H2 pendente:** remover arquivos legacy após aliases estáveis.
+**H2 pendente:** remover 6 arquivos legacy — gate `validate_meridian.py . --h2-ready` + `agent-aliases-h2.md`.
 
 ---
 
-*Maintainer: após cada sub-onda, marcar §7 aqui e `kit-improvement-plan.md`.*
+## 13. H2 — remoção de agentes deprecated
+
+| Item | Detalhe |
+| ---- | ------- |
+| Contrato | `references/agent-aliases-h2.md` |
+| Gate CLI | `python3 .agent/scripts/validate_meridian.py . --h2-ready` |
+| Manter após delete | `meridian-routing` § Legacy aliases (chat routing) |
+| Quebra | `@process-manager` no IDE picklist — usar `@scrum-master` |
+| Não quebra | workflows, `REQUIRED_AGENTS`, `sync_cursor_kit` prune |
+
+- [ ] `--h2-ready` sem erros de refs operacionais
+- [ ] 6 arquivos `agents/*` legacy deletados
+- [ ] `sync_cursor_kit.sh` executado
+- [ ] `--h2-ready` com zero legacy files
+

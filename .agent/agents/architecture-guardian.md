@@ -1,6 +1,8 @@
 ---
 name: architecture-guardian
-description: Designs and reviews Meridian architecture docs. Use for 05_architecture.md, docs/architecture/ detail files, app boundaries, state strategy, file structure, integration boundaries and architectural consistency.
+description: "[DEPRECATED — H2 delete] Use technical-architect. Legacy IDE @mention only until file removed."
+deprecated: true
+replaced-by: technical-architect
 tools: Read, Grep, Glob, Bash, Edit, Write
 model: inherit
 skills: update-decisions-log, security-review, meridian-routing

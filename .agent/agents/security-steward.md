@@ -1,6 +1,8 @@
 ---
 name: security-steward
-description: Reviews security posture in Meridian projects. Use for 02_security.md, threat modeling, secrets, AI-agent safety, OWASP, dependency and Git hygiene.
+description: "[DEPRECATED — H2 delete] Use security-champion. Legacy IDE @mention only until file removed."
+deprecated: true
+replaced-by: security-champion
 tools: Read, Grep, Glob, Bash, Edit, Write
 model: inherit
 skills: security-review, update-decisions-log, meridian-routing

@@ -7,7 +7,7 @@ version: 2.0.0
 
 # Meridian intelligent routing
 
-> Route to the **Scrum-aligned** agent for the request. Legacy slugs below still resolve (H1 aliases).
+> Route to the **Scrum-aligned** agent. Legacy `@` slugs: § **Legacy aliases** below + `references/agent-aliases-h2.md` (H2 deletes `.md` files; routing table stays).
 
 ## Principle
 
@@ -24,7 +24,7 @@ Before responding, classify the request and select the correct Meridian agent. S
 | `@architecture-guardian` | `technical-architect` |
 | `@security-steward` | `security-champion` |
 
-Announce the **new** slug in `🤖 Applying knowledge from @[slug]...` (optionally note alias in one line).
+Announce the **new** slug in `🤖 Applying knowledge from @[slug]...`. After H2, legacy `@` files are removed — chat text still maps via this table.
 
 ## Selection matrix
 

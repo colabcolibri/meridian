@@ -16,7 +16,7 @@ Meridian keeps specs, decisions, and task status in **files** (`docs/`), not in 
 | **Extension** | Click — see and validate | Open Board · Validate Project · Show Status |
 | **Chat** | Type slash **workflows** | `/status` · `/create-us` · `/complete-us US-0103` |
 
-**You invoke workflows, not agents.** Workflows route the right agent automatically. Override with `@process-manager` when needed.
+**You invoke workflows, not agents.** Workflows route the right agent automatically. Override with `@scrum-master` or `@backlog-refiner` when needed.
 
 **Guides in the IDE** (sidebar Meridian → Commands → **Guides**):
 

@@ -81,12 +81,12 @@ const HOW_TO_USE_HTML = `
 
     <h2>3. Workflow, agent, or skill?</h2>
     <pre><code>YOU type          →  /create-us          (workflow — .agent/workflows/)
-workflow routes   →  @board-keeper       (agent — .agent/agents/)
+workflow routes   →  @backlog-refiner    (agent — .agent/agents/)
 agent runs        →  create-user-story   (skill — .agent/skills/)
 output lands in   →  .meridian/meridian.db   (delivery source of truth)</code></pre>
     <ul class="rules">
       <li><strong>You invoke workflows</strong> — slash commands in Cursor, Claude Code, or Codex skills (<code>$workflow-create-us</code>).</li>
-      <li><strong>You rarely @mention agents</strong> — the workflow picks the right persona. Override with <code>@process-manager</code> when needed.</li>
+      <li><strong>You rarely @mention agents</strong> — the workflow picks the right persona. Override with <code>@scrum-master</code> or <code>@developer</code> when needed.</li>
       <li><strong>You never type skills</strong> — agents load them from the kit.</li>
     </ul>
 

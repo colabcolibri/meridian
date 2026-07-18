@@ -1,6 +1,8 @@
 ---
 name: scope-architect
-description: Defines and challenges project scope for Meridian. Use for 00_scope.md, in-scope/out-of-scope boundaries, assumptions, risks and project framing before code exists.
+description: "[DEPRECATED — H2 delete] Use product-owner. Legacy IDE @mention only until file removed."
+deprecated: true
+replaced-by: product-owner
 tools: Read, Grep, Glob, Bash, Edit, Write
 model: inherit
 skills: init-project, update-decisions-log, meridian-routing

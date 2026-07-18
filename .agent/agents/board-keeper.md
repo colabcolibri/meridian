@@ -1,6 +1,8 @@
 ---
 name: board-keeper
-description: Maintains Meridian user stories in SQLite — create, refine, review, close US; validate dependencies and board consistency.
+description: "[DEPRECATED — H2 delete] Use backlog-refiner. Legacy IDE @mention only until file removed."
+deprecated: true
+replaced-by: backlog-refiner
 skills: create-user-story, review-user-story, refine-user-story, complete-user-story, update-decisions-log, meridian-routing
 ---
 
