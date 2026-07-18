@@ -26,7 +26,7 @@ AI agents in the IDE ship code fast — but without a written spec, scope drifts
 
 ## What I'm learning
 
-- Once versions, sprints, and open US are in `docs/`, can the agent run long continuous sessions on the backlog — refine, implement, close — without drifting or skipping harness gates?
+- Once versions, sprints, and open US are in **SQLite** (`.meridian/meridian.db`), can the agent run long continuous sessions on the backlog — refine, implement, close — without drifting or skipping harness gates?
 - Does managing Scrum in files (commands, skills, structured artifacts) cost fewer credits than re-explaining context and priorities in chat every session?
 - Does the harness — guides, sensors, `ready` / `Record` gates, phase docs — actually ship functional, organized, secure, **documented** software, not just fast code?
 
@@ -36,10 +36,10 @@ Still open questions. This repository is my lab.
 
 | Branch / artifact | Purpose |
 | ----------------- | ------- |
-| `main` | Meridian 2.0 — SQLite delivery store (`.meridian/meridian.db`) + phase docs in Markdown |
+| `main` | Meridian 2.0 — delivery in `.meridian/meridian.db` + `delivery.json`; phase docs in `docs/` |
 | `meridian-v1-old` | Meridian v1 — file-per-artifact Markdown under `docs/us/`, `docs/epics/`, etc. |
 
-Cutover steps: [MERIDIAN_V2_CUTOVER.md](MERIDIAN_V2_CUTOVER.md).
+Cutover steps: [MERIDIAN_V2_CUTOVER.md](MERIDIAN_V2_CUTOVER.md). Legacy Markdown delivery → **`/migrate-delivery`** (or `migrate_md_to_sqlite.py`).
 
 ## The loop I'm testing
 
@@ -58,13 +58,14 @@ document → plan → refine → implement → close → commit
 
 **Two rules of the experiment:** no product code without `ready: true`. No ✅ without a filled `## Record`.
 
-## Three folders, three roles
+## Layers in a Meridian project
 
-| Folder | Role |
-| ------ | ---- |
-| **`docs/`** (in *your* project) | Memory + task specs — the product spec and what counts as done |
-| **`.agent/`** (copied from the kit) | Guides — rules, agents, skills, slash-command workflows |
-| **`app-visual-studio/`** | Observability — board and planning in the IDE; not the harness itself |
+| Path | Role |
+| ---- | ---- |
+| **`docs/`** | Phase memory — scope, architecture, security (`00`–`11`); approved by you |
+| **`.meridian/`** | Delivery runtime — `meridian.db` (gitignored) + `delivery.json` (connector config, commitável) |
+| **`.agent/`** (from kit) | Guides — rules, agents, skills, slash workflows |
+| **`app-visual-studio/`** (optional) | IDE board and deliverables — reads SQLite; not the harness itself |
 
 Scrum-inspired, adapted for a **single human directing AI agents** — no story points, velocity, or mandatory Feature layer. [Scrum ↔ Meridian map](.agent/references/scrum-meridian-map.md)
 
@@ -79,12 +80,14 @@ chmod +x .agent/scripts/sync_cursor_kit.sh
 ./.agent/scripts/sync_cursor_kit.sh
 ```
 
-1. In your IDE: `/init-meridian` — creates `docs/` for your project (greenfield or existing codebase).
-2. **`/agents-help`** — agent groups, slash command groups, numbered steps (`.agent/references/agents-help.md`).
+1. In your IDE: `/init-meridian` — creates `docs/` + bootstraps `.meridian/` (`meridian.db` + `delivery.json`).
+2. **`/agents-help`** — agent groups, slash commands, numbered steps (`.agent/references/agents-help.md`).
 3. Optional: install the VS Code extension — `cd app-visual-studio && pnpm install && pnpm install:cursor`.
-4. Anytime: `/status` — blockers, current state, suggested next step.
+4. Anytime: `/status` — blockers, counts (`meridian_delivery.py`), suggested next step.
 
-**Use in another repo:** copy `.agent/` only, run `/init-meridian`, sync the kit if you use Cursor/Claude. Existing codebase → also `docs/inventory/as-is.md` (see [usage guide](.agent/references/usage-guide.md#migrate-an-existing-project)).
+Agents call **`meridian_delivery.py`** for delivery (reads `.meridian/delivery.json`; default connector: sqlite).
+
+**Use in another repo:** copy `.agent/` only, run `/init-meridian`, sync the kit if you use Cursor/Claude. Existing codebase → `docs/inventory/as-is.md`. Coming from v1 Markdown delivery → **`/migrate-delivery`** ([usage guide](.agent/references/usage-guide.md#migrate-an-existing-project)).
 
 **Maintainers:** [instruction surfaces](.agent/references/instruction-surfaces.md) — where to edit when the protocol changes (kit, extension).
 
@@ -115,7 +118,7 @@ Publisher: **colabcolibri** · [GitHub](https://github.com/colabcolibri/meridian
 | ----- | --------- | ---------------------- |
 | [`.agent/`](.agent/) | Yes (in your project) | Portable harness kit — guides, skills, validation |
 | `docs/` | Yes (in your project) | Living spec — [example here](docs/) |
-| [`app-visual-studio/`](app-visual-studio/) | No | VS Code/Cursor extension — board and planning in the editor |
+| [`app-visual-studio/`](app-visual-studio/) | No | VS Code/Cursor extension — board reads `.meridian/meridian.db` |
 
 ## Where the experiment stands
 
@@ -124,7 +127,7 @@ Publisher: **colabcolibri** · [GitHub](https://github.com/colabcolibri/meridian
 | **v4** | VS Code extension — board, versions, sprints, epics | Shipped |
 | **v9** | SQLite delivery store + kit scripts | Shipped |
 | **v10** | Remove browser monitor; dogfood `docs/` at repo root | Shipped |
-| **v11** | Board só SQLite — sem `board.json` nem `/sync-board` | Shipped |
+| **v11** | Board só SQLite; facade `meridian_delivery.py` + `delivery.json` | Shipped |
 | v5+ | Write commands, wizards | Planned |
 
 Details in [`MERIDIAN_V2_CUTOVER.md`](MERIDIAN_V2_CUTOVER.md) and release rows in SQLite (`meridian_delivery.py list versions`) when dogfood DB exists.
@@ -136,6 +139,7 @@ Details in [`MERIDIAN_V2_CUTOVER.md`](MERIDIAN_V2_CUTOVER.md) and release rows i
 - [Agents & commands help — groups and steps](.agent/references/agents-help.md)
 - [Scrum ↔ Meridian map](.agent/references/scrum-meridian-map.md)
 - [Validate a project](.agent/scripts/validate_meridian.py): `python3 .agent/scripts/validate_meridian.py . --sqlite-only`
+- [Delivery CLI](.agent/references/templates/delivery-connector-schema.md): `python3 .agent/scripts/meridian_delivery.py counts`
 - [IDE adapters](.agent/IDE_ADAPTERS.md) — Antigravity native; Cursor/Claude via sync script
 
 ## Contributing · license
