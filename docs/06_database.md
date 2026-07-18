@@ -60,6 +60,8 @@ erDiagram
   versions ||--o{ sprints : "version_id"
   sprints ||--o{ sprint_stories : "sprint_id CASCADE"
   user_stories ||--o{ sprint_stories : "story_id CASCADE"
+  user_stories ||--o{ story_dependencies : "story_id CASCADE"
+  user_stories ||--o{ story_dependencies : "depends_on_id CASCADE"
 
   versions {
     text id PK
@@ -120,6 +122,12 @@ erDiagram
     int position
   }
 
+  story_dependencies {
+    text story_id PK_FK
+    text depends_on_id PK_FK
+    int position
+  }
+
   decisions {
     int id PK
     text decision_date
@@ -150,8 +158,9 @@ erDiagram
 3. user_stories      → epic_id, version_id
 4. sprints           → version_id
 5. sprint_stories    → sprint_id, story_id (rebuilt by upsert_sprint)
-6. decisions         (independent)
-7. board_snapshots   (derived via generate_board.py)
+6. story_dependencies → story_id, depends_on_id (rebuilt by upsert_user_story; validates US PKs)
+7. decisions         (independent)
+8. board_snapshots   (derived via generate_board.py)
 ```
 
 Breaking order causes `FOREIGN KEY constraint failed` — use `meridian_db.py` upsert helpers or `meridian_db_cli.py`, not ad-hoc SQL.
@@ -164,6 +173,7 @@ Migrations:
 | ---- | ---- |
 | `20260718100000_initial_delivery_schema.sql` | All tables below + indexes |
 | `20260718110000_summary_columns.sql` | `summary TEXT` on versions, epics, sprints, user_stories |
+| `20260718120000_story_dependencies.sql` | `story_dependencies` junction + backfill from `depends_on_json` |
 
 ### `versions`
 
@@ -187,7 +197,7 @@ Migrations:
 
 ### `user_stories`
 
-Frontmatter maps to columns (`epic` → `epic_id`, `version` → `version_id`, `depends_on` → `depends_on_json`).
+Frontmatter maps to columns (`epic` → `epic_id`, `version` → `version_id`, `depends_on` → `depends_on_json` + `story_dependencies`).
 
 | Column | Type | Notes |
 | ------ | ---- | ----- |
@@ -196,7 +206,7 @@ Frontmatter maps to columns (`epic` → `epic_id`, `version` → `version_id`, `
 | `epic_id` | TEXT FK → `epics.id` | required |
 | `version_id` | TEXT FK → `versions.id` | required |
 | `status`, `moscow`, `ready`, `done_when`, `tests`, `tests_status` | | frontmatter |
-| `depends_on_json` | TEXT | JSON array of US ids |
+| `depends_on_json` | TEXT | denormalized JSON array; synced with `story_dependencies` |
 | `summary` | TEXT | read first; 4–8 sentences after `/complete-us` |
 | `body_markdown` | TEXT | **full US file** — canonical round-trip |
 | `created_at`, `updated_at` | TEXT | auto |
@@ -234,6 +244,25 @@ sqlite3 .meridian/meridian.db "
 ```
 
 Indexes: `idx_user_stories_epic`, `idx_user_stories_version`.
+
+### `story_dependencies`
+
+| Column | Type | Notes |
+| ------ | ---- | ----- |
+| `story_id` | TEXT PK FK → `user_stories.id` | dependent story |
+| `depends_on_id` | TEXT PK FK → `user_stories.id` | prerequisite US PK (`US-XXXX`) |
+| `position` | INTEGER | order in frontmatter list |
+
+Rebuilt on every `upsert_user_story`. Validates: PK format, target exists, no self-reference, no cycles. `/implement-us` requires each dependency `status: ✅`.
+
+```bash
+sqlite3 .meridian/meridian.db "
+  SELECT sd.story_id, sd.depends_on_id, us.status
+  FROM story_dependencies sd
+  JOIN user_stories us ON us.id = sd.depends_on_id
+  WHERE sd.story_id = 'US-0128';
+"
+```
 
 ### `sprints`
 

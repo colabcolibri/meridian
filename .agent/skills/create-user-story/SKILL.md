@@ -34,7 +34,7 @@ If the request is vague, ask (then write):
 1. Who is the user (`03_user_types.md`)?
 2. What **single slice** does this US deliver — not the whole epic?
 3. What exists today vs after **this US only**?
-4. What does `depends_on` provide; what does this unblock?
+4. What does `depends_on` provide; what does this unblock? **Each `depends_on` entry must be an existing `US-XXXX` PK** already in SQLite (FK). Use `meridian_db_cli.py list user_stories` or form catalog — never invent ids.
 5. How will we know it is done (`done_when` + acceptance)?
 
 Read linked epic and dependency US **for understanding** — write in your own words.
@@ -69,6 +69,7 @@ Forbidden: telegraphic stubs, repeating acceptance under Approach, “see EPIC-X
 - Why + Where + Approach filled with real sentences (not placeholders)
 - `ready: false`
 - `done_when` measurable
+- `depends_on`: only existing `US-XXXX` PKs (empty `[]` if none); cite ids in Why/Where to explain system links
 
 ## Output
 

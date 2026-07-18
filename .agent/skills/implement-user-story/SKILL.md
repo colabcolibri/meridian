@@ -35,7 +35,7 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 | US file | `docs/us/US-XXXX.md` exists |
 | `ready` | Frontmatter `ready: true` |
 | Plan | `## Plan` filled; Approach not placeholder |
-| Dependencies | All `depends_on` at `✅` |
+| Dependencies | All `depends_on` at `✅` — verify with `load_story_dependencies` / `check_story_dependencies_satisfied` in `meridian_db.py` or read dependency US status from SQLite |
 | Status | Not `✅` (use `/complete-us` instead); not `🧊` without manager waiver |
 
 If `ready` is not `true` → **stop**; output blocker; recommend `/refine-us US-XXXX`.

@@ -40,11 +40,18 @@ def parse_depends_on(value: str | None) -> list[str]:
         try:
             parsed = json.loads(value.replace("'", '"'))
             if isinstance(parsed, list):
-                return [str(x) for x in parsed]
+                return [str(x).strip() for x in parsed if str(x).strip()]
         except json.JSONDecodeError:
             pass
         return [part.strip() for part in inner.split(",") if part.strip()]
     return [part.strip() for part in value.split(",") if part.strip()]
+
+
+def format_depends_on(ids: list[str]) -> str:
+    cleaned = [item.strip() for item in ids if item and str(item).strip()]
+    if not cleaned:
+        return "[]"
+    return "[" + ", ".join(cleaned) + "]"
 
 
 def parse_stories_list(value: str | None) -> list[str]:

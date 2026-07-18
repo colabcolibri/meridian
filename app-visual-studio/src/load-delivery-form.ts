@@ -3,11 +3,11 @@ import * as path from "node:path"
 
 import type { DeliveryFolder } from "./delivery-path.js"
 import { parseDeliveryRelativePath } from "./delivery-path.js"
-import type { DeliveryFormPayload } from "./delivery-form-schema.js"
+import type { DeliveryFormPayload, FormCatalog } from "./delivery-form-schema.js"
 import { resolvePythonCommand, sqliteDbExists } from "./load-from-sqlite.js"
 import { resolveExportScriptPath } from "./resolve-kit-scripts.js"
 
-type FormExport = DeliveryFormPayload & { error?: string }
+type FormExport = DeliveryFormPayload & { error?: string; catalog?: FormCatalog }
 
 export type LoadFormResult =
   | { ok: true; payload: DeliveryFormPayload }
@@ -58,6 +58,7 @@ export function loadDeliveryFormFromSqlite(
         frontmatter: data.frontmatter ?? {},
         preamble: data.preamble ?? "",
         sections,
+        catalog: data.catalog,
       },
     }
   } catch (err) {

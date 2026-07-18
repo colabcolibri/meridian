@@ -1,6 +1,8 @@
 import { esc } from "./markdown-to-html.js"
 import {
   deliveryFormFields,
+  formatDependsOn,
+  parseDependsOn,
   type DeliveryFormPayload,
   selectOptionsForField,
 } from "./delivery-form-schema.js"
@@ -17,7 +19,10 @@ export type DeliveryFormViewModel = {
   rawMarkdown?: string
 }
 
-function fieldValue(model: DeliveryFormViewModel, field: ReturnType<typeof deliveryFormFields>[number]): string {
+function fieldValue(
+  model: DeliveryFormViewModel,
+  field: ReturnType<typeof deliveryFormFields>[number],
+): string {
   if (field.scope === "preamble") {
     return model.form.preamble
   }
@@ -27,23 +32,67 @@ function fieldValue(model: DeliveryFormViewModel, field: ReturnType<typeof deliv
   return model.form.sections[field.key] ?? ""
 }
 
-function renderField(model: DeliveryFormViewModel, field: ReturnType<typeof deliveryFormFields>[number]): string {
+function catalogLabel(
+  model: DeliveryFormViewModel,
+  field: ReturnType<typeof deliveryFormFields>[number],
+  id: string,
+): string {
+  if (!field.catalogKey || !model.form.catalog) {
+    return id
+  }
+  const entry = model.form.catalog[field.catalogKey].find((item) => item.id === id)
+  if (!entry) return id
+  const status = entry.status ? ` · ${entry.status}` : ""
+  return `${entry.id} — ${entry.title}${status}`
+}
+
+function renderMultiselect(
+  model: DeliveryFormViewModel,
+  field: ReturnType<typeof deliveryFormFields>[number],
+): string {
+  const selected = new Set(parseDependsOn(fieldValue(model, field)))
+  const options = selectOptionsForField(model.folder, field, model.form.catalog) ?? []
+  const id = `field-${field.scope}-${field.key}`
+  if (!options.length) {
+    return `<div class="field"><label>${esc(field.label)}</label><p class="hint">No stories in database yet.</p><input type="hidden" id="${id}" data-scope="${field.scope}" data-key="${esc(field.key)}" data-multiselect="true" value="${esc(fieldValue(model, field))}" /></div>`
+  }
+  const items = options
+    .map((opt) => {
+      const checked = selected.has(opt) ? " checked" : ""
+      return `<label class="check-item"><input type="checkbox" data-multiselect-parent="${id}" value="${esc(opt)}"${checked} /><span>${esc(catalogLabel(model, field, opt))}</span></label>`
+    })
+    .join("")
+  return `<div class="field multiselect"><label>${esc(field.label)}</label><div class="check-list" id="${id}" data-scope="${field.scope}" data-key="${esc(field.key)}" data-multiselect="true">${items}</div><p class="hint">Select prerequisite user stories (PK). /implement-us blocks until each is ✅.</p></div>`
+}
+
+function renderField(
+  model: DeliveryFormViewModel,
+  field: ReturnType<typeof deliveryFormFields>[number],
+): string {
   const value = fieldValue(model, field)
   const id = `field-${field.scope}-${field.key}`
-  const options = selectOptionsForField(model.folder, field)
 
   if (field.kind === "readonly") {
     return `<div class="field readonly"><label>${esc(field.label)}</label><div class="readonly-value">${esc(value)}</div></div>`
   }
 
+  if (field.kind === "multiselect") {
+    return renderMultiselect(model, field)
+  }
+
+  const options = selectOptionsForField(model.folder, field, model.form.catalog)
   if (options) {
     const opts = options
-      .map(
-        (opt) =>
-          `<option value="${esc(opt)}"${opt === value ? " selected" : ""}>${esc(opt)}</option>`,
-      )
+      .map((opt) => {
+        const label = field.catalogKey ? catalogLabel(model, field, opt) : opt
+        return `<option value="${esc(opt)}"${opt === value ? " selected" : ""}>${esc(label)}</option>`
+      })
       .join("")
-    return `<div class="field"><label for="${id}">${esc(field.label)}</label><select id="${id}" data-scope="${field.scope}" data-key="${esc(field.key)}">${opts}</select></div>`
+    const empty =
+      field.catalogKey && !value
+        ? `<option value="" selected>— select —</option>`
+        : ""
+    return `<div class="field"><label for="${id}">${esc(field.label)}</label><select id="${id}" data-scope="${field.scope}" data-key="${esc(field.key)}">${empty}${opts}</select></div>`
   }
 
   if (field.kind === "textarea") {
@@ -138,10 +187,13 @@ export function buildDeliveryFormHtml(model: DeliveryFormViewModel): string {
     }
     .field textarea { min-height: 72px; resize: vertical; font-family: var(--vscode-editor-font-family, monospace); line-height: 1.45; }
     .readonly-value { padding: 8px 10px; border-radius: 6px; background: var(--vscode-input-background); border: 1px solid var(--vscode-panel-border); font-family: var(--vscode-editor-font-family, monospace); }
+    .check-list { display: flex; flex-direction: column; gap: 6px; max-height: 240px; overflow-y: auto; padding: 8px 10px; border-radius: 6px; border: 1px solid var(--vscode-input-border, var(--vscode-panel-border)); background: var(--vscode-input-background); }
+    .check-item { display: flex; align-items: flex-start; gap: 8px; font-size: 0.92em; line-height: 1.35; cursor: pointer; }
+    .check-item input { width: auto; margin-top: 3px; flex-shrink: 0; }
+    .hint, .edit-hint { margin: 4px 0 0; font-size: 11px; color: var(--vscode-descriptionForeground); }
     .banner { margin: 0 0 12px; padding: 8px 10px; border-radius: 6px; font-size: 12px; }
     .banner.error { background: color-mix(in srgb, var(--vscode-errorForeground) 12%, transparent); color: var(--vscode-errorForeground); border: 1px solid color-mix(in srgb, var(--vscode-errorForeground) 35%, transparent); }
     .banner.ok { border: 1px solid var(--vscode-panel-border); }
-    .edit-hint { margin: 0 0 10px; font-size: 12px; color: var(--vscode-descriptionForeground); }
     .editor { width: 100%; min-height: 50vh; resize: vertical; font-family: var(--vscode-editor-font-family, monospace); font-size: calc(var(--vscode-editor-font-size, 13px) * 0.95); line-height: 1.45; color: var(--vscode-editor-foreground); background: var(--vscode-editor-background); border: 1px solid var(--vscode-panel-border); border-radius: 8px; padding: 12px 14px; }
   </style>
 </head>
@@ -163,13 +215,27 @@ export function buildDeliveryFormHtml(model: DeliveryFormViewModel): string {
   </main>
   <script>
     const vscode = acquireVsCodeApi();
+    function formatDependsOn(ids) {
+      if (!ids.length) return "[]";
+      return "[" + ids.join(", ") + "]";
+    }
+    function readFieldValue(el) {
+      if (el.dataset.multiselect === "true") {
+        const parentId = el.id;
+        const boxes = document.querySelectorAll('[data-multiselect-parent="' + parentId + '"]');
+        const ids = [];
+        boxes.forEach((box) => { if (box.checked) ids.push(box.value); });
+        return formatDependsOn(ids);
+      }
+      return el.value ?? "";
+    }
     document.getElementById("viewBtn").onclick = () => vscode.postMessage({ type: "view" });
     document.getElementById("saveFormBtn").onclick = () => {
       const payload = { frontmatter: {}, preamble: "", sections: {} };
       document.querySelectorAll("[data-scope][data-key]").forEach((el) => {
         const scope = el.getAttribute("data-scope");
         const key = el.getAttribute("data-key");
-        const value = el.value ?? "";
+        const value = readFieldValue(el);
         if (scope === "frontmatter") payload.frontmatter[key] = value;
         else if (scope === "sections") payload.sections[key] = value;
         else if (scope === "preamble") payload.preamble = value;
@@ -189,3 +255,6 @@ export function buildDeliveryFormHtml(model: DeliveryFormViewModel): string {
 </body>
 </html>`
 }
+
+// Re-export for tests
+export { formatDependsOn, parseDependsOn }

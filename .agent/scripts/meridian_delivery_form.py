@@ -8,11 +8,14 @@ import re
 from typing import Any
 
 from meridian_db import export_entity_markdown, upsert_delivery_from_markdown
+from meridian_db import connect, fetch_delivery_form_catalog, load_story_dependencies
 from meridian_markdown_parse import (
     extract_epic_sections,
     extract_sprint_sections,
     extract_us_sections,
     extract_version_sections,
+    format_depends_on,
+    parse_depends_on,
     read_markdown_text,
 )
 from meridian_section_contracts import (
@@ -200,6 +203,15 @@ def export_entity_form(
         "sections": {},
     }
     if entity_key == "us":
+        conn = connect(package_root)
+        try:
+            depends = load_story_dependencies(conn, entity_id)
+            payload["frontmatter"]["depends_on"] = format_depends_on(depends)
+            payload["catalog"] = fetch_delivery_form_catalog(
+                conn, exclude_story_id=entity_id
+            )
+        finally:
+            conn.close()
         payload["sections"] = extract_us_sections(section_body)
     elif entity_key == "epics":
         payload["sections"] = extract_epic_sections(section_body)
@@ -243,6 +255,9 @@ def import_entity_form(
     if "frontmatter" not in payload or not isinstance(payload["frontmatter"], dict):
         raise ValueError("frontmatter object is required")
     payload["frontmatter"]["id"] = entity_id
+    if entity.lower() == "us":
+        depends = parse_depends_on(str(payload["frontmatter"].get("depends_on")))
+        payload["frontmatter"]["depends_on"] = format_depends_on(depends)
     markdown = build_markdown_from_form(payload)
     errors, _warnings = _validate_markdown(entity, entity_id, markdown)
     if errors:

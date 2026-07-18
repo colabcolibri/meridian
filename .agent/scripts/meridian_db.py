@@ -4,10 +4,13 @@
 from __future__ import annotations
 
 import json
+import re
 import sqlite3
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
+
+US_ID_RE = re.compile(r"^US-\d{4}$")
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 MIGRATIONS_DIR = REPO_ROOT / ".agent" / "migrations"
@@ -253,6 +256,141 @@ def upsert_sprint(
         )
 
 
+def normalize_depends_on(depends_on: list[str]) -> list[str]:
+    seen: set[str] = set()
+    normalized: list[str] = []
+    for item in depends_on:
+        dep = str(item).strip()
+        if not dep or dep in seen:
+            continue
+        seen.add(dep)
+        normalized.append(dep)
+    return normalized
+
+
+def validate_story_dependency_ids(
+    conn: sqlite3.Connection,
+    story_id: str,
+    depends_on: list[str],
+) -> None:
+    depends = normalize_depends_on(depends_on)
+    for dep in depends:
+        if not US_ID_RE.match(dep):
+            raise ValueError(f"depends_on entry '{dep}' is not a valid US id (US-XXXX)")
+        if dep == story_id:
+            raise ValueError(f"depends_on cannot include self ({story_id})")
+        row = conn.execute("SELECT 1 FROM user_stories WHERE id = ?", (dep,)).fetchone()
+        if not row:
+            raise ValueError(f"depends_on references unknown US: {dep}")
+    if depends and _dependency_cycle_exists(conn, story_id, depends):
+        raise ValueError(f"depends_on would create a cycle involving {story_id}")
+
+
+def _dependency_cycle_exists(
+    conn: sqlite3.Connection,
+    story_id: str,
+    new_deps: list[str],
+) -> bool:
+    visited: set[str] = set()
+    stack = list(new_deps)
+    while stack:
+        current = stack.pop()
+        if current == story_id:
+            return True
+        if current in visited:
+            continue
+        visited.add(current)
+        rows = conn.execute(
+            "SELECT depends_on_id FROM story_dependencies WHERE story_id = ?",
+            (current,),
+        ).fetchall()
+        for row in rows:
+            stack.append(row["depends_on_id"])
+    return False
+
+
+def sync_story_dependencies(
+    conn: sqlite3.Connection,
+    story_id: str,
+    depends_on: list[str],
+) -> list[str]:
+    """Write junction rows (call after user_stories row exists)."""
+    depends = normalize_depends_on(depends_on)
+    conn.execute("DELETE FROM story_dependencies WHERE story_id = ?", (story_id,))
+    for index, dep_id in enumerate(depends):
+        conn.execute(
+            """
+            INSERT INTO story_dependencies (story_id, depends_on_id, position)
+            VALUES (?, ?, ?)
+            """,
+            (story_id, dep_id, index),
+        )
+    return depends
+
+
+def load_story_dependencies(conn: sqlite3.Connection, story_id: str) -> list[str]:
+    rows = conn.execute(
+        """
+        SELECT depends_on_id FROM story_dependencies
+        WHERE story_id = ? ORDER BY position
+        """,
+        (story_id,),
+    ).fetchall()
+    if rows:
+        return [row["depends_on_id"] for row in rows]
+    row = conn.execute(
+        "SELECT depends_on_json FROM user_stories WHERE id = ?",
+        (story_id,),
+    ).fetchone()
+    if not row:
+        return []
+    return json.loads(row["depends_on_json"] or "[]")
+
+
+def check_story_dependencies_satisfied(
+    conn: sqlite3.Connection,
+    story_id: str,
+) -> tuple[bool, list[str]]:
+    blocking: list[str] = []
+    for dep in load_story_dependencies(conn, story_id):
+        row = conn.execute(
+            "SELECT status FROM user_stories WHERE id = ?",
+            (dep,),
+        ).fetchone()
+        if not row or row["status"] != "✅":
+            blocking.append(dep)
+    return len(blocking) == 0, blocking
+
+
+def fetch_delivery_form_catalog(
+    conn: sqlite3.Connection,
+    *,
+    exclude_story_id: str | None = None,
+) -> dict[str, list[dict[str, str]]]:
+    stories: list[dict[str, str]] = []
+    for row in conn.execute(
+        "SELECT id, title, status FROM user_stories ORDER BY id"
+    ):
+        if exclude_story_id and row["id"] == exclude_story_id:
+            continue
+        stories.append(
+            {
+                "id": row["id"],
+                "title": row["title"],
+                "status": row["status"],
+            }
+        )
+    epics = [
+        {"id": row["id"], "title": row["title"]}
+        for row in conn.execute("SELECT id, title FROM epics ORDER BY id")
+    ]
+    versions = [
+        {"id": row["id"], "title": row["title"]}
+        for row in conn.execute("SELECT id, title FROM versions ORDER BY id")
+    ]
+    return {"stories": stories, "epics": epics, "versions": versions}
+
+
 def upsert_user_story(
     conn: sqlite3.Connection,
     frontmatter: dict[str, str],
@@ -260,6 +398,9 @@ def upsert_user_story(
     sections: dict[str, str | None],
     depends_on: list[str],
 ) -> None:
+    story_id = frontmatter.get("id") or ""
+    depends = normalize_depends_on(depends_on)
+    validate_story_dependency_ids(conn, story_id, depends)
     ready_val = 1 if frontmatter.get("ready", "").lower() == "true" else 0
     conn.execute(
         """
@@ -298,7 +439,7 @@ def upsert_user_story(
             frontmatter.get("version"),
             frontmatter.get("status", "❌"),
             frontmatter.get("moscow", "Must"),
-            json.dumps(depends_on),
+            json.dumps(depends),
             ready_val,
             frontmatter.get("done_when", ""),
             frontmatter.get("tests", "required"),
@@ -325,6 +466,7 @@ def upsert_user_story(
             _now(),
         ),
     )
+    sync_story_dependencies(conn, story_id, depends)
 
 
 def import_decisions(conn: sqlite3.Connection, docs: Path) -> int:
@@ -379,7 +521,7 @@ def export_board_entries(package_root: str | Path) -> list[dict[str, Any]]:
         ).fetchall()
         entries: list[dict[str, Any]] = []
         for row in rows:
-            depends = json.loads(row["depends_on_json"] or "[]")
+            depends = load_story_dependencies(conn, row["id"])
             entries.append(
                 {
                     "id": row["id"],
@@ -449,7 +591,7 @@ def export_planning_json(package_root: str | Path) -> dict[str, Any]:
         stories = []
         for row in conn.execute(
             """
-            SELECT id, title, epic_id, version_id, status, moscow, depends_on_json,
+            SELECT id, title, epic_id, version_id, status, moscow,
                    done_when, tests, tests_status, ready, summary
             FROM user_stories ORDER BY id
             """
@@ -462,7 +604,7 @@ def export_planning_json(package_root: str | Path) -> dict[str, Any]:
                     "version": row["version_id"],
                     "status": row["status"],
                     "moscow": row["moscow"],
-                    "dependsOn": json.loads(row["depends_on_json"] or "[]"),
+                    "dependsOn": load_story_dependencies(conn, row["id"]),
                     "doneWhen": row["done_when"] or "",
                     "tests": row["tests"] or "required",
                     "testsStatus": row["tests_status"] or "pending",

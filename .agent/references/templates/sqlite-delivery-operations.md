@@ -21,8 +21,9 @@ Dogfood `packageRoot` = repository root (`.`).
 3. user_stories      (FK: epic_id → epics.id, version_id → versions.id)
 4. sprints           (FK: version_id → versions.id)
 5. sprint_stories    (FK: sprint_id → sprints.id, story_id → user_stories.id)
-6. decisions         (independent)
-7. board_snapshots   (derived; use generate_board.py)
+6. story_dependencies (FK: story_id → user_stories.id, depends_on_id → user_stories.id)
+7. decisions         (independent)
+8. board_snapshots   (derived; use generate_board.py)
 ```
 
 **FK failures** mean parent row missing — insert version and epic before user story; insert user stories before `sprint_stories`.
@@ -34,6 +35,8 @@ erDiagram
   epics ||--o{ user_stories : epic_id
   sprints ||--o{ sprint_stories : sprint_id
   user_stories ||--o{ sprint_stories : story_id
+  user_stories ||--o{ story_dependencies : story_id
+  user_stories ||--o{ story_dependencies : depends_on_id
 ```
 
 ## Agent workflow (summary-first)
@@ -85,7 +88,7 @@ sqlite3 .meridian/meridian.db "PRAGMA foreign_key_list(user_stories);"
 | ------ | -------- | ----- |
 | Version | `upsert_version(conn, fm, body, sections)` | `sections` from `extract_version_sections` |
 | Epic | `upsert_epic(conn, fm, body, sections)` | |
-| User story | `upsert_user_story(conn, fm, body, sections, depends_on)` | `depends_on` is `list[str]` |
+| User story | `upsert_user_story(conn, fm, body, sections, depends_on)` | `depends_on` is `list[str]` of **existing** `US-XXXX` PKs; synced to `story_dependencies` with FK + cycle check |
 | Sprint | `upsert_sprint(conn, fm, body, sections, stories)` | `stories` rebuilds `sprint_stories` |
 
 `body` = full markdown with YAML frontmatter. Section columns are extracted by `meridian_markdown_parse.py` on every upsert.
@@ -146,7 +149,9 @@ Parse → upsert via CLI; do not hand-edit SQL for narrative bodies unless emerg
 | Import + validate | `meridian_db_export.py … --write-form` (JSON stdin) |
 | Build/validate | `.agent/scripts/meridian_delivery_form.py` |
 
-JSON shape: `{ "frontmatter": {…}, "preamble": "…", "sections": { column_key: "markdown body" } }`.
+JSON shape: `{ "frontmatter": {…}, "preamble": "…", "sections": { column_key: "markdown body" }, "catalog": { stories, epics, versions } }` (catalog on US export only).
+
+US `depends_on` in the form is a **multi-select picker** of story PKs (`US-XXXX`). Save validates FK, rejects self-reference and cycles. `/implement-us` gate: every `depends_on` US must be `status: ✅` (`check_story_dependencies_satisfied` in `meridian_db.py`).
 
 Section keys match `extract_*_sections` in `meridian_markdown_parse.py` (e.g. US `intent_acceptance`, epic `capability`). Save runs `validate_*_structure` before upsert — invalid templates are rejected.
 

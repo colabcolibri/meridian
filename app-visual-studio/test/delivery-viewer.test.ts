@@ -49,7 +49,7 @@ version: v0
     }
   })
 
-  it("builds structured form html", () => {
+  it("builds structured form html with depends_on picker", () => {
     const html = buildDeliveryFormHtml({
       relativePath: "us/US-0099.md",
       entityLabel: "User story",
@@ -57,12 +57,22 @@ version: v0
       form: {
         entity: "us",
         id: "US-0099",
-        frontmatter: { id: "US-0099", title: "Sample story" },
+        frontmatter: { id: "US-0099", title: "Sample story", depends_on: "[US-0001]" },
         preamble: "# US-0099 — Sample story",
         sections: { intent_acceptance: "- [ ] Works" },
+        catalog: {
+          stories: [
+            { id: "US-0001", title: "Prerequisite", status: "✅" },
+            { id: "US-0002", title: "Other", status: "❌" },
+          ],
+          epics: [{ id: "EPIC-01", title: "Epic" }],
+          versions: [{ id: "v10", title: "v10" }],
+        },
       },
     })
     assert.match(html, /id="saveFormBtn"/)
-    assert.match(html, /intent_acceptance|Acceptance/)
+    assert.match(html, /data-multiselect="true"/)
+    assert.match(html, /US-0001/)
+    assert.match(html, /Prerequisite/)
   })
 })

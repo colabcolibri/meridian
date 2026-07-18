@@ -1,14 +1,27 @@
 import type { DeliveryFolder } from "./delivery-path.js"
 
+export type FormCatalogEntry = {
+  id: string
+  title: string
+  status?: string
+}
+
+export type FormCatalog = {
+  stories: FormCatalogEntry[]
+  epics: FormCatalogEntry[]
+  versions: FormCatalogEntry[]
+}
+
 export type DeliveryFormPayload = {
   entity: DeliveryFolder
   id: string
   frontmatter: Record<string, string>
   preamble: string
   sections: Record<string, string>
+  catalog?: FormCatalog
 }
 
-export type FormFieldKind = "text" | "textarea" | "readonly"
+export type FormFieldKind = "text" | "textarea" | "readonly" | "select" | "multiselect"
 
 export type FormFieldDef = {
   key: string
@@ -17,6 +30,7 @@ export type FormFieldDef = {
   scope: "frontmatter" | "sections" | "preamble"
   group: string
   rows?: number
+  catalogKey?: keyof FormCatalog
 }
 
 const US_STATUS = ["❌", "🔶", "✅"]
@@ -33,8 +47,9 @@ function fm(
   label: string,
   group: string,
   kind: FormFieldKind = "text",
+  catalogKey?: keyof FormCatalog,
 ): FormFieldDef {
-  return { key, label, kind, scope: "frontmatter", group }
+  return { key, label, kind, scope: "frontmatter", group, catalogKey }
 }
 
 function sec(
@@ -53,15 +68,15 @@ export function deliveryFormFields(folder: DeliveryFolder): FormFieldDef[] {
       return [
         readonlyId,
         fm("title", "Title", "Metadata"),
-        fm("epic", "Epic", "Metadata"),
-        fm("version", "Version", "Metadata"),
-        fm("status", "Status", "Metadata"),
-        fm("moscow", "MoSCoW", "Metadata"),
-        fm("depends_on", "Depends on", "Metadata"),
-        fm("ready", "Ready", "Metadata"),
+        fm("epic", "Epic", "Metadata", "select", "epics"),
+        fm("version", "Version", "Metadata", "select", "versions"),
+        fm("status", "Status", "Metadata", "select"),
+        fm("moscow", "MoSCoW", "Metadata", "select"),
+        fm("depends_on", "Depends on", "Metadata", "multiselect", "stories"),
+        fm("ready", "Ready", "Metadata", "select"),
         fm("done_when", "Done when", "Metadata"),
-        fm("tests", "Tests", "Metadata"),
-        fm("tests_status", "Tests status", "Metadata"),
+        fm("tests", "Tests", "Metadata", "select"),
+        fm("tests_status", "Tests status", "Metadata", "select"),
         {
           key: "preamble",
           label: "Title line + user story",
@@ -91,7 +106,7 @@ export function deliveryFormFields(folder: DeliveryFolder): FormFieldDef[] {
       return [
         readonlyId,
         fm("title", "Title", "Metadata"),
-        fm("status", "Status", "Metadata"),
+        fm("status", "Status", "Metadata", "select"),
         fm("versions", "Versions", "Metadata"),
         fm("profiles", "Profiles", "Metadata"),
         fm("outcome", "Outcome", "Metadata"),
@@ -112,7 +127,7 @@ export function deliveryFormFields(folder: DeliveryFolder): FormFieldDef[] {
       return [
         readonlyId,
         fm("title", "Title", "Metadata"),
-        fm("status", "Status", "Metadata"),
+        fm("status", "Status", "Metadata", "select"),
         fm("outcome", "Outcome", "Metadata"),
         {
           key: "preamble",
@@ -131,9 +146,9 @@ export function deliveryFormFields(folder: DeliveryFolder): FormFieldDef[] {
     case "sprints":
       return [
         readonlyId,
-        fm("version", "Version", "Metadata"),
+        fm("version", "Version", "Metadata", "select", "versions"),
         fm("title", "Title", "Metadata"),
-        fm("status", "Status", "Metadata"),
+        fm("status", "Status", "Metadata", "select"),
         fm("goal", "Goal (frontmatter)", "Metadata"),
         fm("done_when", "Done when", "Metadata"),
         fm("stories", "Stories", "Metadata"),
@@ -158,7 +173,11 @@ export function deliveryFormFields(folder: DeliveryFolder): FormFieldDef[] {
 export function selectOptionsForField(
   folder: DeliveryFolder,
   field: FormFieldDef,
+  catalog?: FormCatalog,
 ): string[] | undefined {
+  if (field.catalogKey && catalog?.[field.catalogKey]?.length) {
+    return catalog[field.catalogKey].map((entry) => entry.id)
+  }
   if (field.scope !== "frontmatter") {
     return undefined
   }
@@ -173,4 +192,21 @@ export function selectOptionsForField(
   if (folder === "versions" && field.key === "status") return VERSION_STATUS
   if (folder === "sprints" && field.key === "status") return SPRINT_STATUS
   return undefined
+}
+
+export function parseDependsOn(value: string): string[] {
+  const trimmed = value.trim()
+  if (!trimmed || trimmed === "[]") return []
+  if (trimmed.startsWith("[")) {
+    const inner = trimmed.slice(1, -1).trim()
+    if (!inner) return []
+    return inner.split(",").map((part) => part.trim()).filter(Boolean)
+  }
+  return trimmed.split(",").map((part) => part.trim()).filter(Boolean)
+}
+
+export function formatDependsOn(ids: string[]): string {
+  const cleaned = ids.map((id) => id.trim()).filter(Boolean)
+  if (!cleaned.length) return "[]"
+  return `[${cleaned.join(", ")}]`
 }

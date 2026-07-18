@@ -19,6 +19,7 @@ EXPECTED_TABLES = {
     "versions",
     "sprints",
     "sprint_stories",
+    "story_dependencies",
     "user_stories",
     "decisions",
     "board_snapshots",

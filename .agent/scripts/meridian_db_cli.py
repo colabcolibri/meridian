@@ -294,6 +294,9 @@ def cmd_update_us(args) -> int:
     try:
         upsert_user_story(conn, fm, full, extract_us_sections(body), depends)
         conn.commit()
+    except ValueError as exc:
+        print(f"ERROR: {exc}", file=sys.stderr)
+        return 1
     finally:
         conn.close()
     write_board_json(root)
