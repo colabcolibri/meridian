@@ -10,7 +10,7 @@ Use with `/discover` and agent `product-owner`. PO lane — before scope is appr
 | ---- | ---- | ----------------- | -------- |
 | **PO** | What to build, for whom, why | `docs/discovery/product-brief.md` | `/discover` |
 | **PM** | Governance, phases, delivery plan | `docs/` phase docs, versions, sprints | `/init-meridian`, `/status`, `/plan-sprint` |
-| **Dev** | Executable slices | SQLite `user_stories` (or legacy `docs/us/*.md`) | `/refine-us`, `/implement-us`, `/complete-us` |
+| **Dev** | Executable slices | SQLite `user_stories` | `/refine-us`, `/implement-us`, `/complete-us` |
 
 Discovery is **exploratory**. `00_scope.md` is the **contract** agents execute against once approved.
 

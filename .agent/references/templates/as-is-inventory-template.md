@@ -73,8 +73,8 @@ When a row is validated, move knowledge out of this file:
 - [ ] System structure → `docs/05_architecture.md`
 - [ ] Data model → `docs/06_database.md`
 - [ ] APIs → `docs/07_api_contracts.md`
-- [ ] Large capability block → `docs/epics/EPIC-XX.md` (`status: complete` if already shipped)
-- [ ] Past technical choice → `docs/decisions/YYYY-MM-DD.json`
+- [ ] Large capability block → epic in SQLite (`create-epic`; `status: complete` if already shipped)
+- [ ] Past technical choice → `prepend-decision`
 
 After `05_architecture` is **approved**, archive or delete this file. Do not maintain two sources of truth.
 
@@ -83,7 +83,7 @@ After `05_architecture` is **approved**, archive or delete this file. Do not mai
 If the product already shipped significant work before Meridian:
 
 1. Create epics from **high** confidence rows (no retroactive US).
-2. Create `docs/versions/v0.md` — baseline release documenting pre-Meridian state.
+2. Create version `v0` in SQLite — baseline release documenting pre-Meridian state.
 3. Mark completed epics `status: complete` and list them under v0.
 4. New work starts in `v1`+ as normal user stories.
 

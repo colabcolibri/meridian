@@ -75,7 +75,7 @@ cd meridian-kit-1.0.0
 
 **Future channels:** GitHub Releases (`kit-v*` + `extension-v*` tags with `.tar.gz` and `.vsix` assets). See [DISTRIBUTION.md](DISTRIBUTION.md).
 
-Always edit in `.agent/` first; then run sync (also mirrors `app-desktop/docs/templates/` in the Meridian monorepo).
+Always edit in `.agent/` first; then run `./.agent/scripts/sync_cursor_kit.sh` for IDE adapters (`.cursor/references/templates/` included).
 
 ## What gets generated
 

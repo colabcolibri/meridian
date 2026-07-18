@@ -18,7 +18,7 @@ By contributing, you agree that your contributions will be licensed under the [P
 | Cursor / Claude Code adapters (local symlinks) | Run `./.agent/scripts/sync_cursor_kit.sh` — **do not** commit `.cursor/` or `.claude/` |
 | VS Code extension | `app-visual-studio/src/` |
 | Dogfood product documentation | `docs/` |
-| Architecture decisions | Prepend in `docs/decisions/YYYY-MM-DD.json` (skill `update-decisions-log`) |
+| Architecture decisions | `prepend-decision` (skill `update-decisions-log`) |
 
 ## Local environment
 
@@ -65,8 +65,8 @@ Builds `.cursor/` and `.claude/` locally. See [`.agent/IDE_ADAPTERS.md`](.agent/
 
 - **Commits:** clear messages in Portuguese or English (be consistent within the PR).
 - **Documentation:** precedes product code when the change alters protocol or governance.
-- **User stories:** only after `05_architecture.md` `approved` and epic/version in folders (see `.agent/MERIDIAN.md`).
-- **Decisions:** scope, stack, or architecture changes → prepend in `docs/decisions/YYYY-MM-DD.json`.
+- **User stories:** only after `05_architecture.md` `approved` and epic/version in SQLite.
+- **Decisions:** scope, stack, or architecture changes → `prepend-decision`.
 - **`.cursor/`:** never commit — it is in `.gitignore`.
 
 ## What we do not accept (for now)

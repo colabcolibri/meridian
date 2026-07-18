@@ -30,8 +30,8 @@ Meridian is not a mesh of autonomous agents. It is a minimal, auditable loop.
 | - | --------- |
 | 1 | Documentation precedes product code |
 | 2 | Status reflects evidence, not optimism |
-| 3 | Decisions live in `docs/decisions/YYYY-MM-DD.json` (prepend; never edit old entries). **Clock:** run `date +"%Y-%m-%d"` and `date +"%H:%M"` before Write — workflow `/update-decisions-log` |
-| 4 | `docs/kanban/board.json` is **derived** from `docs/us/*.md` — never the primary source |
+| 3 | Decisions live in `.meridian/meridian.db` (`decisions` table). Prepend via `meridian_delivery.py prepend-decision`. **Clock:** run `date +"%Y-%m-%d"` and `date +"%H:%M"` before CLI — workflow `/update-decisions-log` |
+| 4 | Board / planning UI reads SQLite (`meridian_db_export --format planning`); `board_snapshots` on upsert — never maintain `docs/kanban/board.json` as source |
 | 5 | Simplicity over bureaucracy — use agents/skills for detail, not duplicate specs here |
 
 ---
@@ -68,12 +68,13 @@ See `.agent/ARCHITECTURE.md` for the full map. Minimum:
     migrate_us_v2_structure.py   # one-off US schema migration
     sync_cursor_kit.sh
 
-docs/                        ← one product's source of truth (path varies in monorepos)
+docs/                        ← phase docs only (path varies in monorepos)
   00_scope.md … 11_decisions.md
-  epics/  versions/  sprints/  us/  kanban/board.json  decisions/
-  templates/                 ← symlinks to kit templates (human mirror)
-
-.meridian/projects.json      ← optional — several docs/ trees in one repo (A + discovery B)
+  architecture/  inventory/  discovery/
+.meridian/
+  delivery.json              ← connector profile (commit)
+  meridian.db                ← epics, versions, sprints, US, decisions (gitignored)
+  projects.json              ← optional — multi-product monorepos
 ```
 
 **Multi-product repos:** one `.agent/` kit root; each Meridian product = one folder named exactly `docs` (any path). `.meridian/projects.json` declares ids, default, exclude; discovery finds unnamed `docs/` trees. **Active project** (saved) selects which tree board/validate/US target. IDE: **Project** toolbar row in Board/Deliverables + **Select Active Project**. Maintainer map: `references/instruction-surfaces.md` (EPIC-13 checklist). Template: `projects-manifest-template.md`.
@@ -102,7 +103,7 @@ blocks: []
 ### Dependency order
 
 ```txt
-11_decisions + docs/decisions/     starts day 1; never blocks
+11_decisions.md (stub)             starts day 1; never blocks
 00_scope                           unblocks all
 01_tech_stack                      → 02, 04, 08
 02_security                        → 03, 04
@@ -133,17 +134,20 @@ blocks: []
 
 ---
 
-## 6. Delivery artifacts (folders)
+## 6. Delivery artifacts (SQLite)
 
 After `05_architecture` is `approved`:
 
-| Artifact | Path | Create | Close |
-| -------- | ---- | ------ | ----- |
-| Epic | `docs/epics/EPIC-XX.md` | `/create-epic` | — |
-| Version | `docs/versions/vX.md` | `/create-version` | go-live checklist |
-| Sprint | `docs/sprints/vX-SY.md` | `/plan-sprint` | — |
-| User story | `docs/us/US-XXXX.md` | `/create-us` | `/complete-us` |
-| Board | `docs/kanban/board.json` | `/sync-board` | derived only |
+| Artifact | Store | Create | Close |
+| -------- | ----- | ------ | ----- |
+| Epic | `epics` table | `/create-epic` | — |
+| Version | `versions` table | `/create-version` | go-live checklist |
+| Sprint | `sprints` table | `/plan-sprint` | `/complete-sprint` |
+| User story | `user_stories` table | `/create-us` | `/complete-us` |
+| Decision log | `decisions` table | `/update-decisions-log` | prepend only |
+| Board snapshot | `board_snapshots` | auto on upsert | — |
+
+CLI: `python3 .agent/scripts/meridian_delivery.py` — see `sqlite-delivery-operations.md`.
 
 Templates registry: `.agent/references/templates/INDEX.md`  
 Canonical edit paths: `TEMPLATE_SOURCES.md`  
@@ -193,11 +197,11 @@ Strict US also require `ready: true | false`.
 /refine-us     → deepen Plan + Approach (required), ready: true
 implement      → process-manager gate: ready + Plan filled
 /complete-us   → Record + status ✅
-/sync-board    → regenerate board.json
+/sync-board    → removed in v11 (board reads SQLite)
 commit (human) → after close + board sync; one commit per US — see commit-after-us-close.md
 ```
 
-Agent: `board-keeper`. Skills: `create-user-story`, `review-user-story`, `refine-user-story`, `complete-user-story`, `generate-board-json`.
+Agent: `board-keeper`. Skills: `create-user-story`, `review-user-story`, `refine-user-story`, `complete-user-story`.
 
 ---
 
@@ -212,9 +216,10 @@ python3 .agent/scripts/validate_meridian.py <project-folder> --json
 
 ### Decision log
 
-- One file per day: `docs/decisions/YYYY-MM-DD.json` — prepend in `entries`; never edit old entries
-- **Before Write:** run `date +"%Y-%m-%d"` (filename + JSON `date`) and `date +"%H:%M"` (`entries[].time`)
+- Table `decisions` in `.meridian/meridian.db` — prepend via `meridian_delivery.py prepend-decision`
+- **Before CLI:** run `date +"%Y-%m-%d"` (`--date`) and `date +"%H:%M"` (`--time`)
 - Workflow `/update-decisions-log` + skill `update-decisions-log`; templates `decision-template.md`, `decision-schema.md`
+- Never edit old decision rows; legacy `docs/decisions/*.json` is import-only (purge after migrate)
 
 ---
 
@@ -228,7 +233,7 @@ python3 .agent/scripts/validate_meridian.py <project-folder> --json
 | Security | `security-steward` | `/security-pass` |
 | Architecture | `architecture-guardian` | `/architecture` |
 | Versions / sprints | `sprint-planner` | `/create-version`, `/plan-sprint`, `/complete-sprint` |
-| US / board | `board-keeper` | `/create-us`, `/refine-us`, `/complete-us`, `/sync-board` |
+| US / board | `board-keeper` | `/create-us`, `/refine-us`, `/complete-us` |
 | US implement | `process-manager` | `/implement-us` (requires `ready: true`) |
 | Decisions | any relevant agent | `/update-decisions-log` |
 | Auto-pick | `meridian-routing` skill | — |
@@ -244,8 +249,8 @@ Create drafts, suggest decisions, implement approved US, run tests, update docs,
 - Start product code without `/implement-us` gate or US `ready: true`
 - Create US before `05_architecture` approved and epic/version exist
 - Mark `✅` without evidence or filled Record
-- Edit old decision log entries
-- Write to `docs/decisions/` without running `date +"%Y-%m-%d"` and `date +"%H:%M"` first
+- Write to `docs/decisions/` or edit old decision rows
+- Prepend decisions without running `date +"%Y-%m-%d"` and `date +"%H:%M"` first (use `prepend-decision` CLI)
 - Edit `board.json` as primary source
 - Expose secrets or run destructive commands without confirmation
 
@@ -263,11 +268,11 @@ Use workflow `/init-meridian` and skill `init-project`. Two modes:
 
 Both modes:
 
-1. Create `docs/` tree + `docs/decisions/YYYY-MM-DD.json`
-2. Stub `11_decisions.md`; initial decision entry
+1. Create `docs/` phase docs + bootstrap SQLite (`meridian_delivery.py bootstrap`)
+2. Stub `11_decisions.md`; initial decision via `prepend-decision`
 3. Draft `00_scope.md`; populated, not blank
 4. Follow dependency order for remaining phase docs
-5. Empty `board.json`; add epics/versions after architecture approved
+5. Epics/versions after architecture approved (SQLite bootstrap)
 6. `.gitignore` before secrets or dependencies land
 
 Human guide: `.agent/references/start-here.md`  
@@ -303,10 +308,10 @@ Delivery is done when:
 - `## Record` filled (Files + layers + Executed when tests required)
 - `tests_status: done` when `tests: required`
 - `status: ✅` in frontmatter
-- `board.json` regenerated
+- `board_snapshots` updated on upsert (no manual board.json)
 - Cross-cutting changes in decision log (skill `update-decisions-log` + real clock)
 
-**Repository (human, after the above):** one git commit per closed US — code + `docs/us/US-XXXX.md` + board/decisions in scope. Agents suggest message on close; they do not commit unless the manager explicitly asks. See `.agent/references/commit-after-us-close.md`.
+**Repository (human, after the above):** one git commit per closed US — code + SQLite delivery state in scope. Agents suggest message on close; they do not commit unless the manager explicitly asks. See `.agent/references/commit-after-us-close.md`.
 
 ---
 

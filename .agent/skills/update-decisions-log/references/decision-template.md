@@ -1,30 +1,34 @@
 # Decision template
 
-Insert **at the beginning** of `entries` in `docs/decisions/YYYY-MM-DD.json`.
-If daily file does not exist, create:
+Prepend via `meridian_delivery.py prepend-decision` — **never** edit old rows.
 
-```json
-{
-  "date": "YYYY-MM-DD",
-  "entries": []
-}
+**Before CLI:** run `date +"%Y-%m-%d"` → `--date` and `date +"%H:%M"` → `--time` (24h local; real clock only).
+
+## CLI (preferred)
+
+```bash
+python3 .agent/scripts/meridian_delivery.py prepend-decision \
+  --date "$(date +"%Y-%m-%d")" \
+  --time "$(date +"%H:%M")" \
+  --title "Objective decision title" \
+  --affected-document "path/to/doc.md" \
+  --what-changed "factual description of delta" \
+  --why-changed "context, constraint or learning that motivated" \
+  --impact "list; mark docs that return to review" \
+  --responsible "manager or role"
 ```
 
-New entry (prepend — first item in array):
+## Entry fields (stored in `payload_json`)
 
-**Before writing:** run `date +"%H:%M"` and paste the result into `time`. Must be the actual moment of logging (24h, local timezone). Never use placeholder intervals (:00, :15, :30, :45) unless that is the real clock reading.
-
-```json
-{
-  "time": "20:58",
-  "title": "Objective decision title",
-  "affected_document": "path/to/doc.md",
-  "what_changed": "factual description of delta",
-  "why_changed": "context, constraint or learning that motivated",
-  "impact": "list; mark docs that return to review",
-  "responsible": "manager or role"
-}
-```
+| Field | CLI flag |
+| ----- | -------- |
+| `time` | `--time` |
+| `title` | `--title` |
+| `affected_document` | `--affected-document` |
+| `what_changed` | `--what-changed` |
+| `why_changed` | `--why-changed` |
+| `impact` | `--impact` |
+| `responsible` | `--responsible` |
 
 ## When to use
 
@@ -32,12 +36,12 @@ New entry (prepend — first item in array):
 
 ## Forbidden
 
-- Edit or delete old entries.
-- Append at end of `entries` (correct order: **new at beginning**).
+- `Write` on `docs/decisions/*.json` when `meridian.db` exists.
+- Edit or delete old decision rows.
 - Vague entry ("adjusted scope") without listed impact.
 
 ## After decision that changes `approved` doc
 
-1. Prepend in `docs/decisions/YYYY-MM-DD.json`.
+1. Run `prepend-decision`.
 2. Change affected doc `status` to `review`.
 3. Inform manager which re-approval is needed.

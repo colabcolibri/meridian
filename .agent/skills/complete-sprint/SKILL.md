@@ -1,60 +1,47 @@
 ---
 name: complete-sprint
-description: Closes a Meridian sprint after sprint review — fills Retrospective, sets status complete, logs decisions. Use with /complete-sprint vX-SY.
+description: Closes a Meridian sprint in SQLite after sprint review — fills Retrospective, sets status complete, logs decisions. Use with /complete-sprint vX-SY.
 allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 ---
 
 # Complete sprint (Meridian)
 
+> **v11:** read/write sprint via SQLite export — never `docs/sprints/*.md`.
+
 ## Selective reading
 
 | File | When to read |
 | ------- | ---------- |
-| `../create-sprint/references/sprint-template.md` | **Mandatory** — close rules + Retrospective |
-| Target `docs/sprints/vX-SY.md` | Sprint goal, stories, current status |
-| Listed `docs/us/US-XXXX.md` | US status for sprint review |
-| `../update-decisions-log/SKILL.md` | When logging decisions from retrospective |
+| `../create-sprint/references/sprint-template.md` | Close rules + Retrospective |
+| Target sprint | `meridian_db_export.py . --entity sprints --id vX-SY` |
+| Listed US | `meridian_delivery.py show US-XXXX` per story in sprint |
+| `../update-decisions-log/SKILL.md` | Retrospective decisions |
 
-## When to trigger
+## Delivery commands
 
-- All or accepted subset of sprint US delivered.
-- Manager ran sprint review (increment vs `goal` and Acceptance).
-- Workflow `/complete-sprint vX-SY`.
-
-**Do not** use to create or expand sprint scope — use `create-sprint` / `/plan-sprint`.
-
-## Preconditions
-
-| Check | Requirement |
-| ----------- | --------- |
-| Sprint file | `docs/sprints/vX-SY.md` exists |
-| Sprint review | Manager confirmed increment (human gate) |
-| Retrospective | Must be filled before `status: complete` |
-
-If Must US remain `❌` without manager waiver → report blocker; do not silently mark complete.
+```bash
+python3 .agent/scripts/meridian_db_export.py . --entity sprints --id v11-S1
+# edit markdown → upsert:
+cat /tmp/sprint.md | python3 .agent/scripts/meridian_db_export.py . --entity sprints --id v11-S1 --write
+```
 
 ## Procedure
 
-1. Read sprint template + target sprint file.
-2. For each US in `stories:` frontmatter, read frontmatter `status`.
-3. Summarize delivery vs sprint `goal` and `done_when`.
-4. Fill `## Retrospective`:
-   - What worked:
-   - What to improve:
-   - Decisions to log:
-5. Set frontmatter `status: complete`.
-6. If retrospective or scope warrants → `update-decisions-log` (**read skill + run `date`**).
-7. `validate_meridian.py` when available.
+1. Export sprint markdown; read US statuses via `show`.
+2. Summarize delivery vs `goal` and `done_when`.
+3. Fill `## Retrospective` (What worked / improve / decisions to log).
+4. Set frontmatter `status: complete`; `--write` upsert.
+5. `prepend-decision` if warranted.
+6. `validate_meridian.py`
 
 ## Output
 
 ```txt
 Sprint completed:
-File:
+ID: vX-SY
 Status: complete
 US delivered: N ✅ / N 🔶 / N ❌
 Retrospective filled: yes | no
 Decisions logged: yes | no
-Deferred US:
 Next: /plan-sprint | /create-us
 ```

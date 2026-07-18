@@ -64,7 +64,7 @@ Artifacts created in this phase:
 The AI implements each user story, guided by the files from Phase 3. You review the code, then close the story with evidence.
 
 ```
-/create-us  →  /refine-us  →  /implement-us  →  /complete-us  →  /sync-board
+/create-us  →  /refine-us  →  /implement-us  →  /complete-us
 ```
 
 **No code without `ready: true`.** No `✅` without evidence in the Record.
@@ -85,16 +85,17 @@ docs/
   06_database.md           Phase 2 — data model
   07_api_contracts.md      Phase 2 — API definitions
   08_environments.md       Phase 2 — dev, staging, production
-  11_decisions.md          Always on — decision log index
-  decisions/               One JSON file per day of decisions
-  epics/EPIC-XX.md         Phase 3 — product capabilities
-  versions/vX.md           Phase 3 — releases
-  sprints/vX-SY.md         Phase 3 — time-boxed delivery units
-  us/US-XXXX.md            Phase 3+4 — executable tasks
-  kanban/board.json        Generated — never edit by hand
+  11_decisions.md          Always on — decision log index (store: .meridian/meridian.db)
+  architecture/            Optional detail indexed from 05
   inventory/as-is.md       Mode B only — transitional; archive after promotion
-  ../.meridian/projects.json  Optional — multi-product repos (several docs/ trees)
+  discovery/               Optional product discovery artifacts
+  ../.meridian/
+    delivery.json          Connector profile (commit)
+    meridian.db            Delivery backlog — epics, versions, sprints, US (gitignored)
+    projects.json          Optional — multi-product repos (several docs/ trees)
 ```
+
+Delivery templates (US, epic, version shape) live in **`.agent/references/templates/`** — not under `docs/`.
 
 ### Several `docs/` folders (monorepo)
 
@@ -262,7 +263,7 @@ Reference section — open when you need the detail on a specific file's fields 
 | Field | What it is |
 | ----- | ---------- |
 | `id` | `v1-S1` — must match filename. |
-| `version` | Parent version — must exist in `docs/versions/`. |
+| `version` | Parent version — must exist in SQLite (`list versions`). |
 | `goal` | One sentence — what this sprint proves or delivers. |
 | `done_when` | Observable close condition. |
 | `stories` | Canonical US id list (used by validation). |
@@ -272,13 +273,17 @@ Reference section — open when you need the detail on a specific file's fields 
 
 ---
 
-### Decision log (decisions/YYYY-MM-DD.json)
+### Decision log (SQLite)
 
-Append-only. Every significant decision — technology choice, architecture change, scope adjustment, security posture — goes here. Entries are prepended (newest first), never edited.
+Append-only in `.meridian/meridian.db` (`decisions` table). Every significant decision — technology choice, architecture change, scope adjustment, security posture — is prepended via CLI (newest `entry_index` = 0 per day), never edited in place.
 
-Each entry requires: `time` (`HH:MM` from `date +"%H:%M"`), `title`, `affected_document`, `what_changed`, `why_changed`, `impact`, `responsible`. File name and JSON `date` use `date +"%Y-%m-%d"`.
+Each entry requires: `time` (`HH:MM` from `date +"%H:%M"`), `title`, `affected_document`, `what_changed`, `why_changed`, `impact`, `responsible`. Calendar day from `date +"%Y-%m-%d"`.
 
-Workflow: **`/update-decisions-log`**. Never invent date or time.
+```bash
+python3 .agent/scripts/meridian_delivery.py prepend-decision --date "$(date +"%Y-%m-%d")" ...
+```
+
+Workflow: **`/update-decisions-log`**. Never invent date or time. Never `Write` on `docs/decisions/*.json`.
 
 ---
 

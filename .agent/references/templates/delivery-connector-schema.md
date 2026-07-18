@@ -1,7 +1,7 @@
 # Delivery connector profile
 
 > **Machine config:** `.meridian/delivery.json` at the Meridian **product** package root.  
-> **Human note (optional):** log connector changes in `docs/decisions/YYYY-MM-DD.json`.
+> **Human note (optional):** log connector changes via `prepend-decision` (SQLite).
 
 Agents and skills call **`meridian_delivery.py`** — not `meridian_db_cli.py` directly. The facade reads this file and dispatches to the configured connector driver.
 
@@ -69,6 +69,7 @@ python3 .agent/scripts/meridian_delivery.py counts
 python3 .agent/scripts/meridian_delivery.py show US-0115 --full
 python3 .agent/scripts/meridian_delivery.py create-us --title "..." --epic EPIC-01 --version v1
 python3 .agent/scripts/meridian_delivery.py implement-gate US-0115
+python3 .agent/scripts/meridian_delivery.py prepend-decision --date YYYY-MM-DD --time HH:MM ...
 ```
 
 Override package root: `--package-root path/to/product`.

@@ -45,11 +45,11 @@ After **Install Harness** or clone: run `./.agent/scripts/sync_cursor_kit.sh` to
 
 - Documentation precedes product code.
 - Do not create US before `05_architecture` `approved`.
-- `docs/kanban/board.json` is derived from `docs/us/*.md`.
+- `docs/kanban/board.json` is **deprecated** in v11 — use SQLite `board_snapshots` / planning export.
 - Never `✅` without evidence; never `🔶` without `Missing:` in acceptance.
 - Never `✅` without filled `## Record` on the US (skill `complete-user-story`).
 - Product code for a US requires `ready: true` — run `/implement-us US-XXXX` before coding.
-- `docs/decisions/YYYY-MM-DD.json`: prepend in `entries`; never edit old entries. Before Write run `date +"%Y-%m-%d"` and `date +"%H:%M"` — use `/update-decisions-log`.
+- Decisions: prepend via `meridian_delivery.py prepend-decision` (SQLite). Before CLI run `date +"%Y-%m-%d"` and `date +"%H:%M"` — use `/update-decisions-log`.
 - Structural contract: `.agent/references/templates/section-contracts.md` (validator + monitor).
 
 ## Validate (optional)

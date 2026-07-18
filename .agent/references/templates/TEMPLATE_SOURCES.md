@@ -7,14 +7,14 @@
 ## How the mirror works
 
 ```txt
-CANONICAL (edit here)          REGISTRY (agents read)              HUMAN / CURSOR (read-only mirrors)
-.agent/skills/.../references/  →  .agent/references/templates/  →  app-desktop/docs/templates/
-                                                              →  .cursor/references/templates/
+CANONICAL (edit here)          REGISTRY (agents read)              IDE ADAPTER (read-only mirror)
+.agent/skills/.../references/  →  .agent/references/templates/  →  .cursor/references/templates/
 ```
 
-- **Registry** = symlinks + 4 kit-owned files (`INDEX.md`, `writing-guide.md`, `section-contracts.md`, `lifecycle.md`, `TEMPLATE_SOURCES.md`).
-- **Never** edit symlinks in `docs/templates/` or `.cursor/` — they point at `.agent/`.
-- After adding a new template file, update `INDEX.md`, run `./.agent/scripts/sync_cursor_kit.sh` (syncs `.cursor/` + `app-desktop/docs/templates/`), and `docs/templates/README.md` in target projects.
+- **Registry** = symlinks + kit-owned files (`INDEX.md`, `writing-guide.md`, `section-contracts.md`, `lifecycle.md`, `TEMPLATE_SOURCES.md`).
+- **Never** edit symlinks in `.cursor/` — they point at `.agent/`.
+- **No `docs/templates/`** — removed in v11 (Onda C). Do not recreate under `docs/`.
+- After adding a new template file: update `INDEX.md`, edit the canonical skill `references/` path, then run `./.agent/scripts/sync_cursor_kit.sh` (syncs `.cursor/references/templates/` only).
 
 ---
 
@@ -30,7 +30,7 @@ CANONICAL (edit here)          REGISTRY (agents read)              HUMAN / CURSO
 | `epic-template.md` | `.agent/skills/create-epic/references/epic-template.md` | `.agent/references/templates/epic-template.md` | `/create-epic` |
 | `version-template.md` | `.agent/skills/create-version/references/version-template.md` | `.agent/references/templates/version-template.md` | `/create-version` |
 | `sprint-template.md` | `.agent/skills/create-sprint/references/sprint-template.md` | `.agent/references/templates/sprint-template.md` | `/plan-sprint` |
-| `board-schema.md` | `.agent/skills/generate-board-json/references/board-schema.md` | `.agent/references/templates/board-schema.md` | `/sync-board` |
+| `board-schema.md` | _(removed v11)_ | — | use `meridian_db_export --format planning` |
 | `decision-template.md` | `.agent/skills/update-decisions-log/references/decision-template.md` | `.agent/references/templates/decision-template.md` | `update-decisions-log` |
 | `decision-schema.md` | `.agent/skills/update-decisions-log/references/decision-schema.md` | `.agent/references/templates/decision-schema.md` | `update-decisions-log` (validation) |
 | `doc-templates.md` | `.agent/skills/init-project/references/doc-templates.md` | `.agent/references/templates/doc-templates.md` | `/init-meridian` |
@@ -69,9 +69,12 @@ CANONICAL (edit here)          REGISTRY (agents read)              HUMAN / CURSO
 
 ---
 
-## Dogfooding copy
+## Humans and managers
 
-In this repo, human-readable mirrors live at `app-desktop/docs/templates/` (symlinks to registry). Open [README.md](../../../app-desktop/docs/templates/README.md) in the monitor **Templates** section.
+Templates for **reading** (not copying into `docs/`):
+
+- Registry: `.agent/references/templates/INDEX.md`
+- Extension **Agents Help** / kit reference panels read the same paths at runtime.
 
 Regenerate Cursor mirrors after clone:
 

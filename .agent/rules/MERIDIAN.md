@@ -42,7 +42,7 @@ Before any action, classify:
 | **REVIEW US** | "review US", `/review-us`, "audit US", "check story" | `board-keeper` + `review-user-story` |
 | **CLOSE US** | "complete US", "mark done", "record", `/complete-us` | `board-keeper` + `complete-user-story` |
 | **CLOSE SPRINT** | "complete sprint", "close sprint", `/complete-sprint` | `sprint-planner` + `complete-sprint` |
-| **LOG DECISION** | "log decision", "decision log", `/update-decisions-log`, `docs/decisions/` | read `update-decisions-log` + run `date` before Write |
+| **LOG DECISION** | "log decision", "decision log", `/update-decisions-log` | read `update-decisions-log` + run `date` before `prepend-decision` CLI |
 | **SECURITY** | "security", "OWASP", "secrets", `02_security` | `security-steward` |
 | **START PROJECT** | "start", "meridian setup", "create docs" | `process-manager` + `init-project` |
 | **CODE** | "implement", "create app", "fix", "refactor" | `/implement-us US-XXXX` or equivalent gate; US `ready: true` required |
@@ -92,7 +92,8 @@ Before any action, classify:
 ### Source of truth
 
 - `docs/` is the source of truth of the **target project** (do not confuse with this repo's `app-desktop/docs/` unless context is explicit).
-- `docs/kanban/board.json` is **derived** from `docs/us/*.md`.
+- Delivery backlog lives in `.meridian/meridian.db` (epics, versions, sprints, US, decisions).
+- Board UI reads SQLite via `meridian_db_export --format planning`; `board_snapshots` on upsert.
 - Read `.agent/MERIDIAN.md` before changing project structure.
 
 ### Documentation precedes code
@@ -103,8 +104,8 @@ Do not write product code until required docs for the current phase exist (see `
 
 - Do not mark `approved` without human confirmation or explicit authorization.
 - Do not create US before `05_architecture.md` is `approved`.
-- Do not edit old entries in `docs/decisions/`; new entries go **at the start** of `entries`.
-- **Before any Write to `docs/decisions/`:** run `date +"%Y-%m-%d"` (file + JSON `date`) and `date +"%H:%M"` (`entries[].time`). Never invent or round timestamps. Use workflow `/update-decisions-log` or read skill `update-decisions-log` first.
+- Do not edit old decision rows in SQLite; new entries via `prepend-decision` only.
+- **Before `prepend-decision`:** run `date +"%Y-%m-%d"` (`--date`) and `date +"%H:%M"` (`--time`). Never invent or round timestamps. Use workflow `/update-decisions-log` or read skill `update-decisions-log` first.
 
 ### Acceptance and status
 
@@ -115,8 +116,8 @@ Do not write product code until required docs for the current phase exist (see `
 
 - Protect `.env`, `.env.*`, logs, builds, `node_modules`, caches.
 - Do not expose secrets; do not run destructive commands without approval.
-- Security changes require a decision in `docs/decisions/YYYY-MM-DD.json`.
-- After `/complete-us` + `/sync-board`, the **manager** commits (one US per commit by default). Agents may suggest a message in `### Executed`; they do not `git commit` unless explicitly asked. See `.agent/references/commit-after-us-close.md`.
+- Security changes require a decision via `prepend-decision` (SQLite).
+- After `/complete-us`, the **manager** commits (one US per commit by default). Agents suggest message in `### Executed`; they do not `git commit` unless explicitly asked. See `.agent/references/commit-after-us-close.md`.
 
 ### Human manager
 
@@ -136,15 +137,15 @@ The person is manager of the process. Agents report blockers, next step, and pen
 | `02_security.md` | `security-steward` | `security-review` |
 | `05_architecture.md` | `architecture-guardian` | `architecture-folder-guide.md` + `security-review` |
 | `docs/architecture/*.md` | `architecture-guardian` | indexed from `05`; gate stays on `05` only |
-| `docs/versions/`, `docs/sprints/` (create/plan) | `sprint-planner` | `create-sprint`, `create-version` |
-| `docs/sprints/` (close) | `sprint-planner` | `complete-sprint` |
-| `docs/us/*.md` (create) | `board-keeper` | `create-user-story` + `code-quality-at-us-time.md` |
-| `docs/us/*.md` (review) | `board-keeper` | `review-user-story` |
-| `docs/us/*.md` (refine) | `board-keeper` | `refine-user-story` + `code-quality-at-us-time.md` + `04_principles.md` |
-| `docs/us/*.md` (implement) | `process-manager` | `implement-user-story` + `code-quality-at-us-time.md` + `04_principles.md` |
-| `docs/us/*.md` (close) | `board-keeper` | `complete-user-story` |
-| `board.json` | `board-keeper` | `generate-board-json` |
-| `11_decisions.md` (stub) + `docs/decisions/` | any relevant agent | `update-decisions-log` |
+| Epics / versions / sprints (create/plan) | `sprint-planner` | `create-sprint`, `create-version` |
+| Sprints (close) | `sprint-planner` | `complete-sprint` |
+| User stories (create) | `board-keeper` | `create-user-story` |
+| User stories (review) | `board-keeper` | `review-user-story` |
+| User stories (refine) | `board-keeper` | `refine-user-story` |
+| User stories (implement) | `process-manager` | `implement-user-story` |
+| User stories (close) | `board-keeper` | `complete-user-story` |
+| Decision log | any relevant agent | `update-decisions-log` (`prepend-decision`) |
+| `11_decisions.md` (stub) | any relevant agent | `update-decisions-log` |
 
 ---
 

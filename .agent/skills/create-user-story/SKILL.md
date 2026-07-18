@@ -1,85 +1,75 @@
 ---
 name: create-user-story
-description: Creates a valid Meridian user story after epics and versions are approved. Use when adding work to docs/us and keeping acceptance criteria concrete.
+description: Creates a Meridian user story in SQLite after epics and versions exist. Use when adding work to the backlog with concrete acceptance criteria.
 allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 ---
 
 # Create user story (Meridian)
 
+> **v11:** delivery lives in `.meridian/meridian.db` — never create `docs/us/*.md`.
+
 ## Selective reading
 
 | File | When to read |
 | ------- | ---------- |
-| `.agent/references/templates/writing-guide.md` | **Mandatory** — how to write explanatory US prose |
-| `.agent/references/templates/code-quality-at-us-time.md` | **Mandatory** — DRY, SRP, link to `04_principles` |
+| `.agent/references/templates/writing-guide.md` | **Mandatory** — explanatory US prose |
+| `.agent/references/templates/code-quality-at-us-time.md` | **Mandatory** — DRY, SRP |
 | `.agent/references/templates/INDEX.md` | Agent protocol |
-| `references/us-template.md` | **Mandatory** — full structure before Write |
+| `references/us-template.md` | **Mandatory** — full `body_markdown` shape |
+
+## Delivery commands
+
+```bash
+python3 .agent/scripts/meridian_delivery.py list epics
+python3 .agent/scripts/meridian_delivery.py list versions
+python3 .agent/scripts/meridian_delivery.py show US-0115 --full   # dependency context
+python3 .agent/scripts/meridian_delivery.py create-us --title "..." --epic EPIC-15 --version v10
+python3 .agent/scripts/meridian_delivery.py update-us US-0116 --from-file /tmp/us.md
+```
+
+Never Write `docs/us/` or `docs/kanban/board.json`. Upsert records `board_snapshots` automatically.
 
 ## Preconditions (hard gate)
 
 | Doc | Required status |
 | --- | -------------- |
 | `05_architecture.md` | `approved` |
-| epic/version in folders | exist |
-| Referenced epic | `docs/epics/EPIC-XX.md` exists |
-| Referenced version | `docs/versions/vX.md` exists |
+| epic / version rows | exist in SQLite (`list epics`, `list versions`) |
 | Profile in `03_user_types.md` | exists |
 
-Frontmatter links `epic:` — **do not paste epic text** into the body. Explain **this slice** in Why / Where / Approach.
+Frontmatter links `epic:` — **do not paste epic text** into the body.
 
 ## Phase 0 — clarify before writing
 
-If the request is vague, ask (then write):
-
-1. Who is the user (`03_user_types.md`)?
-2. What **single slice** does this US deliver — not the whole epic?
-3. What exists today vs after **this US only**?
-4. What does `depends_on` provide; what does this unblock?
-5. How will we know it is done (`done_when` + acceptance)?
-
-Read linked epic and dependency US **for understanding** — write in your own words.
+If vague, ask: user type, single slice, before/after, `depends_on`, `done_when` + acceptance.
 
 ## Writing rules (mandatory)
 
 | Section | Rule |
 | ------- | ---- |
 | **Why** | 2–4 sentences: problem, before/after for this slice |
-| **Where** | 2–4 sentences: version, deps, next US — cite ids, not epic body |
-| **Approach** | optional at create; add on refine if bullets help |
-| **Acceptance** | 2–4 observable checklist items — not a copy of Approach |
-| **Architecture refs** | May use `§ TBD` at create; `/refine-us` fills exact heading |
-| **Out of scope** | Prevents SRP violations — what this slice does **not** touch |
-| **Code quality** | Read `code-quality-at-us-time.md`; one slice = one concern |
-
-Forbidden: telegraphic stubs, repeating acceptance under Approach, “see EPIC-XX” without explanation.
+| **Where** | 2–4 sentences: version, deps, next US |
+| **Approach** | optional at create; refine adds bullets |
+| **Acceptance** | 2–4 observable checklist items |
+| **Out of scope** | Prevents SRP violations |
 
 ## Procedure
 
-1. Read `writing-guide.md` + `code-quality-at-us-time.md` + full `us-template.md`.
-2. Read epic, version, dependency US files for context.
-3. Next ID = highest `US-XXXX` + 1 (4 digits).
-4. Write full US — especially Why / Where / Approach with explanatory prose.
-5. Set `ready: false` — implement blocked until `/refine-us`.
-6. Save `docs/us/US-XXXX.md`.
-7. `generate-board-json`; `update-decisions-log` if acceptance model changes.
-
-## Validations before saving
-
-- Every `##` / `###` from template present
-- Why + Where + Approach filled with real sentences (not placeholders)
-- `ready: false`
-- `done_when` measurable
+1. Read `writing-guide.md`, `code-quality-at-us-time.md`, `us-template.md`.
+2. Read epic/version/dependency US via `show --full` or `meridian_db_export.py --entity epics --id EPIC-XX`.
+3. `create-us` for id + stub, or draft full markdown with next id from `list user_stories`.
+4. Write full US markdown (Why / Where / Approach with real sentences).
+5. `update-us US-XXXX --from-file` with `ready: false`.
+6. `prepend-decision` if acceptance model changes.
 
 ## Output
 
 ```txt
 US created:
-File:
+ID: US-XXXX
 Epic:
 Version:
 Depends on:
 Narrative complete: yes | needs refine
-Board updated:
-Open questions:
 Next: /refine-us US-XXXX
 ```

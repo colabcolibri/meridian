@@ -23,7 +23,7 @@
 ```md
 ## Capability
 
-Today the Process Manager opens the repo and cannot see delivery state without reading many Markdown files and mentally grouping them by release. This epic adds a monitor in app-desktop: Deliverables and Board read from `docs/epics/` and `docs/us/`, with status derived from frontmatter — board.json is output, never the source of truth.
+Today the Process Manager opens the repo and cannot see delivery state without querying many SQLite rows and mentally grouping them by release. This epic adds a monitor in the VS Code extension: Deliverables and Board read from `.meridian/meridian.db` via planning export — `board_snapshots` on upsert, never `board.json` on disk.
 
 The manager filters by version and epic, sees ❌/🔶/✅ in one place, and uses that view in planning sessions. No manual column maintenance, no orphan IDs.
 
@@ -58,11 +58,11 @@ In a single planning session the manager answers “what is still open in v1?”
 
 ### Why
 
-v1 and v0 US mix on the same board today, which makes sprint review noisy. This story adds version filtering only — it does not change how stories are loaded or how board.json is generated. When done, the manager selects v1 and the columns show only v1 cards.
+v1 and v0 US mix on the same board today, which makes sprint review noisy. This story adds version filtering only — it does not change how stories are loaded from SQLite. When done, the manager selects v1 and the columns show only v1 cards.
 
 ### Where
 
-Part of v1 / EPIC-04. Depends on US-0022 (kanban reads from `docs/us/`). Unblocks US-0025 (deliverables using the same version focus). No VS Code or write path — read-only monitor change.
+Part of v1 / EPIC-04. Depends on US-0022 (board reads planning export). Unblocks US-0025 (deliverables using the same version focus). Read-only monitor change.
 
 ## Plan
 
@@ -121,11 +121,11 @@ Refine **expands** optional Approach and makes Architecture refs and Planned tes
 ```md
 ## Objective
 
-v2 adds real writes from the editor: VS Code extension scaffold, sync-board command, and validate on save. The manager still uses app-desktop for visibility; the Future VSCode User can run Meridian workflows without leaving the IDE.
+v2 adds real writes from the editor: VS Code extension with SQLite delivery, validate on save, and board reading `meridian_db_export --format planning`. The manager runs Meridian workflows without leaving the IDE.
 
 ## Done criteria
 
-v2 is `complete` when the extension loads in Extension Development Host, at least one command writes to `docs/us/` correctly, and board.json regenerates from disk without manual merge.
+v2 is `complete` when the extension loads in Extension Development Host, upserts at least one US via `meridian_delivery.py`, and the board reflects SQLite without manual JSON merge.
 ```
 
 ---

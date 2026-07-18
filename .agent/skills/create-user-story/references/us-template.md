@@ -65,7 +65,7 @@ Read `code-quality-at-us-time.md` at refine — Approach must respect DRY and SR
 
 ### Related decisions
 
-- _n/a_ | `docs/decisions/YYYY-MM-DD.json` — entry title when relevant
+- _n/a_ | decision log via `prepend-decision` when relevant
 
 ### Planned
 

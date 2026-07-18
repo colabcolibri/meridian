@@ -41,7 +41,7 @@ Bullets with short rationale — what waits for a later version and why.
 
 ## Sprints
 
-- `vX-S1` — theme of sprint in a phrase (file in docs/sprints/)
+- `vX-S1` — theme of sprint in a phrase (row in SQLite `sprints`)
 ```
 
 ## Status

@@ -75,6 +75,10 @@ python3 .agent/scripts/meridian_delivery.py implement-gate US-0115
 python3 .agent/scripts/meridian_delivery.py implement-gate US-0115 --json
 python3 .agent/scripts/meridian_delivery.py set-ready US-0115 --ready true
 python3 .agent/scripts/meridian_delivery.py set-summary US-0115 --text "4-8 sentence summary"
+python3 .agent/scripts/meridian_delivery.py prepend-decision \
+  --date "$(date +"%Y-%m-%d")" --time "$(date +"%H:%M")" \
+  --title "..." --affected-document "docs/05_architecture.md" \
+  --what-changed "..." --why-changed "..." --impact "..." --responsible "..."
 
 # 5. Validate
 python3 .agent/scripts/validate_meridian.py .

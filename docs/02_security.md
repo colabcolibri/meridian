@@ -27,8 +27,8 @@ No role-based permissions in the product. The human manager directs agents; agen
 
 | Control | Rule |
 | ------- | ---- |
-| Write scope (phase) | `docs/00`–`11`, `docs/discovery/`, `docs/architecture/`, `docs/inventory/`, `docs/decisions/*.json` |
-| Write scope (delivery) | `.meridian/meridian.db` via kit Python scripts — **not** `docs/us/`, `docs/epics/`, `docs/versions/`, `docs/sprints/`, or `docs/kanban/board.json` in v11 |
+| Write scope (phase) | `docs/00`–`11`, `docs/discovery/`, `docs/architecture/`, `docs/inventory/` |
+| Write scope (delivery) | `.meridian/meridian.db` via `meridian_delivery.py` — not legacy `docs/us/`, `docs/epics/`, etc. |
 | Path traversal | Reject writes outside project root + resolved workspace paths |
 | Kit (`.agent/`) | Read for detection; do not modify kit files from extension commands |
 | Scripts | Spawn `python3` with explicit script path under `.agent/scripts/`; pass project root as argv — no shell injection from UI input |
@@ -50,7 +50,7 @@ Out of scope — local-only product.
 
 ## Audit and logs
 
-- Decisions: append-only `docs/decisions/YYYY-MM-DD.json` (prepend in `entries`).
+- Decisions: append-only SQLite `decisions` table via `prepend-decision`.
 - Editing an `approved` phase doc should trigger `update-decisions-log` and set doc `status: review`.
 
 ## Secrets management

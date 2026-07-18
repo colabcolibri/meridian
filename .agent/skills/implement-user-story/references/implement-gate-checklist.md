@@ -25,7 +25,7 @@ Use with `/implement-us US-XXXX` **before** any Write on product code for that s
 
 ## After gate passes
 
-1. Read full `docs/us/US-XXXX.md` (Intent + Plan).
+1. Read full US via `meridian_delivery.py show US-XXXX --full` (Intent + Plan).
 2. Read every Architecture ref path/§ before coding.
 3. Read `docs/04_principles.md` (DRY, SRP) — apply during implementation.
 4. Implement against Acceptance + Planned steps only.

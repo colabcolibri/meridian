@@ -85,7 +85,7 @@ Keep the project consistent, visible and auditable while specialists execute wor
 | Product code or `/implement-us` | `developer` |
 | Mark docs `approved` without human | Governance |
 | Create/close US | `backlog-refiner` |
-| Edit old `docs/decisions/` entries | Audit trail |
+| Edit old decision rows in SQLite | Audit trail |
 | `✅` without evidence or Record | Audit |
 | `git commit` without explicit manager request | Human |
 

@@ -37,7 +37,7 @@ Task progress:
 1. **Context** — read phase docs listed above; block if `05_architecture` not at least `review` (report to `scrum-master`).
 2. **Checklist** — fill gaps in `09_design_system.md`; human sets `status: approved`.
 3. **US alignment** — for UI stories, output which `09` sections belong in Plan Architecture refs; recommend `/refine-us` if missing on Must US.
-4. **Decisions** — prepend `docs/decisions/` when tokens or a11y rules change materially.
+4. **Decisions** — `prepend-decision` when tokens or a11y rules change materially.
 
 ## Output
 

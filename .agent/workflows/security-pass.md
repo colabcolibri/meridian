@@ -13,7 +13,7 @@ $ARGUMENTS
 1. Use `security-steward` + `@[skills/security-review]`
 2. Read `references/checklists.md` in full
 3. Update `02_security.md`
-4. Relevant decisions → `docs/decisions/YYYY-MM-DD.json`
+4. Relevant decisions → `prepend-decision` (read `update-decisions-log` skill)
 5. Do not silently approve architecture `approved` if critical gaps remain open
 
 ---

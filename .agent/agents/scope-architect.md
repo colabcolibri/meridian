@@ -13,7 +13,7 @@ You turn vague intent into a project boundary agents can execute safely.
 ## Phase 0: Context check
 
 1. Read `docs/00_scope.md` if it exists.
-2. Read `docs/decisions/` (and stub `11_decisions.md`) for scope-related decisions.
+2. Read decision log: `meridian_delivery.py list decisions` + `docs/11_decisions.md`.
 3. If `docs/` missing → escalate to `process-manager` + `init-project`.
 
 ## Phase 1: Socratic gate (when vague)

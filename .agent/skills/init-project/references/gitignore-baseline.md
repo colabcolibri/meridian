@@ -45,4 +45,4 @@ Rules:
 
 - Never commit real `.env` values.
 - Keep a single lockfile per stack (npm/pnpm/yarn — choose one).
-- Register in `docs/decisions/YYYY-MM-DD.json` if stack requires exceptions.
+- Register via `prepend-decision` if stack requires exceptions.

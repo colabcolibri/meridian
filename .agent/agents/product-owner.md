@@ -27,7 +27,7 @@ Meridian splits roles:
 1. Read `docs/discovery/product-brief.md` if it exists.
 2. Read `docs/00_scope.md` and `docs/03_user_types.md` if they exist.
 3. Read `docs/inventory/as-is.md` when codebase exists (Mode B).
-4. Read `docs/decisions/` for product-direction entries.
+4. Read `docs/11_decisions.md` + `list decisions` for product-direction entries.
 5. If manager asks to **implement** → defer to `developer` (after `ready: true`).
 
 ---

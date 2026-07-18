@@ -468,6 +468,113 @@ def upsert_user_story(
     sync_story_dependencies(conn, story_id, depends)
 
 
+DECISION_ENTRY_FIELDS = (
+    "time",
+    "title",
+    "affected_document",
+    "what_changed",
+    "why_changed",
+    "impact",
+    "responsible",
+)
+
+DECISION_DATE_RE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+DECISION_TIME_RE = re.compile(r"^\d{2}:\d{2}$")
+
+
+def validate_decision_entry(entry: dict[str, Any]) -> list[str]:
+    errors: list[str] = []
+    if not isinstance(entry, dict):
+        return ["entry must be an object"]
+    time = entry.get("time")
+    if not time or not DECISION_TIME_RE.match(str(time)):
+        errors.append("time must be HH:MM (24h)")
+    title = entry.get("title")
+    if not title or not str(title).strip():
+        errors.append("title is required")
+    for field in DECISION_ENTRY_FIELDS:
+        if field in ("time", "title"):
+            continue
+        if field not in entry or not str(entry.get(field, "")).strip():
+            errors.append(f"missing {field}")
+    return errors
+
+
+def validate_decision_date(decision_date: str) -> list[str]:
+    if not DECISION_DATE_RE.match(decision_date):
+        return ["decision_date must use YYYY-MM-DD format"]
+    return []
+
+
+def prepend_decision(
+    conn: sqlite3.Connection,
+    decision_date: str,
+    entry: dict[str, Any],
+) -> int:
+    """Prepend entry at index 0 for decision_date. Returns entry_index (always 0)."""
+    date_errors = validate_decision_date(decision_date)
+    entry_errors = validate_decision_entry(entry)
+    errors = date_errors + entry_errors
+    if errors:
+        raise ValueError("; ".join(errors))
+    conn.execute(
+        "UPDATE decisions SET entry_index = entry_index + 1 WHERE decision_date = ?",
+        (decision_date,),
+    )
+    conn.execute(
+        """
+        INSERT INTO decisions (decision_date, entry_index, title, payload_json)
+        VALUES (?, 0, ?, ?)
+        """,
+        (decision_date, entry.get("title"), json.dumps(entry, ensure_ascii=False)),
+    )
+    return 0
+
+
+def list_decision_dates(conn: sqlite3.Connection) -> list[tuple[str, int]]:
+    rows = conn.execute(
+        """
+        SELECT decision_date, COUNT(*) AS entry_count
+        FROM decisions
+        GROUP BY decision_date
+        ORDER BY decision_date DESC
+        """
+    ).fetchall()
+    return [(str(row["decision_date"]), int(row["entry_count"])) for row in rows]
+
+
+def fetch_decisions_for_date(
+    conn: sqlite3.Connection,
+    decision_date: str,
+) -> list[dict[str, Any]]:
+    rows = conn.execute(
+        """
+        SELECT entry_index, title, payload_json
+        FROM decisions
+        WHERE decision_date = ?
+        ORDER BY entry_index ASC
+        """,
+        (decision_date,),
+    ).fetchall()
+    entries: list[dict[str, Any]] = []
+    for row in rows:
+        payload = json.loads(row["payload_json"])
+        payload.setdefault("title", row["title"])
+        entries.append(payload)
+    return entries
+
+
+def export_decisions_by_date(package_root: str | Path) -> dict[str, list[dict[str, Any]]]:
+    conn = connect(package_root)
+    try:
+        result: dict[str, list[dict[str, Any]]] = {}
+        for decision_date, _ in list_decision_dates(conn):
+            result[decision_date] = fetch_decisions_for_date(conn, decision_date)
+        return result
+    finally:
+        conn.close()
+
+
 def import_decisions(conn: sqlite3.Connection, docs: Path) -> int:
     decisions_dir = docs / "decisions"
     count = 0

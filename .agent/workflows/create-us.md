@@ -40,7 +40,7 @@ RULES:
    - Plan / Architecture refs — ok with § TBD until refine
    - Plan / Planned — draft test steps
 5. ready: false
-6. generate-board-json
+6. `update-us --from-file` after full markdown draft
 7. Tell user: run /refine-us before implement
 ```
 
@@ -50,11 +50,10 @@ RULES:
 
 ```txt
 US created:
-File:
+ID: US-XXXX
 Summary (one line):
 Why written: yes | thin — needs refine
-Board updated:
-Next: /review-us US-XXXX (optional) | /refine-us US-XXXX | then /implement-us after ready
+Next: /review-us US-XXXX (optional) | /refine-us US-XXXX
 ```
 
 ---

@@ -55,7 +55,7 @@ Same list as refine-checklist: `_(fill in`, `§ [section name`, `path/to/…`, `
 
 ```txt
 US review: US-XXXX
-File: docs/us/US-XXXX.md
+ID: US-XXXX
 Validator: ...
 Checklist: 11/13 pass
 

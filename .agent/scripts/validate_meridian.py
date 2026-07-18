@@ -226,16 +226,125 @@ def read_frontmatter(path: Path) -> dict[str, str]:
     return data
 
 
+def parse_cli_args(argv: list[str]) -> tuple[Path, bool, bool, bool]:
+    json_output = False
+    sqlite_only = False
+    strict_kit_md = False
+    positional: list[str] = []
+    for arg in argv:
+        if arg == "--json":
+            json_output = True
+        elif arg == "--sqlite-only":
+            sqlite_only = True
+        elif arg == "--strict-kit-md":
+            strict_kit_md = True
+        else:
+            positional.append(arg)
+    root = Path(positional[0]).resolve() if positional else Path.cwd()
+    return root, json_output, sqlite_only, strict_kit_md
+
+
+def validate_sqlite_only_mode(root: Path, errors: list[str]) -> None:
+    if not sqlite_delivery_active(root):
+        errors.append("--sqlite-only: missing .meridian/meridian.db — run meridian_delivery.py bootstrap")
+        return
+    docs = root / "docs"
+    lib_dir = _SCRIPT_DIR / "lib"
+    if str(lib_dir) not in sys.path:
+        sys.path.insert(0, str(lib_dir))
+    from meridian_db import delivery_md_paths  # noqa: PLC0415
+
+    legacy = delivery_md_paths(docs)
+    if legacy:
+        sample = ", ".join(str(p.relative_to(root)) for p in legacy[:5])
+        suffix = "…" if len(legacy) > 5 else ""
+        errors.append(f"--sqlite-only: legacy delivery files remain: {sample}{suffix}")
+    board = docs / "kanban" / "board.json"
+    if board.is_file():
+        errors.append("--sqlite-only: remove docs/kanban/board.json (board_snapshots in SQLite)")
+
+
+def _kit_line_allowed(line: str) -> bool:
+    lowered = line.lower()
+    allow = (
+        "never ",
+        "do not",
+        "forbidden",
+        "legacy",
+        "import-only",
+        "removed",
+        "não ",
+        "not write",
+        "→",
+        "v1)",
+        "anti-pattern",
+        "grep ok",
+        "histórico",
+        "proibição",
+        "purge",
+        "migrate",
+    )
+    return any(token in lowered for token in allow)
+
+
+def validate_kit_markdown_v11(kit_root: Path, errors: list[str], warnings: list[str], *, strict: bool) -> None:
+    """Flag v1 delivery write paths still present in operational kit markdown."""
+    patterns: list[tuple[str, str]] = [
+        (r"generate-board-json", "generate-board-json (removed)"),
+        (r"/sync-board", "sync-board (removed in v11)"),
+        (r"Save `docs/(us|epics|versions|sprints)/", "Save docs/*/ as primary write path"),
+        (r"Invoke `generate-board-json`", "generate-board-json invoke"),
+        (r"6\. generate-board-json", "workflow step generate-board-json"),
+    ]
+    scan_roots = [
+        kit_root / "skills",
+        kit_root / "workflows",
+        kit_root / "agents",
+        kit_root / "MERIDIAN.md",
+        kit_root / "rules" / "MERIDIAN.md",
+    ]
+    skill_dead = kit_root / "skills" / "generate-board-json" / "SKILL.md"
+    if skill_dead.is_file():
+        msg = "skill generate-board-json still exists — remove folder"
+        if strict:
+            errors.append(msg)
+        else:
+            warnings.append(msg)
+
+    for base in scan_roots:
+        if base.is_file():
+            files = [base]
+        elif base.is_dir():
+            files = sorted(base.rglob("*.md"))
+        else:
+            continue
+        rel_base = kit_root
+        for path in files:
+            if "references/plans/" in str(path):
+                continue
+            try:
+                text = path.read_text(encoding="utf-8")
+            except OSError:
+                continue
+            for lineno, line in enumerate(text.splitlines(), start=1):
+                if _kit_line_allowed(line):
+                    continue
+                for pattern, label in patterns:
+                    if re.search(pattern, line):
+                        rel = path.relative_to(rel_base)
+                        msg = f"v11 kit drift ({label}): {rel}:{lineno}"
+                        if strict:
+                            errors.append(msg)
+                        else:
+                            warnings.append(msg)
+                        break
+
+
 def main() -> int:
     argv = sys.argv[1:]
-    json_output = False
-    if "--json" in argv:
-        json_output = True
-        argv = [arg for arg in argv if arg != "--json"]
-
-    root = Path(argv[0]).resolve() if argv else Path.cwd()
+    root, json_output, sqlite_only_flag, strict_kit_md = parse_cli_args(argv)
     docs = root / "docs"
-    sqlite_delivery = sqlite_delivery_active(root)
+    sqlite_delivery = sqlite_delivery_active(root) or sqlite_only_flag
     errors: list[str] = []
     warnings: list[str] = []
 
@@ -250,6 +359,10 @@ def main() -> int:
         validate_agent_kit(kit_root, errors, warnings)
         validate_cursor_adapter(kit_root, warnings)
         validate_codex_adapter(kit_root, warnings)
+        validate_kit_markdown_v11(kit_root, errors, warnings, strict=strict_kit_md)
+
+    if sqlite_only_flag:
+        validate_sqlite_only_mode(root, errors)
 
     architecture_approved = False
     if not docs.exists():
@@ -371,63 +484,69 @@ def main() -> int:
         if not sqlite_delivery:
             errors.append("Missing docs/epics/ directory.")
 
-    if decisions_dir.is_dir():
-        for decision_path in sorted(decisions_dir.glob("*.json")):
-            if not re.match(r"\d{4}-\d{2}-\d{2}\.json$", decision_path.name):
-                errors.append(f"Invalid decision filename: {decision_path.name}")
-                continue
-            try:
-                payload = json.loads(decision_path.read_text(encoding="utf-8"))
-            except json.JSONDecodeError as exc:
-                errors.append(f"Invalid JSON in {decision_path.name}: {exc}")
-                continue
-            if not isinstance(payload, dict):
-                errors.append(f"{decision_path.name}: root must be an object")
-                continue
-            date = payload.get("date")
-            if not date:
-                errors.append(f"Missing date in {decision_path.name}")
-            elif date != decision_path.stem:
-                errors.append(
-                    f"{decision_path.name}: date {date} does not match filename"
-                )
-            elif not re.match(r"^\d{4}-\d{2}-\d{2}$", str(date)):
-                errors.append(f"{decision_path.name}: date must use YYYY-MM-DD format")
-            entries = payload.get("entries")
-            if not isinstance(entries, list):
-                errors.append(f"{decision_path.name}: entries must be an array")
-                continue
-            if not entries:
-                warnings.append(f"{decision_path.name}: no entries in entries array")
-            for index, entry in enumerate(entries):
-                if not isinstance(entry, dict):
-                    errors.append(f"{decision_path.name}: entries[{index}] must be an object")
+    if decisions_dir.is_dir() and list(decisions_dir.glob("*.json")):
+        if sqlite_delivery:
+            errors.append(
+                "Legacy docs/decisions/*.json present — decisions live in "
+                ".meridian/meridian.db (use prepend-decision; purge JSON after import)"
+            )
+        else:
+            for decision_path in sorted(decisions_dir.glob("*.json")):
+                if not re.match(r"\d{4}-\d{2}-\d{2}\.json$", decision_path.name):
+                    errors.append(f"Invalid decision filename: {decision_path.name}")
                     continue
-                time = entry.get("time")
-                title = entry.get("title")
-                if not time or not re.match(r"^\d{2}:\d{2}$", str(time)):
+                try:
+                    payload = json.loads(decision_path.read_text(encoding="utf-8"))
+                except json.JSONDecodeError as exc:
+                    errors.append(f"Invalid JSON in {decision_path.name}: {exc}")
+                    continue
+                if not isinstance(payload, dict):
+                    errors.append(f"{decision_path.name}: root must be an object")
+                    continue
+                date = payload.get("date")
+                if not date:
+                    errors.append(f"Missing date in {decision_path.name}")
+                elif date != decision_path.stem:
                     errors.append(
-                        f"{decision_path.name}: entries[{index}].time must be HH:MM"
+                        f"{decision_path.name}: date {date} does not match filename"
                     )
-                if not title:
-                    errors.append(
-                        f"{decision_path.name}: entries[{index}].title is required"
-                    )
-                for field in (
-                    "affected_document",
-                    "what_changed",
-                    "why_changed",
-                    "impact",
-                    "responsible",
-                ):
-                    if field not in entry:
+                elif not re.match(r"^\d{4}-\d{2}-\d{2}$", str(date)):
+                    errors.append(f"{decision_path.name}: date must use YYYY-MM-DD format")
+                entries = payload.get("entries")
+                if not isinstance(entries, list):
+                    errors.append(f"{decision_path.name}: entries must be an array")
+                    continue
+                if not entries:
+                    warnings.append(f"{decision_path.name}: no entries in entries array")
+                for index, entry in enumerate(entries):
+                    if not isinstance(entry, dict):
+                        errors.append(f"{decision_path.name}: entries[{index}] must be an object")
+                        continue
+                    time = entry.get("time")
+                    title = entry.get("title")
+                    if not time or not re.match(r"^\d{2}:\d{2}$", str(time)):
                         errors.append(
-                            f"{decision_path.name}: entries[{index}] missing {field}"
+                            f"{decision_path.name}: entries[{index}].time must be HH:MM"
                         )
-    else:
+                    if not title:
+                        errors.append(
+                            f"{decision_path.name}: entries[{index}].title is required"
+                        )
+                    for field in (
+                        "affected_document",
+                        "what_changed",
+                        "why_changed",
+                        "impact",
+                        "responsible",
+                    ):
+                        if field not in entry:
+                            errors.append(
+                                f"{decision_path.name}: entries[{index}] missing {field}"
+                            )
+    elif not sqlite_delivery:
         errors.append("Missing docs/decisions/ directory.")
 
-    if us_dir.exists():
+    if us_dir.exists() and not sqlite_delivery:
         legacy_missing_context: list[str] = []
         for story in sorted(us_dir.glob("US-*.md")):
             match = re.match(r"US-\d{4}\.md$", story.name)
@@ -515,8 +634,11 @@ def main() -> int:
             )
 
     if board_path.exists():
-        if sqlite_delivery:
-            pass  # v11: board.json ignored when meridian.db exists
+        if sqlite_delivery or sqlite_only_flag:
+            if sqlite_only_flag:
+                errors.append(
+                    "--sqlite-only: remove docs/kanban/board.json (board_snapshots in SQLite)"
+                )
         else:
             try:
                 board = json.loads(board_path.read_text(encoding="utf-8"))

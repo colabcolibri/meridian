@@ -16,7 +16,7 @@ $ARGUMENTS
 4. **Hard block:** `ready: true` required — if false → stop; recommend `/refine-us`
 5. Read every **Architecture refs** section before Write on code
 6. Implement with DRY + SRP — reuse modules per Approach; no scope creep across layers
-7. One US per session — cite `docs/us/US-XXXX.md` explicitly
+7. One US per session — cite `US-XXXX` and load with `show --full`
 8. Do **not** mark `✅` or run `/complete-us` in the same turn unless manager only asked to close
 9. Partial delivery → `🔶` + `Missing:` in Acceptance; no forced close
 
@@ -35,7 +35,7 @@ RULES:
 3. If blocked → output blocker; NO product code
 4. If passed → read Architecture refs + 04_principles → implement Acceptance + Planned (DRY + SRP)
 5. validate_meridian.py optional after US edits (not before gate)
-6. Remind manager: review diff → /complete-us → /sync-board → commit (human)
+6. Remind manager: review diff → /complete-us → commit (human)
 ```
 
 ---

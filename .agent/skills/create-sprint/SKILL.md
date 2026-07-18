@@ -1,40 +1,50 @@
 ---
 name: create-sprint
-description: Creates a Meridian sprint file in docs/sprints linked to a version. Use when planning execution slices within a release.
+description: Creates a Meridian sprint row in SQLite linked to a version. Use when planning execution slices within a release.
 allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 ---
 
 # Create sprint (Meridian)
+
+> **v11:** sprints live in SQLite — never create `docs/sprints/*.md`.
 
 ## Selective reading
 
 | File | When to read |
 | ------- | ---------- |
 | `.agent/references/templates/INDEX.md` | Before any sprint create |
-| `references/sprint-template.md` | **Mandatory** before drafting `docs/sprints/vX-SY.md` |
-| `docs/versions/vX.md` | Parent version must exist |
-| `docs/sprints/` | Existing sprints for version |
+| `references/sprint-template.md` | **Mandatory** |
+| Parent version | `meridian_delivery.py list versions` |
+
+## Delivery commands
+
+```bash
+python3 .agent/scripts/meridian_delivery.py list sprints --version v11
+python3 .agent/scripts/meridian_delivery.py create-sprint --version v11 --title "Sprint name" --stories US-0001,US-0002
+cat /tmp/sprint.md | python3 .agent/scripts/meridian_db_export.py . --entity sprints --id v11-S1 --write
+```
+
+Never Write `docs/sprints/`.
 
 ## Preconditions
 
-- File `docs/versions/{version}.md` exists (`version: v1` in sprint).
-- Referenced version is `planned` or `active`.
+- Version row exists (`list versions`).
+- Version is `planned` or `active`.
 - `05_architecture.md` `approved` before creating new US.
 
 ## Procedure
 
-1. Read `.agent/references/templates/INDEX.md` and **full** `references/sprint-template.md`.
-2. List sprints for version in `docs/sprints/vX-S*.md` → next SY = highest + 1.
-3. Fill template with `stories: [US-XXXX, …]` (existing or planned US).
-3. Save `docs/sprints/vX-SY.md`.
-4. New US → `/create-us` after gates; then `/sync-board`.
+1. Read `INDEX.md` + `sprint-template.md`.
+2. `list sprints --version vX` → next id `vX-Sn`.
+3. `create-sprint` or draft markdown + `--write`.
+4. New US → `/create-us` after gates.
 
 ## Output
 
 ```txt
 Sprint created:
-File: docs/sprints/vX-SY.md
+ID: vX-SY
 Version:
 Stories:
-sprint file saved: yes | no
+Saved: yes | no
 ```

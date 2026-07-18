@@ -30,10 +30,10 @@ Brief description.
 ## How to work
 
 1. Approve docs in dependency order: foundation → principles → architecture → detail.
-2. Build backlog in `docs/epics/`, `docs/versions/` and `docs/sprints/`.
-3. Create US only after `05_architecture` approved and epic/version in folders.
-4. Human templates mirror: `docs/templates/README.md` (symlinks to kit).
-5. Regenerate board after US changes.
+2. Build backlog via slash commands (`/create-epic`, `/create-version`, `/plan-sprint`, `/create-us`) — delivery lives in `.meridian/meridian.db`, not `docs/us/`.
+3. Create US only after `05_architecture` approved and epic/version exist in SQLite.
+4. Artifact templates for agents: `.agent/references/templates/INDEX.md` (do not copy into `docs/templates/` — removed in v11).
+5. Board refreshes automatically when `meridian.db` changes (extension + `record_board_snapshot` audit).
 ```
 
 ## `00_scope.md` (initial draft)
@@ -74,33 +74,23 @@ Keep cross-cutting content here; move deep specs to `docs/architecture/` when a 
 
 Optional at init: empty `docs/architecture/README.md` pointing to `architecture-folder-guide.md` in kit.
 
-## `11_decisions.md` + `docs/decisions/` (first entry)
+## `11_decisions.md` + first decision (SQLite)
 
-Create stub `11_decisions.md` (rules) and folder `docs/decisions/`.
-On first day, create `docs/decisions/YYYY-MM-DD.json`:
+Create stub `11_decisions.md` (rules). After `meridian_delivery.py bootstrap`, prepend the first entry:
 
-```json
-{
-  "date": "YYYY-MM-DD",
-  "entries": [
-    {
-      "time": "HH:MM",
-      "title": "Project started with Meridian",
-      "affected_document": "docs/",
-      "what_changed": "Meridian structure created.",
-      "why_changed": "Project start with document governance.",
-      "impact": "All phase docs in draft.",
-      "responsible": "[manager]"
-    }
-  ]
-}
+```bash
+python3 .agent/scripts/meridian_delivery.py prepend-decision \
+  --date "$(date +"%Y-%m-%d")" \
+  --time "$(date +"%H:%M")" \
+  --title "Project started with Meridian" \
+  --affected-document "docs/" \
+  --what-changed "Meridian structure created." \
+  --why-changed "Project start with document governance." \
+  --impact "All phase docs in draft." \
+  --responsible "[manager]"
 ```
 
-## `docs/kanban/board.json`
-
-```json
-[]
-```
+Do **not** create `docs/decisions/`, `docs/kanban/`, or delivery markdown folders when SQLite delivery is active.
 
 ## `docs/inventory/as-is.md` (Mode B only)
 

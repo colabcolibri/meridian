@@ -1,6 +1,6 @@
 ---
 name: init-project
-description: Initializes a project with Meridian docs, decision log, board JSON and minimum governance. Use when starting a new project or repairing a missing Meridian structure. Also handles existing codebases migrating into Meridian.
+description: Initializes a project with Meridian phase docs, SQLite delivery profile, and minimum governance. Use when starting a new project or repairing a missing Meridian structure. Also handles existing codebases migrating into Meridian.
 allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 ---
 
@@ -49,21 +49,24 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 docs/
   README.md
   00_scope.md … 11_decisions.md
-  decisions/
-  epics/
-  versions/
-  sprints/
-  us/
-  templates/          # symlinks to kit delivery templates (recommended)
-  kanban/board.json
+  architecture/       # optional — detail indexed from 05
+  inventory/          # Mode B only — as-is.md
+  discovery/          # optional — product discovery artifacts
+.meridian/
+  delivery.json       # created by bootstrap (meridian.db is gitignored)
 ```
 
-3. Apply frontmatter from `references/doc-templates.md` on each doc (`status: draft`, except initial decision).
-4. `11_decisions.md` (stub) + `docs/decisions/YYYY-MM-DD.json` with entry "Project started with Meridian".
-5. `00_scope.md`: populate with answers from Phase 0 questions — do not leave it blank.
-6. `board.json`: `[]`
+3. Run delivery bootstrap:
+
+```bash
+python3 .agent/scripts/meridian_delivery.py bootstrap
+```
+
+4. Apply frontmatter from `references/doc-templates.md` on each phase doc (`status: draft`, except initial decision).
+5. `11_decisions.md` (stub) + initial decision via `prepend-decision` ("Project started with Meridian").
+6. `00_scope.md`: populate with answers from Phase 0 questions — do not leave it blank.
 7. Validate `.gitignore` with `references/gitignore-baseline.md`.
-8. **Do not** create US, app, API, database or migrations.
+8. **Do not** create US, epics, versions, sprints, `docs/templates/`, `docs/kanban/board.json`, app, API, database or migrations.
 
 ---
 
@@ -133,18 +136,20 @@ If discovery finds **more than one** `docs/` folder named exactly `docs` with Me
 
 | # | Check |
 | - | ----------- |
-| 1 | `docs/`, `decisions/`, `architecture/`, `epics/`, `versions/`, `us/`, `sprints/`, `board.json`, `11_decisions`, `00_scope` exist |
-| 2 | `.env*` protected in `.gitignore` |
-| 3 | No product code created |
-| 4 | (Mode B) `docs/inventory/as-is.md` exists with capability table |
-| 5 | (Mode B) Inferences marked as assumptions — human must review and approve |
+| 1 | `docs/` phase docs (`00`–`11`), `00_scope`, `11_decisions` exist; `meridian.db` bootstrapped |
+| 2 | `.meridian/delivery.json` exists; `meridian.db` bootstrapped |
+| 3 | `.env*` and `.meridian/meridian.db` protected in `.gitignore` |
+| 4 | No `docs/templates/` mirror |
+| 5 | No product code created |
+| 6 | (Mode B) `docs/inventory/as-is.md` exists with capability table |
+| 7 | (Mode B) Inferences marked as assumptions — human must review and approve |
 
 ## Prohibitions
 
 | Forbidden | Allowed |
 | -------- | --------- |
 | Mark phase docs as `approved` without human | `draft` + assumptions |
-| Create US | Empty `us/` structure |
+| Create US | Empty delivery — use `/create-epic` after architecture approved |
 | Create retroactive US with `✅` for legacy | Inventory + epics `complete` + optional v0 |
 | Implement features | Docs + initial decision |
 | (Mode B) Replace existing README | Add `docs/README.md` alongside |

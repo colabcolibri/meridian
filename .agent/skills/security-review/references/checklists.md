@@ -177,5 +177,5 @@ Business logic vulnerabilities do not appear in scanners. They require understan
 - [ ] No unapproved destructive commands executed autonomously (`rm -rf`, `db drop`, `DELETE FROM`, etc.)
 - [ ] No private or regulated data sent to external AI APIs without explicit user consent and documentation in `02_security.md`
 - [ ] Agent actions that affect production (deploy, migrate, delete) require explicit human confirmation
-- [ ] Security-relevant decisions made by agents (auth model, data schema change, permission change) registered in `docs/decisions/YYYY-MM-DD.json`
+- [ ] Security-relevant decisions registered via `prepend-decision`
 - [ ] Agent-generated code is reviewed before merge — not auto-merged without human review

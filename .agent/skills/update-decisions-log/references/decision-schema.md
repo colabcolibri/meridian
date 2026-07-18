@@ -1,21 +1,25 @@
-# Schema — `docs/decisions/YYYY-MM-DD.json`
+# Schema — decision log (SQLite)
 
-## Daily file
+Storage: table `decisions` in `.meridian/meridian.db`.
+
+| Column | Meaning |
+| ------ | ------- |
+| `decision_date` | `YYYY-MM-DD` calendar day |
+| `entry_index` | `0` = newest that day; increases for older entries |
+| `title` | denormalized title (also inside `payload_json`) |
+| `payload_json` | full entry object (fields below) |
+
+## Entry object (`payload_json`)
 
 ```json
 {
-  "date": "2026-06-02",
-  "entries": [
-    {
-      "time": "17:30",
-      "title": "Objective title",
-      "affected_document": "path/to/doc.md",
-      "what_changed": "factual description",
-      "why_changed": "context and motivation",
-      "impact": "affected docs; mark review",
-      "responsible": "role or person"
-    }
-  ]
+  "time": "17:30",
+  "title": "Objective title",
+  "affected_document": "path/to/doc.md",
+  "what_changed": "factual description",
+  "why_changed": "context and motivation",
+  "impact": "affected docs; mark review",
+  "responsible": "role or person"
 }
 ```
 
@@ -23,26 +27,39 @@
 
 | Field | Required | Format |
 | ----- | ----------- | ------- |
-| `date` | yes | `YYYY-MM-DD`, same as filename |
-| `entries` | yes | array; empty only on day bootstrap |
-| `entries[].time` | yes | `HH:MM` (24h) — **real clock** at log time (`date +"%H:%M"`). Not rounded or synthetic. |
-| `entries[].title` | yes | non-empty string |
-| `entries[].affected_document` | yes | string |
-| `entries[].what_changed` | yes | string |
-| `entries[].why_changed` | yes | string |
-| `entries[].impact` | yes | string |
-| `entries[].responsible` | yes | string |
+| `time` | yes | `HH:MM` (24h) — **real clock** at log time (`date +"%H:%M"`) |
+| `title` | yes | non-empty string |
+| `affected_document` | yes | string |
+| `what_changed` | yes | string |
+| `why_changed` | yes | string |
+| `impact` | yes | string |
+| `responsible` | yes | string |
 
 ## Order
 
-- **Prepend:** new decision at the **beginning** of `entries` (`entries.unshift(...)`).
-- Days sorted by filename (ISO date).
+- **Prepend:** `prepend-decision` inserts at `entry_index` 0 and shifts older rows for that date.
+- Days sorted by `decision_date` descending in `list decisions`.
+
+## Write
+
+```bash
+python3 .agent/scripts/meridian_delivery.py prepend-decision --date YYYY-MM-DD ...
+```
+
+## Read
+
+```bash
+python3 .agent/scripts/meridian_delivery.py list decisions
+python3 .agent/scripts/meridian_delivery.py show-decisions --date YYYY-MM-DD --json
+```
 
 ## Validation
 
 ```bash
 python3 .agent/scripts/validate_meridian.py <project-root>
 ```
+
+When `meridian.db` exists, `docs/decisions/*.json` must not remain (legacy import only).
 
 ## Related
 

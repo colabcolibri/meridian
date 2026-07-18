@@ -67,13 +67,13 @@ Workflows orchestrate agents; they do not replace the master protocol.
 
 | Agent | Purpose | Skills |
 | ----- | ------- | ------ |
-| `process-manager` | Governance, status, gates, **implement US** | init-project, implement-user-story, update-decisions-log, generate-board-json, meridian-routing |
+| `process-manager` | Governance, status, gates, **implement US** | init-project, implement-user-story, update-decisions-log, meridian-routing |
 | `scope-architect` | `00_scope.md` | init-project, update-decisions-log, meridian-routing |
-| `documentation-strategist` | Phase docs `01`–`05`, `08`–`10`, `docs/epics/` | init-project, create-epic, create-user-story, update-decisions-log, meridian-routing |
+| `documentation-strategist` | Phase docs `01`–`05`, `08`–`10` | init-project, create-epic, create-user-story, update-decisions-log, meridian-routing |
 | `security-steward` | `02_security.md` | security-review, update-decisions-log, meridian-routing |
 | `architecture-guardian` | `05_architecture.md` | security-review, update-decisions-log, meridian-routing |
-| `sprint-planner` | `docs/versions/`, `docs/sprints/` | create-version, create-sprint, complete-sprint, create-user-story, … |
-| `board-keeper` | US + `board.json` | create-user-story, review-user-story, refine-user-story, complete-user-story, generate-board-json, update-decisions-log, meridian-routing |
+| `sprint-planner` | SQLite `versions`, `sprints` | create-version, create-sprint, complete-sprint, create-user-story, … |
+| `board-keeper` | US in SQLite | create-user-story, review-user-story, refine-user-story, complete-user-story, update-decisions-log, meridian-routing |
 
 Each agent includes: phases 0/-1, mission, prohibitions, output format, delegation.
 
@@ -93,7 +93,6 @@ Each agent includes: phases 0/-1, mission, prohibitions, output format, delegati
 | `refine-user-story` | `refine-checklist.md`, `writing-guide.md` |
 | `implement-user-story` | `implement-gate-checklist.md` |
 | `complete-user-story` | `implementation-template.md` |
-| `generate-board-json` | `board-schema.md` |
 | `update-decisions-log` | `decision-template.md`, `decision-schema.md` |
 | `security-review` | `checklists.md` |
 | `meridian-routing` | — (inline matrix) |
@@ -111,16 +110,15 @@ See `.agent/skills/doc.md` to create new skills.
 | `init-meridian` | process-manager | init, no code |
 | `status` | process-manager | read-only |
 | `plan-sprint` | sprint-planner | planning |
-| `create-version` | sprint-planner | create release in `docs/versions/` |
+| `create-version` | sprint-planner | create release in SQLite |
 | `create-us` | board-keeper | create US |
 | `review-us` | board-keeper | audit US — report only |
 | `refine-us` | board-keeper | refine US before implement |
 | `implement-us` | process-manager | gate + implement when `ready: true` |
 | `complete-us` | board-keeper | close US after implementation |
-| `create-epic` | documentation-strategist | create epic in `docs/epics/` |
+| `create-epic` | documentation-strategist | create epic in SQLite |
 | `architecture` | architecture-guardian | doc 05 |
 | `security-pass` | security-steward | doc 02 |
-| `sync-board` | board-keeper | derive JSON |
 | `daily-with-ai` | process-manager | daily manager + AI routine |
 
 All support `$ARGUMENTS` and a critical rules section.

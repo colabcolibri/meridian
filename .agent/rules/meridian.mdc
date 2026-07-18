@@ -19,15 +19,16 @@ Priority: **P0 rules > P1 agent + MERIDIAN.md > P2 skills**.
 
 ## Short rules
 
-- `docs/` of the **active Meridian product** is the source of truth (monorepos may have several `docs/` trees — see `.meridian/projects.json` and `projects-manifest-template.md`).
+- Phase docs: `docs/` of the **active Meridian product** (monorepos: `.meridian/projects.json`).
+- Delivery backlog: `.meridian/meridian.db` (epics, versions, sprints, US, decisions).
+- Board UI: `meridian_db_export --format planning`; `board_snapshots` on every upsert.
 - Documentation precedes product code.
 - Do not create US before `05_architecture` `approved`.
-- `docs/kanban/board.json` is derived from `docs/us/*.md`.
 - Never `✅` without evidence; never `🔶` without `Missing:` in acceptance.
 - Never `✅` without filled `## Record` on the US (skill `complete-user-story`).
-- Product code for a US requires `ready: true` — use `/implement-us US-XXXX` (skill `implement-user-story`) before coding.
-- `docs/decisions/YYYY-MM-DD.json`: prepend in `entries`; never edit old entries. **Before Write:** run `date +"%Y-%m-%d"` and `date +"%H:%M"` — use `/update-decisions-log` or skill `update-decisions-log`.
-- Structural contract for US/epic/version: `.agent/references/templates/section-contracts.md` (validated by script + monitor).
+- Product code for a US requires `ready: true` — use `/implement-us US-XXXX` before coding.
+- Decisions: `prepend-decision` CLI — run `date +"%Y-%m-%d"` and `date +"%H:%M"` first (`/update-decisions-log`).
+- Structural contract: `.agent/references/templates/section-contracts.md`.
 - Routing: skill `meridian-routing` or specialized agents.
 - Announce: `🤖 Applying knowledge from @[agent-name]...` before specialized work.
 
@@ -48,18 +49,17 @@ Priority: **P0 rules > P1 agent + MERIDIAN.md > P2 skills**.
 | `/complete-sprint` | `.cursor/commands/complete-sprint.md` |
 | `/architecture` | `.cursor/commands/architecture.md` |
 | `/security-pass` | `.cursor/commands/security-pass.md` |
-| `/sync-board` | `.cursor/commands/sync-board.md` |
 | `/update-decisions-log` | `.cursor/commands/update-decisions-log.md` |
 | `/daily-with-ai` | `.cursor/commands/daily-with-ai.md` |
 | `/agents-help` | `.cursor/commands/agents-help.md` |
 
-Human reference (groups + numbered steps): `.agent/references/agents-help.md`
+Human reference: `.agent/references/agents-help.md`
 
-Maintainer map (protocol change → which files to edit): `.agent/references/instruction-surfaces.md`
+Maintainer map: `.agent/references/instruction-surfaces.md`
 
 ## Validate project
 
 ```bash
 python3 .agent/scripts/validate_meridian.py <project-folder>
-python3 .agent/scripts/validate_meridian.py <project-folder> --json
+python3 .agent/scripts/validate_meridian.py <project-folder> --sqlite-only --strict-kit-md
 ```

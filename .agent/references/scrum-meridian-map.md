@@ -28,7 +28,7 @@ flowchart TB
     S[Sprint]
     USm[US Intent/Plan/Record]
     A[Agents + skills + validate]
-    B[board.json derived]
+    B[SQLite meridian.db + board_snapshots]
   end
 
   E --> EP
@@ -45,14 +45,14 @@ ASCII equivalent (IDEs without Mermaid preview):
 ```txt
 Scrum (top, reference)  → maps ↓  Meridian (below, top → bottom)
 ──────────────────────────────────────────────────────────────
-Épico                 →   docs/epics/EPIC-XX.md
+Épico                 →   SQLite `epics` (EPIC-XX)
 Feature (opcional)    →   (omit — épico → US)
-User Story            →   docs/us/US-XXXX.md
+User Story            →   SQLite `user_stories` (US-XXXX)
 Task / Subtask        →   ## Plan (Approach + Planned) — no tasks/ folder
 Bug                   →   US de correção ou fix na US da sprint
-Spike                 →   US com timebox em Notes OU decisão no log
-Product Backlog       →   docs/us/*.md + épicos (MoSCoW, depends_on)
-Sprint Backlog        →   sprint frontmatter stories: [...] (ordem = prioridade da sprint)
+Spike                 →   US com timebox em Notes OU `prepend-decision`
+Product Backlog       →   `user_stories` + epics (MoSCoW, depends_on)
+Sprint Backlog        →   sprint `stories_json` / frontmatter stories (ordem = prioridade)
 Cerimônias            →   comandos abaixo (assíncrono, sem timebox rígido)
 PO / priorização      →   gestor humano (agentes não priorizam sozinhos)
 Velocity / burndown   →   não usados (capacidade = julgamento + Must + deps)
@@ -65,17 +65,17 @@ Velocity / burndown   →   não usados (capacidade = julgamento + Must + deps)
 | Scrum / Jira concept | Meridian | Notes |
 | -------------------- | -------- | ----- |
 | Product | `docs/` + phase `00`–`11` | Spec before code |
-| Epic | `docs/epics/EPIC-XX.md` | May span versions; prefer **new epic** over reopening `complete` |
+| Epic | SQLite `epics` | May span versions; prefer **new epic** over reopening `complete` |
 | Feature | — | Intentionally skipped for small products (valid in Scrum too) |
-| User story | `docs/us/US-XXXX.md` | Schema v2: Intent / Plan / Record / Boundaries |
+| User story | SQLite `user_stories` | Schema v2: Intent / Plan / Record / Boundaries in `body_markdown` |
 | Task / subtask | `## Plan` → Approach, Planned | No separate task files |
 | Bug | US with fix acceptance | In-sprint bug: fix inside current US; production: new US + version patch |
-| Spike | US (Notes: timebox) or decision log | Outcome = knowledge, not production code |
-| Release / version | `docs/versions/vX.md` | Hotfix versions (v1.1) allowed anytime |
-| Sprint | `docs/sprints/vX-SY.md` | Optional; `stories:` order = sprint priority |
-| Product backlog | `docs/us/` + epics | Manager orders via sprint scope + MoSCoW |
-| Sprint backlog | Sprint `stories:` + active sprint | New work mid-sprint → backlog, not silent scope creep |
-| Kanban board | `docs/kanban/board.json` | **Derived** — never primary |
+| Spike | US (Notes: timebox) or `prepend-decision` | Outcome = knowledge, not production code |
+| Release / version | SQLite `versions` | Hotfix versions (v1.1) allowed anytime |
+| Sprint | SQLite `sprints` | Optional; `stories` order = sprint priority |
+| Product backlog | `user_stories` + epics | Manager orders via sprint scope + MoSCoW |
+| Sprint backlog | Sprint `stories` + active sprint | New work mid-sprint → backlog, not silent scope creep |
+| Kanban board | Extension reads `meridian_db_export --format planning` | `board_snapshots` on upsert — never `board.json` |
 | Definition of Done | `04_principles.md` + `/complete-us` | Global DoD in principles; CA per US in Intent |
 | Story points / velocity | — | Not in Meridian (simplicity) |
 
@@ -90,7 +90,6 @@ Velocity / burndown   →   não usados (capacidade = julgamento + Must + deps)
 | Daily Scrum | `/daily-with-ai` or `/status` + Commands tab in app | Manager |
 | Sprint review (demo) | Manager reviews increment against Acceptance + Planned | Manager |
 | Sprint retrospective | `/complete-sprint` — fill `## Retrospective`, `status: complete` | Manager + `sprint-planner` |
-| — | `/sync-board` after US changes | Agent or manager |
 
 No fixed 15-minute daily or 8-hour planning timeboxes — async manager + AI sessions.
 
@@ -139,7 +138,7 @@ Do not create `docs/bugs/` or Jira-style bug IDs.
 ### Spikes
 
 1. **Timeboxed investigation** — US with clear question in Intent, `tests: none`, timebox in `### Notes`, Boundaries: no production deliverable.
-2. **Outcome** — prepend `docs/decisions/YYYY-MM-DD.json`; optional follow-up US for implementation.
+2. **Outcome** — `prepend-decision`; optional follow-up US for implementation.
 
 ---
 
@@ -155,10 +154,10 @@ When more work appears after `status: complete`:
 
 ## Sprint scope (active sprint)
 
-When `docs/sprints/vX-SY.md` has `status: active`:
+When sprint `vX-SY` has `status: active` in SQLite:
 
-- **Manager** owns the commitment; agents do not add US to the sprint file without explicit request.
-- New urgent items → Product backlog (`docs/us/`) or next sprint; log scope change in decisions if the sprint goal shifts.
+- **Manager** owns the commitment; agents do not add US to the sprint without explicit request.
+- New urgent items → product backlog (`user_stories`) or next sprint; log scope change via `prepend-decision` if the sprint goal shifts.
 - **Sprint review:** before `status: complete`, manager confirms increment against sprint `goal` and US Acceptance.
 - **Retrospective:** mandatory fields on sprint close (even one line each).
 
@@ -174,8 +173,8 @@ Record the team’s global DoD in **`docs/04_principles.md`** (section “Defini
 - Build/lint/test per `04_principles` and US `tests`
 - `## Record` filled with real paths; `tests_status: done` when required
 - `status: ✅` only via `/complete-us`
-- `board.json` regenerated; human git commit per closed US (unless batched intentionally)
-- Cross-cutting changes in decision log
+- `board_snapshots` updated on upsert; human git commit per closed US (unless batched intentionally)
+- Cross-cutting changes via `prepend-decision`
 
 Per-story criteria stay in **Intent / Acceptance** — not duplicated as global DoD.
 

@@ -32,7 +32,7 @@ PROCEDURE:
    - Report active project (manager choice, default, or single match)
 3. Read docs/README.md for the **active** docs/ tree
 4. For each phase doc 00–08 and 11: record status from frontmatter
-5. Count US by status from active docs/us/ or board.json
+5. Count US by status from `meridian_delivery.py list user_stories` or `counts`
 6. List blockers (missing deps, invalid US, immature docs)
 7. Recommend next human decision
 ```

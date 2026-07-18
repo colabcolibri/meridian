@@ -70,7 +70,7 @@ _(pending until close)_
 | One line per file | What changed in that file |
 | Empty layers | `_n/a_` — do not omit heading |
 | Plan vs delivery | On completion, remove bullets describing unimplemented intent |
-| Global decisions | Register in `docs/decisions/YYYY-MM-DD.json`; local US record stays here |
+| Global decisions | `prepend-decision` CLI; local US record stays here |
 | Git | US ✅ = docs closed; **commit is human after** `/complete-us` + board sync — see `commit-after-us-close.md`. On close: **suggested commit** in `### Executed`. After commit: optional **git commit** line with SHA + subject; omit until then |
 
 ## Anti-patterns (block `✅`)

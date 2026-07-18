@@ -35,7 +35,7 @@ Global “done” for any closed user story — in addition to that story’s Ac
 - `## Record` filled with real paths and `### Executed` (commands + results)
 - `status: ✅` only via `/complete-us`
 - One git commit per closed US (code + delivery change in scope), unless the manager batches intentionally
-- Cross-cutting changes logged in `docs/decisions/YYYY-MM-DD.json`
+- Cross-cutting changes logged via `prepend-decision` (`/update-decisions-log`)
 
 Per-story scope stays in US Intent — this section is the team-wide bar. See `.agent/references/scrum-meridian-map.md`.
 

@@ -128,7 +128,6 @@ allowed-tools: Read, Glob, Grep
 | `review-user-story` | `review-user-story/` |
 | `refine-user-story` | `refine-user-story/` |
 | `complete-user-story` | `complete-user-story/` |
-| `generate-board-json` | `generate-board-json/` |
 | `update-decisions-log` | `update-decisions-log/` |
 | `security-review` | `security-review/` |
 | `meridian-routing` | `meridian-routing/` |

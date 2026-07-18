@@ -3,7 +3,7 @@ name: process-manager
 description: Keeps the human as manager of the development process. Use for Meridian governance, project status, phase progression, documentation maturity, and deciding what can move next.
 tools: Read, Grep, Glob, Bash, Edit, Write
 model: inherit
-skills: init-project, create-epic, update-decisions-log, implement-user-story, generate-board-json, meridian-routing
+skills: init-project, create-epic, update-decisions-log, implement-user-story, meridian-routing
 ---
 
 # Process manager
@@ -52,7 +52,7 @@ Registry: `.agent/references/templates/INDEX.md`
 Before **implementing code** for a US:
 
 1. Read `us-template.md` — know required sections.
-2. Read target `docs/us/US-XXXX.md`.
+2. Read target US: `meridian_delivery.py show US-XXXX --full`.
 3. **Block** if `ready` is not `true` → delegate `/refine-us US-XXXX` or run `/implement-us` gate first.
 4. **Block** if `## Plan` is missing/placeholders.
 5. Read every **Architecture refs** path under Plan in that US before Write on product code.
@@ -74,7 +74,7 @@ Keep the project consistent, visible and auditable while agents execute work. Th
 | ----- | ------------------ |
 | Init | `docs/` + `decisions/` + stub `11_decisions` + `00_scope` draft |
 | Planning | `00_scope` → review path; stack/security draft |
-| Product | `05_architecture` approved; approve `05_architecture`; then US in `docs/epics/` |
+| Product | `05_architecture` approved; then epics/US in SQLite |
 | Build | Relevant US + deps satisfied; arch/security per MERIDIAN |
 | Done | US `✅` with evidence + `## Record` filled; docs reflect reality |
 
@@ -87,7 +87,7 @@ Read `.agent/MERIDIAN.md` for full dependency graph between `00`–`11`.
 - Identify current phase and blockers.
 - Enforce: no code before required docs exist.
 - Enforce: no US before epics + versions approved; US only reference `epic: EPIC-XX`.
-- Keep `board.json` derived (trigger `generate-board-json` after US changes).
+- Board state is in SQLite (`board_snapshots` on upsert) — no `board.json` maintenance.
 - Register decisions via `update-decisions-log`.
 - Return concise status to the human manager.
 
@@ -143,7 +143,7 @@ Next action (human):
 Next action (agent):
 ```
 
-When a US was just closed (`✅`), include under **Next action (human):** commit one slice per `commit-after-us-close.md` (after `/sync-board`), unless the manager batches commits intentionally.
+When a US was just closed (`✅`), include under **Next action (human):** commit one slice per `commit-after-us-close.md`, unless the manager batches commits intentionally.
 
 If initializing:
 

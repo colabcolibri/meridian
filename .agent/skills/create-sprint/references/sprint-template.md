@@ -47,11 +47,11 @@ _(fill at sprint close)_
 - **`stories:` order** in frontmatter is the sprint priority (top first) — no separate priority field on US.
 - While `status: active`, do not add US to the sprint without manager request; new work goes to backlog or next sprint (see `scrum-meridian-map.md`).
 - Before `status: complete`, manager performs **sprint review** (increment vs `goal` and US Acceptance) then fills **Retrospective**.
-- `version` must exist in `docs/versions/`.
+- `version` must exist in SQLite (`list versions`).
 - `goal` is one measurable sentence — not a copy of the version objective.
 - `stories` in frontmatter is the canonical list used by validation; body table is for human readability.
 - `status`: `planned` → `active` → `complete`.
-- **Retrospective** is mandatory on close — even one line each. Decisions go to `docs/decisions/YYYY-MM-DD.json`.
+- **Retrospective** is mandatory on close — even one line each. Decisions → `prepend-decision`.
 - Do not start a sprint without at least one `ready: true` US.
 
 ## Sprint status

@@ -19,7 +19,7 @@ The **extension** shows and validates `docs/`. **Chat slash commands** create an
 | You want to… | Use | Not |
 | ------------ | --- | --- |
 | See kanban, versions, epics | Extension: **Open Board**, **Open Versions**, … | `/create-us` |
-| Validate or sync `board.json` | Extension: **Validate Project**, **Sync Board** | Manual JSON edit |
+| Validate project | Extension: **Validate Project** | Manual edits |
 | Bootstrap or change docs | Chat: `/init-meridian`, `/create-us`, `/complete-us`, … | Extension forms (v5) |
 | Health check | Chat: `/status` | — |
 
@@ -78,8 +78,8 @@ The agent will ask up to 5 questions about the product — problem, users, scope
 What gets created:
 - `docs/` folder tree with all phase document stubs
 - `docs/00_scope.md` populated with your answers
-- `docs/decisions/YYYY-MM-DD.json` with the initial decision entry
-- `docs/kanban/board.json` empty
+- `.meridian/meridian.db` bootstrapped via `meridian_delivery.py bootstrap`
+- Initial decision via `prepend-decision`
 
 After this, go to [Work through the phase documents](#work-through-the-phase-documents).
 
@@ -146,7 +146,7 @@ Phase documents must be completed in order. Each one unlocks the next.
 
 Any significant decision made while working on a document — technology choice, architectural tradeoff, security posture — should be logged:
 
-- Run **`/update-decisions-log`** or ask the agent to prepend an entry to `docs/decisions/YYYY-MM-DD.json` (agent must run `date +"%Y-%m-%d"` and `date +"%H:%M"` first).
+- Run **`/update-decisions-log`** — agent uses `prepend-decision` (run `date` first).
 - Never edit existing entries.
 
 ---
@@ -199,7 +199,7 @@ Details: [scrum-meridian-map.md](./scrum-meridian-map.md).
 
 ### After backlog changes
 
-Run **`/sync-board`** to regenerate `docs/kanban/board.json` from the US files.
+Board refreshes when `.meridian/meridian.db` changes (extension) or after any `meridian_delivery.py` upsert (`board_snapshots`).
 
 ---
 
@@ -219,7 +219,7 @@ The workflow gates on `ready: true`, filled Plan, and satisfied `depends_on`, th
 
 You can also ask in natural language — the agent must run the same gate before coding:
 
-> "Run `/implement-us US-0017`" or "Implement `docs/us/US-0017.md` per Acceptance."
+> "Run `/implement-us US-0017`" or "Implement US-0017 per Acceptance."
 
 ### Review the output
 
@@ -243,11 +243,11 @@ Run: **`/complete-us US-XXXX`**
 - `## Record` — real file paths changed, layer summary, executed test output
 - Acceptance items checked `[x]`
 - Frontmatter: `status: ✅`, `tests_status: done`
-- If there was a cross-cutting decision, it prepends `docs/decisions/YYYY-MM-DD.json`
+- If there was a cross-cutting decision → `prepend-decision`
 
 **After closing:**
-- Run **`/sync-board`** to regenerate the board
-- Verify the story appears in the correct column in the monitor
+- Board snapshot updates automatically on upsert
+- Verify the story in the extension board
 - Go to [Commit after close](#commit-after-close) — human step; not part of `/complete-us`
 
 ---
@@ -256,7 +256,7 @@ Run: **`/complete-us US-XXXX`**
 
 Full rules: **`commit-after-us-close.md`** in this folder.
 
-After **`/complete-us`** and **`/sync-board`** for one US:
+After **`/complete-us`** for one US:
 
 1. Review `git diff` — scope must match `## Record` / `### Files` (one US only).
 2. Confirm lint/build and `validate_meridian.py` if `docs/` changed.
@@ -274,9 +274,8 @@ For experienced users, **`/daily-with-ai`** runs a guided session: checks status
 If you prefer to drive manually:
 1. `/status` — what is blocked, what is next
 2. One focused conversation per concern (document, backlog, implement — not mixed)
-3. `/complete-us` + `/sync-board` when a slice is done
+3. `/complete-us` when a slice is done
 4. **Commit** — one commit per closed US (see [Commit after close](#commit-after-close))
-5. `/sync-board` after any US change that did not already sync on close
 
 ---
 
@@ -299,19 +298,18 @@ Run at the project root. Fix errors before creating US or marking docs `approved
 | `/status` | Session start — blockers, current state, next action |
 | `/architecture` | Draft or review `05_architecture.md` |
 | `/security-pass` | Draft or review `02_security.md` |
-| `/create-epic` | New product capability in `docs/epics/` |
-| `/create-version` | New release in `docs/versions/` |
-| `/plan-sprint` | New sprint in `docs/sprints/` |
+| `/create-epic` | New epic row in SQLite |
+| `/create-version` | New version row in SQLite |
+| `/plan-sprint` | New sprint row in SQLite |
+| `/update-decisions-log` | Prepend decision via `prepend-decision` |
 | `/complete-sprint vX-SY` | Close sprint — retrospective + status complete |
 | `/create-us` | New user story (gates: architecture approved + epic + version exist) |
 | `/review-us US-XXXX` | Quality audit — read-only, no changes, no `ready` |
 | `/refine-us US-XXXX` | Deepen Plan and Approach — sets `ready: true` when checklist passes |
 | `/implement-us US-XXXX` | Gate + implement — requires `ready: true` |
-| `/complete-us US-XXXX` | Close story — fills Record, marks `✅`, syncs board |
-| `/sync-board` | Regenerate `docs/kanban/board.json` from US files |
+| `/complete-us US-XXXX` | Close story — fills Record, marks `✅` (SQLite upsert) |
 | `/daily-with-ai` | Full guided session loop |
 | `/agents-help` | Agent groups, slash command groups, numbered steps — open `.agent/references/agents-help.md` |
-| `/update-decisions-log` | Prepend a decision entry to `docs/decisions/YYYY-MM-DD.json` |
 
 ---
 
@@ -319,7 +317,7 @@ Run at the project root. Fix errors before creating US or marking docs `approved
 
 - Asking the agent to implement without a `ready: true` story
 - Marking `✅` in chat without running `/complete-us` in the files
-- Editing `board.json` directly — it is always generated
+- Editing delivery markdown/json on disk when `meridian.db` exists
 - Creating US before `05_architecture.md` is `approved`
 - Mixing document work, backlog work, and implementation in one conversation
 - Setting `approved` on a document you did not read

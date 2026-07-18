@@ -370,9 +370,13 @@ python3 .agent/scripts/meridian_delivery.py create-us --title "..." --epic EPIC-
 python3 .agent/scripts/meridian_delivery.py update-us US-0115 --from-file /tmp/us.md
 python3 .agent/scripts/meridian_delivery.py set-ready US-0115
 python3 .agent/scripts/meridian_delivery.py set-summary US-0115 --text "..."
+python3 .agent/scripts/meridian_delivery.py prepend-decision \
+  --date "$(date +"%Y-%m-%d")" --time "$(date +"%H:%M")" \
+  --title "..." --affected-document "docs/05_architecture.md" \
+  --what-changed "..." --why-changed "..." --impact "..." --responsible "..."
 ```
 
-Never `Write` on `docs/us/`, `docs/epics/`, `docs/versions/`, `docs/sprints/`, or `docs/decisions/*.json` when `meridian.db` exists.
+Never `Write` on `docs/us/`, `docs/epics/`, `docs/versions/`, `docs/sprints/`, or `docs/decisions/*.json` when `meridian.db` exists. Use `prepend-decision` for the decision log.
 
 ## Migration and cutover
 

@@ -15,15 +15,19 @@ from meridian_db import (  # noqa: E402
     connect,
     db_exists,
     delivery_counts,
+    fetch_decisions_for_date,
+    list_decision_dates,
     next_epic_id,
     next_sprint_id,
     next_user_story_id,
+    prepend_decision,
     record_board_snapshot,
     set_summary,
     upsert_epic,
     upsert_sprint,
     upsert_user_story,
     upsert_version,
+    validate_decision_entry,
 )
 from meridian_markdown_parse import (  # noqa: E402
     extract_epic_sections,
@@ -189,6 +193,7 @@ ENTITY_TABLE = {
     "version": ("versions", "id"),
     "sprints": ("sprints", "id"),
     "sprint": ("sprints", "id"),
+    "decisions": ("decisions", "decision_date"),
 }
 
 
@@ -209,6 +214,18 @@ def cmd_counts(args) -> int:
 
 def cmd_list(args) -> int:
     root = _root(args)
+    if args.entity == "decisions":
+        conn = connect(root)
+        try:
+            if getattr(args, "date", None):
+                for index, entry in enumerate(fetch_decisions_for_date(conn, args.date)):
+                    print(f"{args.date}\t{index}\t{entry.get('time', '')}\t{entry.get('title', '')}")
+            else:
+                for decision_date, count in list_decision_dates(conn):
+                    print(f"{decision_date}\t{count}")
+        finally:
+            conn.close()
+        return 0
     table, _ = ENTITY_TABLE.get(args.entity, (None, None))
     if not table:
         print(f"ERROR: unknown entity {args.entity}", file=sys.stderr)
@@ -556,6 +573,93 @@ def cmd_implement_gate(args) -> int:
     return 0 if result["ok"] else 1
 
 
+def _decision_entry_from_args(args) -> dict[str, str]:
+    if args.from_json:
+        path = Path(args.from_json)
+        payload = json.loads(path.read_text(encoding="utf-8"))
+        if not isinstance(payload, dict):
+            raise ValueError("from-json must be a decision entry object")
+        return payload
+    required = {
+        "time": args.time,
+        "title": args.title,
+        "affected_document": args.affected_document,
+        "what_changed": args.what_changed,
+        "why_changed": args.why_changed,
+        "impact": args.impact,
+        "responsible": args.responsible,
+    }
+    missing = [name for name, value in required.items() if not value]
+    if missing:
+        raise ValueError(f"missing required flags: {', '.join(missing)} (or use --from-json)")
+    return required
+
+
+def cmd_prepend_decision(args) -> int:
+    root = _root(args)
+    try:
+        entry = _decision_entry_from_args(args)
+    except (json.JSONDecodeError, ValueError) as exc:
+        print(f"ERROR: {exc}", file=sys.stderr)
+        return 1
+    errors = validate_decision_entry(entry)
+    if errors:
+        print(f"ERROR: {'; '.join(errors)}", file=sys.stderr)
+        return 1
+    conn = connect(root)
+    try:
+        prepend_decision(conn, args.date, entry)
+        conn.commit()
+    except ValueError as exc:
+        print(f"ERROR: {exc}", file=sys.stderr)
+        return 1
+    finally:
+        conn.close()
+    if args.json:
+        print(
+            json.dumps(
+                {"decision_date": args.date, "entry_index": 0, "entry": entry},
+                ensure_ascii=False,
+                indent=2,
+            )
+        )
+    else:
+        print(f"OK: prepended decision on {args.date} at index 0")
+        print(f"title: {entry.get('title')}")
+        print(f"time: {entry.get('time')}")
+    return 0
+
+
+def cmd_show_decisions(args) -> int:
+    root = _root(args)
+    conn = connect(root)
+    try:
+        entries = fetch_decisions_for_date(conn, args.date)
+    finally:
+        conn.close()
+    if not entries and not args.json:
+        print(f"No decisions for {args.date}", file=sys.stderr)
+        return 1
+    payload = {"date": args.date, "entries": entries}
+    if args.json:
+        print(json.dumps(payload, ensure_ascii=False, indent=2))
+    else:
+        print(f"date: {args.date}")
+        print(f"entries: {len(entries)}")
+        for index, entry in enumerate(entries):
+            print(f"\n--- [{index}] {entry.get('time', '')} — {entry.get('title', '')} ---")
+            for field in (
+                "affected_document",
+                "what_changed",
+                "why_changed",
+                "impact",
+                "responsible",
+            ):
+                if entry.get(field):
+                    print(f"{field}: {entry[field]}")
+    return 0
+
+
 def main() -> int:
     import argparse
 
@@ -574,6 +678,7 @@ def main() -> int:
     list_p.add_argument("--version")
     list_p.add_argument("--epic")
     list_p.add_argument("--ready", choices=["true", "false"])
+    list_p.add_argument("--date", help="Decision date (YYYY-MM-DD) when entity=decisions")
     list_p.set_defaults(func=cmd_list)
 
     show = sub.add_parser("show", help="Show US summary or --full body")
@@ -652,6 +757,27 @@ def main() -> int:
     gate.add_argument("story_id")
     gate.add_argument("--json", action="store_true")
     gate.set_defaults(func=cmd_implement_gate)
+
+    prepend = sub.add_parser(
+        "prepend-decision",
+        help="Prepend decision entry at index 0 for decision_date (SQLite)",
+    )
+    prepend.add_argument("--date", required=True, help="YYYY-MM-DD")
+    prepend.add_argument("--time", help="HH:MM (24h local)")
+    prepend.add_argument("--title")
+    prepend.add_argument("--affected-document")
+    prepend.add_argument("--what-changed")
+    prepend.add_argument("--why-changed")
+    prepend.add_argument("--impact")
+    prepend.add_argument("--responsible")
+    prepend.add_argument("--from-json", help="Path to single decision entry JSON object")
+    prepend.add_argument("--json", action="store_true", help="Print result as JSON")
+    prepend.set_defaults(func=cmd_prepend_decision)
+
+    show_dec = sub.add_parser("show-decisions", help="Show decisions for a calendar day")
+    show_dec.add_argument("--date", required=True, help="YYYY-MM-DD")
+    show_dec.add_argument("--json", action="store_true")
+    show_dec.set_defaults(func=cmd_show_decisions)
 
     args = parser.parse_args()
     create_commands = {"create-us", "create-epic", "create-version", "create-sprint"}
