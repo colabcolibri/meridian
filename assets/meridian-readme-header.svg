@@ -1,0 +1,137 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 640" fill="none" role="img" aria-labelledby="title desc">
+  <title id="title">Meridian - infrastructure for AI-assisted delivery</title>
+  <desc id="desc">README header for Meridian, a harness that coordinates AI agents inside a structured delivery system.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1600" y2="640" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#09090b"/>
+      <stop offset=".58" stop-color="#111113"/>
+      <stop offset="1" stop-color="#18181b"/>
+    </linearGradient>
+    <linearGradient id="blue" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#60a5fa"/>
+      <stop offset="1" stop-color="#2563eb"/>
+    </linearGradient>
+    <linearGradient id="panel" x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#ffffff"/>
+      <stop offset="1" stop-color="#f4f4f5"/>
+    </linearGradient>
+    <filter id="softShadow" x="-25%" y="-25%" width="150%" height="150%">
+      <feDropShadow dx="0" dy="18" stdDeviation="22" flood-color="#000000" flood-opacity=".24"/>
+    </filter>
+    <filter id="blueGlow" x="-35%" y="-35%" width="170%" height="170%">
+      <feGaussianBlur stdDeviation="20" result="blur"/>
+      <feColorMatrix in="blur" type="matrix" values="0 0 0 0 0.23 0 0 0 0 0.51 0 0 0 0 0.96 0 0 0 .42 0"/>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <pattern id="grid" width="36" height="36" patternUnits="userSpaceOnUse">
+      <path d="M36 0H0v36" stroke="#27272a" stroke-width="1" opacity=".55"/>
+    </pattern>
+    <marker id="arrow" markerWidth="11" markerHeight="11" refX="9" refY="5.5" orient="auto">
+      <path d="M1 1l9 4.5L1 10z" fill="#3b82f6"/>
+    </marker>
+  </defs>
+
+  <rect width="1600" height="640" rx="34" fill="url(#bg)"/>
+  <rect width="1600" height="640" rx="34" fill="url(#grid)" opacity=".32"/>
+  <path d="M1168-70c92 86 150 188 172 306 25 134 10 264 124 404h136V0z" fill="#2563eb" opacity=".92"/>
+  <path d="M1216-34c63 84 103 179 118 284 18 122 8 240 102 390h56c-99-143-91-273-111-397-17-106-59-203-125-277z" fill="#60a5fa" opacity=".5"/>
+  <ellipse cx="842" cy="320" rx="352" ry="226" fill="#3b82f6" opacity=".08" filter="url(#blueGlow)"/>
+
+  <g transform="translate(82 82)">
+    <g filter="url(#softShadow)">
+      <rect width="118" height="118" rx="28" fill="#09090b"/>
+      <rect x="13" y="13" width="92" height="92" rx="22" fill="#111113" stroke="#27272a" stroke-width="2.5"/>
+      <path d="M59 22v74" stroke="#f4f4f5" stroke-width="5" stroke-linecap="round"/>
+      <path d="M59 32c-20 0-32 9-32 22s12 22 32 22 32 9 32 22" stroke="#3b82f6" stroke-width="5" stroke-linecap="round"/>
+      <circle cx="59" cy="37" r="10" fill="#3b82f6" stroke="#93c5fd" stroke-width="2.5"/>
+      <circle cx="59" cy="59" r="7.5" fill="#fafafa"/>
+      <circle cx="59" cy="82" r="6.4" fill="#71717a" stroke="#a1a1aa" stroke-width="1.7"/>
+    </g>
+
+    <text x="148" y="58" fill="#fafafa" font-family="Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="58" font-weight="820" letter-spacing="0">Meridian</text>
+    <text x="152" y="93" fill="#93c5fd" font-family="Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="17" font-weight="760" letter-spacing=".12em">AI-ASSISTED DELIVERY INFRASTRUCTURE</text>
+  </g>
+
+  <g transform="translate(84 250)">
+    <text x="0" y="0" fill="#fafafa" font-family="Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="58" font-weight="840" letter-spacing="0">
+      <tspan x="0" dy="0">Not another chatbot.</tspan>
+      <tspan x="0" dy="70">A system for agents.</tspan>
+    </text>
+    <text x="2" y="170" fill="#d4d4d8" font-family="Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif" font-size="25" font-weight="520">
+      <tspan x="2" dy="0">Scrum-shaped delivery, project memory,</tspan>
+      <tspan x="2" dy="38">agent roles, workflows, and SQLite-backed state.</tspan>
+    </text>
+  </g>
+
+  <g transform="translate(812 74)" filter="url(#softShadow)">
+    <rect width="660" height="488" rx="28" fill="#f8fafc" stroke="#3f3f46" stroke-width="2"/>
+    <rect x="24" y="24" width="612" height="58" rx="18" fill="#09090b"/>
+    <circle cx="58" cy="53" r="8" fill="#22c55e"/>
+    <circle cx="84" cy="53" r="8" fill="#f59e0b"/>
+    <circle cx="110" cy="53" r="8" fill="#ef4444"/>
+    <text x="144" y="61" fill="#d4d4d8" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="18" font-weight="700">meridian delivery system</text>
+
+    <g transform="translate(46 112)">
+      <rect width="150" height="232" rx="18" fill="#ffffff" stroke="#d4d4d8" stroke-width="2"/>
+      <text x="86" y="40" text-anchor="middle" fill="#18181b" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="19" font-weight="800">Prompt-only</text>
+      <rect x="28" y="70" width="112" height="28" rx="14" fill="#e5e7eb"/>
+      <rect x="52" y="116" width="92" height="28" rx="14" fill="#dbeafe"/>
+      <rect x="28" y="162" width="118" height="28" rx="14" fill="#e5e7eb"/>
+      <path d="M146 116h42" stroke="#3b82f6" stroke-width="3.5" marker-end="url(#arrow)"/>
+    </g>
+
+    <g transform="translate(230 112)">
+      <rect width="176" height="232" rx="22" fill="#eff6ff" stroke="#3b82f6" stroke-width="2.4"/>
+      <text x="88" y="40" text-anchor="middle" fill="#1d4ed8" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="19" font-weight="850">Meridian</text>
+      <g transform="translate(48 66)">
+        <rect width="80" height="80" rx="20" fill="#09090b"/>
+        <rect x="9" y="9" width="62" height="62" rx="16" fill="#111113" stroke="#27272a" stroke-width="1.8"/>
+        <path d="M40 16v48" stroke="#f4f4f5" stroke-width="3.2" stroke-linecap="round"/>
+        <path d="M40 22c-13 0-21 6-21 14s8 14 21 14 21 6 21 14" stroke="#3b82f6" stroke-width="3.2" stroke-linecap="round"/>
+        <circle cx="40" cy="26" r="6.2" fill="#3b82f6" stroke="#93c5fd" stroke-width="1.6"/>
+        <circle cx="40" cy="40" r="4.7" fill="#fafafa"/>
+        <circle cx="40" cy="55" r="4" fill="#71717a"/>
+      </g>
+      <g transform="translate(24 170)">
+        <rect width="58" height="32" rx="9" fill="#ffffff" stroke="#93c5fd"/>
+        <text x="29" y="22" text-anchor="middle" fill="#1d4ed8" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="12" font-weight="800">roles</text>
+        <rect x="70" width="78" height="32" rx="9" fill="#ffffff" stroke="#93c5fd"/>
+        <text x="109" y="22" text-anchor="middle" fill="#1d4ed8" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="12" font-weight="800">workflow</text>
+      </g>
+      <path d="M174 116h42" stroke="#3b82f6" stroke-width="3.5" marker-end="url(#arrow)"/>
+    </g>
+
+    <g transform="translate(446 112)">
+      <rect width="168" height="232" rx="18" fill="#ffffff" stroke="#d4d4d8" stroke-width="2"/>
+      <text x="92" y="40" text-anchor="middle" fill="#18181b" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="19" font-weight="800">Agents</text>
+      <g fill="#f8fafc" stroke="#bfdbfe" stroke-width="1.5">
+        <rect x="20" y="64" width="58" height="44" rx="12"/>
+        <rect x="90" y="64" width="58" height="44" rx="12"/>
+        <rect x="20" y="124" width="58" height="44" rx="12"/>
+        <rect x="90" y="124" width="58" height="44" rx="12"/>
+      </g>
+      <text x="49" y="91" text-anchor="middle" fill="#2563eb" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="850">Product</text>
+      <text x="119" y="91" text-anchor="middle" fill="#2563eb" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="850">Arch</text>
+      <text x="49" y="151" text-anchor="middle" fill="#2563eb" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="850">Dev</text>
+      <text x="119" y="151" text-anchor="middle" fill="#2563eb" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="11" font-weight="850">QA</text>
+      <rect x="34" y="188" width="100" height="28" rx="14" fill="#dcfce7" stroke="#22c55e"/>
+      <text x="84" y="207" text-anchor="middle" fill="#15803d" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="12" font-weight="850">with context</text>
+    </g>
+
+    <g transform="translate(46 374)">
+      <rect width="568" height="70" rx="18" fill="#ffffff" stroke="#bfdbfe" stroke-width="2"/>
+      <text x="32" y="43" fill="#18181b" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="19" font-weight="850">Discover</text>
+      <path d="M124 35h38" stroke="#3b82f6" stroke-width="3" marker-end="url(#arrow)"/>
+      <text x="184" y="43" fill="#18181b" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="19" font-weight="850">Plan</text>
+      <path d="M236 35h38" stroke="#3b82f6" stroke-width="3" marker-end="url(#arrow)"/>
+      <text x="296" y="43" fill="#18181b" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="19" font-weight="850">Build</text>
+      <path d="M354 35h38" stroke="#3b82f6" stroke-width="3" marker-end="url(#arrow)"/>
+      <text x="414" y="43" fill="#18181b" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="19" font-weight="850">Review</text>
+      <path d="M492 35h38" stroke="#3b82f6" stroke-width="3" marker-end="url(#arrow)"/>
+      <text x="526" y="43" fill="#15803d" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="19" font-weight="850">Ship</text>
+    </g>
+  </g>
+</svg>

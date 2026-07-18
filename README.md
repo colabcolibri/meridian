@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/screenshots/meridian-header.jpg" alt="Meridian — AI agent harness experiment" width="100%" />
+  <img src="assets/meridian-readme-header.svg" alt="Meridian — infrastructure for AI-assisted delivery" width="100%" />
 </p>
 
 <p align="center">
@@ -17,6 +17,49 @@
 > [Full protocol](.agent/MERIDIAN.md)
 
 # Meridian
+
+## How Meridian works
+
+<p align="center">
+  <img src="assets/infographic/meridian-agent-infrastructure-4x5-final.png" alt="Meridian infrastructure for AI-assisted delivery" width="720" />
+</p>
+
+## Screenshots
+
+The optional [VS Code / Cursor extension](app-visual-studio/) reads `.meridian/meridian.db` and surfaces the backlog inside the IDE — board, versions, sprints, epics, and user-story detail.
+
+<table>
+  <tr>
+    <td width="50%" valign="top">
+      <img src="assets/screenshots/board-kanban.jpg" alt="Meridian kanban board with version and epic filters" width="100%" />
+      <p align="center"><sub><strong>Board</strong> — kanban by status, filter by version and epic</sub></p>
+    </td>
+    <td width="50%" valign="top">
+      <img src="assets/screenshots/versions-roadmap.jpg" alt="Meridian versions roadmap with sprints and epics" width="100%" />
+      <p align="center"><sub><strong>Versions</strong> — release roadmap with nested sprints and epics</sub></p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">
+      <img src="assets/screenshots/sprints-list.jpg" alt="Meridian sprints list filtered by version" width="100%" />
+      <p align="center"><sub><strong>Sprints</strong> — time-boxed goals and done-when criteria</sub></p>
+    </td>
+    <td width="50%" valign="top">
+      <img src="assets/screenshots/epics-list.jpg" alt="Meridian epics list with user story progress" width="100%" />
+      <p align="center"><sub><strong>Epics</strong> — capability blocks and story progress</sub></p>
+    </td>
+  </tr>
+  <tr>
+    <td width="50%" valign="top">
+      <img src="assets/screenshots/user-story-viewer.jpg" alt="Meridian user story markdown viewer beside the board" width="100%" />
+      <p align="center"><sub><strong>User story</strong> — read acceptance, plan, and approach</sub></p>
+    </td>
+    <td width="50%" valign="top">
+      <img src="assets/screenshots/user-story-editor.jpg" alt="Meridian user story form editor beside the board" width="100%" />
+      <p align="center"><sub><strong>Edit story</strong> — structured form with dependencies</sub></p>
+    </td>
+  </tr>
+</table>
 
 ## The hypothesis
 
@@ -68,6 +111,36 @@ document → plan → refine → implement → close → commit
 | **`app-visual-studio/`** (optional) | IDE board and deliverables — reads SQLite; not the harness itself |
 
 Scrum-inspired, adapted for a **single human directing AI agents** — no story points, velocity, or mandatory Feature layer. [Scrum ↔ Meridian map](.agent/references/scrum-meridian-map.md)
+
+## The agent harness (`.agent/`)
+
+Slash commands route to **workflows** → **agents** → **skills** → artifacts in `docs/` and SQLite. You stay the manager; agents draft and execute inside gates (`ready`, `Record`, `approved`).
+
+```txt
+.agent/
+├── MERIDIAN.md              # master protocol
+├── rules/                   # P0 constraints (never skip)
+├── workflows/               # slash commands — /status, /create-us, /implement-us, …
+├── agents/                  # domain personas (see below)
+├── skills/                  # repeatable procedures + templates
+├── references/              # guides, templates, agents-help
+└── scripts/                 # validate_meridian.py, meridian_delivery.py, kit sync
+```
+
+| Agent | Group | Role |
+| ----- | ----- | ---- |
+| [`scrum-master`](.agent/agents/scrum-master.md) | Orchestration | `/status`, `/init-meridian`, blockers — never closes US or ships code |
+| [`product-owner`](.agent/agents/product-owner.md) | Scope | `00_scope`, discovery, `/create-epic` |
+| [`technical-writer`](.agent/agents/technical-writer.md) | Phase docs | Drafts `01`–`04`, `06`–`08`, `11` |
+| [`security-champion`](.agent/agents/security-champion.md) | Hardening | `02_security`, `/security-pass`, `/security-review` |
+| [`technical-architect`](.agent/agents/technical-architect.md) | Structure | `05_architecture` — **gate before backlog** |
+| [`design-system-owner`](.agent/agents/design-system-owner.md) | UI contract | `09_design_system`, `/design-pass`, `/design-review` |
+| [`quality-owner`](.agent/agents/quality-owner.md) | Testing | `10_test_strategy`, `/test-pass`, `/test-review` |
+| [`sprint-planner`](.agent/agents/sprint-planner.md) | Releases | `/create-version`, `/plan-sprint`, MoSCoW order |
+| [`backlog-refiner`](.agent/agents/backlog-refiner.md) | Backlog | `/create-us`, `/refine-us`, `/complete-us` |
+| [`developer`](.agent/agents/developer.md) | Delivery | `/implement-us` — product code only after `ready: true` |
+
+Full map: [`/agents-help`](.agent/references/agents-help.md) · invoke any persona with `@agent-name` in chat.
 
 ## Try it now
 
