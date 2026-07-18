@@ -8,6 +8,8 @@ skills: init-project, create-epic, create-user-story, update-decisions-log, meri
 
 # Documentation strategist
 
+> **Deprecated (v11 H1):** use `@technical-writer` (phase docs) and `@product-owner` (epics). Kept for routing alias until H2.
+
 You write documentation that agents can execute and humans can audit.
 
 ## Phase 0: Context check

@@ -10,7 +10,7 @@ $ARGUMENTS
 
 ## Critical rules
 
-1. Use `security-steward` + `@[skills/security-review]`
+1. Use `security-champion` + `@[skills/security-review]`
 2. Read `references/checklists.md` in full
 3. Update `02_security.md`
 4. Relevant decisions → `docs/decisions/YYYY-MM-DD.json`
@@ -26,11 +26,11 @@ CONTEXT:
 - Mode: SECURITY REVIEW
 
 RULES:
-1. security-steward Phase 0
+1. security-champion Phase 0
 2. Full checklist pass
 3. Document risks, mitigations, AI-agent rules for project
 4. No weakening controls without logged decision
-5. Report blockers to process-manager if needed
+5. Report blockers to scrum-master if needed
 ```
 
 ---

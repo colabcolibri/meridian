@@ -10,20 +10,21 @@ Templates are mirrored here from skills (`references/`) so every agent uses the 
 
 | Artifact | Template (read before Write) | Primary agent | Skill | Workflow |
 | -------- | ---------------------------- | ------------- | ----- | -------- |
-| Phase docs `00`–`11` | `doc-templates.md` | `documentation-strategist` | `init-project` | `/init-meridian` |
-| As-is inventory `docs/inventory/as-is.md` | `as-is-inventory-template.md` | `documentation-strategist` | `init-project` (Mode B) | `/init-meridian` |
-| Projects manifest `.meridian/projects.json` | `projects-manifest-template.md` | `process-manager` | `init-project` | `/init-meridian`, `/status` |
-| Epic (SQLite `epics`) | `epic-template.md` + **`writing-guide.md`** | `documentation-strategist` | `create-epic` | `/create-epic` |
+| Phase docs `00`–`11` | `doc-templates.md` | `technical-writer` / `product-owner` (`00`) | `init-project` | `/init-meridian` |
+| As-is inventory `docs/inventory/as-is.md` | `as-is-inventory-template.md` | `technical-writer` | `init-project` (Mode B) | `/init-meridian` |
+| Projects manifest `.meridian/projects.json` | `projects-manifest-template.md` | `scrum-master` | `init-project` | `/init-meridian`, `/status` |
+| Epic (SQLite `epics`) | `epic-template.md` + **`writing-guide.md`** | `product-owner` | `create-epic` | `/create-epic` |
 | Version (SQLite `versions`) | `version-template.md` + **`writing-guide.md`** | `sprint-planner` | `create-version` | `/create-version` |
 | Sprint (SQLite `sprints`) | `sprint-template.md` | `sprint-planner` | `create-sprint` | `/plan-sprint` |
-| User story (create) | `us-template.md` + **`writing-guide.md`** + **`code-quality-at-us-time.md`** | `board-keeper` | `create-user-story` | `/create-us` |
-| User story (review) | `review-checklist.md` + `us-template.md` + **`writing-guide.md`** + `section-contracts.md` | `board-keeper` | `review-user-story` | `/review-us` |
-| User story (refine) | `us-template.md` + `refine-checklist.md` + **`writing-guide.md`** + **`code-quality-at-us-time.md`** | `board-keeper` | `refine-user-story` | `/refine-us` |
-| User story (implement) | `implement-gate-checklist.md` + **`code-quality-at-us-time.md`** + target US | `process-manager` | `implement-user-story` | `/implement-us` |
-| Architecture detail | `architecture-folder-guide.md` + `05` phase doc | `architecture-guardian` | — | `/architecture` |
-| User story (close) | `implementation-template.md` + `us-template.md` | `board-keeper` | `complete-user-story` | `/complete-us` |
+| User story (create) | `us-template.md` + **`writing-guide.md`** + **`code-quality-at-us-time.md`** | `backlog-refiner` | `create-user-story` | `/create-us` |
+| User story (review) | `review-checklist.md` + `us-template.md` + **`writing-guide.md`** + `section-contracts.md` | `backlog-refiner` | `review-user-story` | `/review-us` |
+| User story (refine) | `us-template.md` + `refine-checklist.md` + **`writing-guide.md`** + **`code-quality-at-us-time.md`** | `backlog-refiner` | `refine-user-story` | `/refine-us` |
+| User story (implement) | `implement-gate-checklist.md` + **`code-quality-at-us-time.md`** + target US | `developer` | `implement-user-story` | `/implement-us` |
+| Architecture detail | `architecture-folder-guide.md` + `05` phase doc | `technical-architect` | — | `/architecture` |
+| Design system | `design-system-checklist.md` (skill ref) | `design-system-owner` | `design-system` | `/design-pass` |
+| User story (close) | `implementation-template.md` + `us-template.md` | `backlog-refiner` | `complete-user-story` | `/complete-us` |
 | Decision entry | `decision-template.md` + `decision-schema.md` | any relevant agent | `update-decisions-log` | — |
-| Kanban card shape | `board-schema.md` | `board-keeper` | `sqlite-delivery-operations.md` | — |
+| Kanban card shape | `board-schema.md` | `backlog-refiner` | `sqlite-delivery-operations.md` | — |
 
 **Section contracts:** `section-contracts.md` — fixed `##` / `###` for US, epic, version.
 
@@ -48,7 +49,7 @@ When an agent from the table is activated:
 7. Read **`architecture-folder-guide.md`** when editing `05_architecture.md` or `docs/architecture/`.
 8. Only then create or edit the artifact.
 
-If the request is **implement code** for a US (`process-manager` gate):
+If the request is **implement code** for a US (`developer` + gate):
 
 1. Read `implement-gate-checklist.md` + `meridian_db_cli.py show US-XXXX --full`.
 2. Block if `ready` is not `true` → `/refine-us` first.

@@ -1,6 +1,6 @@
 # Architecture folder — `docs/architecture/`
 
-Use with `/architecture` and agent `architecture-guardian`. Read before creating or splitting architecture detail files.
+Use with `/architecture` and agent `technical-architect`. Read before creating or splitting architecture detail files.
 
 ---
 

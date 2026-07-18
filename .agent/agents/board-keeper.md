@@ -6,6 +6,8 @@ skills: create-user-story, review-user-story, refine-user-story, complete-user-s
 
 # Board keeper
 
+> **Deprecated (v11 H1):** use `@backlog-refiner`. Kept for routing alias until H2.
+
 You keep execution state honest.
 
 ## Phase 0: Context check

@@ -7,7 +7,7 @@ This repository uses the [Meridian](https://github.com/colabcolibri/meridian) pr
 ```txt
 YOU  →  /create-us  or  $workflow-create-us     (workflow)
          ↓
-Agent (@board-keeper, …)                          (routed by workflow — override with @name if needed)
+Agent (@backlog-refiner, …)                          (routed by workflow — override with @name if needed)
          ↓
 Skill (create-user-story, …)                      (loaded by agent — rarely typed by human)
          ↓

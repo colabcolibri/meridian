@@ -122,17 +122,17 @@ Revisão sistemática de ~107 arquivos `.md` — ver `markdown-audit-v11.md`.
 
 Sub-ondas: G1 P0 bloqueantes → G2 templates → G3 agents/workflows → G4 dogfood docs → G5 repo/CI → G6 guardrail grep.
 
-### Onda H — Agent roster e workflow — **P0 (planejado, paralelo a G)**
+### Onda H — Agent roster e workflow — **✅ H1 concluída**
 
-Novos agentes + redesign de responsabilidades — ver `agent-roster-and-workflow-v11.md`.
+Roster Scrum v11 — ver `agent-roster-and-workflow-v11.md`. H2 = remover arquivos legacy após aliases estáveis.
 
 | Entregável | Status |
 | ---------- | ------ |
-| `implementation-specialist` — dono de `/implement-us` | pendente H1 |
-| `design-steward` — `docs/09_design_system.md` | pendente H1 |
-| `process-manager` sem código de produto | pendente H1 |
-| Workflow `/design-pass` | pendente H1 |
-| Routing + agents-help atualizados | pendente H1 |
+| `developer` — dono de `/implement-us` | ✅ H1 |
+| `design-system-owner` — `09_design_system.md` | ✅ H1 |
+| `scrum-master` sem código de produto | ✅ H1 |
+| Workflow `/design-pass` | ✅ H1 |
+| Routing + agents-help + INDEX + validator | ✅ H1 |
 
 ### Onda F — Board só SQLite — **✅ F2 concluída**
 

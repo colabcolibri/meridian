@@ -81,4 +81,4 @@ _(Optional)_ What to copy into `00_scope.md` and `03_user_types.md` when manager
 | Value | Meaning |
 | ----- | ------- |
 | `draft` | Discovery in progress |
-| `ready for scope` | Manager may promote to `00_scope` / `03_user_types` or ask scope-architect to review |
+| `ready for scope` | Manager may promote to `00_scope` / `03_user_types` or ask product-owner to review |

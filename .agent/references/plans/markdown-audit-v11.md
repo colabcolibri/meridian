@@ -159,16 +159,18 @@ Marque `[x]` quando o arquivo estiver **v11-operacional** (sem P0; P1 aceito ou 
 - [ ] `templates/architecture-folder-guide.md`
 - [ ] `templates/code-quality-at-us-time.md`
 
-### 7.5 Agents (8)
+### 7.5 Agents (v11 roster — 9 + legacy aliases)
 
-- [ ] `agents/board-keeper.md`
-- [ ] `agents/process-manager.md`
-- [ ] `agents/sprint-planner.md`
-- [ ] `agents/documentation-strategist.md`
-- [ ] `agents/architecture-guardian.md`
-- [ ] `agents/security-steward.md`
-- [ ] `agents/scope-architect.md`
-- [ ] `agents/product-owner.md`
+- [x] `agents/scrum-master.md`
+- [x] `agents/product-owner.md`
+- [x] `agents/technical-writer.md`
+- [x] `agents/security-champion.md`
+- [x] `agents/technical-architect.md`
+- [x] `agents/design-system-owner.md`
+- [x] `agents/sprint-planner.md`
+- [x] `agents/backlog-refiner.md`
+- [x] `agents/developer.md`
+- [x] Legacy aliases deprecated: `process-manager`, `board-keeper`, `scope-architect`, `documentation-strategist`, `architecture-guardian`, `security-steward`
 
 ### 7.6 Workflows (17)
 
@@ -181,7 +183,13 @@ Marque `[x]` quando o arquivo estiver **v11-operacional** (sem P0; P1 aceito ou 
 - [ ] `workflows/create-us.md`
 - [ ] `workflows/review-us.md`
 - [ ] `workflows/refine-us.md`
-- [ ] `workflows/implement-us.md`
+- [x] `workflows/implement-us.md` → `developer`
+- [x] `workflows/status.md`, `init-meridian.md`, `daily-with-ai.md` → `scrum-master`
+- [x] `workflows/create-us|review-us|refine-us|complete-us.md` → `backlog-refiner`
+- [x] `workflows/create-epic.md` → `product-owner`
+- [x] `workflows/architecture.md` → `technical-architect`
+- [x] `workflows/security-pass.md` → `security-champion`
+- [x] `workflows/design-pass.md` (novo)
 - [ ] `workflows/complete-us.md`
 - [ ] `workflows/complete-sprint.md`
 - [ ] `workflows/architecture.md`

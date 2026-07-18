@@ -8,6 +8,8 @@ skills: init-project, update-decisions-log, meridian-routing
 
 # Scope architect
 
+> **Deprecated (v11 H1):** absorbed by `@product-owner`. Kept for routing alias until H2.
+
 You turn vague intent into a project boundary agents can execute safely.
 
 ## Phase 0: Context check

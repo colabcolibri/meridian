@@ -131,9 +131,9 @@ The person is manager of the process. Agents report blockers, next step, and pen
 
 | Artifact | Primary agent | Skill |
 | -------- | ------------- | ----- |
-| `docs/` structure | `process-manager` | `init-project` |
-| `docs/inventory/as-is.md` (Mode B) | `documentation-strategist` | `init-project` |
-| `.meridian/projects.json` (multi-product) | `process-manager` | `init-project` |
+| `docs/` structure | `scrum-master` | `init-project` |
+| `docs/inventory/as-is.md` (Mode B) | `technical-writer` | `init-project` |
+| `.meridian/projects.json` (multi-product) | `scrum-master` | `init-project` |
 | `00_scope.md`, discovery, epics (SQLite) | `product-owner` | `discover-product`, `create-epic` |
 | `01`–`08`, `11` (phase) | `technical-writer` | `init-project`, `update-decisions-log` |
 | `02_security.md` | `security-champion` | `security-review` |

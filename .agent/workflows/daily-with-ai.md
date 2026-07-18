@@ -32,7 +32,7 @@ People who have already read **Start here** and **Usage guide** in the app (four
 ### 1. Orient
 
 ```txt
-Agent: process-manager
+Agent: scrum-master
 Skill: meridian-routing (optional)
 Command: /status
 App: Settings tab + **Decisions** (log) + Board
@@ -55,7 +55,7 @@ Prompt: "Implement US-XXXX per acceptance. Do not mark ✅ without evidence."
 ### 2b. Refine (if needed)
 
 ```txt
-Agent: board-keeper
+Agent: backlog-refiner
 Skill: refine-user-story
 Command: /refine-us US-XXXX
 ```
@@ -67,7 +67,7 @@ Command: /refine-us US-XXXX
 ### 3. Implement
 
 ```txt
-Agent: process-manager
+Agent: developer
 Skill: implement-user-story
 Command: /implement-us US-XXXX
 ```
@@ -80,7 +80,7 @@ Command: /implement-us US-XXXX
 ### 4. Close
 
 ```txt
-Agent: board-keeper
+Agent: backlog-refiner
 Skill: complete-user-story
 Command: /complete-us US-XXXX
 ```

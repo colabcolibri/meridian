@@ -80,5 +80,5 @@ File: docs/discovery/product-brief.md
 Status: draft | ready for scope
 Open questions:
 Epic candidates:
-Next: /init-meridian | promote to 00_scope | /discover again | scope-architect review
+Next: /init-meridian | promote to 00_scope | /discover again | product-owner review
 ```

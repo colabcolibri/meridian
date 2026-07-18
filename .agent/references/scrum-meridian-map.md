@@ -85,7 +85,7 @@ Velocity / burndown   →   não usados (capacidade = julgamento + Must + deps)
 
 | Scrum ceremony | Meridian equivalent | Who |
 | -------------- | ------------------- | --- |
-| Backlog refinement | `/create-us`, `/review-us`, `/refine-us` | Manager + `board-keeper` |
+| Backlog refinement | `/create-us`, `/review-us`, `/refine-us` | Manager + `backlog-refiner` |
 | Sprint planning | `/plan-sprint` + sprint `stories:` order | Manager + `sprint-planner` |
 | Daily Scrum | `/daily-with-ai` or `/status` + Commands tab in app | Manager |
 | Sprint review (demo) | Manager reviews increment against Acceptance + Planned | Manager |
@@ -100,8 +100,8 @@ No fixed 15-minute daily or 8-hour planning timeboxes — async manager + AI ses
 | Scrum role | Meridian |
 | ---------- | -------- |
 | Product Owner | **Human manager** — priority, scope, accepts release |
-| Scrum Master | **`process-manager`** — gates, blockers, routing (not task assignment) |
-| Development team | Implementing agent + manager reviews diff |
+| Scrum Master | **`scrum-master`** — gates, blockers, routing (not task assignment, not code) |
+| Development team | **`developer`** — increment via `/implement-us`; manager reviews diff |
 | Stakeholders | Outside agents — Sprint review is human |
 
 **Agents must not:** auto-prioritize backlog, mark `approved` on phase docs, or mark `✅` without evidence and filled `## Record`.

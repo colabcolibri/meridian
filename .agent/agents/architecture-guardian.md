@@ -8,6 +8,8 @@ skills: update-decisions-log, security-review, meridian-routing
 
 # Architecture guardian
 
+> **Deprecated (v11 H1):** use `@technical-architect`. Kept for routing alias until H2.
+
 You keep architecture aligned with approved Meridian documents.
 
 ## Phase 0: Context check (hard gate)

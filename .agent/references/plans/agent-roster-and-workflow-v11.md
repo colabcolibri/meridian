@@ -219,17 +219,17 @@ flowchart TB
 
 ### H1 — Criar / renomear agentes
 
-- [ ] `agents/developer.md`
-- [ ] `agents/scrum-master.md` (from process-manager, sem implement)
-- [ ] `agents/backlog-refiner.md` (from board-keeper)
-- [ ] `agents/design-system-owner.md`
-- [ ] `agents/technical-writer.md` (from documentation-strategist)
-- [ ] `agents/technical-architect.md` (from architecture-guardian)
-- [ ] `agents/security-champion.md` (from security-steward)
-- [ ] Expandir `agents/product-owner.md` (scope + epic)
-- [ ] `skills/design-system/SKILL.md`, `workflows/design-pass.md`
-- [ ] Routing matrix + `agents-help.md` + `scrum-meridian-map.md` § Ceremonies
-- [ ] Aliases `@process-manager` → `scrum-master` em routing (1 release)
+- [x] `agents/developer.md`
+- [x] `agents/scrum-master.md` (from process-manager, sem implement)
+- [x] `agents/backlog-refiner.md` (from board-keeper)
+- [x] `agents/design-system-owner.md`
+- [x] `agents/technical-writer.md` (from documentation-strategist)
+- [x] `agents/technical-architect.md` (from architecture-guardian)
+- [x] `agents/security-champion.md` (from security-steward)
+- [x] Expandir `agents/product-owner.md` (scope + epic)
+- [x] `skills/design-system/SKILL.md`, `workflows/design-pass.md`
+- [x] Routing matrix + `agents-help.md` + `scrum-meridian-map.md` § Ceremonies
+- [x] Aliases `@process-manager` → `scrum-master` em routing (1 release)
 
 ### H2 — Limpeza
 

@@ -67,17 +67,21 @@ Workflows orchestrate agents; they do not replace the master protocol.
 
 ---
 
-## Agents
+## Agents (v11 Scrum roster)
 
 | Agent | Purpose | Skills |
 | ----- | ------- | ------ |
-| `process-manager` | Governance, status, gates, **implement US** | init-project, implement-user-story, update-decisions-log, meridian-routing |
-| `scope-architect` | `00_scope.md` | init-project, update-decisions-log, meridian-routing |
-| `documentation-strategist` | Phase docs `01`–`05`, `08`–`10`, SQLite epics | init-project, create-epic, create-user-story, update-decisions-log, meridian-routing |
-| `security-steward` | `02_security.md` | security-review, update-decisions-log, meridian-routing |
-| `architecture-guardian` | `05_architecture.md` | security-review, update-decisions-log, meridian-routing |
-| `sprint-planner` | SQLite `versions`, `sprints` | create-version, create-sprint, complete-sprint, create-user-story, … |
-| `board-keeper` | US lifecycle in SQLite | create-user-story, review-user-story, refine-user-story, complete-user-story, update-decisions-log, meridian-routing |
+| `scrum-master` | Process, status, init — **no product code** | init-project, update-decisions-log, meridian-routing |
+| `product-owner` | Discovery, `00_scope`, epics | discover-product, create-epic, init-project, update-decisions-log, meridian-routing |
+| `technical-writer` | Phase docs `01`–`08`, `11` | init-project, update-decisions-log, meridian-routing |
+| `security-champion` | `02_security.md` | security-review, update-decisions-log, meridian-routing |
+| `technical-architect` | `05_architecture.md` | security-review, update-decisions-log, meridian-routing |
+| `design-system-owner` | `09_design_system.md` | design-system, update-decisions-log, meridian-routing |
+| `sprint-planner` | SQLite `versions`, `sprints` | create-version, create-sprint, complete-sprint, … |
+| `backlog-refiner` | US lifecycle (not implement) | create-user-story, review-user-story, refine-user-story, complete-user-story, … |
+| `developer` | `/implement-us` gate + code | implement-user-story, update-decisions-log, meridian-routing |
+
+**Legacy aliases (H1):** `process-manager` → `scrum-master`, `board-keeper` → `backlog-refiner`, etc. — see `meridian-routing` skill.
 
 Each agent includes: phases 0/-1, mission, prohibitions, output format, delegation.
 
@@ -99,6 +103,7 @@ Each agent includes: phases 0/-1, mission, prohibitions, output format, delegati
 | `complete-user-story` | `implementation-template.md` |
 | `update-decisions-log` | `decision-template.md`, `decision-schema.md` |
 | `security-review` | `checklists.md` |
+| `design-system` | `design-system-checklist.md` |
 | `meridian-routing` | — (inline matrix) |
 
 **Agent mirror:** all delivery templates are symlinked under `.agent/references/templates/` with registry `INDEX.md`. Agents must read INDEX + full template before Write — see each agent's **Template protocol** section.
@@ -111,19 +116,21 @@ See `.agent/skills/doc.md` to create new skills.
 
 | Workflow | Agent | Mode |
 | -------- | ----- | ---- |
-| `init-meridian` | process-manager | init, no code |
-| `status` | process-manager | read-only |
+| `init-meridian` | scrum-master | init, no code |
+| `status` | scrum-master | read-only |
 | `plan-sprint` | sprint-planner | planning |
 | `create-version` | sprint-planner | create release in SQLite |
-| `create-us` | board-keeper | create US |
-| `review-us` | board-keeper | audit US — report only |
-| `refine-us` | board-keeper | refine US before implement |
-| `implement-us` | process-manager | gate + implement when `ready: true` |
-| `complete-us` | board-keeper | close US after implementation |
-| `create-epic` | documentation-strategist | create epic in SQLite |
-| `architecture` | architecture-guardian | doc 05 |
-| `security-pass` | security-steward | doc 02 |
-| `daily-with-ai` | process-manager | daily manager + AI routine |
+| `create-us` | backlog-refiner | create US |
+| `review-us` | backlog-refiner | audit US — report only |
+| `refine-us` | backlog-refiner | refine US before implement |
+| `implement-us` | developer | gate + implement when `ready: true` |
+| `complete-us` | backlog-refiner | close US after implementation |
+| `create-epic` | product-owner | create epic in SQLite |
+| `architecture` | technical-architect | doc 05 |
+| `security-pass` | security-champion | doc 02 |
+| `design-pass` | design-system-owner | doc 09 |
+| `discover` | product-owner | discovery brief |
+| `daily-with-ai` | scrum-master | daily manager + AI routine |
 
 All support `$ARGUMENTS` and a critical rules section.
 

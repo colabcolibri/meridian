@@ -31,7 +31,7 @@ Optional later: `docs/discovery/interviews/` or `docs/discovery/research/` — o
 ```txt
 /discover                    → product-brief.md (PO)
 /init-meridian               → full docs/ tree (PM) — reads brief if present
-00_scope + 03_user_types     → promote from brief; scope-architect challenges
+00_scope + 03_user_types     → promote from brief; product-owner challenges
 Phase 2 → 05 approved        → backlog (/create-epic …)
 /refine-us → /implement-us   → dev lane
 ```
@@ -54,8 +54,8 @@ Phase 2 → 05 approved        → backlog (/create-epic …)
 
 | Agent / command | When |
 | --------------- | ---- |
-| `scope-architect` | Brief `ready for scope` — tighten boundaries in `00_scope.md` |
-| `process-manager` | `/init-meridian` — structure and decision log |
-| `documentation-strategist` | Phase docs after scope direction exists |
+| `product-owner` | Brief `ready for scope` — tighten boundaries in `00_scope.md` |
+| `scrum-master` | `/init-meridian` — structure and decision log |
+| `technical-writer` | Phase docs after scope direction exists |
 
 Material product pivot → `/update-decisions-log` (`date` before Write).

@@ -51,13 +51,15 @@ AGENT_KIT_PATHS = [
 ]
 
 REQUIRED_AGENTS = [
-    "process-manager.md",
-    "scope-architect.md",
-    "documentation-strategist.md",
-    "security-steward.md",
-    "architecture-guardian.md",
+    "scrum-master.md",
+    "product-owner.md",
+    "technical-writer.md",
+    "security-champion.md",
+    "technical-architect.md",
+    "design-system-owner.md",
     "sprint-planner.md",
-    "board-keeper.md",
+    "backlog-refiner.md",
+    "developer.md",
 ]
 
 

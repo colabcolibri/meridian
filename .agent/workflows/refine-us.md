@@ -10,7 +10,7 @@ $ARGUMENTS
 
 ## Critical rules
 
-1. Use `board-keeper` + `@[skills/refine-user-story]`
+1. Use `backlog-refiner` + `@[skills/refine-user-story]`
 2. **Mandatory read:** `writing-guide.md` + `code-quality-at-us-time.md` + `refine-checklist.md`
 3. **Mandatory read:** `docs/04_principles.md` (DRY, SRP) this session
 4. **NO product code** — docs only

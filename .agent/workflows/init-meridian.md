@@ -11,7 +11,7 @@ $ARGUMENTS
 ## Critical rules
 
 1. **NO PRODUCT CODE** — only `docs/` structure and governance
-2. Use agent `process-manager`, not generic IDE plan mode
+2. Use agent `scrum-master`, not generic IDE plan mode
 3. Follow `@[skills/init-project]` — read Mode A (new) or Mode B (existing codebase)
 4. Register initial decision in `docs/decisions/YYYY-MM-DD.json`
 5. Never mark phase docs `approved` — only `draft`
@@ -32,7 +32,7 @@ If `$ARGUMENTS` does not specify, read the repository first — then determine m
 
 ## Task
 
-Use `process-manager` with this context:
+Use `scrum-master` with this context:
 
 ```txt
 CONTEXT:
