@@ -8,7 +8,7 @@ By contributing, you agree that your contributions will be licensed under the [P
 
 1. Read [`README.md`](README.md) and [`.agent/MERIDIAN.md`](.agent/MERIDIAN.md) to understand the project and protocol.
 2. Read [`.agent/MERIDIAN.md`](.agent/MERIDIAN.md) if you will change agent behavior.
-3. Confirm your change respects the core rule: **`docs/` of the target project is the source of truth** (in this kit, `app-desktop/docs/`).
+3. Confirm your change respects the core rule: **`docs/` of the target project is the source of truth** (this repo dogfoods `docs/` at the repository root).
 
 ## Where to edit
 
@@ -16,28 +16,26 @@ By contributing, you agree that your contributions will be licensed under the [P
 | ----------------------- | ------------- |
 | Agents, skills, workflows, rules | **`.agent/`** (canonical source) |
 | Cursor / Claude Code adapters (local symlinks) | Run `./.agent/scripts/sync_cursor_kit.sh` — **do not** commit `.cursor/` or `.claude/` |
-| Desktop app (UI, parser, validations) | `app-desktop/src/` |
-| App product documentation | `app-desktop/docs/` |
-| Architecture decisions | Prepend in `app-desktop/docs/decisions/YYYY-MM-DD.json` (skill `update-decisions-log`) |
+| VS Code extension | `app-visual-studio/src/` |
+| Dogfood product documentation | `docs/` |
+| Architecture decisions | Prepend in `docs/decisions/YYYY-MM-DD.json` (skill `update-decisions-log`) |
 
 ## Local environment
 
 ### Kit + validation
 
 ```bash
-python3 .agent/scripts/validate_meridian.py app-desktop
-python3 .agent/scripts/validate_meridian.py app-desktop --json   # CI
+python3 .agent/scripts/validate_meridian.py .
+python3 .agent/scripts/validate_meridian.py . --json   # CI
 ```
 
-### Desktop app
+### VS Code extension
 
 ```bash
-cd app-desktop
+cd app-visual-studio
 pnpm install
-pnpm dev        # http://localhost:5173
-pnpm lint
 pnpm test
-pnpm build
+pnpm package:vsix
 ```
 
 ### Cursor or Claude Code (optional)

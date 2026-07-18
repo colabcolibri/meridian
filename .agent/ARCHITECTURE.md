@@ -16,7 +16,7 @@
 | Operations | `.agent/agents`, `skills`, `workflows` | Personas and procedures |
 | Human references | `.agent/references/` | `start-here`, `usage-guide`, `agents-help`, `instruction-surfaces`, `scrum-meridian-map`, optional `scrum-guide-complete` |
 
-The desktop app (`app-desktop/`) monitors Meridian folders; it is not the source of truth. Learn/Commands UI copy lives in `app-desktop/src/features/monitor/content/meridian-concepts.ts` — see [instruction-surfaces.md](./references/instruction-surfaces.md) when the protocol changes.
+The VS Code extension (`app-visual-studio/`) monitors Meridian folders; it is not the source of truth. Learn/Commands UI copy lives in extension webviews — see [instruction-surfaces.md](./references/instruction-surfaces.md) when the protocol changes.
 
 ### Why `.agent` and `.cursor`?
 

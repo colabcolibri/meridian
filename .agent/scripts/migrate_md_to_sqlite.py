@@ -84,7 +84,7 @@ def main() -> int:
     import argparse
 
     parser = argparse.ArgumentParser(description="Migrate Meridian docs to SQLite")
-    parser.add_argument("package_root", nargs="?", default="app-desktop")
+    parser.add_argument("package_root", nargs="?", default=".")
     parser.add_argument(
         "--decisions-only",
         action="store_true",

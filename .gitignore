@@ -9,7 +9,6 @@ app-visual-studio/bundled/
 # Builds
 dist/
 build/
-app-desktop/public/demo-docs/
 **/dist/
 **/build/
 .vite/

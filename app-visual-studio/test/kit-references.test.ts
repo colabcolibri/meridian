@@ -8,9 +8,9 @@ import type { MeridianWorkspaceInfo } from "../src/meridian-workspace.js"
 test("kitReferencePath resolves agents-help under project root", () => {
   const info: MeridianWorkspaceInfo = {
     projectRoot: "/repo",
-    docsRoot: "/repo/app-desktop/docs",
-    packageRoot: "/repo/app-desktop",
-    projectId: "app-desktop",
+    docsRoot: "/repo/docs",
+    packageRoot: "/repo",
+    projectId: "meridian",
     projectName: "Desktop",
     projects: [],
     kitDetected: true,

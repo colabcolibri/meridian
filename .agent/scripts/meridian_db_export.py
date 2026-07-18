@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""JSON export of delivery artifacts for app-desktop dev API (US-0112)."""
+"""JSON export of delivery artifacts for IDE monitor / dev API."""
 
 from __future__ import annotations
 

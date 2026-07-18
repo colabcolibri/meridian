@@ -1,2 +1,1 @@
-cd app-desktop
-pnpm exec lint-staged
+python3 .agent/scripts/validate_meridian.py .

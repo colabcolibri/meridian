@@ -66,16 +66,16 @@ test("non-Meridian folder returns null", () => {
   assert.equal(resolveMeridianWorkspaceFromPaths(tmp), null)
 })
 
-test("monorepo root: kit at root, docs under app-desktop/docs", () => {
+test("monorepo root: kit at root, docs in nested package folder", () => {
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "meridian-ws-"))
   writeKit(tmp)
-  writeDocs(path.join(tmp, "app-desktop"), ["US-0099"])
+  writeDocs(path.join(tmp, "my-product"), ["US-0099"])
 
   const info = resolveMeridianWorkspaceFromPaths(tmp)
   assert.ok(info)
   assert.equal(info.docsExists, true)
   assert.equal(info.usCount, 1)
-  assert.ok(info.docsRoot.endsWith("app-desktop/docs"))
-  assert.equal(info.packageRoot, path.join(tmp, "app-desktop"))
+  assert.ok(info.docsRoot.endsWith("my-product/docs"))
+  assert.equal(info.packageRoot, path.join(tmp, "my-product"))
   assert.equal(info.projects.length, 1)
 })

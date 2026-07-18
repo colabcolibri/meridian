@@ -1,0 +1,23 @@
+{
+  "date": "2026-07-18",
+  "entries": [
+    {
+      "time": "09:50",
+      "title": "Meridian v10 — remove app-desktop; dogfood docs at repo root",
+      "affected_document": "app-desktop/ (deleted), docs/ (moved to root), README.md, 00_scope.md, 05_architecture.md, 06_database.md, CI, CONTRIBUTING.md, MERIDIAN_V2_CUTOVER.md, .agent/scripts/* default package-root",
+      "what_changed": "Removed browser monitor (app-desktop/) entirely. Dogfood docs moved from app-desktop/docs/ to repository root docs/. Default package-root for kit DB scripts is `.` (repo root). GitHub Pages deploy workflow removed. VS Code extension is the sole IDE monitor.",
+      "why_changed": "Desktop Vite app duplicated extension value and added maintenance cost; single-product dogfood is simpler at repo root.",
+      "impact": "Use `python3 .agent/scripts/validate_meridian.py .` and extension `app-visual-studio/` for visibility. Branch meridian-v1-old preserves pre-v2 tree including app-desktop.",
+      "responsible": "Process Manager"
+    },
+    {
+      "time": "09:30",
+      "title": "Meridian v2 cutover — SQLite delivery store on main; meridian-v1-old branch",
+      "affected_document": ".meridian/meridian.db, .agent/migrations/, meridian_db.py, migrate_md_to_sqlite.py, generate_board.py, validate_meridian.py, docs/versions/v9.md, EPIC-14",
+      "what_changed": "Delivery artifacts (epics, versions, sprints, US, decisions) stored in SQLite at {packageRoot}/.meridian/meridian.db. Migration imported dogfood history. Branch meridian-v1-old at 70149ee preserves Markdown-only protocol.",
+      "why_changed": "Scale delivery tooling without hundreds of .md files; enable atomic queries and board generation from DB.",
+      "impact": "Phase docs remain Markdown; /create-us and /sync-board use DB when meridian.db exists. See MERIDIAN_V2_CUTOVER.md.",
+      "responsible": "Process Manager"
+    }
+  ]
+}

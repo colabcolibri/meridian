@@ -64,8 +64,8 @@ test("formatMeridianPanelTitle uses docs path when single project", () => {
       {
         id: "main",
         name: "Main",
-        docs: "app-desktop/docs",
-        packageRoot: "app-desktop",
+        docs: "docs",
+        packageRoot: ".",
         source: "discovered",
         usCount: 100,
         isActive: true,
@@ -73,7 +73,7 @@ test("formatMeridianPanelTitle uses docs path when single project", () => {
     ],
   })
   const title = formatMeridianPanelTitle("Versions", single, 5)
-  assert.equal(title, "Versions — app-desktop/docs (5)")
+  assert.equal(title, "Versions — docs (5)")
 })
 
 test("projectContextToolbarHtml includes select when multiProject", () => {

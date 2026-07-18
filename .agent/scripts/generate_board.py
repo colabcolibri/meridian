@@ -16,7 +16,7 @@ def main() -> int:
     import argparse
 
     parser = argparse.ArgumentParser(description="Generate board.json from SQLite")
-    parser.add_argument("package_root", nargs="?", default="app-desktop")
+    parser.add_argument("package_root", nargs="?", default=".")
     args = parser.parse_args()
     root = Path(args.package_root).resolve()
 

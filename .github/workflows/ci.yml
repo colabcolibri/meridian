@@ -6,19 +6,25 @@ on:
   pull_request:
     branches: [main]
 
-defaults:
-  run:
-    working-directory: app-desktop
-
 jobs:
-  validate-and-test:
+  validate-meridian:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
       - name: Validar estrutura Meridian
-        working-directory: .
-        run: python3 .agent/scripts/validate_meridian.py app-desktop
+        run: python3 .agent/scripts/validate_meridian.py .
+
+      - name: Schema SQLite smoke test
+        run: python3 .agent/scripts/test_meridian_db_schema.py
+
+  extension:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: app-visual-studio
+    steps:
+      - uses: actions/checkout@v4
 
       - uses: pnpm/action-setup@v4
         with:
@@ -28,16 +34,10 @@ jobs:
         with:
           node-version: 22
           cache: pnpm
-          cache-dependency-path: app-desktop/pnpm-lock.yaml
+          cache-dependency-path: app-visual-studio/pnpm-lock.yaml
 
       - name: Instalar dependências
         run: pnpm install --frozen-lockfile
 
-      - name: Lint
-        run: pnpm lint
-
       - name: Testes
         run: pnpm test
-
-      - name: Build
-        run: pnpm build

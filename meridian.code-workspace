@@ -7,10 +7,6 @@
     {
       "name": "VS Code extension",
       "path": "app-visual-studio"
-    },
-    {
-      "name": "Desktop monitor",
-      "path": "app-desktop"
     }
   ],
   "settings": {

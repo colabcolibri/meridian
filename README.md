@@ -14,7 +14,7 @@
 </p>
 
 > Very early personal experiment. Rules, structure, and APIs will change.  
-> [Live demo](https://colabcolibri.github.io/meridian/) · [Full protocol](.agent/MERIDIAN.md)
+> [Full protocol](.agent/MERIDIAN.md)
 
 # Meridian
 
@@ -64,7 +64,7 @@ document → plan → refine → implement → close → commit
 | ------ | ---- |
 | **`docs/`** (in *your* project) | Memory + task specs — the product spec and what counts as done |
 | **`.agent/`** (copied from the kit) | Guides — rules, agents, skills, slash-command workflows |
-| **`app-desktop/`** · **`app-visual-studio/`** | Observability — read `docs/`; optional monitors, not the harness itself |
+| **`app-visual-studio/`** | Observability — board and planning in the IDE; not the harness itself |
 
 Scrum-inspired, adapted for a **single human directing AI agents** — no story points, velocity, or mandatory Feature layer. [Scrum ↔ Meridian map](.agent/references/scrum-meridian-map.md)
 
@@ -81,14 +81,14 @@ chmod +x .agent/scripts/sync_cursor_kit.sh
 
 1. In your IDE: `/init-meridian` — creates `docs/` for your project (greenfield or existing codebase).
 2. **`/agents-help`** — agent groups, slash command groups, numbered steps (`.agent/references/agents-help.md`).
-3. Optional: [browser demo](https://colabcolibri.github.io/meridian/) or `cd app-desktop && pnpm install && pnpm dev`.
+3. Optional: install the VS Code extension — `cd app-visual-studio && pnpm install && pnpm install:cursor`.
 4. Anytime: `/status` — blockers, current state, suggested next step.
 
 **Use in another repo:** copy `.agent/` only, run `/init-meridian`, sync the kit if you use Cursor/Claude. Existing codebase → also `docs/inventory/as-is.md` (see [usage guide](.agent/references/usage-guide.md#migrate-an-existing-project)).
 
-**Maintainers:** [instruction surfaces](.agent/references/instruction-surfaces.md) — where to edit when the protocol changes (kit, app-desktop UI, extension).
+**Maintainers:** [instruction surfaces](.agent/references/instruction-surfaces.md) — where to edit when the protocol changes (kit, extension).
 
-Or download a **kit release** (`.agent` only, no app-desktop):
+Or download a **kit release** (`.agent` only):
 
 ```bash
 tar -xzf meridian-kit-1.0.0.tar.gz && cd meridian-kit-1.0.0
@@ -114,19 +114,19 @@ Publisher: **colabcolibri** · [GitHub](https://github.com/colabcolibri/meridian
 | Piece | Required? | Role in the experiment |
 | ----- | --------- | ---------------------- |
 | [`.agent/`](.agent/) | Yes (in your project) | Portable harness kit — guides, skills, validation |
-| `docs/` | Yes (in your project) | Living spec — [example here](app-desktop/docs/) |
-| [`app-desktop/`](app-desktop/) | No | Browser observability (demo + local) |
+| `docs/` | Yes (in your project) | Living spec — [example here](docs/) |
 | [`app-visual-studio/`](app-visual-studio/) | No | VS Code/Cursor extension — board and planning in the editor |
 
 ## Where the experiment stands
 
 | Version | What | Status |
 | ------- | ---- | ------ |
-| Monitor v0–v3 | Read `docs/` in the browser | Shipped |
-| **v4** | VS Code bridge — board, versions, sprints, epics | In progress |
+| **v4** | VS Code extension — board, versions, sprints, epics | Shipped |
+| **v9** | SQLite delivery store + kit scripts | Shipped |
+| **v10** | Remove browser monitor; dogfood `docs/` at repo root | Shipped |
 | v5+ | Write commands, wizards | Planned |
 
-Details in [`app-desktop/docs/versions/`](app-desktop/docs/versions/).
+Details in [`docs/versions/`](docs/versions/).
 
 ## Reference (not the home page)
 

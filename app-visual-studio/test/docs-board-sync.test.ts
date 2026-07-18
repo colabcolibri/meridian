@@ -7,11 +7,11 @@ import {
   relativeDocsPath,
 } from "../src/docs-board-sync.ts"
 
-const docs = "/proj/app-desktop/docs"
+const docs = "/proj/docs"
 
 test("relativeDocsPath normalizes separators", () => {
   assert.equal(
-    relativeDocsPath(docs, "/proj/app-desktop/docs/us/US-0042.md"),
+    relativeDocsPath(docs, "/proj/docs/us/US-0042.md"),
     "us/US-0042.md",
   )
 })

@@ -21,8 +21,8 @@ def main() -> int:
     parser.add_argument(
         "package_root",
         nargs="?",
-        default="app-desktop",
-        help="Folder containing docs/ (e.g. app-desktop)",
+        default=".",
+        help="Folder containing docs/ (e.g. . for repo root dogfood)",
     )
     args = parser.parse_args()
     root = Path(args.package_root).resolve()

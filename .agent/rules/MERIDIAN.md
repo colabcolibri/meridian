@@ -92,7 +92,7 @@ Before any action, classify:
 
 ### Source of truth
 
-- `docs/` is the source of truth of the **target project** (do not confuse with this repo's `app-desktop/docs/` unless context is explicit).
+- `docs/` is the source of truth of the **target project** (this repo dogfoods `docs/` at the repository root next to `.agent/`).
 - `docs/kanban/board.json` is **derived** from `docs/us/*.md`.
 - Read `.agent/MERIDIAN.md` before changing project structure.
 

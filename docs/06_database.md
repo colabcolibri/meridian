@@ -18,7 +18,7 @@ Meridian 2.0 stores **delivery artifacts** in a local **SQLite** database per pr
 | **Markdown** (`docs/`)               | `00_scope.md` … `11_decisions.md`, `discovery/`, `architecture/`, `inventory/`, `templates/`, `README.md` |
 | **SQLite** (`.meridian/meridian.db`) | epics, versions, sprints, user stories, decisions, board snapshots                                        |
 
-Path: `{packageRoot}/.meridian/meridian.db` (e.g. `app-desktop/.meridian/meridian.db` in dogfood). Kit root `.meridian/projects.json` (multi-product manifest) stays separate.
+Path: `{packageRoot}/.meridian/meridian.db` (e.g. `./.meridian/meridian.db` at repo root in dogfood). Kit root `.meridian/projects.json` (multi-product manifest) stays separate.
 
 Engine: SQLite 3 with WAL journal mode for concurrent monitor reads during kit writes.
 

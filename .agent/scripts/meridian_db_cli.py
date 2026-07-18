@@ -163,7 +163,7 @@ def main() -> int:
     import argparse
 
     parser = argparse.ArgumentParser(description="Meridian DB CLI for kit skills")
-    parser.add_argument("--package-root", default="app-desktop")
+    parser.add_argument("--package-root", default=".")
     sub = parser.add_subparsers(dest="command", required=True)
 
     create = sub.add_parser("create-us")

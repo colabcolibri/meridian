@@ -8,13 +8,13 @@
 
 ```txt
 CANONICAL (edit here)          REGISTRY (agents read)              HUMAN / CURSOR (read-only mirrors)
-.agent/skills/.../references/  →  .agent/references/templates/  →  app-desktop/docs/templates/
+.agent/skills/.../references/  →  .agent/references/templates/  →  docs/templates/
                                                               →  .cursor/references/templates/
 ```
 
 - **Registry** = symlinks + 4 kit-owned files (`INDEX.md`, `writing-guide.md`, `section-contracts.md`, `lifecycle.md`, `TEMPLATE_SOURCES.md`).
 - **Never** edit symlinks in `docs/templates/` or `.cursor/` — they point at `.agent/`.
-- After adding a new template file, update `INDEX.md`, run `./.agent/scripts/sync_cursor_kit.sh` (syncs `.cursor/` + `app-desktop/docs/templates/`), and `docs/templates/README.md` in target projects.
+- After adding a new template file, update `INDEX.md`, run `./.agent/scripts/sync_cursor_kit.sh` (syncs `.cursor/` + `docs/templates/`), and `docs/templates/README.md` in target projects.
 
 ---
 
@@ -75,7 +75,7 @@ CANONICAL (edit here)          REGISTRY (agents read)              HUMAN / CURSO
 
 ## Dogfooding copy
 
-In this repo, human-readable mirrors live at `app-desktop/docs/templates/` (symlinks to registry). Open [README.md](../../../app-desktop/docs/templates/README.md) in the monitor **Templates** section.
+In this repo, human-readable mirrors live at `docs/templates/` (symlinks to registry). Open [README.md](../../../docs/templates/README.md) in the extension or file tree.
 
 Regenerate Cursor mirrors after clone:
 

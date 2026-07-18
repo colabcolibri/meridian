@@ -449,13 +449,13 @@ def main() -> int:
     sub = parser.add_subparsers(dest="command", required=True)
 
     sub.add_parser("list-tables", help="List tables").add_argument(
-        "package_root", nargs="?", default="app-desktop"
+        "package_root", nargs="?", default="."
     )
     migrate_p = sub.add_parser("migrate", help="Apply pending migrations")
-    migrate_p.add_argument("package_root", nargs="?", default="app-desktop")
+    migrate_p.add_argument("package_root", nargs="?", default=".")
 
     args = parser.parse_args()
-    root = getattr(args, "package_root", "app-desktop")
+    root = getattr(args, "package_root", ".")
 
     if args.command == "list-tables":
         conn = connect(root)
