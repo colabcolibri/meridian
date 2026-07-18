@@ -1,12 +1,11 @@
+import * as fs from "node:fs"
 import * as path from "node:path"
 
 import * as vscode from "vscode"
 
 import { boardKanbanHtml, buildBoardPayload, emptyBoardHtml } from "./board-webview-html.js"
 import { buildWebviewProjectContext, formatMeridianPanelTitle } from "./webview-project-context.js"
-import { loadEpicSummaries } from "./load-epics.js"
-import { loadUserStoriesFromDocs } from "./load-stories.js"
-import { loadVersionSummaries } from "./load-versions.js"
+import { loadPlanningPayload } from "./planning-payload.js"
 import type { MeridianWorkspaceInfo } from "./meridian-workspace.js"
 
 type BoardMessage =
@@ -70,15 +69,14 @@ export class BoardEditorPanel {
       this.panel.title = "Meridian Board"
       return
     }
-    const stories = loadUserStoriesFromDocs(info.docsRoot)
-    const epics = loadEpicSummaries(info.docsRoot)
-    const versions = loadVersionSummaries(info.docsRoot)
-    const payload = {
-      ...buildBoardPayload(stories, epics, versions),
+    const payload = loadPlanningPayload(info.docsRoot, info.packageRoot)
+    const board = buildBoardPayload(payload.stories, payload.epics, payload.versions)
+    const viewPayload = {
+      ...board,
       context: buildWebviewProjectContext(info),
     }
-    this.panel.webview.html = boardKanbanHtml(payload)
-    this.panel.title = formatMeridianPanelTitle("Board", info, stories.length)
+    this.panel.webview.html = boardKanbanHtml(viewPayload)
+    this.panel.title = formatMeridianPanelTitle("Board", info, payload.stories.length)
   }
 
   private async openStory(id: string): Promise<void> {
@@ -87,6 +85,12 @@ export class BoardEditorPanel {
       return
     }
     const filePath = path.join(info.docsRoot, "us", `${id}.md`)
+    if (!fs.existsSync(filePath)) {
+      void vscode.window.showInformationMessage(
+        `${id} lives in SQLite only. Run: python3 .agent/scripts/meridian_db_cli.py show ${id} --full`,
+      )
+      return
+    }
     try {
       const doc = await vscode.workspace.openTextDocument(vscode.Uri.file(filePath))
       await vscode.window.showTextDocument(doc, {

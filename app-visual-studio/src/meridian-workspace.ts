@@ -11,6 +11,7 @@ import {
   resolveMeridianProjects,
   type MeridianProject,
 } from "./resolve-meridian-projects.js"
+import { loadPlanningPayloadFromSqlite } from "./load-from-sqlite.js"
 
 const US_FILENAME = /^US-\d{4}\.md$/i
 
@@ -36,7 +37,12 @@ export type MeridianWorkspaceInfo = {
   usCount: number
 }
 
-export function countUserStoriesInDocs(docsRoot: string): number {
+export function countUserStoriesInDocs(docsRoot: string, packageRoot?: string): number {
+  const pkg = packageRoot ?? path.dirname(docsRoot)
+  const fromDb = loadPlanningPayloadFromSqlite(pkg)
+  if (fromDb && fromDb.stories.length > 0) {
+    return fromDb.stories.length
+  }
   const usDir = path.join(docsRoot, "us")
   if (!fs.existsSync(usDir)) {
     return 0
@@ -68,7 +74,7 @@ function buildInfo(
       docs: p.docs,
       packageRoot: p.packageRoot,
       source: p.source,
-      usCount: exists ? countUserStoriesInDocs(pDocs) : 0,
+      usCount: exists ? countUserStoriesInDocs(pDocs, path.join(kitRoot, ...p.packageRoot.split("/"))) : 0,
       isActive: p.id === project.id,
     }
   })
@@ -82,7 +88,7 @@ function buildInfo(
     projects,
     kitDetected: true,
     docsExists,
-    usCount: docsExists ? countUserStoriesInDocs(docsRoot) : 0,
+    usCount: docsExists ? countUserStoriesInDocs(docsRoot, packageRoot) : 0,
   }
 }
 

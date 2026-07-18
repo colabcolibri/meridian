@@ -13,16 +13,17 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 | `.agent/references/templates/writing-guide.md` | **Mandatory** — how to write explanatory US prose |
 | `.agent/references/templates/code-quality-at-us-time.md` | **Mandatory** — DRY, SRP, link to `04_principles` |
 | `.agent/references/templates/INDEX.md` | Agent protocol |
-| `references/us-template.md` | **Mandatory** — full structure before Write |
+| `.agent/references/templates/sqlite-delivery-operations.md` | **Mandatory when DB exists** — INSERT order, CLI, FK rules |
+| `references/us-template.md` | **Mandatory** — full structure before upsert |
 
 ## Preconditions (hard gate)
 
 | Doc | Required status |
 | --- | -------------- |
 | `05_architecture.md` | `approved` |
-| epic/version in folders | exist |
-| Referenced epic | `docs/epics/EPIC-XX.md` exists |
-| Referenced version | `docs/versions/vX.md` exists |
+| epic/version exist | in SQLite (`meridian_db_cli list`) or legacy `docs/` when no DB |
+| Referenced epic | row in `epics` table or `docs/epics/EPIC-XX.md` |
+| Referenced version | row in `versions` table or `docs/versions/vX.md` |
 | Profile in `03_user_types.md` | exists |
 
 Frontmatter links `epic:` — **do not paste epic text** into the body. Explain **this slice** in Why / Where / Approach.
@@ -60,7 +61,7 @@ Forbidden: telegraphic stubs, repeating acceptance under Approach, “see EPIC-X
 3. Next ID = highest `US-XXXX` + 1 (4 digits).
 4. Write full US — especially Why / Where / Approach with explanatory prose.
 5. Set `ready: false` — implement blocked until `/refine-us`.
-6. **v9+ SQLite:** when `{packageRoot}/.meridian/meridian.db` exists, persist via `python3 .agent/scripts/meridian_db_cli.py create-us ...` instead of Write on `docs/us/US-XXXX.md`. Else save `docs/us/US-XXXX.md`.
+6. **v9+ SQLite:** when `{packageRoot}/.meridian/meridian.db` exists, persist via `python3 .agent/scripts/meridian_db_cli.py create-us ...` then `update-us` with full markdown from template — **never** Write `docs/us/US-XXXX.md`. Read `sqlite-delivery-operations.md` for FK insert order. Else save `docs/us/US-XXXX.md`.
 7. `generate-board-json` (`generate_board.py` when DB exists); `update-decisions-log` if acceptance model changes.
 
 ## Validations before saving

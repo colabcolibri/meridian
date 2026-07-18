@@ -25,6 +25,7 @@ Templates are mirrored here from skills (`references/`) so every agent uses the 
 | User story (close) | `implementation-template.md` + `us-template.md` | `board-keeper` | `complete-user-story` | `/complete-us` |
 | Decision entry | `decision-template.md` + `decision-schema.md` | any relevant agent | `update-decisions-log` | — |
 | Board JSON | `board-schema.md` | `board-keeper` | `generate-board-json` | `/sync-board` |
+| SQLite delivery (v10+) | **`sqlite-delivery-operations.md`** | `board-keeper` | `create-user-story`, `refine-user-story`, `complete-user-story` | `/create-us`, `/refine-us`, `/complete-us` |
 
 **Section contracts:** `section-contracts.md` — fixed `##` / `###` for US, epic, version.
 

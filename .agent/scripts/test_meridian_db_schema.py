@@ -58,6 +58,9 @@ def main() -> int:
         if "ready" not in col_names:
             print("FAIL: user_stories.ready column missing")
             return 1
+        if "summary" not in col_names:
+            print("FAIL: user_stories.summary column missing")
+            return 1
 
         conn.close()
 

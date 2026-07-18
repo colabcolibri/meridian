@@ -1,4 +1,7 @@
+import * as path from "node:path"
+
 import { loadEpicSummaries } from "./load-epics.js"
+import { loadPlanningPayloadFromSqlite } from "./load-from-sqlite.js"
 import { loadSprintSummaries } from "./load-sprints.js"
 import { loadVersionSummaries } from "./load-versions.js"
 import { loadUserStoriesFromDocs } from "./load-stories.js"
@@ -16,7 +19,12 @@ export type PlanningPayload = {
   stories: UserStory[]
 }
 
-export function loadPlanningPayload(docsRoot: string): PlanningPayload {
+export function loadPlanningPayload(docsRoot: string, packageRoot?: string): PlanningPayload {
+  const pkg = packageRoot ?? path.dirname(docsRoot)
+  const fromDb = loadPlanningPayloadFromSqlite(pkg)
+  if (fromDb && fromDb.stories.length > 0) {
+    return fromDb
+  }
   return {
     versions: loadVersionSummaries(docsRoot),
     epics: loadEpicSummaries(docsRoot),

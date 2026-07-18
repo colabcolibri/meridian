@@ -24,11 +24,12 @@ from meridian_section_contracts import (  # noqa: E402
 )
 
 try:
-    from meridian_db import db_exists, load_delivery_markdown_files  # noqa: E402
+    from meridian_db import db_exists, load_delivery_markdown_files, has_delivery_markdown  # noqa: E402
     from meridian_markdown_parse import parse_frontmatter_dict  # noqa: E402
 except ImportError:
     db_exists = None  # type: ignore[assignment,misc]
     load_delivery_markdown_files = None  # type: ignore[assignment,misc]
+    has_delivery_markdown = None  # type: ignore[assignment,misc]
     parse_frontmatter_dict = None  # type: ignore[assignment,misc]
 
 
@@ -238,8 +239,11 @@ def main() -> int:
     argv = sys.argv[1:]
     json_output = False
     md_only = "--md-only" in argv
+    sqlite_only = "--sqlite-only" in argv
     if md_only:
         argv = [arg for arg in argv if arg != "--md-only"]
+    if sqlite_only:
+        argv = [arg for arg in argv if arg != "--sqlite-only"]
     if "--json" in argv:
         json_output = True
         argv = [arg for arg in argv if arg != "--json"]
@@ -608,6 +612,17 @@ def main() -> int:
             errors.append(f"Invalid board.json: {exc}")
     elif story_ids:
         errors.append("Missing docs/kanban/board.json.")
+
+    if (
+        sqlite_only
+        and has_delivery_markdown is not None
+        and has_delivery_markdown(root)
+    ):
+        errors.append(
+            "SQLite-only mode: delivery Markdown/JSON still present under "
+            "docs/us/, docs/epics/, docs/versions/, docs/sprints/, or docs/decisions/*.json. "
+            "Run purge_delivery_md.py --require-verify after parity check."
+        )
 
     if json_output:
         payload = {

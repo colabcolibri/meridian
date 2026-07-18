@@ -94,7 +94,36 @@ def is_meridian_package(package_root: str | Path) -> bool:
         return False
     if (docs / "00_scope.md").exists():
         return True
+    if db_exists(package_root):
+        return True
     return any(docs.glob("us/US-*.md"))
+
+
+def delivery_md_paths(docs: Path) -> list[Path]:
+    """Legacy delivery markdown/json paths (excluded from phase docs)."""
+    paths: list[Path] = []
+    for folder, pattern in [
+        ("us", "US-*.md"),
+        ("epics", "EPIC-*.md"),
+        ("versions", "v*.md"),
+        ("sprints", "v*-S*.md"),
+    ]:
+        base = docs / folder
+        if base.is_dir():
+            paths.extend(sorted(base.glob(pattern)))
+    decisions = docs / "decisions"
+    if decisions.is_dir():
+        paths.extend(sorted(decisions.glob("*.json")))
+    return paths
+
+
+def has_delivery_markdown(package_root: str | Path) -> bool:
+    docs = Path(package_root).resolve() / "docs"
+    return bool(delivery_md_paths(docs))
+
+
+def _summary_from_frontmatter(frontmatter: dict[str, str]) -> str | None:
+    return frontmatter.get("summary") or None
 
 
 def _now() -> str:
@@ -111,13 +140,14 @@ def upsert_version(
         """
         INSERT INTO versions (
           id, title, status, outcome, objective, done_criteria,
-          included, explicitly_out, go_live, body_markdown, updated_at
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+          included, explicitly_out, go_live, body_markdown, summary, updated_at
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ON CONFLICT(id) DO UPDATE SET
           title=excluded.title, status=excluded.status, outcome=excluded.outcome,
           objective=excluded.objective, done_criteria=excluded.done_criteria,
           included=excluded.included, explicitly_out=excluded.explicitly_out,
           go_live=excluded.go_live, body_markdown=excluded.body_markdown,
+          summary=COALESCE(excluded.summary, versions.summary),
           updated_at=excluded.updated_at
         """,
         (
@@ -131,6 +161,7 @@ def upsert_version(
             sections.get("explicitly_out"),
             sections.get("go_live"),
             body,
+            _summary_from_frontmatter(frontmatter) or sections.get("summary"),
             _now(),
         ),
     )
@@ -146,14 +177,16 @@ def upsert_epic(
         """
         INSERT INTO epics (
           id, title, status, outcome, profiles, versions,
-          capability, expected_outcome, out_of_scope, notes, body_markdown, updated_at
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+          capability, expected_outcome, out_of_scope, notes, body_markdown, summary, updated_at
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ON CONFLICT(id) DO UPDATE SET
           title=excluded.title, status=excluded.status, outcome=excluded.outcome,
           profiles=excluded.profiles, versions=excluded.versions,
           capability=excluded.capability, expected_outcome=excluded.expected_outcome,
           out_of_scope=excluded.out_of_scope, notes=excluded.notes,
-          body_markdown=excluded.body_markdown, updated_at=excluded.updated_at
+          body_markdown=excluded.body_markdown,
+          summary=COALESCE(excluded.summary, epics.summary),
+          updated_at=excluded.updated_at
         """,
         (
             frontmatter.get("id"),
@@ -167,6 +200,7 @@ def upsert_epic(
             sections.get("out_of_scope"),
             sections.get("notes"),
             body,
+            _summary_from_frontmatter(frontmatter) or sections.get("summary"),
             _now(),
         ),
     )
@@ -183,14 +217,16 @@ def upsert_sprint(
         """
         INSERT INTO sprints (
           id, version_id, title, status, goal, done_when, stories_json,
-          goal_body, scope_table, out_of_scope, retrospective, body_markdown, updated_at
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+          goal_body, scope_table, out_of_scope, retrospective, body_markdown, summary, updated_at
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         ON CONFLICT(id) DO UPDATE SET
           version_id=excluded.version_id, title=excluded.title, status=excluded.status,
           goal=excluded.goal, done_when=excluded.done_when, stories_json=excluded.stories_json,
           goal_body=excluded.goal_body, scope_table=excluded.scope_table,
           out_of_scope=excluded.out_of_scope, retrospective=excluded.retrospective,
-          body_markdown=excluded.body_markdown, updated_at=excluded.updated_at
+          body_markdown=excluded.body_markdown,
+          summary=COALESCE(excluded.summary, sprints.summary),
+          updated_at=excluded.updated_at
         """,
         (
             frontmatter.get("id"),
@@ -205,6 +241,7 @@ def upsert_sprint(
             sections.get("out_of_scope"),
             sections.get("retrospective"),
             body,
+            _summary_from_frontmatter(frontmatter) or sections.get("summary"),
             _now(),
         ),
     )
@@ -233,9 +270,9 @@ def upsert_user_story(
           plan_approach, plan_architecture_refs, plan_api_db, plan_security,
           plan_decisions, plan_planned,
           record_files, record_backend, record_frontend, record_scripts, record_executed,
-          boundaries_out_of_scope, boundaries_notes, body_markdown, updated_at
+          boundaries_out_of_scope, boundaries_notes, body_markdown, summary, updated_at
         ) VALUES (
-          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
+          ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?
         )
         ON CONFLICT(id) DO UPDATE SET
           title=excluded.title, epic_id=excluded.epic_id, version_id=excluded.version_id,
@@ -251,6 +288,7 @@ def upsert_user_story(
           record_scripts=excluded.record_scripts, record_executed=excluded.record_executed,
           boundaries_out_of_scope=excluded.boundaries_out_of_scope,
           boundaries_notes=excluded.boundaries_notes, body_markdown=excluded.body_markdown,
+          summary=COALESCE(excluded.summary, user_stories.summary),
           updated_at=excluded.updated_at
         """,
         (
@@ -283,6 +321,7 @@ def upsert_user_story(
             sections.get("boundaries_out_of_scope"),
             sections.get("boundaries_notes"),
             body,
+            _summary_from_frontmatter(frontmatter) or sections.get("summary"),
             _now(),
         ),
     )
@@ -401,6 +440,176 @@ def load_delivery_markdown_files(package_root: str | Path) -> dict[str, list[tup
     finally:
         conn.close()
     return result
+
+
+def export_planning_json(package_root: str | Path) -> dict[str, Any]:
+    """Structured export for IDE extension (no markdown parse in TS)."""
+    conn = connect(package_root)
+    try:
+        stories = []
+        for row in conn.execute(
+            """
+            SELECT id, title, epic_id, version_id, status, moscow, depends_on_json,
+                   done_when, tests, tests_status, ready, summary
+            FROM user_stories ORDER BY id
+            """
+        ):
+            stories.append(
+                {
+                    "id": row["id"],
+                    "title": row["title"],
+                    "epic": row["epic_id"],
+                    "version": row["version_id"],
+                    "status": row["status"],
+                    "moscow": row["moscow"],
+                    "dependsOn": json.loads(row["depends_on_json"] or "[]"),
+                    "doneWhen": row["done_when"] or "",
+                    "tests": row["tests"] or "required",
+                    "testsStatus": row["tests_status"] or "pending",
+                    "ready": bool(row["ready"]),
+                    "summary": row["summary"],
+                }
+            )
+        versions = []
+        for row in conn.execute(
+            "SELECT id, title, status, outcome, summary FROM versions ORDER BY id"
+        ):
+            versions.append(
+                {
+                    "id": row["id"],
+                    "title": row["title"],
+                    "status": row["status"],
+                    "outcome": row["outcome"] or "",
+                    "summary": row["summary"],
+                }
+            )
+        epics = []
+        for row in conn.execute(
+            "SELECT id, title, status, outcome, versions, summary FROM epics ORDER BY id"
+        ):
+            versions_raw = row["versions"] or "[]"
+            try:
+                version_list = json.loads(versions_raw.replace("'", '"'))
+            except json.JSONDecodeError:
+                import re
+
+                version_list = re.findall(r"v[\w.-]+", versions_raw)
+            epics.append(
+                {
+                    "id": row["id"],
+                    "title": row["title"],
+                    "status": row["status"],
+                    "outcome": row["outcome"] or "",
+                    "versions": version_list if isinstance(version_list, list) else [],
+                    "summary": row["summary"],
+                }
+            )
+        sprints = []
+        for row in conn.execute(
+            """
+            SELECT id, version_id, title, status, goal, done_when, stories_json, summary
+            FROM sprints ORDER BY id
+            """
+        ):
+            sprints.append(
+                {
+                    "id": row["id"],
+                    "version": row["version_id"],
+                    "title": row["title"],
+                    "status": row["status"],
+                    "goal": row["goal"] or "",
+                    "doneWhen": row["done_when"] or "",
+                    "stories": json.loads(row["stories_json"] or "[]"),
+                    "summary": row["summary"],
+                }
+            )
+        return {
+            "packageRoot": str(Path(package_root).resolve()),
+            "userStories": stories,
+            "versions": versions,
+            "epics": epics,
+            "sprints": sprints,
+        }
+    finally:
+        conn.close()
+
+
+def set_summary(
+    conn: sqlite3.Connection,
+    entity: str,
+    entity_id: str,
+    summary: str,
+) -> bool:
+    table_map = {
+        "user_stories": "user_stories",
+        "user_story": "user_stories",
+        "us": "user_stories",
+        "epics": "epics",
+        "epic": "epics",
+        "versions": "versions",
+        "version": "versions",
+        "sprints": "sprints",
+        "sprint": "sprints",
+    }
+    table = table_map.get(entity)
+    if not table:
+        return False
+    cur = conn.execute(
+        f"UPDATE {table} SET summary = ?, updated_at = ? WHERE id = ?",
+        (summary, _now(), entity_id),
+    )
+    return cur.rowcount > 0
+
+
+def build_summary_from_story_row(row: sqlite3.Row) -> str:
+    """Deterministic summary for backfill (no LLM)."""
+    parts = [
+        f"{row['id']} — {row['title']}.",
+        f"Status {row['status']}, epic {row['epic_id']}, version {row['version_id']}.",
+    ]
+    if row["ready"]:
+        parts.append("Ready for implementation.")
+    if row["done_when"]:
+        parts.append(f"Done when: {row['done_when']}")
+    why = row["intent_why"] if "intent_why" in row.keys() else None
+    if why:
+        first = why.strip().split("\n")[0][:200]
+        if first:
+            parts.append(first)
+    return " ".join(parts)
+
+
+def backfill_summaries(package_root: str | Path) -> dict[str, int]:
+    conn = connect(package_root)
+    counts = {"user_stories": 0, "epics": 0, "versions": 0, "sprints": 0}
+    try:
+        for row in conn.execute(
+            "SELECT * FROM user_stories WHERE summary IS NULL OR summary = ''"
+        ):
+            conn.execute(
+                "UPDATE user_stories SET summary = ?, updated_at = ? WHERE id = ?",
+                (build_summary_from_story_row(row), _now(), row["id"]),
+            )
+            counts["user_stories"] += 1
+        for table, fields in [
+            ("epics", ("title", "outcome", "status")),
+            ("versions", ("title", "outcome", "status")),
+            ("sprints", ("title", "goal", "status")),
+        ]:
+            for row in conn.execute(
+                f"SELECT id, {', '.join(fields)} FROM {table} WHERE summary IS NULL OR summary = ''"
+            ):
+                title, extra, status = row[1], row[2], row[3]
+                text = f"{row['id']} — {title}. Status {status}. {extra or ''}".strip()
+                conn.execute(
+                    f"UPDATE {table} SET summary = ?, updated_at = ? WHERE id = ?",
+                    (text[:500], _now(), row["id"]),
+                )
+                counts[table] += 1
+        conn.commit()
+    finally:
+        conn.close()
+    return counts
 
 
 def export_delivery_json(package_root: str | Path) -> dict[str, Any]:

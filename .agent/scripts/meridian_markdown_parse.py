@@ -53,6 +53,10 @@ def parse_stories_list(value: str | None) -> list[str]:
 
 def read_markdown_file(path: Path) -> tuple[dict[str, str], str, str]:
     text = path.read_text(encoding="utf-8")
+    return read_markdown_text(text)
+
+
+def read_markdown_text(text: str) -> tuple[dict[str, str], str, str]:
     fm = parse_frontmatter_dict(text)
     match = FRONTMATTER_RE.match(text)
     body = text[match.end() :] if match else text

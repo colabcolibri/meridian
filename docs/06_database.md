@@ -1,7 +1,7 @@
 ---
 title: Database
 status: approved
-version: 2.0
+version: 3.0
 updated: 2026-07-18
 depends_on: [03_user_types.md, 05_architecture.md]
 blocks: [07_api_contracts.md]
@@ -11,98 +11,85 @@ blocks: [07_api_contracts.md]
 
 ## Strategy
 
-Meridian 2.0 stores **delivery artifacts** in a local **SQLite** database per product. **Phase documents** (`00`–`11`, discovery, architecture detail, inventory, templates) remain Markdown on disk — they are the project contract and gate documents agents read at init.
+Meridian **v10+** stores **all delivery artifacts** in SQLite only. **Phase documents** (`00`–`11`, discovery, architecture detail, inventory, templates) remain Markdown — project gates and agent init context.
 
-| Storage                              | Artifacts                                                                                                 |
-| ------------------------------------ | --------------------------------------------------------------------------------------------------------- |
-| **Markdown** (`docs/`)               | `00_scope.md` … `11_decisions.md`, `discovery/`, `architecture/`, `inventory/`, `templates/`, `README.md` |
-| **SQLite** (`.meridian/meridian.db`) | epics, versions, sprints, user stories, decisions, board snapshots                                        |
+| Storage | Artifacts |
+| ------- | --------- |
+| **Markdown** (`docs/`) | `00_scope.md` … `11_decisions.md`, `discovery/`, `architecture/`, `inventory/`, `templates/`, `kanban/board.json` (derived) |
+| **SQLite** (`.meridian/meridian.db`) | epics, versions, sprints, user stories, sprint_stories, decisions, board snapshots |
 
-Path: `{packageRoot}/.meridian/meridian.db` (e.g. `./.meridian/meridian.db` at repo root in dogfood). Kit root `.meridian/projects.json` (multi-product manifest) stays separate.
+Path: `{packageRoot}/.meridian/meridian.db`. Agent reference: `.agent/references/templates/sqlite-delivery-operations.md`.
 
-Engine: SQLite 3 with WAL journal mode for concurrent monitor reads during kit writes.
+## Relational model
 
-## Schema overview
+Foreign keys are enforced (`PRAGMA foreign_keys = ON`). **Insert order:**
 
-Migration: `.agent/migrations/20260718100000_initial_delivery_schema.sql`
+1. `versions` → 2. `epics` → 3. `user_stories` (needs `epic_id`, `version_id`) → 4. `sprints` (needs `version_id`) → 5. `sprint_stories` (needs `sprint_id`, `story_id`)
 
 ```mermaid
 erDiagram
-  versions ||--o{ sprints : contains
-  versions ||--o{ user_stories : targets
-  epics ||--o{ user_stories : groups
-  sprints ||--o{ sprint_stories : includes
-  user_stories ||--o{ sprint_stories : listed_in
-
-  versions {
-    text id PK
-    text title
-    text status
-  }
-  epics {
-    text id PK
-    text title
-    text status
-  }
-  sprints {
-    text id PK
-    text version_id FK
-    text stories_json
-  }
-  user_stories {
-    text id PK
-    text epic_id FK
-    text version_id FK
-    int ready
-    text depends_on_json
-  }
-  decisions {
-    int id PK
-    text decision_date
-    int entry_index
-  }
-  board_snapshots {
-    int id PK
-    text source
-    int card_count
-  }
-  schema_migrations {
-    int id PK
-    text name UK
-  }
+  versions ||--o{ sprints : version_id
+  versions ||--o{ user_stories : version_id
+  epics ||--o{ user_stories : epic_id
+  sprints ||--o{ sprint_stories : sprint_id
+  user_stories ||--o{ sprint_stories : story_id
 ```
 
-### Tables
+### Summary column (progressive disclosure)
 
-| Table               | Purpose                                                         |
-| ------------------- | --------------------------------------------------------------- |
-| `schema_migrations` | Applied kit migration filenames                                 |
-| `versions`          | Release docs (v0, v1, …)                                        |
-| `epics`             | Epic capability narratives                                      |
-| `sprints`           | Sprint goals and scope                                          |
-| `sprint_stories`    | Sprint ↔ US junction (ordered)                                  |
-| `user_stories`      | US frontmatter + Intent/Plan/Record/Boundaries sections         |
-| `decisions`         | Append-only decision log entries (from `docs/decisions/*.json`) |
-| `board_snapshots`   | Derived `board.json` history (`source`: import \| generate)     |
+| Table | `summary` purpose |
+| ----- | ----------------- |
+| `user_stories` | 4–8 sentences after `/complete-us`; agents read before `body_markdown` |
+| `epics`, `versions`, `sprints` | One-paragraph capability/release/sprint digest |
 
-User story section columns map to `section-contracts.md` (`intent_acceptance`, `plan_approach`, `record_files`, etc.). Full markdown body also stored in `body_markdown` for round-trip export.
+Workflow: `meridian_db_cli list` → `show ID` (summary) → `show ID --full` only when implementing.
 
-## Bootstrap and migrations
+## CLI — discover and write
 
 ```bash
-python3 .agent/scripts/meridian_db.py migrate <package-root>
-python3 .agent/scripts/meridian_db.py list-tables <package-root>
+python3 .agent/scripts/bootstrap_meridian_db.py .
+python3 .agent/scripts/meridian_db_cli.py counts .
+python3 .agent/scripts/meridian_db_cli.py list user_stories --version v10
+python3 .agent/scripts/meridian_db_cli.py show US-0115
+python3 .agent/scripts/meridian_db_cli.py show US-0115 --full
+python3 .agent/scripts/meridian_db_cli.py search "parity"
+python3 .agent/scripts/meridian_db_cli.py create-us --title "..." --epic EPIC-15 --version v10
+python3 .agent/scripts/meridian_db_cli.py update-us US-0115 --from-file /tmp/us.md
+python3 .agent/scripts/meridian_db_cli.py set-ready US-0115
+python3 .agent/scripts/meridian_db_cli.py set-summary US-0115 --text "..."
 ```
 
-Kit module: `.agent/scripts/meridian_db.py` — `connect()`, `apply_migrations()`, `bootstrap()`, `resolve_db_path()`.
+Never `Write` on `docs/us/`, `docs/epics/`, `docs/versions/`, `docs/sprints/`, or `docs/decisions/*.json` when `meridian.db` exists.
 
-Migrations are versioned SQL files in `.agent/migrations/` with `YYYYMMDDHHMMSS_description.sql` naming. Re-run is idempotent (skips applied names in `schema_migrations`).
+## Migration and cutover
 
-## Migration from Markdown (v1)
+```bash
+python3 .agent/scripts/migrate_md_to_sqlite.py .      # legacy import
+python3 .agent/scripts/verify_md_sqlite_parity.py .   # gate — exit 0 required
+python3 .agent/scripts/backfill_summaries.py .
+python3 .agent/scripts/purge_delivery_md.py . --dry-run
+python3 .agent/scripts/purge_delivery_md.py . --require-verify
+python3 .agent/scripts/validate_meridian.py . --sqlite-only
+python3 .agent/scripts/generate_board.py .
+```
 
-One-shot import: `.agent/scripts/migrate_md_to_sqlite.py` (US-0107, US-0108) reads legacy `docs/epics/`, `docs/versions/`, `docs/sprints/`, `docs/us/`, and `docs/decisions/` into SQLite. Source `.md` files may remain as read-only archive after cutover.
+## Validation modes
 
-## Pending approval
+| Flag | Behavior |
+| ---- | -------- |
+| _(default)_ | DB when `meridian.db` exists; phase docs on disk |
+| `--md-only` | Legacy markdown delivery folders |
+| `--sqlite-only` | Fails if delivery `.md`/`.json` still present |
 
-- [x] Manager approves this document (`status: approved`) after US-0113 review.
-- [x] `05_architecture.md` storage split section updated (US-0113).
+## Kit modules
+
+| Script | Role |
+| ------ | ---- |
+| `meridian_db.py` | `connect`, `upsert_*`, `export_planning_json`, migrations |
+| `meridian_db_cli.py` | Human/agent query and write CLI |
+| `meridian_db_export.py` | JSON for extension (`--format planning`) |
+| `verify_md_sqlite_parity.py` | Pre-purge gate |
+| `purge_delivery_md.py` | Remove legacy delivery files |
+| `backfill_summaries.py` | Populate `summary` column |
+
+Migrations: `.agent/migrations/YYYYMMDDHHMMSS_*.sql`

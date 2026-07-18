@@ -1535,5 +1535,150 @@
     "tests": "none",
     "tests_status": "n/a",
     "ready": true
+  },
+  {
+    "id": "US-0115",
+    "title": "Summary columns schema migration",
+    "epic": "EPIC-15",
+    "version": "v10",
+    "status": "\u2705",
+    "moscow": "Must",
+    "depends_on": [],
+    "done_when": "Migration 20260718110000 adds summary TEXT to delivery tables; bootstrap applies idempotently.",
+    "tests": "required",
+    "tests_status": "done",
+    "ready": true
+  },
+  {
+    "id": "US-0116",
+    "title": "meridian_db_cli query commands for agents",
+    "epic": "EPIC-15",
+    "version": "v10",
+    "status": "\u2705",
+    "moscow": "Must",
+    "depends_on": [],
+    "done_when": "meridian_db_cli supports list, show, search, counts for delivery entities without raw SQL.",
+    "tests": "required",
+    "tests_status": "done",
+    "ready": true
+  },
+  {
+    "id": "US-0117",
+    "title": "verify_md_sqlite_parity.py migration verification",
+    "epic": "EPIC-15",
+    "version": "v10",
+    "status": "\u2705",
+    "moscow": "Must",
+    "depends_on": [],
+    "done_when": "Parity script compares delivery .md files to SQLite rows and exits non-zero on any mismatch.",
+    "tests": "required",
+    "tests_status": "done",
+    "ready": true
+  },
+  {
+    "id": "US-0118",
+    "title": "Summary backfill and complete-us summary generation",
+    "epic": "EPIC-15",
+    "version": "v10",
+    "status": "\u2705",
+    "moscow": "Must",
+    "depends_on": [
+      "US-0115"
+    ],
+    "done_when": "Backfill script populates summary for migrated rows; complete-us skill writes summary on close.",
+    "tests": "required",
+    "tests_status": "done",
+    "ready": true
+  },
+  {
+    "id": "US-0119",
+    "title": "Kit skills SQLite-only write path",
+    "epic": "EPIC-15",
+    "version": "v10",
+    "status": "\u2705",
+    "moscow": "Must",
+    "depends_on": [
+      "US-0115"
+    ],
+    "done_when": "create/refine/complete/sync skills persist only to SQLite; no Write on docs/us or sibling delivery folders.",
+    "tests": "required",
+    "tests_status": "done",
+    "ready": true
+  },
+  {
+    "id": "US-0120",
+    "title": "Validator --sqlite-only rejects delivery markdown files",
+    "epic": "EPIC-15",
+    "version": "v10",
+    "status": "\u2705",
+    "moscow": "Must",
+    "depends_on": [
+      "US-0119"
+    ],
+    "done_when": "validate_meridian.py --sqlite-only errors when docs/us, epics, versions, sprints, or decisions/*.json exist.",
+    "tests": "required",
+    "tests_status": "done",
+    "ready": true
+  },
+  {
+    "id": "US-0121",
+    "title": "VS Code extension reads delivery from SQLite",
+    "epic": "EPIC-15",
+    "version": "v10",
+    "status": "\u2705",
+    "moscow": "Must",
+    "depends_on": [
+      "US-0116"
+    ],
+    "done_when": "Extension board and deliverables load from meridian_db export when meridian.db exists.",
+    "tests": "required",
+    "tests_status": "done",
+    "ready": true
+  },
+  {
+    "id": "US-0122",
+    "title": "Protocol documentation for SQLite-only workflow",
+    "epic": "EPIC-15",
+    "version": "v10",
+    "status": "\u2705",
+    "moscow": "Must",
+    "depends_on": [],
+    "done_when": "06_database, 05_architecture, MERIDIAN.md, skills, and agents-help document SQLite-only + CLI + summary pipeline.",
+    "tests": "required",
+    "tests_status": "done",
+    "ready": true
+  },
+  {
+    "id": "US-0123",
+    "title": "purge_delivery_md.py safe removal of delivery markdown",
+    "epic": "EPIC-15",
+    "version": "v10",
+    "status": "\u2705",
+    "moscow": "Must",
+    "depends_on": [
+      "US-0117",
+      "US-0120"
+    ],
+    "done_when": "purge script deletes delivery .md/json only after verify passes; supports --dry-run.",
+    "tests": "required",
+    "tests_status": "done",
+    "ready": true
+  },
+  {
+    "id": "US-0124",
+    "title": "Dogfood cutover verify purge validate end-to-end",
+    "epic": "EPIC-15",
+    "version": "v10",
+    "status": "\u2705",
+    "moscow": "Must",
+    "depends_on": [
+      "US-0123",
+      "US-0121",
+      "US-0122"
+    ],
+    "done_when": "Dogfood repo runs verify, purge, validate --sqlite-only, extension test, and generate_board on SQLite only.",
+    "tests": "required",
+    "tests_status": "done",
+    "ready": true
   }
 ]

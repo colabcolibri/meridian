@@ -13,7 +13,7 @@ export class VersionsEditorPanel extends DocsOpenPanel {
     "Open a Meridian workspace with a docs/ folder to see versions."
 
   protected buildHtml(info: MeridianWorkspaceInfo): BuiltHtml {
-    const payload = loadPlanningPayload(info.docsRoot)
+    const payload = loadPlanningPayload(info.docsRoot, info.packageRoot)
     const context = buildWebviewProjectContext(info)
     return {
       html: versionsWebviewHtml(payload, context),
@@ -29,7 +29,7 @@ export class SprintsEditorPanel extends DocsOpenPanel {
     "Open a Meridian workspace with a docs/ folder to see sprints."
 
   protected buildHtml(info: MeridianWorkspaceInfo): BuiltHtml {
-    const payload = loadPlanningPayload(info.docsRoot)
+    const payload = loadPlanningPayload(info.docsRoot, info.packageRoot)
     const context = buildWebviewProjectContext(info)
     return {
       html: sprintsWebviewHtml(payload, context),
@@ -45,7 +45,7 @@ export class EpicsEditorPanel extends DocsOpenPanel {
     "Open a Meridian workspace with a docs/ folder to see epics."
 
   protected buildHtml(info: MeridianWorkspaceInfo): BuiltHtml {
-    const payload = loadPlanningPayload(info.docsRoot)
+    const payload = loadPlanningPayload(info.docsRoot, info.packageRoot)
     const context = buildWebviewProjectContext(info)
     return {
       html: epicsWebviewHtml(payload, context),

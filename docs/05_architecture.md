@@ -52,7 +52,7 @@ The extension is **not** the source of truth for the protocol. It monitors **`do
 | Protocol             | `.agent/MERIDIAN.md` (copy `.agent/` into client projects)                     |
 | Always-on governance | `.agent/rules/MERIDIAN.md`                                                     |
 | Phase documents      | `docs/00`–`11`, discovery, architecture detail — **Markdown on disk**          |
-| Delivery store (v9+) | `.meridian/meridian.db` — epics, versions, sprints, US, decisions, board snaps |
+| Delivery store (v10+) | `.meridian/meridian.db` — epics, versions, sprints, US, decisions, board snapshots — **SQLite only** (no delivery `.md`) |
 | Derived kanban       | `docs/kanban/board.json` — generated from SQLite (`generate_board.py`)         |
 | VS Code extension    | Board + Deliverables editor tabs; validate via kit Python; sync board          |
 
