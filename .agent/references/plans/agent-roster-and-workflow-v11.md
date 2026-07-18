@@ -1,216 +1,248 @@
-# Agent roster e workflow v11 — gap analysis e redesign
+# Agent roster v11 — nomes Scrum/ágil e redesign
 
-> **Status:** proposta — jul/2026  
-> **Contexto:** markdown audit (onda G) alinha texto; esta onda (H) alinha **quem faz o quê** e remove sobrecarga do `process-manager`.  
-> **Relacionado:** `markdown-audit-v11.md`, `kit-improvement-plan.md`
-
----
-
-## 1. Problema hoje
-
-| Sintoma | Causa |
-| ------- | ----- |
-| `/implement-us` mistura governança e código | `process-manager` faz gate **e** implementação |
-| UI/design sem dono no protocolo | `04_principles` cita tokens; ninguém mantém referência viva |
-| `documentation-strategist` faz epics + fase 01–10 | papel amplo demais |
-| `board-keeper` vs `process-manager` | fronteira US-doc vs gate/implement confusa |
-| 8 agentes, routing na matriz | falta especialista de execução e de design |
-
-**Visão:** cada agente = **um tipo de decisão**. Governança não escreve produto; implementador não redefine escopo.
+> **Status:** decisão de design — jul/2026 (fechada para H1)  
+> **Princípio:** cada agente = **papel reconhecível em Scrum ou em enablement ágil** — não metáforas genéricas (`keeper`, `guardian`, `manager` que implementa código).  
+> **Humano:** continua **Product Owner de fato** (prioriza, aprova, commita). Agentes **facilitam e executam** no protocolo Meridian.
 
 ---
 
-## 2. Roster atual (8)
+## 1. Por que renomear
 
-| Agente | Foco | Sobrecarga? |
-| ------ | ---- | ----------- |
-| `process-manager` | Status, gates, **implement US**, init | ⚠️ implement deve sair |
-| `board-keeper` | US create/review/refine/close | OK |
-| `sprint-planner` | Version, sprint | OK |
-| `documentation-strategist` | Phase docs + epic create | ⚠️ epic pode ficar; fase OK |
-| `scope-architect` | `00_scope.md` | OK |
-| `architecture-guardian` | `05_architecture.md` + `docs/architecture/` | OK |
-| `security-steward` | `02_security.md` | OK |
-| `product-owner` | Discovery, product brief | OK |
+| Nome atual | Problema | Nome alvo |
+| ---------- | -------- | --------- |
+| `process-manager` | Soa como PM que **codifica**; Scrum já tem **Scrum Master** para facilitar o processo | `scrum-master` |
+| `board-keeper` | Kanban/board não é cerimônia Scrum; o trabalho é **refino de backlog** + DoD na US | `backlog-refiner` |
+| `architecture-guardian` | “Guardian” não é papel ágil | `technical-architect` |
+| `security-steward` | OK mas “champion” é o termo enablement comum | `security-champion` |
+| `documentation-strategist` | Muito vago | `technical-writer` |
+| `scope-architect` | Sobrepõe PO na fase charter | **absorvido por** `product-owner` |
+| _(ausente)_ | Development Team entrega incremento | `developer` |
+| _(ausente)_ | Design system / UX enablement | `design-system-owner` |
 
 ---
 
-## 3. Agentes propostos (novos)
-
-### 3.1 `implementation-specialist` (ou `us-implementer`)
-
-**Por quê:** `/implement-us` é o único momento em que agente **escreve código de produto**. Hoje `process-manager` faz isso — conflito com papel de “manager”.
-
-| Item | Definição |
-| ---- | --------- |
-| **Missão** | Passar gate, implementar US com `ready: true`, respeitar Plan/Architecture refs, não fechar US |
-| **Workflow** | `/implement-us` |
-| **Skills** | `implement-user-story`, `meridian-routing` (leitura) |
-| **Proibições** | Criar US, alterar escopo, `complete-us`, pular gate, código sem US |
-| **Gate** | `meridian_db_cli implement-gate` exit 0 antes de qualquer Write em `src/` |
-
-**Handoff:**
+## 2. Roster alvo — 9 agentes
 
 ```txt
-board-keeper (/refine-us, ready: true)
-  → implementation-specialist (/implement-us)
-  → board-keeper (/complete-us) + human commit
+CAMADA SCRUM          AGENTE (slug)           ARTEFATOS / COMANDOS
+────────────────────────────────────────────────────────────────────
+Product Owner         product-owner           00_scope, discovery/, /discover, /create-epic
+Enabler (docs)        technical-writer        01–08, 11 (phase docs)
+Enabler (security)    security-champion       02_security, /security-pass
+Enabler (architecture) technical-architect    05_architecture, docs/architecture/, /architecture
+Enabler (design)      design-system-owner     09_design_system, /design-pass
+Sprint planning       sprint-planner          versions, sprints, /create-version, /plan-sprint, /complete-sprint
+Backlog refinement    backlog-refiner         /create-us, /review-us, /refine-us, /complete-us
+Development Team      developer               /implement-us (gate + código)
+Scrum Master          scrum-master            /status, /daily-with-ai, /init-meridian, governança
 ```
 
-`process-manager` **valida** que o fluxo foi seguido em `/status` e `/daily-with-ai` — não implementa.
-
-### 3.2 `design-steward`
-
-**Por quê:** stack dogfood usa React + Tailwind + shadcn (`docs/01_tech_stack.md`). US de UI precisam de referência estável — tokens, componentes, padrões responsivos — sem duplicar em cada US.
-
-| Item | Definição |
-| ---- | --------- |
-| **Missão** | Criar e evoluir **referência de design** alinhada à linguagem escolhida; revisar/refinar quando US ou epic toca UI |
-| **Artefato canônico** | `docs/09_design_system.md` (novo phase doc) + opcional `docs/design-system/*.md` (detalhe) |
-| **Skills** | `refine-design-system` (novo), `update-decisions-log`, `meridian-routing` |
-| **Workflows** | `/design-pass` (novo), invocado em `/refine-us` quando Acceptance menciona UI |
-| **Proibições** | Implementar feature completa; substituir `05_architecture`; inventar stack fora de `01_tech_stack` |
-
-**Gate:** US com critérios visuais deve citar `docs/09_design_system.md` em Plan → Architecture refs (ou seção Design refs).
-
-**Relação com outros:**
-
-| Agente | Divisão |
-| ------ | ------- |
-| `architecture-guardian` | estrutura, apps, integrações |
-| `design-steward` | superfície, tokens, componentes, a11y/responsive |
-| `implementation-specialist` | código seguindo ambos |
+**Priorização:** só o **humano** prioriza backlog (MoSCoW, ordem na sprint). Agentes não reordenam sozinhos.
 
 ---
 
-## 4. Outros gaps (avaliar — não bloquear H1)
+## 3. Mapa cerimônia → agente (fiel ao `scrum-meridian-map.md`)
 
-| Candidato | Quando criar | Por quê não agora |
-| --------- | ------------ | ----------------- |
-| `test-engineer` | Muitas US com `tests: required` e falhas recorrentes | gate + checklist cobrem MVP |
-| `devops-steward` | Deploy/go-live vira epic recorrente | `08_environments` + human |
-| `database-architect` | Projetos com schema complexo fora do kit | `06_database` + architecture-guardian |
-| Renomear `documentation-strategist` → `phase-docs-strategist` | Após H1 | só naming; baixo ROI |
-
-**Recomendação v11:** criar só **implementation-specialist** + **design-steward**; revisar em 1 sprint.
-
----
-
-## 5. Roster alvo (10 agentes)
-
-```txt
-Discovery     product-owner
-Scope         scope-architect
-Phase docs    documentation-strategist
-Security      security-steward
-Architecture  architecture-guardian
-Design        design-steward          ← NEW
-Planning      sprint-planner
-US lifecycle  board-keeper
-Implement     implementation-specialist ← NEW
-Governance    process-manager         (sem código)
-```
+| Cerimônia Scrum | Comandos Meridian | Agente |
+| --------------- | ----------------- | ------ |
+| Product discovery / visão | `/discover`, charter | `product-owner` |
+| Definição de produto (escopo) | `00_scope.md` | `product-owner` |
+| Enabler: especificação técnica | phase docs | `technical-writer` |
+| Enabler: arquitetura | `/architecture` | `technical-architect` |
+| Enabler: segurança | `/security-pass` | `security-champion` |
+| Enabler: design system | `/design-pass` | `design-system-owner` |
+| Release / versão | `/create-version` | `sprint-planner` |
+| Sprint planning | `/plan-sprint`, `/create-sprint` | `sprint-planner` |
+| Backlog refinement | `/create-us`, `/review-us`, `/refine-us` | `backlog-refiner` |
+| Implementação (incremento) | `/implement-us` | `developer` |
+| Inspeção / DoD na US | `/complete-us` | `backlog-refiner` |
+| Sprint review / retro (doc) | `/complete-sprint` | `sprint-planner` |
+| Daily / impedimentos / status | `/daily-with-ai`, `/status` | `scrum-master` |
+| Bootstrap projeto | `/init-meridian` | `scrum-master` + skills |
 
 ---
 
-## 6. Redesign de workflow
+## 4. Fichas resumidas
 
-### 6.1 Fluxo US (v11)
+### 4.1 `product-owner`
+
+| | |
+| - | - |
+| **Scrum** | Product Owner (descoberta + épico + escopo — humano prioriza) |
+| **Missão** | Problema, usuários, valor, `00_scope.md`, `docs/discovery/`, epics no SQLite |
+| **Skills** | `discover-product`, `create-epic`, `update-decisions-log`, `meridian-routing` |
+| **Não faz** | Implementar código; refinar Plan técnico de US; fechar sprint |
+
+Absorve o antigo `scope-architect` (`00_scope` é charter do produto — trabalho de PO antes do backlog executável).
+
+### 4.2 `technical-writer`
+
+| | |
+| - | - |
+| **Scrum** | Enabler / specialist (documentação de fundação) |
+| **Missão** | Phase docs `01`–`08`, `11` — stack, princípios, ambientes, stub decisões |
+| **Skills** | `init-project`, `update-decisions-log`, `meridian-routing` |
+| **Não faz** | US; código; arquitetura gate (`05` → `technical-architect`) |
+
+### 4.3 `technical-architect`
+
+| | |
+| - | - |
+| **Scrum** | Architect / Tech Lead (enablement) |
+| **Missão** | `05_architecture.md`, `docs/architecture/*`, gate antes do backlog |
+| **Skills** | `security-review` (leitura), `update-decisions-log`, `meridian-routing` |
+
+### 4.4 `security-champion`
+
+| | |
+| - | - |
+| **Scrum** | Security champion (time/enabler) |
+| **Missão** | `02_security.md`, threat model, hygiene para agentes |
+| **Skills** | `security-review`, `update-decisions-log` |
+
+### 4.5 `design-system-owner`
+
+| | |
+| - | - |
+| **Scrum** | Enabler (UX / design system — SAFe “System Team” para UI) |
+| **Missão** | `docs/09_design_system.md` — tokens, componentes, responsive, a11y baseline |
+| **Skills** | `design-system` (novo), `update-decisions-log` |
+| **Workflow** | `/design-pass` — **recomendado** quando Acceptance menciona UI/layout/visual; não obrigatório para US só backend |
+| **Gate** | US Must com critérios visuais → Plan cita `09_design_system.md` (após doc `approved`) |
+
+### 4.6 `sprint-planner`
+
+| | |
+| - | - |
+| **Scrum** | Facilitador de Sprint Planning + release |
+| **Missão** | `versions`, `sprints` no SQLite; fechar sprint com retrospectiva |
+| **Skills** | `create-version`, `create-sprint`, `complete-sprint`, `meridian-routing` |
+
+### 4.7 `backlog-refiner`
+
+| | |
+| - | - |
+| **Scrum** | Backlog refinement (qualidade do PBI / DoR / evidência no close) |
+| **Missão** | Ciclo US: create → review → refine (`ready: true`) → complete (`Record`, ✅) |
+| **Skills** | `create-user-story`, `review-user-story`, `refine-user-story`, `complete-user-story`, `sqlite-delivery-operations` |
+| **Não faz** | Código de produto (`developer`); épico (`product-owner`) |
+
+### 4.8 `developer`
+
+| | |
+| - | - |
+| **Scrum** | Developer (Development Team) |
+| **Missão** | `implement-gate` exit 0 → código alinhado ao Plan; **não** fecha US |
+| **Skills** | `implement-user-story`, `code-quality-at-us-time` (via refs), `meridian-routing` |
+| **Proibições** | `create-us`, `complete-us`, escopo novo, código sem US `ready: true` |
+
+### 4.9 `scrum-master`
+
+| | |
+| - | - |
+| **Scrum** | Scrum Master (facilita processo; não é o PO humano) |
+| **Missão** | Maturidade de docs, `/status`, impedimentos, `/daily-with-ai`, init; **nunca** código de produto |
+| **Skills** | `init-project`, `meridian-routing`, `update-decisions-log` |
+| **Remove** | `implement-user-story` do frontmatter |
+
+---
+
+## 5. Fluxo de entrega (v11)
 
 ```mermaid
-flowchart LR
-  PO[product-owner] --> SA[scope-architect]
-  SA --> DS[documentation-strategist]
-  DS --> AG[architecture-guardian]
-  AG --> DST[design-steward]
-  DST --> SP[sprint-planner]
-  SP --> BK[board-keeper create-us]
-  BK --> BK2[review / refine-us]
-  BK2 --> IMP[implementation-specialist implement-us]
-  IMP --> BK3[complete-us]
-  BK3 --> H[human commit]
-  PM[process-manager] -.->|status / blockers| BK
-  PM -.->|status / blockers| IMP
-```
+flowchart TB
+  PO[product-owner scope + epic]
+  TW[technical-writer phase docs]
+  TA[technical-architect 05 approved]
+  SC[security-champion]
+  DSO[design-system-owner]
+  SP[sprint-planner version + sprint]
+  BR[backlog-refiner create refine]
+  DEV[developer implement-us]
+  BR2[backlog-refiner complete-us]
+  SM[scrum-master status daily]
+  H[human commit]
 
-### 6.2 Comandos slash
-
-| Comando | Agente (novo) | Notas |
-| ------- | ------------- | ----- |
-| `/implement-us` | `implementation-specialist` | era `process-manager` |
-| `/design-pass` | `design-steward` | novo — opcional antes de refine UI |
-| `/status`, `/daily-with-ai` | `process-manager` | sem mudança |
-| Demais delivery | `board-keeper` / `sprint-planner` | sem mudança |
-
-### 6.3 Redundâncias a remover (onda H + G)
-
-| Redundância | Ação |
-| ----------- | ---- |
-| `process-manager` implementa código | Mover para `implementation-specialist`; PM só gate-check em status |
-| Epic em `documentation-strategist` e `create-epic` skill | Manter skill; agente pode ser `documentation-strategist` ou `board-keeper` — **decidir H2** |
-| Templates duplicados skill `references/` vs `references/templates/` | `TEMPLATE_SOURCES.md` já mapeia — audit G2 confirma single edit path |
-| `instruction-surfaces.md` app-desktop | Remover camada morta (G1) |
-| `meridian-routing` matrix desatualizada | Atualizar na onda H1 |
-
----
-
-## 7. Onda H — entregáveis (checklist)
-
-### H1 — Agentes core (par com G1–G3)
-
-- [ ] `.agent/agents/implementation-specialist.md`
-- [ ] `.agent/agents/design-steward.md`
-- [ ] `.agent/skills/design-system/SKILL.md` + `references/design-system-template.md`
-- [ ] `.agent/workflows/design-pass.md`
-- [ ] `docs/09_design_system.md` stub no dogfood (ou seção em `04_principles` até aprovado — preferir 09)
-- [ ] Atualizar `meridian-routing/SKILL.md` matrix
-- [ ] Atualizar `process-manager.md` — remover implement; delegar
-- [ ] Atualizar `workflows/implement-us.md` → `implementation-specialist`
-- [ ] Atualizar `rules/MERIDIAN.md`, `agents-help.md`, `ARCHITECTURE.md`, `INDEX.md`
-- [ ] `sync_cursor_kit.sh` + `.codex/agents/*.toml` gerados
-
-### H2 — Workflow e redundância
-
-- [ ] Revisar epic owner (`documentation-strategist` vs dedicado)
-- [ ] Unificar narrativa `board-keeper` / `implementation-specialist` / `process-manager` em `lifecycle.md`
-- [ ] Adicionar `design-pass` opcional em `refine-us` workflow quando UI
-- [ ] Validator: US com keywords UI sem ref design → warning
-
-### H3 — Guardrail
-
-- [ ] Routing test: “implement US-XXXX” → `implementation-specialist`, não PM
-- [ ] Documentar em `instruction-surfaces.md` checklist para novo agente
-
----
-
-## 8. Integração com audit markdown (onda G)
-
-Ao revisar cada arquivo em `markdown-audit-v11.md` §7:
-
-1. Substituir `process-manager` + implement → `implementation-specialist` onde for **execução de código**
-2. Manter `process-manager` para status, governança, init, daily
-3. Inserir `design-steward` onde houver UI, tokens, Tailwind, responsive
-4. Adicionar `docs/09_design_system.md` na árvore em `start-here.md` (G1)
-5. Marcar checkboxes H1 em paralelo aos checkboxes G3 (agents/workflows)
-
-**Ordem sugerida:**
-
-```txt
-Commit planos (G audit + H roster)
-  → G1 P0 markdown (rules, lifecycle, start-here, instruction-surfaces, docs/README)
-  → H1 skeleton agents + routing + implement-us workflow
-  → G2–G3 restante com vocabulário já incluindo novos agentes
+  PO --> TW --> TA
+  TA --> SC
+  TA --> DSO
+  DSO --> SP --> BR
+  BR --> DEV --> BR2 --> H
+  SM -.-> BR
+  SM -.-> DEV
 ```
 
 ---
 
-## 9. Perguntas abertas (manager)
+## 6. Decisões fechadas (manager delegou)
 
-1. Nome final: `implementation-specialist` vs `us-implementer` vs `delivery-engineer`?
-2. `09_design_system.md` como phase doc com gate `approved` antes de UI US Must?
-3. `/design-pass` obrigatório ou só quando Acceptance menciona UI?
-4. Epic continua com `documentation-strategist`?
+| # | Decisão |
+| - | ------- |
+| 1 | Slug **`developer`** — papel Scrum explícito, não “implementation-specialist” |
+| 2 | Slug **`scrum-master`** — substitui `process-manager` para facilitação |
+| 3 | Slug **`backlog-refiner`** — substitui `board-keeper` |
+| 4 | Épico fica com **`product-owner`** + skill `create-epic` (não technical-writer) |
+| 5 | **`scope-architect`** deixa de existir — merge em `product-owner` |
+| 6 | `/design-pass` **recomendado** se Acceptance tem UI; obrigatório só para US Must visuais após `09_design_system` `approved` |
+| 7 | Renomeação em **H1**: criar novos `.md` + aliases de routing 1 sprint; **H2**: remover arquivos antigos |
 
 ---
 
-*Documento vivo — fechar perguntas §9 antes de H1 Write nos agent files.*
+## 7. Migração (slug antigo → novo)
+
+| Antigo | Novo | H1 action |
+| ------ | ---- | --------- |
+| `process-manager` | `scrum-master` | novo arquivo; routing aceita ambos |
+| `board-keeper` | `backlog-refiner` | novo arquivo; routing aceita ambos |
+| `architecture-guardian` | `technical-architect` | rename ou alias |
+| `security-steward` | `security-champion` | rename ou alias |
+| `documentation-strategist` | `technical-writer` | rename ou alias |
+| `scope-architect` | `product-owner` | deprecar arquivo; texto merge no PO |
+| _(novo)_ | `developer` | criar |
+| _(novo)_ | `design-system-owner` | criar |
+
+**Compatibilidade:** `meridian-routing` e `@process-manager` / `@board-keeper` respondem com redirect até H2.
+
+---
+
+## 8. O que não criar (agora)
+
+| Papel | Motivo |
+| ----- | ------ |
+| `test-engineer` | `tests` + gate + `complete-us` Record bastam |
+| `devops-engineer` | `08_environments` + human no go-live |
+| `database-architect` | `06_database` + `technical-architect` |
+
+---
+
+## 9. Onda H — checklist atualizado
+
+### H1 — Criar / renomear agentes
+
+- [ ] `agents/developer.md`
+- [ ] `agents/scrum-master.md` (from process-manager, sem implement)
+- [ ] `agents/backlog-refiner.md` (from board-keeper)
+- [ ] `agents/design-system-owner.md`
+- [ ] `agents/technical-writer.md` (from documentation-strategist)
+- [ ] `agents/technical-architect.md` (from architecture-guardian)
+- [ ] `agents/security-champion.md` (from security-steward)
+- [ ] Expandir `agents/product-owner.md` (scope + epic)
+- [ ] `skills/design-system/SKILL.md`, `workflows/design-pass.md`
+- [ ] Routing matrix + `agents-help.md` + `scrum-meridian-map.md` § Ceremonies
+- [ ] Aliases `@process-manager` → `scrum-master` em routing (1 release)
+
+### H2 — Limpeza
+
+- [ ] Remover arquivos antigos após aliases estáveis
+- [ ] Atualizar todo markdown audit §7 (onda G) com slugs finais
+- [ ] Validator warning: UI US sem ref `09_design_system`
+
+---
+
+## 10. Integração onda G
+
+Ao revisar cada `.md` do kit, usar **somente** os slugs da §2. Tabela de vocabulário em `markdown-audit-v11.md` §10 será atualizada em H1.
+
+---
+
+*Próximo passo executável: H1 — criar `developer.md` + `scrum-master.md` + routing; em paralelo G2 templates.*

@@ -302,6 +302,13 @@ generate-board-json
 | Evitar (v1) | Usar (v11) |
 | ----------- | ---------- |
 | `docs/us/US-XXXX.md` | `user_stories` row / `meridian_db_cli show US-XXXX` |
+| `process-manager` + código | `scrum-master` (processo) + `developer` (código) |
+| `board-keeper` | `backlog-refiner` |
+| `architecture-guardian` | `technical-architect` |
+| `security-steward` | `security-champion` |
+| `documentation-strategist` | `technical-writer` |
+| `scope-architect` | `product-owner` (`00_scope`) |
+| `implementation-specialist` / `design-steward` | `developer` / `design-system-owner` |
 | `docs/epics/EPIC-XX.md` | `epics` table / `create-epic` |
 | `docs/versions/vX.md` | `versions` table / `create-version` |
 | `docs/sprints/vX-SY.md` | `sprints` table / `create-sprint` |

@@ -34,19 +34,22 @@ Before any action, classify:
 | Type | Triggers | Outcome |
 | ---- | -------- | ------- |
 | **QUESTION** | "what is", "how does", "explain" | Text answer; do not change docs |
-| **STATUS** | "status", "where are we", "blockers" | `process-manager` + `/status` |
-| **DOC / PHASE** | "scope", "epic", "version", "architecture", `00_`–`11_` | Documentation agent per matrix |
-| **US / BOARD** | "user story", "US-", "kanban", "board" | `board-keeper` or `sprint-planner` |
-| **IMPLEMENT US** | "implement US", "build", "code for US", `/implement-us` | `implementation-specialist` + `implement-user-story` — **block** if `ready` not true _(H1: até arquivo do agente, roteamento temporário via `process-manager`)_ |
-| **REFINE US** | "refine US", `/refine-us`, "ready for implement" | `board-keeper` + `refine-user-story` |
-| **REVIEW US** | "review US", `/review-us`, "audit US", "check story" | `board-keeper` + `review-user-story` |
-| **CLOSE US** | "complete US", "mark done", "record", `/complete-us` | `board-keeper` + `complete-user-story` |
-| **CLOSE SPRINT** | "complete sprint", "close sprint", `/complete-sprint` | `sprint-planner` + `complete-sprint` |
-| **LOG DECISION** | "log decision", "decision log", `/update-decisions-log`, `docs/decisions/` | read `update-decisions-log` + run `date` before Write |
-| **DESIGN** | "design system", "UI tokens", "visual", `/design-pass`, `09_design` | `design-steward` _(H1)_ |
-| **START PROJECT** | "start", "meridian setup", "create docs" | `process-manager` + `init-project` |
-| **CODE** | "implement", "create app", "fix", "refactor" | `/implement-us US-XXXX` or equivalent gate; US `ready: true` required |
-| **SLASH** | `/init-meridian`, `/create-epic`, `/create-us`, `/complete-us`, `/daily-with-ai`, etc. | Corresponding workflow |
+| **STATUS** | "status", "where are we", "blockers", `/daily-with-ai` | `scrum-master` + `/status` |
+| **DOC / PHASE** | "tech stack", "principles", `01_`–`08_`, `11_` | `technical-writer` |
+| **SCOPE / EPIC** | "scope", "in scope", `/discover`, `/create-epic`, `00_scope` | `product-owner` |
+| **ARCHITECTURE** | "architecture", `/architecture`, `05_architecture` | `technical-architect` |
+| **US / BACKLOG** | "user story", "US-", "kanban", `/create-us` | `backlog-refiner` or `sprint-planner` |
+| **IMPLEMENT US** | "implement US", "build", "code for US", `/implement-us` | `developer` + `implement-user-story` — **block** if `ready` not true |
+| **REFINE US** | "refine US", `/refine-us` | `backlog-refiner` + `refine-user-story` |
+| **REVIEW US** | "review US", `/review-us` | `backlog-refiner` + `review-user-story` |
+| **CLOSE US** | "complete US", `/complete-us` | `backlog-refiner` + `complete-user-story` |
+| **CLOSE SPRINT** | "complete sprint", `/complete-sprint` | `sprint-planner` + `complete-sprint` |
+| **LOG DECISION** | "decision log", `/update-decisions-log` | `update-decisions-log` + `date` before Write |
+| **DESIGN** | "design system", "UI", `/design-pass`, `09_design` | `design-system-owner` |
+| **START PROJECT** | "start", `/init-meridian` | `scrum-master` + `init-project` |
+| **SECURITY** | "security", "OWASP", `/security-pass`, `02_security` | `security-champion` |
+| **CODE** | "fix", "refactor" (sem US clara) | Block → `/create-us` ou `/implement-us US-XXXX` |
+| **SLASH** | workflows Meridian | Corresponding workflow file |
 
 > For automatic agent routing, follow `@[skills/meridian-routing]`.
 
@@ -64,7 +67,7 @@ Before any action, classify:
 [specialized response]
 ```
 
-4. **Respect override:** if the user cites `@scope-architect`, use that agent.
+4. **Respect override:** if the user cites `@board-keeper` or `@process-manager`, route via alias table in `meridian-routing` (H1).
 
 ### Checklist before code or US
 
@@ -131,18 +134,14 @@ The person is manager of the process. Agents report blockers, next step, and pen
 | `docs/` structure | `process-manager` | `init-project` |
 | `docs/inventory/as-is.md` (Mode B) | `documentation-strategist` | `init-project` |
 | `.meridian/projects.json` (multi-product) | `process-manager` | `init-project` |
-| `00_scope.md` | `scope-architect` | `init-project` |
-| `01`–`08`, `11` (phase) | `documentation-strategist` | `update-decisions-log` |
-| `02_security.md` | `security-steward` | `security-review` |
-| `05_architecture.md` | `architecture-guardian` | `architecture-folder-guide.md` + `security-review` |
-| `09_design_system.md` | `design-steward` | _(skill `design-system` — onda H1)_ |
-| `docs/architecture/*.md` | `architecture-guardian` | indexed from `05`; gate stays on `05` only |
+| `00_scope.md`, discovery, epics (SQLite) | `product-owner` | `discover-product`, `create-epic` |
+| `01`–`08`, `11` (phase) | `technical-writer` | `init-project`, `update-decisions-log` |
+| `02_security.md` | `security-champion` | `security-review` |
+| `05_architecture.md` | `technical-architect` | `architecture-folder-guide` + `security-review` |
+| `09_design_system.md` | `design-system-owner` | `design-system` _(H1)_ |
 | Versions / sprints (SQLite) | `sprint-planner` | `create-version`, `create-sprint`, `complete-sprint` |
-| Delivery US (create) | `board-keeper` | `create-user-story` + `sqlite-delivery-operations.md` |
-| Delivery US (review) | `board-keeper` | `review-user-story` |
-| Delivery US (refine) | `board-keeper` | `refine-user-story` + `code-quality-at-us-time.md` + `04_principles.md` |
-| Delivery US (implement) | `implementation-specialist` | `implement-user-story` + `code-quality-at-us-time.md` + `04_principles.md` |
-| Delivery US (close) | `board-keeper` | `complete-user-story` |
+| Delivery US (create → close, not implement) | `backlog-refiner` | `create-user-story`, `review-user-story`, `refine-user-story`, `complete-user-story` |
+| Delivery US (implement) | `developer` | `implement-user-story` |
 | `11_decisions.md` (stub) + `docs/decisions/` | any relevant agent | `update-decisions-log` |
 
 ---
@@ -164,13 +163,13 @@ The person is manager of the process. Agents report blockers, next step, and pen
 
 ## Quick reference
 
-- **Governance:** `process-manager` (status, gates — não código de produto)
-- **Implement US:** `implementation-specialist` _(H1)_
-- **Design system:** `design-steward` _(H1)_
-- **Scope:** `scope-architect`
-- **Phase docs:** `documentation-strategist`
-- **Security:** `security-steward`
-- **Architecture:** `architecture-guardian`
-- **Versions/sprints:** `sprint-planner`
-- **US/board:** `board-keeper`
+- **Governance / daily:** `scrum-master`
+- **Product / scope / epic:** `product-owner`
+- **Phase docs:** `technical-writer`
+- **Security:** `security-champion`
+- **Architecture:** `technical-architect`
+- **Design system:** `design-system-owner`
+- **Sprint planning:** `sprint-planner`
+- **Backlog / US (not code):** `backlog-refiner`
+- **Implement US:** `developer`
 - **Routing:** `meridian-routing`
