@@ -1,7 +1,7 @@
 # Audit markdown v11 — review completo para estrutura SQLite
 
 > **Status:** em execução — jul/2026  
-> **Última atualização:** H1 ✅ · G1 ✅ · G2 parcial · G3 parcial  
+> **Última atualização:** H1 ✅ · G1 ✅ · G2 ✅ · G3/G5 ✅ · G4/G6 ✅ (guardrail)
 > **Gatilho:** onda A marcou skills como ✅, mas dezenas de `.md` ainda descreviam delivery como arquivos `docs/us/*.md`, `app-desktop`, `/sync-board`, ou “US file”.  
 > **Objetivo:** um agente ou humano consegue seguir **qualquer** markdown do kit sem ambiguidade v1 vs v11.
 
@@ -14,7 +14,9 @@
 | **H2** | ⏳ | gate `--h2-ready` + `agent-aliases-h2.md` — delete 6 legacy files |
 | **G2** | ✅ | templates P0 + writing-guide |
 | **G3** | ✅ | MERIDIAN, usage-guide, agents/workflows H1 |
-| **G5** | 🔄 | PR template, SECURITY, README ✅ |
+| **G5** | ✅ | PR template, SECURITY, README |
+| **G4** | ✅ | `docs/01_tech_stack.md` → extension + SQLite |
+| **G6** | ✅ | `validate_kit_markdown_v11` + `--strict-kit-md` no CI |
 
 **Skills novas:** seguir `.agent/skills/doc.md` + padrão create-skill (description 3ª pessoa com WHAT/WHEN, tabela selective reading, corpo &lt;500 linhas, detalhes em `references/`).
 
@@ -29,7 +31,7 @@
 | Onda C ✅ — sem `docs/templates/` | **OK** no repo |
 | Onda D/E ✅ — scripts | **OK** |
 
-**Conclusão:** onda **G** continua — G2–G5 + G6 guardrail.
+**Conclusão:** onda **G** quase fechada — checklist §7 (skills secundários) + **H2** delete legacy.
 
 ---
 
@@ -52,7 +54,7 @@ Protocolo      → .agent/MERIDIAN.md, rules/, agents/, skills/, workflows/
 | Padrão | Arquivos afetados (aprox.) | Severidade | Progresso |
 | ------ | -------------------------- | ---------- | --------- |
 | `docs/us/`, `docs/epics/`, … como write path | ~28 → ~12 | P0–P1 | G2/G3 em curso |
-| `app-desktop` como produto ativo | ~18 | P0–P1 | G4/G5 pendente |
+| `app-desktop` como produto ativo | ~18 → ~2 | P0–P1 | G4/G5 ✅ (histórico OK) |
 | `sync-board`, `board.json` | ~12 | P1 | maioria histórico |
 | “US file”, “must match filename” | ~5 → ~2 | P0 | sprint-template ✅ |
 | `validate_meridian.py app-desktop` | ~6 → ~1 | P1 | AGENTS.md ✅ |
@@ -209,7 +211,10 @@ Marque `[x]` quando **v11-operacional** (sem P0; P1 aceito ou corrigido).
 ### 7.10 Dogfood `docs/`
 
 - [x] `docs/README.md` — G1
-- [ ] `docs/00_scope.md` … `docs/08_environments.md`
+- [x] `docs/00_scope.md` — histórico `app-desktop` removido OK
+- [x] `docs/01_tech_stack.md` — G4 extension + SQLite
+- [x] `docs/05_architecture.md` — seção removed monitor OK
+- [ ] `docs/02_security.md` … `docs/08_environments.md` (grep §3 se necessário)
 - [x] `docs/04_principles.md` — G4 parcial (app-desktop → extension)
 - [x] `templates/writing-guide.md` — G2
 - [x] `docs/09_design_system.md` — stub G1
@@ -230,17 +235,32 @@ H1 — roster Scrum              ✅
 G2 — Templates + skill refs    🔄 (esta sessão)
 G3 — Agents/workflows grep     🔄 (maioria H1)
 G5 — Repo root, CI, SECURITY          🔄
-G4 — Dogfood docs/00–11               ⏳
-G6 — Guardrail CI grep               ⏳
+G4 — Dogfood docs/00–11               ✅
+G6 — Guardrail CI grep               ✅
 ```
 
 **Ordem por arquivo:** checklist §7 → grep P0 patterns → substituir vocabulário §10 → `validate_meridian.py . --sqlite-only`
 
 ---
 
-## 9. Guardrail proposto (G6)
+## 9. Guardrail (G6) — implementado
 
-_(inalterado — ver commit anterior)_
+Função `validate_kit_markdown_v11()` em `validate_meridian.py`:
+
+| Padrão | Severidade |
+| ------ | ---------- |
+| `validate_meridian.py app-desktop` | erro com `--strict-kit-md` |
+| `/sync-board`, `generate-board-json`, `must match filename` | idem |
+| `Write/Create/… docs/(us\|epics\|versions\|sprints)/` como caminho primário | idem |
+| `app-desktop` sem contexto legacy/negado | idem |
+
+**Flags:** default = WARN; `--strict-kit-md` = ERROR (usado no CI).
+
+**Allowlist:** `references/plans/*`, `agent-aliases-h2.md`, templates históricos, agentes deprecated H1, linhas com `never` / `do not` / `removed` / `→` (markdown bold ignorado).
+
+```bash
+python3 .agent/scripts/validate_meridian.py . --strict-kit-md
+```
 
 ---
 
@@ -272,7 +292,7 @@ _(inalterado — ver commit anterior)_
 - [ ] Checklist §7 — 100% `[x]`
 - [ ] Zero P0 no grep com allowlist
 - [x] Vocabulário de agentes alinhado com **`agent-roster-and-workflow-v11.md`** (H1 ✅)
-- [ ] Guardrail G6 no CI
+- [x] Guardrail G6 no CI (`--strict-kit-md`)
 - [ ] Novo agente: `/create-us` → só SQLite
 
 ---

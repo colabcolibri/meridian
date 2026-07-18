@@ -63,7 +63,7 @@ Relative to kit root (where `.agent/MERIDIAN.md` lives).
 ### `docs` path rules
 
 - Must point to a directory whose **name is exactly** `docs`
-- Examples: `docs`, `app-desktop/docs`, `apps/app-osc/docs`, `sistema-phomenta/docs`
+- Examples: `docs`, `apps/my-app/docs`, `sistema-phomenta/docs`
 - **Not** `docs-extra`, `documentation`, `doc` — those are ignored by discovery
 
 ---

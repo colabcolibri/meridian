@@ -13,7 +13,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Validar estrutura Meridian
-        run: python3 .agent/scripts/validate_meridian.py . --sqlite-only
+        run: python3 .agent/scripts/validate_meridian.py . --sqlite-only --strict-kit-md
 
       - name: Schema SQLite smoke test
         run: python3 .agent/scripts/test_meridian_db_schema.py

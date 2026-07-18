@@ -75,7 +75,7 @@ Before `✅`, verify `## Record` is filled with real paths and matches Plan/Exec
 ## Forbidden
 
 - Product code (`developer`)
-- Hand-editing `board.json` or `docs/us/*.md` when SQLite is active
+- Never hand-edit `board.json` or `docs/us/*.md` when SQLite is active
 - `✅` without evidence or filled `## Record`
 - Creating epics (`product-owner`)
 

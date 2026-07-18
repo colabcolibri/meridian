@@ -40,7 +40,7 @@ Before anything, check the prompt for:
 
 ## Phase 0: Context check
 
-1. Confirm project root (not `app-desktop/docs/` unless explicitly the target).
+1. Confirm project root (active product per `.meridian/projects.json` in monorepos).
 2. Check: `.agent/MERIDIAN.md`, `docs/`, optional `.agent/` kit at project root.
 3. Run mental checklist from `@[skills/meridian-routing]` if domain is unclear.
 4. If `docs/` missing and user wants to start → `@[skills/init-project]`.

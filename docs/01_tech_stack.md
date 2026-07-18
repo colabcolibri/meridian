@@ -35,26 +35,24 @@ blocks: [02_security.md, 04_principles.md, 08_environments.md]
 | Bundle          | esbuild → `dist/extension.js` (CJS, `vscode` external)   |
 | Packaging       | `@vscode/vsce` when publishing (out of v4-S1)            |
 | Backend         | **None** — commands spawn `python3` on `.agent/scripts/` |
-| UI in extension | Status bar + Output channel; **no** React kanban in v4   |
+| UI in extension | Webviews (Board, Epics, Versions, Sprints) + status bar + Output |
 
-**Rationale:** Keep the extension thin: editor-native commands and file I/O only. Kanban, epic bars, and version progress stay in the Vite monitor where they already exist (v1–v3).
+**Rationale:** Editor-native commands plus in-IDE planning views; kit Python scripts on `.agent/scripts/` for validation and SQLite delivery.
 
-**Discarded for v4:**
+**Discarded for v4+:**
 
-- Embedded webview duplicating `app-desktop` Board — scope creep; use monitor side-by-side.
-- Shared npm package with `app-desktop` — separate build graphs.
+- Separate browser monitor duplicating the extension board — removed (v10); use **Meridian Harness** only.
+- Shared npm package with unrelated apps — separate build graphs.
 
 ## Backend
 
-There is no remote backend in the monitor or the extension.
+There is no remote backend.
 
-The monitor uses local file access only. The extension writes under `docs/` and invokes kit Python scripts on disk.
+The extension reads/writes local `docs/` and `.meridian/meridian.db` via kit Python scripts on disk.
 
 ## Database
 
-There will be no database in the first version.
-
-Initial data will live in TypeScript modules. Preferences and simulations may use `localStorage`.
+**Delivery:** SQLite at `.meridian/meridian.db` — see `06_database.md`. Phase docs (`00`–`11`) remain Markdown.
 
 ## Infrastructure
 

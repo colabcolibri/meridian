@@ -25,7 +25,7 @@
 | `bootstrap_meridian_db.py` | Create/upgrade `.meridian/meridian.db` |
 | `meridian_db_cli.py` | **Agent CLI:** counts, list, show, search, create-us/epic/version/sprint, update-us, set-ready, set-summary, implement-gate |
 | `meridian_db_export.py` | JSON export for extension (`--format planning`; `--write-form`) |
-| `validate_meridian.py` | Governance validator (default / `--sqlite-only` / `--md-only` / `--h2-ready`) |
+| `validate_meridian.py` | Governance validator (`--h2-ready`, `--strict-kit-md`, `--json`) |
 | `meridian_delivery_form.py` | Shim — re-exports `lib/meridian_delivery_form.py` for extension path checks |
 
 ## Shell (maintainers)
@@ -70,7 +70,7 @@ Run once per project when importing from branch `meridian-v1-old`:
 | -------- | ------- |
 | **Cursor / Claude agents** | `meridian_db_cli.py`, `validate_meridian.py` |
 | **VS Code extension** | `validate_meridian.py`, `meridian_db_export.py`, `meridian_delivery_form.py` (path check) |
-| **GitHub Actions** | `validate_meridian.py --sqlite-only`, `test_*.py` shims |
+| **GitHub Actions** | `validate_meridian.py --strict-kit-md`, `test_*.py` shims |
 | **Pre-commit** | `validate_meridian.py` |
 
 ## Python requirement
