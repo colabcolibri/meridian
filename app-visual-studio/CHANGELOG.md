@@ -4,6 +4,20 @@ All notable changes to the **Meridian** VS Code extension (`meridian-vscode`).
 
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.1.23] - 2026-07-18
+
+### Added
+
+- **Bundled kit:** HAR (ação humana necessária) P0 — agents stop for OAuth, billing, production creds
+- **Bundled kit:** `/privacy-pass` with LGPD (Brazil / ANPD) and GDPR (EU / EDPB) checklists and official reference URLs
+- **Bundled kit:** optional `/seo-pass` + `12_marketing_seo` phase doc for public web products
+- **Bundled kit:** privacy validator warnings + `test_privacy_validator.py`
+
+### Changed
+
+- **Bundled kit:** `02_security` and `08_environments` deepened (privacy sections, deploy/rollback/HAR)
+- **Bundled kit:** `agents-help`, `start-here`, routing updated for EPIC-18 operators
+
 ## [1.1.22] - 2026-07-18
 
 ### Added

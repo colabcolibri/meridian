@@ -38,6 +38,7 @@ Frontmatter + tables + placeholders. Fill using the guide above, then copy to th
 | `docs/08_environments.md` | `08-environments.md` |
 | `docs/09_design_system.md` | `09-design-system.md` (UI) |
 | `docs/10_test_strategy.md` | `10-test-strategy.md` (tests) |
+| `docs/12_marketing_seo.md` | `12-marketing-seo.md` (public web SEO — optional) |
 | `docs/11_decisions.md` | `11-decisions.md` |
 
 **Registry:** `.agent/skills/init-project/references/doc-templates.md`  

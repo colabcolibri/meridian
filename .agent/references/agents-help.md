@@ -159,6 +159,7 @@ Complete in order: `00` → `01` → `02` → `03` → `04` → **`05`** → `06
 | C1 | *(conversation)* | `product-owner` | `00_scope.md` | Scope, users, out of scope. |
 | C2 | *(conversation)* | `technical-writer` | `01`, `03`, `04`, `06`–`08` | Draft phase documents. |
 | C3 | **`/security-pass`** | `security-champion` | `02_security.md` | Threat model, secrets, OWASP, agent safety. |
+| C3b | **`/privacy-pass`** | `security-champion` | `02_security.md` § LGPD + GDPR | Brazil (ANPD) and EU (EDPB) privacy sections; official refs in checklist. **Doc only.** |
 | C4 | **`/architecture`** | `technical-architect` | `05_architecture.md` + optional `docs/architecture/` | Overview, index, detail files; gate for backlog. |
 | C5 | **`/design-pass`** | `design-system-owner` | `09_design_system.md` | Contract: tokens, stack, components. Modes: `bootstrap`, `US-XXXX`. **Doc only.** |
 | C6 | **`/design-showcase`** | `design-system-owner` | `09` § Showcase + US drafts | Plan catalog routes; creates showcase US for `developer`. **No code.** |
@@ -167,6 +168,9 @@ Complete in order: `00` → `01` → `02` → `03` → `04` → **`05`** → `06
 | C9 | **`/dependency-audit`** | `security-champion` | Report | Lockfiles and supply chain hygiene. **No code.** |
 | C10 | **`/test-pass`** | `quality-owner` | `10_test_strategy.md` | Pyramid, runners, coverage. Modes: `bootstrap`, `US-XXXX`. **Doc only.** |
 | C11 | **`/test-review`** | `quality-owner` | Report | Audit US tests vs strategy before close. **No code.** |
+| C12 | **`/seo-pass`** | `seo-strategy` + `technical-writer` | `12_marketing_seo.md` | Public web only — meta, sitemap, CWV. **Doc only.** Skip CLI-only. |
+
+**HAR (ação humana necessária):** agents stop for external accounts, OAuth/PAT, billing, production credentials — see `rules/MERIDIAN.md`. Not a slash command; applies during any workflow.
 
 **UI products:** create `09` stub at `/init-meridian` when stack has UI. Run `/design-pass bootstrap` after `01_tech_stack`. Human approves `09` before Must UI US ship.
 

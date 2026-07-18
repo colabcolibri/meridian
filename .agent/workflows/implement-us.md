@@ -19,6 +19,7 @@ $ARGUMENTS
 7. One US per session — cite `US-XXXX` and load with `show --full`
 8. Do **not** mark `✅` or run `/complete-us` in the same turn unless manager only asked to close
 9. Partial delivery → `🔶` + `Missing:` in Acceptance; no forced close
+10. **HAR:** if Acceptance needs external accounts, OAuth, billing, or production credentials → emit `⛔ Ação humana necessária` per `rules/MERIDIAN.md`; do not fake completion
 
 ---
 

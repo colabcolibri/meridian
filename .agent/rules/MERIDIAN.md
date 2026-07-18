@@ -43,9 +43,12 @@ Before any action, classify:
 | **CLOSE US** | "complete US", "mark done", "record", `/complete-us` | `backlog-refiner` + `complete-user-story` |
 | **CLOSE SPRINT** | "complete sprint", "close sprint", `/complete-sprint` | `sprint-planner` + `complete-sprint` |
 | **LOG DECISION** | "log decision", "decision log", `/update-decisions-log` | read `update-decisions-log` + run `date` before `prepend-decision` CLI |
+| **HAR** | external account, OAuth, PAT, billing, payment, production deploy creds, accept terms | **Stop** — emit HAR block (see below); no simulation |
 | **SECURITY** | "security", "OWASP", "secrets", `02_security`, `/security-review`, `/dependency-audit` | `security-champion` |
+| **PRIVACY** | LGPD, GDPR, privacy pass, titular, data subject, encarregado, DPO, consent | `security-champion` + `/privacy-pass` |
 | **QUALITY** | "test strategy", `10_test`, `/test-pass`, `/test-review`, coverage | `quality-owner` |
 | **DESIGN** | `09_design`, `/design-pass`, `/design-review` | `design-system-owner` |
+| **SEO** | SEO, sitemap, meta tags, Core Web Vitals, indexation (public web only) | `seo-strategy` skill + phase doc `12` |
 | **START PROJECT** | "start", "meridian setup", "create docs" | `scrum-master` + `init-project` |
 | **CODE** | "implement", "create app", "fix", "refactor" | `/implement-us US-XXXX` or equivalent gate; US `ready: true` required |
 | **SLASH** | `/init-meridian`, `/create-epic`, `/create-us`, `/complete-us`, `/daily-with-ai`, etc. | Corresponding workflow |
@@ -124,6 +127,34 @@ Do not write product code until required docs for the current phase exist (see `
 ### Human manager
 
 The person is manager of the process. Agents report blockers, next step, and pending decisions — they do not replace judgment.
+
+### HAR — ação humana necessária (P0)
+
+**Never simulate** steps only a human can perform. When a trigger matches, **stop implementation** and respond with the HAR block below. Do not invent credentials, claim accounts were created, or accept legal terms on behalf of the manager.
+
+**Triggers (non-exhaustive):**
+
+- Create or verify accounts on external services (cloud, Stripe, OAuth provider, analytics)
+- Generate, paste, or store API keys, PATs, passwords, or production secrets
+- Billing, payment, subscription, or card capture in any dashboard
+- Production deploy or infrastructure changes requiring console login
+- Accepting terms of service, privacy policies, or legal agreements
+- Government or regulator portals that require human identity (e.g. ANPD incident filing)
+
+**Required response format:**
+
+```markdown
+⛔ **Ação humana necessária**
+
+Só você pode executar este passo. Eu não crio contas, não aceito termos e não uso credenciais reais.
+
+1. _(passo concreto)_
+2. _(próximo passo)_
+
+Quando terminar, cole aqui: _(confirmação, nome da variável, ou screenshot sem segredos)_
+```
+
+Resume work only after the manager provides evidence or explicit skip with logged decision.
 
 ---
 

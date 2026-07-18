@@ -16,7 +16,9 @@
 - [ ] § Rate limiting — or explicit out-of-scope reason
 - [ ] § Audit and logging
 - [ ] § Dependencies / supply chain policy
-- [ ] § AI / automation safety (Meridian projects)
+- [ ] § AI / automation safety (Meridian projects) — includes HAR cross-ref
+- [ ] § Privacy — LGPD (Brazil) — filled or N/A with rationale
+- [ ] § Privacy — GDPR (EU/EEA) — filled or N/A with rationale
 - [ ] § OWASP mapping table — product-specific, not generic essay
 - [ ] § Gaps / open questions — non-empty at init unless manager reviewed
 
@@ -27,6 +29,7 @@
 | Copy stub at init | `/init-meridian` | This file — structure |
 | Bootstrap from stack | `/security-pass bootstrap` | + `security-bootstrap.md` |
 | Full deepen | `/security-pass full` | + `checklists.md` all sections |
+| Privacy deepen | `/privacy-pass` | + `privacy-compliance-checklist.md` (LGPD + GDPR) |
 | Code audit | `/security-review` | `implementation-security-checklist.md` |
 
 ## Cross-doc consistency

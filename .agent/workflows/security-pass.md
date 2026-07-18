@@ -15,6 +15,7 @@ $ARGUMENTS
 3. Read checklist for active mode before Write on `02_security.md`
 4. Relevant decisions → `prepend-decision` (read `update-decisions-log` skill)
 5. Do not silently approve architecture `approved` if critical gaps remain open
+6. **HAR:** console signup, OAuth app registration, or regulator portals → stop with HAR block; read-only official docs (ANPD, EUR-Lex) need no account
 
 ---
 

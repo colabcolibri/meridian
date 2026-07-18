@@ -29,6 +29,7 @@ Maintain `02_security.md` as the security contract and gate risky agent behavior
 | Workflow | Purpose |
 | -------- | ------- |
 | `/security-pass` | Create/update `02` — Phase 2 doc pass |
+| `/privacy-pass` | Deepen LGPD (Brazil) and GDPR (EU) sections in `02` |
 | `/security-review` | Audit code vs `02` + US (no code) |
 | `/dependency-audit` | Lockfiles and supply chain report |
 

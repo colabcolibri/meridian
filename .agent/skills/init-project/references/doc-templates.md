@@ -45,6 +45,7 @@ For each row below:
 | `docs/08_environments.md` | `phase-docs/08-environments.md` | never |
 | `docs/09_design_system.md` | `phase-docs/09-design-system.md` | CLI-only / no UI |
 | `docs/10_test_strategy.md` | `phase-docs/10-test-strategy.md` | no test mandate |
+| `docs/12_marketing_seo.md` | `phase-docs/12-marketing-seo.md` | no public indexable web |
 | `docs/11_decisions.md` | `phase-docs/11-decisions.md` | never |
 
 After `meridian_delivery.py bootstrap`, prepend first decision (see `11-decisions.md` stub).
@@ -65,10 +66,11 @@ Use `/audit-docs` for a full pass across all phase docs.
 
 | Doc | Command |
 | --- | ------- |
-| `02_security` | `/security-pass bootstrap` → `full` |
+| `02_security` | `/security-pass bootstrap` → `full`; `/privacy-pass bootstrap` → `full` when PII |
 | `05_architecture` | `/architecture` |
 | `09_design_system` | `/design-pass bootstrap` |
 | `10_test_strategy` | `/test-pass bootstrap` |
+| `12_marketing_seo` | `/seo-pass bootstrap` → `full` (public web only) |
 
 ## Mode B only
 

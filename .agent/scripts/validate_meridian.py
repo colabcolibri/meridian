@@ -241,7 +241,18 @@ UI_ACCEPTANCE_RE = re.compile(
 
 SECURITY_ACCEPTANCE_RE = re.compile(
     r"\b(auth|security|secret|owasp|encrypt|csrf|xss|injection|token|password|"
-    r"permission|rbac|pii|vulnerability)\b",
+    r"permission|rbac|vulnerability)\b",
+    re.IGNORECASE,
+)
+
+PRIVACY_ACCEPTANCE_RE = re.compile(
+    r"\b(lgpd|gdpr|pii|personal data|dados pessoais|titular|data subject|"
+    r"encarregado|consent|privacidade|privacy)\b",
+    re.IGNORECASE,
+)
+
+PLACEHOLDER_PRIVACY_RE = re.compile(
+    r"_\(.*\)_|_TBD_|Delete or mark N/A",
     re.IGNORECASE,
 )
 
@@ -326,6 +337,85 @@ def validate_sqlite_test_strategy_refs(
             warnings.append(
                 f"{row['id']}: Must US with tests: required missing 10_test_strategy in "
                 "Plan Architecture refs — run /test-pass or /refine-us"
+            )
+
+
+def validate_privacy_sections_in_02(docs: Path, warnings: list[str]) -> None:
+    """Warn when 02 cites LGPD/GDPR compliance but privacy sections are thin."""
+    security_path = docs / "02_security.md"
+    if not security_path.is_file():
+        return
+    text = security_path.read_text(encoding="utf-8")
+    lower = text.lower()
+    if "lgpd" not in lower and "gdpr" not in lower:
+        return
+    if "privacy — lgpd" not in lower and "privacy - lgpd" not in lower:
+        warnings.append(
+            "02_security.md cites compliance but missing § Privacy — LGPD (Brazil) — run /privacy-pass"
+        )
+    elif "privacy — lgpd" in lower or "privacy - lgpd" in lower:
+        lgpd_block = text.lower().split("privacy — lgpd", 1)[-1].split("##", 1)[0]
+        if PLACEHOLDER_PRIVACY_RE.search(lgpd_block) or lgpd_block.count("| |") > 3:
+            warnings.append(
+                "02_security.md § Privacy — LGPD looks placeholder-only — run /privacy-pass full"
+            )
+    if "gdpr" in lower and "privacy — gdpr" not in lower and "privacy - gdpr" not in lower:
+        warnings.append(
+            "02_security.md cites GDPR but missing § Privacy — GDPR (EU/EEA) — run /privacy-pass"
+        )
+    elif "privacy — gdpr" in lower or "privacy - gdpr" in lower:
+        gdpr_block = text.lower().split("privacy — gdpr", 1)[-1].split("##", 1)[0]
+        if PLACEHOLDER_PRIVACY_RE.search(gdpr_block) or gdpr_block.count("| |") > 3:
+            warnings.append(
+                "02_security.md § Privacy — GDPR looks placeholder-only — run /privacy-pass full"
+            )
+
+
+def validate_sqlite_privacy_refs(
+    root: Path,
+    docs: Path,
+    warnings: list[str],
+) -> None:
+    """Warn when open Must US with privacy acceptance lack 02_security privacy Plan refs."""
+    db_path = root / ".meridian" / "meridian.db"
+    security_path = docs / "02_security.md"
+    if not db_path.is_file() or not security_path.is_file():
+        return
+    if read_frontmatter(security_path).get("status") != "approved":
+        return
+
+    import sqlite3
+
+    conn = sqlite3.connect(db_path)
+    conn.row_factory = sqlite3.Row
+    try:
+        rows = conn.execute(
+            """
+            SELECT id, moscow, status, body_markdown, plan_architecture_refs
+            FROM user_stories
+            WHERE status IN ('❌', '🔶')
+            """
+        ).fetchall()
+    finally:
+        conn.close()
+
+    for row in rows:
+        if (row["moscow"] or "").strip() != "Must":
+            continue
+        body = row["body_markdown"] or ""
+        if not PRIVACY_ACCEPTANCE_RE.search(body):
+            continue
+        refs = (row["plan_architecture_refs"] or "").lower()
+        if "02_security" not in refs:
+            warnings.append(
+                f"{row['id']}: Must privacy US missing 02_security in Plan Architecture "
+                "refs — run /privacy-pass or /refine-us"
+            )
+            continue
+        if "privacy" not in refs and "lgpd" not in refs and "gdpr" not in refs:
+            warnings.append(
+                f"{row['id']}: Must privacy US missing privacy/LGPD/GDPR in Plan "
+                "Architecture refs — run /privacy-pass or /refine-us"
             )
 
 
@@ -808,8 +898,10 @@ def main() -> int:
             )
 
     if sqlite_delivery and docs.exists():
+        validate_privacy_sections_in_02(docs, warnings)
         validate_sqlite_design_system_refs(root, docs, warnings)
         validate_sqlite_security_refs(root, docs, warnings)
+        validate_sqlite_privacy_refs(root, docs, warnings)
         validate_sqlite_test_strategy_refs(root, docs, warnings)
 
     if board_path.exists():

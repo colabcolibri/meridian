@@ -13,6 +13,7 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 | Workflow | Purpose |
 | -------- | ------- |
 | `/security-pass` | Create/update `02` — Phase 2 doc pass |
+| `/privacy-pass` | LGPD + GDPR sections in `02` |
 | `/security-review` | Audit code vs `02` + US (no code) |
 | `/dependency-audit` | Lockfiles and supply chain report |
 
@@ -23,13 +24,15 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 | `.agent/references/templates/phase-docs/02-security.md` | **Init** — § Document stub to create `docs/02_security.md` |
 | `references/security-doc-checklist.md` | **Mandatory** — structure of `02` at init and pass |
 | `references/security-bootstrap.md` | **Mandatory** — `/security-pass bootstrap` |
+| `references/privacy-compliance-checklist.md` | **Mandatory** — `/privacy-pass` (LGPD + GDPR) |
+| `references/privacy-bootstrap.md` | **Mandatory** — `/privacy-pass bootstrap` |
 | `references/checklists.md` | `/security-pass full` or deep `02` review |
 | `references/implementation-security-checklist.md` | **Mandatory** — `/security-review` |
 | `references/supply-chain-checklist.md` | **Mandatory** — `/dependency-audit` |
 
 ## When to trigger
 
-- `/security-pass`, `/security-review`, `/dependency-audit`
+- `/security-pass`, `/privacy-pass`, `/security-review`, `/dependency-audit`
 - Create or review `02_security.md`
 - Threat model, secrets, OWASP, supply chain request
 - Before `05_architecture.md` goes to `approved`

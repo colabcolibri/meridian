@@ -41,15 +41,16 @@ Hosting, deploy mechanism, rollback, smoke URL.
 
 Workflow file paths, jobs, merge gates. Link test commands to `10` when it exists.
 
-### Observability
+### Deploy and release
 
-Optional at init; document before production `approved` if applicable.
+Document **who approves** production deploys, **how** rollback works, and **where** secrets enter CI (OIDC, env secrets — never in repo). First-time cloud console or production key setup → **HAR** (`rules/MERIDIAN.md`). Cross-ref `02` secrets policy.
 
 ## Depth checklist
 
 - [ ] Local setup is copy-pasteable
 - [ ] Env table matches `.env.example`
 - [ ] CI path exists in repo
+- [ ] Deploy matrix names environment, trigger, approver, rollback
 - [ ] No contradiction with root README (merge if needed)
 
 
@@ -58,6 +59,7 @@ Optional at init; document before production `approved` if applicable.
 Phase docs are **living contracts**. Re-open this file when:
 
 - Stack, auth, or deployment changes materially
+- Production host or CI pipeline changes
 - A US or epic introduces a new surface not covered here
 - `/audit-docs` or validator flags gaps
 - Before marking a new epic `active` if it touches this domain
@@ -165,7 +167,20 @@ cp .env.example .env
 | --------- | ----- |
 | Host | |
 | Deploy | manual / CI on tag |
-| Rollback | |
+| Rollback | _(command or revert procedure)_ |
+| Production approver | _(human role — deploy uses HAR for first-time creds)_ |
+
+## Deploy and release
+
+| Step | Environment | Trigger | Approver | Rollback |
+| ---- | ----------- | ------- | -------- | -------- |
+| Build artifact | CI | PR merge / tag | automated | n/a |
+| Promote staging | staging | | | |
+| Promote production | production | | manager | |
+
+**Secrets in CI:** _(OIDC / provider secrets UI — names only; values via HAR)_
+
+**Smoke test after deploy:** _(URL + command)_
 
 ## CI/CD
 

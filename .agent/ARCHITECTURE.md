@@ -124,6 +124,7 @@ See `.agent/skills/doc.md` to create new skills.
 | `create-epic` | product-owner | create epic in SQLite |
 | `architecture` | technical-architect | doc 05 |
 | `security-pass` | security-champion | doc 02 |
+| `privacy-pass` | security-champion | LGPD + GDPR in 02 |
 | `security-review` | security-champion | code vs 02 — report only |
 | `dependency-audit` | security-champion | supply chain — report only |
 | `design-pass` | design-system-owner | doc 09 |
@@ -131,6 +132,7 @@ See `.agent/skills/doc.md` to create new skills.
 | `design-review` | design-system-owner | UI audit — report only |
 | `test-pass` | quality-owner | doc 10 |
 | `test-review` | quality-owner | tests audit — report only |
+| `seo-pass` | seo-strategy | doc 12 (public web) |
 | `daily-with-ai` | scrum-master | daily manager + AI routine |
 
 All support `$ARGUMENTS` and a critical rules section.

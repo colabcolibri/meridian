@@ -19,7 +19,8 @@ Agents and humans use this before architecture approval, during `/implement-us` 
 | ------ | ------ |
 | Init | Copy stub; fill posture from scope + stack at high level |
 | After `01` drafted | `/security-pass bootstrap` — infer auth, surfaces, secrets |
-| Before `02` approved | `/security-pass full` — walk `checklists.md` + `security-doc-checklist.md` |
+| After `01` drafted (PII in scope) | `/privacy-pass bootstrap` — infer LGPD/GDPR jurisdictions |
+| Before `02` approved | `/security-pass full` + `/privacy-pass full` when PII or compliance cited |
 | New integration, auth change, dependency spike | `status: review`; update tables; `/dependency-audit` if lockfiles changed |
 | After security-related US | `/security-review`; update `02` if contract changed |
 
@@ -63,7 +64,35 @@ Lockfile policy, audit command, CI gate (fail vs warn).
 
 ### AI and automation safety
 
-Required for Meridian-managed repos: what paths agents may write, forbidden actions, human gates (`ready`, `Record`, `approved`).
+Required for Meridian-managed repos: what paths agents may write, forbidden actions, human gates (`ready`, `Record`, `approved`), and **HAR** (ação humana necessária) for external accounts and credentials — see `rules/MERIDIAN.md`.
+
+### Privacy — LGPD (Brazil)
+
+When the product processes **dados pessoais** of individuals in Brazil or data processed under Brazilian law:
+
+- Identify **controlador** / **operador** roles (Art. 5º, VII–IX).
+- Document **legal bases** (Art. 7 for regular data; Art. 11 for sensitive data) — not a copy of the law; map **this product’s** treatments.
+- **Titular rights** (Art. 18): access, correction, anonymization, portability, deletion — how the product honors each channel.
+- **Encarregado** (DPO): named contact or N/A with justification; see ANPD guias.
+- **RIPD** when high-risk processing; consult encarregado during preparation.
+- **Incidentes**: communication to ANPD when applicable — link official incident channel in references table.
+- **Transferência internacional**: Res. CD/ANPD nº 19/2024 and subsequent norms when data leaves Brazil.
+
+Mark section **N/A** only when manager confirms no Brazilian data subjects and no processing in Brazil.
+
+### Privacy — GDPR (European Union / EEA)
+
+When the product processes personal data of individuals in the **EU/EEA** or offers goods/services to them (Art. 3(2)):
+
+- **Controller / processor** roles (Art. 4(7)–(8)); Art. 28 processor agreements when applicable.
+- **Lawful bases** (Art. 6) — one row per processing purpose; special categories Art. 9 when relevant.
+- **Data subject rights** (Arts. 12–23): access, rectification, erasure, portability, objection — product workflow.
+- **DPO** (Arts. 37–39) when required or appointed voluntarily.
+- **DPIA** (Art. 35) for high-risk processing.
+- **Breach notification** (Arts. 33–34) to supervisory authority and data subjects when required.
+- **Transfers** (Chapter V): adequacy, SCCs, or other mechanisms — name mechanism per destination.
+
+Mark section **N/A** only when manager confirms no EU/EEA scope. **LGPD ≠ GDPR** — fill both sections when product serves Brazil and Europe.
 
 ### OWASP table
 
@@ -81,7 +110,9 @@ Non-empty at init unless manager reviewed and accepted. Critical gaps block `05`
 - [ ] ≥1 threat model row per major surface
 - [ ] Secrets policy names `.env.example` and gitignore
 - [ ] Gaps table has owner for each open item
-
+- [ ] LGPD section filled or N/A with manager rationale (Brazil)
+- [ ] GDPR section filled or N/A with manager rationale (EU/EEA)
+- [ ] Official reference URLs cited in doc or checklist when compliance applies
 
 ## Mid-project review (doc drift)
 
@@ -107,8 +138,8 @@ Human `approved` after `/security-pass full`. Critical gaps resolved or logged. 
 
 ## Related
 
-- `security-review/references/checklists.md`, `security-doc-checklist.md`, `security-bootstrap.md`
-- `/security-review`, `/dependency-audit`
+- `security-review/references/checklists.md`, `security-doc-checklist.md`, `security-bootstrap.md`, `privacy-compliance-checklist.md`, `privacy-bootstrap.md`
+- `/security-pass`, `/security-review`, `/dependency-audit`, `/privacy-pass`
 ---
 
 ## Document stub
@@ -126,7 +157,7 @@ blocks: [03_user_types.md, 04_principles.md, 05_architecture.md]
 
 # 02 — Security
 
-> **Init:** copy this stub at `/init-meridian`. **Deepen:** `/security-pass bootstrap` after `01_tech_stack.md`, then `/security-pass full` before `approved`.
+> **Init:** copy this stub at `/init-meridian`. **Deepen:** `/security-pass bootstrap` after `01_tech_stack.md`, `/privacy-pass bootstrap` when PII in scope, then `/security-pass full` + `/privacy-pass full` before `approved`.
 
 ## Security posture summary
 
@@ -150,6 +181,40 @@ blocks: [03_user_types.md, 04_principles.md, 05_architecture.md]
 **PII inventory:** _(name, email, phone, device id, … — or “none”)_
 
 **Data minimization:** _(what we refuse to collect in v1)_
+
+## Privacy — LGPD (Brazil)
+
+_(Delete or mark N/A if no Brazilian data subjects — manager must confirm.)_
+
+| Topic | This product |
+| ----- | ------------ |
+| Controlador / operador | |
+| Bases legais (Art. 7 / 11) | |
+| Direitos do titular (Art. 18) — como exercer | |
+| Encarregado — contato | |
+| RIPD necessário? | sim / não / em elaboração |
+| Retenção e exclusão | |
+| Transferência internacional | |
+| Incidentes — procedimento | |
+
+**Referências oficiais (consultar, não substituir assessoria jurídica):** ver checklist `privacy-compliance-checklist.md` § LGPD.
+
+## Privacy — GDPR (EU/EEA)
+
+_(Delete or mark N/A if no EU/EEA scope — manager must confirm.)_
+
+| Topic | This product |
+| ----- | ------------ |
+| Controller / processor | |
+| Lawful bases (Art. 6) per purpose | |
+| Data subject rights — how to exercise | |
+| DPO — contact or N/A | |
+| DPIA required? | yes / no / in progress |
+| Retention and erasure | |
+| International transfers (Ch. V) | |
+| Breach notification process | |
+
+**Official references:** see `privacy-compliance-checklist.md` § GDPR.
 
 ## Authentication model
 
@@ -260,6 +325,7 @@ _Run `/dependency-audit` when lockfiles change materially._
 | Write scope | which paths agents may modify |
 | Forbidden | secrets in prompts, `git push --force`, disable auth |
 | Human gates | `ready: true`, `Record`, `approved` docs |
+| HAR | external accounts, OAuth/PAT, billing, production creds — `⛔ Ação humana necessária` per `rules/MERIDIAN.md` |
 | Extension / IDE | local disk only / network calls |
 
 ## OWASP and common risks

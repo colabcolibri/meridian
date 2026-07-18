@@ -52,7 +52,13 @@ Documents produced:
 
 **Security operator:** `/security-pass` deepens `02` → after `/implement-us` run `/security-review` (and `/dependency-audit` when deps change) before close on sensitive US.
 
+**Privacy operator:** `/privacy-pass` deepens **LGPD (Brazil)** and **GDPR (EU/EEA)** in `02_security` — separate sections, official regulator URLs (ANPD, EUR-Lex, EDPB). Not legal advice; checklist + doc contract.
+
+**HAR:** when agents need external accounts, payments, or production secrets → `⛔ Ação humana necessária` (P0 in `rules/MERIDIAN.md`).
+
 **Quality operator:** `/test-pass bootstrap` deepens `10_test_strategy.md` when tests in scope → `/test-review` before `/complete-us` on Must US with `tests: required`.
+
+**SEO operator (optional):** `/seo-pass` when public indexable web is in scope → `12_marketing_seo.md`. Skip CLI-only backends.
 
 ### Phase 3 — Backlog definition
 
