@@ -317,3 +317,16 @@ python3 .agent/scripts/validate_meridian.py . --strict-kit-md
 - [x] `sync_cursor_kit.sh` executado
 - [x] `--h2-ready` com zero legacy files
 
+---
+
+## 14. `.meridian/` e git
+
+| Artefato | Git? | Motivo |
+| -------- | ---- | ------ |
+| `.meridian/meridian.db` | **Não** (gitignore) | Delivery local — como um DB de dev; compartilhar via bootstrap/migrations, não o arquivo |
+| `.meridian/meridian.db-wal` / `.db-shm` | **Não** | Sidecars SQLite |
+| `.meridian/projects.json` | **Sim** (quando existir) | Manifest multi-produto — configuração versionada |
+| Pasta `.meridian/` inteira | **Não** ignorar | Só o banco; deixar `projects.json` commitável |
+
+Baseline para novos projetos: `init-project/references/gitignore-baseline.md`. Referência operacional: `commit-after-us-close.md` § Scope.
+

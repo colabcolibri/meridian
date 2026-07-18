@@ -61,7 +61,10 @@ yarn.lock
 **/yarn.lock
 
 # Meridian 2.0 — local SQLite per product (US-0106)
+# Ignore DB runtime only — commit .meridian/projects.json when used (multi-product manifest)
 **/.meridian/meridian.db
+**/.meridian/meridian.db-wal
+**/.meridian/meridian.db-shm
 
 # Legacy derived board (v11 — board reads SQLite only)
 **/docs/kanban/board.json

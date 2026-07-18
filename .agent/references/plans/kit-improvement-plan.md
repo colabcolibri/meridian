@@ -1,6 +1,6 @@
 # Plano de melhoria do kit Meridian (skills, scripts, templates, v11 SQLite)
 
-> **Status:** em execução — jul/2026  
+> **Status:** ondas A–G + H1/H2 ✅ — jul/2026  
 > **Contexto:** v10 entregou SQLite + extensão VS Code; v11 remove `board.json` e `/sync-board` — board lê só `.meridian/meridian.db`.  
 > **Objetivo:** protocolo coerente, uma fonte de verdade por camada, menos artefatos mortos.
 
@@ -22,7 +22,7 @@
 
 | Problema | Status |
 | -------- | ------ |
-| Skills citam `docs/us/*.md` como write path | **Onda A — ⚠️ parcial** (skills; templates/agents pendentes — **onda G**) |
+| Skills citam `docs/us/*.md` como write path | **Onda G + G7 — ✅** (`markdown-audit-v11.md`, `skill-references-audit-v11.md`) |
 | `docs/templates/` espelho frágil | **Onda C — ✅ concluída** |
 | Gate só em checklist | **Onda B — ✅ concluída** |
 | `board.json` + `/sync-board` + `generate_board.py` | **Onda F2 — ✅ concluída (removidos)** |
@@ -116,15 +116,15 @@ Subpastas `lib/`, `migrate/`, `test/`, `dev/` com shims na raiz para CI/extensã
 
 `meridian_db_cli.py create-epic`, `create-version`, `create-sprint`.
 
-### Onda G — Audit markdown v11 — **P0 (em execução)**
+### Onda G — Audit markdown v11 — **✅ concluída (G1–G7 + H1/H2)**
 
-Revisão sistemática de ~107 arquivos `.md` — ver `markdown-audit-v11.md`.
+Revisão sistemática — ver `markdown-audit-v11.md` e `skill-references-audit-v11.md`.
 
-Sub-ondas: G1 ✅ · H1 ✅ · G2 🔄 · G3 🔄 · G4–G6 ⏳ — checklist em `markdown-audit-v11.md` §7
+Sub-ondas: G1 ✅ · H1 ✅ · H2 ✅ · G2–G7 ✅ · G6 guardrail CI ✅
 
-### Onda H — Agent roster e workflow — **✅ H1 concluída**
+### Onda H — Agent roster e workflow — **✅ H1 + H2 concluídas**
 
-Roster Scrum v11 — ver `agent-roster-and-workflow-v11.md`. H2 = remover arquivos legacy após aliases estáveis.
+Roster Scrum v11 — ver `agent-roster-and-workflow-v11.md`. H2 = 6 agentes legacy removidos (`--h2-ready`).
 
 | Entregável | Status |
 | ---------- | ------ |
@@ -188,8 +188,8 @@ Roster Scrum v11 — ver `agent-roster-and-workflow-v11.md`. H2 = remover arquiv
 4. Onda A — skills/workflows SQLite     ✅
 5. Onda D — reorganizar scripts            ✅
 6. Onda E — CLI epic/version/sprint        ✅
-7. Onda G — audit markdown v11 (completo)  ← em execução
-8. Onda H — agent roster + workflow       ← paralelo (G3 + H1)
+7. Onda G — audit markdown v11 (completo)  ✅
+8. Onda H — agent roster + workflow       ✅
 ```
 
 ---
@@ -219,11 +219,9 @@ Roster Scrum v11 — ver `agent-roster-and-workflow-v11.md`. H2 = remover arquiv
 
 ## 9. Próximo passo imediato
 
-1. **G1** — P0 markdown: `rules/MERIDIAN.md`, `lifecycle.md`, `start-here.md`, `instruction-surfaces.md`, `docs/README.md`
-2. **H1** — skeleton: `implementation-specialist`, `design-steward`, `/design-pass`, routing (ver `agent-roster-and-workflow-v11.md`)
-3. **G2–G3** — templates + agents/workflows (vocabulário SQLite + novos agentes)
-4. **G6** — guardrail CI
-5. Validar extensão contra `meridian-teste`
+1. **Extensão** — validar board + form + save em `meridian-teste` (único critério aberto em §7)
+2. **Opcional** — CLI único `meridian` com subcomandos (§8 pergunta 1)
+3. **Manutenção** — novos skills delivery seguem `skill-references-audit-v11.md` §6
 
 ---
 

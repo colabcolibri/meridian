@@ -39,7 +39,17 @@ coverage/
 # Python (if applicable)
 __pycache__/
 .venv/
+
+# Meridian delivery (local SQLite — never commit)
+**/.meridian/meridian.db
+**/.meridian/meridian.db-wal
+**/.meridian/meridian.db-shm
+
+# Legacy derived board (v11 — ignore when migrating from v1)
+**/docs/kanban/board.json
 ```
+
+**Nota `.meridian/`:** ignore só o **banco** (`meridian.db` e sidecars WAL). **`projects.json`** (manifest multi-produto) **pode** ir no git — é configuração, não delivery runtime.
 
 Rules:
 
