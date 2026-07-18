@@ -1680,5 +1680,35 @@
     "tests": "required",
     "tests_status": "done",
     "ready": true
+  },
+  {
+    "id": "US-0125",
+    "title": "Extension opens delivery markdown from SQLite on click",
+    "epic": "EPIC-15",
+    "version": "v10",
+    "status": "\u274c",
+    "moscow": "Must",
+    "depends_on": [
+      "US-0121"
+    ],
+    "done_when": "Board and planning panels open full delivery markdown from meridian.db when docs delivery files are absent.",
+    "tests": "required",
+    "tests_status": "pending",
+    "ready": true
+  },
+  {
+    "id": "US-0126",
+    "title": "Extension sync board and refresh from SQLite",
+    "epic": "EPIC-15",
+    "version": "v10",
+    "status": "\u274c",
+    "moscow": "Should",
+    "depends_on": [
+      "US-0125"
+    ],
+    "done_when": "Sync Board command and file watchers regenerate board.json from SQLite and refresh panels when meridian.db changes.",
+    "tests": "required",
+    "tests_status": "pending",
+    "ready": true
   }
 ]

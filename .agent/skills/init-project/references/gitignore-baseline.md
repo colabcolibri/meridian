@@ -39,9 +39,6 @@ coverage/
 # Python (if applicable)
 __pycache__/
 .venv/
-
-# Meridian 2.0 — local SQLite per product package (not kit root)
-**/.meridian/meridian.db
 ```
 
 Rules:

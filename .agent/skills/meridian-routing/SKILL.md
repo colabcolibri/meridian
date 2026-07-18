@@ -18,7 +18,6 @@ Before responding, classify the request and select the correct Meridian agent. S
 | Intent | Keywords | Agent(s) | Auto? |
 | -------- | -------------- | -------- | ----- |
 | Start / structure | "start", "setup", "create docs", "init meridian" | `process-manager` | yes |
-| Product discovery | "discover", "product brief", "PO", "what to build", "personas", "jobs to be done", `/discover` | `product-owner` + `discover-product` | yes |
 | Status / governance | "status", "phase", "blocker", "can advance" | `process-manager` | yes |
 | Daily AI workflow | "how to use AI", "day to day", "cursor routine", `/daily-with-ai` | `process-manager` | yes |
 | Scope | "scope", "in scope", "out of scope", `00_scope` | `scope-architect` | yes |

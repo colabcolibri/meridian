@@ -89,21 +89,18 @@ Next human decision:
 Tell the user:
 
 ```txt
-Next steps (new project — recommended):
-0. /discover if product intent still fuzzy (PO lane)
-1. Review docs/discovery/product-brief.md if present
-2. Review docs/00_scope.md — approve or adjust inferences
-3. Work through 01_tech_stack → 02_security → 03_user_types → 04_principles (in order)
-4. Run /architecture to draft 05_architecture.md
-5. Approve 05_architecture (human action in frontmatter)
-6. Plan delivery: /create-epic → /create-version → /plan-sprint
-7. Create work: /create-us → /refine-us → /implement-us → /complete-us → /sync-board
+Next steps (new project):
+1. Review docs/00_scope.md — approve or adjust inferences
+2. Work through 01_tech_stack → 02_security → 03_user_types → 04_principles (in order)
+3. Run /architecture to draft 05_architecture.md
+4. Approve 05_architecture (human action in frontmatter)
+5. Plan delivery: /create-epic → /create-version → /plan-sprint
+6. Create work: /create-us → /refine-us → /implement-us → /complete-us → /sync-board
 
-Next steps (existing codebase — add before step 6):
+Next steps (existing codebase — add before step 5):
 A. Review docs/inventory/as-is.md — fix confidence, gaps, epic candidates
-B. /discover — align product intent with as-is (recommended after inventory)
-C. Promote validated rows into phase docs; archive inventory after 05_architecture approved
-D. /create-epic for existing capabilities (status: complete where already shipped)
-E. Optional v0 baseline version for pre-Meridian state — no retroactive US with ✅
-F. Forward work only in v1+ via /create-us
+B. Promote validated rows into phase docs; archive inventory after 05_architecture approved
+C. /create-epic for existing capabilities (status: complete where already shipped)
+D. Optional v0 baseline version for pre-Meridian state — no retroactive US with ✅
+E. Forward work only in v1+ via /create-us
 ```

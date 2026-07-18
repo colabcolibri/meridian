@@ -11,9 +11,7 @@ import {
   resolveMeridianProjects,
   type MeridianProject,
 } from "./resolve-meridian-projects.js"
-import { loadPlanningPayloadFromSqlite } from "./load-from-sqlite.js"
-
-const US_FILENAME = /^US-\d{4}\.md$/i
+import { loadPlanningPayloadFromSqliteDetailed, sqliteDbExists } from "./load-from-sqlite.js"
 
 export type MeridianProjectSummary = {
   id: string
@@ -39,17 +37,11 @@ export type MeridianWorkspaceInfo = {
 
 export function countUserStoriesInDocs(docsRoot: string, packageRoot?: string): number {
   const pkg = packageRoot ?? path.dirname(docsRoot)
-  const fromDb = loadPlanningPayloadFromSqlite(pkg)
-  if (fromDb && fromDb.stories.length > 0) {
-    return fromDb.stories.length
-  }
-  const usDir = path.join(docsRoot, "us")
-  if (!fs.existsSync(usDir)) {
+  if (!sqliteDbExists(pkg)) {
     return 0
   }
-  return fs
-    .readdirSync(usDir, { withFileTypes: true })
-    .filter((e) => e.isFile() && US_FILENAME.test(e.name)).length
+  const fromDb = loadPlanningPayloadFromSqliteDetailed(pkg)
+  return fromDb.payload?.stories.length ?? 0
 }
 
 function docsDirExists(docsDir: string): boolean {

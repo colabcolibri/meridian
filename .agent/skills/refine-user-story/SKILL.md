@@ -13,7 +13,6 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 | `.agent/references/templates/writing-guide.md` | Refine example — Approach depth, tests |
 | `.agent/references/templates/code-quality-at-us-time.md` | **Mandatory** — DRY, SRP before `ready: true` |
 | `references/refine-checklist.md` | **Mandatory** — ready gate |
-| `.agent/references/templates/sqlite-delivery-operations.md` | **When DB exists** — use `update-us` not Write on docs/us |
 | `references/us-template.md` | Full structure |
 | Target US + `depends_on` US | What already exists |
 | `docs/05_architecture.md` | Sections cited in Architecture refs |
@@ -42,8 +41,7 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 7. Replace generic **Tests / Planned** with numbered steps or exact commands.
 8. Tighten **Acceptance** if vague (keep `[ ]`).
 9. Set `ready: true` only when checklist passes (including DRY + SRP rows).
-10. **SQLite:** when `meridian.db` exists, persist via `meridian_db_cli update-us US-XXXX --from-file` (or stdin) — not Write on `docs/us/`. Then `set-ready US-XXXX`.
-11. `generate-board-json`; `update-decisions-log` if scope changed.
+10. `generate-board-json`; `update-decisions-log` if scope changed.
 
 ## Approach — refine quality bar
 

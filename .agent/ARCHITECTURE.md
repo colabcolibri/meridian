@@ -16,7 +16,7 @@
 | Operations | `.agent/agents`, `skills`, `workflows` | Personas and procedures |
 | Human references | `.agent/references/` | `start-here`, `usage-guide`, `agents-help`, `instruction-surfaces`, `scrum-meridian-map`, optional `scrum-guide-complete` |
 
-The VS Code extension (`app-visual-studio/`) monitors Meridian folders; it is not the source of truth. Learn/Commands UI copy lives in extension webviews — see [instruction-surfaces.md](./references/instruction-surfaces.md) when the protocol changes.
+The desktop app (`app-desktop/`) monitors Meridian folders; it is not the source of truth. Learn/Commands UI copy lives in `app-desktop/src/features/monitor/content/meridian-concepts.ts` — see [instruction-surfaces.md](./references/instruction-surfaces.md) when the protocol changes.
 
 ### Why `.agent` and `.cursor`?
 
@@ -68,7 +68,6 @@ Workflows orchestrate agents; they do not replace the master protocol.
 | Agent | Purpose | Skills |
 | ----- | ------- | ------ |
 | `process-manager` | Governance, status, gates, **implement US** | init-project, implement-user-story, update-decisions-log, generate-board-json, meridian-routing |
-| `product-owner` | PO — `docs/discovery/product-brief.md` | discover-product, update-decisions-log, meridian-routing |
 | `scope-architect` | `00_scope.md` | init-project, update-decisions-log, meridian-routing |
 | `documentation-strategist` | Phase docs `01`–`05`, `08`–`10`, `docs/epics/` | init-project, create-epic, create-user-story, update-decisions-log, meridian-routing |
 | `security-steward` | `02_security.md` | security-review, update-decisions-log, meridian-routing |

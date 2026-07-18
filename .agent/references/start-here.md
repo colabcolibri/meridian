@@ -8,27 +8,11 @@ Without this, AI agents hallucinate scope, repeat decisions already made, and pr
 
 ## New project or existing codebase?
 
-**Vague idea:** run **`/discover`** first (PO lane) — clarifies problem, users, and value in `docs/discovery/product-brief.md`.
+**New project:** run `/init-meridian`. The agent asks up to 5 questions about the product and creates the foundation documents from your answers.
 
-**New project:** run `/init-meridian` (PM lane). If a product brief exists, init uses it for draft `00_scope` and `03_user_types`. Otherwise the agent asks up to 5 questions.
-
-**Existing codebase:** run `/init-meridian` with your project open. The agent reads the code first — package files, folder structure, README, any existing docs. Then run **`/discover`** to align product intent with the as-is map, or ask only what is still unclear. It creates **`docs/inventory/as-is.md`** (a transitional capability map) and populates the phase documents from what it observed, marking every inference as an assumption for you to review and approve. Legacy work is captured in inventory and phase docs — not as retroactive user stories with `✅`.
+**Existing codebase:** run `/init-meridian` with your project open. The agent reads the code first — package files, folder structure, README, any existing docs. Then it asks only what it could not determine. It creates **`docs/inventory/as-is.md`** (a transitional capability map) and populates the phase documents from what it observed, marking every inference as an assumption for you to review and approve. Legacy work is captured in inventory and phase docs — not as retroactive user stories with `✅`.
 
 Either way, the result is the same: a `docs/` folder with the structure below, ready to complete and approve. Existing codebases also get `docs/inventory/` until you promote and archive the as-is map.
-
----
-
-## PO, PM, and dev in one harness
-
-Meridian covers three lanes — you stay manager and approve gates:
-
-| Lane | Role | Typical commands |
-| ---- | ---- | ---------------- |
-| **PO** | What to build, for whom, why | `/discover` |
-| **PM** | Structure, phases, delivery plan | `/init-meridian`, `/status`, `/plan-sprint`, `/create-epic` |
-| **Dev** | Executable slices | `/refine-us`, `/implement-us`, `/complete-us` |
-
-Discovery (`docs/discovery/`) is exploratory. **`00_scope.md` approved** is still the Phase 1 gate for technical work and backlog.
 
 ---
 
@@ -91,7 +75,6 @@ The AI implements each user story, guided by the files from Phase 3. You review 
 
 ```
 docs/
-  discovery/               PO — product-brief.md (/discover)
   00_scope.md              Phase 1 — what the product is
   01_tech_stack.md         Phase 2 — technology choices
   02_security.md           Phase 2 — security model
@@ -110,11 +93,8 @@ docs/
   us/US-XXXX.md            Phase 3+4 — executable tasks
   kanban/board.json        Generated — never edit by hand
   inventory/as-is.md       Mode B only — transitional; archive after promotion
-  ../.meridian/meridian.db v9+ — delivery store (epics, versions, sprints, US); phase docs stay in docs/
   ../.meridian/projects.json  Optional — multi-product repos (several docs/ trees)
 ```
-
-**Meridian 2.0 (v9+):** epics, versions, sprints, and user stories live in `{packageRoot}/.meridian/meridian.db`. Phase documents (`00`–`11`, discovery, architecture) remain Markdown. Run `python3 .agent/scripts/bootstrap_meridian_db.py <package-root>` after init; migrate legacy `.md` with `migrate_md_to_sqlite.py`.
 
 ### Several `docs/` folders (monorepo)
 
@@ -306,4 +286,4 @@ For commands and step-by-step instructions, open **[usage-guide.md](./usage-guid
 
 For **agents, slash command groups, and numbered steps**, open **[agents-help.md](./agents-help.md)**.
 
-**Kit maintainers:** when the protocol changes, open **[instruction-surfaces.md](./instruction-surfaces.md)** — map of every place that carries instructions (kit, extension, mirrors).
+**Kit maintainers:** when the protocol changes, open **[instruction-surfaces.md](./instruction-surfaces.md)** — map of every place that carries instructions (kit, app-desktop UI, extension, mirrors).

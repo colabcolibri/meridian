@@ -1,11 +1,9 @@
-import * as fs from "node:fs"
-import * as path from "node:path"
-
 import * as vscode from "vscode"
 
 import { boardKanbanHtml, buildBoardPayload, emptyBoardHtml } from "./board-webview-html.js"
+import { openDeliveryDocument } from "./open-delivery-document.js"
 import { buildWebviewProjectContext, formatMeridianPanelTitle } from "./webview-project-context.js"
-import { loadPlanningPayload } from "./planning-payload.js"
+import { loadPlanningPayloadDetailed } from "./planning-payload.js"
 import type { MeridianWorkspaceInfo } from "./meridian-workspace.js"
 
 type BoardMessage =
@@ -22,6 +20,7 @@ export class BoardEditorPanel {
     private readonly extensionUri: vscode.Uri,
     private readonly getWorkspace: () => MeridianWorkspaceInfo | null,
     private readonly onSelectProject?: (id: string) => Promise<void>,
+    private readonly onDeliverySaved?: () => void,
   ) {}
 
   show(column: vscode.ViewColumn = vscode.ViewColumn.One): void {
@@ -69,14 +68,30 @@ export class BoardEditorPanel {
       this.panel.title = "Meridian Board"
       return
     }
-    const payload = loadPlanningPayload(info.docsRoot, info.packageRoot)
-    const board = buildBoardPayload(payload.stories, payload.epics, payload.versions)
+    const loaded = loadPlanningPayloadDetailed(info.docsRoot, info.packageRoot)
+    if (!loaded.ok) {
+      this.panel.webview.html = emptyBoardHtml(loaded.error)
+      this.panel.title = "Meridian Board"
+      return
+    }
+    const board = buildBoardPayload(
+      loaded.payload.stories,
+      loaded.payload.epics,
+      loaded.payload.versions,
+    )
+    if (board.defaultVersions.length === 0) {
+      this.panel.webview.html = emptyBoardHtml(
+        "Meridian: SQLite returned stories but no matching versions. Check meridian.db integrity.",
+      )
+      this.panel.title = "Meridian Board"
+      return
+    }
     const viewPayload = {
       ...board,
       context: buildWebviewProjectContext(info),
     }
     this.panel.webview.html = boardKanbanHtml(viewPayload)
-    this.panel.title = formatMeridianPanelTitle("Board", info, payload.stories.length)
+    this.panel.title = formatMeridianPanelTitle("Board", info, loaded.payload.stories.length)
   }
 
   private async openStory(id: string): Promise<void> {
@@ -84,21 +99,11 @@ export class BoardEditorPanel {
     if (!info?.docsExists) {
       return
     }
-    const filePath = path.join(info.docsRoot, "us", `${id}.md`)
-    if (!fs.existsSync(filePath)) {
-      void vscode.window.showInformationMessage(
-        `${id} lives in SQLite only. Run: python3 .agent/scripts/meridian_db_cli.py show ${id} --full`,
-      )
-      return
-    }
-    try {
-      const doc = await vscode.workspace.openTextDocument(vscode.Uri.file(filePath))
-      await vscode.window.showTextDocument(doc, {
-        viewColumn: vscode.ViewColumn.Beside,
-        preview: false,
-      })
-    } catch {
-      void vscode.window.showErrorMessage(`Meridian: could not open ${id}.md`)
-    }
+    await openDeliveryDocument(
+      this.extensionUri,
+      info,
+      `us/${id}.md`,
+      this.onDeliverySaved,
+    )
   }
 }

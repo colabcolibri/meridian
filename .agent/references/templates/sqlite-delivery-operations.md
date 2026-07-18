@@ -81,7 +81,30 @@ sqlite3 .meridian/meridian.db "PRAGMA foreign_key_list(user_stories);"
 | User story | `upsert_user_story(conn, fm, body, sections, depends_on)` | `depends_on` is `list[str]` |
 | Sprint | `upsert_sprint(conn, fm, body, sections, stories)` | `stories` rebuilds `sprint_stories` |
 
-`body` = full markdown with YAML frontmatter. Section columns (`intent_why`, `plan_approach`, …) are extracted by `meridian_markdown_parse.py`.
+`body` = full markdown with YAML frontmatter. Section columns are extracted by `meridian_markdown_parse.py` on every upsert.
+
+### User story — section → column
+
+| `###` under | Column |
+| ----------- | ------ |
+| Intent / Acceptance | `intent_acceptance` |
+| Intent / Why | `intent_why` |
+| Intent / Where | `intent_where` |
+| Plan / Approach | `plan_approach` |
+| Plan / Architecture refs | `plan_architecture_refs` |
+| Plan / API / DB impact | `plan_api_db` |
+| Plan / Security notes | `plan_security` |
+| Plan / Related decisions | `plan_decisions` |
+| Plan / Planned | `plan_planned` |
+| Record / Files | `record_files` |
+| Record / Backend | `record_backend` |
+| Record / Frontend | `record_frontend` |
+| Record / Scripts / Docs | `record_scripts` |
+| Record / Executed | `record_executed` |
+| Boundaries / Out of scope for this story | `boundaries_out_of_scope` |
+| Boundaries / Notes | `boundaries_notes` |
+
+Plus `body_markdown` (full file) and `summary`. Full contract: `section-contracts.md`.
 
 ## Verification and purge
 

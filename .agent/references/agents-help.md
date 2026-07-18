@@ -39,7 +39,7 @@ docs/                       →  source of truth
 
 ## Agent groups
 
-Eight agents in **six groups** — **`product-owner`** and **`scope-architect`** share Group 2 (PO + scope contract).
+Seven agents in **six groups**. One agent may appear in notes when it supports another group.
 
 ### Group 1 — Orchestration
 
@@ -55,18 +55,17 @@ Keeps you as manager. Gates phases, reports blockers, decides what can move next
 
 ---
 
-### Group 2 — Product & scope
+### Group 2 — Scope & framing
 
-PO discovery and scope contract before structure and code.
+Defines *what the product is* before structure and code.
 
 | Agent | Serves for | Primary artifacts | Does not |
 | ----- | ---------- | ----------------- | -------- |
-| **`product-owner`** | Product discovery, users, value, epic candidates (names) | `docs/discovery/product-brief.md` | Scope approval; epics/US; code |
 | **`scope-architect`** | Problem, users, in/out of scope, assumptions, risks | `docs/00_scope.md`, scope decisions | Tech stack, architecture, US |
 
-**When to use:** `/discover` when intent is fuzzy; scope-architect when challenging or tightening `00_scope`.
+**When to use:** drafting or challenging `00_scope`, scope arguments, “is this in scope?”
 
-**Skills:** `discover-product`, `init-project`, `update-decisions-log`, `meridian-routing`
+**Skills:** `init-project`, `update-decisions-log`, `meridian-routing`
 
 ---
 
@@ -137,8 +136,7 @@ Slash command groups — workflows in **six groups**. Each maps to one primary a
 
 | Step | Command | Agent | What it does |
 | ---- | ------- | ----- | ------------ |
-| A0 | **`/discover`** | `product-owner` | `docs/discovery/product-brief.md` | PO — problem, users, value, epic candidates. **No code, no epics/US.** |
-| A1 | **`/init-meridian`** | `process-manager` | Creates `docs/` tree, initial scope, decision log, empty board. **Mode B (existing codebase):** also `docs/inventory/as-is.md` — transitional capability map; no retroactive US. Reads product brief if present. **No product code.** |
+| A1 | **`/init-meridian`** | `process-manager` | Creates `docs/` tree, initial scope, decision log, empty board. **Mode B (existing codebase):** also `docs/inventory/as-is.md` — transitional capability map; no retroactive US. **No product code.** |
 
 ---
 
@@ -215,9 +213,8 @@ Epic/version **close:** set `status: complete` manually when outcome reached (no
 Use this as the canonical sequence. Skip steps only when the artifact already exists and is approved.
 
 ```txt
- 0. /discover (recommended if vague)       [Group A]  product-owner
  1. /init-meridian                          [Group A]  process-manager
- 2. Complete 00_scope → approve             [Group 2]  scope-architect
+ 2. Complete 00_scope → approve             [Group C]  scope-architect
  3. Complete 01, 03, 04 (draft → approve)  [Group C]  documentation-strategist
  4. /security-pass → approve 02             [Group C]  security-steward
  5. /architecture → approve 05              [Group C]  architecture-guardian  ← GATE
@@ -248,7 +245,6 @@ Skills are procedures agents load automatically. Grouped by purpose.
 | Skill | Used by | Purpose |
 | ----- | ------- | ------- |
 | `meridian-routing` | all agents | Pick correct agent from intent |
-| `discover-product` | product-owner | PO product brief |
 | `init-project` | process-manager, scope-architect, documentation-strategist | Bootstrap `docs/` |
 | `update-decisions-log` | most agents | Prepend decision JSON (real `date` commands) |
 
@@ -285,7 +281,6 @@ Skills are procedures agents load automatically. Grouped by purpose.
 | You want to… | Group | Agent | Command |
 | ------------ | ----- | ----- | ------- |
 | Start or migrate project | A | `process-manager` | `/init-meridian` |
-| Clarify product (PO) | A | `product-owner` | `/discover` |
 | See blockers and next step | B | `process-manager` | `/status` |
 | Full guided day | B | `process-manager` | `/daily-with-ai` |
 | Open this manual | B | `process-manager` | `/agents-help` |

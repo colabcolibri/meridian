@@ -1,6 +1,10 @@
+import * as fs from "node:fs"
+import * as path from "node:path"
+
 import * as vscode from "vscode"
 
 import { fileEventTouchesBoardSync, isBoardSyncDocsPath } from "./docs-board-sync.js"
+import { clearMeridianDeliveryCache } from "./meridian-document-provider.js"
 import {
   pickMeridianWorkspace,
   selectActiveMeridianProject,
@@ -23,6 +27,7 @@ export class MeridianContext {
   private state: MeridianContextState = { info: null }
   private lastWarnedDocsRoot: string | null = null
   private docsWatcher: vscode.FileSystemWatcher | undefined
+  private dbWatcher: vscode.FileSystemWatcher | undefined
   private boardSyncTimer: ReturnType<typeof setTimeout> | undefined
 
   constructor(
@@ -124,6 +129,7 @@ export class MeridianContext {
     this.clearBoardSyncTimer()
     this.statusItem?.dispose()
     this.docsWatcher?.dispose()
+    this.dbWatcher?.dispose()
   }
 
   registerListeners(): void {
@@ -148,7 +154,10 @@ export class MeridianContext {
   private resetDocsWatcher(): void {
     this.docsWatcher?.dispose()
     this.docsWatcher = undefined
-    const docsRoot = this.state.info?.docsRoot
+    this.dbWatcher?.dispose()
+    this.dbWatcher = undefined
+    const info = this.state.info
+    const docsRoot = info?.docsRoot
     if (!docsRoot) {
       return
     }
@@ -166,6 +175,19 @@ export class MeridianContext {
     this.docsWatcher.onDidChange(bump)
     this.docsWatcher.onDidCreate(bump)
     this.docsWatcher.onDidDelete(bump)
+
+    const dbPath = path.join(info.packageRoot, ".meridian", "meridian.db")
+    if (fs.existsSync(dbPath)) {
+      const meridianDir = path.dirname(dbPath)
+      const dbPattern = new vscode.RelativePattern(vscode.Uri.file(meridianDir), "meridian.db")
+      this.dbWatcher = vscode.workspace.createFileSystemWatcher(dbPattern)
+      const bumpDb = () => {
+        clearMeridianDeliveryCache()
+        this.scheduleBoardSync()
+      }
+      this.dbWatcher.onDidChange(bumpDb)
+      this.dbWatcher.onDidCreate(bumpDb)
+    }
   }
 
   private scheduleBoardSync(): void {

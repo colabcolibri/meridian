@@ -50,7 +50,7 @@ type PlanningExport = {
   }>
 }
 
-function kitRootFromPackageRoot(packageRoot: string): string {
+export function kitRootFromPackageRoot(packageRoot: string): string {
   const agent = path.join(packageRoot, ".agent", "MERIDIAN.md")
   if (fs.existsSync(agent)) {
     return packageRoot
@@ -66,18 +66,45 @@ export function sqliteDbExists(packageRoot: string): boolean {
   return fs.existsSync(path.join(packageRoot, ".meridian", "meridian.db"))
 }
 
+export function resolvePythonCommand(): string {
+  for (const cmd of ["python3", "python"]) {
+    try {
+      execFileSync(cmd, ["--version"], { encoding: "utf-8", stdio: "pipe" })
+      return cmd
+    } catch {
+      continue
+    }
+  }
+  return "python3"
+}
+
+export type SqlitePlanningResult = {
+  payload: PlanningPayload | null
+  error: string | null
+}
+
 export function loadPlanningPayloadFromSqlite(packageRoot: string): PlanningPayload | null {
+  return loadPlanningPayloadFromSqliteDetailed(packageRoot).payload
+}
+
+export function loadPlanningPayloadFromSqliteDetailed(
+  packageRoot: string,
+): SqlitePlanningResult {
   if (!sqliteDbExists(packageRoot)) {
-    return null
+    return { payload: null, error: null }
   }
   const kitRoot = kitRootFromPackageRoot(packageRoot)
   const script = path.join(kitRoot, ".agent", "scripts", "meridian_db_export.py")
   if (!fs.existsSync(script)) {
-    return null
+    return {
+      payload: null,
+      error: `Kit script not found: ${script}`,
+    }
   }
+  const python = resolvePythonCommand()
   try {
     const stdout = execFileSync(
-      "python3",
+      python,
       [script, packageRoot, "--format", "planning"],
       { encoding: "utf-8", maxBuffer: 32 * 1024 * 1024 },
     )
@@ -117,8 +144,12 @@ export function loadPlanningPayloadFromSqlite(packageRoot: string): PlanningPayl
       doneWhen: s.doneWhen,
       stories: s.stories ?? [],
     }))
-    return { versions, epics, sprints, stories }
-  } catch {
-    return null
+    return { payload: { versions, epics, sprints, stories }, error: null }
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err)
+    return {
+      payload: null,
+      error: `SQLite export failed (${python}): ${message}`,
+    }
   }
 }

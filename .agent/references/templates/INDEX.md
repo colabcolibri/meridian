@@ -11,7 +11,6 @@ Templates are mirrored here from skills (`references/`) so every agent uses the 
 | Artifact | Template (read before Write) | Primary agent | Skill | Workflow |
 | -------- | ---------------------------- | ------------- | ----- | -------- |
 | Phase docs `00`–`11` | `doc-templates.md` | `documentation-strategist` | `init-project` | `/init-meridian` |
-| Product brief `docs/discovery/product-brief.md` | `discovery-folder-guide.md` + `product-brief-template.md` | `product-owner` | `discover-product` | `/discover` |
 | As-is inventory `docs/inventory/as-is.md` | `as-is-inventory-template.md` | `documentation-strategist` | `init-project` (Mode B) | `/init-meridian` |
 | Projects manifest `.meridian/projects.json` | `projects-manifest-template.md` | `process-manager` | `init-project` | `/init-meridian`, `/status` |
 | Epic `docs/epics/EPIC-XX.md` | `epic-template.md` + **`writing-guide.md`** | `documentation-strategist` | `create-epic` | `/create-epic` |
@@ -25,7 +24,6 @@ Templates are mirrored here from skills (`references/`) so every agent uses the 
 | User story (close) | `implementation-template.md` + `us-template.md` | `board-keeper` | `complete-user-story` | `/complete-us` |
 | Decision entry | `decision-template.md` + `decision-schema.md` | any relevant agent | `update-decisions-log` | — |
 | Board JSON | `board-schema.md` | `board-keeper` | `generate-board-json` | `/sync-board` |
-| SQLite delivery (v10+) | **`sqlite-delivery-operations.md`** | `board-keeper` | `create-user-story`, `refine-user-story`, `complete-user-story` | `/create-us`, `/refine-us`, `/complete-us` |
 
 **Section contracts:** `section-contracts.md` — fixed `##` / `###` for US, epic, version.
 

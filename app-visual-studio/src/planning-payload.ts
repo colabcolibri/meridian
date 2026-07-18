@@ -1,10 +1,9 @@
 import * as path from "node:path"
 
-import { loadEpicSummaries } from "./load-epics.js"
-import { loadPlanningPayloadFromSqlite } from "./load-from-sqlite.js"
-import { loadSprintSummaries } from "./load-sprints.js"
-import { loadVersionSummaries } from "./load-versions.js"
-import { loadUserStoriesFromDocs } from "./load-stories.js"
+import {
+  loadPlanningPayloadFromSqliteDetailed,
+  sqliteDbExists,
+} from "./load-from-sqlite.js"
 import { sortByIdAsc } from "./domain/sort-by-id.js"
 import { allSelectedVersionIds } from "./domain/version-filter.js"
 import type { EpicSummary } from "./load-epics.js"
@@ -19,18 +18,46 @@ export type PlanningPayload = {
   stories: UserStory[]
 }
 
-export function loadPlanningPayload(docsRoot: string, packageRoot?: string): PlanningPayload {
+export type PlanningLoadResult =
+  | { ok: true; payload: PlanningPayload }
+  | { ok: false; error: string }
+
+function sqliteRequiredMessage(packageRoot: string): string {
+  return (
+    `Meridian: .meridian/meridian.db not found under ${packageRoot}.\n` +
+    "Run: python3 .agent/scripts/bootstrap_meridian_db.py ."
+  )
+}
+
+/** v10+: delivery data comes only from SQLite — no docs/us fallback. */
+export function loadPlanningPayloadDetailed(
+  docsRoot: string,
+  packageRoot?: string,
+): PlanningLoadResult {
   const pkg = packageRoot ?? path.dirname(docsRoot)
-  const fromDb = loadPlanningPayloadFromSqlite(pkg)
-  if (fromDb && fromDb.stories.length > 0) {
-    return fromDb
+  if (!sqliteDbExists(pkg)) {
+    return { ok: false, error: sqliteRequiredMessage(pkg) }
   }
-  return {
-    versions: loadVersionSummaries(docsRoot),
-    epics: loadEpicSummaries(docsRoot),
-    sprints: loadSprintSummaries(docsRoot),
-    stories: loadUserStoriesFromDocs(docsRoot),
+  const fromDb = loadPlanningPayloadFromSqliteDetailed(pkg)
+  if (fromDb.error || !fromDb.payload) {
+    return {
+      ok: false,
+      error: fromDb.error ?? "Meridian: SQLite planning export failed.",
+    }
   }
+  if (fromDb.payload.stories.length === 0) {
+    return { ok: false, error: "Meridian: meridian.db has zero user stories." }
+  }
+  return { ok: true, payload: fromDb.payload }
+}
+
+/** Throws if SQLite load fails — use loadPlanningPayloadDetailed when UI needs error text. */
+export function loadPlanningPayload(docsRoot: string, packageRoot?: string): PlanningPayload {
+  const result = loadPlanningPayloadDetailed(docsRoot, packageRoot)
+  if (!result.ok) {
+    throw new Error(result.error)
+  }
+  return result.payload
 }
 
 /** Lists sorted by id (v0, v4-S2, EPIC-05); version chips default to all selected. */

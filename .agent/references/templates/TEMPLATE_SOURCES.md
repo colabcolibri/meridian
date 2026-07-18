@@ -8,13 +8,13 @@
 
 ```txt
 CANONICAL (edit here)          REGISTRY (agents read)              HUMAN / CURSOR (read-only mirrors)
-.agent/skills/.../references/  →  .agent/references/templates/  →  docs/templates/
+.agent/skills/.../references/  →  .agent/references/templates/  →  app-desktop/docs/templates/
                                                               →  .cursor/references/templates/
 ```
 
 - **Registry** = symlinks + 4 kit-owned files (`INDEX.md`, `writing-guide.md`, `section-contracts.md`, `lifecycle.md`, `TEMPLATE_SOURCES.md`).
 - **Never** edit symlinks in `docs/templates/` or `.cursor/` — they point at `.agent/`.
-- After adding a new template file, update `INDEX.md`, run `./.agent/scripts/sync_cursor_kit.sh` (syncs `.cursor/` + `docs/templates/`), and `docs/templates/README.md` in target projects.
+- After adding a new template file, update `INDEX.md`, run `./.agent/scripts/sync_cursor_kit.sh` (syncs `.cursor/` + `app-desktop/docs/templates/`), and `docs/templates/README.md` in target projects.
 
 ---
 
@@ -34,8 +34,6 @@ CANONICAL (edit here)          REGISTRY (agents read)              HUMAN / CURSO
 | `decision-template.md` | `.agent/skills/update-decisions-log/references/decision-template.md` | `.agent/references/templates/decision-template.md` | `update-decisions-log` |
 | `decision-schema.md` | `.agent/skills/update-decisions-log/references/decision-schema.md` | `.agent/references/templates/decision-schema.md` | `update-decisions-log` (validation) |
 | `doc-templates.md` | `.agent/skills/init-project/references/doc-templates.md` | `.agent/references/templates/doc-templates.md` | `/init-meridian` |
-| `product-brief-template.md` | `.agent/skills/discover-product/references/product-brief-template.md` | `.agent/references/templates/product-brief-template.md` | `/discover` |
-| `discovery-folder-guide.md` | *(kit-owned — edit in registry)* | `.agent/references/templates/discovery-folder-guide.md` | `/discover` |
 | `as-is-inventory-template.md` | *(kit-owned — edit in registry)* | `.agent/references/templates/as-is-inventory-template.md` | `/init-meridian` (Mode B) |
 
 ---
@@ -45,14 +43,13 @@ CANONICAL (edit here)          REGISTRY (agents read)              HUMAN / CURSO
 | File | Purpose |
 | ---- | ------- |
 | `.agent/references/templates/as-is-inventory-template.md` | Mode B as-is map — `docs/inventory/as-is.md` |
-| `.agent/references/templates/discovery-folder-guide.md` | PO lane — `docs/discovery/` + product brief |
-| `.agent/references/templates/architecture-folder-guide.md` | `05` index + `docs/architecture/` detail |
-| `.agent/references/templates/code-quality-at-us-time.md` | DRY, SRP at create / refine / implement |
 | `.agent/references/templates/projects-manifest-template.md` | Multi-product monorepo — `.meridian/projects.json` |
 | `.agent/references/templates/INDEX.md` | Registry table artifact → template → agent → workflow |
 | `.agent/references/templates/writing-guide.md` | Prose quality — Intent, Plan, epic paragraphs |
+| `.agent/references/templates/code-quality-at-us-time.md` | DRY, SRP at create / refine / implement |
+| `.agent/references/templates/architecture-folder-guide.md` | `05` index + `docs/architecture/` detail |
 | `.agent/references/templates/section-contracts.md` | Fixed headings — validated by Python + monitor |
-| `.agent/references/templates/lifecycle.md` | discover → init → create → refine → implement → close |
+| `.agent/references/templates/lifecycle.md` | create → review → refine → implement → close |
 | `.agent/references/templates/TEMPLATE_SOURCES.md` | This file — canonical paths |
 
 ---
@@ -65,7 +62,6 @@ CANONICAL (edit here)          REGISTRY (agents read)              HUMAN / CURSO
 | Review | `/review-us` | `review-checklist.md` + `writing-guide.md` + `section-contracts.md` + `us-template.md` |
 | Refine | `/refine-us` | `refine-checklist.md` + `writing-guide.md` + `code-quality-at-us-time.md` + `us-template.md` + `04_principles.md` |
 | Implement | `/implement-us` | `implement-gate-checklist.md` + `code-quality-at-us-time.md` + target US + `04_principles.md` |
-| Discover | `/discover` | `discovery-folder-guide.md` + `product-brief-template.md` + phase context |
 | Architecture | `/architecture` | `architecture-folder-guide.md` + phase docs 00–04 |
 | Close | `/complete-us` | `implementation-template.md` + `us-template.md` + `section-contracts.md` |
 
@@ -75,7 +71,7 @@ CANONICAL (edit here)          REGISTRY (agents read)              HUMAN / CURSO
 
 ## Dogfooding copy
 
-In this repo, human-readable mirrors live at `docs/templates/` (symlinks to registry). Open [README.md](../../../docs/templates/README.md) in the extension or file tree.
+In this repo, human-readable mirrors live at `app-desktop/docs/templates/` (symlinks to registry). Open [README.md](../../../app-desktop/docs/templates/README.md) in the monitor **Templates** section.
 
 Regenerate Cursor mirrors after clone:
 

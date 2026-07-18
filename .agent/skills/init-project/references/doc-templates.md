@@ -102,12 +102,6 @@ On first day, create `docs/decisions/YYYY-MM-DD.json`:
 []
 ```
 
-## `docs/discovery/product-brief.md` (PO lane)
-
-Product discovery before scope is locked. Read `.agent/references/templates/discovery-folder-guide.md` and `product-brief-template.md` before Write. Created by `/discover`; read by `/init-meridian` when populating `00_scope` / `03_user_types`.
-
-Optional at init: create empty `docs/discovery/` folder.
-
 ## `docs/inventory/as-is.md` (Mode B only)
 
 Transitional capability map for existing codebases. Read `.agent/references/templates/as-is-inventory-template.md` before Write. Archive after `05_architecture` is approved.

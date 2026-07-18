@@ -20,6 +20,7 @@ export type BoardWebviewPayload = {
   versions: VersionSummary[]
   defaultVersions: string[]
   context: WebviewProjectContext
+  loadWarning?: string | null
 }
 
 export function buildBoardPayload(
@@ -215,7 +216,7 @@ export function boardKanbanHtml(payload: BoardWebviewPayload): string {
     ${PROJECT_CONTEXT_SCRIPT}
     wireProjectContext(payload.context);
     ${PAGINATION_SCRIPT}
-    const BOARD_STATE_VERSION = 7;
+    const BOARD_STATE_VERSION = 10;
     const COLUMN_ORDER = ["❌", "🔶", "🧪", "✅", "🧊"];
     const ALWAYS_VISIBLE = ["❌", "🔶", "🧪", "✅"];
     const COLUMN_LABELS = { "❌": "Todo", "🔶": "Partial", "🧪": "Tests", "✅": "Done", "🧊": "Frozen" };
@@ -224,16 +225,27 @@ export function boardKanbanHtml(payload: BoardWebviewPayload): string {
     const saved = vscode.getState() || {};
     const freshState = saved.stateVersion !== BOARD_STATE_VERSION;
     let selectedVersions = new Set(
-      !freshState && saved.selectedVersions
+      !freshState && saved.selectedVersions && saved.selectedVersions.length
         ? saved.selectedVersions
         : payload.defaultVersions,
     );
-    let selectedEpics = !freshState && saved.selectedEpics
+    let selectedEpics = !freshState && saved.selectedEpics && saved.selectedEpics.length
       ? new Set(saved.selectedEpics)
       : null;
     let showFrozen = !!saved.showFrozen;
     let pageSize = freshState ? DEFAULT_PAGE_SIZE : normalizePageSize(saved.pageSize);
     let columnPages = freshState ? {} : (saved.columnPages || {});
+
+    function ensureVersionSelection() {
+      if (selectedVersions.size > 0) {
+        return;
+      }
+      if (payload.defaultVersions && payload.defaultVersions.length) {
+        selectedVersions = new Set(payload.defaultVersions);
+      }
+    }
+
+    ensureVersionSelection();
 
     function resolveColumn(story) {
       if (story.status === "🧊") return "🧊";
@@ -270,11 +282,14 @@ export function boardKanbanHtml(payload: BoardWebviewPayload): string {
 
     function ensureEpicSelection(scoped) {
       const epicIds = epicIdsInScope(scoped);
-      if (selectedEpics === null) {
+      if (selectedEpics === null || selectedEpics.size === 0) {
         selectedEpics = new Set(epicIds);
         return;
       }
       selectedEpics = new Set([...selectedEpics].filter((id) => epicIds.includes(id)));
+      if (selectedEpics.size === 0 && epicIds.length) {
+        selectedEpics = new Set(epicIds);
+      }
     }
 
     function colKey(col) {

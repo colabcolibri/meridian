@@ -612,6 +612,93 @@ def backfill_summaries(package_root: str | Path) -> dict[str, int]:
     return counts
 
 
+ENTITY_TABLE_MAP: dict[str, str] = {
+    "us": "user_stories",
+    "user_story": "user_stories",
+    "user_stories": "user_stories",
+    "epic": "epics",
+    "epics": "epics",
+    "version": "versions",
+    "versions": "versions",
+    "sprint": "sprints",
+    "sprints": "sprints",
+}
+
+
+def upsert_delivery_from_markdown(
+    package_root: str | Path,
+    entity: str,
+    entity_id: str,
+    markdown_text: str,
+) -> dict[str, str]:
+    """Parse full delivery markdown and upsert the matching SQLite row."""
+    from meridian_markdown_parse import (  # noqa: PLC0415
+        extract_epic_sections,
+        extract_sprint_sections,
+        extract_us_sections,
+        extract_version_sections,
+        parse_depends_on,
+        parse_stories_list,
+        read_markdown_text,
+    )
+
+    if not markdown_text.strip():
+        raise ValueError("empty markdown")
+
+    fm, body, full = read_markdown_text(markdown_text)
+    row_id = fm.get("id") or entity_id
+    if row_id != entity_id:
+        raise ValueError(f"frontmatter id {row_id} does not match {entity_id}")
+    fm["id"] = entity_id
+
+    entity_key = entity.lower().replace("-", "_")
+    conn = connect(package_root)
+    try:
+        if entity_key in ("us", "user_story", "user_stories"):
+            depends = parse_depends_on(fm.get("depends_on"))
+            upsert_user_story(conn, fm, full, extract_us_sections(body), depends)
+        elif entity_key in ("epic", "epics"):
+            upsert_epic(conn, fm, full, extract_epic_sections(body))
+        elif entity_key in ("version", "versions"):
+            upsert_version(conn, fm, full, extract_version_sections(body))
+        elif entity_key in ("sprint", "sprints"):
+            stories = parse_stories_list(fm.get("stories"))
+            upsert_sprint(conn, fm, full, extract_sprint_sections(body), stories)
+        else:
+            raise ValueError(f"unknown entity: {entity}")
+        conn.commit()
+    finally:
+        conn.close()
+
+    write_board_json(package_root)
+    return {"id": entity_id, "entity": entity}
+
+
+def export_entity_markdown(
+    package_root: str | Path,
+    entity: str,
+    entity_id: str,
+) -> dict[str, str] | None:
+    """Return one delivery artifact body_markdown (single-row read)."""
+    table = ENTITY_TABLE_MAP.get(entity.lower().replace("-", "_"))
+    if not table:
+        raise ValueError(f"unknown entity: {entity}")
+    conn = connect(package_root)
+    try:
+        row = conn.execute(
+            f"SELECT id, body_markdown FROM {table} WHERE id = ?",
+            (entity_id,),
+        ).fetchone()
+        if not row:
+            return None
+        raw = (row["body_markdown"] or "").strip()
+        if not raw:
+            return None
+        return {"id": row["id"], "entity": entity, "raw": row["body_markdown"] or ""}
+    finally:
+        conn.close()
+
+
 def export_delivery_json(package_root: str | Path) -> dict[str, Any]:
     files = load_delivery_markdown_files(package_root)
     return {

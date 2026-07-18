@@ -44,10 +44,9 @@ Before any action, classify:
 | **CLOSE SPRINT** | "complete sprint", "close sprint", `/complete-sprint` | `sprint-planner` + `complete-sprint` |
 | **LOG DECISION** | "log decision", "decision log", `/update-decisions-log`, `docs/decisions/` | read `update-decisions-log` + run `date` before Write |
 | **SECURITY** | "security", "OWASP", "secrets", `02_security` | `security-steward` |
-| **DISCOVER** | "discover", "product brief", "PO", "what to build", `/discover` | `product-owner` + `discover-product` |
 | **START PROJECT** | "start", "meridian setup", "create docs" | `process-manager` + `init-project` |
 | **CODE** | "implement", "create app", "fix", "refactor" | `/implement-us US-XXXX` or equivalent gate; US `ready: true` required |
-| **SLASH** | `/discover`, `/init-meridian`, `/create-epic`, `/create-us`, `/complete-us`, `/daily-with-ai`, etc. | Corresponding workflow |
+| **SLASH** | `/init-meridian`, `/create-epic`, `/create-us`, `/complete-us`, `/daily-with-ai`, etc. | Corresponding workflow |
 
 > For automatic agent routing, follow `@[skills/meridian-routing]`.
 
@@ -92,7 +91,7 @@ Before any action, classify:
 
 ### Source of truth
 
-- `docs/` is the source of truth of the **target project** (this repo dogfoods `docs/` at the repository root next to `.agent/`).
+- `docs/` is the source of truth of the **target project** (do not confuse with this repo's `app-desktop/docs/` unless context is explicit).
 - `docs/kanban/board.json` is **derived** from `docs/us/*.md`.
 - Read `.agent/MERIDIAN.md` before changing project structure.
 
@@ -130,7 +129,6 @@ The person is manager of the process. Agents report blockers, next step, and pen
 | Artifact | Primary agent | Skill |
 | -------- | ------------- | ----- |
 | `docs/` structure | `process-manager` | `init-project` |
-| `docs/discovery/product-brief.md` | `product-owner` | `discover-product` |
 | `docs/inventory/as-is.md` (Mode B) | `documentation-strategist` | `init-project` |
 | `.meridian/projects.json` (multi-product) | `process-manager` | `init-project` |
 | `00_scope.md` | `scope-architect` | `init-project` |

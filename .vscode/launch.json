@@ -7,7 +7,7 @@
       "request": "launch",
       "args": [
         "--extensionDevelopmentPath=${workspaceFolder}/app-visual-studio",
-        "${workspaceFolder}/app-desktop"
+        "${workspaceFolder}"
       ],
       "outFiles": ["${workspaceFolder}/app-visual-studio/dist/**/*.js"],
       "preLaunchTask": "meridian-extension: compile"

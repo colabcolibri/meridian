@@ -31,19 +31,16 @@ meridian/                    # kit + dogfood product
     scripts/migrate_md_to_sqlite.py
     migrations/              # SQLite schema (YYYYMMDDHHMMSS_*.sql)
   .meridian/
-    meridian.db              # v9+ delivery store (gitignored)
-  docs/                      # dogfood phase docs + derived board.json
+    meridian.db              # v10 delivery store (gitignored) — schema: docs/06_database.md
+  docs/                      # phase docs + derived board.json only (no delivery .md)
     00_scope.md … 11_decisions.md
-    decisions/               # legacy import; new entries via meridian_db_cli
-    us/                      # legacy .md (v1 import); v9+ primary store is SQLite
-    epics/ versions/ sprints/
     kanban/board.json        # derived from SQLite (generate_board.py)
   app-visual-studio/         # VS Code extension — IDE monitor
     src/extension.ts
     dist/extension.js
 ```
 
-The extension is **not** the source of truth for the protocol. It monitors **`docs/`** for phase documents and **`.meridian/meridian.db`** for delivery artifacts (v9+).
+The extension is **not** the source of truth for the protocol. It monitors **`docs/`** for phase documents and **`.meridian/meridian.db`** for delivery artifacts. **ER diagram and table contract:** `docs/06_database.md` § Schema.
 
 ## Layers
 
@@ -52,7 +49,7 @@ The extension is **not** the source of truth for the protocol. It monitors **`do
 | Protocol             | `.agent/MERIDIAN.md` (copy `.agent/` into client projects)                     |
 | Always-on governance | `.agent/rules/MERIDIAN.md`                                                     |
 | Phase documents      | `docs/00`–`11`, discovery, architecture detail — **Markdown on disk**          |
-| Delivery store (v10+) | `.meridian/meridian.db` — epics, versions, sprints, US, decisions, board snapshots — **SQLite only** (no delivery `.md`) |
+| Delivery store (v10+) | `.meridian/meridian.db` — **canonical ER diagram and table contract:** `docs/06_database.md` § Schema |
 | Derived kanban       | `docs/kanban/board.json` — generated from SQLite (`generate_board.py`)         |
 | VS Code extension    | Board + Deliverables editor tabs; validate via kit Python; sync board          |
 
@@ -87,7 +84,7 @@ F5 / Extension Development Host is **maintainer-only**. End users install `.vsix
 ### Data loading
 
 - Parsers: `load-stories.ts`, `load-epics.ts`, `load-versions.ts`, `load-sprints.ts` (YAML frontmatter).
-- **v9+:** extension should read delivery from SQLite export API when `meridian.db` exists (US-0112 scope — follow-up).
+- **v10+:** extension reads delivery via `meridian_db_export.py --format planning` when `meridian.db` exists (`load-from-sqlite.ts`).
 - `MeridianContext` file watcher: `docs/us/*.md`, `docs/kanban/board.json`, deliverables folders → refresh webviews.
 
 ### Activation and `docs/` resolution

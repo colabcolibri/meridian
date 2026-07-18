@@ -23,6 +23,10 @@ import {
 } from "./kit-installer.js"
 import { syncBoardFromDocs } from "./sync-board.js"
 import { resolveValidateTarget, runValidateMeridian } from "./validate-runner.js"
+import {
+  MERIDIAN_DOCUMENT_SCHEME,
+  MeridianDocumentProvider,
+} from "./meridian-document-provider.js"
 
 let meridianContext: MeridianContext | undefined
 let boardEditor: BoardEditorPanel | undefined
@@ -183,15 +187,13 @@ async function syncBoard(): Promise<void> {
   if (!info) {
     return
   }
-  try {
-    const result = syncBoardFromDocs(info)
-    appendToolOutput("Sync board", result.message)
+  const result = syncBoardFromDocs(info)
+  appendToolOutput("Sync board", result.message)
+  if (result.ok) {
     void vscode.window.showInformationMessage(`Meridian: ${result.message}`)
     refreshAllPanels()
-  } catch (err) {
-    const message = err instanceof Error ? err.message : String(err)
-    appendToolOutput("Sync board", `Failed: ${message}`)
-    void vscode.window.showErrorMessage(`Meridian: sync board failed — ${message}`)
+  } else {
+    void vscode.window.showErrorMessage(`Meridian: ${result.message}`)
   }
 }
 
@@ -214,16 +216,44 @@ export function activate(context: vscode.ExtensionContext): void {
   outputTools = vscode.window.createOutputChannel("Meridian Tools")
   context.subscriptions.push(outputGeneral, outputValidate, outputTools)
 
+  const deliveryDocProvider = new MeridianDocumentProvider()
+  context.subscriptions.push(
+    vscode.workspace.registerTextDocumentContentProvider(
+      MERIDIAN_DOCUMENT_SCHEME,
+      deliveryDocProvider,
+    ),
+  )
+
   const getWorkspace = () => meridianContext?.workspace ?? null
   const onSelectProject = (id: string) =>
     meridianContext?.selectActiveProjectById(id) ?? Promise.resolve()
 
   meridianContext = new MeridianContext(context, outputGeneral, refreshAllPanels)
 
-  boardEditor = new BoardEditorPanel(context.extensionUri, getWorkspace, onSelectProject)
-  versionsEditor = new VersionsEditorPanel(context.extensionUri, getWorkspace, onSelectProject)
-  sprintsEditor = new SprintsEditorPanel(context.extensionUri, getWorkspace, onSelectProject)
-  epicsEditor = new EpicsEditorPanel(context.extensionUri, getWorkspace, onSelectProject)
+  boardEditor = new BoardEditorPanel(
+    context.extensionUri,
+    getWorkspace,
+    onSelectProject,
+    refreshAllPanels,
+  )
+  versionsEditor = new VersionsEditorPanel(
+    context.extensionUri,
+    getWorkspace,
+    onSelectProject,
+    refreshAllPanels,
+  )
+  sprintsEditor = new SprintsEditorPanel(
+    context.extensionUri,
+    getWorkspace,
+    onSelectProject,
+    refreshAllPanels,
+  )
+  epicsEditor = new EpicsEditorPanel(
+    context.extensionUri,
+    getWorkspace,
+    onSelectProject,
+    refreshAllPanels,
+  )
   helpEditor = new HelpEditorPanel(context.extensionUri)
   startHereEditor = new KitReferenceEditorPanel(
     START_HERE_PANEL,

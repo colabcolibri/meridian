@@ -1,7 +1,6 @@
-import * as path from "node:path"
-
 import * as vscode from "vscode"
 
+import { openDeliveryDocument } from "./open-delivery-document.js"
 import type { MeridianWorkspaceInfo } from "./meridian-workspace.js"
 
 export type DocsOpenMessage =
@@ -20,6 +19,7 @@ export abstract class DocsOpenPanel {
     protected readonly extensionUri: vscode.Uri,
     protected readonly getWorkspace: () => MeridianWorkspaceInfo | null,
     protected readonly onSelectProject?: (id: string) => Promise<void>,
+    protected readonly onDeliverySaved?: () => void,
   ) {}
 
   protected abstract readonly viewType: string
@@ -72,32 +72,35 @@ export abstract class DocsOpenPanel {
       return
     }
     if (msg.type === "openVersion") {
-      await this.openFile(path.join("versions", `${msg.id}.md`))
+      await openDeliveryDocument(
+        this.extensionUri,
+        info,
+        `versions/${msg.id}.md`,
+        this.onDeliverySaved,
+      )
     } else if (msg.type === "openEpic") {
-      await this.openFile(path.join("epics", `${msg.id}.md`))
+      await openDeliveryDocument(
+        this.extensionUri,
+        info,
+        `epics/${msg.id}.md`,
+        this.onDeliverySaved,
+      )
     } else if (msg.type === "openSprint") {
-      await this.openFile(path.join("sprints", `${msg.id}.md`))
+      await openDeliveryDocument(
+        this.extensionUri,
+        info,
+        `sprints/${msg.id}.md`,
+        this.onDeliverySaved,
+      )
     } else if (msg.type === "openStory") {
-      await this.openFile(path.join("us", `${msg.id}.md`))
+      await openDeliveryDocument(
+        this.extensionUri,
+        info,
+        `us/${msg.id}.md`,
+        this.onDeliverySaved,
+      )
     } else if (msg.type === "selectProject") {
       await this.onSelectProject?.(msg.id)
-    }
-  }
-
-  private async openFile(relativePath: string): Promise<void> {
-    const info = this.getWorkspace()
-    if (!info?.docsExists) {
-      return
-    }
-    const filePath = path.join(info.docsRoot, relativePath)
-    try {
-      const doc = await vscode.workspace.openTextDocument(vscode.Uri.file(filePath))
-      await vscode.window.showTextDocument(doc, {
-        viewColumn: vscode.ViewColumn.Beside,
-        preview: false,
-      })
-    } catch {
-      void vscode.window.showErrorMessage(`Meridian: could not open ${relativePath}`)
     }
   }
 }

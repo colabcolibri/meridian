@@ -1,6 +1,6 @@
-import { DocsOpenPanel, type BuiltHtml } from "./docs-open-panel.js"
+import { DocsOpenPanel, emptyPanelHtml, type BuiltHtml } from "./docs-open-panel.js"
 import { epicsWebviewHtml } from "./epics-webview-html.js"
-import { loadPlanningPayload } from "./planning-payload.js"
+import { loadPlanningPayloadDetailed } from "./planning-payload.js"
 import { sprintsWebviewHtml } from "./sprints-webview-html.js"
 import { versionsWebviewHtml } from "./versions-webview-html.js"
 import type { MeridianWorkspaceInfo } from "./meridian-workspace.js"
@@ -13,11 +13,14 @@ export class VersionsEditorPanel extends DocsOpenPanel {
     "Open a Meridian workspace with a docs/ folder to see versions."
 
   protected buildHtml(info: MeridianWorkspaceInfo): BuiltHtml {
-    const payload = loadPlanningPayload(info.docsRoot, info.packageRoot)
+    const loaded = loadPlanningPayloadDetailed(info.docsRoot, info.packageRoot)
+    if (!loaded.ok) {
+      return { html: emptyPanelHtml(loaded.error), title: this.defaultTitle }
+    }
     const context = buildWebviewProjectContext(info)
     return {
-      html: versionsWebviewHtml(payload, context),
-      title: formatMeridianPanelTitle("Versions", info, payload.versions.length),
+      html: versionsWebviewHtml(loaded.payload, context),
+      title: formatMeridianPanelTitle("Versions", info, loaded.payload.versions.length),
     }
   }
 }
@@ -29,11 +32,14 @@ export class SprintsEditorPanel extends DocsOpenPanel {
     "Open a Meridian workspace with a docs/ folder to see sprints."
 
   protected buildHtml(info: MeridianWorkspaceInfo): BuiltHtml {
-    const payload = loadPlanningPayload(info.docsRoot, info.packageRoot)
+    const loaded = loadPlanningPayloadDetailed(info.docsRoot, info.packageRoot)
+    if (!loaded.ok) {
+      return { html: emptyPanelHtml(loaded.error), title: this.defaultTitle }
+    }
     const context = buildWebviewProjectContext(info)
     return {
-      html: sprintsWebviewHtml(payload, context),
-      title: formatMeridianPanelTitle("Sprints", info, payload.sprints.length),
+      html: sprintsWebviewHtml(loaded.payload, context),
+      title: formatMeridianPanelTitle("Sprints", info, loaded.payload.sprints.length),
     }
   }
 }
@@ -45,11 +51,14 @@ export class EpicsEditorPanel extends DocsOpenPanel {
     "Open a Meridian workspace with a docs/ folder to see epics."
 
   protected buildHtml(info: MeridianWorkspaceInfo): BuiltHtml {
-    const payload = loadPlanningPayload(info.docsRoot, info.packageRoot)
+    const loaded = loadPlanningPayloadDetailed(info.docsRoot, info.packageRoot)
+    if (!loaded.ok) {
+      return { html: emptyPanelHtml(loaded.error), title: this.defaultTitle }
+    }
     const context = buildWebviewProjectContext(info)
     return {
-      html: epicsWebviewHtml(payload, context),
-      title: formatMeridianPanelTitle("Epics", info, payload.epics.length),
+      html: epicsWebviewHtml(loaded.payload, context),
+      title: formatMeridianPanelTitle("Epics", info, loaded.payload.epics.length),
     }
   }
 }

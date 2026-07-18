@@ -10,7 +10,13 @@ from pathlib import Path
 _SCRIPT_DIR = Path(__file__).resolve().parent
 sys.path.insert(0, str(_SCRIPT_DIR))
 
-from meridian_db import db_exists, export_delivery_json, export_planning_json  # noqa: E402
+from meridian_db import (  # noqa: E402
+    db_exists,
+    export_delivery_json,
+    export_entity_markdown,
+    export_planning_json,
+    upsert_delivery_from_markdown,
+)
 
 
 def main() -> int:
@@ -25,6 +31,17 @@ def main() -> int:
         default="raw",
         help="raw=markdown bodies; planning=structured for extension",
     )
+    parser.add_argument(
+        "--entity",
+        choices=["us", "epics", "versions", "sprints"],
+        help="single entity folder (with --id)",
+    )
+    parser.add_argument("--id", help="entity id, e.g. US-0125 or EPIC-15")
+    parser.add_argument(
+        "--write",
+        action="store_true",
+        help="upsert body_markdown from stdin (requires --entity and --id)",
+    )
     args = parser.parse_args()
     root = Path(args.package_root).resolve()
 
@@ -34,6 +51,30 @@ def main() -> int:
     if not db_exists(root):
         print(json.dumps({"error": "meridian.db not found"}))
         return 1
+
+    if args.entity or args.id:
+        if not args.entity or not args.id:
+            print(json.dumps({"error": "both --entity and --id are required"}))
+            return 1
+        if args.write:
+            markdown_text = sys.stdin.read()
+            try:
+                row = upsert_delivery_from_markdown(root, args.entity, args.id, markdown_text)
+            except ValueError as exc:
+                print(json.dumps({"ok": False, "error": str(exc)}))
+                return 1
+            print(json.dumps({"ok": True, **row}, ensure_ascii=False))
+            return 0
+        try:
+            row = export_entity_markdown(root, args.entity, args.id)
+        except ValueError as exc:
+            print(json.dumps({"error": str(exc)}))
+            return 1
+        if row is None:
+            print(json.dumps({"error": "not found"}))
+            return 1
+        print(json.dumps(row, ensure_ascii=False))
+        return 0
 
     if args.format == "planning":
         print(json.dumps(export_planning_json(root), ensure_ascii=False))

@@ -13,41 +13,41 @@ blocks: []
 
 ### Prerequisites
 
-- Node.js compatible with Vite.
-- pnpm.
-- Python 3 (for `validate_meridian.py` in dev and in the terminal).
+- **Python 3** on `PATH` — required for kit scripts and extension (see § Python dependency).
+- **Node.js 18+** and **pnpm** — only if working on `app-visual-studio/` extension.
 
-### Initial setup
-
-```bash
-pnpm install
-pnpm prepare
-```
-
-### Day-to-day commands
+### Kit + dogfood (repository root)
 
 ```bash
-pnpm dev
-pnpm build
-pnpm lint
-pnpm format
-pnpm format:check
-python3 ../.agent/scripts/validate_meridian.py .
+python3 .agent/scripts/bootstrap_meridian_db.py .
+python3 .agent/scripts/validate_meridian.py . --sqlite-only
+python3 .agent/scripts/meridian_db_cli.py counts .
 ```
+
+Fresh clone without `.meridian/meridian.db`: bootstrap creates empty schema; import history from branch `meridian-v1-old` via `migrate_md_to_sqlite.py` (see `docs/06_database.md` § Migration).
 
 ### Validate Meridian governance
 
-At the repository root (or in `app-desktop/`):
-
 ```bash
-python3 .agent/scripts/validate_meridian.py app-desktop
+python3 .agent/scripts/validate_meridian.py <package-root>
+python3 .agent/scripts/validate_meridian.py <package-root> --sqlite-only
+python3 .agent/scripts/validate_meridian.py <package-root> --json   # CI
 ```
 
-In the app (`pnpm dev`), use the **Validate folder** button — it calls the same script via local API (`/api/meridian/validate`).
+## Python dependency
 
-### Dogfooding with path persistence (v2.01)
+| Who | Needs Python? | Why |
+| --- | ------------- | --- |
+| **Kit / agents (Cursor, Claude)** | **Yes** | `meridian_db_cli.py`, `validate_meridian.py`, `generate_board.py` — stdlib only, no `pip` |
+| **VS Code extension** | **Yes** | Validate command + Board/Deliverables read SQLite via `python3 .agent/scripts/meridian_db_export.py` |
+| **Chat-only (no validate, no board)** | No | Not a supported workflow — docs would drift without validator |
+| **Phase docs only** | No | Editing `docs/00_scope.md` etc. is plain Markdown |
 
-With `pnpm dev`, prefer **Enter path manually (local dev)** on the welcome screen: absolute path to `app-desktop/docs/` (or any project `docs/`). The path is stored in `localStorage` (`meridian.localFolderPath`); F5 and new tabs reload the board without the folder picker. **Close folder** clears the key. File reads use Vite middleware `/api/list` and `/api/files` (see `05_architecture.md`). The picker remains a fallback when no path is stored.
+Python is an intentional choice: single stdlib runtime for migrations, validation, and SQLite access without shipping a second compiled binary. **macOS/Linux** usually have `python3`; **Windows** install from [python.org](https://www.python.org/) or Microsoft Store and ensure `python3` or `py -3` is on PATH.
+
+Alternative (not planned v10): rewrite `meridian_db` in Node for the extension, or bundle a frozen Python — would duplicate logic today.
+
+Script inventory: `.agent/scripts/README.md`.
 
 ## VS Code extension (`app-visual-studio/`)
 
@@ -69,12 +69,11 @@ pnpm compile
 
 ### Debug (F5)
 
-| Workspace opened            | Launch config                                                                          |
-| --------------------------- | -------------------------------------------------------------------------------------- |
-| Monorepo root (`meridian/`) | Root `.vscode/launch.json` → **Run Meridian extension** (opens `app-desktop/` in host) |
-| Extension only              | `app-visual-studio/.vscode/launch.json` → **Run Extension**                            |
+| Workspace opened            | Launch config |
+| --------------------------- | ------------- |
+| Monorepo root (`meridian/`) | Extension `.vscode/launch.json` → **Run Extension** (opens repo root) |
 
-After F5, use **Cmd+Shift+P** → `Meridian: Show Workspace Status`. View kanban in **`app-desktop`** (`pnpm dev`) — not inside the extension in v4.
+After F5, open **Meridian: Open Board** — data loads from SQLite when `.meridian/meridian.db` exists.
 
 ### Extension scripts
 
@@ -88,7 +87,7 @@ Packaging for Marketplace (`vsce package`) → v4-S4 / US-0052.
 
 ## Environment variables
 
-v0 monitor and v4 extension do not require environment variables.
+v10 extension and kit do not require environment variables.
 
 | Variable | Description                | Required | Example |
 | -------- | -------------------------- | -------: | ------- |
@@ -106,9 +105,9 @@ v0 monitor and v4 extension do not require environment variables.
 
 ## Available environments
 
-| Environment | Purpose          | Branch | Automatic deploy |
-| ----------- | ---------------- | ------ | ---------------- |
-| local       | Vite development | any    | no               |
+| Environment | Purpose                    | Branch | Automatic deploy |
+| ----------- | -------------------------- | ------ | ---------------- |
+| local       | Kit + extension + SQLite   | any    | no               |
 
 ## Differences between environments
 
