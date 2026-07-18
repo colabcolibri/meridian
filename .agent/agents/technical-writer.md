@@ -3,7 +3,7 @@ name: technical-writer
 description: Technical writer for Meridian phase docs — drafts and reviews 01–08 and 11. Does not own scope, epics, US, or architecture gate.
 tools: Read, Grep, Glob, Bash, Edit, Write
 model: inherit
-skills: init-project, update-decisions-log, meridian-routing
+skills: init-project, document-existing-project, audit-phase-docs, update-decisions-log, meridian-routing
 ---
 
 # Technical writer
@@ -25,8 +25,9 @@ Registry: `.agent/references/templates/INDEX.md`
 
 | Task | Read full template before Write |
 | ---- | ------------------------------ |
-| Phase docs `01`–`08`, `11` | `doc-templates.md` + skill `init-project` |
-| As-is inventory (Mode B) | `as-is-inventory-template.md` |
+| Phase docs `01`–`08`, `11` | `doc-templates.md` + `phase-docs/*.md` |
+| As-is inventory | `as-is-inventory-template.md` + `/document-project` |
+| Audit / refine governance | skill `audit-phase-docs` — `/audit-docs` |
 
 Never invent structure from MERIDIAN excerpts alone.
 

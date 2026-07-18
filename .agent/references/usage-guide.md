@@ -71,15 +71,16 @@ When the repo has **more than one** folder named exactly `docs` with Meridian co
 
 ## Start a new project
 
-Run: **`/init-meridian`**
+Run: **`/discover`** (optional, when the idea is fuzzy) then **`/init-meridian`**
 
-The agent will ask up to 5 questions about the product — problem, users, scope, technology, and security constraints. Answer what you know; leave gaps for later.
+The agent runs the **init interview** (`init-interview-guide.md`) — problem, users, scope, stack, security. Answer what you know; gaps go to Open questions.
 
 What gets created:
-- `docs/` folder tree with all phase document stubs
-- `docs/00_scope.md` populated with your answers
+- `docs/` with phase documents **`00`–`08`** filled per `phase-docs/` templates (not heading-only stubs)
 - `docs/decisions/YYYY-MM-DD.json` with the initial decision entry
-- `.meridian/meridian.db` bootstrapped (`bootstrap_meridian_db.py`)
+- `.meridian/meridian.db` + `delivery.json` bootstrapped
+
+Optional: **`/audit-docs`** before you approve docs.
 
 After this, go to [Work through the phase documents](#work-through-the-phase-documents).
 
@@ -87,31 +88,33 @@ After this, go to [Work through the phase documents](#work-through-the-phase-doc
 
 ## Migrate an existing project
 
-Run: **`/init-meridian`** with your codebase open in the IDE.
+Run: **`/init-meridian`** then **`/document-project`** with your codebase open.
 
-The agent reads the codebase first — package files, folder structure, README, any existing docs. Then it asks only what it could not infer.
+| Step | Command | Result |
+| ---- | ------- | ------ |
+| 1 | `/init-meridian` | `docs/` tree + bootstrap |
+| 2 | `/document-project` | `docs/inventory/as-is.md` + phase docs from code |
+| 3 | `/audit-docs` | Gap report (optional `apply`) |
+| 4 | Review + approve | No retroactive US for legacy |
 
-What gets created:
-
-- Same `docs/` tree as a new project, but phase documents are populated from the code — not blank
-- **`docs/inventory/as-is.md`** — transitional map of existing capabilities (table with evidence, confidence, epic candidates)
-- Every inference marked as an assumption for your review
+The agent reads code first, interviews on gaps only, and marks inferences as assumptions.
 
 ### Migration sequence (existing codebase)
 
 ```
-/init-meridian → review inventory → approve phase docs → epics (+ optional v0) → US for new work only
+/init-meridian → /document-project → /audit-docs → approve phase docs → forward backlog only
 ```
 
 | Step | You do | Result |
 | ---- | ------ | ------ |
-| 1 | Run `/init-meridian` | `docs/inventory/as-is.md` + draft phase docs |
-| 2 | Review inventory table — fix confidence and gaps | Validated as-is map |
-| 3 | Promote rows into `00_scope`, `05_architecture`, etc. | Phase docs reflect reality |
-| 4 | Approve `05_architecture` (human) | Backlog gate unlocked |
-| 5 | `/create-epic` for major existing capabilities; optional **`v0`** baseline version | Epics `complete` where already shipped — **no retroactive US** |
-| 6 | `/create-version` **v1**+ and `/create-us` | Forward work only |
-| 7 | Archive or delete `docs/inventory/as-is.md` | Single source of truth in phase docs |
+| 1 | Run `/init-meridian` | `docs/` tree + bootstrap |
+| 2 | Run `/document-project` | `docs/inventory/as-is.md` + draft phase docs |
+| 3 | Optional `/audit-docs` | Gap report |
+| 4 | Review inventory + phase docs | Validated as-is map |
+| 5 | Approve `05_architecture` (human) | Backlog gate unlocked |
+| 6 | `/create-epic` for major capabilities; optional **`v0`** baseline | Epics `complete` where shipped — **no retroactive US** |
+| 7 | `/create-version` **v1**+ and `/create-us` | Forward work only |
+| 8 | Archive or delete `docs/inventory/as-is.md` | Single source of truth in phase docs |
 
 After step 2, review `docs/00_scope.md` and `docs/05_architecture.md` — correct anything the agent got wrong, then follow the same path as a new project.
 

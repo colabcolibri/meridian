@@ -74,7 +74,7 @@ Workflows orchestrate agents; they do not replace the master protocol.
 | ----- | ------- | ------ |
 | `scrum-master` | Process, status, init — **no product code** | init-project, update-decisions-log, meridian-routing |
 | `product-owner` | Discovery, `00_scope`, epics | discover-product, create-epic, init-project, update-decisions-log, meridian-routing |
-| `technical-writer` | Phase docs `01`–`08`, `11` | init-project, update-decisions-log, meridian-routing |
+| `technical-writer` | Phase docs `01`–`08`, `11`, as-is documentation | init-project, document-existing-project, audit-phase-docs, update-decisions-log, meridian-routing |
 | `security-champion` | `02_security.md` | security-review, update-decisions-log, meridian-routing |
 | `technical-architect` | `05_architecture.md` | security-review, update-decisions-log, meridian-routing |
 | `design-system-owner` | `09_design_system.md` | design-system, update-decisions-log, meridian-routing |
@@ -92,7 +92,9 @@ Each agent includes: phases 0/-1, mission, prohibitions, output format, delegati
 
 | Skill | References |
 | ----- | ---------- |
-| `init-project` | `doc-templates.md`, `gitignore-baseline.md` |
+| `init-project` | `doc-templates.md`, `phase-docs/`, `init-interview-guide.md`, `gitignore-baseline.md` |
+| `document-existing-project` | `as-is-inventory-template.md`, `phase-docs/` |
+| `audit-phase-docs` | `phase-docs/`, `doc-templates.md` |
 | `create-epic` | `epic-template.md`, `writing-guide.md` |
 | `create-version` | `version-template.md`, `writing-guide.md` |
 | `create-sprint` | `sprint-template.md` |
@@ -118,6 +120,8 @@ See `.agent/skills/doc.md` to create new skills.
 | Workflow | Agent | Mode |
 | -------- | ----- | ---- |
 | `init-meridian` | scrum-master | init, no code |
+| `document-project` | technical-writer | as-is + phase docs, no US |
+| `audit-docs` | technical-writer | audit phase docs |
 | `status` | scrum-master | read-only |
 | `plan-sprint` | sprint-planner | planning |
 | `create-version` | sprint-planner | create release in SQLite |

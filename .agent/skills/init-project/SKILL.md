@@ -6,169 +6,128 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 
 # Init project (Meridian)
 
-> Creates minimum structure in `docs/` for governance before any product code.
+> Creates `docs/` governance before product code. **All** phase docs `00`–`08` + `11` are created in Mode A; Mode B creates structure then hands off to `/document-project`.
 
 ## Selective reading
 
 | File | When to read |
 | ------- | ---------- |
-| `.agent/references/templates/INDEX.md` | Before creating phase docs or pointing manager to templates |
-| `.agent/references/templates/as-is-inventory-template.md` | **Mode B only** — before creating `docs/inventory/as-is.md` |
-| `references/doc-templates.md` | **Mandatory** before creating phase files and first decision |
-| `references/gitignore-baseline.md` | Before `npm install` or first commit |
+| `.agent/references/templates/init-interview-guide.md` | **Mandatory** — interview gate |
+| `references/doc-templates.md` | **Mandatory** — index + depth bar |
+| `.agent/references/templates/phase-docs/*.md` | **Mandatory** — one per doc you Write |
+| `.agent/references/templates/as-is-inventory-template.md` | Mode B pointer only |
+| `references/gitignore-baseline.md` | Before first commit |
+| `.agent/references/templates/INDEX.md` | Protocol |
 
 ## When to trigger
 
 - New project with Meridian intent
 - `.agent/` exists but `docs/` missing
-- Incomplete or corrupted structure
-- Agent tried to implement without document base
-- **Existing codebase migrating to Meridian** (see Mode B below)
+- Incomplete structure (repair gaps only)
+- Workflow `/init-meridian`
+
+**Brownfield documentation body:** use skill `document-existing-project` (`/document-project`) — not full Mode B inside this skill in one turn unless manager insists.
+
+---
+
+## Interview gate (both modes)
+
+1. Read `init-interview-guide.md`.
+2. If context thin → run question bank (Mode A or B); do not Write `00_scope` with invented facts.
+3. Pass gate or list **Open questions** in `00_scope`.
 
 ---
 
 ## Mode A — New project
 
-### Phase 0 — context check
-
-1. Read `.agent/MERIDIAN.md` if it exists.
-2. Confirm target folder and user authorization to create files.
-3. If project intent missing → ask the following questions (maximum **5** — do not ask all if context is already clear):
-   - What problem does this product solve, and for whom?
-   - Who are the primary users (role, context, technical level)?
-   - What is explicitly out of scope for this version?
-   - What are the main technology constraints or decisions already made?
-   - Are there security, compliance, or data sensitivity concerns to document from the start?
-
 ### Procedure
 
-1. Check if `docs/` exists.
-2. If absent, create tree:
+1. Confirm target folder and authorization.
+2. Create tree:
 
 ```txt
 docs/
   README.md
-  00_scope.md … 11_decisions.md
+  00_scope.md … 08_environments.md
+  11_decisions.md
   decisions/
-  epics/
-  versions/
-  sprints/
+  discovery/          # optional empty; /discover may fill
 ```
 
-Run `python3 .agent/scripts/meridian_delivery.py bootstrap` or `bootstrap_meridian_db.py <packageRoot>` after creating `docs/`.
+3. Read `doc-templates.md` + **every** `phase-docs/0X-*.md` for docs `00`–`08`.
+4. Write each phase doc with **depth bar** content from interview answers (not heading-only stubs).
+5. `09_design_system.md` — stub only if UI product; skip for API/CLI-only.
+6. `11_decisions.md` stub + `docs/decisions/YYYY-MM-DD.json` — “Project started with Meridian”.
+7. Bootstrap: `meridian_delivery.py bootstrap` or `bootstrap_meridian_db.py <packageRoot>`.
+8. `.gitignore` per `gitignore-baseline.md`.
+9. **Do not** create US, epics, versions, product code.
 
-Templates: read `.agent/references/templates/INDEX.md` — **do not** create `docs/templates/`.
+### Recommended before init
 
-3. Apply frontmatter from `references/doc-templates.md` on each doc (`status: draft`, except initial decision).
-4. `11_decisions.md` (stub) + `docs/decisions/YYYY-MM-DD.json` with entry "Project started with Meridian".
-5. `00_scope.md`: populate with answers from Phase 0 questions — do not leave it blank.
-6. Validate `.gitignore` with `references/gitignore-baseline.md`.
-7. **Do not** create US, app, API, or product migrations.
+`/discover` when product idea is still fuzzy → `docs/discovery/product-brief.md`.
 
 ---
 
-## Mode B — Existing codebase (migration)
+## Mode B — Existing codebase
 
-Use when the user already has running code and wants to adopt Meridian governance.
+### Procedure
 
-### Phase 0 — code reading
+1. **Interview gate** — code read per `init-interview-guide.md` Mode B (inferences first).
+2. Create same `docs/` tree as Mode A if missing (files may be minimal stubs **only** if `/document-project` runs immediately after in same session).
+3. Bootstrap `.meridian/meridian.db` + `delivery.json`.
+4. First decision JSON entry.
+5. **Stop** — tell manager to run **`/document-project`** for inventory + populated phase docs.
 
-Before asking any questions, read the repository to infer:
+Do **not** in Mode B init alone:
 
-1. `package.json`, `pyproject.toml`, `Cargo.toml`, or equivalent — technology stack.
-2. Top-level folder structure — what are the main modules/apps?
-3. Existing README (if any) — product description, setup, audience.
-4. Any existing docs, ADRs, or architecture notes.
-5. Open issues or PR titles if accessible — infer current priorities.
+- Create epics, versions, sprints, US
+- Mark docs `approved`
+- Fill retroactive ✅ US
 
-### Phase 1 — structured interview
+### Same session exception
 
-After reading the codebase, ask (only what is still unclear after reading):
+If manager explicitly requests full init in one turn: run `document-existing-project` procedure after step 3.
 
-- Based on the code, this appears to be [your inference]. Is that accurate?
-- Who are the primary users of this product, and what problem does it solve for them?
-- What is in scope for the next release, and what are you explicitly deferring?
-- Are there security or compliance requirements (auth model, PII, regulated data)?
-- Are there architecture decisions already made that should be documented (DB choice, hosting, auth library)?
+---
 
-### Phase 2 — as-is inventory
+## Multi-product manifest (when applicable)
 
-Read `as-is-inventory-template.md`, then create `docs/inventory/as-is.md`:
-
-1. One table row per **user-facing capability** (not per folder).
-2. Evidence = real paths, routes, models, or docs.
-3. Confidence = `high` | `medium` | `low` — never `high` without evidence.
-4. Epic candidate column for significant blocks (ids only — do not create epics yet).
-5. Assumptions section for anything the manager must confirm.
-
-### Phase 3 — generate docs from code
-
-Populate phase docs from inventory + observations (not blank templates):
-
-1. `00_scope.md` — derive from README + inventory + interview answers. Include **current product state** from high-confidence rows.
-2. `01_tech_stack.md` — list what was found (languages, frameworks, infra). Mark `status: draft`.
-3. `02_security.md` — note what exists (auth libraries, env handling) and what is unknown. Mark gaps explicitly.
-4. `03_user_types.md` — derive from code (admin routes, user models, role checks found in code).
-5. `04_principles.md` — leave mostly blank with a note: "derived from existing code style; needs human review".
-6. `05_architecture.md` — diagram the actual structure found. Mark `status: draft` — **not approved**.
-7. Cross-check: every `high` inventory row appears in scope or architecture (or explain why not).
-
-### Phase 4 — structure
-
-Same as Mode A steps 3–8, applied to inferred content. Ensure `docs/inventory/` exists with `as-is.md`.
-
-### Phase 5 — multi-product manifest (when applicable)
-
-If discovery finds **more than one** `docs/` folder named exactly `docs` with Meridian fingerprint:
+If multiple `docs/` folders with Meridian fingerprint:
 
 1. Read `projects-manifest-template.md`.
-2. Propose `.meridian/projects.json` at kit root with one entry per product (`docs` path relative to kit root).
-3. Do **not** treat `docs-extra` or non-`docs` folder names as products.
-4. Use `exclude` only for stray `docs/` folders that must not appear in the picker.
-5. Set `default` after manager confirms which product is primary.
+2. Propose `.meridian/projects.json`.
+3. Set `default` after manager confirms.
 
 ---
 
-## Checkpoints (both modes)
+## Checkpoints
 
 | # | Check |
 | - | ----------- |
-| 1 | `docs/` phase tree + `.meridian/meridian.db` + `.meridian/delivery.json` bootstrapped |
-| 2 | `.env*` protected in `.gitignore` |
-| 3 | No product code created |
-| 4 | (Mode B) `docs/inventory/as-is.md` exists with capability table |
-| 5 | (Mode B) Inferences marked as assumptions — human must review and approve |
-
-## Delivery commands — after `docs/` exists
-
-```bash
-python3 .agent/scripts/bootstrap_meridian_db.py <packageRoot>
-python3 .agent/scripts/validate_meridian.py <packageRoot> --sqlite-only
-```
-
-Delivery rows (epics, versions, sprints, US) go in SQLite — **not** `docs/us/`, `docs/epics/`, etc.
+| 1 | `docs/` `00`–`08`, `11` exist + `.meridian/` bootstrapped |
+| 2 | Mode A: no empty `##` without TBD + reason |
+| 3 | `.env*` in `.gitignore` |
+| 4 | No product code / no US rows |
+| 5 | Mode B: output points to `/document-project` unless same-session doc run |
 
 ## Prohibitions
 
 | Forbidden | Allowed |
 | -------- | --------- |
-| Mark phase docs as `approved` without human | `draft` + assumptions |
-| Create US | Bootstrap empty SQLite schema |
-| Create retroactive US with `✅` for legacy | Inventory + epics in SQLite when migrated |
-| Implement features | Docs + initial decision |
-| (Mode B) Replace existing README | Add `docs/README.md` alongside |
-| (Mode B) Keep inventory after `05_architecture` approved | Archive or delete after promotion |
+| `approved` without human | `draft` |
+| Create US / epics | Empty SQLite schema |
+| Heading-only phase docs (Mode A) | Full drafts per phase-docs |
+| Replace root README (Mode B) | `docs/README.md` alongside |
 
 ## Output
 
 ```txt
 Meridian initialized:
 Mode: new project | existing codebase
-Created:
-Inventory (Mode B): docs/inventory/as-is.md
-Inferred (Mode B):
+Interview: complete | assumptions listed
+Created: [paths]
+Phase docs depth: ok | thin — run /document-project or /audit-docs
+Bootstrap: meridian.db + delivery.json
 Assumptions requiring human review:
-Pending:
-Blocked:
-Next human decision:
+Next: /document-project (Mode B) | /audit-docs | approve 00→04 | /discover
 ```

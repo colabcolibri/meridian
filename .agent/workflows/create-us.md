@@ -11,7 +11,7 @@ $ARGUMENTS
 ## Critical rules
 
 1. Use `backlog-refiner` + `@[skills/create-user-story]`
-2. **Mandatory read:** `writing-guide.md` + `code-quality-at-us-time.md` + `us-template.md` **before** Write
+2. **Mandatory read:** `writing-guide.md` + `code-quality-at-us-time.md` + `docs/04_principles.md` + `us-template.md` **before** Write
 3. **Gate:** `05_architecture` = `approved`; epic + version exist
 4. Write **Intent** (Why, Where, Acceptance) + **Plan** draft (refs, Planned) — see writing-guide
 5. **One slice (SRP)** — split or narrow if request bundles unrelated layers; fill **Out of scope**

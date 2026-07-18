@@ -47,6 +47,8 @@ Before any action, classify:
 | **LOG DECISION** | "decision log", `/update-decisions-log` | `update-decisions-log` + `date` before Write |
 | **DESIGN** | "design system", "UI", `/design-pass`, `09_design` | `design-system-owner` |
 | **START PROJECT** | "start", `/init-meridian` | `scrum-master` + `init-project` |
+| **DOCUMENT AS-IS** | `/document-project`, brownfield, inventory | `technical-writer` + `document-existing-project` |
+| **AUDIT DOCS** | `/audit-docs`, audit phase docs, refine scope | `technical-writer` + `audit-phase-docs` |
 | **SECURITY** | "security", "OWASP", `/security-pass`, `02_security` | `security-champion` |
 | **CODE** | "fix", "refactor" (sem US clara) | Block → `/create-us` ou `/implement-us US-XXXX` |
 | **SLASH** | workflows Meridian | Corresponding workflow file |

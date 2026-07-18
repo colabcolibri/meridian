@@ -18,6 +18,8 @@ Before responding, classify the request and select the correct Meridian agent. S
 | Intent | Keywords | Agent(s) | Auto? |
 | -------- | -------------- | -------- | ----- |
 | Start / structure | "start", "setup", "init meridian" | `scrum-master` | yes |
+| Document as-is | `/document-project`, brownfield, inventory | `technical-writer` + `document-existing-project` | yes |
+| Audit phase docs | `/audit-docs`, "audit docs", "refine scope" | `technical-writer` + `audit-phase-docs` | yes |
 | Status / governance | "status", "phase", "blocker", `/daily-with-ai` | `scrum-master` | yes |
 | Discovery | `/discover`, product brief | `product-owner` | yes |
 | Scope | "scope", "in scope", `00_scope` | `product-owner` | yes |

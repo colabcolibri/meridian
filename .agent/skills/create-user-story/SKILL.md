@@ -16,6 +16,7 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 | `.agent/references/templates/sqlite-delivery-operations.md` | **Mandatory** — sqlite driver / ER |
 | `.agent/references/templates/writing-guide.md` | **Mandatory** — prose |
 | `.agent/references/templates/code-quality-at-us-time.md` | **Mandatory** — DRY, SRP |
+| `docs/04_principles.md` | **Mandatory** — DRY + SRP sections (slice boundaries) |
 | `.agent/references/templates/INDEX.md` | Protocol |
 | `references/us-template.md` | **Mandatory** — `body_markdown` shape |
 
@@ -78,7 +79,7 @@ Forbidden: telegraphic stubs, repeating acceptance under Approach, “see EPIC-X
 
 ## Procedure
 
-1. Read `writing-guide.md` + `code-quality-at-us-time.md` + `sqlite-delivery-operations.md` + `us-template.md`.
+1. Read `writing-guide.md` + `code-quality-at-us-time.md` + `04_principles.md` + `sqlite-delivery-operations.md` + `us-template.md`.
 2. Read epic/version/dependency US via `meridian_delivery.py show --full` for context.
 3. Next ID = highest `US-XXXX` + 1 (`meridian_delivery.py list user_stories`).
 4. Compose full US body (Why / Where / Approach) per `us-template.md`.

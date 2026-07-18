@@ -3,12 +3,20 @@
 Each phase uses a **fixed template**. Agents must not skip phases or merge them in one conversation without explicit manager approval.
 
 ```txt
-Existing codebase only (Mode B):
-  Codebase → as-is-inventory-template.md → docs/inventory/as-is.md
-  ↓ human review + promote rows
-  ↓ archive inventory after 05 approved
+Greenfield:
+  /discover (optional) → product-brief
+  /init-meridian Mode A → doc-templates + phase-docs → docs/00–08, 11
+  /audit-docs (optional)
+  ↓ approve 00→04
+  /architecture → 05 approved → backlog
 
-Phase docs (doc-templates.md; optional docs/architecture/ indexed from 05)
+Existing codebase:
+  /init-meridian Mode B → docs/ tree + bootstrap
+  /document-project → as-is-inventory + phase-docs from code (no US)
+  /audit-docs
+  ↓ human review → approve docs → forward backlog only
+
+Phase docs (doc-templates.md + phase-docs/; optional docs/architecture/)
   ↓ 05_architecture approved
 Epic (epic-template.md)
   ↓

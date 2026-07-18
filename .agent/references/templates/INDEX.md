@@ -10,8 +10,10 @@ Templates are mirrored here from skills (`references/`) so every agent uses the 
 
 | Artifact | Template (read before Write) | Primary agent | Skill | Workflow |
 | -------- | ---------------------------- | ------------- | ----- | -------- |
-| Phase docs `00`–`11` | `doc-templates.md` | `technical-writer` / `product-owner` (`00`) | `init-project` | `/init-meridian` |
-| As-is inventory `docs/inventory/as-is.md` | `as-is-inventory-template.md` | `technical-writer` | `init-project` (Mode B) | `/init-meridian` |
+| Phase docs `00`–`11` | `doc-templates.md` + `phase-docs/*.md` | `technical-writer` / `product-owner` (`00`) | `init-project` | `/init-meridian` |
+| As-is inventory `docs/inventory/as-is.md` | `as-is-inventory-template.md` | `technical-writer` | `document-existing-project` | `/document-project` |
+| Phase docs audit | `audit-phase-docs` skill + `phase-docs/*.md` | `technical-writer` | `audit-phase-docs` | `/audit-docs` |
+| Init interview | `init-interview-guide.md` | `scrum-master` / `product-owner` | `init-project`, `discover-product` | `/init-meridian`, `/discover` |
 | Projects manifest `.meridian/projects.json` | `projects-manifest-template.md` | `scrum-master` | `init-project` | `/init-meridian`, `/status` |
 | Delivery connector `.meridian/delivery.json` | `delivery-connector-schema.md` | `scrum-master` | `init-project` | `/init-meridian`, all delivery verbs |
 | Epic (SQLite `epics`) | `epic-template.md` + **`writing-guide.md`** | `product-owner` | `create-epic` | `/create-epic` |

@@ -8,11 +8,13 @@ Without this, AI agents hallucinate scope, repeat decisions already made, and pr
 
 ## New project or existing codebase?
 
-**New project:** run `/init-meridian`. The agent asks up to 5 questions about the product and creates the foundation documents from your answers.
+**New project (greenfield):** run `/discover` when the idea is still fuzzy, then **`/init-meridian`**. The agent runs an **interview** (`init-interview-guide.md`) and creates **all** phase docs `00`–`08` from `phase-docs/` templates — not heading-only stubs.
 
-**Existing codebase:** run `/init-meridian` with your project open. The agent reads the code first — package files, folder structure, README, any existing docs. Then it asks only what it could not determine. It creates **`docs/inventory/as-is.md`** (a transitional capability map) and populates the phase documents from what it observed, marking every inference as an assumption for you to review and approve. Legacy work is captured in inventory and phase docs — not as retroactive user stories with `✅`.
+**Existing codebase:** run **`/init-meridian`** (creates `docs/` + bootstrap), then **`/document-project`**. The agent reads the code, interviews you on gaps, writes **`docs/inventory/as-is.md`**, and populates phase docs from evidence. **No epics or user stories** for legacy shipped work.
 
-Either way, the result is the same: a `docs/` folder with the structure below, ready to complete and approve. Existing codebases also get `docs/inventory/` until you promote and archive the as-is map.
+**Anytime docs feel thin or stale:** run **`/audit-docs`** — gap report and optional draft fixes (works for Meridian-started and brownfield projects).
+
+Either way: approve phase docs in order (`00` → `04` → `05`), then plan forward backlog only.
 
 ---
 

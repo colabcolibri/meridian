@@ -38,7 +38,7 @@ Phase 2 → 05 approved        → backlog (/create-epic …)
 
 **Greenfield:** `/discover` before `/init-meridian` when the idea is still fuzzy.
 
-**Existing codebase:** `/init-meridian` Mode B (inventory) then `/discover` to align product intent with as-is.
+**Existing codebase:** `/init-meridian` → `/document-project` (inventory + phase docs) → `/discover` if intent vs code misaligned → `/audit-docs` before approving docs.
 
 ---
 

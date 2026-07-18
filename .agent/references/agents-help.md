@@ -115,8 +115,10 @@ Slash command groups — workflows in **six groups**. Each maps to one primary a
 
 | Step | Command | Agent | What it does |
 | ---- | ------- | ----- | ------------ |
-| A1 | **`/init-meridian`** | `scrum-master` | Creates `docs/` tree, initial scope, decision log, bootstraps `meridian.db` + `delivery.json`. **Mode B:** also `docs/inventory/as-is.md`. **No product code.** |
-| A2 | **`/migrate-delivery`** | `scrum-master` | One-shot: import legacy `docs/us/` … into SQLite (`migrate_md_to_sqlite.py`). Skip if project started on v11. |
+| A1 | **`/init-meridian`** | `scrum-master` | Creates `docs/` tree, **Mode A:** all phase docs from `phase-docs/` + interview; **Mode B:** structure + bootstrap. **No product code.** |
+| A2 | **`/document-project`** | `technical-writer` | Brownfield: `as-is` inventory + populate `00`–`08` from code. **No US/epics.** |
+| A3 | **`/audit-docs`** | `technical-writer` | Audit phase docs (depth, consistency, drift). Optional `apply` for draft fixes. |
+| A4 | **`/migrate-delivery`** | `scrum-master` | One-shot: legacy `docs/us/` → SQLite. Skip on v11 greenfield. |
 
 ---
 
@@ -196,7 +198,9 @@ Use this as the canonical sequence. Skip steps only when the artifact already ex
 
 ```txt
  1. /init-meridian                          [Group A]  scrum-master
+ 1a. /document-project (brownfield)         [Group A]  technical-writer — after step 1 Mode B
  1b. /migrate-delivery (legacy v1 only)    [Group A]  scrum-master
+ 1c. /audit-docs (optional)                 [Group A]  technical-writer — gap report before approve
  2. /discover (optional)                    [Group C]  product-owner
  3. Complete 00_scope → approve             [Group C]  product-owner
  4. Complete 01, 03, 04 (draft → approve)  [Group C]  technical-writer
@@ -229,7 +233,9 @@ Skills are procedures agents load automatically. Grouped by purpose.
 | Skill | Used by | Purpose |
 | ----- | ------- | ------- |
 | `meridian-routing` | all agents | Pick correct agent from intent |
-| `init-project` | scrum-master, product-owner, technical-writer | Bootstrap `docs/` |
+| `init-project` | scrum-master, product-owner, technical-writer | Bootstrap `docs/` (Mode A full phase docs) |
+| `document-existing-project` | technical-writer | `/document-project` — as-is + phase docs, no US |
+| `audit-phase-docs` | technical-writer | `/audit-docs` — governance audit |
 | `update-decisions-log` | most agents | Prepend decision JSON (real `date` commands) |
 
 ### Delivery authoring
@@ -265,7 +271,8 @@ Skills are procedures agents load automatically. Grouped by purpose.
 
 | You want to… | Group | Agent | Command |
 | ------------ | ----- | ----- | ------- |
-| Start or migrate project | A | `scrum-master` | `/init-meridian`, `/migrate-delivery` |
+| Start or migrate project | A | `scrum-master` | `/init-meridian`, `/document-project`, `/migrate-delivery` |
+| Audit phase docs | A | `technical-writer` | `/audit-docs` |
 | See blockers and next step | B | `scrum-master` | `/status` |
 | Full guided day | B | `scrum-master` | `/daily-with-ai` |
 | Open this manual | B | `scrum-master` | `/agents-help` |

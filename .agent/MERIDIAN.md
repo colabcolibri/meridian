@@ -260,9 +260,11 @@ If documentation is missing, report: what blocks, why, smallest fix, offer draft
 
 Use workflow `/init-meridian` and skill `init-project`. Two modes:
 
-**Mode A — New project:** agent interviews user (up to 5 questions), creates `docs/` from answers.
+**Mode A — New project:** interview (`init-interview-guide.md`), then create **all** phase docs `00`–`08` from `phase-docs/` templates — not heading-only stubs.
 
-**Mode B — Existing codebase:** agent reads code first, creates `docs/inventory/as-is.md` (capability table with evidence), infers scope and tech, asks only what is unclear, populates phase docs from inventory + observations. All inferences marked as assumptions for human review. No retroactive US with `✅`; optional baseline version `v0` for pre-Meridian epics.
+**Mode B — Existing codebase:** `/init-meridian` creates structure + bootstrap; run **`/document-project`** (skill `document-existing-project`) for `as-is` inventory + phase docs from code. No retroactive US with `✅`.
+
+**Hygiene:** `/audit-docs` audits phase docs anytime (Meridian-started or brownfield).
 
 Both modes:
 
