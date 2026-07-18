@@ -44,9 +44,10 @@ Before any action, classify:
 | **CLOSE SPRINT** | "complete sprint", "close sprint", `/complete-sprint` | `sprint-planner` + `complete-sprint` |
 | **LOG DECISION** | "log decision", "decision log", `/update-decisions-log`, `docs/decisions/` | read `update-decisions-log` + run `date` before Write |
 | **SECURITY** | "security", "OWASP", "secrets", `02_security` | `security-steward` |
+| **DISCOVER** | "discover", "product brief", "PO", "what to build", `/discover` | `product-owner` + `discover-product` |
 | **START PROJECT** | "start", "meridian setup", "create docs" | `process-manager` + `init-project` |
 | **CODE** | "implement", "create app", "fix", "refactor" | `/implement-us US-XXXX` or equivalent gate; US `ready: true` required |
-| **SLASH** | `/init-meridian`, `/create-epic`, `/create-us`, `/complete-us`, `/daily-with-ai`, etc. | Corresponding workflow |
+| **SLASH** | `/discover`, `/init-meridian`, `/create-epic`, `/create-us`, `/complete-us`, `/daily-with-ai`, etc. | Corresponding workflow |
 
 > For automatic agent routing, follow `@[skills/meridian-routing]`.
 
@@ -129,6 +130,7 @@ The person is manager of the process. Agents report blockers, next step, and pen
 | Artifact | Primary agent | Skill |
 | -------- | ------------- | ----- |
 | `docs/` structure | `process-manager` | `init-project` |
+| `docs/discovery/product-brief.md` | `product-owner` | `discover-product` |
 | `docs/inventory/as-is.md` (Mode B) | `documentation-strategist` | `init-project` |
 | `.meridian/projects.json` (multi-product) | `process-manager` | `init-project` |
 | `00_scope.md` | `scope-architect` | `init-project` |

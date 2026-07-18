@@ -1,0 +1,1 @@
+../../../.agent/references/templates/discovery-folder-guide.md

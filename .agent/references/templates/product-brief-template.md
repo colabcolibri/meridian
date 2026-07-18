@@ -1,0 +1,1 @@
+../../skills/discover-product/references/product-brief-template.md

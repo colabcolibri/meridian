@@ -13,6 +13,8 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 | File | When to read |
 | ------- | ---------- |
 | `.agent/references/templates/INDEX.md` | Before creating phase docs or pointing manager to templates |
+| `.agent/references/templates/discovery-folder-guide.md` | Before reading/writing `docs/discovery/` |
+| `docs/discovery/product-brief.md` | **Before** populating `00_scope` / `03_user_types` when present |
 | `.agent/references/templates/as-is-inventory-template.md` | **Mode B only** — before creating `docs/inventory/as-is.md` |
 | `references/doc-templates.md` | **Mandatory** before creating phase files and first decision |
 | `references/gitignore-baseline.md` | Before `npm install` or first commit |
@@ -32,8 +34,9 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 ### Phase 0 — context check
 
 1. Read `.agent/MERIDIAN.md` if it exists.
-2. Confirm target folder and user authorization to create files.
-3. If project intent missing → ask the following questions (maximum **5** — do not ask all if context is already clear):
+2. Read `docs/discovery/product-brief.md` if it exists — use for `00_scope` and `03_user_types` drafts.
+3. Confirm target folder and user authorization to create files.
+4. If project intent missing and no product brief → recommend `/discover` first when vague; else ask (maximum **5** — skip if context clear):
    - What problem does this product solve, and for whom?
    - Who are the primary users (role, context, technical level)?
    - What is explicitly out of scope for this version?
@@ -48,6 +51,7 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 ```txt
 docs/
   README.md
+  discovery/          # PO — product-brief.md (optional at init; /discover may create first)
   00_scope.md … 11_decisions.md
   decisions/
   epics/

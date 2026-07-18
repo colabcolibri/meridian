@@ -68,6 +68,7 @@ Workflows orchestrate agents; they do not replace the master protocol.
 | Agent | Purpose | Skills |
 | ----- | ------- | ------ |
 | `process-manager` | Governance, status, gates, **implement US** | init-project, implement-user-story, update-decisions-log, generate-board-json, meridian-routing |
+| `product-owner` | PO — `docs/discovery/product-brief.md` | discover-product, update-decisions-log, meridian-routing |
 | `scope-architect` | `00_scope.md` | init-project, update-decisions-log, meridian-routing |
 | `documentation-strategist` | Phase docs `01`–`05`, `08`–`10`, `docs/epics/` | init-project, create-epic, create-user-story, update-decisions-log, meridian-routing |
 | `security-steward` | `02_security.md` | security-review, update-decisions-log, meridian-routing |

@@ -50,6 +50,7 @@ AGENT_KIT_PATHS = [
 
 REQUIRED_AGENTS = [
     "process-manager.md",
+    "product-owner.md",
     "scope-architect.md",
     "documentation-strategist.md",
     "security-steward.md",

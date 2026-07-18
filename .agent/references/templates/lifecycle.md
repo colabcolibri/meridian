@@ -3,8 +3,12 @@
 Each phase uses a **fixed template**. Agents must not skip phases or merge them in one conversation without explicit manager approval.
 
 ```txt
+PO lane (before Phase 1 gate):
+/discover → docs/discovery/product-brief.md
+
 Existing codebase only (Mode B):
   Codebase → as-is-inventory-template.md → docs/inventory/as-is.md
+  ↓ /discover (align intent with as-is) — recommended
   ↓ human review + promote rows
   ↓ archive inventory after 05 approved
 

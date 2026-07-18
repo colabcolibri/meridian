@@ -339,6 +339,12 @@ export const folderStructure = {
         "Scope, stack, security, architecture, and principles. Written once, updated when things change. The stable ground agents build on.",
     },
     {
+      path: "docs/discovery/",
+      label: "Product discovery (PO)",
+      description:
+        "Product brief before scope is locked — problem, users, value, epic candidates. /discover; feeds 00_scope on promotion.",
+    },
+    {
       path: "docs/architecture/",
       label: "Architecture detail",
       description:
@@ -841,7 +847,7 @@ export type UsageGuideSection = {
 
 export const usageGuideIntro = {
   title: "Commands",
-  lead: "How to run the experiment day to day — from first /init-meridian to closing a story.",
+  lead: "How to run the experiment day to day — from /discover or /init-meridian to closing a story.",
   paragraphs: [
     "Concepts (epic, ready, Record) are on the Learn tab.",
     "Anytime in the IDE: /status — blockers, state, and suggested next step.",
@@ -850,6 +856,12 @@ export const usageGuideIntro = {
 }
 
 export const usageSituations = [
+  {
+    situation: "Idea still fuzzy — what to build?",
+    section: "Product discovery (PO)",
+    sectionId: "discover",
+    command: "/discover",
+  },
   {
     situation: "No docs/ folder yet",
     section: "Getting started",
@@ -908,12 +920,13 @@ export const gettingStartedSteps: DailyWorkflowStep[] = [
     title: "Start a new project",
     when: "No docs/ folder yet.",
     actions: [
+      "If the idea is still fuzzy, run /discover first (PO lane) — product-brief.md.",
       "Run /init-meridian in the IDE.",
-      "The agent asks up to 5 questions: problem, users, scope, technology, security constraints.",
+      "The agent uses the brief if present, else asks up to 5 questions: problem, users, scope, technology, security constraints.",
       "Answer what you know — leave gaps for later.",
       "docs/ is created with all phase document stubs and 00_scope.md populated from your answers.",
     ],
-    commands: ["/init-meridian"],
+    commands: ["/discover", "/init-meridian"],
     tip: "After this, go to Work through the phase documents.",
   },
   {
@@ -925,10 +938,11 @@ export const gettingStartedSteps: DailyWorkflowStep[] = [
       "The agent reads the code first — package files, folder structure, README, any existing docs.",
       "It creates docs/inventory/as-is.md — a transitional table of existing capabilities (evidence, confidence, epic candidates).",
       "Phase documents are populated from inventory + observations — every inference is marked as an assumption.",
-      "Review the inventory, then docs/00_scope.md and docs/05_architecture.md — promote validated rows; archive inventory after architecture is approved.",
+      "Review the inventory, then run /discover to align product intent with as-is.",
+      "Review docs/00_scope.md and docs/05_architecture.md — promote validated rows; archive inventory after architecture is approved.",
       "Create epics for major existing capabilities (optional v0 baseline). No retroactive user stories with ✅ — forward work only in v1+.",
     ],
-    commands: ["/init-meridian"],
+    commands: ["/init-meridian", "/discover"],
   },
   {
     id: "resume",
@@ -1219,6 +1233,10 @@ export const slashCommandGroups: SlashCommandGroup[] = [
     group: "Start",
     description: "First time or resuming",
     commands: [
+      {
+        command: "/discover",
+        when: "PO lane — clarify problem, users, value before scope (product-brief.md)",
+      },
       {
         command: "/init-meridian",
         when: "Create docs/ structure — new project or existing codebase migration",

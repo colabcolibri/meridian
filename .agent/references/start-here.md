@@ -8,11 +8,27 @@ Without this, AI agents hallucinate scope, repeat decisions already made, and pr
 
 ## New project or existing codebase?
 
-**New project:** run `/init-meridian`. The agent asks up to 5 questions about the product and creates the foundation documents from your answers.
+**Vague idea:** run **`/discover`** first (PO lane) — clarifies problem, users, and value in `docs/discovery/product-brief.md`.
 
-**Existing codebase:** run `/init-meridian` with your project open. The agent reads the code first — package files, folder structure, README, any existing docs. Then it asks only what it could not determine. It creates **`docs/inventory/as-is.md`** (a transitional capability map) and populates the phase documents from what it observed, marking every inference as an assumption for you to review and approve. Legacy work is captured in inventory and phase docs — not as retroactive user stories with `✅`.
+**New project:** run `/init-meridian` (PM lane). If a product brief exists, init uses it for draft `00_scope` and `03_user_types`. Otherwise the agent asks up to 5 questions.
+
+**Existing codebase:** run `/init-meridian` with your project open. The agent reads the code first — package files, folder structure, README, any existing docs. Then run **`/discover`** to align product intent with the as-is map, or ask only what is still unclear. It creates **`docs/inventory/as-is.md`** (a transitional capability map) and populates the phase documents from what it observed, marking every inference as an assumption for you to review and approve. Legacy work is captured in inventory and phase docs — not as retroactive user stories with `✅`.
 
 Either way, the result is the same: a `docs/` folder with the structure below, ready to complete and approve. Existing codebases also get `docs/inventory/` until you promote and archive the as-is map.
+
+---
+
+## PO, PM, and dev in one harness
+
+Meridian covers three lanes — you stay manager and approve gates:
+
+| Lane | Role | Typical commands |
+| ---- | ---- | ---------------- |
+| **PO** | What to build, for whom, why | `/discover` |
+| **PM** | Structure, phases, delivery plan | `/init-meridian`, `/status`, `/plan-sprint`, `/create-epic` |
+| **Dev** | Executable slices | `/refine-us`, `/implement-us`, `/complete-us` |
+
+Discovery (`docs/discovery/`) is exploratory. **`00_scope.md` approved** is still the Phase 1 gate for technical work and backlog.
 
 ---
 
@@ -75,6 +91,7 @@ The AI implements each user story, guided by the files from Phase 3. You review 
 
 ```
 docs/
+  discovery/               PO — product-brief.md (/discover)
   00_scope.md              Phase 1 — what the product is
   01_tech_stack.md         Phase 2 — technology choices
   02_security.md           Phase 2 — security model

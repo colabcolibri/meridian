@@ -1,0 +1,1 @@
+../../../.agent/references/templates/product-brief-template.md
