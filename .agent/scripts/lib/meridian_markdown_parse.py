@@ -70,6 +70,17 @@ def read_markdown_text(text: str) -> tuple[dict[str, str], str, str]:
     return fm, body, text
 
 
+def extract_us_preamble(body: str) -> str:
+    """Text before the first ## section (As / I want / so that + optional H1)."""
+    content = body
+    if content.lstrip().startswith("---"):
+        _, content, _ = read_markdown_text(content)
+    match = re.search(r"^## ", content, re.MULTILINE)
+    if not match:
+        return content.strip()
+    return content[: match.start()].strip()
+
+
 def extract_us_sections(body: str) -> dict[str, str | None]:
     intent = extract_section_body(body, "Intent") or ""
     plan = extract_section_body(body, "Plan") or ""

@@ -12,6 +12,7 @@ from meridian_db import connect, fetch_delivery_form_catalog, load_story_depende
 from meridian_markdown_parse import (
     extract_epic_sections,
     extract_sprint_sections,
+    extract_us_preamble,
     extract_us_sections,
     extract_version_sections,
     format_depends_on,
@@ -28,7 +29,7 @@ from meridian_section_contracts import (
 def _split_preamble(body: str) -> tuple[str, str]:
     match = re.search(r"^## ", body, re.MULTILINE)
     if not match:
-        return body.strip(), ""
+        return extract_us_preamble(body), ""
     idx = match.start()
     return body[:idx].strip(), body[idx:].strip()
 

@@ -15,4 +15,5 @@ export type UserStory = {
   tests: TestsRequirement
   testsStatus: TestsStatus
   ready: boolean | null
+  preamble?: string | null
 }

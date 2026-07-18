@@ -23,6 +23,7 @@ type PlanningExport = {
     testsStatus: UserStory["testsStatus"]
     ready: boolean
     summary: string | null
+    preamble: string | null
   }>
   versions: Array<{
     id: string
@@ -122,6 +123,7 @@ export function loadPlanningPayloadFromSqliteDetailed(
       tests: s.tests,
       testsStatus: s.testsStatus,
       ready: s.ready,
+      preamble: s.preamble ?? null,
     }))
     const versions: VersionSummary[] = data.versions.map((v) => ({
       id: v.id,

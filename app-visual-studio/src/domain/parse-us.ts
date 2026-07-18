@@ -1,6 +1,7 @@
 import { parse as parseYaml } from "yaml"
 
 import type { Moscow, StoryStatus, TestsRequirement, TestsStatus, UserStory } from "./types.js"
+import { extractUsPreamble } from "./story-narrative.js"
 
 const US_FILENAME = /^US-\d{4}\.md$/i
 const STORY_STATUSES: StoryStatus[] = ["✅", "🔶", "❌", "🧊"]
@@ -30,7 +31,7 @@ export function parseUserStoryFile(filename: string, raw: string): UserStory | n
   if (!US_FILENAME.test(filename)) {
     return null
   }
-  const { frontmatter } = splitMarkdown(raw)
+  const { frontmatter, body } = splitMarkdown(raw)
   if (!frontmatter) {
     return null
   }
@@ -71,5 +72,6 @@ export function parseUserStoryFile(filename: string, raw: string): UserStory | n
     tests,
     testsStatus,
     ready,
+    preamble: extractUsPreamble(body) || null,
   }
 }

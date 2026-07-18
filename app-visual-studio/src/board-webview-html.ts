@@ -3,6 +3,7 @@ import * as crypto from "node:crypto"
 import type { EpicSummary } from "./load-epics.js"
 import type { VersionSummary } from "./load-versions.js"
 import type { UserStory } from "./domain/types.js"
+import { compactStoryNarrative } from "./domain/story-narrative.js"
 import {
   allSelectedVersionIds,
 } from "./domain/version-filter.js"
@@ -47,7 +48,14 @@ export function emptyBoardHtml(message: string): string {
 
 export function boardKanbanHtml(payload: BoardWebviewPayload): string {
   const nonce = crypto.randomBytes(16).toString("hex")
-  const dataJson = JSON.stringify(payload)
+  const viewPayload = {
+    ...payload,
+    stories: payload.stories.map((s) => ({
+      ...s,
+      narrative: compactStoryNarrative(s.preamble),
+    })),
+  }
+  const dataJson = JSON.stringify(viewPayload)
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -157,6 +165,13 @@ export function boardKanbanHtml(payload: BoardWebviewPayload): string {
     .card:hover { border-color: var(--vscode-focusBorder); }
     .card-id { font-weight: 600; font-size: 11px; }
     .card-title { font-size: 12px; margin-top: 4px; line-height: 1.35; }
+    .card-narrative {
+      font-size: 10px;
+      color: var(--vscode-descriptionForeground);
+      margin-top: 4px;
+      line-height: 1.4;
+      font-style: italic;
+    }
     .card-meta { font-size: 10px; color: var(--vscode-descriptionForeground); margin-top: 4px; }
     .empty { padding: 24px; text-align: center; color: var(--vscode-descriptionForeground); }
     .column-pager {
@@ -207,6 +222,7 @@ export function boardKanbanHtml(payload: BoardWebviewPayload): string {
       <span class="toolbar-label">Show</span>
       <select class="pager-select" id="page-size" title="Cards per column"></select>
       <button type="button" class="chip" id="frozen-toggle">Show frozen</button>
+      <button type="button" class="chip" id="narrative-toggle">Show narrative</button>
     </div>
   </div>
   <div class="board-wrap"><div id="board" class="board"></div></div>
@@ -216,7 +232,7 @@ export function boardKanbanHtml(payload: BoardWebviewPayload): string {
     ${PROJECT_CONTEXT_SCRIPT}
     wireProjectContext(payload.context);
     ${PAGINATION_SCRIPT}
-    const BOARD_STATE_VERSION = 10;
+    const BOARD_STATE_VERSION = 11;
     const COLUMN_ORDER = ["❌", "🔶", "🧪", "✅", "🧊"];
     const ALWAYS_VISIBLE = ["❌", "🔶", "🧪", "✅"];
     const COLUMN_LABELS = { "❌": "Todo", "🔶": "Partial", "🧪": "Tests", "✅": "Done", "🧊": "Frozen" };
@@ -233,6 +249,7 @@ export function boardKanbanHtml(payload: BoardWebviewPayload): string {
       ? new Set(saved.selectedEpics)
       : null;
     let showFrozen = !!saved.showFrozen;
+    let showNarrative = !!saved.showNarrative;
     let pageSize = freshState ? DEFAULT_PAGE_SIZE : normalizePageSize(saved.pageSize);
     let columnPages = freshState ? {} : (saved.columnPages || {});
 
@@ -396,12 +413,18 @@ export function boardKanbanHtml(payload: BoardWebviewPayload): string {
         btn.type = "button";
         btn.className = "card";
         const meta = s.epic + (showVer ? " · " + s.version : "") + " · " + s.moscow;
+        const narrativeHtml =
+          showNarrative && s.narrative
+            ? '<div class="card-narrative">' + esc(s.narrative) + "</div>"
+            : "";
         btn.innerHTML =
           '<div class="card-id">' +
           esc(s.id) +
           '</div><div class="card-title">' +
           esc(s.title) +
-          '</div><div class="card-meta">' +
+          "</div>" +
+          narrativeHtml +
+          '<div class="card-meta">' +
           esc(meta) +
           "</div>";
         btn.onclick = () => vscode.postMessage({ type: "openStory", id: s.id });
@@ -575,6 +598,21 @@ export function boardKanbanHtml(payload: BoardWebviewPayload): string {
         renderBoard();
       };
 
+      const narrativeBtn = document.getElementById("narrative-toggle");
+      const narrativeN = scoped.filter((s) => s.narrative).length;
+      narrativeBtn.classList.toggle("on", showNarrative);
+      narrativeBtn.classList.toggle("muted", narrativeN === 0);
+      narrativeBtn.textContent = narrativeN
+        ? showNarrative
+          ? "Hide narrative"
+          : "Show narrative (" + narrativeN + ")"
+        : "Show narrative";
+      narrativeBtn.onclick = () => {
+        showNarrative = !showNarrative;
+        persist();
+        renderBoard();
+      };
+
       const list = filteredStories();
       const summary = document.getElementById("summary");
       summary.textContent =
@@ -620,6 +658,7 @@ export function boardKanbanHtml(payload: BoardWebviewPayload): string {
         selectedVersions: [...selectedVersions],
         selectedEpics: selectedEpics ? [...selectedEpics] : [],
         showFrozen,
+        showNarrative,
         pageSize,
         columnPages,
       });

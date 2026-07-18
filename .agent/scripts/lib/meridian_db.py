@@ -12,6 +12,7 @@ from typing import Any
 
 US_ID_RE = re.compile(r"^US-\d{4}$")
 
+from meridian_markdown_parse import extract_us_preamble
 from meridian_paths import MIGRATIONS_DIR, REPO_ROOT
 DB_FILENAME = "meridian.db"
 MERIDIAN_DIR = ".meridian"
@@ -401,6 +402,7 @@ def upsert_user_story(
     depends = normalize_depends_on(depends_on)
     validate_story_dependency_ids(conn, story_id, depends)
     ready_val = 1 if frontmatter.get("ready", "").lower() == "true" else 0
+    preamble = extract_us_preamble(body)
     conn.execute(
         """
         INSERT INTO user_stories (
@@ -443,7 +445,7 @@ def upsert_user_story(
             frontmatter.get("done_when", ""),
             frontmatter.get("tests", "required"),
             frontmatter.get("tests_status", "pending"),
-            None,
+            preamble or None,
             sections.get("intent_acceptance"),
             sections.get("intent_why"),
             sections.get("intent_where"),
@@ -707,10 +709,14 @@ def export_planning_json(package_root: str | Path) -> dict[str, Any]:
         for row in conn.execute(
             """
             SELECT id, title, epic_id, version_id, status, moscow,
-                   done_when, tests, tests_status, ready, summary
+                   done_when, tests, tests_status, ready, summary,
+                   preamble, body_markdown
             FROM user_stories ORDER BY id
             """
         ):
+            preamble = (row["preamble"] or "").strip()
+            if not preamble and row["body_markdown"]:
+                preamble = extract_us_preamble(row["body_markdown"])
             stories.append(
                 {
                     "id": row["id"],
@@ -725,6 +731,7 @@ def export_planning_json(package_root: str | Path) -> dict[str, Any]:
                     "testsStatus": row["tests_status"] or "pending",
                     "ready": bool(row["ready"]),
                     "summary": row["summary"],
+                    "preamble": preamble or None,
                 }
             )
         versions = []

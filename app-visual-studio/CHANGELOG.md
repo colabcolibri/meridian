@@ -4,6 +4,13 @@ All notable changes to the **Meridian** VS Code extension (`meridian-vscode`).
 
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.1.20] - 2026-07-18
+
+### Added
+
+- **Board:** optional **Show narrative** toolbar toggle — compact As / I want / so that line on kanban cards (off by default)
+- **Planning export:** `preamble` on user stories (SQLite upsert + fallback from `body_markdown`)
+
 ## [1.1.19] - 2026-07-18
 
 ### Changed
