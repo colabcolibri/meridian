@@ -32,6 +32,15 @@ AI agents in the IDE ship code fast — but without a written spec, scope drifts
 
 Still open questions. This repository is my lab.
 
+## Repository lineage (Meridian 2.0)
+
+| Branch / artifact | Purpose |
+| ----------------- | ------- |
+| `main` | Meridian 2.0 — SQLite delivery store (`.meridian/meridian.db`) + phase docs in Markdown |
+| `meridian-v1-old` | Meridian v1 — file-per-artifact Markdown under `docs/us/`, `docs/epics/`, etc. |
+
+Cutover steps: [MERIDIAN_V2_CUTOVER.md](MERIDIAN_V2_CUTOVER.md).
+
 ## The loop I'm testing
 
 ```

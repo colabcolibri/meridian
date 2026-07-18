@@ -23,6 +23,14 @@ from meridian_section_contracts import (  # noqa: E402
     validate_version_structure,
 )
 
+try:
+    from meridian_db import db_exists, load_delivery_markdown_files  # noqa: E402
+    from meridian_markdown_parse import parse_frontmatter_dict  # noqa: E402
+except ImportError:
+    db_exists = None  # type: ignore[assignment,misc]
+    load_delivery_markdown_files = None  # type: ignore[assignment,misc]
+    parse_frontmatter_dict = None  # type: ignore[assignment,misc]
+
 
 PHASE_DOCS = [
     "00_scope.md",
@@ -121,6 +129,10 @@ TESTS_GENERIC_MARKERS = (
 
 def read_markdown_body(path: Path) -> str:
     text = path.read_text(encoding="utf-8")
+    return read_markdown_body_from_text(text)
+
+
+def read_markdown_body_from_text(text: str) -> str:
     if not text.startswith("---\n"):
         return text
     end = text.find("\n---", 4)
@@ -225,11 +237,19 @@ def read_frontmatter(path: Path) -> dict[str, str]:
 def main() -> int:
     argv = sys.argv[1:]
     json_output = False
+    md_only = "--md-only" in argv
+    if md_only:
+        argv = [arg for arg in argv if arg != "--md-only"]
     if "--json" in argv:
         json_output = True
         argv = [arg for arg in argv if arg != "--json"]
 
     root = Path(argv[0]).resolve() if argv else Path.cwd()
+    use_db = (
+        not md_only
+        and db_exists is not None
+        and db_exists(root)
+    )
     docs = root / "docs"
     errors: list[str] = []
     warnings: list[str] = []
@@ -273,7 +293,7 @@ def main() -> int:
     epic_ids: set[str] = set()
     version_ids: set[str] = set()
 
-    if versions_dir.exists():
+    if versions_dir.exists() and not use_db:
         for version_path in sorted(versions_dir.glob("v*.md")):
             if not re.match(r"v\d+(\.\d+)*\.md$", version_path.name):
                 errors.append(f"Invalid version filename: {version_path.name}")
@@ -303,9 +323,10 @@ def main() -> int:
                 warnings,
             )
     else:
-        errors.append("Missing docs/versions/ directory.")
+        if not use_db:
+            errors.append("Missing docs/versions/ directory.")
 
-    if sprints_dir.exists():
+    if sprints_dir.exists() and not use_db:
         for sprint_path in sorted(sprints_dir.glob("v*-S*.md")):
             if not re.match(r"v\d+(\.\d+)*-S\d+\.md$", sprint_path.name):
                 errors.append(f"Invalid sprint filename: {sprint_path.name}")
@@ -325,7 +346,7 @@ def main() -> int:
                     f"{sprint_path.name}: version {version_ref} does not exist in docs/versions/"
                 )
 
-    if epics_dir.exists():
+    if epics_dir.exists() and not use_db:
         for epic_path in sorted(epics_dir.glob("EPIC-*.md")):
             if not re.match(r"EPIC-\d+\.md$", epic_path.name):
                 errors.append(f"Invalid epic filename: {epic_path.name}")
@@ -362,7 +383,8 @@ def main() -> int:
                 warnings,
             )
     else:
-        errors.append("Missing docs/epics/ directory.")
+        if not use_db:
+            errors.append("Missing docs/epics/ directory.")
 
     if decisions_dir.is_dir():
         for decision_path in sorted(decisions_dir.glob("*.json")):
@@ -420,7 +442,7 @@ def main() -> int:
     else:
         errors.append("Missing docs/decisions/ directory.")
 
-    if us_dir.exists():
+    if us_dir.exists() and not use_db:
         legacy_missing_context: list[str] = []
         for story in sorted(us_dir.glob("US-*.md")):
             match = re.match(r"US-\d{4}\.md$", story.name)
@@ -500,6 +522,71 @@ def main() -> int:
             warnings.append(
                 f"{len(legacy_missing_context)} open US without ## Plan "
                 f"(legacy) — run /refine-us before implement: {sample}{suffix}"
+            )
+
+        if story_ids and not architecture_approved:
+            errors.append(
+                "User stories exist but 05_architecture.md is not approved (delivery gate)."
+            )
+
+    if use_db and load_delivery_markdown_files is not None and parse_frontmatter_dict is not None:
+        delivery = load_delivery_markdown_files(root)
+        legacy_missing_context: list[str] = []
+
+        for name, text in delivery["versions"]:
+            frontmatter = parse_frontmatter_dict(text)
+            version_id = frontmatter.get("id")
+            if not version_id:
+                errors.append(f"Missing id in {name}")
+                continue
+            version_ids.add(version_id)
+            validate_version_structure(
+                name,
+                read_markdown_body_from_text(text),
+                errors,
+                warnings,
+            )
+
+        for name, text in delivery["epics"]:
+            frontmatter = parse_frontmatter_dict(text)
+            epic_id = frontmatter.get("id")
+            if epic_id:
+                epic_ids.add(epic_id)
+            validate_epic_structure(
+                name,
+                read_markdown_body_from_text(text),
+                errors,
+                warnings,
+            )
+
+        for name, text in delivery["sprints"]:
+            frontmatter = parse_frontmatter_dict(text)
+            sprint_id = frontmatter.get("id")
+            version_ref = frontmatter.get("version")
+            if version_ref and version_ids and version_ref not in version_ids:
+                errors.append(f"{name}: version {version_ref} does not exist")
+
+        for name, text in delivery["user_stories"]:
+            frontmatter = parse_frontmatter_dict(text)
+            story_id = frontmatter.get("id")
+            status = frontmatter.get("status")
+            if story_id:
+                story_ids.add(story_id)
+            validate_us_structure(
+                name,
+                read_markdown_body_from_text(text),
+                frontmatter,
+                errors,
+                warnings,
+            )
+            validate_us_semantics(
+                name,
+                status,
+                frontmatter,
+                text,
+                errors,
+                warnings,
+                legacy_missing_context,
             )
 
         if story_ids and not architecture_approved:

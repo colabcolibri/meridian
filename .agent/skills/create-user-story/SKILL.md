@@ -60,8 +60,8 @@ Forbidden: telegraphic stubs, repeating acceptance under Approach, “see EPIC-X
 3. Next ID = highest `US-XXXX` + 1 (4 digits).
 4. Write full US — especially Why / Where / Approach with explanatory prose.
 5. Set `ready: false` — implement blocked until `/refine-us`.
-6. Save `docs/us/US-XXXX.md`.
-7. `generate-board-json`; `update-decisions-log` if acceptance model changes.
+6. **v9+ SQLite:** when `{packageRoot}/.meridian/meridian.db` exists, persist via `python3 .agent/scripts/meridian_db_cli.py create-us ...` instead of Write on `docs/us/US-XXXX.md`. Else save `docs/us/US-XXXX.md`.
+7. `generate-board-json` (`generate_board.py` when DB exists); `update-decisions-log` if acceptance model changes.
 
 ## Validations before saving
 

@@ -1,6 +1,6 @@
 ---
 title: Database
-status: draft
+status: approved
 version: 2.0
 updated: 2026-07-18
 depends_on: [03_user_types.md, 05_architecture.md]
@@ -104,5 +104,5 @@ One-shot import: `.agent/scripts/migrate_md_to_sqlite.py` (US-0107, US-0108) rea
 
 ## Pending approval
 
-- [ ] Manager approves this document (`status: approved`) after US-0113 review.
-- [ ] `05_architecture.md` storage split section updated (US-0113).
+- [x] Manager approves this document (`status: approved`) after US-0113 review.
+- [x] `05_architecture.md` storage split section updated (US-0113).

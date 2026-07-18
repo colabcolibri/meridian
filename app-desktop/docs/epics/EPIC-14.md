@@ -1,7 +1,7 @@
 ---
 id: EPIC-14
 title: SQLite data layer (Meridian 2.0)
-status: active
+status: complete
 versions: [v9]
 profiles: [Process Manager, Future VSCode User]
 outcome: "Delivery artifacts live in SQLite; phase docs stay Markdown; full v1 history migrated; kit and monitor read/write the database."

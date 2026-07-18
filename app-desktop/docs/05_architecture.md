@@ -27,35 +27,41 @@ meridian/                    # kit + app repository
     skills/                  # progressive disclosure + references/
     workflows/               # slash commands
     scripts/validate_meridian.py
-    scripts/generate_board.py  # v4-S2 — board from US frontmatter
+    scripts/generate_board.py   # v9 — board from SQLite when meridian.db exists
+    scripts/meridian_db.py
+    scripts/migrate_md_to_sqlite.py
+    migrations/                 # SQLite schema (YYYYMMDDHHMMSS_*.sql)
   app-visual-studio/         # VS Code extension (v4) — read-first IDE monitor
     src/extension.ts
     src/board-editor-panel.ts
     src/deliverables-editor-panel.ts
     dist/extension.js
   app-desktop/               # browser monitor (Vite) — read-only UI
-    docs/                    # source of truth for THIS app (monitored folder in dogfooding)
+    .meridian/meridian.db    # v9 — delivery store (epics, versions, sprints, US, decisions)
+    docs/                    # phase docs + derived board.json
       00_scope.md … 11_decisions.md
-      decisions/YYYY-MM-DD.json
-      us/
+      decisions/YYYY-MM-DD.json   # legacy import; new entries via meridian_db_cli
+      us/                  # legacy .md (v1); v9+ writes to SQLite when DB exists
       epics/
       versions/
       sprints/
-      kanban/board.json      # derived from US
+      kanban/board.json      # derived from SQLite user_stories (generate_board.py)
     src/
 ```
 
-The app is **not** the source of truth for the protocol. It monitors the project's **`docs/`** folder (the same one agents edit in Cursor).
+The app is **not** the source of truth for the protocol. It monitors the project's **`docs/`** folder for phase documents and **`.meridian/meridian.db`** for delivery artifacts when present (v9+).
 
 ## Layers
 
-| Layer                | Responsibility                                                                                                |
-| -------------------- | ------------------------------------------------------------------------------------------------------------- |
-| Protocol             | `.agent/MERIDIAN.md` (copy `.agent/` into client projects)                                                    |
-| Always-on governance | `.agent/rules/MERIDIAN.md`                                                                                    |
-| Monitored project    | phase docs 00–08 and 11, `docs/decisions/`, `docs/epics/`, `docs/versions/`, `docs/us/`, derived `board.json` |
-| Desktop monitor      | **Read-only** UI: Setup, Deliverables (epics/versions/sprints), Board (kanban), Decisions                     |
-| VS Code extension    | **Read-first** in v4: Board + Deliverables editor tabs; validate via kit Python; disk writes deferred to v5   |
+| Layer                | Responsibility                                                                                              |
+| -------------------- | ----------------------------------------------------------------------------------------------------------- |
+| Protocol             | `.agent/MERIDIAN.md` (copy `.agent/` into client projects)                                                  |
+| Always-on governance | `.agent/rules/MERIDIAN.md`                                                                                  |
+| Phase documents      | `docs/00`–`11`, discovery, architecture detail — **Markdown on disk**                                       |
+| Delivery store (v9+) | `.meridian/meridian.db` — epics, versions, sprints, US, decisions, board snapshots                          |
+| Derived kanban       | `docs/kanban/board.json` — generated from SQLite (`generate_board.py`)                                      |
+| Desktop monitor      | **Read-only** UI: Setup, Deliverables, Board, Decisions — loads delivery from DB when `meridian.db` exists  |
+| VS Code extension    | **Read-first** in v4: Board + Deliverables editor tabs; validate via kit Python; disk writes deferred to v5 |
 
 ## Desktop app (v1 + v2.01)
 
@@ -75,11 +81,11 @@ The app is **not** the source of truth for the protocol. It monitors the project
 ## Monitor views (v1)
 
 | Tab          | Source (relative to opened `docs/` folder) |
-| ------------ | ------------------------------------------ |
+| ------------ | ------------------------------------------ | -------------------------------------------------------------------------------------------------- |
 | Setup        | parsed docs 00–08 and 11 + inline reader   |
 | Decisions    | `decisions/*.json` — structured log by day |
 | Deliverables | `versions/`, `sprints/`, `epics/`          |
-| Board        | `us/*.md` + diff with `kanban/board.json`  |
+| Board        | `us/*.md` + diff with `kanban/board.json`  | **v9:** `user_stories` table via dev `/api/meridian/db` when `meridian.db` present; else `us/*.md` |
 
 ## VS Code extension (v4 — `app-visual-studio/`)
 

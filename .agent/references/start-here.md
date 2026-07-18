@@ -110,8 +110,11 @@ docs/
   us/US-XXXX.md            Phase 3+4 — executable tasks
   kanban/board.json        Generated — never edit by hand
   inventory/as-is.md       Mode B only — transitional; archive after promotion
+  ../.meridian/meridian.db v9+ — delivery store (epics, versions, sprints, US); phase docs stay in docs/
   ../.meridian/projects.json  Optional — multi-product repos (several docs/ trees)
 ```
+
+**Meridian 2.0 (v9+):** epics, versions, sprints, and user stories live in `{packageRoot}/.meridian/meridian.db`. Phase documents (`00`–`11`, discovery, architecture) remain Markdown. Run `python3 .agent/scripts/bootstrap_meridian_db.py <package-root>` after init; migrate legacy `.md` with `migrate_md_to_sqlite.py`.
 
 ### Several `docs/` folders (monorepo)
 

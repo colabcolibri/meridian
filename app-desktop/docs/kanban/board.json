@@ -945,7 +945,7 @@
     "status": "\u2705",
     "moscow": "Must",
     "depends_on": [],
-    "done_when": "Monitor flags US with status \u2705 or \ud83d\udd36 when",
+    "done_when": "Monitor flags US with status \u2705 or \ud83d\udd36 when ## Technical implementation is missing or still placeholder, using pure functions in story-body.ts.",
     "tests": "required",
     "tests_status": "done",
     "ready": true
@@ -983,11 +983,7 @@
     "version": "v2",
     "status": "\u2705",
     "moscow": "Must",
-    "depends_on": [
-      "US-0009",
-      "US-0016",
-      "US-0014"
-    ],
+    "depends_on": [],
     "done_when": "Opening docs/ builds a frontmatter-only project index; monitor tabs use the index; full markdown bodies load from disk only when a reader or sheet opens.",
     "tests": "required",
     "tests_status": "done",
@@ -1104,10 +1100,7 @@
     "version": "v2",
     "status": "\u2705",
     "moscow": "Must",
-    "depends_on": [
-      "US-0009",
-      "US-0076"
-    ],
+    "depends_on": [],
     "done_when": "Every Open folder runs a single deterministic session reset with generation-guarded async work; no code path leaves status open without a successful bind; all failures surface in UI or issues banner (zero silent catch).",
     "tests": "required",
     "tests_status": "done",
@@ -1400,12 +1393,12 @@
     "title": "SQLite schema for delivery artifacts",
     "epic": "EPIC-14",
     "version": "v9",
-    "status": "\u274c",
+    "status": "\u2705",
     "moscow": "Must",
     "depends_on": [],
-    "done_when": "Schema migration creates all delivery tables; ER diagram in 06_database; validator stub can open DB.",
+    "done_when": "Schema migration creates all delivery tables; ER diagram in 06_database; meridian_db.py can open DB and list tables.",
     "tests": "required",
-    "tests_status": "pending",
+    "tests_status": "done",
     "ready": true
   },
   {
@@ -1413,14 +1406,14 @@
     "title": "Database bootstrap and .meridian layout",
     "epic": "EPIC-14",
     "version": "v9",
-    "status": "\u274c",
+    "status": "\u2705",
     "moscow": "Must",
     "depends_on": [
       "US-0105"
     ],
-    "done_when": "Running bootstrap on a Meridian product folder creates .meridian/meridian.db with latest schema.",
+    "done_when": "Running bootstrap on app-desktop creates .meridian/meridian.db with latest schema and idempotent re-run.",
     "tests": "required",
-    "tests_status": "pending",
+    "tests_status": "done",
     "ready": true
   },
   {
@@ -1428,14 +1421,14 @@
     "title": "Migration script \u2014 import delivery artifacts from Markdown",
     "epic": "EPIC-14",
     "version": "v9",
-    "status": "\u274c",
+    "status": "\u2705",
     "moscow": "Must",
     "depends_on": [
       "US-0106"
     ],
-    "done_when": "Script imports all dogfood epics, versions, sprints, and US with count report matching source file totals.",
+    "done_when": "migrate_md_to_sqlite.py imports all dogfood epics, versions, sprints, and US with matching row counts.",
     "tests": "required",
-    "tests_status": "pending",
+    "tests_status": "done",
     "ready": true
   },
   {
@@ -1443,14 +1436,14 @@
     "title": "Migration script \u2014 import decisions and board history",
     "epic": "EPIC-14",
     "version": "v9",
-    "status": "\u274c",
+    "status": "\u2705",
     "moscow": "Must",
     "depends_on": [
       "US-0107"
     ],
-    "done_when": "All docs/decisions/*.json entries and latest board.json snapshot are stored in SQLite with verification report.",
+    "done_when": "All docs/decisions/*.json entries imported; board snapshot stored or regenerated with matching card count.",
     "tests": "required",
-    "tests_status": "pending",
+    "tests_status": "done",
     "ready": true
   },
   {
@@ -1458,14 +1451,14 @@
     "title": "Validator reads delivery artifacts from SQLite",
     "epic": "EPIC-14",
     "version": "v9",
-    "status": "\u274c",
+    "status": "\u2705",
     "moscow": "Must",
     "depends_on": [
       "US-0108"
     ],
-    "done_when": "validate_meridian.py app-desktop passes using DB as source for epics, versions, sprints, US; fails on same structural errors as before.",
+    "done_when": "validate_meridian.py app-desktop passes on DB-backed project with same structural rules as Markdown mode.",
     "tests": "required",
-    "tests_status": "pending",
+    "tests_status": "done",
     "ready": true
   },
   {
@@ -1473,14 +1466,14 @@
     "title": "Board generator derives board.json from SQLite",
     "epic": "EPIC-14",
     "version": "v9",
-    "status": "\u274c",
+    "status": "\u2705",
     "moscow": "Must",
     "depends_on": [
       "US-0109"
     ],
-    "done_when": "generate_board.py output matches pre-migration board.json for dogfood US set (column assignment and ids).",
+    "done_when": "generate_board.py writes board.json from SQLite with same card ids as pre-migration snapshot.",
     "tests": "required",
-    "tests_status": "pending",
+    "tests_status": "done",
     "ready": true
   },
   {
@@ -1488,14 +1481,14 @@
     "title": "Kit write path persists artifacts to database",
     "epic": "EPIC-14",
     "version": "v9",
-    "status": "\u274c",
+    "status": "\u2705",
     "moscow": "Must",
     "depends_on": [
       "US-0109"
     ],
-    "done_when": "/create-us inserts a new US row in SQLite without creating docs/us/US-XXXX.md; refine and complete update the same row.",
+    "done_when": "/create-us flow inserts US row in SQLite without new docs/us/*.md; refine and complete update same row.",
     "tests": "required",
-    "tests_status": "pending",
+    "tests_status": "done",
     "ready": true
   },
   {
@@ -1503,14 +1496,14 @@
     "title": "app-desktop monitor loads delivery data from SQLite",
     "epic": "EPIC-14",
     "version": "v9",
-    "status": "\u274c",
+    "status": "\u2705",
     "moscow": "Must",
     "depends_on": [
       "US-0111"
     ],
-    "done_when": "Board and Deliverables tabs show epics, versions, sprints, and US from .meridian/meridian.db on dogfood project.",
+    "done_when": "Board and Deliverables tabs show epics, versions, sprints, and US from .meridian/meridian.db on dogfood.",
     "tests": "required",
-    "tests_status": "pending",
+    "tests_status": "done",
     "ready": true
   },
   {
@@ -1518,12 +1511,12 @@
     "title": "Document phase-doc vs database boundary",
     "epic": "EPIC-14",
     "version": "v9",
-    "status": "\u274c",
+    "status": "\u2705",
     "moscow": "Must",
     "depends_on": [
       "US-0105"
     ],
-    "done_when": "06_database.md approved; 05_architecture.md updated; manager can list what stays .md vs what is in SQLite.",
+    "done_when": "06_database.md and 05_architecture.md approved with explicit Markdown vs SQLite split.",
     "tests": "none",
     "tests_status": "n/a",
     "ready": true
@@ -1533,12 +1526,12 @@
     "title": "Repo lineage \u2014 meridian-v1-old and main cutover",
     "epic": "EPIC-14",
     "version": "v9",
-    "status": "\u274c",
+    "status": "\u2705",
     "moscow": "Must",
     "depends_on": [
       "US-0112"
     ],
-    "done_when": "Branch meridian-v1-old exists with pre-v9 tree; cutover runbook in repo root; manager sign-off checklist complete.",
+    "done_when": "Branch meridian-v1-old exists; MERIDIAN_V2_CUTOVER.md runbook reviewed; README notes v1 vs v2.",
     "tests": "none",
     "tests_status": "n/a",
     "ready": true

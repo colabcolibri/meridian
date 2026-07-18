@@ -5,6 +5,7 @@ import react from "@vitejs/plugin-react"
 import { defineConfig } from "vite"
 
 import { meridianFileServerPlugin } from "./vite-file-server"
+import { meridianDbApi } from "./vite-meridian-db"
 import { meridianValidateApi } from "./vite-meridian-validate"
 
 const appDesktopRoot = path.dirname(fileURLToPath(import.meta.url))
@@ -22,7 +23,13 @@ export default defineConfig({
   base: process.env.VITE_BASE_PATH ?? "/",
   root: appDesktopRoot,
   envDir: appDesktopRoot,
-  plugins: [meridianFileServerPlugin(), meridianValidateApi(), react(), tailwindcss()],
+  plugins: [
+    meridianFileServerPlugin(),
+    meridianDbApi(),
+    meridianValidateApi(),
+    react(),
+    tailwindcss(),
+  ],
   server: {
     port: 5173,
     strictPort: false,
