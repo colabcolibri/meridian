@@ -91,8 +91,8 @@ Before any action, classify:
 
 ### Source of truth
 
-- `docs/` is the source of truth of the **target project** (do not confuse with this repo's `app-desktop/docs/` unless context is explicit).
-- `docs/kanban/board.json` is **derived** from `docs/us/*.md`.
+- `docs/` is the source of truth for **phase docs** (`00`–`11`, decisions, architecture) of the **target project** (do not confuse with this repo's `app-desktop/docs/` unless context is explicit).
+- Delivery (US, epic, version, sprint) lives in `.meridian/meridian.db` — see `sqlite-delivery-operations.md`.
 - Read `.agent/MERIDIAN.md` before changing project structure.
 
 ### Documentation precedes code
@@ -116,7 +116,7 @@ Do not write product code until required docs for the current phase exist (see `
 - Protect `.env`, `.env.*`, logs, builds, `node_modules`, caches.
 - Do not expose secrets; do not run destructive commands without approval.
 - Security changes require a decision in `docs/decisions/YYYY-MM-DD.json`.
-- After `/complete-us` + `/sync-board`, the **manager** commits (one US per commit by default). Agents may suggest a message in `### Executed`; they do not `git commit` unless explicitly asked. See `.agent/references/commit-after-us-close.md`.
+- After `/complete-us`, the **manager** commits (one US per commit by default). Agents may suggest a message in `### Executed`; they do not `git commit` unless explicitly asked. See `.agent/references/commit-after-us-close.md`.
 
 ### Human manager
 
@@ -138,12 +138,11 @@ The person is manager of the process. Agents report blockers, next step, and pen
 | `docs/architecture/*.md` | `architecture-guardian` | indexed from `05`; gate stays on `05` only |
 | `docs/versions/`, `docs/sprints/` (create/plan) | `sprint-planner` | `create-sprint`, `create-version` |
 | `docs/sprints/` (close) | `sprint-planner` | `complete-sprint` |
-| `docs/us/*.md` (create) | `board-keeper` | `create-user-story` + `code-quality-at-us-time.md` |
-| `docs/us/*.md` (review) | `board-keeper` | `review-user-story` |
-| `docs/us/*.md` (refine) | `board-keeper` | `refine-user-story` + `code-quality-at-us-time.md` + `04_principles.md` |
-| `docs/us/*.md` (implement) | `process-manager` | `implement-user-story` + `code-quality-at-us-time.md` + `04_principles.md` |
-| `docs/us/*.md` (close) | `board-keeper` | `complete-user-story` |
-| `board.json` | `board-keeper` | `generate-board-json` |
+| Delivery US (create) | `board-keeper` | `create-user-story` + `sqlite-delivery-operations.md` |
+| Delivery US (review) | `board-keeper` | `review-user-story` |
+| Delivery US (refine) | `board-keeper` | `refine-user-story` + `code-quality-at-us-time.md` + `04_principles.md` |
+| Delivery US (implement) | `process-manager` | `implement-user-story` + `code-quality-at-us-time.md` + `04_principles.md` |
+| Delivery US (close) | `board-keeper` | `complete-user-story` |
 | `11_decisions.md` (stub) + `docs/decisions/` | any relevant agent | `update-decisions-log` |
 
 ---

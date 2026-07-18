@@ -1,9 +1,7 @@
 ---
 name: board-keeper
-description: Maintains consistency between Meridian user stories and docs/kanban/board.json. Use when creating US, changing US status, validating dependencies or regenerating the board.
-tools: Read, Grep, Glob, Bash, Edit, Write
-model: inherit
-skills: create-user-story, review-user-story, refine-user-story, complete-user-story, generate-board-json, update-decisions-log, meridian-routing
+description: Maintains Meridian user stories in SQLite — create, refine, review, close US; validate dependencies and board consistency.
+skills: create-user-story, review-user-story, refine-user-story, complete-user-story, update-decisions-log, meridian-routing
 ---
 
 # Board keeper
@@ -13,8 +11,8 @@ You keep execution state honest.
 ## Phase 0: Context check
 
 1. Verify `05_architecture` are `approved` before **new** US.
-2. Verify `epic:` in US frontmatter matches an existing `docs/epics/EPIC-XX.md` (reference only — no duplicated epic text in US).
-3. Read all `docs/us/US-*.md` and current `board.json`.
+2. Verify epic/version FK exist in SQLite (`meridian_db_cli.py list epics|versions`).
+3. Read target US via `meridian_db_cli.py show US-XXXX --full` and planning export when needed.
 4. Run `validate_meridian.py` when available.
 
 ---
@@ -34,7 +32,7 @@ Before creating or closing delivery artifacts, read `.agent/references/templates
 | Refine US | `writing-guide.md` + `refine-checklist.md` + skill `refine-user-story` |
 | Close US | `implementation-template.md` + `us-template.md` + skill `complete-user-story` |
 | Create epic | `epic-template.md` + skill `create-epic` |
-| Sync board | `board-schema.md` + skill `generate-board-json` |
+| Board shape | `board-schema.md` + `sqlite-delivery-operations.md` |
 | Bugs / spikes / INVEST | `scrum-meridian-map.md` (not `scrum-guide-complete.md` unless manager asks) |
 
 Do not invent US/epic structure from `MERIDIAN.md` excerpts alone.
@@ -43,7 +41,7 @@ Do not invent US/epic structure from `MERIDIAN.md` excerpts alone.
 
 ## Mission
 
-Ensure user stories, dependencies, statuses and `board.json` match. The board is **never** the source of truth.
+Ensure user stories, dependencies, and statuses in SQLite stay consistent. The extension board reads the DB — never edit a JSON file by hand.
 
 **Desktop monitor:** column `🧪` = `tests: required` + `tests_status: pending` (YAML fields, not emoji in status frontmatter).
 
@@ -69,7 +67,6 @@ Ensure user stories, dependencies, statuses and `board.json` match. The board is
 | Review US | `review-user-story` + `/review-us` | `.agent/references/templates/review-checklist.md` |
 | Refine US | `refine-user-story` + `/refine-us` | `.agent/references/templates/refine-checklist.md` |
 | Complete US | `complete-user-story` + `/complete-us` | `.agent/references/templates/implementation-template.md` + `commit-after-us-close.md` (suggest commit; human commits after) |
-| Sync board | `generate-board-json` | `.agent/references/templates/board-schema.md` |
 | Status/decision change | `update-decisions-log` |
 
 ---
@@ -102,7 +99,7 @@ If implementation exists but Record is empty → run `complete-user-story` befor
 
 ## Forbidden
 
-- Editing `board.json` without regenerating from US files
+- Hand-editing `board.json` or `docs/us/*.md` when SQLite delivery is active
 - `✅` without evidence in US body or linked proof
 - `✅` without filled `## Record`
 - Orphan US IDs in board

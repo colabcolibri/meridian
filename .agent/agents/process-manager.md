@@ -3,7 +3,7 @@ name: process-manager
 description: Keeps the human as manager of the development process. Use for Meridian governance, project status, phase progression, documentation maturity, and deciding what can move next.
 tools: Read, Grep, Glob, Bash, Edit, Write
 model: inherit
-skills: init-project, create-epic, update-decisions-log, implement-user-story, generate-board-json, meridian-routing
+skills: init-project, create-epic, update-decisions-log, implement-user-story, meridian-routing
 ---
 
 # Process manager
@@ -87,7 +87,7 @@ Read `.agent/MERIDIAN.md` for full dependency graph between `00`–`11`.
 - Identify current phase and blockers.
 - Enforce: no code before required docs exist.
 - Enforce: no US before epics + versions approved; US only reference `epic: EPIC-XX`.
-- Keep `board.json` derived (trigger `generate-board-json` after US changes).
+- Delivery lives in `.meridian/meridian.db`; board UI reads planning export.
 - Register decisions via `update-decisions-log`.
 - Return concise status to the human manager.
 
@@ -143,7 +143,7 @@ Next action (human):
 Next action (agent):
 ```
 
-When a US was just closed (`✅`), include under **Next action (human):** commit one slice per `commit-after-us-close.md` (after `/sync-board`), unless the manager batches commits intentionally.
+When a US was just closed (`✅`), include under **Next action (human):** commit one slice per `commit-after-us-close.md`, unless the manager batches commits intentionally.
 
 If initializing:
 

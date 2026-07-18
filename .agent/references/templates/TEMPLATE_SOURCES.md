@@ -7,14 +7,14 @@
 ## How the mirror works
 
 ```txt
-CANONICAL (edit here)          REGISTRY (agents read)              HUMAN / CURSOR (read-only mirrors)
-.agent/skills/.../references/  →  .agent/references/templates/  →  app-desktop/docs/templates/
-                                                              →  .cursor/references/templates/
+CANONICAL (edit here)          REGISTRY (agents read)              IDE adapter (read-only)
+.agent/skills/.../references/  →  .agent/references/templates/  →  .cursor/references/templates/
 ```
 
-- **Registry** = symlinks + 4 kit-owned files (`INDEX.md`, `writing-guide.md`, `section-contracts.md`, `lifecycle.md`, `TEMPLATE_SOURCES.md`).
-- **Never** edit symlinks in `docs/templates/` or `.cursor/` — they point at `.agent/`.
-- After adding a new template file, update `INDEX.md`, run `./.agent/scripts/sync_cursor_kit.sh` (syncs `.cursor/` + `app-desktop/docs/templates/`), and `docs/templates/README.md` in target projects.
+- **Registry** = symlinks + kit-owned files (`INDEX.md`, `writing-guide.md`, `section-contracts.md`, `lifecycle.md`, `TEMPLATE_SOURCES.md`).
+- **Never** edit symlinks in `.cursor/references/templates/` — they point at `.agent/`.
+- **Do not** create `docs/templates/` in product projects (v11). Templates are kit instructions, not delivery artifacts.
+- After adding a new template file, update `INDEX.md` and run `./.agent/scripts/sync_cursor_kit.sh` (syncs `.cursor/references/templates/` only).
 
 ---
 
@@ -30,7 +30,7 @@ CANONICAL (edit here)          REGISTRY (agents read)              HUMAN / CURSO
 | `epic-template.md` | `.agent/skills/create-epic/references/epic-template.md` | `.agent/references/templates/epic-template.md` | `/create-epic` |
 | `version-template.md` | `.agent/skills/create-version/references/version-template.md` | `.agent/references/templates/version-template.md` | `/create-version` |
 | `sprint-template.md` | `.agent/skills/create-sprint/references/sprint-template.md` | `.agent/references/templates/sprint-template.md` | `/plan-sprint` |
-| `board-schema.md` | `.agent/skills/generate-board-json/references/board-schema.md` | `.agent/references/templates/board-schema.md` | `/sync-board` |
+| `board-schema.md` | `.agent/references/templates/board-schema.md` | `.agent/references/templates/board-schema.md` | kanban card shape (SQLite) |
 | `decision-template.md` | `.agent/skills/update-decisions-log/references/decision-template.md` | `.agent/references/templates/decision-template.md` | `update-decisions-log` |
 | `decision-schema.md` | `.agent/skills/update-decisions-log/references/decision-schema.md` | `.agent/references/templates/decision-schema.md` | `update-decisions-log` (validation) |
 | `doc-templates.md` | `.agent/skills/init-project/references/doc-templates.md` | `.agent/references/templates/doc-templates.md` | `/init-meridian` |
@@ -51,6 +51,7 @@ CANONICAL (edit here)          REGISTRY (agents read)              HUMAN / CURSO
 | `.agent/references/templates/section-contracts.md` | Fixed headings — validated by Python + monitor |
 | `.agent/references/templates/lifecycle.md` | create → review → refine → implement → close |
 | `.agent/references/templates/TEMPLATE_SOURCES.md` | This file — canonical paths |
+| `.agent/references/templates/sqlite-delivery-operations.md` | Agent SQLite write guide (v10) |
 
 ---
 
@@ -61,7 +62,7 @@ CANONICAL (edit here)          REGISTRY (agents read)              HUMAN / CURSO
 | Create | `/create-us` | `writing-guide.md` + `code-quality-at-us-time.md` + `us-template.md` |
 | Review | `/review-us` | `review-checklist.md` + `writing-guide.md` + `section-contracts.md` + `us-template.md` |
 | Refine | `/refine-us` | `refine-checklist.md` + `writing-guide.md` + `code-quality-at-us-time.md` + `us-template.md` + `04_principles.md` |
-| Implement | `/implement-us` | `implement-gate-checklist.md` + `code-quality-at-us-time.md` + target US + `04_principles.md` |
+| Implement | `/implement-us` | `implement-gate-checklist.md` + `meridian_db_cli implement-gate` + target US (`show --full`) + `04_principles.md` |
 | Architecture | `/architecture` | `architecture-folder-guide.md` + phase docs 00–04 |
 | Close | `/complete-us` | `implementation-template.md` + `us-template.md` + `section-contracts.md` |
 
@@ -69,11 +70,7 @@ CANONICAL (edit here)          REGISTRY (agents read)              HUMAN / CURSO
 
 ---
 
-## Dogfooding copy
-
-In this repo, human-readable mirrors live at `app-desktop/docs/templates/` (symlinks to registry). Open [README.md](../../../app-desktop/docs/templates/README.md) in the monitor **Templates** section.
-
-Regenerate Cursor mirrors after clone:
+## Regenerate Cursor mirrors after clone
 
 ```bash
 ./.agent/scripts/sync_cursor_kit.sh

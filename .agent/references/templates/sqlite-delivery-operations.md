@@ -23,7 +23,7 @@ Dogfood `packageRoot` = repository root (`.`).
 5. sprint_stories    (FK: sprint_id → sprints.id, story_id → user_stories.id)
 6. story_dependencies (FK: story_id → user_stories.id, depends_on_id → user_stories.id)
 7. decisions         (independent)
-8. board_snapshots   (derived; use generate_board.py)
+8. board_snapshots   (derived; auto on upsert via record_board_snapshot)
 ```
 
 **FK failures** mean parent row missing — insert version and epic before user story; insert user stories before `sprint_stories`.
@@ -65,11 +65,12 @@ python3 .agent/scripts/meridian_db_export.py . --entity epics --id EPIC-15 --for
 # stdin: JSON { frontmatter, preamble, sections } — see meridian_delivery_form.py
 python3 .agent/scripts/meridian_db_export.py . --entity us --id US-0115 --write-form < form.json
 
+python3 .agent/scripts/meridian_db_cli.py implement-gate US-0115
+python3 .agent/scripts/meridian_db_cli.py implement-gate US-0115 --json
 python3 .agent/scripts/meridian_db_cli.py set-ready US-0115 --ready true
 python3 .agent/scripts/meridian_db_cli.py set-summary US-0115 --text "4-8 sentence summary"
 
-# 5. Board + validate
-python3 .agent/scripts/generate_board.py .
+# 5. Validate
 python3 .agent/scripts/validate_meridian.py .
 python3 .agent/scripts/validate_meridian.py . --sqlite-only   # after purge
 ```

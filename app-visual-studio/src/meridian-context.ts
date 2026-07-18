@@ -3,7 +3,7 @@ import * as path from "node:path"
 
 import * as vscode from "vscode"
 
-import { fileEventTouchesBoardSync, isBoardSyncDocsPath } from "./docs-board-sync.js"
+import { fileEventTouchesMeridianDb } from "./docs-board-sync.js"
 import { clearMeridianDeliveryCache } from "./meridian-document-provider.js"
 import {
   pickMeridianWorkspace,
@@ -27,7 +27,6 @@ export class MeridianContext {
   private state: MeridianContextState = { info: null }
   private lastWarnedDocsRoot: string | null = null
   private docsWatcher: vscode.FileSystemWatcher | undefined
-  private dbWatcher: vscode.FileSystemWatcher | undefined
   private boardSyncTimer: ReturnType<typeof setTimeout> | undefined
 
   constructor(
@@ -129,7 +128,6 @@ export class MeridianContext {
     this.clearBoardSyncTimer()
     this.statusItem?.dispose()
     this.docsWatcher?.dispose()
-    this.dbWatcher?.dispose()
   }
 
   registerListeners(): void {
@@ -144,57 +142,41 @@ export class MeridianContext {
   private onWorkspaceFileEvent(
     files: readonly { readonly oldUri?: vscode.Uri; readonly newUri?: vscode.Uri }[],
   ): void {
-    const docsRoot = this.state.info?.docsRoot
-    if (!docsRoot || !fileEventTouchesBoardSync(docsRoot, files)) {
+    const packageRoot = this.state.info?.packageRoot
+    if (!packageRoot || !fileEventTouchesMeridianDb(packageRoot, files)) {
       return
     }
-    this.scheduleBoardSync()
+    this.schedulePlanningRefresh()
   }
 
   private resetDocsWatcher(): void {
     this.docsWatcher?.dispose()
     this.docsWatcher = undefined
-    this.dbWatcher?.dispose()
-    this.dbWatcher = undefined
     const info = this.state.info
-    const docsRoot = info?.docsRoot
-    if (!docsRoot) {
+    if (!info) {
       return
     }
-    const pattern = new vscode.RelativePattern(
-      vscode.Uri.file(docsRoot),
-      "{us/*.md,kanban/board.json,versions/*.md,epics/*.md,sprints/*.md}",
-    )
-    this.docsWatcher = vscode.workspace.createFileSystemWatcher(pattern)
-    const bump = (uri: vscode.Uri) => {
-      if (!isBoardSyncDocsPath(docsRoot, uri.fsPath)) {
-        return
-      }
-      this.scheduleBoardSync()
-    }
-    this.docsWatcher.onDidChange(bump)
-    this.docsWatcher.onDidCreate(bump)
-    this.docsWatcher.onDidDelete(bump)
-
     const dbPath = path.join(info.packageRoot, ".meridian", "meridian.db")
-    if (fs.existsSync(dbPath)) {
-      const meridianDir = path.dirname(dbPath)
-      const dbPattern = new vscode.RelativePattern(vscode.Uri.file(meridianDir), "meridian.db")
-      this.dbWatcher = vscode.workspace.createFileSystemWatcher(dbPattern)
-      const bumpDb = () => {
-        clearMeridianDeliveryCache()
-        this.scheduleBoardSync()
-      }
-      this.dbWatcher.onDidChange(bumpDb)
-      this.dbWatcher.onDidCreate(bumpDb)
+    if (!fs.existsSync(dbPath)) {
+      return
     }
+    const meridianDir = path.dirname(dbPath)
+    const dbPattern = new vscode.RelativePattern(vscode.Uri.file(meridianDir), "meridian.db")
+    this.docsWatcher = vscode.workspace.createFileSystemWatcher(dbPattern)
+    const bumpDb = () => {
+      clearMeridianDeliveryCache()
+      this.schedulePlanningRefresh()
+    }
+    this.docsWatcher.onDidChange(bumpDb)
+    this.docsWatcher.onDidCreate(bumpDb)
+    this.docsWatcher.onDidDelete(bumpDb)
   }
 
-  private scheduleBoardSync(): void {
+  private schedulePlanningRefresh(): void {
     this.clearBoardSyncTimer()
     this.boardSyncTimer = setTimeout(() => {
       this.boardSyncTimer = undefined
-      void this.syncBoardFromDocs()
+      void this.refreshPlanningPanels()
     }, BOARD_SYNC_DEBOUNCE_MS)
   }
 
@@ -205,8 +187,8 @@ export class MeridianContext {
     }
   }
 
-  /** Reload board UI and US count — without re-picking workspace or resetting watchers. */
-  private async syncBoardFromDocs(): Promise<void> {
+  /** Reload planning panels and US count when meridian.db changes. */
+  private async refreshPlanningPanels(): Promise<void> {
     const info = this.state.info
     if (!info?.docsExists) {
       return

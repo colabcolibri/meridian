@@ -49,7 +49,7 @@ RULES:
 6. Create docs/ tree per skill
 7. 00_scope.md = draft, populated (not blank)
 8. 11_decisions.md stub + first JSON entry in docs/decisions/
-9. board.json = []
+9. Bootstrap `.meridian/meridian.db` (`bootstrap_meridian_db.py`)
 10. Validate .gitignore baseline
 11. REPORT exact paths created and any inferences (Mode B)
 ```
@@ -63,9 +63,9 @@ RULES:
 | Docs structure | `docs/` + subfolders |
 | Initial scope | `docs/00_scope.md` (populated, not blank) |
 | Decision log | `docs/decisions/YYYY-MM-DD.json` + stub `11_decisions.md` |
-| Empty board | `docs/kanban/board.json` |
+| Delivery DB | `.meridian/meridian.db` (empty delivery tables) |
 | As-is inventory (Mode B only) | `docs/inventory/as-is.md` |
-| Templates mirror | `docs/templates/` (symlinks to kit; optional but recommended) |
+| Templates mirror | *(removed v11)* — agents read `.agent/references/templates/` |
 
 ---
 
@@ -95,7 +95,7 @@ Next steps (new project):
 3. Run /architecture to draft 05_architecture.md
 4. Approve 05_architecture (human action in frontmatter)
 5. Plan delivery: /create-epic → /create-version → /plan-sprint
-6. Create work: /create-us → /refine-us → /implement-us → /complete-us → /sync-board
+6. Create work: /create-us → /refine-us → /implement-us → /complete-us
 
 Next steps (existing codebase — add before step 5):
 A. Review docs/inventory/as-is.md — fix confidence, gaps, epic candidates

@@ -2,7 +2,7 @@
 
 Use with `/implement-us US-XXXX` **before** any Write on product code for that story.
 
-**Hard block:** if any required row fails → do **not** implement; report blocker and next command (`/refine-us`, `/status`, etc.).
+**Automated:** `python3 .agent/scripts/meridian_db_cli.py implement-gate US-XXXX` (checks 1–7 except session scope and principles read).
 
 ---
 
@@ -11,7 +11,7 @@ Use with `/implement-us US-XXXX` **before** any Write on product code for that s
 | # | Check | Pass when |
 | - | ----- | --------- |
 | 1 | `05_architecture.md` | `status: approved` |
-| 2 | Epic + version | `epic:` and `version:` exist in folders |
+| 2 | Epic + version | `epic_id` and `version_id` exist in SQLite |
 | 3 | `ready` | Frontmatter `ready: true` (set only by `/refine-us`) |
 | 4 | `## Plan` | Present; not placeholder; Approach has ≥2 explanatory bullets |
 | 5 | Architecture refs | Each ref resolves to § in `05_architecture.md` **or** `docs/architecture/*.md` |
@@ -25,7 +25,7 @@ Use with `/implement-us US-XXXX` **before** any Write on product code for that s
 
 ## After gate passes
 
-1. Read full `docs/us/US-XXXX.md` (Intent + Plan).
+1. Read full US from SQLite: `meridian_db_cli.py show US-XXXX --full` (Intent + Plan).
 2. Read every Architecture ref path/§ before coding.
 3. Read `docs/04_principles.md` (DRY, SRP) — apply during implementation.
 4. Implement against Acceptance + Planned steps only.

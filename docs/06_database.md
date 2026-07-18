@@ -15,8 +15,8 @@ Meridian **v10+** stores **all delivery artifacts** in SQLite only. **Phase docu
 
 | Storage | Artifacts |
 | ------- | --------- |
-| **Markdown** (`docs/`) | `00_scope.md` … `11_decisions.md`, `discovery/`, `architecture/`, `inventory/`, `templates/`, `kanban/board.json` (derived) |
-| **SQLite** (`.meridian/meridian.db`) | epics, versions, sprints, user stories, sprint_stories, decisions, board snapshots |
+| **Markdown** (`docs/`) | `00_scope.md` … `11_decisions.md`, `discovery/`, `architecture/`, `inventory/` |
+| **SQLite** (`.meridian/meridian.db`) | epics, versions, sprints, user stories, sprint_stories, story_dependencies, decisions, board_snapshots |
 
 Path: `{packageRoot}/.meridian/meridian.db` (gitignored). Canonical SQL: `.agent/migrations/`. Agent upsert guide: `.agent/references/templates/sqlite-delivery-operations.md`. Section contract (markdown shape): `.agent/references/templates/section-contracts.md`.
 
@@ -160,7 +160,7 @@ erDiagram
 5. sprint_stories    → sprint_id, story_id (rebuilt by upsert_sprint)
 6. story_dependencies → story_id, depends_on_id (rebuilt by upsert_user_story; validates US PKs)
 7. decisions         (independent)
-8. board_snapshots   (derived via generate_board.py)
+8. board_snapshots   (audit JSON on upsert — `record_board_snapshot()`)
 ```
 
 Breaking order causes `FOREIGN KEY constraint failed` — use `meridian_db.py` upsert helpers or `meridian_db_cli.py`, not ad-hoc SQL.
@@ -297,7 +297,7 @@ Composite PK `(sprint_id, story_id)`. Not every US appears here — only US assi
 
 ### `board_snapshots`
 
-Append-only history of `docs/kanban/board.json` exports (`source`: `import` | `generate`).
+Append-only kanban card payloads (`source`: `import` | `upsert`). v11 no longer writes `docs/kanban/board.json`.
 
 ### `schema_migrations`
 
@@ -318,7 +318,7 @@ Illustrative after migration + purge on this repo (local DB, not in git):
 
 Verify live: `python3 .agent/scripts/meridian_db_cli.py counts .`
 
-Note: US numbering skips `US-0096` (never existed in v1 tree). `board.json` must match `user_stories` row count.
+Note: US numbering skips `US-0096` (never existed in v1 tree).
 
 ## Integrity checks
 
@@ -344,7 +344,7 @@ python3 .agent/scripts/validate_meridian.py . --sqlite-only
 | Board / planning lists | `meridian_db_export.py --format planning` | Structured JSON (no `body_markdown` in payload) |
 | Click-to-open artifact | `meridian_db_export.py --entity us --id US-XXXX` | Single `body_markdown` row |
 | Structured edit (form) | `meridian_db_export.py --format form` / `--write-form` | JSON fields → build markdown → validate → upsert |
-| Sync board | `generate_board.py` | Writes `docs/kanban/board.json` + `board_snapshots` |
+| Board audit | `record_board_snapshot()` on upsert | Optional history in `board_snapshots` |
 
 Extension: **View** = HTML preview; **Edit** = schema-driven form (all entity types); **Advanced** = raw markdown with confirm.
 
@@ -383,7 +383,6 @@ python3 .agent/scripts/backfill_summaries.py .
 python3 .agent/scripts/purge_delivery_md.py . --dry-run
 python3 .agent/scripts/purge_delivery_md.py . --require-verify
 python3 .agent/scripts/validate_meridian.py . --sqlite-only
-python3 .agent/scripts/generate_board.py .
 ```
 
 Fresh clone: `bootstrap` creates empty schema; import data via `migrate_md_to_sqlite` from legacy branch or restore a DB backup.

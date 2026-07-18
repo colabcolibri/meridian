@@ -29,7 +29,7 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 
 | Check | Requirement |
 | ----------- | --------- |
-| US exists | `docs/us/US-XXXX.md` |
+| US exists | `meridian_db_cli.py show US-XXXX` |
 | Dependencies | Every `depends_on` with status `✅` |
 | Evidence | Applicable build/lint/test passed |
 | Acceptance | Criteria proven (mark `[x]`) |
@@ -39,7 +39,7 @@ If anything fails → **do not** mark `✅`; use `🔶` with `Missing:` in accep
 
 ## Procedure
 
-1. Read `.agent/references/templates/INDEX.md`, **full** `implementation-template.md`, and target `docs/us/US-XXXX.md`.
+1. Read `.agent/references/templates/INDEX.md`, **full** `implementation-template.md`, and `meridian_db_cli.py show US-XXXX --full`.
 2. Identify scope (acceptance + `done_when` + Plan refs).
 3. Inspect what was delivered: `git diff`, changed files, test output.
 4. Replace `## Record` with the **real delivery record** (see `references/implementation-template.md`):
@@ -53,9 +53,8 @@ If anything fails → **do not** mark `✅`; use `🔶` with `Missing:` in accep
    - **git commit:** line only if the manager already committed in this session or pastes SHA + message — otherwise omit (manager may add after commit);
    - update frontmatter `tests_status: done` (when `tests: required`).
 6. Mark acceptance `[x]` with objective evidence.
-7. Update frontmatter `status: ✅` (or `🔶` if partial + `Missing:`). Only mark `✅` if `tests: none` **or** `tests_status: done`.
-8. Invoke `generate-board-json`.
-9. If relevant cross-cutting change → read `update-decisions-log` skill + run `date` before Write (local US decisions stay in Record).
+7. Update via `meridian_db_cli.py update-us US-XXXX --from-file` or `--write-form` with Record + status.
+8. If relevant cross-cutting change → read `update-decisions-log` skill + run `date` before Write (local US decisions stay in Record).
 
 ## Validations before marking `✅`
 

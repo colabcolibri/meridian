@@ -1,1 +1,0 @@
-../../../.agent/references/templates/refine-checklist.md

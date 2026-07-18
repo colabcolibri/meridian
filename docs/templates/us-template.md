@@ -1,1 +1,0 @@
-../../../.agent/references/templates/us-template.md

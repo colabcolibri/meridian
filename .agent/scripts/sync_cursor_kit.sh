@@ -19,7 +19,6 @@ CLAUDE="${ROOT}/.claude"
 CODEX="${ROOT}/.codex"
 AGENTS_SKILLS="${ROOT}/.agents/skills"
 REGISTRY="${AGENT}/references/templates"
-DOCS_TPL="${ROOT}/app-desktop/docs/templates"
 
 SYNC_CURSOR=1
 SYNC_CLAUDE=1
@@ -229,17 +228,6 @@ sync_cursor() {
     name="$(basename "${tpl_file}")"
     link "../../../.agent/references/templates/${name}" "${CURSOR}/references/templates/${name}"
   done
-
-  if [[ -d "${ROOT}/app-desktop/docs" ]]; then
-    mkdir -p "${DOCS_TPL}"
-    for tpl_file in "${REGISTRY}"/*.md; do
-      [[ -f "${tpl_file}" ]] || continue
-      name="$(basename "${tpl_file}")"
-      [[ "${name}" == "README.md" ]] && continue
-      link "../../../.agent/references/templates/${name}" "${DOCS_TPL}/${name}"
-    done
-    echo "Synced human mirror: ${DOCS_TPL}"
-  fi
 
   for skill_dir in "${AGENT}"/skills/*/; do
     [[ -d "${skill_dir}" ]] || continue

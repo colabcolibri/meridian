@@ -1,1 +1,0 @@
-../../../.agent/references/templates/as-is-inventory-template.md

@@ -10,9 +10,8 @@
 | `meridian_markdown_parse.py` | Library: frontmatter + US section parsing |
 | `meridian_section_contracts.py` | Library: structural validation helpers |
 | `bootstrap_meridian_db.py` | Create/upgrade `.meridian/meridian.db` (`bootstrap`) |
-| `meridian_db_cli.py` | **Agent CLI:** counts, list, show, search, create-us, update-us, set-ready, set-summary |
+| `meridian_db_cli.py` | **Agent CLI:** counts, list, show, search, create-us, update-us, set-ready, set-summary, **implement-gate** |
 | `meridian_db_export.py` | JSON export for extension (`--format planning`; `--entity us --id US-XXXX` for one markdown body) |
-| `generate_board.py` | Write `docs/kanban/board.json` from SQLite |
 | `validate_meridian.py` | Governance validator (default / `--sqlite-only` / `--md-only`) |
 | `backfill_summaries.py` | Fill empty `summary` columns |
 
@@ -28,7 +27,10 @@
 
 | Script | Purpose |
 | ------ | ------- |
-| `test_meridian_db_schema.py` | Smoke test migrations + `summary` column |
+| `test_meridian_db_schema.py` | Smoke test migrations |
+| `test_story_dependencies.py` | FK + cycle checks for `story_dependencies` |
+| `test_implement_gate.py` | `/implement-us` gate CLI |
+| `meridian_implement_gate.py` | Library: `check_implement_gate()` |
 
 ## Migration lane (v1 Markdown → v10 SQLite)
 
@@ -50,7 +52,7 @@ See `archive/` — one-off migrations superseded by SQLite-only v10.
 
 | Consumer | Scripts |
 | -------- | ------- |
-| **Cursor / Claude agents** | `meridian_db_cli.py`, `validate_meridian.py`, `generate_board.py` |
+| **Cursor / Claude agents** | `meridian_db_cli.py`, `validate_meridian.py` |
 | **VS Code extension** | `validate_meridian.py`, `meridian_db_export.py` (spawns `python3`) |
 | **GitHub Actions** | `validate_meridian.py --sqlite-only`, `test_meridian_db_schema.py` |
 | **Pre-commit** | `validate_meridian.py` |

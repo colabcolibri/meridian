@@ -23,7 +23,7 @@ Templates are mirrored here from skills (`references/`) so every agent uses the 
 | Architecture detail | `architecture-folder-guide.md` + `05` phase doc | `architecture-guardian` | — | `/architecture` |
 | User story (close) | `implementation-template.md` + `us-template.md` | `board-keeper` | `complete-user-story` | `/complete-us` |
 | Decision entry | `decision-template.md` + `decision-schema.md` | any relevant agent | `update-decisions-log` | — |
-| Board JSON | `board-schema.md` | `board-keeper` | `generate-board-json` | `/sync-board` |
+| Kanban card shape | `board-schema.md` | `board-keeper` | `sqlite-delivery-operations.md` | — |
 
 **Section contracts:** `section-contracts.md` — fixed `##` / `###` for US, epic, version.
 

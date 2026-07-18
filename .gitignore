@@ -63,5 +63,8 @@ yarn.lock
 # Meridian 2.0 — local SQLite per product (US-0106)
 **/.meridian/meridian.db
 
+# Legacy derived board (v11 — board reads SQLite only)
+**/docs/kanban/board.json
+
 # Meridian IDE adapters (local symlinks)
 AGENTS.md

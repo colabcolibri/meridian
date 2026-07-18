@@ -1,6 +1,6 @@
 ---
 name: init-project
-description: Initializes a project with Meridian docs, decision log, board JSON and minimum governance. Use when starting a new project or repairing a missing Meridian structure. Also handles existing codebases migrating into Meridian.
+description: Initializes a project with Meridian docs, SQLite delivery DB and minimum governance.
 allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 ---
 
@@ -53,17 +53,17 @@ docs/
   epics/
   versions/
   sprints/
-  us/
-  templates/          # symlinks to kit delivery templates (recommended)
-  kanban/board.json
 ```
+
+Run `python3 .agent/scripts/bootstrap_meridian_db.py <packageRoot>` after creating `docs/`.
+
+Templates: read `.agent/references/templates/INDEX.md` — **do not** create `docs/templates/`.
 
 3. Apply frontmatter from `references/doc-templates.md` on each doc (`status: draft`, except initial decision).
 4. `11_decisions.md` (stub) + `docs/decisions/YYYY-MM-DD.json` with entry "Project started with Meridian".
 5. `00_scope.md`: populate with answers from Phase 0 questions — do not leave it blank.
-6. `board.json`: `[]`
-7. Validate `.gitignore` with `references/gitignore-baseline.md`.
-8. **Do not** create US, app, API, database or migrations.
+6. Validate `.gitignore` with `references/gitignore-baseline.md`.
+7. **Do not** create US, app, API, or product migrations.
 
 ---
 
@@ -133,7 +133,7 @@ If discovery finds **more than one** `docs/` folder named exactly `docs` with Me
 
 | # | Check |
 | - | ----------- |
-| 1 | `docs/`, `decisions/`, `architecture/`, `epics/`, `versions/`, `us/`, `sprints/`, `board.json`, `11_decisions`, `00_scope` exist |
+| 1 | `docs/`, `decisions/`, `architecture/`, `epics/`, `versions/`, `sprints/`, `.meridian/meridian.db`, `11_decisions`, `00_scope` exist |
 | 2 | `.env*` protected in `.gitignore` |
 | 3 | No product code created |
 | 4 | (Mode B) `docs/inventory/as-is.md` exists with capability table |

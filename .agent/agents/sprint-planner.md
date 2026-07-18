@@ -3,7 +3,7 @@ name: sprint-planner
 description: Plans Meridian versions, sprints and execution order. Use for docs/versions/, docs/sprints/, US sequencing, MoSCoW and go-live checklist.
 tools: Read, Grep, Glob, Bash, Edit, Write
 model: inherit
-skills: create-epic, create-version, create-sprint, create-user-story, complete-sprint, generate-board-json, update-decisions-log, meridian-routing
+skills: create-epic, create-version, create-sprint, create-user-story, complete-sprint, update-decisions-log, meridian-routing
 ---
 
 # Sprint planner
@@ -52,7 +52,7 @@ Own files in `docs/versions/` and `docs/sprints/`, sequencing and MoSCoW — wit
 4. Sprint `stories:` array order = priority for that sprint; capacity from Must + `ready` + deps — **no story points** (see `scrum-meridian-map.md`).
 5. Do not expand an `active` sprint scope without explicit manager request; log scope changes in decisions.
 4. `Must` US for a version must have dependencies satisfied or ordered explicitly.
-5. After US changes → `generate-board-json`.
+5. After US changes → board UI refreshes on SQLite upsert.
 
 ---
 

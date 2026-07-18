@@ -15,7 +15,7 @@ from meridian_db import (  # noqa: E402
     upsert_epic,
     upsert_user_story,
     upsert_version,
-    write_board_json,
+    record_board_snapshot,
 )
 from meridian_markdown_parse import extract_epic_sections, extract_us_sections, extract_version_sections  # noqa: E402
 
@@ -185,7 +185,7 @@ Board and form load from SQLite.
     finally:
         conn.close()
 
-    write_board_json(root)
+    record_board_snapshot(root)
     print(f"Seeded meridian-teste DB at {root / '.meridian' / 'meridian.db'}")
     return 0
 

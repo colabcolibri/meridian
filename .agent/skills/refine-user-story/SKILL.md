@@ -40,8 +40,8 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 6. Fill API/DB/Security/Decisions with short phrases when not `_n/a_`.
 7. Replace generic **Tests / Planned** with numbered steps or exact commands.
 8. Tighten **Acceptance** if vague (keep `[ ]`).
-9. Set `ready: true` only when checklist passes (including DRY + SRP rows).
-10. `generate-board-json`; `update-decisions-log` if scope changed.
+9. Set `ready: true` only when checklist passes (including DRY + SRP rows) via `meridian_db_cli.py set-ready US-XXXX --ready true`.
+10. `update-decisions-log` if scope changed.
 
 ## Approach — refine quality bar
 

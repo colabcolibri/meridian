@@ -27,7 +27,7 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 2. List sprints for version in `docs/sprints/vX-S*.md` → next SY = highest + 1.
 3. Fill template with `stories: [US-XXXX, …]` (existing or planned US).
 3. Save `docs/sprints/vX-SY.md`.
-4. New US → `/create-us` after gates; then `/sync-board`.
+4. New US → `/create-us` after gates (board refreshes on DB save).
 
 ## Output
 

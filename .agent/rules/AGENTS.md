@@ -45,7 +45,7 @@ After **Install Harness** or clone: run `./.agent/scripts/sync_cursor_kit.sh` to
 
 - Documentation precedes product code.
 - Do not create US before `05_architecture` `approved`.
-- `docs/kanban/board.json` is derived from `docs/us/*.md`.
+- Delivery lives in `.meridian/meridian.db` when the harness is bootstrapped.
 - Never `✅` without evidence; never `🔶` without `Missing:` in acceptance.
 - Never `✅` without filled `## Record` on the US (skill `complete-user-story`).
 - Product code for a US requires `ready: true` — run `/implement-us US-XXXX` before coding.

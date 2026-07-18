@@ -1,7 +1,7 @@
 ---
 title: Architecture
 status: approved
-version: 2.0
+version: 2.1
 updated: 2026-07-18
 depends_on:
   [00_scope.md, 01_tech_stack.md, 02_security.md, 03_user_types.md, 04_principles.md]
@@ -26,21 +26,21 @@ meridian/                    # kit + dogfood product
     skills/
     workflows/
     scripts/validate_meridian.py
-    scripts/generate_board.py
+    scripts/meridian_db_cli.py
+    scripts/meridian_db_export.py
     scripts/meridian_db.py
     scripts/migrate_md_to_sqlite.py
     migrations/              # SQLite schema (YYYYMMDDHHMMSS_*.sql)
   .meridian/
-    meridian.db              # v10 delivery store (gitignored) — schema: docs/06_database.md
-  docs/                      # phase docs + derived board.json only (no delivery .md)
+    meridian.db              # delivery store (gitignored) — schema: docs/06_database.md
+  docs/                      # phase docs only (no delivery .md, no board.json)
     00_scope.md … 11_decisions.md
-    kanban/board.json        # derived from SQLite (generate_board.py)
   app-visual-studio/         # VS Code extension — IDE monitor
     src/extension.ts
     dist/extension.js
 ```
 
-The extension is **not** the source of truth for the protocol. It monitors **`docs/`** for phase documents and **`.meridian/meridian.db`** for delivery artifacts. **ER diagram and table contract:** `docs/06_database.md` § Schema.
+The extension is **not** the source of truth for the protocol. It monitors **`docs/`** for phase documents and **`.meridian/meridian.db`** for delivery. **ER diagram and table contract:** `docs/06_database.md` § Schema.
 
 ## Layers
 
@@ -49,20 +49,18 @@ The extension is **not** the source of truth for the protocol. It monitors **`do
 | Protocol             | `.agent/MERIDIAN.md` (copy `.agent/` into client projects)                     |
 | Always-on governance | `.agent/rules/MERIDIAN.md`                                                     |
 | Phase documents      | `docs/00`–`11`, discovery, architecture detail — **Markdown on disk**          |
-| Delivery store (v10+) | `.meridian/meridian.db` — **canonical ER diagram and table contract:** `docs/06_database.md` § Schema |
-| Derived kanban       | `docs/kanban/board.json` — generated from SQLite (`generate_board.py`)         |
-| VS Code extension    | Board + Deliverables editor tabs; validate via kit Python; sync board          |
+| Delivery store       | `.meridian/meridian.db` — canonical ER: `docs/06_database.md` § Schema         |
+| VS Code extension    | Board + Deliverables editor tabs; validate via kit Python; reads SQLite       |
 
 ## VS Code extension (`app-visual-studio/`)
 
-**North star:** kanban + deliverables **inside the IDE** as editor tabs. Agents author via workflows; the extension **displays**, **validates**, and **syncs** `board.json`.
+**North star:** kanban + deliverables **inside the IDE** as editor tabs. Agents author via CLI/workflows; the extension **displays**, **validates**, and **edits** delivery in SQLite.
 
 | Concern                    | Extension (v4+)                                                                 |
 | -------------------------- | ------------------------------------------------------------------------------- |
 | Board / kanban             | Editor tab; columns ❌🔶🧪✅🧊; version/epic filters; frozen toggle              |
 | Epics / versions / sprints | Editor tab; version accordions; progress from US metadata                       |
-| Open artifact              | Opens `docs/us/`, `epics/`, `versions/`, `sprints/` `.md` beside tab (legacy)   |
-| Sync `board.json`          | **Meridian: Sync Board** — TS export or `generate_board.py` from SQLite        |
+| Open artifact              | Virtual document from `meridian_db_export.py --entity …`                        |
 | Validate project           | **Meridian: Validate Project** → `validate_meridian.py` (Output channel)      |
 | New US                     | Output stub (v5) — prefer `/create-us` workflow                                 |
 
@@ -70,12 +68,11 @@ The extension is **not** the source of truth for the protocol. It monitors **`do
 
 | Surface                   | Role                                                                                  |
 | ------------------------- | ------------------------------------------------------------------------------------- |
-| Activity bar **Meridian** | Commands tree — Open Board, Open Deliverables, Validate, Status, Sync, New US stub    |
+| Activity bar **Meridian** | Commands tree — Open Board, Open Deliverables, Validate, Status                         |
 | **Editor tab — Board**    | `WebviewPanel` `meridian.board`; client-side filters                                  |
 | **Editor tab — Versions** | All releases, accordions                                                            |
 | **Editor tab — Sprints**  | Sprint list with version filter                                                       |
 | **Editor tab — Epics**    | Epic progress with version + epic filters                                             |
-| **Sync Board**            | Export to `docs/kanban/board.json`                                                    |
 | Status bar                | `Meridian: N US` when `docs/` resolved; project name when multi-product               |
 | **Project context strip** | Toolbar: name, `docs/` path, US count; dropdown when N>1                              |
 
@@ -83,16 +80,15 @@ F5 / Extension Development Host is **maintainer-only**. End users install `.vsix
 
 ### Data loading
 
-- Parsers: `load-stories.ts`, `load-epics.ts`, `load-versions.ts`, `load-sprints.ts` (YAML frontmatter).
 - **v10+:** extension reads delivery via `meridian_db_export.py --format planning` when `meridian.db` exists (`load-from-sqlite.ts`).
-- `MeridianContext` file watcher: `docs/us/*.md`, `docs/kanban/board.json`, deliverables folders → refresh webviews.
+- `MeridianContext` watches `.meridian/meridian.db` → refresh board/deliverables webviews on change.
 
 ### Activation and `docs/` resolution
 
 - `workspaceContains:.agent/MERIDIAN.md`.
 - **Single product:** `docs/` next to `.agent/` at repo root (this dogfood) or client project layout.
 - **Multi-product:** optional `.meridian/projects.json` at kit root; discovery finds `docs/` folders with Meridian fingerprint.
-- **Active project:** `meridian.activeProject` + **Select Active Project**; validate/sync use active `packageRoot` (parent of `docs/`).
+- **Active project:** `meridian.activeProject` + **Select Active Project**; validate uses active `packageRoot` (parent of `docs/`).
 
 ### Packaging
 
@@ -101,10 +97,13 @@ F5 / Extension Development Host is **maintainer-only**. End users install `.vsix
 
 ## Removed: browser monitor (`app-desktop/`)
 
-The Vite/React desktop app was removed in v10 (2026-07-18). GitHub Pages demo and `vite-file-server` are retired. Use the VS Code extension for all IDE visibility.
+The Vite/React desktop app was removed in v10 (2026-07-18). Use the VS Code extension for all IDE visibility.
+
+## Removed: `docs/kanban/board.json` (v11)
+
+Kanban is read directly from SQLite. No JSON export on disk; optional `board_snapshots` table for audit history.
 
 ## Limits
 
-- Extension v4 still reads legacy `docs/us/*.md` for board until SQLite read path ships.
 - Extension does not replace agent routing (`meridian-routing` stays in the IDE chat).
-- SQLite DB is local and gitignored; team sync is via exported `board.json` + phase docs in Git.
+- SQLite DB is local and gitignored; team sync is via phase docs in Git + shared migration/bootstrap scripts (not committed DB file).

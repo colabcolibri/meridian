@@ -542,19 +542,28 @@ def export_board_entries(package_root: str | Path) -> list[dict[str, Any]]:
         conn.close()
 
 
-def write_board_json(package_root: str | Path) -> int:
-    docs = Path(package_root).resolve() / "docs"
+def record_board_snapshot(package_root: str | Path, source: str = "upsert") -> int:
+    """Store kanban card snapshot in SQLite only (v11 — no docs/kanban/board.json)."""
     entries = export_board_entries(package_root)
-    board_path = docs / "kanban" / "board.json"
-    board_path.parent.mkdir(parents=True, exist_ok=True)
-    board_path.write_text(json.dumps(entries, indent=2) + "\n", encoding="utf-8")
+    payload = json.dumps(entries, ensure_ascii=False)
     conn = connect(package_root)
     try:
-        import_board_snapshot(conn, docs, source="generate")
+        conn.execute(
+            """
+            INSERT INTO board_snapshots (source, card_count, payload_json)
+            VALUES (?, ?, ?)
+            """,
+            (source, len(entries), payload),
+        )
         conn.commit()
     finally:
         conn.close()
     return len(entries)
+
+
+def write_board_json(package_root: str | Path) -> int:
+    """Deprecated alias — v11 writes board_snapshots only, not board.json."""
+    return record_board_snapshot(package_root, source="legacy-write-board-json")
 
 
 def load_delivery_markdown_files(package_root: str | Path) -> dict[str, list[tuple[str, str]]]:
@@ -812,7 +821,7 @@ def upsert_delivery_from_markdown(
     finally:
         conn.close()
 
-    write_board_json(package_root)
+    record_board_snapshot(package_root)
     return {"id": entity_id, "entity": entity}
 
 

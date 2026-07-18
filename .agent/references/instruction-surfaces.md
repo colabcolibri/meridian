@@ -8,8 +8,8 @@
 
 ## Golden rules
 
-1. **Edit `.agent/` first** — never start in `.cursor/`, `app-desktop/docs/templates/`, or IDE adapters.
-2. **Run** `./.agent/scripts/sync_cursor_kit.sh` — refreshes `.cursor/`, `.claude/`, Codex adapters, `app-desktop/docs/templates/`.
+1. **Edit `.agent/` first** — never start in `.cursor/` or IDE adapters.
+2. **Run** `./.agent/scripts/sync_cursor_kit.sh` — refreshes `.cursor/`, `.claude/`, Codex adapters (not `docs/templates/`).
 3. **Update duplicated UI** — app-desktop Learn/Commands tabs do not auto-sync from markdown.
 4. **VS Code extension** — Help panels that read `.agent/references/*.md` at runtime pick up kit changes after install/upgrade; command catalog and README are separate edits.
 5. **Record the change** — prepend `docs/decisions/YYYY-MM-DD.json` in this repo when the protocol itself changes.
@@ -34,7 +34,7 @@
 | Distribution | `.agent/KIT_README.md`, `.agent/DISTRIBUTION.md` | Humans installing kit | **Canonical** | P2 |
 | Repo README | `README.md` | GitHub visitors | **Canonical** | P2 |
 | IDE adapters | `.cursor/`, `.claude/`, `.agents/skills/`, `.codex/` | Cursor / Claude Code / Codex | **Mirror** — sync only | — |
-| Desktop template mirror | `app-desktop/docs/templates/` | Humans in monitor | **Mirror** — sync only | — |
+| Template registry | `.agent/references/templates/` | Agents + humans (via kit) | **Canonical** | `INDEX.md`, `TEMPLATE_SOURCES.md` |
 | **Desktop UI copy** | `app-desktop/src/features/monitor/content/meridian-concepts.ts` | Manager in Learn/Commands tabs | **Duplicate** — edit by hand | P0 |
 | Desktop tab hints | `app-desktop/src/.../MonitorTabs.tsx`, `monitor-views.ts` | Manager | **Duplicate** — edit by hand | P2 |
 | Desktop project docs | `app-desktop/docs/README.md` | Desktop dogfood | **Canonical** for app-desktop only | P1 |
@@ -95,7 +95,6 @@
 | `.cursor/commands/`, `.cursor/skills/`, `.cursor/agents/`, `.cursor/rules/` | `sync_cursor_kit.sh` |
 | `.claude/commands/`, `.claude/agents/` | `sync_cursor_kit.sh` |
 | `.agents/skills/` (incl. `workflow-*`), `.codex/agents/*.toml`, `AGENTS.md` (symlink) | `sync_cursor_kit.sh` |
-| `app-desktop/docs/templates/*` | `sync_cursor_kit.sh` |
 
 ---
 

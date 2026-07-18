@@ -22,7 +22,7 @@ Priority: **P0 rules > P1 agent + MERIDIAN.md > P2 skills**.
 - `docs/` of the **active Meridian product** is the source of truth (monorepos may have several `docs/` trees — see `.meridian/projects.json` and `projects-manifest-template.md`).
 - Documentation precedes product code.
 - Do not create US before `05_architecture` `approved`.
-- `docs/kanban/board.json` is derived from `docs/us/*.md`.
+- Delivery (US, epic, version, sprint) lives in `.meridian/meridian.db` — see `sqlite-delivery-operations.md`.
 - Never `✅` without evidence; never `🔶` without `Missing:` in acceptance.
 - Never `✅` without filled `## Record` on the US (skill `complete-user-story`).
 - Product code for a US requires `ready: true` — use `/implement-us US-XXXX` (skill `implement-user-story`) before coding.
@@ -48,7 +48,6 @@ Priority: **P0 rules > P1 agent + MERIDIAN.md > P2 skills**.
 | `/complete-sprint` | `.cursor/commands/complete-sprint.md` |
 | `/architecture` | `.cursor/commands/architecture.md` |
 | `/security-pass` | `.cursor/commands/security-pass.md` |
-| `/sync-board` | `.cursor/commands/sync-board.md` |
 | `/update-decisions-log` | `.cursor/commands/update-decisions-log.md` |
 | `/daily-with-ai` | `.cursor/commands/daily-with-ai.md` |
 | `/agents-help` | `.cursor/commands/agents-help.md` |

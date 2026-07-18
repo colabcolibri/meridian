@@ -40,7 +40,7 @@ RULES:
    - Plan / Architecture refs — ok with § TBD until refine
    - Plan / Planned — draft test steps
 5. ready: false
-6. generate-board-json
+6. Save via `meridian_db_cli.py create-us` or `--write-form`
 7. Tell user: run /refine-us before implement
 ```
 

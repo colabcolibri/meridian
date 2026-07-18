@@ -511,18 +511,21 @@ def main() -> int:
             )
 
     if board_path.exists():
-        try:
-            board = json.loads(board_path.read_text(encoding="utf-8"))
-            board_ids = {item.get("id") for item in board if isinstance(item, dict)}
-            missing = story_ids - board_ids
-            extra = board_ids - story_ids
-            if missing:
-                warnings.append(f"Stories missing from board.json: {sorted(missing)}")
-            if extra and not sqlite_delivery:
-                warnings.append(f"Board items without story file: {sorted(extra)}")
-        except json.JSONDecodeError as exc:
-            errors.append(f"Invalid board.json: {exc}")
-    elif story_ids:
+        if sqlite_delivery:
+            pass  # v11: board.json ignored when meridian.db exists
+        else:
+            try:
+                board = json.loads(board_path.read_text(encoding="utf-8"))
+                board_ids = {item.get("id") for item in board if isinstance(item, dict)}
+                missing = story_ids - board_ids
+                extra = board_ids - story_ids
+                if missing:
+                    warnings.append(f"Stories missing from board.json: {sorted(missing)}")
+                if extra:
+                    warnings.append(f"Board items without story file: {sorted(extra)}")
+            except json.JSONDecodeError as exc:
+                errors.append(f"Invalid board.json: {exc}")
+    elif story_ids and not sqlite_delivery:
         errors.append("Missing docs/kanban/board.json.")
 
     if json_output:

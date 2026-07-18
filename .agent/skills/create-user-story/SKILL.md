@@ -13,7 +13,7 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 | `.agent/references/templates/writing-guide.md` | **Mandatory** — how to write explanatory US prose |
 | `.agent/references/templates/code-quality-at-us-time.md` | **Mandatory** — DRY, SRP, link to `04_principles` |
 | `.agent/references/templates/INDEX.md` | Agent protocol |
-| `references/us-template.md` | **Mandatory** — full structure before Write |
+| `.agent/references/templates/sqlite-delivery-operations.md` | **Mandatory** — CLI writes to SQLite |
 
 ## Preconditions (hard gate)
 
@@ -21,8 +21,8 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 | --- | -------------- |
 | `05_architecture.md` | `approved` |
 | epic/version in folders | exist |
-| Referenced epic | `docs/epics/EPIC-XX.md` exists |
-| Referenced version | `docs/versions/vX.md` exists |
+| Referenced epic | exists in SQLite (`meridian_db_cli.py list epics`) |
+| Referenced version | exists in SQLite (`meridian_db_cli.py list versions`) |
 | Profile in `03_user_types.md` | exists |
 
 Frontmatter links `epic:` — **do not paste epic text** into the body. Explain **this slice** in Why / Where / Approach.
@@ -55,13 +55,13 @@ Forbidden: telegraphic stubs, repeating acceptance under Approach, “see EPIC-X
 
 ## Procedure
 
-1. Read `writing-guide.md` + `code-quality-at-us-time.md` + full `us-template.md`.
-2. Read epic, version, dependency US files for context.
-3. Next ID = highest `US-XXXX` + 1 (4 digits).
-4. Write full US — especially Why / Where / Approach with explanatory prose.
+1. Read `writing-guide.md` + `code-quality-at-us-time.md` + `sqlite-delivery-operations.md` + `us-template.md`.
+2. Read epic/version/dependency US via `meridian_db_cli.py show --full` for context.
+3. Next ID = highest `US-XXXX` + 1 (`meridian_db_cli.py list user_stories`).
+4. Compose full US body (Why / Where / Approach) per `us-template.md`.
 5. Set `ready: false` — implement blocked until `/refine-us`.
-6. Save `docs/us/US-XXXX.md`.
-7. `generate-board-json`; `update-decisions-log` if acceptance model changes.
+6. Save via `meridian_db_cli.py create-us` or `meridian_db_export.py --write-form` — **never** `docs/us/*.md` when DB exists.
+7. `update-decisions-log` if acceptance model changes.
 
 ## Validations before saving
 

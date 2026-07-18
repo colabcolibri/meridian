@@ -21,7 +21,6 @@ import {
   kitInstalledAt,
   workspaceProjectRoot,
 } from "./kit-installer.js"
-import { syncBoardFromDocs } from "./sync-board.js"
 import { resolveValidateTarget, runValidateMeridian } from "./validate-runner.js"
 import {
   MERIDIAN_DOCUMENT_SCHEME,
@@ -182,21 +181,6 @@ async function showStatus(): Promise<void> {
   appendToolOutput("Workspace status", formatStatusTooltip(info))
 }
 
-async function syncBoard(): Promise<void> {
-  const info = await requireWorkspace()
-  if (!info) {
-    return
-  }
-  const result = syncBoardFromDocs(info)
-  appendToolOutput("Sync board", result.message)
-  if (result.ok) {
-    void vscode.window.showInformationMessage(`Meridian: ${result.message}`)
-    refreshAllPanels()
-  } else {
-    void vscode.window.showErrorMessage(`Meridian: ${result.message}`)
-  }
-}
-
 async function newUserStory(): Promise<void> {
   appendToolOutput(
     "New user story",
@@ -290,7 +274,6 @@ export function activate(context: vscode.ExtensionContext): void {
     vscode.commands.registerCommand("meridian.selectActiveProject", () =>
       meridianContext?.selectActiveProject(),
     ),
-    vscode.commands.registerCommand("meridian.syncBoard", syncBoard),
     vscode.commands.registerCommand("meridian.newUserStory", newUserStory),
   )
 }

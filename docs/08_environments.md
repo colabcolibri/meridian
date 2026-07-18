@@ -38,7 +38,7 @@ python3 .agent/scripts/validate_meridian.py <package-root> --json   # CI
 
 | Who | Needs Python? | Why |
 | --- | ------------- | --- |
-| **Kit / agents (Cursor, Claude)** | **Yes** | `meridian_db_cli.py`, `validate_meridian.py`, `generate_board.py` — stdlib only, no `pip` |
+| **Kit / agents (Cursor, Claude)** | **Yes** | `meridian_db_cli.py`, `validate_meridian.py`, `meridian_db_export.py` — stdlib only, no `pip` |
 | **VS Code extension** | **Yes** | Validate command + Board/Deliverables read SQLite via `python3 .agent/scripts/meridian_db_export.py` |
 | **Chat-only (no validate, no board)** | No | Not a supported workflow — docs would drift without validator |
 | **Phase docs only** | No | Editing `docs/00_scope.md` etc. is plain Markdown |

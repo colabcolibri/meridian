@@ -12,13 +12,14 @@ $ARGUMENTS
 
 1. Use `process-manager` + `@[skills/implement-user-story]`
 2. **Mandatory read:** `implement-gate-checklist.md` + `code-quality-at-us-time.md` + target US **before** product code
-3. **Mandatory read:** `docs/04_principles.md` (DRY, SRP) before Write on code
-4. **Hard block:** `ready: true` required — if false → stop; recommend `/refine-us`
-5. Read every **Architecture refs** section before Write on code
-6. Implement with DRY + SRP — reuse modules per Approach; no scope creep across layers
-7. One US per session — cite `docs/us/US-XXXX.md` explicitly
-8. Do **not** mark `✅` or run `/complete-us` in the same turn unless manager only asked to close
-9. Partial delivery → `🔶` + `Missing:` in Acceptance; no forced close
+3. **Run gate CLI first:** `python3 .agent/scripts/meridian_db_cli.py implement-gate US-XXXX` (exit 0 = pass)
+4. **Mandatory read:** `docs/04_principles.md` (DRY, SRP) before Write on code
+5. **Hard block:** `ready: true` required — if false → stop; recommend `/refine-us`
+6. Load US from SQLite: `meridian_db_cli.py show US-XXXX --full` (not `docs/us/`)
+7. Read every **Architecture refs** section before Write on code
+8. One US per session — cite `US-XXXX` explicitly
+9. Do **not** mark `✅` or run `/complete-us` in the same turn unless manager only asked to close
+10. Partial delivery → `🔶` + `Missing:` in Acceptance; no forced close
 
 ---
 
@@ -31,11 +32,12 @@ CONTEXT:
 
 RULES:
 1. Resolve US id from $ARGUMENTS or ask
-2. Run implement gate checklist (architecture, ready, Plan, depends_on, status)
-3. If blocked → output blocker; NO product code
-4. If passed → read Architecture refs + 04_principles → implement Acceptance + Planned (DRY + SRP)
-5. validate_meridian.py optional after US edits (not before gate)
-6. Remind manager: review diff → /complete-us → /sync-board → commit (human)
+2. Run: python3 .agent/scripts/meridian_db_cli.py implement-gate US-XXXX
+3. If exit != 0 → output blockers; NO product code
+4. If passed → meridian_db_cli show US-XXXX --full; read Architecture refs + 04_principles
+5. Implement Acceptance + Planned (DRY + SRP)
+6. Board UI refreshes automatically on DB upsert
+7. Remind manager: review diff → /complete-us → commit (human)
 ```
 
 ---
@@ -59,7 +61,7 @@ Next: /complete-us US-XXXX (after manager review)
 
 | `/refine-us` | `/implement-us` |
 | --- | --- |
-| Docs only; sets `ready: true` | Gate + product code |
+| Docs only; sets `ready: true` | Gate CLI + product code |
 | Deepens Plan | Requires Plan already concrete |
 | Never writes app code | Writes code after gate passes |
 

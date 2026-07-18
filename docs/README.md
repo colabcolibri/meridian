@@ -28,19 +28,16 @@ This folder is the **source of truth** for Meridian Desktop development. In dogf
 | [08_environments.md](08_environments.md)   | approved | Local commands and Git hooks                 |
 | [11_decisions.md](11_decisions.md)         | approved | Stub — log rules (entries in `decisions/`)   |
 
-## Delivery artifacts (folders — source of truth)
+## Delivery artifacts
 
-| Artifact      | Path                                     | Role                                           |
-| ------------- | ---------------------------------------- | ---------------------------------------------- |
-| Epics         | [`epics/`](epics/)                       | One file per EPIC-XX (product capability)      |
-| Releases      | [`versions/`](versions/)                 | One file per vX (go-live)                      |
-| Sprints       | [`sprints/`](sprints/)                   | vX-SY slices within each release               |
-| User stories  | [`us/`](us/)                             | Backlog (one US = one file)                    |
-| Templates     | [`templates/`](templates/)               | Human-readable contract mirror (symlinks)      |
-| Decision log  | [`decisions/`](decisions/)               | One JSON per day (`YYYY-MM-DD.json`)           |
-| Derived board | [`kanban/board.json`](kanban/board.json) | Kanban generated from US — do not edit by hand |
+| Artifact      | Location | Role |
+| ------------- | -------- | ---- |
+| Epics, versions, sprints, user stories | `.meridian/meridian.db` | **Canonical delivery** (v10+) — CLI, agents, extension |
+| Kit templates | `.agent/references/templates/` | Agent contracts — not in `docs/` |
+| Decision log  | [`decisions/`](decisions/) | One JSON per day (`YYYY-MM-DD.json`) |
+| Phase docs    | `00_scope.md` … `11_decisions.md` | Gates, architecture, principles |
 
-Epics, versions, and sprints live **only** in the folders above — no parallel markdown index.
+There is **no** `docs/us/`, `docs/epics/`, or `docs/kanban/board.json` in v11. The VS Code board reads SQLite via `meridian_db_export.py --format planning`. Optional audit rows live in `board_snapshots` on each upsert.
 
 ## Current version and sprint
 
@@ -77,14 +74,14 @@ Epics, versions, and sprints live **only** in the folders above — no parallel 
 | 1 — Principles       | 04                                | System   |
 | 2 — Architecture     | 05                                | System   |
 | 3 — Technical detail | 06–08                             | System   |
-| Backlog              | `epics/`, `versions/`, `sprints/` | Delivery |
-| Execution            | `us/`, `board.json`               | Delivery |
+| Backlog              | SQLite (`meridian_db_cli list`)   | Delivery |
+| Execution            | `.meridian/meridian.db`           | Delivery |
 
-US gate: `05_architecture` approved + referenced epic/version exist in `docs/epics/` and `docs/versions/`.
+US gate: `05_architecture` approved + referenced epic/version exist in SQLite.
 
-**US lifecycle:** `/create-us` (Why / Where / Approach, `ready: false`) → `/refine-us` (`ready: true`) → implement → `/complete-us` → `/sync-board`.
+**US lifecycle:** `/create-us` (`ready: false`) → `/refine-us` (`ready: true`) → `/implement-us` → `/complete-us` → commit (human).
 
-Validate: `python3 ../../.agent/scripts/validate_meridian.py app-desktop` (`--json` for CI).
+Validate: `python3 .agent/scripts/validate_meridian.py . --sqlite-only` (`--json` for CI).
 
 ## How agents should work
 
@@ -96,24 +93,24 @@ See also: [Start here](../../.agent/references/start-here.md) · [Usage guide](.
 
 1. **Orient** — `/status`; app (Setup + Board); pick an unblocked Must US.
 2. **Create/refine** — `/create-us` then `/refine-us US-XXXX` until `ready: true`.
-3. **Contextualize** — cite the US in chat (`US-XXXX` or `docs/us/US-XXXX.md`).
-4. **Implement** — agent executes; review diff; partial → `🔶` + `Missing:` in acceptance.
-5. **Close** — `/complete-us US-XXXX` (technical implementation + acceptance + `✅`); `/sync-board`.
-6. **Review** — check the Board tab in the app.
+3. **Contextualize** — cite `US-XXXX` (`meridian_db_cli.py show US-XXXX --full`).
+4. **Implement** — `/implement-us US-XXXX` after `ready: true`; review diff; partial → `🔶` + `Missing:`.
+5. **Close** — `/complete-us US-XXXX` (Record + acceptance + `✅`); board UI refreshes on DB save.
+6. **Commit** — one commit per US per `commit-after-us-close.md`.
+7. **Review** — Board tab in VS Code extension.
 
 ### Detail by artifact
 
-1. Pick a US in `docs/sprints/` or `docs/versions/` (active: **v4** VS Code / EPIC-05; optional polish: **v2-S4** US-0051 after v4-S2; **v2.01** ✅).
-2. Implement citing `US-XXXX` in context.
-3. Fill `## Technical implementation` when done (skill `complete-user-story`).
-4. Update US frontmatter (`🔶` + `Missing:` or `✅` with evidence).
-5. Regenerate `board.json` (skill `generate-board-json` or `/sync-board`).
-6. Relevant decisions → prepend in `docs/decisions/YYYY-MM-DD.json` (skill `update-decisions-log`).
+1. Pick a US from the board or `meridian_db_cli.py list user_stories`.
+2. Implement citing `US-XXXX` in context; gate with `/implement-us`.
+3. Fill `## Record` on close (skill `complete-user-story`).
+4. Update US in SQLite (`update-us` / `--write-form`) with status and evidence.
+5. Cross-cutting decisions → prepend in `docs/decisions/YYYY-MM-DD.json`.
 
-## Dogfooding in the app
+## Dogfooding in the IDE
 
 ```bash
-cd app-desktop && pnpm dev
+cd app-visual-studio && pnpm install && pnpm install:cursor
 ```
 
-In the monitor: **Open docs folder** → select `app-desktop/docs/`.
+Open this repo in VS Code/Cursor → **Meridian: Open Board**. Delivery reads `.meridian/meridian.db` at repository root (bootstrap with `python3 .agent/scripts/bootstrap_meridian_db.py .` if missing).

@@ -1,9 +1,7 @@
 import assert from "node:assert/strict"
-import * as fs from "node:fs"
 import { test } from "node:test"
 
 import { storyToBoardEntry, storiesToBoardEntries } from "../src/generate-board.js"
-import { writeBoardJsonForTest } from "../src/sync-board.js"
 import type { UserStory } from "../src/domain/types.js"
 
 const sample: UserStory = {
@@ -28,10 +26,6 @@ test("storyToBoardEntry maps depends_on field name", () => {
   assert.equal(entry.ready, false)
 })
 
-test("writeBoardJson creates sorted array file", () => {
-  const boardPath = writeBoardJsonForTest([sample])
-  assert.ok(fs.existsSync(boardPath))
-  const parsed = JSON.parse(fs.readFileSync(boardPath, "utf-8")) as unknown[]
-  assert.equal(parsed.length, 1)
+test("storiesToBoardEntries preserves ids", () => {
   assert.equal(storiesToBoardEntries([sample])[0].id, "US-0001")
 })

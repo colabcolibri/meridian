@@ -2,50 +2,27 @@ import assert from "node:assert/strict"
 import { test } from "node:test"
 
 import {
-  fileEventTouchesBoardSync,
-  isBoardSyncDocsPath,
-  relativeDocsPath,
-} from "../src/docs-board-sync.ts"
+  fileEventTouchesMeridianDb,
+  isMeridianDbPath,
+  meridianDbPath,
+} from "../src/docs-board-sync.js"
 
-const docs = "/proj/docs"
+test("isMeridianDbPath matches package .meridian/meridian.db", () => {
+  const pkg = "/proj"
+  const db = meridianDbPath(pkg)
+  assert.equal(isMeridianDbPath(pkg, db), true)
+  assert.equal(isMeridianDbPath(pkg, "/proj/README.md"), false)
+})
 
-test("relativeDocsPath normalizes separators", () => {
+test("fileEventTouchesMeridianDb detects db renames", () => {
+  const pkg = "/proj"
+  const db = meridianDbPath(pkg)
   assert.equal(
-    relativeDocsPath(docs, "/proj/docs/us/US-0042.md"),
-    "us/US-0042.md",
+    fileEventTouchesMeridianDb(pkg, [{ newUri: { fsPath: db } as import("vscode").Uri }]),
+    true,
   )
-})
-
-test("isBoardSyncDocsPath accepts US, board.json, and deliverables", () => {
-  assert.equal(isBoardSyncDocsPath(docs, `${docs}/us/US-0001.md`), true)
-  assert.equal(isBoardSyncDocsPath(docs, `${docs}/kanban/board.json`), true)
-  assert.equal(isBoardSyncDocsPath(docs, `${docs}/epics/EPIC-05.md`), true)
-  assert.equal(isBoardSyncDocsPath(docs, `${docs}/versions/v4.md`), true)
-  assert.equal(isBoardSyncDocsPath(docs, `${docs}/sprints/v4-S3.md`), true)
-  assert.equal(isBoardSyncDocsPath(docs, `${docs}/05_architecture.md`), false)
-  assert.equal(isBoardSyncDocsPath(docs, "/proj/README.md"), false)
-})
-
-test("fileEventTouchesBoardSync ignores phase docs", () => {
-  const touch = fileEventTouchesBoardSync(docs, [
-    { newUri: { fsPath: `${docs}/05_architecture.md` } as import("vscode").Uri },
-  ])
-  assert.equal(touch, false)
-})
-
-test("fileEventTouchesBoardSync detects epic changes", () => {
-  const touch = fileEventTouchesBoardSync(docs, [
-    { newUri: { fsPath: `${docs}/epics/EPIC-01.md` } as import("vscode").Uri },
-  ])
-  assert.equal(touch, true)
-})
-
-test("fileEventTouchesBoardSync detects US renames", () => {
-  const touch = fileEventTouchesBoardSync(docs, [
-    {
-      oldUri: { fsPath: `${docs}/us/US-0001.md` } as import("vscode").Uri,
-      newUri: { fsPath: `${docs}/us/US-0099.md` } as import("vscode").Uri,
-    },
-  ])
-  assert.equal(touch, true)
+  assert.equal(
+    fileEventTouchesMeridianDb(pkg, [{ newUri: { fsPath: "/proj/docs/00_scope.md" } as import("vscode").Uri }]),
+    false,
+  )
 })

@@ -55,7 +55,7 @@ Quick map:
 - Security: security-steward — /security-pass
 - Architecture: architecture-guardian — /architecture (gate before backlog)
 - Planning: sprint-planner — /create-version, /plan-sprint
-- Execution: board-keeper — /create-us, /refine-us, /complete-us, /sync-board
+- Execution: board-keeper — /create-us, /refine-us, /complete-us
 
 Full reference: .agent/references/agents-help.md
 ```

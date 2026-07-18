@@ -1,1 +1,0 @@
-../../../.agent/references/templates/code-quality-at-us-time.md

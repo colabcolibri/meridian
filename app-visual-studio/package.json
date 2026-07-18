@@ -56,7 +56,6 @@
     "onCommand:meridian.upgradeKit",
     "onCommand:meridian.validateProject",
     "onCommand:meridian.showStatus",
-    "onCommand:meridian.syncBoard",
     "onCommand:meridian.selectActiveProject",
     "workspaceContains:.agent/MERIDIAN.md"
   ],
@@ -107,8 +106,7 @@
         { "command": "meridian.validateProject", "group": "3@1" },
         { "command": "meridian.showStatus", "group": "3@2" },
         { "command": "meridian.selectActiveProject", "group": "3@3" },
-        { "command": "meridian.syncBoard", "group": "4@1" },
-        { "command": "meridian.newUserStory", "group": "4@2" }
+        { "command": "meridian.newUserStory", "group": "4@1" }
       ]
     },
     "submenus": [
@@ -142,11 +140,6 @@
         "command": "meridian.openDeliverables",
         "title": "%meridian.command.openDeliverables.title%",
         "icon": "$(list-tree)"
-      },
-      {
-        "command": "meridian.syncBoard",
-        "title": "%meridian.command.syncBoard.title%",
-        "icon": "$(sync)"
       },
       {
         "command": "meridian.openHelp",

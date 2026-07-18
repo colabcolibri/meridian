@@ -14,7 +14,7 @@ $ARGUMENTS
 2. **Gate:** implementation delivered; applicable tests passed; `depends_on` at `✅`
 3. **Mandatory read:** `implementation-template.md` + `us-template.md` + `section-contracts.md` + target US **before** editing status
 4. **Do not** mark `✅` with placeholder in `## Record`
-5. Regenerate `board.json` at the end
+5. Save via `meridian_db_cli.py update-us` — board UI refreshes on DB write
 6. `update-decisions-log` only if cross-cutting decision — **read** `@[skills/update-decisions-log]` and run `date +"%Y-%m-%d"` + `date +"%H:%M"` before Write
 7. Add **suggested commit** in `### Executed` — do **not** `git commit` unless manager explicitly asks (see `commit-after-us-close.md`)
 
@@ -33,9 +33,9 @@ RULES:
 3. Fill ## Record (Files + layers + Executed)
 4. Mark Intent/Acceptance [x]; update Plan/Planned [x]; set tests_status: done
 5. Set status ✅ (or 🔶 + Missing: if partial) — only ✅ if tests: none or tests_status: done
-6. generate-board-json
+6. update-us with Record + status ✅
 7. update-decisions-log if protocol/architecture changed — read skill + run date before Write
-8. suggested commit line in ### Executed; remind manager: commit after /sync-board (human)
+8. suggested commit line in ### Executed (human commits per commit-after-us-close.md)
 ```
 
 ---

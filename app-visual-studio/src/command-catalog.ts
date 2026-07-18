@@ -192,28 +192,11 @@ export const MERIDIAN_COMMAND_CATALOG: CommandHelpEntry[] = [
     summary: "Runs validate_meridian.py on the project root",
     details: [
       "Equivalent to python3 .agent/scripts/validate_meridian.py <project-folder>.",
-      "Checks docs/ structure, user stories, board.json, template contracts, etc.",
+      "Checks docs/ structure, SQLite delivery, template contracts, etc.",
       "Pass/fail notification; full log in Output.",
     ],
     outputChannel: "Meridian Validate",
     icon: "$(checklist)",
-    status: "shipped",
-  },
-  {
-    id: "sync",
-    title: "Sync board",
-    commandId: "meridian.syncBoard",
-    paletteTitle: "Meridian: Sync Board",
-    group: "governance",
-    summary: "Regenerates docs/kanban/board.json from SQLite or US frontmatter",
-    details: [
-      "When meridian.db exists, runs generate_board.py (SQLite source of truth).",
-      "Otherwise reads docs/us/*.md frontmatter.",
-      "Run after /complete-us or when validate reports board drift.",
-      "Refreshes open panels after writing.",
-    ],
-    outputChannel: "Meridian Tools",
-    icon: "$(sync)",
     status: "shipped",
   },
   {
@@ -226,7 +209,7 @@ export const MERIDIAN_COMMAND_CATALOG: CommandHelpEntry[] = [
     details: [
       "Discovery finds every folder named docs with Meridian fingerprint (00_scope or us/).",
       "Manifest .meridian/projects.json declares ids, names, default, and exclude.",
-      "Board, Deliverables, validate, and sync use the active project only.",
+      "Board, Deliverables, validate use the active project only.",
     ],
     icon: "$(list-selection)",
     status: "shipped",

@@ -31,9 +31,9 @@ Brief description.
 
 1. Approve docs in dependency order: foundation → principles → architecture → detail.
 2. Build backlog in `docs/epics/`, `docs/versions/` and `docs/sprints/`.
-3. Create US only after `05_architecture` approved and epic/version in folders.
-4. Human templates mirror: `docs/templates/README.md` (symlinks to kit).
-5. Regenerate board after US changes.
+3. Create US only after `05_architecture` approved and epic/version exist (SQLite or legacy folders).
+4. Kit templates: `.agent/references/templates/INDEX.md` — do not create `docs/templates/`.
+5. Validate delivery: `python3 .agent/scripts/validate_meridian.py . --sqlite-only`
 ```
 
 ## `00_scope.md` (initial draft)
@@ -96,11 +96,9 @@ On first day, create `docs/decisions/YYYY-MM-DD.json`:
 }
 ```
 
-## `docs/kanban/board.json`
+## Delivery database
 
-```json
-[]
-```
+After `docs/` exists, run `python3 .agent/scripts/bootstrap_meridian_db.py <packageRoot>`. Kanban reads `.meridian/meridian.db` — no `docs/kanban/board.json`.
 
 ## `docs/inventory/as-is.md` (Mode B only)
 

@@ -50,7 +50,7 @@ document → plan → refine → implement → close → commit
 | Step | In one line |
 | ---- | ----------- |
 | **Document** | Scope, stack, security, architecture in `docs/00`–`11` — I approve, agent drafts |
-| **Plan** | Epics, versions, sprint, and user stories in `docs/` |
+| **Plan** | Epics, versions, sprint, and user stories in `.meridian/meridian.db` (phase docs in `docs/`) |
 | **Refine** | Story gets a concrete Approach and `ready: true` before any product code |
 | **Implement** | Agent reads the US and codes against acceptance criteria |
 | **Close** | Agent fills `## Record` with evidence; I review and set `status: ✅` |
@@ -124,6 +124,7 @@ Publisher: **colabcolibri** · [GitHub](https://github.com/colabcolibri/meridian
 | **v4** | VS Code extension — board, versions, sprints, epics | Shipped |
 | **v9** | SQLite delivery store + kit scripts | Shipped |
 | **v10** | Remove browser monitor; dogfood `docs/` at repo root | Shipped |
+| **v11** | Board só SQLite — sem `board.json` nem `/sync-board` | Shipped |
 | v5+ | Write commands, wizards | Planned |
 
 Details in [`docs/versions/`](docs/versions/).

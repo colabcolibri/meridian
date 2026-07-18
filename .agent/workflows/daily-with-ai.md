@@ -16,8 +16,8 @@ $ARGUMENTS
 4. **Refine before implement** — `/refine-us` after `/create-us`; never skip to code with `ready: false`.
 5. **Implement only via gate** — `/implement-us US-XXXX` after `ready: true`; agent blocks otherwise.
 5. Always close with `complete-user-story` or `/complete-us` — never ✅ in chat only.
-6. `board.json` is derived — use `/sync-board` after changing US.
-7. **Commit after close** — human step after `/complete-us` + `/sync-board`; one commit per US. See `commit-after-us-close.md`. Agents suggest message only unless you explicitly ask them to commit.
+6. Board UI refreshes automatically when delivery rows change in SQLite.
+7. **Commit after close** — human step after `/complete-us`; one commit per US. See `commit-after-us-close.md`. Agents suggest message only unless you explicitly ask them to commit.
 
 ---
 
@@ -44,7 +44,7 @@ App: Settings tab + **Decisions** (log) + Board
 ### 2. Contextualize
 
 ```txt
-Cite: US-XXXX or docs/us/US-XXXX.md
+Cite: US-XXXX (`meridian_db_cli.py show US-XXXX --full`)
 Prompt: "Implement US-XXXX per acceptance. Do not mark ✅ without evidence."
 ```
 
@@ -83,7 +83,6 @@ Command: /implement-us US-XXXX
 Agent: board-keeper
 Skill: complete-user-story
 Command: /complete-us US-XXXX
-Then: /sync-board
 ```
 
 - Fill `## Record` (Files + layers + Executed).
@@ -93,7 +92,7 @@ Then: /sync-board
 ### 5. Commit (human)
 
 ```txt
-After: /complete-us + /sync-board for US-XXXX
+After: /complete-us for US-XXXX
 Reference: .agent/references/commit-after-us-close.md
 ```
 
@@ -120,7 +119,6 @@ Reference: .agent/references/commit-after-us-close.md
 | `/implement-us` | Gate + implement — requires `ready: true` |
 | `/complete-us` | Close US after implementation |
 | `/complete-sprint` | Close sprint — retrospective + status complete |
-| `/sync-board` | Regenerate kanban JSON |
 | `/update-decisions-log` | Prepend decision entry (real date + clock) |
 | `/plan-sprint` | Work slice in version |
 | `/create-epic` | New product capability |
@@ -132,8 +130,8 @@ Reference: .agent/references/commit-after-us-close.md
 ## Anti-patterns
 
 - Code without US, `ready: false`, or skipping `/implement-us` gate.
-- ✅ in chat without updating `docs/us/US-XXXX.md`.
-- Editing `board.json` by hand.
+- ✅ in chat without updating the US in SQLite.
+- Hand-editing delivery outside CLI/form when `meridian.db` exists.
 - Single conversation mixing many features.
 - `approved` on phase doc without human review.
 - ✅ in US with uncommitted git changes left indefinitely.

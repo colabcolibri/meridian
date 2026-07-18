@@ -16,9 +16,9 @@ from meridian_db import (  # noqa: E402
     db_exists,
     delivery_counts,
     next_user_story_id,
+    record_board_snapshot,
     set_summary,
     upsert_user_story,
-    write_board_json,
 )
 from meridian_markdown_parse import (  # noqa: E402
     extract_us_sections,
@@ -270,7 +270,7 @@ def cmd_create_us(args) -> int:
         conn.commit()
     finally:
         conn.close()
-    write_board_json(root)
+    record_board_snapshot(root)
     print(story_id)
     return 0
 
@@ -299,7 +299,7 @@ def cmd_update_us(args) -> int:
         return 1
     finally:
         conn.close()
-    write_board_json(root)
+    record_board_snapshot(root)
     print(f"Updated {story_id}")
     return 0
 
@@ -315,7 +315,7 @@ def cmd_set_ready(args) -> int:
         conn.commit()
     finally:
         conn.close()
-    write_board_json(root)
+    record_board_snapshot(root)
     return 0
 
 
@@ -343,8 +343,26 @@ def cmd_delete_us(args) -> int:
         conn.commit()
     finally:
         conn.close()
-    write_board_json(root)
+    record_board_snapshot(root)
     return 0
+
+
+def cmd_implement_gate(args) -> int:
+    from meridian_implement_gate import check_implement_gate
+
+    result = check_implement_gate(_root(args), args.story_id)
+    if args.json:
+        print(json.dumps(result, ensure_ascii=False, indent=2))
+    else:
+        for check in result["checks"]:
+            mark = "PASS" if check["passed"] else "FAIL"
+            detail = check.get("detail") or ""
+            print(f"{mark}\t{check['name']}\t{detail}")
+        if result["ok"]:
+            print(f"OK: implement gate passed for {args.story_id}")
+        else:
+            print(f"BLOCKED: cannot implement {args.story_id}", file=sys.stderr)
+    return 0 if result["ok"] else 1
 
 
 def main() -> int:
@@ -403,6 +421,11 @@ def main() -> int:
     delete = sub.add_parser("delete-us")
     delete.add_argument("story_id")
     delete.set_defaults(func=cmd_delete_us)
+
+    gate = sub.add_parser("implement-gate", help="Check /implement-us gate for a US")
+    gate.add_argument("story_id")
+    gate.add_argument("--json", action="store_true")
+    gate.set_defaults(func=cmd_implement_gate)
 
     args = parser.parse_args()
     if args.command != "create-us" and not db_exists(args.package_root):

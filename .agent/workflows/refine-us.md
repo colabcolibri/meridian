@@ -35,7 +35,7 @@ RULES:
 5. Concrete Plan/Planned — numbered manual steps or commands
 6. Fix Why/Where only if create left real gaps
 7. ready: true iff checklist passes (rows 11–12 included)
-8. generate-board-json
+8. `set-ready` when checklist passes
 ```
 
 ---

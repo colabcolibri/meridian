@@ -17,7 +17,7 @@ $ARGUMENTS
 5. New US only with epic/version referenced in existing folders
 6. Sprints in **`docs/sprints/`** — one file per sprint
 7. Log scope shifts → read `@[skills/update-decisions-log]` + run `date` before Write
-8. After changing US → `/sync-board`
+8. After changing US → board refreshes on DB save
 9. `validate_meridian.py` on project folder when available
 
 ---
@@ -72,5 +72,5 @@ Human approval needed:
 ## After
 
 ```txt
-Next: review release with manager → /create-us for stories → /sync-board
+Next: review release with manager → /create-us for stories
 ```
