@@ -42,7 +42,7 @@ python3 .agent/scripts/meridian_db_export.py . --entity us --id US-XXXX --format
 python3 .agent/scripts/meridian_db_export.py . --entity us --id US-XXXX --write-form < form.json
 ```
 
-**On save:** set `status: ✅` (or `🔶` + `Missing:`), acceptance `[x]`, filled `## Record`, `tests_status: done` when `tests: required`. Extension board refreshes when `meridian.db` changes (sync-board command removed in v11).
+**On save:** set `status: ✅` (or `🔶` + `Missing:`), acceptance `[x]`, filled `## Record`, `tests_status: done` when `tests: required`. Extension board refreshes when `meridian.db` changes (automatic in v11).
 
 ## When to trigger
 

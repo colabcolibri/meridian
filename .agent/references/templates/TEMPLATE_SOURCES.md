@@ -62,7 +62,7 @@ CANONICAL (edit here)          REGISTRY (agents read)              IDE adapter (
 | Create | `/create-us` | `writing-guide.md` + `code-quality-at-us-time.md` + `us-template.md` |
 | Review | `/review-us` | `review-checklist.md` + `writing-guide.md` + `section-contracts.md` + `us-template.md` |
 | Refine | `/refine-us` | `refine-checklist.md` + `writing-guide.md` + `code-quality-at-us-time.md` + `us-template.md` + `04_principles.md` |
-| Implement | `/implement-us` | `implement-gate-checklist.md` + `meridian_db_cli implement-gate` + target US (`show --full`) + `04_principles.md` |
+| Implement | `/implement-us` | `implement-gate-checklist.md` + `meridian_delivery.py implement-gate` + target US (`show --full`) + `04_principles.md` |
 | Architecture | `/architecture` | `architecture-folder-guide.md` + phase docs 00–04 |
 | Close | `/complete-us` | `implementation-template.md` + `us-template.md` + `section-contracts.md` |
 

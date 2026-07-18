@@ -217,7 +217,7 @@ The workflow gates on `ready: true`, filled Plan, and satisfied `depends_on`, th
 
 You can also ask in natural language — the agent must run the same gate before coding:
 
-> "Run `/implement-us US-0017`" or "Implement US-0017 per Acceptance (`meridian_db_cli.py show US-0017 --full`)."
+> "Run `/implement-us US-0017`" or "Implement US-0017 per Acceptance (`meridian_delivery.py show US-0017 --full`)."
 
 ### Review the output
 

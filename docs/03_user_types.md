@@ -33,7 +33,7 @@ blocks: [04_principles.md, 05_architecture.md, 06_database.md, 07_api_contracts.
 
 - **Description:** IDE agent following `.agent/` rules, specialized agents, skills, and workflows — not an end-user persona with login.
 - **Origin:** invoked by manager via chat or slash command.
-- **Permissions:** read phase docs and US rows; write delivery via `meridian_db_cli.py` when skill allows; product code only after `/implement-us` gate.
+- **Permissions:** read phase docs and US rows; write delivery via `meridian_delivery.py` when skill allows; product code only after `/implement-us` gate.
 - **Restrictions:** no autonomous commits; no `✅` without evidence; routing via `meridian-routing` (v11 slugs; legacy chat aliases redirect).
 - **Visible data:** same workspace as manager, minus secrets.
 - **Edge cases:** wrong agent for task, legacy v1 paths in prompt, attempting Write on `docs/us/` when SQLite active.

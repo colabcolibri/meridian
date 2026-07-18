@@ -35,7 +35,7 @@ When any detail file exists, add:
 | File | Scope |
 | ---- | ----- |
 | `architecture/desktop-monitor.md` | Vite app, loading, HTTP path |
-| `architecture/vscode-extension.md` | Webviews, sync board, activation |
+| `architecture/vscode-extension.md` | Webviews, board refresh on DB change, activation |
 ```
 
 Each detail file should have frontmatter (`title`, `updated`) and link back to the relevant § in `05`.

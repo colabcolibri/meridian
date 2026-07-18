@@ -26,6 +26,7 @@ meridian/                    # kit + dogfood product
     skills/
     workflows/
     scripts/validate_meridian.py
+    scripts/meridian_delivery.py
     scripts/meridian_db_cli.py
     scripts/meridian_db_export.py
     scripts/meridian_db.py

@@ -49,7 +49,7 @@ RULES:
 6. Create docs/ tree per skill
 7. 00_scope.md = draft, populated (not blank)
 8. 11_decisions.md stub + first JSON entry in docs/decisions/
-9. Bootstrap `.meridian/meridian.db` (`bootstrap_meridian_db.py`)
+9. Bootstrap `.meridian/meridian.db` + `.meridian/delivery.json` (`bootstrap_meridian_db.py` or `meridian_delivery.py bootstrap`)
 10. Validate .gitignore baseline
 11. REPORT exact paths created and any inferences (Mode B)
 ```
@@ -64,6 +64,7 @@ RULES:
 | Initial scope | `docs/00_scope.md` (populated, not blank) |
 | Decision log | `docs/decisions/YYYY-MM-DD.json` + stub `11_decisions.md` |
 | Delivery DB | `.meridian/meridian.db` (empty delivery tables) |
+| Delivery profile | `.meridian/delivery.json` (`connector: sqlite`) |
 | As-is inventory (Mode B only) | `docs/inventory/as-is.md` |
 | Templates mirror | *(removed v11)* — agents read `.agent/references/templates/` |
 

@@ -82,7 +82,7 @@ After `05_architecture` is **approved**, archive or delete this file. Do not mai
 
 If the product already shipped significant work before Meridian:
 
-1. Create epics from **high** confidence rows via `meridian_db_cli.py create-epic` (no retroactive US).
+1. Create epics from **high** confidence rows via `meridian_delivery.py create-epic` (no retroactive US).
 2. Create baseline version `v0` in SQLite (`create-version`) — documents pre-Meridian state.
 3. Mark completed epics `status: complete` and list them under v0.
 4. New work starts in `v1`+ as normal user stories.

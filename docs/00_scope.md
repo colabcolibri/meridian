@@ -13,7 +13,7 @@ blocks: [01_tech_stack.md, 04_principles.md, 05_architecture.md]
 
 **Meridian** is a repo-native harness for AI-assisted software development: the `.agent/` kit (agents, skills, workflows, validators) plus product documentation under `docs/`. This repository dogfoods the protocol at the root (`docs/` next to `.agent/`).
 
-Visibility and planning happen in the **VS Code / Cursor extension** (`app-visual-studio/`): Board, Deliverables, validate, and sync board. There is no separate browser desktop app — the IDE is the monitor.
+Visibility and planning happen in the **VS Code / Cursor extension** (`app-visual-studio/`): Board, Deliverables, validate, and project picker. The board refreshes when `.meridian/meridian.db` changes — no derived `board.json` on disk. There is no separate browser desktop app — the IDE is the monitor.
 
 Delivery artifacts (epics, versions, sprints, user stories, decisions) live in **SQLite** (`.meridian/meridian.db`) from v9 onward. Phase documents (`00`–`11`, discovery, architecture detail) remain Markdown.
 
@@ -33,7 +33,7 @@ Meridian keeps the contract in Git and gives the process manager visibility insi
 
 - `.agent/` kit: agents, skills, workflows, `validate_meridian.py`, SQLite delivery store (v9+).
 - `docs/` phase documents and governance gates.
-- VS Code extension: Board, Deliverables, validate, sync board, project picker (multi-product).
+- VS Code extension: Board, Deliverables, validate, project picker (multi-product); board reads SQLite directly.
 - Kit distribution (`meridian-kit` tarball) and IDE adapters (Cursor, Claude, Codex).
 
 ## Out of initial scope

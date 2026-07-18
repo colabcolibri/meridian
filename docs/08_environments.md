@@ -21,10 +21,10 @@ blocks: []
 ```bash
 python3 .agent/scripts/bootstrap_meridian_db.py .
 python3 .agent/scripts/validate_meridian.py . --sqlite-only
-python3 .agent/scripts/meridian_db_cli.py counts .
+python3 .agent/scripts/meridian_delivery.py counts
 ```
 
-Fresh clone without `.meridian/meridian.db`: bootstrap creates empty schema; import history from branch `meridian-v1-old` via `migrate_md_to_sqlite.py` (see `docs/06_database.md` § Migration).
+Fresh clone without `.meridian/meridian.db`: bootstrap creates empty schema + `delivery.json`. Import legacy delivery from branch `meridian-v1-old` via **`/migrate-delivery`** or `migrate_md_to_sqlite.py` (see `docs/06_database.md` § Migration).
 
 ### Validate Meridian governance
 
@@ -38,7 +38,7 @@ python3 .agent/scripts/validate_meridian.py <package-root> --json   # CI
 
 | Who | Needs Python? | Why |
 | --- | ------------- | --- |
-| **Kit / agents (Cursor, Claude)** | **Yes** | `meridian_db_cli.py`, `validate_meridian.py`, `meridian_db_export.py` — stdlib only, no `pip` |
+| **Kit / agents (Cursor, Claude)** | **Yes** | `meridian_delivery.py`, `validate_meridian.py`, `meridian_db_export.py` — stdlib only, no `pip` |
 | **VS Code extension** | **Yes** | Validate command + Board/Deliverables read SQLite via `python3 .agent/scripts/meridian_db_export.py` |
 | **Chat-only (no validate, no board)** | No | Not a supported workflow — docs would drift without validator |
 | **Phase docs only** | No | Editing `docs/00_scope.md` etc. is plain Markdown |

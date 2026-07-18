@@ -55,7 +55,7 @@
 
 ---
 
-## 3. Workflows (18)
+## 3. Workflows (19)
 
 | Workflow | G7 | Alterações G7 |
 | -------- | -- | ------------- |
@@ -68,9 +68,10 @@
 | `create-version.md` | ✅ | `Id:` + CLI |
 | `complete-sprint.md` | ✅ | `Id:` + SQLite |
 | `plan-sprint.md` | ✅ | `SQLite saved` output |
+| `migrate-delivery.md` | ✅ | v1 import scripts |
 | `discover.md` | ✅ | phase — grep OK |
 | `init-meridian.md` | ✅ | grep OK |
-| `status.md` | ✅ | `meridian_db_cli counts` |
+| `status.md` | ✅ | `meridian_delivery.py counts` |
 | `architecture.md` | ✅ | phase only — grep OK |
 | `security-pass.md` | ✅ | phase only — grep OK |
 | `design-pass.md` | ✅ | já tinha `show --full` |
@@ -84,7 +85,7 @@
 
 | Agente | G7 | Alterações G7 |
 | ------ | -- | ------------- |
-| `scrum-master` | ✅ | `meridian_db_cli counts` na Phase 0 |
+| `scrum-master` | ✅ | `meridian_delivery.py counts` na Phase 0 |
 | `product-owner` | ✅ | grep OK; epics SQLite já citado |
 | `technical-writer` | ✅ | grep OK; anti duplicar SQLite |
 | `technical-architect` | ✅ | epics/versions **in SQLite** |

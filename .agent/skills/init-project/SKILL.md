@@ -55,7 +55,7 @@ docs/
   sprints/
 ```
 
-Run `python3 .agent/scripts/bootstrap_meridian_db.py <packageRoot>` after creating `docs/`.
+Run `python3 .agent/scripts/meridian_delivery.py bootstrap` or `bootstrap_meridian_db.py <packageRoot>` after creating `docs/`.
 
 Templates: read `.agent/references/templates/INDEX.md` — **do not** create `docs/templates/`.
 
@@ -133,7 +133,7 @@ If discovery finds **more than one** `docs/` folder named exactly `docs` with Me
 
 | # | Check |
 | - | ----------- |
-| 1 | `docs/` phase tree (`00`–`11`, `decisions/`, `architecture/`, `discovery/`, `inventory/`) + `.meridian/meridian.db` bootstrapped |
+| 1 | `docs/` phase tree + `.meridian/meridian.db` + `.meridian/delivery.json` bootstrapped |
 | 2 | `.env*` protected in `.gitignore` |
 | 3 | No product code created |
 | 4 | (Mode B) `docs/inventory/as-is.md` exists with capability table |

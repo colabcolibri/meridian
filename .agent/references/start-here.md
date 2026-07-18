@@ -91,18 +91,20 @@ docs/
   decisions/               One JSON file per day of decisions
   inventory/as-is.md       Mode B only — transitional; archive after promotion
   ../.meridian/
+    delivery.json          Connector profile (commit) — default sqlite
     meridian.db            Delivery store (gitignored) — epics, versions, sprints, US
     projects.json          Optional — multi-product repos (several docs/ trees)
 ```
 
-**Delivery (v11):** epics, versions, sprints, and user stories live in **`.meridian/meridian.db`**, not as `docs/epics/`, `docs/us/`, or `docs/kanban/board.json`. Agents write via `meridian_db_cli.py` or `meridian_db_export.py --write-form` — see `sqlite-delivery-operations.md`.
+**Delivery (v11):** epics, versions, sprints, and user stories live in **`.meridian/meridian.db`**, not as `docs/epics/`, `docs/us/`, or `docs/kanban/board.json`. Agents call **`meridian_delivery.py`** (reads `.meridian/delivery.json`) or `meridian_db_export.py --write-form` — see `delivery-connector-schema.md`.
 
 ```txt
 docs/                      Phase docs only (00–11, decisions, architecture, inventory)
+.meridian/delivery.json    Connector config (versioned)
 .meridian/meridian.db      Epics, versions, sprints, user stories (canonical delivery)
 ```
 
-Legacy v1 (branch `meridian-v1-old`): file-per-artifact Markdown — use `migrate_md_to_sqlite.py` once when adopting v2 on `main`.
+**Legacy v1** (branch `meridian-v1-old`): file-per-artifact Markdown — run **`/migrate-delivery`** or `migrate_md_to_sqlite.py` once when adopting v11 on `main`.
 
 ### Several `docs/` folders (monorepo)
 

@@ -35,7 +35,7 @@ Every delivery row (epic, version, sprint, user story) uses **two layers**:
 Agent writes full US markdown
         │
         ▼
-meridian_db_cli update-us --from-file us.md
+meridian_delivery.py update-us --from-file us.md
         │
         ├─► body_markdown          (entire file — source for display)
         ├─► record_files, …        (each ### under ## Record → own column)
@@ -163,7 +163,7 @@ erDiagram
 8. board_snapshots   (audit JSON on upsert — `record_board_snapshot()`)
 ```
 
-Breaking order causes `FOREIGN KEY constraint failed` — use `meridian_db.py` upsert helpers or `meridian_db_cli.py`, not ad-hoc SQL.
+Breaking order causes `FOREIGN KEY constraint failed` — use `meridian_db.py` upsert helpers or `meridian_delivery.py`, not ad-hoc SQL.
 
 ## Tables — column contract
 
@@ -316,7 +316,7 @@ Illustrative after migration + purge on this repo (local DB, not in git):
 | `sprint_stories` | 96 |
 | `decisions` | 63 |
 
-Verify live: `python3 .agent/scripts/meridian_db_cli.py counts .`
+Verify live: `python3 .agent/scripts/meridian_delivery.py counts .`
 
 Note: US numbering skips `US-0096` (never existed in v1 tree).
 
@@ -324,7 +324,7 @@ Note: US numbering skips `US-0096` (never existed in v1 tree).
 
 ```bash
 # row counts
-python3 .agent/scripts/meridian_db_cli.py counts .
+python3 .agent/scripts/meridian_delivery.py counts .
 
 # FK orphans (should print nothing)
 sqlite3 .meridian/meridian.db "
@@ -355,21 +355,21 @@ Extension: **View** = HTML preview; **Edit** = schema-driven form (all entity ty
 | `user_stories` | 4–8 sentences after `/complete-us`; agents read before `body_markdown` |
 | `epics`, `versions`, `sprints` | One-paragraph digest |
 
-Workflow: `meridian_db_cli list` → `show ID` (summary) → `show ID --full` only when implementing.
+Workflow: `meridian_delivery.py list` → `show ID` (summary) → `show ID --full` only when implementing.
 
 ## CLI — discover and write
 
 ```bash
 python3 .agent/scripts/bootstrap_meridian_db.py .
-python3 .agent/scripts/meridian_db_cli.py counts .
-python3 .agent/scripts/meridian_db_cli.py list user_stories --version v10
-python3 .agent/scripts/meridian_db_cli.py show US-0115
-python3 .agent/scripts/meridian_db_cli.py show US-0115 --full
-python3 .agent/scripts/meridian_db_cli.py search "parity"
-python3 .agent/scripts/meridian_db_cli.py create-us --title "..." --epic EPIC-15 --version v10
-python3 .agent/scripts/meridian_db_cli.py update-us US-0115 --from-file /tmp/us.md
-python3 .agent/scripts/meridian_db_cli.py set-ready US-0115
-python3 .agent/scripts/meridian_db_cli.py set-summary US-0115 --text "..."
+python3 .agent/scripts/meridian_delivery.py counts .
+python3 .agent/scripts/meridian_delivery.py list user_stories --version v10
+python3 .agent/scripts/meridian_delivery.py show US-0115
+python3 .agent/scripts/meridian_delivery.py show US-0115 --full
+python3 .agent/scripts/meridian_delivery.py search "parity"
+python3 .agent/scripts/meridian_delivery.py create-us --title "..." --epic EPIC-15 --version v10
+python3 .agent/scripts/meridian_delivery.py update-us US-0115 --from-file /tmp/us.md
+python3 .agent/scripts/meridian_delivery.py set-ready US-0115
+python3 .agent/scripts/meridian_delivery.py set-summary US-0115 --text "..."
 ```
 
 Never `Write` on `docs/us/`, `docs/epics/`, `docs/versions/`, `docs/sprints/`, or `docs/decisions/*.json` when `meridian.db` exists.
@@ -400,7 +400,7 @@ Fresh clone: `bootstrap` creates empty schema; import data via `migrate_md_to_sq
 | Script | Role |
 | ------ | ---- |
 | `meridian_db.py` | `connect`, `upsert_*`, `export_planning_json`, migrations |
-| `meridian_db_cli.py` | Human/agent query and write CLI |
+| `meridian_delivery.py` | Human/agent query and write CLI |
 | `meridian_db_export.py` | JSON for extension (`--format planning`; `--format form`; `--write-form`) |
 | `meridian_delivery_form.py` | Build markdown from form fields; validate before upsert |
 | `verify_md_sqlite_parity.py` | Pre-purge gate |

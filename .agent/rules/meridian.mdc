@@ -35,6 +35,7 @@ Priority: **P0 rules > P1 agent + MERIDIAN.md > P2 skills**.
 
 | Command | File |
 | ------- | ---- |
+| `/migrate-delivery` | `.cursor/commands/migrate-delivery.md` |
 | `/init-meridian` | `.cursor/commands/init-meridian.md` |
 | `/status` | `.cursor/commands/status.md` |
 | `/plan-sprint` | `.cursor/commands/plan-sprint.md` |

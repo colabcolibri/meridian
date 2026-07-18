@@ -33,9 +33,9 @@ Lineage docs on v1 branch: [MERIDIAN_V2_CUTOVER.md on meridian-v1-old](https://g
 
 When `meridian.db` exists:
 
-- `/create-us` → `meridian_db_cli.py create-us` or `meridian_db_export.py --write-form`
+- `/create-us` → `meridian_delivery.py create-us` or `meridian_db_export.py --write-form`
 - `/refine-us` → `update-us` + `set-ready`
-- `/implement-us` → `meridian_db_cli.py implement-gate US-XXXX` then code
+- `/implement-us` → `meridian_delivery.py implement-gate US-XXXX` then code
 - `/complete-us` → `update-us` with Record + status
 - Phase docs (`00`–`11`) → still Markdown
 

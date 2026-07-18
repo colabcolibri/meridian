@@ -66,13 +66,14 @@ See `.agent/ARCHITECTURE.md` for the full map. Minimum:
   scripts/
     lib/                     ← meridian_db, parsers, form
     migrate/                 ← v1 → SQLite one-shot
-    meridian_db_cli.py
+    meridian_delivery.py     ← agent facade
+    meridian_db_cli.py       ← sqlite driver
     validate_meridian.py
     sync_cursor_kit.sh
 
 docs/                        ← one product's source of truth (path varies in monorepos)
   00_scope.md … 11_decisions.md
-  epics/  versions/  sprints/  decisions/   (delivery in .meridian/meridian.db)
+  epics/  versions/  sprints/  decisions/   (removed from dogfood — delivery in .meridian/)
 
 .meridian/projects.json      ← optional — several docs/ trees in one repo (A + discovery B)
 ```

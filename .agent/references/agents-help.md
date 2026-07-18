@@ -115,7 +115,8 @@ Slash command groups — workflows in **six groups**. Each maps to one primary a
 
 | Step | Command | Agent | What it does |
 | ---- | ------- | ----- | ------------ |
-| A1 | **`/init-meridian`** | `scrum-master` | Creates `docs/` tree, initial scope, decision log, bootstraps `meridian.db`. **Mode B:** also `docs/inventory/as-is.md`. **No product code.** |
+| A1 | **`/init-meridian`** | `scrum-master` | Creates `docs/` tree, initial scope, decision log, bootstraps `meridian.db` + `delivery.json`. **Mode B:** also `docs/inventory/as-is.md`. **No product code.** |
+| A2 | **`/migrate-delivery`** | `scrum-master` | One-shot: import legacy `docs/us/` … into SQLite (`migrate_md_to_sqlite.py`). Skip if project started on v11. |
 
 ---
 
@@ -185,6 +186,7 @@ Epic/version **close:** set `status: complete` manually when outcome reached (no
 | F1 | **`/update-decisions-log`** | any + skill | Read skill; run `date +"%Y-%m-%d"` + `date +"%H:%M"`; prepend `docs/decisions/YYYY-MM-DD.json`. Never edit old entries. |
 | F2 | **`validate_meridian.py`** | script | `python3 .agent/scripts/validate_meridian.py <project-root> --sqlite-only` — structure, US contracts, phase docs. |
 | F3 | **Meridian: Validate Project** *(extension)* | IDE command | Same validator from VS Code/Cursor sidebar. |
+| F4 | **Delivery facade** | `meridian_delivery.py` | Reads `.meridian/delivery.json` (default `connector: sqlite`). All agent delivery verbs — `counts`, `show`, `create-us`, … |
 
 ---
 
@@ -194,6 +196,7 @@ Use this as the canonical sequence. Skip steps only when the artifact already ex
 
 ```txt
  1. /init-meridian                          [Group A]  scrum-master
+ 1b. /migrate-delivery (legacy v1 only)    [Group A]  scrum-master
  2. /discover (optional)                    [Group C]  product-owner
  3. Complete 00_scope → approve             [Group C]  product-owner
  4. Complete 01, 03, 04 (draft → approve)  [Group C]  technical-writer
@@ -262,7 +265,7 @@ Skills are procedures agents load automatically. Grouped by purpose.
 
 | You want to… | Group | Agent | Command |
 | ------------ | ----- | ----- | ------- |
-| Start or migrate project | A | `scrum-master` | `/init-meridian` |
+| Start or migrate project | A | `scrum-master` | `/init-meridian`, `/migrate-delivery` |
 | See blockers and next step | B | `scrum-master` | `/status` |
 | Full guided day | B | `scrum-master` | `/daily-with-ai` |
 | Open this manual | B | `scrum-master` | `/agents-help` |

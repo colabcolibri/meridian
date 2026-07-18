@@ -34,7 +34,7 @@ RULES:
 1. Resolve US id from $ARGUMENTS or ask
 2. Run: python3 .agent/scripts/meridian_delivery.py implement-gate US-XXXX
 3. If exit != 0 → output blockers; NO product code
-4. If passed → meridian_db_cli show US-XXXX --full; read Architecture refs + 04_principles
+4. If passed → meridian_delivery.py show US-XXXX --full; read Architecture refs + 04_principles
 5. Implement Acceptance + Planned (DRY + SRP)
 6. Board UI refreshes automatically on DB upsert
 7. Remind manager: review diff → /complete-us → commit (human)

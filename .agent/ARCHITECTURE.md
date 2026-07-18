@@ -41,7 +41,8 @@ The VS Code extension (`app-visual-studio/`) monitors Meridian projects; it is n
     migrate/               # v1 → SQLite one-shot
     test/                  # smoke tests (root shims for CI)
     dev/                   # meridian-teste seed
-    meridian_db_cli.py
+    meridian_delivery.py     ← agent facade (reads delivery.json)
+    meridian_db_cli.py       ← sqlite driver (implementation)
     validate_meridian.py
     sync_cursor_kit.sh
   references/templates/      # delivery templates (INDEX, writing-guide, section-contracts, …)
@@ -130,6 +131,7 @@ See `.agent/skills/doc.md` to create new skills.
 | `security-pass` | security-champion | doc 02 |
 | `design-pass` | design-system-owner | doc 09 |
 | `discover` | product-owner | discovery brief |
+| `migrate-delivery` | scrum-master | v1 Markdown → SQLite |
 | `daily-with-ai` | scrum-master | daily manager + AI routine |
 
 All support `$ARGUMENTS` and a critical rules section.
@@ -144,11 +146,14 @@ python3 .agent/scripts/validate_meridian.py <project-root>
 python3 .agent/scripts/validate_meridian.py <project-root> --sqlite-only
 python3 .agent/scripts/validate_meridian.py <project-root> --json   # CI
 
-# Delivery CLI (SQLite)
-python3 .agent/scripts/meridian_db_cli.py counts .
-python3 .agent/scripts/meridian_db_cli.py create-epic --title "..." --versions "[v1]"
-python3 .agent/scripts/meridian_db_cli.py create-version --id v1 --title "..."
-python3 .agent/scripts/meridian_db_cli.py create-sprint --version v1 --title "..."
+# Delivery CLI (facade + sqlite driver)
+python3 .agent/scripts/meridian_delivery.py counts
+python3 .agent/scripts/meridian_delivery.py create-epic --title "..." --versions "[v1]"
+python3 .agent/scripts/meridian_delivery.py create-version --id v1 --title "..."
+python3 .agent/scripts/meridian_delivery.py create-sprint --version v1 --title "..."
+
+# Legacy v1 import (one-shot) — /migrate-delivery or:
+python3 .agent/scripts/migrate_md_to_sqlite.py <project-root>
 
 # Legacy v1 import (one-shot) — see scripts/migrate/
 python3 .agent/scripts/migrate_md_to_sqlite.py <project-root>

@@ -28,7 +28,7 @@ This folder is the **source of truth for phase documents** of the Meridian kit +
 | [06_database.md](06_database.md)           | draft    | SQLite delivery schema                       |
 | [07_api_contracts.md](07_api_contracts.md) | draft    | Extension ↔ kit script contracts             |
 | [08_environments.md](08_environments.md)   | approved | Local commands and CI                        |
-| [09_design_system.md](09_design_system.md) | planned  | UI language — `design-steward` (onda H1)     |
+| [09_design_system.md](09_design_system.md) | planned  | UI language — `design-system-owner` |
 | [11_decisions.md](11_decisions.md)         | approved | Stub — log rules (entries in `decisions/`)   |
 
 ## Delivery artifacts
@@ -49,12 +49,12 @@ There is **no** `docs/us/`, `docs/epics/`, or `docs/kanban/board.json`. Board re
 | 0 — Foundation       | 11, 00–03                         | System   |
 | 1 — Principles       | 04, 09 (design)                   | System   |
 | 2 — Architecture     | 05, 06–08                         | System   |
-| Backlog              | `meridian_db_cli list`            | Delivery |
+| Backlog              | `meridian_delivery.py list`       | Delivery |
 | Execution            | `.meridian/meridian.db`           | Delivery |
 
 US gate: `05_architecture` approved + epic/version exist in SQLite + `ready: true` for `/implement-us`.
 
-**US lifecycle:** `/create-us` → `/refine-us` → `/implement-us` (`implementation-specialist`, H1) → `/complete-us` → commit (human).
+**US lifecycle:** `/create-us` → `/refine-us` → `/implement-us` (`developer`) → `/complete-us` → commit (human).
 
 Validate: `python3 .agent/scripts/validate_meridian.py . --sqlite-only`
 
@@ -66,7 +66,7 @@ See: [Start here](../.agent/references/start-here.md) · [Usage guide](../.agent
 
 1. **Orient** — `/status`; VS Code **Meridian: Open Board**; pick an unblocked Must US.
 2. **Create/refine** — `/create-us` then `/refine-us US-XXXX` until `ready: true`.
-3. **Contextualize** — `meridian_db_cli.py show US-XXXX --full`.
+3. **Contextualize** — `meridian_delivery.py show US-XXXX --full`.
 4. **Implement** — `/implement-us US-XXXX` after gate; review diff.
 5. **Close** — `/complete-us US-XXXX` (Record + `✅`); board refreshes on DB save.
 6. **Commit** — one commit per US per `commit-after-us-close.md`.
