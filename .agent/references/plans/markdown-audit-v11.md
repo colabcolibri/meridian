@@ -120,16 +120,16 @@ Marque `[x]` quando o arquivo estiver **v11-operacional** (sem P0; P1 aceito ou 
 
 ### 7.2 Rules
 
-- [ ] `rules/MERIDIAN.md` — **P0**
+- [x] `rules/MERIDIAN.md` — G1
 - [ ] `rules/AGENTS.md` — **P0**
 
 ### 7.3 References (guias)
 
-- [ ] `references/start-here.md` — **P0**
+- [x] `references/start-here.md` — G1
 - [ ] `references/usage-guide.md`
 - [ ] `references/agents-help.md`
 - [ ] `references/commit-after-us-close.md`
-- [ ] `references/instruction-surfaces.md` — **P0 reescrita**
+- [x] `references/instruction-surfaces.md` — G1
 - [ ] `references/scrum-meridian-map.md` — **P0**
 - [ ] `references/scrum-guide-complete.md` (verificar menções delivery path)
 
@@ -137,7 +137,7 @@ Marque `[x]` quando o arquivo estiver **v11-operacional** (sem P0; P1 aceito ou 
 
 - [ ] `templates/INDEX.md`
 - [ ] `templates/TEMPLATE_SOURCES.md`
-- [ ] `templates/lifecycle.md` — **P0**
+- [x] `templates/lifecycle.md` — G1
 - [ ] `templates/writing-guide.md`
 - [ ] `templates/section-contracts.md`
 - [ ] `templates/sqlite-delivery-operations.md`
@@ -231,7 +231,7 @@ Marque `[x]` quando o arquivo estiver **v11-operacional** (sem P0; P1 aceito ou 
 
 ### 7.10 Dogfood `docs/` (repo root)
 
-- [ ] `docs/README.md` — **P0**
+- [x] `docs/README.md` — G1
 - [ ] `docs/00_scope.md`
 - [ ] `docs/01_tech_stack.md`
 - [ ] `docs/02_security.md`
@@ -243,6 +243,7 @@ Marque `[x]` quando o arquivo estiver **v11-operacional** (sem P0; P1 aceito ou 
 - [ ] `docs/08_environments.md`
 - [ ] `docs/11_decisions.md`
 - [ ] `docs/scrum-guide-complete.md`
+- [ ] `docs/09_design_system.md` — stub H1 (created G1)
 
 ### 7.11 Repo root / CI / extensão
 

@@ -41,6 +41,7 @@ Documents produced:
 - `02_security.md` — threats, sensitive data, auth model, compliance posture
 - `04_principles.md` — code quality and design conventions
 - `05_architecture.md` — how the system is divided into modules and services
+- `09_design_system.md` — visual language (tokens, components, responsive rules)
 - `06_database.md` — data model and migrations
 - `07_api_contracts.md` — API definitions
 - `08_environments.md` — dev, staging, production
@@ -82,6 +83,7 @@ docs/
   04_principles.md         Phase 2 — code and quality conventions
   05_architecture.md       Phase 2 — system structure (gate for backlog)
   architecture/            Phase 2 — optional architecture detail (indexed from 05)
+  09_design_system.md      Phase 2 — UI language, tokens, components (design-steward)
   06_database.md           Phase 2 — data model
   07_api_contracts.md      Phase 2 — API definitions
   08_environments.md       Phase 2 — dev, staging, production
@@ -267,8 +269,8 @@ Reference section — open when you need the detail on a specific file's fields 
 
 | Field | What it is |
 | ----- | ---------- |
-| `id` | `v1-S1` — must match filename. |
-| `version` | Parent version — must exist in `docs/versions/`. |
+| `id` | `v1-S1` — primary key in `sprints` table. |
+| `version` | Parent version id — row must exist in `versions` (`version_id` FK). |
 | `goal` | One sentence — what this sprint proves or delivers. |
 | `done_when` | Observable close condition. |
 | `stories` | Canonical US id list (used by validation). |

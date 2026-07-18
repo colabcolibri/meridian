@@ -37,13 +37,13 @@ Before any action, classify:
 | **STATUS** | "status", "where are we", "blockers" | `process-manager` + `/status` |
 | **DOC / PHASE** | "scope", "epic", "version", "architecture", `00_`–`11_` | Documentation agent per matrix |
 | **US / BOARD** | "user story", "US-", "kanban", "board" | `board-keeper` or `sprint-planner` |
-| **IMPLEMENT US** | "implement US", "build", "code for US", `/implement-us` | `process-manager` + `implement-user-story` — **block** if `ready` not true |
+| **IMPLEMENT US** | "implement US", "build", "code for US", `/implement-us` | `implementation-specialist` + `implement-user-story` — **block** if `ready` not true _(H1: até arquivo do agente, roteamento temporário via `process-manager`)_ |
 | **REFINE US** | "refine US", `/refine-us`, "ready for implement" | `board-keeper` + `refine-user-story` |
 | **REVIEW US** | "review US", `/review-us`, "audit US", "check story" | `board-keeper` + `review-user-story` |
 | **CLOSE US** | "complete US", "mark done", "record", `/complete-us` | `board-keeper` + `complete-user-story` |
 | **CLOSE SPRINT** | "complete sprint", "close sprint", `/complete-sprint` | `sprint-planner` + `complete-sprint` |
 | **LOG DECISION** | "log decision", "decision log", `/update-decisions-log`, `docs/decisions/` | read `update-decisions-log` + run `date` before Write |
-| **SECURITY** | "security", "OWASP", "secrets", `02_security` | `security-steward` |
+| **DESIGN** | "design system", "UI tokens", "visual", `/design-pass`, `09_design` | `design-steward` _(H1)_ |
 | **START PROJECT** | "start", "meridian setup", "create docs" | `process-manager` + `init-project` |
 | **CODE** | "implement", "create app", "fix", "refactor" | `/implement-us US-XXXX` or equivalent gate; US `ready: true` required |
 | **SLASH** | `/init-meridian`, `/create-epic`, `/create-us`, `/complete-us`, `/daily-with-ai`, etc. | Corresponding workflow |
@@ -91,7 +91,7 @@ Before any action, classify:
 
 ### Source of truth
 
-- `docs/` is the source of truth for **phase docs** (`00`–`11`, decisions, architecture) of the **target project** (do not confuse with this repo's `app-desktop/docs/` unless context is explicit).
+- `docs/` is the source of truth for **phase docs** (`00`–`11`, decisions, architecture, discovery) of the **target project** (`packageRoot` — in monorepos see `.meridian/projects.json`).
 - Delivery (US, epic, version, sprint) lives in `.meridian/meridian.db` — see `sqlite-delivery-operations.md`.
 - Read `.agent/MERIDIAN.md` before changing project structure.
 
@@ -135,13 +135,13 @@ The person is manager of the process. Agents report blockers, next step, and pen
 | `01`–`08`, `11` (phase) | `documentation-strategist` | `update-decisions-log` |
 | `02_security.md` | `security-steward` | `security-review` |
 | `05_architecture.md` | `architecture-guardian` | `architecture-folder-guide.md` + `security-review` |
+| `09_design_system.md` | `design-steward` | _(skill `design-system` — onda H1)_ |
 | `docs/architecture/*.md` | `architecture-guardian` | indexed from `05`; gate stays on `05` only |
-| `docs/versions/`, `docs/sprints/` (create/plan) | `sprint-planner` | `create-sprint`, `create-version` |
-| `docs/sprints/` (close) | `sprint-planner` | `complete-sprint` |
+| Versions / sprints (SQLite) | `sprint-planner` | `create-version`, `create-sprint`, `complete-sprint` |
 | Delivery US (create) | `board-keeper` | `create-user-story` + `sqlite-delivery-operations.md` |
 | Delivery US (review) | `board-keeper` | `review-user-story` |
 | Delivery US (refine) | `board-keeper` | `refine-user-story` + `code-quality-at-us-time.md` + `04_principles.md` |
-| Delivery US (implement) | `process-manager` | `implement-user-story` + `code-quality-at-us-time.md` + `04_principles.md` |
+| Delivery US (implement) | `implementation-specialist` | `implement-user-story` + `code-quality-at-us-time.md` + `04_principles.md` |
 | Delivery US (close) | `board-keeper` | `complete-user-story` |
 | `11_decisions.md` (stub) + `docs/decisions/` | any relevant agent | `update-decisions-log` |
 
@@ -164,7 +164,9 @@ The person is manager of the process. Agents report blockers, next step, and pen
 
 ## Quick reference
 
-- **Governance:** `process-manager`
+- **Governance:** `process-manager` (status, gates — não código de produto)
+- **Implement US:** `implementation-specialist` _(H1)_
+- **Design system:** `design-steward` _(H1)_
 - **Scope:** `scope-architect`
 - **Phase docs:** `documentation-strategist`
 - **Security:** `security-steward`

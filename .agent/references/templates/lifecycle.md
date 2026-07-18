@@ -24,9 +24,9 @@ User story create (us-template.md + writing-guide.md + code-quality-at-us-time.m
   ↓
 /implement-us (implement-gate-checklist.md + code-quality-at-us-time.md) — gate then code; DRY/SRP; requires ready true
   ↓
-User story close (implementation-template.md) — Record + status ✅
+User story close (implementation-template.md) — Record + status ✅ in SQLite
   ↓
-Board sync (board-schema.md)
+Board refresh (automático — upsert em meridian.db; ver board-schema.md)
   ↓
 Commit (human) — one commit per closed US; see commit-after-us-close.md
   ↓
@@ -44,7 +44,7 @@ Scrum mapping (bugs, spikes, ceremonies, no story points): `.agent/references/sc
 | **Create** (`/create-us`) | `us-template.md` + `writing-guide.md` + `code-quality-at-us-time.md` | Intent (Why/Where) + Plan draft; one slice (SRP); `ready: false` |
 | **Review** (`/review-us`) | `review-checklist.md` + `section-contracts.md` | Gap report; **no edits**, **no `ready`** |
 | **Refine** (`/refine-us`) | `refine-checklist.md` + `code-quality-at-us-time.md` + `04_principles.md` | Plan concrete; DRY/SRP in Approach; `ready: true` |
-| **Implement** (`/implement-us`) | `implement-gate-checklist.md` + `code-quality-at-us-time.md` + `04_principles.md` | Gate pass; product code with DRY/SRP |
+| **Implement** (`/implement-us`) | `implement-gate-checklist.md` + `code-quality-at-us-time.md` + `04_principles.md` | Agent: `implementation-specialist` (H1); gate pass; product code |
 | **Close** (`/complete-us`) | `implementation-template.md` | `## Record` filled; `status: ✅` |
 
 ## Sprint — close
@@ -55,7 +55,7 @@ Scrum mapping (bugs, spikes, ceremonies, no story points): `.agent/references/sc
 
 Epic and version **close** remain manual (`status: complete` in frontmatter when outcome reached) — no separate refine workflow.
 
-Between create and close, the US file is the **contract for implementation**. Structure is enforced by `section-contracts.md` (Python + monitor). If Plan or Planned tests are still generic placeholders, the agent must **not** implement — run `/refine-us` first.
+Between create and close, the **US row in SQLite** (`user_stories.body_markdown` + section columns) is the contract for implementation. Structure is enforced by `section-contracts.md` (validator + `meridian_delivery_form`). If Plan or Planned tests are still generic placeholders, the agent must **not** implement — run `/refine-us` first.
 
 ---
 
