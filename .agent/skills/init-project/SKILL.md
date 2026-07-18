@@ -63,10 +63,11 @@ python3 .agent/scripts/meridian_delivery.py bootstrap
 ```
 
 4. Apply frontmatter from `references/doc-templates.md` on each phase doc (`status: draft`, except initial decision).
-5. `11_decisions.md` (stub) + initial decision via `prepend-decision` ("Project started with Meridian").
-6. `00_scope.md`: populate with answers from Phase 0 questions — do not leave it blank.
-7. Validate `.gitignore` with `references/gitignore-baseline.md`.
-8. **Do not** create US, epics, versions, sprints, `docs/templates/`, `docs/kanban/board.json`, app, API, database or migrations.
+5. **UI products:** if `01_tech_stack.md` (or Phase 0 answers) indicates UI surfaces (web, extension webviews, mobile, desktop GUI), create `docs/09_design_system.md` from `references/09-design-system-stub.md`. **Skip** for CLI-only, API-only, or library backends with no UI.
+6. `11_decisions.md` (stub) + initial decision via `prepend-decision` ("Project started with Meridian").
+7. `00_scope.md`: populate with answers from Phase 0 questions — do not leave it blank.
+8. Validate `.gitignore` with `references/gitignore-baseline.md`.
+9. **Do not** create US, epics, versions, sprints, `docs/templates/`, `docs/kanban/board.json`, app, API, database or migrations.
 
 ---
 

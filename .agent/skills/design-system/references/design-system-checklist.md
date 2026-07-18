@@ -17,11 +17,20 @@ Use when creating or reviewing `docs/09_design_system.md`.
 - [ ] Spacing scale
 - [ ] Border radius / elevation if used
 
+## Stack and composition
+
+- [ ] Primary UI stack id from `ui-stack-catalog.md`
+- [ ] Plan Architecture refs include `stacks/{id}.md` for UI implement US
+- [ ] Primitive path documented (read-only — shadcn `components/ui/`, etc.)
+- [ ] Composed template path documented (`components/app/`, `ui/composed/`, …)
+- [ ] Composition pattern: config-driven props (`title`, `description`, `body`, `variant`, `size`) — see `component-composition-pattern.md`
+
 ## Components
 
-- [ ] Inventory of shared components
+- [ ] Inventory of **composed** templates (`AppDialog`, …) — not raw primitives
 - [ ] When to use / avoid each
-- [ ] States: default, hover, focus, disabled, error
+- [ ] States: default, hover, focus, disabled, error, loading
+- [ ] Showcase route link per template (when catalog exists)
 
 ## Layout
 

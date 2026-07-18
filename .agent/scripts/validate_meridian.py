@@ -210,6 +210,55 @@ def sqlite_delivery_active(root: Path) -> bool:
     return (root / ".meridian" / "meridian.db").is_file()
 
 
+UI_ACCEPTANCE_RE = re.compile(
+    r"\b(layout|visual|token|component|responsive|ui\b|a11y|accessibility|"
+    r"design system|breakpoint|webview|dialog|button|form field)\b",
+    re.IGNORECASE,
+)
+
+
+def validate_sqlite_design_system_refs(
+    root: Path,
+    docs: Path,
+    warnings: list[str],
+) -> None:
+    """Warn when open Must US with UI acceptance lack 09_design_system Plan refs."""
+    db_path = root / ".meridian" / "meridian.db"
+    design_path = docs / "09_design_system.md"
+    if not db_path.is_file() or not design_path.is_file():
+        return
+    if read_frontmatter(design_path).get("status") != "approved":
+        return
+
+    import sqlite3
+
+    conn = sqlite3.connect(db_path)
+    conn.row_factory = sqlite3.Row
+    try:
+        rows = conn.execute(
+            """
+            SELECT id, moscow, status, body_markdown, plan_architecture_refs
+            FROM user_stories
+            WHERE status IN ('❌', '🔶')
+            """
+        ).fetchall()
+    finally:
+        conn.close()
+
+    for row in rows:
+        if (row["moscow"] or "").strip() != "Must":
+            continue
+        body = row["body_markdown"] or ""
+        if not UI_ACCEPTANCE_RE.search(body):
+            continue
+        refs = row["plan_architecture_refs"] or ""
+        if "09_design_system" not in refs:
+            warnings.append(
+                f"{row['id']}: Must UI US missing 09_design_system in Plan Architecture "
+                "refs — run /design-pass or /refine-us"
+            )
+
+
 def read_frontmatter(path: Path) -> dict[str, str]:
     text = path.read_text(encoding="utf-8")
     if not text.startswith("---\n"):
@@ -639,6 +688,9 @@ def main() -> int:
             errors.append(
                 "User stories exist but 05_architecture.md is not approved (delivery gate)."
             )
+
+    if sqlite_delivery and docs.exists():
+        validate_sqlite_design_system_refs(root, docs, warnings)
 
     if board_path.exists():
         if sqlite_delivery or sqlite_only_flag:

@@ -1,8 +1,8 @@
 ---
-description: Review or deepen docs/09_design_system.md and align UI user stories with design tokens and components.
+description: Create or update docs/09_design_system.md — stack bootstrap, tokens, components, US alignment.
 ---
 
-# /design-pass — design system pass
+# /design-pass — design system contract
 
 $ARGUMENTS
 
@@ -12,9 +12,19 @@ $ARGUMENTS
 
 1. Use `design-system-owner` + `@[skills/design-system]`
 2. Read `design-system-checklist.md` before Write on `09_design_system.md`
-3. If argument is `US-XXXX` — load US via `meridian_delivery.py show US-XXXX --full`; suggest Plan Architecture refs to `09_design_system.md`
-4. Do not implement product code in this workflow
-5. Human sets `status: approved` on `09_design_system.md`
+3. **Doc only** — no product code (showcase code → `/design-showcase` → `/implement-us`)
+4. Human sets `status: approved` on `09_design_system.md`
+5. Block if `05_architecture.md` is not at least `review` → report to `scrum-master`
+
+---
+
+## Modes (`$ARGUMENTS`)
+
+| Argument | Mode | Action |
+| -------- | ---- | ------ |
+| _(empty)_ | **full** | Checklist pass on entire `09` |
+| `bootstrap` | **bootstrap** | Read `01_tech_stack.md` → pick stack id → `stack-bootstrap.md` → fill tokens + paths |
+| `US-XXXX` | **us-align** | Load US `--full`; map Acceptance UI → `09` sections; suggest Plan refs |
 
 ---
 
@@ -26,10 +36,12 @@ CONTEXT:
 - Mode: DESIGN PASS
 
 RULES:
-1. If no 09_design_system.md → create stub from doc-templates / init-project refs
-2. Run checklist; fill gaps
-3. If US id provided → map Acceptance UI criteria to 09 sections
-4. Recommend /refine-us if US Plan missing design refs for Must UI
+1. If no 09_design_system.md → copy stub from init-project references/09-design-system-stub.md
+2. Run mode procedure (full | bootstrap | us-align)
+3. Walk design-system-checklist.md
+4. Recommend /refine-us if Must UI US Plan missing 09 refs
+5. Recommend /design-showcase when Components or Showcase sections empty
+6. prepend-decision on material stack or token changes
 ```
 
 ---
@@ -37,8 +49,12 @@ RULES:
 ## Output
 
 ```txt
+Mode: full | bootstrap | us-align
+Stack id:
+Primitive path:
+Composed path:
 09_design_system status:
 Sections updated:
 US follow-ups:
-Next: human review → approved | /refine-us US-XXXX
+Next: human review → approved | /design-showcase | /refine-us US-XXXX | /design-review
 ```

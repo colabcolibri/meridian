@@ -44,8 +44,11 @@ Documents produced:
 - `06_database.md` — data model and migrations
 - `07_api_contracts.md` — API definitions
 - `08_environments.md` — dev, staging, production
+- `09_design_system.md` — **UI products only** — visual contract (tokens, components, showcase index)
 
 **Gate:** `05_architecture.md` approved → unlocks Phase 3.
+
+**Design operator (UI products):** after `01_tech_stack` is drafted → `/design-pass bootstrap` → human approves `09` → `/design-showcase` → refine UI US → `/design-review` before close.
 
 ### Phase 3 — Backlog definition
 
@@ -85,6 +88,7 @@ docs/
   06_database.md           Phase 2 — data model
   07_api_contracts.md      Phase 2 — API definitions
   08_environments.md       Phase 2 — dev, staging, production
+  09_design_system.md      Phase 2 — UI products: design contract (optional for CLI-only)
   11_decisions.md          Always on — decision log index (store: .meridian/meridian.db)
   architecture/            Optional detail indexed from 05
   inventory/as-is.md       Mode B only — transitional; archive after promotion

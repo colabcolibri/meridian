@@ -22,11 +22,13 @@ $ARGUMENTS
 
 ```txt
 Mode A (new) or Mode B (existing codebase) per init-project SKILL
-1. Create docs/ phase docs (00–11) — not delivery folders
+1. Create docs/ phase docs (00–11) — not delivery folders; 09 when UI product
 2. meridian_delivery.py bootstrap
 3. 11_decisions.md stub + prepend-decision "Project started with Meridian"
 4. validate_meridian.py
 ```
+
+**UI products:** after `01_tech_stack` is drafted → `/design-pass bootstrap` → human approves `09` → `/design-showcase`.
 
 ---
 

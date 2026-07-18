@@ -49,6 +49,9 @@ Priority: **P0 rules > P1 agent + MERIDIAN.md > P2 skills**.
 | `/complete-sprint` | `.cursor/commands/complete-sprint.md` |
 | `/architecture` | `.cursor/commands/architecture.md` |
 | `/security-pass` | `.cursor/commands/security-pass.md` |
+| `/design-pass` | `.cursor/commands/design-pass.md` |
+| `/design-showcase` | `.cursor/commands/design-showcase.md` |
+| `/design-review` | `.cursor/commands/design-review.md` |
 | `/update-decisions-log` | `.cursor/commands/update-decisions-log.md` |
 | `/daily-with-ai` | `.cursor/commands/daily-with-ai.md` |
 | `/agents-help` | `.cursor/commands/agents-help.md` |

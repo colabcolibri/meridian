@@ -28,7 +28,7 @@ This folder is the **source of truth for phase documents** of the Meridian kit +
 | [06_database.md](06_database.md)           | draft    | SQLite delivery schema                       |
 | [07_api_contracts.md](07_api_contracts.md) | draft    | Extension ↔ kit script contracts             |
 | [08_environments.md](08_environments.md)   | approved | Local commands and CI                        |
-| [09_design_system.md](09_design_system.md) | planned  | UI language — `design-system-owner` |
+| [09_design_system.md](09_design_system.md) | review   | UI contract — Harness webviews (`design-system-owner`) |
 | [11_decisions.md](11_decisions.md)         | approved | Stub — log rules (entries in `decisions/`)   |
 
 ## Delivery artifacts

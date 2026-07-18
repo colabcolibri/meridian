@@ -1,57 +1,69 @@
 ---
 name: design-system
-description: Maintains and audits Meridian docs/09_design_system.md — design tokens, shared components, responsive breakpoints, and accessibility baseline. Use when creating or reviewing 09_design_system, running /design-pass, or when Acceptance criteria mention UI, layout, tokens, or visual design.
+description: Maintains docs/09_design_system.md and stack-aware UI bootstrap — shadcn, MUI, Chakra, Ant Design, Streamlit, NiceGUI, Django HTMX, Go templ, Leptos; composed App* templates over read-only primitives. Use for /design-pass, /design-showcase, /design-review, 09_design_system, tokens, showcase catalog, or UI acceptance criteria.
 allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 ---
 
 # Design system (Meridian)
 
-> **Escopo:** phase doc `docs/09_design_system.md`. US com UI: carregar corpo via `meridian_delivery.py show US-XXXX --full` — não `docs/us/`.
+> **Escopo:** `docs/09_design_system.md`. US com UI: `meridian_delivery.py show US-XXXX --full`.
 
-> Authoring pattern: `.agent/skills/doc.md` (selective reading + `references/`). Discovery via `description` triggers above.
+> Authoring: `.agent/skills/doc.md` (selective reading + `references/`).
+
+## Operator workflows
+
+| Workflow | Purpose |
+| -------- | ------- |
+| `/design-pass` | Create/update `09` — full, `bootstrap`, or `US-XXXX` |
+| `/design-showcase` | Plan catalog routes + showcase US (no code) |
+| `/design-review` | Audit live UI vs `09` + showcase (no code) |
 
 ## Selective reading
 
 | File | When to read |
 | ---- | ------------ |
-| `references/design-system-checklist.md` | **Mandatory** — full pass on `09_design_system.md` |
-| Target US (`meridian_delivery.py show US-XXXX --full`) | `/design-pass` with US id or UI Must stories |
+| `references/design-system-checklist.md` | **Mandatory** — any pass on `09` |
+| `references/stack-bootstrap.md` | **Mandatory** — `/design-pass bootstrap` or empty `09` |
+| `references/ui-stack-catalog.md` | **Mandatory** — pick stack id |
+| `references/stacks/{id}.md` | **Mandatory** — implementation model for chosen stack |
+| `references/showcase-us-slices.md` | **Mandatory** — `/design-showcase` US breakdown |
+| `references/component-composition-pattern.md` | **Mandatory** — components, showcase, review |
+| `references/showcase-catalog-pattern.md` | **Mandatory** — `/design-showcase` |
+| `references/design-review-checklist.md` | **Mandatory** — `/design-review` |
+| Target US (`show US-XXXX --full`) | `us-align` or `us-scope` modes |
 
 ## When to trigger
 
-- Create or deepen `docs/09_design_system.md`
-- Workflow `/design-pass` (optional US id in `$ARGUMENTS`)
-- Before `/refine-us` on Must US with visual Acceptance (after `09` at least `draft`)
+- `/design-pass`, `/design-showcase`, `/design-review`
+- Create or deepen `09_design_system.md`
+- Before `/refine-us` on Must US with visual Acceptance
+- Stack change in `01_tech_stack.md`
 
-## Procedure
+## Procedure (design-pass)
 
 ```txt
 Task progress:
-- [ ] Read 00_scope, 03_user_types, 04_principles, 05_architecture (frontend)
-- [ ] Walk design-system-checklist.md
-- [ ] Update 09_design_system.md (tokens, components, breakpoints, a11y)
-- [ ] If US cited: list Plan Architecture refs to cite
-- [ ] Log material changes via update-decisions-log
-```
-
-1. **Context** — read phase docs listed above; block if `05_architecture` not at least `review` (report to `scrum-master`).
-2. **Checklist** — fill gaps in `09_design_system.md`; human sets `status: approved`.
-3. **US alignment** — for UI stories, output which `09` sections belong in Plan Architecture refs; recommend `/refine-us` if missing on Must US.
-4. **Decisions** — `prepend-decision` when tokens or a11y rules change materially.
-
-## Output
-
-```txt
-09_design_system status: draft | review | ready for approved
-Sections updated:
-Checklist gaps:
-US Plan refs suggested:
-Ready for review: yes | no
-Next: human approved | /refine-us US-XXXX | /design-pass
+- [ ] Read 00_scope, 01_tech_stack, 04_principles, 05_architecture
+- [ ] ui-stack-catalog.md → stacks/{id}.md
+- [ ] stack-bootstrap.md + component-composition-pattern.md
+- [ ] design-system-checklist.md → update 09
+- [ ] US Plan refs / showcase / review follow-ups
 ```
 
 ## Anti-patterns
 
-- Product code in this skill (use `developer` + `/implement-us`)
-- Approving `09_design_system` without human
-- Inventing brand outside `00_scope`
+- Product code (use `/design-showcase` → `/implement-us`)
+- Edit installed primitives (`components/ui/*`, etc.)
+- Bootstrap brand before stack id
+- Approve `09` without human
+
+## Output
+
+```txt
+Workflow:
+Stack id:
+Primitive path:
+Composed path:
+09 status:
+Next:
+```

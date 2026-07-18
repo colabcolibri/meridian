@@ -74,6 +74,12 @@ Keep cross-cutting content here; move deep specs to `docs/architecture/` when a 
 
 Optional at init: empty `docs/architecture/README.md` pointing to `architecture-folder-guide.md` in kit.
 
+## `09_design_system.md` (UI products only)
+
+When the product has UI surfaces (see `init-project` skill step 5), create from `.agent/skills/init-project/references/09-design-system-stub.md`. Mark `status: draft`. Run `/design-pass bootstrap` after `01_tech_stack.md` is filled.
+
+Skip entirely for CLI-only or headless backends.
+
 ## `11_decisions.md` + first decision (SQLite)
 
 Create stub `11_decisions.md` (rules). After `meridian_delivery.py bootstrap`, prepend the first entry:

@@ -160,6 +160,11 @@ Complete in order: `00` → `01` → `02` → `03` → `04` → **`05`** → `06
 | C2 | *(conversation)* | `documentation-strategist` | `01`, `03`, `04`, `06`–`08` | Draft phase documents. |
 | C3 | **`/security-pass`** | `security-steward` | `02_security.md` | Threat model, secrets, OWASP, agent safety. |
 | C4 | **`/architecture`** | `architecture-guardian` | `05_architecture.md` + optional `docs/architecture/` | Overview, index, detail files; gate for backlog. |
+| C5 | **`/design-pass`** | `design-system-owner` | `09_design_system.md` | Contract: tokens, stack, components. Modes: `bootstrap`, `US-XXXX`. **Doc only.** |
+| C6 | **`/design-showcase`** | `design-system-owner` | `09` § Showcase + US drafts | Plan catalog routes; creates showcase US for `developer`. **No code.** |
+| C7 | **`/design-review`** | `design-system-owner` | Report | Audit live UI vs `09` + showcase. **No code.** |
+
+**UI products:** create `09` stub at `/init-meridian` when stack has UI. Run `/design-pass bootstrap` after `01_tech_stack`. Human approves `09` before Must UI US ship.
 
 **Human gate:** you set `status: approved` on each doc. Agent never sets `approved`.
 
@@ -217,6 +222,8 @@ Use this as the canonical sequence. Skip steps only when the artifact already ex
  3. Complete 01, 03, 04 (draft → approve)  [Group C]  documentation-strategist
  4. /security-pass → approve 02             [Group C]  security-steward
  5. /architecture → approve 05              [Group C]  architecture-guardian  ← GATE
+ 5b. /design-pass bootstrap → approve 09     [Group C]  design-system-owner    (UI products)
+ 5c. /design-showcase (catalog US)          [Group C]  design-system-owner    (UI products)
  6. Complete 06, 07, 08 as needed          [Group C]  documentation-strategist
  7. /create-epic                            [Group D]  documentation-strategist
  8. /create-version                         [Group D]  sprint-planner
@@ -225,11 +232,12 @@ Use this as the canonical sequence. Skip steps only when the artifact already ex
 11. /review-us US-XXXX                       [Group E]  board-keeper  (optional)
 12. /refine-us US-XXXX                       [Group E]  board-keeper  → ready: true
 13. /implement-us US-XXXX                    [Group E]  process-manager → gate then code
-14. Manager review diff + tests              [Group E]  human
-15. /complete-us US-XXXX                     [Group E]  board-keeper
-16. git commit (human)                       [Group F]  you — one US per commit
-17. /status or /daily-with-ai                [Group B]  process-manager → back to step 10
-18. /complete-sprint vX-SY (when sprint done) [Group D]  sprint-planner — after US in sprint closed
+14. /design-review (UI US)                   [Group C]  design-system-owner → before close
+15. Manager review diff + tests              [Group E]  human
+16. /complete-us US-XXXX                     [Group E]  board-keeper
+17. git commit (human)                       [Group F]  you — one US per commit
+18. /status or /daily-with-ai                [Group B]  process-manager → back to step 10
+19. /complete-sprint vX-SY (when sprint done) [Group D]  sprint-planner — after US in sprint closed
 ```
 
 ---
@@ -271,6 +279,7 @@ Skills are procedures agents load automatically. Grouped by purpose.
 | ----- | ------- | ------- |
 | _(removed)_ | — | v11: `board_snapshots` in SQLite |
 | `security-review` | security-steward, architecture-guardian | Security doc pass |
+| `design-system` | design-system-owner | `09`, stack bootstrap, showcase, review checklists |
 
 ---
 
@@ -291,6 +300,9 @@ Skills are procedures agents load automatically. Grouped by purpose.
 | New / refine / implement / close US | E | `board-keeper` / `process-manager` | `/create-us`, `/refine-us`, `/implement-us`, `/complete-us` |
 | Board refresh | — | Extension reads SQLite on save |
 | Log a decision | F | any | `/update-decisions-log` |
+| Design contract (`09`) | C | `design-system-owner` | `/design-pass`, `/design-pass bootstrap` |
+| Design catalog plan | C | `design-system-owner` | `/design-showcase` |
+| Design UI audit | C | `design-system-owner` | `/design-review` |
 | Validate structure | F | script / extension | `validate_meridian.py` or **Validate Project** |
 
 ---

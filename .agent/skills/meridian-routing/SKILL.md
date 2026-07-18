@@ -25,6 +25,7 @@ Before responding, classify the request and select the correct Meridian agent. S
 | Epic (capability) | "create epic", "new epic", `/create-epic`, `EPIC-`, `list epics` | `documentation-strategist` + skill `create-epic` | yes |
 | Security | "security", "OWASP", "secrets", "threat", `02_security` | `security-steward` | yes |
 | Architecture | "architecture", `05_architecture` | `architecture-guardian` | yes |
+| Design system | "design system", `09_design`, `/design-pass`, `/design-showcase`, `/design-review`, tokens, UI stack, showcase | `design-system-owner` + `design-system` | yes |
 | Version / sprint | "version", "sprint", "roadmap", `/create-version`, `/plan-sprint`, `meridian.db` | `sprint-planner` + skill `create-version` / `create-sprint` | yes |
 | Close sprint | "complete sprint", "close sprint", `/complete-sprint`, sprint retrospective | `sprint-planner` + `complete-sprint` | yes |
 | Decisions / log | "decision", "decisions", "decision log", `/update-decisions-log` | read `update-decisions-log` + run `date` before `prepend-decision` | yes |
