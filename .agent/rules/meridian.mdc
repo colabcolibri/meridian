@@ -21,7 +21,7 @@ Priority: **P0 rules > P1 agent + MERIDIAN.md > P2 skills**.
 
 - Phase docs: `docs/` of the **active Meridian product** (monorepos: `.meridian/projects.json`).
 - Delivery backlog: `.meridian/meridian.db` (epics, versions, sprints, US, decisions).
-- **Forbidden:** `.meridian/drafts/`, `us-*-refine.md`, `us-*-complete.md`, `docs/us/*.md` — US “draft” = `ready: false` in SQLite; persist via `update-us` (stdin heredoc) or `--write-form`.
+- **Forbidden:** `.meridian/drafts/`, `us-*-refine.md`, `us-*-complete.md`, `docs/us/*.md` — US “draft” = `ready: false` in SQLite; persist via `update-*` (stdin heredoc only).
 - Board UI: `meridian_db_export --format planning`; `board_snapshots` on every upsert.
 - Documentation precedes product code.
 - Do not create US before `05_architecture` `approved`.
@@ -62,6 +62,10 @@ Priority: **P0 rules > P1 agent + MERIDIAN.md > P2 skills**.
 | `/update-decisions-log` | `.cursor/commands/update-decisions-log.md` |
 | `/daily-with-ai` | `.cursor/commands/daily-with-ai.md` |
 | `/agents-help` | `.cursor/commands/agents-help.md` |
+| `/discover` | `.cursor/commands/discover.md` |
+| `/document-project` | `.cursor/commands/document-project.md` |
+| `/audit-docs` | `.cursor/commands/audit-docs.md` |
+| `/investigate` | `.cursor/commands/investigate.md` |
 
 Human reference: `.agent/references/agents-help.md`
 

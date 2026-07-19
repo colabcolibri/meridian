@@ -1,135 +1,72 @@
-# Meridian skills
+# Meridian kit authoring
 
-> Guide to creating and using skills in the `.agent/` kit.
+> **Maintainers:** use skill **`create-meridian-artifact`** (`.agent/skills/create-meridian-artifact/SKILL.md`) for the full procedure — skill, agent, workflow, registries, sync, validate.
 
----
-
-## Overview
-
-Skills package specialized knowledge with **progressive disclosure**: the agent reads metadata (`name`, `description`) and only loads the body when the request matches the description.
-
-This avoids inflating context with the entire Meridian protocol on every message.
+This file is the lightweight entry point symlinked as `meridian-authoring` in IDE adapters.
 
 ---
 
-## Folder structure
+## Quick links
+
+| Need | Read |
+| ---- | ---- |
+| Full procedure + checklists | `create-meridian-artifact/SKILL.md` + `references/registry-checklist.md` |
+| Surface map | `.agent/references/instruction-surfaces.md` |
+| Agent/skill/workflow tables | `.agent/ARCHITECTURE.md` |
+| Sync adapters | `./.agent/scripts/sync_cursor_kit.sh` |
+
+---
+
+## Skill folder layout
 
 ```txt
 .agent/skills/skill-name/
   SKILL.md          # required — index + procedure
   references/       # optional — templates, long checklists
-  scripts/          # optional — automation
-  assets/           # optional — images, binary examples
+  scripts/          # optional
+  assets/           # optional
 ```
 
 | Scope | Path |
-| ------ | ------- |
-| Workspace (Meridian project) | `<project-root>/.agent/skills/` |
-| Meridian kit (this repo) | `meridian/.agent/skills/` |
-| Cursor (local mirror) | `<root>/.cursor/` → symlinks to `.agent/` (**gitignored** in kit) |
-
-After editing skills in `.agent/`, run `./.agent/scripts/sync_cursor_kit.sh` for Cursor to index them.
+| ----- | ---- |
+| Kit (this repo) | `meridian/.agent/skills/` |
+| Client project | `<root>/.agent/skills/` |
+| Cursor mirror | `<root>/.cursor/skills/` — **sync only, do not edit** |
 
 ---
 
-## `SKILL.md` frontmatter
+## Minimal skill frontmatter
 
 ```yaml
 ---
 name: my-skill
-description: One clear line with triggers. Use when...
-allowed-tools: Read, Glob, Grep   # optional — read-only skills
----
-```
-
-Rules:
-
-- `name` in kebab-case, same as folder name.
-- `description` is the main discovery trigger for the agent.
-- File body = **index**; long details go in `references/`.
-
----
-
-## "When to read" table (required pattern)
-
-Every `SKILL.md` with references must include:
-
-```markdown
-| File | When to read |
-| ------- | ---------- |
-| `references/foo.md` | When creating X |
-```
-
----
-
-## Agents vs skills
-
-| Layer | Role |
-| ------ | ------ |
-| **Agent** | Persona, phases, prohibitions, output format, skill list |
-| **Skill** | Repeatable procedure, templates, checklists, scripts |
-
-The agent references skills in frontmatter:
-
-```yaml
-skills: init-project, update-decisions-log
-```
-
----
-
-## Scripts
-
-Scripts live in `.agent/skills/<skill>/scripts/` or global `.agent/scripts/`.
-
-Global example in this kit:
-
-```bash
-python .agent/scripts/validate_meridian.py /path/to/project
-```
-
-Agents and skills may invoke scripts when the procedure requires objective validation.
-
----
-
-## Minimal example
-
-```markdown
----
-name: example
-description: Does X in the Meridian flow. Use when user asks for X.
+description: Does X in Meridian. Use when user asks for X.
 allowed-tools: Read, Glob, Grep
 ---
-
-# Example
-
-## When to trigger
-- ...
-
-## Procedure
-1. ...
-
-## References
-| File | When to read |
-| ------- | ---------- |
-| `references/template.md` | When generating file Y |
 ```
+
+Rules: `name` = folder name (kebab-case); `description` includes triggers.
 
 ---
 
-## Official Meridian kit skills
+## Layers
 
-| Skill | Folder |
-| ----- | ----- |
-| `init-project` | `init-project/` |
-| `create-epic` | `create-epic/` |
-| `create-version` | `create-version/` |
-| `create-sprint` | `create-sprint/` |
-| `create-user-story` | `create-user-story/` |
-| `review-user-story` | `review-user-story/` |
-| `refine-user-story` | `refine-user-story/` |
-| `complete-user-story` | `complete-user-story/` |
-| `update-decisions-log` | `update-decisions-log/` |
-| `security-review` | `security-review/` |
-| `meridian-routing` | `meridian-routing/` |
+| Layer | Path | Role |
+| ----- | ---- | ---- |
+| Workflow | `.agent/workflows/{cmd}.md` | Slash command recipe |
+| Agent | `.agent/agents/{name}.md` | Persona, gates, output |
+| Skill | `.agent/skills/{name}/SKILL.md` | Repeatable procedure |
 
-When adding a new skill, update `.agent/ARCHITECTURE.md` and the root `README.md`.
+**Order when adding a full operator:** skill → agent → workflow → registries → sync.
+
+---
+
+## Official kit skills (excerpt)
+
+See `.agent/ARCHITECTURE.md` for the full table. Maintainer skill:
+
+| Skill | Purpose |
+| ----- | ------- |
+| `create-meridian-artifact` | Add/change skill, agent, workflow, routing |
+
+When adding any skill, update `ARCHITECTURE.md` and walk `create-meridian-artifact/references/registry-checklist.md`.

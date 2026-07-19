@@ -77,6 +77,7 @@ Workflows orchestrate agents; they do not replace the master protocol.
 | `backlog-refiner` | US in SQLite | create-user-story, review-user-story, refine-user-story, complete-user-story, update-decisions-log, meridian-routing |
 | `developer` | `/implement-us` increment | implement-user-story, update-decisions-log, meridian-routing |
 | `scrum-master` | Governance, status, init, daily | init-project, update-decisions-log, meridian-routing |
+| `code-investigator` | `/investigate` read-only traces | investigate-codebase, update-decisions-log, meridian-routing |
 
 Each agent includes: phases 0/-1, mission, prohibitions, output format, delegation.
 
@@ -101,10 +102,12 @@ Each agent includes: phases 0/-1, mission, prohibitions, output format, delegati
 | `test-strategy` | test-strategy + test-review checklists, test stacks |
 | `design-system` | design-system checklists, UI stacks |
 | `meridian-routing` | — (inline matrix) |
+| `investigate-codebase` | investigation checklist, report template |
+| `create-meridian-artifact` | registry-checklist, skill/agent/workflow templates |
 
 **Agent mirror:** all delivery templates are symlinked under `.agent/references/templates/` with registry `INDEX.md`. Agents must read INDEX + full template before Write — see each agent's **Template protocol** section.
 
-See `.agent/skills/doc.md` to create new skills.
+See `.agent/skills/doc.md` to create new skills — full procedure: `create-meridian-artifact`.
 
 ---
 
@@ -133,6 +136,10 @@ See `.agent/skills/doc.md` to create new skills.
 | `test-pass` | quality-owner | doc 10 |
 | `test-review` | quality-owner | tests audit — report only |
 | `seo-pass` | seo-strategy | doc 12 (public web) |
+| `investigate` | code-investigator | read-only code trace — report only |
+| `discover` | product-owner | product brief — no code |
+| `document-project` | technical-writer | brownfield phase docs — no US |
+| `audit-docs` | technical-writer | phase doc audit — report only |
 | `daily-with-ai` | scrum-master | daily manager + AI routine |
 
 All support `$ARGUMENTS` and a critical rules section.

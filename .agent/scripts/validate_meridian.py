@@ -535,6 +535,8 @@ def _kit_line_allowed(line: str) -> bool:
         "purge",
         "migrate",
         "meridian-v1-old",
+        "extension only",
+        "not agents",
         "example:",
         "examples:",
     )
@@ -550,7 +552,12 @@ def validate_kit_markdown_v11(kit_root: Path, errors: list[str], warnings: list[
         (r"Invoke `generate-board-json`", "generate-board-json invoke"),
         (r"6\. generate-board-json", "workflow step generate-board-json"),
         (r"app-desktop/", "app-desktop (removed — use app-visual-studio)"),
+        (r"--from-file", "update-* --from-file (removed — use stdin heredoc)"),
         (r"meridian_db_export\.py[^\n]*--write(?!-form)", "meridian_db_export --write (use meridian_delivery update-*)"),
+        (
+            r"meridian_db_export\.py[^\n]*--write-form",
+            "meridian_db_export --write-form as agent path (extension only)",
+        ),
         (r"`process-manager`", "legacy agent process-manager"),
         (r"`board-keeper`", "legacy agent board-keeper"),
         (r"`security-steward`", "legacy agent security-steward"),

@@ -1,6 +1,6 @@
 ---
 name: meridian-routing
-description: Automatic Meridian agent selection and task routing. Analyzes requests and picks v11 agents (scrum-master, product-owner, technical-writer, security-champion, technical-architect, design-system-owner, quality-owner, sprint-planner, backlog-refiner, developer) without explicit user mentions.
+description: Automatic Meridian agent selection and task routing. Analyzes requests and picks v11 agents (scrum-master, product-owner, technical-writer, security-champion, technical-architect, design-system-owner, quality-owner, sprint-planner, backlog-refiner, developer, code-investigator) without explicit user mentions.
 allowed-tools: Read, Glob, Grep
 version: 1.1.0
 ---
@@ -43,6 +43,10 @@ Before responding, classify the request and select the correct Meridian agent. S
 | Review US | `/review-us`, "audit US" | `backlog-refiner` + `review-user-story` | yes |
 | Close US | `/complete-us`, "close story" | `backlog-refiner` + `complete-user-story` | yes |
 | US + planning | "plan sprint" + "create US" | `sprint-planner` + `backlog-refiner` | yes |
+| Code investigation | "how does", "where is", "trace", "explain flow", `/investigate`, spike prep | `code-investigator` + `investigate-codebase` | yes |
+| Brownfield docs | `/document-project`, "document as-is", inventory | `technical-writer` + `document-existing-project` | yes |
+| Phase doc audit | `/audit-docs`, docs stale vs code | `technical-writer` + `audit-phase-docs` | yes |
+| Extend Meridian kit | new skill, new agent, new workflow, register slash | `create-meridian-artifact` | yes |
 
 ## Decision flow
 

@@ -39,7 +39,7 @@ docs/                       →  source of truth
 
 ## Agent groups
 
-Seven agents in **six groups**. One agent may appear in notes when it supports another group.
+Eleven agents in **seven groups**. One agent may appear in notes when it supports another group.
 
 ### Group 1 — Orchestration
 
@@ -128,6 +128,20 @@ Owns the executable backlog and honest execution state.
 
 ---
 
+### Group 7 — Code investigation (read-only)
+
+Trace flows and explain behavior before refine, spike, or architecture updates.
+
+| Agent | Serves for | Primary artifacts | Does not |
+| ----- | ---------- | ----------------- | -------- |
+| **`code-investigator`** | How code works, where logic lives, flow traces | Investigation report (chat) | Product code; US/epic without manager ask |
+
+**When to use:** `/investigate`, "how does X work?", before `/refine-us` when Plan needs code facts.
+
+**Skills:** `investigate-codebase`, `update-decisions-log`, `meridian-routing`
+
+---
+
 ## Slash command groups
 
 Slash command groups — workflows in **six groups**. Each maps to one primary agent (sometimes two).
@@ -169,6 +183,10 @@ Complete in order: `00` → `01` → `02` → `03` → `04` → **`05`** → `06
 | C10 | **`/test-pass`** | `quality-owner` | `10_test_strategy.md` | Pyramid, runners, coverage. Modes: `bootstrap`, `US-XXXX`. **Doc only.** |
 | C11 | **`/test-review`** | `quality-owner` | Report | Audit US tests vs strategy before close. **No code.** |
 | C12 | **`/seo-pass`** | `seo-strategy` + `technical-writer` | `12_marketing_seo.md` | Public web only — meta, sitemap, CWV. **Doc only.** Skip CLI-only. |
+| C13 | **`/investigate`** | `code-investigator` | Report | Read-only codebase trace and explanation. **No code.** |
+| C14 | **`/discover`** | `product-owner` | `docs/discovery/product-brief.md` | Product discovery before scope. **No code.** |
+| C15 | **`/document-project`** | `technical-writer` | `docs/` + `inventory/as-is.md` | Brownfield baseline in phase docs. **No US.** |
+| C16 | **`/audit-docs`** | `technical-writer` | Report | Phase docs depth and drift vs code. **Report only** unless `apply`. |
 
 **HAR (ação humana necessária):** agents stop for external accounts, OAuth/PAT, billing, production credentials — see `rules/MERIDIAN.md`. Not a slash command; applies during any workflow.
 
@@ -293,6 +311,13 @@ Skills are procedures agents load automatically. Grouped by purpose.
 | `security-review` | security-champion, technical-architect | Security pass, review, dependency audit |
 | `test-strategy` | quality-owner | `10`, test pass/review checklists |
 | `design-system` | design-system-owner | `09`, stack bootstrap, showcase, review checklists |
+| `investigate-codebase` | code-investigator | `/investigate` checklists and report template |
+
+### Kit maintenance (maintainers)
+
+| Skill | Used by | Purpose |
+| ----- | ------- | ------- |
+| `create-meridian-artifact` | maintainers | Procedure + registry checklist for new kit pieces |
 
 ---
 
@@ -319,6 +344,11 @@ Skills are procedures agents load automatically. Grouped by purpose.
 | Design contract (`09`) | C | `design-system-owner` | `/design-pass`, `/design-pass bootstrap` |
 | Design catalog plan | C | `design-system-owner` | `/design-showcase` |
 | Design UI audit | C | `design-system-owner` | `/design-review` |
+| Code investigation | C | `code-investigator` | `/investigate` |
+| Brownfield baseline | C | `technical-writer` | `/document-project` |
+| Phase doc audit | C | `technical-writer` | `/audit-docs` |
+| Product discovery | C | `product-owner` | `/discover` |
+| Extend Meridian kit | — | `create-meridian-artifact` skill | edit `.agent/` + `sync_cursor_kit.sh` |
 | Validate structure | F | script / extension | `validate_meridian.py` or **Validate Project** |
 
 ---

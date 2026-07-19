@@ -20,10 +20,19 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 
 ```bash
 python3 .agent/scripts/meridian_delivery.py create-version --id v11 --title "Release name"
-python3 .agent/scripts/meridian_delivery.py update-version v11 --from-file /tmp/version.md
+python3 .agent/scripts/meridian_delivery.py update-version v11 <<'EOF'
+---
+id: v11
+title: ...
+status: planned
+outcome: "..."
+---
+# v11 — ...
+(body per version-template.md)
+EOF
 ```
 
-Never Write `docs/versions/`.
+Never Write `docs/versions/`. Persist with `update-version` on **stdin** (heredoc) — no scratch files.
 
 ## Preconditions
 
@@ -35,7 +44,7 @@ Never Write `docs/versions/`.
 ## Procedure
 
 1. Read `writing-guide.md` + `version-template.md`.
-2. `create-version` then refine body via `update-version --from-file`.
+2. `create-version` then refine body via `update-version` with markdown on stdin (heredoc).
 3. `prepend-decision` if boundaries change.
 4. `validate_meridian.py`
 

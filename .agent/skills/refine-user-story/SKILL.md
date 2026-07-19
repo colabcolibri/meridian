@@ -6,7 +6,7 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 
 # Refine user story (Meridian)
 
-> **v11:** persist with `update-us` (stdin) or `meridian_db_export.py --write-form`.  
+> **v11:** persist with `update-us` (stdin heredoc) only.
 > **Forbidden:** `.meridian/drafts/`, `us-*-refine.md`. Refine = same SQLite row via `update-us` → `set-ready`.
 
 | File | When to read |

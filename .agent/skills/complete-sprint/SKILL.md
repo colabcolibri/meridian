@@ -21,8 +21,16 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 
 ```bash
 python3 .agent/scripts/meridian_db_export.py . --entity sprints --id v11-S1 --format markdown
-# edit → upsert:
-python3 .agent/scripts/meridian_delivery.py update-sprint v11-S1 --from-file /tmp/sprint.md
+python3 .agent/scripts/meridian_delivery.py update-sprint v11-S1 <<'EOF'
+---
+id: v11-S1
+version: v11
+status: complete
+...
+---
+# v11-S1 — ...
+(## Retrospective filled)
+EOF
 ```
 
 ## Procedure
@@ -30,7 +38,7 @@ python3 .agent/scripts/meridian_delivery.py update-sprint v11-S1 --from-file /tm
 1. Export sprint markdown; read US statuses via `show`.
 2. Summarize delivery vs `goal` and `done_when`.
 3. Fill `## Retrospective` (What worked / improve / decisions to log).
-4. Set frontmatter `status: complete`; `update-sprint --from-file`.
+4. Set frontmatter `status: complete`; `update-sprint` with full markdown on stdin (heredoc).
 5. `prepend-decision` if warranted.
 6. `validate_meridian.py`
 

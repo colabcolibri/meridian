@@ -89,7 +89,7 @@ Before any action, classify:
 - US without `05_architecture` approved = **protocol failure**
 - `✅` without evidence = **protocol failure**
 - `✅` without filled `## Record` on the US (skill `complete-user-story`) = **protocol failure**
-- Write `.meridian/drafts/`, `us-*-refine.md`, `us-*-complete.md`, or delivery markdown under `.meridian/` or `docs/us/` for US persist = **protocol failure**
+- Write `.meridian/drafts/`, `us-*-refine.md`, `us-*-complete.md`, delivery markdown under `.meridian/` or `docs/us/`, or `update-* --from-file` for delivery persist = **protocol failure**
 
 ---
 
@@ -99,7 +99,7 @@ Before any action, classify:
 
 - `docs/` is the source of truth of the **target project** (monorepos: resolve via `.meridian/projects.json` — see `projects-manifest-template.md`).
 - Delivery backlog lives in `.meridian/meridian.db` (epics, versions, sprints, US, decisions).
-- **Forbidden — US “draft” paths:** “narrative draft” / “Plan draft” = `ready: false` in SQLite only. Do **not** `Write` `.meridian/drafts/`, `us-*-refine.md`, `us-*-complete.md`, or `docs/us/*.md`. Persist with `update-us US-XXXX` and markdown on **stdin** (heredoc), or `meridian_db_export.py --write-form`.
+- **Forbidden — US “draft” paths:** “narrative draft” / “Plan draft” = `ready: false` in SQLite only. Do **not** `Write` `.meridian/drafts/`, `us-*-refine.md`, `us-*-complete.md`, or `docs/us/*.md`. Persist delivery with `update-{us|epic|version|sprint}` and markdown on **stdin** (heredoc) only — no `--from-file`, no scratch `.md`.
 - Board UI reads SQLite via `meridian_db_export --format planning`; `board_snapshots` on upsert.
 - Read `.agent/MERIDIAN.md` before changing project structure.
 

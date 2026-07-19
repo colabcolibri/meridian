@@ -11,7 +11,7 @@
 | ---- | ---- |
 | Database | `{packageRoot}/.meridian/meridian.db` |
 
-**Forbidden:** `.meridian/drafts/`, `us-*-refine.md`, `us-*-complete.md`, `docs/us/*.md`. Kit “narrative draft” / “Plan draft” = `ready: false` in `user_stories`. Persist: `update-us US-XXXX` with markdown on **stdin** (heredoc), or `meridian_db_export.py --write-form`. Do not create scratch `.md` in the repo.
+**Forbidden:** `.meridian/drafts/`, `us-*-refine.md`, `us-*-complete.md`, `docs/us/*.md`. Kit “narrative draft” / “Plan draft” = `ready: false` in `user_stories`. Persist: `update-{us|epic|version|sprint}` with markdown on **stdin** (heredoc) only. Do not create scratch `.md` in the repo.
 
 | Migrations | `.agent/migrations/YYYYMMDDHHMMSS_*.sql` |
 | Access layer | `.agent/scripts/lib/meridian_db.py` |
@@ -73,11 +73,29 @@ id: US-0115
 ---
 # US body
 EOF
-python3 .agent/scripts/meridian_delivery.py update-epic EPIC-15 --from-file /tmp/epic.md
-python3 .agent/scripts/meridian_delivery.py update-version v11 --from-file /tmp/version.md
-python3 .agent/scripts/meridian_delivery.py update-sprint v11-S1 --from-file /tmp/sprint.md
+python3 .agent/scripts/meridian_delivery.py update-epic EPIC-15 <<'EOF'
+---
+id: EPIC-15
+...
+---
+# Epic body
+EOF
+python3 .agent/scripts/meridian_delivery.py update-version v11 <<'EOF'
+---
+id: v11
+...
+---
+# Version body
+EOF
+python3 .agent/scripts/meridian_delivery.py update-sprint v11-S1 <<'EOF'
+---
+id: v11-S1
+...
+---
+# Sprint body
+EOF
 
-# 4b. Structured form (extension + agents — preferred)
+# 4b. Extension form API (VS Code UI only — not agents)
 python3 .agent/scripts/meridian_db_export.py . --entity us --id US-0115 --format form
 python3 .agent/scripts/meridian_db_export.py . --entity epics --id EPIC-15 --format form
 # stdin: JSON { frontmatter, preamble, sections } — see meridian_delivery_form.py
@@ -164,7 +182,9 @@ python3 .agent/scripts/purge_delivery_md.py . --require-verify
 
 Parse → upsert via CLI; do not hand-edit SQL for narrative bodies unless emergency.
 
-## Structured form API (v10 extension)
+## Structured form API (extension only)
+
+> **Agents:** use `update-*` with stdin heredoc — not `--write-form`.
 
 | Step | Command / module |
 | ---- | ---------------- |

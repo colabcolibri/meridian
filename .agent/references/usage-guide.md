@@ -203,11 +203,26 @@ Board refreshes when `.meridian/meridian.db` changes (extension) or after any `m
 
 ---
 
+## Investigate how something works
+
+Use when you need to understand existing code **without** implementing or rewriting phase docs.
+
+1. `/investigate how does {feature} work?` — default depth `medium`
+2. Optional: `/investigate path:src/auth/ quick` — narrow scope
+3. Optional: `/investigate US-0042` — limit to US Plan scope
+4. Hand off per report: `/refine-us`, `/architecture`, spike US, or `/update-decisions-log`
+
+**Not** for full brownfield baseline (`/document-project`) or security audit (`/security-review`).
+
+---
+
 ## Implement a user story
 
 ### Choose the story
 
 Pick a Must story with `ready: true` and no pending `depends_on`. Run `/status` if unsure.
+
+If Plan is thin because you do not know how the code works yet: run `/investigate` first, then `/refine-us`, then `/implement-us`.
 
 One US per implementation session. Do not mix stories in one conversation.
 
@@ -308,6 +323,10 @@ Run at the project root. Fix errors before creating US or marking docs `approved
 | `/refine-us US-XXXX` | Deepen Plan and Approach — sets `ready: true` when checklist passes |
 | `/implement-us US-XXXX` | Gate + implement — requires `ready: true` |
 | `/complete-us US-XXXX` | Close story — fills Record, marks `✅` (SQLite upsert) |
+| `/investigate` | Read-only code trace — how/where/flow with evidence |
+| `/discover` | Product discovery brief — before scope |
+| `/document-project` | Brownfield baseline in phase docs — no US |
+| `/audit-docs` | Audit phase docs vs code — report only |
 | `/daily-with-ai` | Full guided session loop |
 | `/agents-help` | Agent groups, slash command groups, numbered steps — open `.agent/references/agents-help.md` |
 

@@ -6,7 +6,7 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 
 # Complete user story (Meridian)
 
-> **v11:** persist with `update-us --from-file` — never `docs/us/*.md`.
+> **v11:** persist with `update-us` (stdin heredoc) — never `docs/us/*.md`.
 
 ## Selective reading
 
@@ -43,7 +43,7 @@ python3 .agent/scripts/meridian_delivery.py set-summary US-0115 --text "4-8 sent
 2. Inspect `git diff` / test output.
 3. Fill `## Record` per `implementation-template.md`.
 4. Mark acceptance `[x]`; `tests_status: done` when required.
-5. `update-us --from-file`; `set-summary` when closing.
+5. `update-us US-XXXX` with full markdown on stdin (heredoc); `set-summary` when closing.
 6. `prepend-decision` only for cross-cutting changes.
 
 ## Output

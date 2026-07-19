@@ -122,7 +122,8 @@ Use this when adding or changing protocol behavior (example: **as-is inventory**
 
 | Change | Edit first | Also update |
 | ------ | ---------- | ----------- |
-| New slash command | `.agent/workflows/{name}.md` + skill | `agents-help.md`, `meridian.mdc` table, `command-catalog.ts`, `sync_cursor_kit.sh` |
+| New slash command | `.agent/workflows/{name}.md` + skill | `agents-help.md`, `meridian.mdc` table, `usage-guide.md`, `sync_cursor_kit.sh` |
+| New kit skill/agent/workflow | `create-meridian-artifact` skill | `ARCHITECTURE.md`, `registry-checklist.md`, sync + validate |
 | New delivery artifact | Template + skill + `INDEX.md` | `start-here.md`, `lifecycle.md`, validator if required |
 | Migration / bootstrap step | `init-project/SKILL.md`, `init-meridian.md` | `usage-guide.md`, `start-here.md` |
 | New `docs/` folder (optional) | `start-here.md`, `doc-templates.md` | init skill |

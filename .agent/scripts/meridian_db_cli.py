@@ -484,9 +484,7 @@ def cmd_create_sprint(args) -> int:
     return 0
 
 
-def _read_markdown_input(args) -> str:
-    if args.from_file:
-        return Path(args.from_file).read_text(encoding="utf-8")
+def _read_markdown_input(_args) -> str:
     return sys.stdin.read()
 
 
@@ -742,26 +740,24 @@ def main() -> int:
     sprint.add_argument("--out-of-scope")
     sprint.set_defaults(func=cmd_create_sprint)
 
-    update = sub.add_parser("update-us", help="Upsert US from markdown file or stdin")
+    update = sub.add_parser("update-us", help="Upsert US from markdown on stdin (heredoc)")
     update.add_argument("story_id")
-    update.add_argument("--from-file")
     update.set_defaults(func=cmd_update_us)
 
-    update_epic = sub.add_parser("update-epic", help="Upsert epic from markdown file or stdin")
+    update_epic = sub.add_parser("update-epic", help="Upsert epic from markdown on stdin (heredoc)")
     update_epic.add_argument("epic_id")
-    update_epic.add_argument("--from-file")
     update_epic.set_defaults(func=cmd_update_epic)
 
     update_version = sub.add_parser(
-        "update-version", help="Upsert version from markdown file or stdin"
+        "update-version", help="Upsert version from markdown on stdin (heredoc)"
     )
     update_version.add_argument("version_id")
-    update_version.add_argument("--from-file")
     update_version.set_defaults(func=cmd_update_version)
 
-    update_sprint = sub.add_parser("update-sprint", help="Upsert sprint from markdown file or stdin")
+    update_sprint = sub.add_parser(
+        "update-sprint", help="Upsert sprint from markdown on stdin (heredoc)"
+    )
     update_sprint.add_argument("sprint_id")
-    update_sprint.add_argument("--from-file")
     update_sprint.set_defaults(func=cmd_update_sprint)
 
     ready = sub.add_parser("set-ready")

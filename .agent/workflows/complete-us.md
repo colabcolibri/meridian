@@ -32,7 +32,7 @@ RULES:
 3. Fill ## Record (Files + layers + Executed)
 4. Mark Intent/Acceptance [x]; update Plan/Planned [x]; set tests_status: done
 5. Set status ✅ (or 🔶 + Missing: if partial) — only ✅ if tests: none or tests_status: done
-6. `update-us --from-file` with status ✅ and filled Record
+6. `update-us` (stdin heredoc) with status ✅ and filled Record
 7. `prepend-decision` if protocol/architecture changed
 ```
 

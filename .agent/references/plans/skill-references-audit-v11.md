@@ -1,7 +1,7 @@
 # Audit skills + references v11 — inventário honesto
 
 > **Última revisão G7:** jul/2026  
-> **Regra:** `references/*.md` de **delivery** = forma de `body_markdown` no SQLite — persistir com `meridian_delivery.py` / `meridian_db_export.py --write-form`.  
+> **Regra:** `references/*.md` de **delivery** = forma de `body_markdown` no SQLite — persistir com `meridian_delivery.py update-*` (stdin heredoc).  
 > **Phase docs** (`docs/discovery/`, `docs/09_design_system.md`, `docs/11_decisions.md` index) stay Markdown on disk. **Delivery decisions** live in SQLite (`decisions` table) — never `docs/decisions/*.json`.
 
 **Legenda «G7»:** `✅` lido + alterado ou grep v1 limpo · `👁` só grep (sem edição) · `⏳` pendente · `—` fora do escopo delivery
@@ -120,7 +120,7 @@ Fonte: `.agent/references/templates/delivery-connector-schema.md` + `sqlite-deli
 | Facade | `python3 .agent/scripts/meridian_delivery.py <verb> …` |
 | Read US | `meridian_delivery.py show US-XXXX --full` |
 | Create US | `meridian_delivery.py create-us …` |
-| Refine / close | `update-us --from-file` ou `meridian_db_export.py --write-form` |
+| Refine / close | `update-us` (stdin heredoc) + `set-ready` / `set-summary` |
 | Ready | `meridian_delivery.py set-ready US-XXXX --ready true` |
 | Implement gate | `meridian_delivery.py implement-gate US-XXXX` |
 | Epic / version / sprint | `create-epic` / `create-version` / `create-sprint` |

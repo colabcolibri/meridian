@@ -35,7 +35,7 @@ Every delivery row (epic, version, sprint, user story) uses **two layers**:
 Agent writes full US markdown
         │
         ▼
-meridian_delivery.py update-us --from-file us.md
+meridian_delivery.py update-us US-XXXX <<'EOF' … EOF
         │
         ├─► body_markdown          (entire file — source for display)
         ├─► record_files, …        (each ### under ## Record → own column)
@@ -367,7 +367,13 @@ python3 .agent/scripts/meridian_delivery.py show US-0115
 python3 .agent/scripts/meridian_delivery.py show US-0115 --full
 python3 .agent/scripts/meridian_delivery.py search "parity"
 python3 .agent/scripts/meridian_delivery.py create-us --title "..." --epic EPIC-15 --version v10
-python3 .agent/scripts/meridian_delivery.py update-us US-0115 --from-file /tmp/us.md
+python3 .agent/scripts/meridian_delivery.py update-us US-0115 <<'EOF'
+---
+id: US-0115
+...
+---
+# US body
+EOF
 python3 .agent/scripts/meridian_delivery.py set-ready US-0115
 python3 .agent/scripts/meridian_delivery.py set-summary US-0115 --text "..."
 python3 .agent/scripts/meridian_delivery.py prepend-decision \
