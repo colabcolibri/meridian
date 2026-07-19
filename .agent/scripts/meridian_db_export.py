@@ -12,6 +12,7 @@ sys.path.insert(0, str(_SCRIPT_DIR / "lib"))
 
 from meridian_db import (  # noqa: E402
     db_exists,
+    export_decisions_json,
     export_delivery_json,
     export_entity_markdown,
     export_planning_json,
@@ -31,9 +32,9 @@ def main() -> int:
     parser.add_argument("--probe", action="store_true", help="Exit 0 if DB exists")
     parser.add_argument(
         "--format",
-        choices=["raw", "planning", "form"],
+        choices=["raw", "planning", "decisions", "form"],
         default="raw",
-        help="raw=markdown bodies; planning=structured for extension; form=editable fields",
+        help="raw=markdown bodies; planning=structured for extension; decisions=decision log; form=editable fields",
     )
     parser.add_argument(
         "--entity",
@@ -99,6 +100,8 @@ def main() -> int:
 
     if args.format == "planning":
         print(json.dumps(export_planning_json(root), ensure_ascii=False))
+    elif args.format == "decisions":
+        print(json.dumps(export_decisions_json(root), ensure_ascii=False))
     else:
         print(json.dumps(export_delivery_json(root), ensure_ascii=False))
     return 0

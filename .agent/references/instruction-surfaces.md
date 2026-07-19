@@ -131,6 +131,7 @@ Use this when adding or changing protocol behavior (example: **as-is inventory**
 | Multi-product UI context | `usage-guide.md`, `start-here.md`, `agents-help.md`, `projects-manifest-template.md` | `webview-project-context.ts`, `*-webview-html.ts`, `planning-panels.ts`, `board-editor-panel.ts`, `command-catalog.ts`, `app-visual-studio/README.md`, `05_architecture.md` § UI structure |
 | Agent behavior only | `.agent/agents/{name}.md` | Usually nothing else |
 | Extension-only feature | `app-visual-studio/` + phase docs | Kit only if protocol changes |
+| New extension view (SQLite-backed) | `app-visual-studio/src/*-webview-html.ts`, `planning-panels.ts`, `load-*.ts`, `extension.ts`, `package.json`, `command-catalog.ts` | `meridian_db_export.py --format …`, `05_architecture.md` § UI structure, `agents-help.md`, `README.md` |
 
 ---
 
@@ -154,6 +155,7 @@ When changing **several `docs/` trees in one repo** or **project context in the 
 - [ ] `app-visual-studio/src/meridian-workspace*.ts`, `meridian-context.ts`
 - [ ] `app-visual-studio/src/webview-project-context.ts`
 - [ ] `app-visual-studio/src/*-webview-html.ts`, `planning-panels.ts`, `board-editor-panel.ts`
+- [ ] `app-visual-studio/src/load-*.ts` when new SQLite export format is needed
 - [ ] `app-visual-studio/src/command-catalog.ts`
 - [ ] `app-visual-studio/README.md`, `CHANGELOG.md`
 

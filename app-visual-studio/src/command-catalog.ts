@@ -180,6 +180,22 @@ export const MERIDIAN_COMMAND_CATALOG: CommandHelpEntry[] = [
     status: "shipped",
   },
   {
+    id: "decisions",
+    title: "Open Decisions",
+    commandId: "meridian.openDecisions",
+    paletteTitle: "Meridian: Open Decisions",
+    group: "views",
+    summary: "Read-only decision log from SQLite by date",
+    details: [
+      "Project row in toolbar — same active docs/ as Board.",
+      "Accordion per calendar day; entries show time, title, what/why/impact.",
+      "Click affected document to open the workspace file.",
+      "Append via /update-decisions-log — not editable in the extension.",
+    ],
+    icon: "$(history)",
+    status: "shipped",
+  },
+  {
     id: "deliverables",
     title: "Open Deliverables",
     commandId: "meridian.openDeliverables",

@@ -1,6 +1,7 @@
 import * as vscode from "vscode"
 
 import { openDeliveryDocument } from "./open-delivery-document.js"
+import { openWorkspaceDoc } from "./open-workspace-doc.js"
 import type { MeridianWorkspaceInfo } from "./meridian-workspace.js"
 
 export type DocsOpenMessage =
@@ -8,6 +9,7 @@ export type DocsOpenMessage =
   | { type: "openEpic"; id: string }
   | { type: "openSprint"; id: string }
   | { type: "openStory"; id: string }
+  | { type: "openDoc"; path: string }
   | { type: "selectProject"; id: string }
 
 export type BuiltHtml = { html: string; title: string }
@@ -99,6 +101,8 @@ export abstract class DocsOpenPanel {
         `us/${msg.id}.md`,
         this.onDeliverySaved,
       )
+    } else if (msg.type === "openDoc") {
+      await openWorkspaceDoc(info, msg.path)
     } else if (msg.type === "selectProject") {
       await this.onSelectProject?.(msg.id)
     }

@@ -74,6 +74,7 @@ The extension is **not** the source of truth for the protocol. It monitors **`do
 | **Editor tab — Versions** | All releases, accordions                                                            |
 | **Editor tab — Sprints**  | Sprint list with version filter                                                       |
 | **Editor tab — Epics**    | Epic progress with version + epic filters                                             |
+| **Editor tab — Decisions**| Read-only decision log by date from SQLite (`--format decisions`)                     |
 | Status bar                | `Meridian: N US` when `docs/` resolved; project name when multi-product               |
 | **Project context strip** | Toolbar: name, `docs/` path, US count; dropdown when N>1                              |
 
@@ -82,6 +83,7 @@ F5 / Extension Development Host is **maintainer-only**. End users install `.vsix
 ### Data loading
 
 - **v10+:** extension reads delivery via `meridian_db_export.py --format planning` when `meridian.db` exists (`load-from-sqlite.ts`).
+- **Decisions:** `meridian_db_export.py --format decisions` → `load-decisions.ts` → **Open Decisions** tab.
 - `MeridianContext` watches `.meridian/meridian.db` → refresh board/deliverables webviews on change.
 
 ### Activation and `docs/` resolution

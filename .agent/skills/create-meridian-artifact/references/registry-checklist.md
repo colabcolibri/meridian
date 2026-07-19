@@ -48,6 +48,28 @@
 
 ---
 
+## K. New extension view (IDE monitor)
+
+When shipping a new read-only tab in `app-visual-studio` (e.g. Board, Epics, Decisions):
+
+- [ ] Export format in `.agent/scripts/meridian_db_export.py` (`--format …`) + `meridian_db.py` helper if needed
+- [ ] `app-visual-studio/src/load-*.ts` — call export script from extension
+- [ ] `app-visual-studio/src/*-webview-html.ts` — webview UI
+- [ ] `app-visual-studio/src/planning-panels.ts` or dedicated panel class — wire `DocsOpenPanel`
+- [ ] `app-visual-studio/src/extension.ts` — command + panel instance + `refreshAllPanels`
+- [ ] `app-visual-studio/package.json` — command, menu, activation event
+- [ ] `app-visual-studio/package.nls.json` — localized title
+- [ ] `app-visual-studio/src/command-catalog.ts` — help catalog entry
+- [ ] `app-visual-studio/test/*.test.ts` — webview script smoke
+- [ ] `docs/05_architecture.md` § UI structure + § Data loading
+- [ ] `.agent/references/agents-help.md` — IDE extension commands table
+- [ ] `app-visual-studio/README.md` — command table when user-facing
+- [ ] Phase doc that documents the surface (e.g. `docs/11_decisions.md`) — keep promise aligned
+
+**Kit agents:** when implementing a US that adds SQLite-backed IDE visibility, read section **K** before coding — do not ship CLI-only read paths when `docs/` already promises an extension tab.
+
+---
+
 ## D. Skill + agent + workflow (full operator — e.g. `/investigate`)
 
 Complete **A + B + C** in order:

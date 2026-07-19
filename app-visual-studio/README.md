@@ -117,7 +117,7 @@ In **chat**:
 | Situations | **Meridian: Open Usage Guide** |
 | Slash commands | **Meridian: Open Agents Help** |
 | Kanban | **Meridian: Open Board** |
-| Planning | **Open Versions**, **Open Sprints**, **Open Epics** |
+| Planning | **Open Versions**, **Open Sprints**, **Open Epics**, **Open Decisions** |
 | Validate project | **Meridian: Validate Project** (needs `python3`) |
 | Multi-product | **Meridian: Select Active Project** |
 

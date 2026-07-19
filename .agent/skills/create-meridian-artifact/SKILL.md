@@ -99,6 +99,7 @@ Walk **every** applicable row in `references/registry-checklist.md`:
 | P1 | `instruction-surfaces.md` | Quick lookup row if new pattern |
 | P2 | `README.md` | One line if user-facing |
 | P2 | `app-visual-studio/src/command-catalog.ts` | Only extension palette commands — **not** chat slash |
+| P2 | `create-meridian-artifact` → `registry-checklist.md` § **K** | New extension view (SQLite-backed tab) |
 
 **Auto-sync (no manual edit):** `.cursor/commands/`, `.cursor/skills/`, `.cursor/agents/`, `.agents/skills/workflow-*`, `.codex/agents/*.toml` — via sync script.
 

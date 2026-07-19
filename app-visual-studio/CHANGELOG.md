@@ -4,6 +4,13 @@ All notable changes to the **Meridian** VS Code extension (`meridian-vscode`).
 
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.1.27] - 2026-07-19
+
+### Added
+
+- **Open Decisions** — read-only editor tab listing the SQLite decision log by date (US-0158)
+- `meridian_db_export.py --format decisions` for structured export
+
 ## [1.1.25] - 2026-07-19
 
 ### Changed

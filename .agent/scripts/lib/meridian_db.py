@@ -577,6 +577,24 @@ def export_decisions_by_date(package_root: str | Path) -> dict[str, list[dict[st
         conn.close()
 
 
+def export_decisions_json(package_root: str | Path) -> dict[str, Any]:
+    """Structured export for IDE extension decisions webview."""
+    by_date = export_decisions_by_date(package_root)
+    dates: list[dict[str, Any]] = []
+    total_entries = 0
+    for decision_date in sorted(by_date.keys(), reverse=True):
+        entries = by_date[decision_date]
+        total_entries += len(entries)
+        dates.append(
+            {
+                "date": decision_date,
+                "count": len(entries),
+                "entries": entries,
+            }
+        )
+    return {"dates": dates, "totalEntries": total_entries}
+
+
 def import_decisions(conn: sqlite3.Connection, docs: Path) -> int:
     decisions_dir = docs / "decisions"
     count = 0

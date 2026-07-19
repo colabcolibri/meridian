@@ -2,6 +2,7 @@ import * as vscode from "vscode"
 
 import { BoardEditorPanel } from "./board-editor-panel.js"
 import {
+  DecisionsEditorPanel,
   EpicsEditorPanel,
   SprintsEditorPanel,
   VersionsEditorPanel,
@@ -33,6 +34,7 @@ let boardEditor: BoardEditorPanel | undefined
 let versionsEditor: VersionsEditorPanel | undefined
 let sprintsEditor: SprintsEditorPanel | undefined
 let epicsEditor: EpicsEditorPanel | undefined
+let decisionsEditor: DecisionsEditorPanel | undefined
 let helpEditor: HelpEditorPanel | undefined
 let howToUseEditor: KitReferenceEditorPanel | undefined
 let startHereEditor: KitReferenceEditorPanel | undefined
@@ -57,6 +59,10 @@ function openSprintsTab(): void {
 
 function openEpicsTab(): void {
   epicsEditor?.show(vscode.ViewColumn.One)
+}
+
+function openDecisionsTab(): void {
+  decisionsEditor?.show(vscode.ViewColumn.One)
 }
 
 function openHelpTab(): void {
@@ -88,6 +94,7 @@ function refreshAllPanels(): void {
   versionsEditor?.refresh()
   sprintsEditor?.refresh()
   epicsEditor?.refresh()
+  decisionsEditor?.refresh()
   startHereEditor?.refresh()
   howToUseEditor?.refresh()
   usageGuideEditor?.refresh()
@@ -239,6 +246,12 @@ export function activate(context: vscode.ExtensionContext): void {
     onSelectProject,
     refreshAllPanels,
   )
+  decisionsEditor = new DecisionsEditorPanel(
+    context.extensionUri,
+    getWorkspace,
+    onSelectProject,
+    refreshAllPanels,
+  )
   helpEditor = new HelpEditorPanel(context.extensionUri)
   howToUseEditor = new KitReferenceEditorPanel(
     HOW_TO_USE_PANEL,
@@ -269,6 +282,7 @@ export function activate(context: vscode.ExtensionContext): void {
     vscode.commands.registerCommand("meridian.openDeliverables", openVersionsTab),
     vscode.commands.registerCommand("meridian.openSprints", openSprintsTab),
     vscode.commands.registerCommand("meridian.openEpics", openEpicsTab),
+    vscode.commands.registerCommand("meridian.openDecisions", openDecisionsTab),
     vscode.commands.registerCommand("meridian.openHelp", openHelpTab),
     vscode.commands.registerCommand("meridian.openHowToUse", openHowToUseTab),
     vscode.commands.registerCommand("meridian.openStartHere", openStartHereTab),
@@ -291,6 +305,7 @@ export function deactivate(): void {
   versionsEditor = undefined
   sprintsEditor = undefined
   epicsEditor = undefined
+  decisionsEditor = undefined
   helpEditor = undefined
   howToUseEditor = undefined
   startHereEditor = undefined

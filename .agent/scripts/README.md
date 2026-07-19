@@ -25,7 +25,7 @@
 | `bootstrap_meridian_db.py` | Create/upgrade `.meridian/meridian.db` + `delivery.json` |
 | `meridian_delivery.py` | **Agent facade** — reads `delivery.json`, dispatches connector (`counts`, `show`, `create-us`, …) |
 | `meridian_db_cli.py` | SQLite driver (implementation; facade calls this) |
-| `meridian_db_export.py` | JSON export for extension (`--format planning`; `--write-form`) |
+| `meridian_db_export.py` | JSON export for extension (`--format planning|decisions`; `--write-form`) |
 | `validate_meridian.py` | Governance validator (`--strict-kit-md`, `--json`; deprecated-agent check always on kit) |
 | `meridian_delivery_form.py` | Shim — re-exports `lib/meridian_delivery_form.py` for extension path checks |
 
