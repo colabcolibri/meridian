@@ -628,7 +628,7 @@ export function boardKanbanHtml(payload: BoardWebviewPayload): string {
       frozenBtn.onclick = () => {
         showFrozen = !showFrozen;
         persist();
-        renderBoard();
+        renderAll();
       };
 
       const deprecatedBtn = document.getElementById("deprecated-toggle");
@@ -640,7 +640,7 @@ export function boardKanbanHtml(payload: BoardWebviewPayload): string {
       deprecatedBtn.onclick = () => {
         showDeprecated = !showDeprecated;
         persist();
-        renderBoard();
+        renderAll();
       };
 
       const narrativeBtn = document.getElementById("narrative-toggle");
@@ -652,7 +652,7 @@ export function boardKanbanHtml(payload: BoardWebviewPayload): string {
       narrativeBtn.onclick = () => {
         showNarrative = !showNarrative;
         persist();
-        renderBoard();
+        renderAll();
       };
 
       const list = filteredStories();

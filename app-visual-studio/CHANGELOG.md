@@ -4,6 +4,12 @@ All notable changes to the **Meridian** VS Code extension (`meridian-vscode`).
 
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.1.30] - 2026-07-20
+
+### Fixed
+
+- **Board:** Show/Hide toggle labels now update on click (toolbar was not re-rendered)
+
 ## [1.1.29] - 2026-07-20
 
 ### Changed
