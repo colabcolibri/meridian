@@ -4,6 +4,12 @@ All notable changes to the **Meridian** VS Code extension (`meridian-vscode`).
 
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.1.29] - 2026-07-20
+
+### Changed
+
+- **Board:** frozen / deprecated / narrative toggles use Show↔Hide labels and clearer active (`on`) state
+
 ## [1.1.28] - 2026-07-20
 
 ### Changed

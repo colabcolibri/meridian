@@ -108,6 +108,7 @@ export function boardKanbanHtml(payload: BoardWebviewPayload): string {
       background: var(--vscode-button-background);
       color: var(--vscode-button-foreground);
       border-color: var(--vscode-button-background);
+      font-weight: 600;
     }
     .chip.muted { opacity: 0.55; }
     .chip:disabled { opacity: 0.45; cursor: default; pointer-events: none; }
@@ -219,11 +220,11 @@ export function boardKanbanHtml(payload: BoardWebviewPayload): string {
       <span class="count" id="summary"></span>
     </div>
     <div class="toolbar-row">
-      <span class="toolbar-label">Show</span>
+      <span class="toolbar-label">View</span>
       <select class="pager-select" id="page-size" title="Cards per column"></select>
-      <button type="button" class="chip" id="frozen-toggle">Show frozen</button>
-      <button type="button" class="chip" id="deprecated-toggle">Show deprecated</button>
-      <button type="button" class="chip" id="narrative-toggle">Show narrative</button>
+      <button type="button" class="chip" id="frozen-toggle" aria-pressed="false">Show frozen</button>
+      <button type="button" class="chip" id="deprecated-toggle" aria-pressed="false">Show deprecated</button>
+      <button type="button" class="chip" id="narrative-toggle" aria-pressed="false">Show narrative</button>
     </div>
   </div>
   <div class="board-wrap"><div id="board" class="board"></div></div>
@@ -613,11 +614,17 @@ export function boardKanbanHtml(payload: BoardWebviewPayload): string {
         },
       );
 
+      const toggleLabel = (on, noun, n) => {
+        const base = (on ? "Hide " : "Show ") + noun;
+        return n > 0 ? base + " (" + n + ")" : base;
+      };
+
       const frozenBtn = document.getElementById("frozen-toggle");
       const frozenN = scoped.filter((s) => resolveColumn(s) === "🧊").length;
       frozenBtn.classList.toggle("on", showFrozen);
       frozenBtn.classList.toggle("muted", frozenN === 0);
-      frozenBtn.textContent = frozenN ? "Show frozen (" + frozenN + ")" : "Show frozen";
+      frozenBtn.setAttribute("aria-pressed", showFrozen ? "true" : "false");
+      frozenBtn.textContent = toggleLabel(showFrozen, "frozen", frozenN);
       frozenBtn.onclick = () => {
         showFrozen = !showFrozen;
         persist();
@@ -628,9 +635,8 @@ export function boardKanbanHtml(payload: BoardWebviewPayload): string {
       const deprecatedN = scoped.filter((s) => resolveColumn(s) === "🚫").length;
       deprecatedBtn.classList.toggle("on", showDeprecated);
       deprecatedBtn.classList.toggle("muted", deprecatedN === 0);
-      deprecatedBtn.textContent = deprecatedN
-        ? "Show deprecated (" + deprecatedN + ")"
-        : "Show deprecated";
+      deprecatedBtn.setAttribute("aria-pressed", showDeprecated ? "true" : "false");
+      deprecatedBtn.textContent = toggleLabel(showDeprecated, "deprecated", deprecatedN);
       deprecatedBtn.onclick = () => {
         showDeprecated = !showDeprecated;
         persist();
@@ -641,11 +647,8 @@ export function boardKanbanHtml(payload: BoardWebviewPayload): string {
       const narrativeN = scoped.filter((s) => s.narrative).length;
       narrativeBtn.classList.toggle("on", showNarrative);
       narrativeBtn.classList.toggle("muted", narrativeN === 0);
-      narrativeBtn.textContent = narrativeN
-        ? showNarrative
-          ? "Hide narrative"
-          : "Show narrative (" + narrativeN + ")"
-        : "Show narrative";
+      narrativeBtn.setAttribute("aria-pressed", showNarrative ? "true" : "false");
+      narrativeBtn.textContent = toggleLabel(showNarrative, "narrative", narrativeN);
       narrativeBtn.onclick = () => {
         showNarrative = !showNarrative;
         persist();
