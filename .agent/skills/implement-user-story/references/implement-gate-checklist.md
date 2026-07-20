@@ -16,7 +16,7 @@ Use with `/implement-us US-XXXX` **before** any Write on product code for that s
 | 4 | `## Plan` | Present; not placeholder; Approach has ≥2 explanatory bullets |
 | 5 | Architecture refs | Each ref resolves to § in `05_architecture.md` **or** `docs/architecture/*.md` |
 | 6 | `depends_on` | Every listed US has `status: ✅` |
-| 7 | Story status | `❌` or `🔶` (not ✅ closed; not 🧊 frozen without manager waiver) |
+| 7 | Story status | `❌` or `🔶` (not ✅ closed; not 🧊 frozen or 🚫 deprecated without manager waiver) |
 | 8 | Session scope | One US id cited; manager did not bundle unrelated features |
 | 9 | `04_principles.md` | Read DRY + SRP sections this session |
 | 10 | Code quality | Implementation reuses existing modules per Approach; no copy-paste duplication; layer boundaries respected |

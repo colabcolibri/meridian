@@ -1,4 +1,4 @@
-export type StoryStatus = "✅" | "🔶" | "❌" | "🧊"
+export type StoryStatus = "✅" | "🔶" | "❌" | "🧊" | "🚫"
 export type TestsRequirement = "required" | "none"
 export type TestsStatus = "pending" | "done" | "n/a"
 export type Moscow = "Must" | "Should" | "Could" | "Won't"

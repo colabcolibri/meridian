@@ -124,6 +124,10 @@ Full rules: `section-contracts.md`. Golden examples: `writing-guide.md`.
 | ❌ | Not started |
 | 🔶 | Partial (requires `Missing:` in acceptance) |
 | ✅ | Complete (acceptance + record + tests when `tests: required`) |
+| 🧊 | Frozen for this version (paused) |
+| 🚫 | Deprecated — won't implement |
+
+Board columns **📋 Backlog** / **📌 Todo** are not frontmatter values: the IDE board puts `status: ❌` in Backlog when `ready: false` and in Todo when `ready: true`. Agents set `status` and `ready`; they do not set column names.
 
 ## Test fields
 

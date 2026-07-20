@@ -222,6 +222,7 @@ export function boardKanbanHtml(payload: BoardWebviewPayload): string {
       <span class="toolbar-label">Show</span>
       <select class="pager-select" id="page-size" title="Cards per column"></select>
       <button type="button" class="chip" id="frozen-toggle">Show frozen</button>
+      <button type="button" class="chip" id="deprecated-toggle">Show deprecated</button>
       <button type="button" class="chip" id="narrative-toggle">Show narrative</button>
     </div>
   </div>
@@ -232,11 +233,30 @@ export function boardKanbanHtml(payload: BoardWebviewPayload): string {
     ${PROJECT_CONTEXT_SCRIPT}
     wireProjectContext(payload.context);
     ${PAGINATION_SCRIPT}
-    const BOARD_STATE_VERSION = 11;
-    const COLUMN_ORDER = ["❌", "🔶", "🧪", "✅", "🧊"];
-    const ALWAYS_VISIBLE = ["❌", "🔶", "🧪", "✅"];
-    const COLUMN_LABELS = { "❌": "Todo", "🔶": "Partial", "🧪": "Tests", "✅": "Done", "🧊": "Frozen" };
-    const COL_STORAGE_KEY = { "❌": "todo", "🔶": "partial", "🧪": "tests", "✅": "done", "🧊": "frozen" };
+    const BOARD_STATE_VERSION = 12;
+    const COLUMN_ORDER = ["backlog", "todo", "🔶", "🧪", "✅", "🧊", "🚫"];
+    const ALWAYS_VISIBLE = ["backlog", "todo", "🔶", "🧪", "✅"];
+    const COLUMN_HEADER_LABELS = {
+      backlog: "📋 Backlog",
+      todo: "📌 Todo",
+      "🔶": "🔶 Partial",
+      "🧪": "🧪 Tests",
+      "✅": "✅ Done",
+      "🧊": "🧊 Frozen",
+      "🚫": "🚫 Deprecated",
+    };
+    function columnHeaderLabel(col) {
+      return COLUMN_HEADER_LABELS[col] || col;
+    }
+    const COL_STORAGE_KEY = {
+      backlog: "backlog",
+      todo: "todo",
+      "🔶": "partial",
+      "🧪": "tests",
+      "✅": "done",
+      "🧊": "frozen",
+      "🚫": "deprecated",
+    };
 
     const saved = vscode.getState() || {};
     const freshState = saved.stateVersion !== BOARD_STATE_VERSION;
@@ -249,6 +269,7 @@ export function boardKanbanHtml(payload: BoardWebviewPayload): string {
       ? new Set(saved.selectedEpics)
       : null;
     let showFrozen = !!saved.showFrozen;
+    let showDeprecated = !!saved.showDeprecated;
     let showNarrative = !!saved.showNarrative;
     let pageSize = freshState ? DEFAULT_PAGE_SIZE : normalizePageSize(saved.pageSize);
     let columnPages = freshState ? {} : (saved.columnPages || {});
@@ -266,7 +287,8 @@ export function boardKanbanHtml(payload: BoardWebviewPayload): string {
 
     function resolveColumn(story) {
       if (story.status === "🧊") return "🧊";
-      if (story.status === "❌") return "❌";
+      if (story.status === "🚫") return "🚫";
+      if (story.status === "❌") return story.ready === true ? "todo" : "backlog";
       if (story.tests === "required" && story.testsStatus === "pending") return "🧪";
       return story.status;
     }
@@ -332,7 +354,11 @@ export function boardKanbanHtml(payload: BoardWebviewPayload): string {
     }
 
     function visibleColumns() {
-      return [...ALWAYS_VISIBLE, ...(showFrozen ? ["🧊"] : [])];
+      return [
+        ...ALWAYS_VISIBLE,
+        ...(showFrozen ? ["🧊"] : []),
+        ...(showDeprecated ? ["🚫"] : []),
+      ];
     }
 
     function renderPageSizeSelect() {
@@ -365,7 +391,7 @@ export function boardKanbanHtml(payload: BoardWebviewPayload): string {
       setColumnPage(col, safePage);
       const from = (safePage - 1) * pageSize + 1;
       const to = Math.min(safePage * pageSize, total);
-      const label = COLUMN_LABELS[col] || col;
+      const label = columnHeaderLabel(col);
 
       const prev = document.createElement("button");
       prev.type = "button";
@@ -442,7 +468,7 @@ export function boardKanbanHtml(payload: BoardWebviewPayload): string {
       const paged = pageSlice(allInCol, getColumnPage(col), pageSize);
       setColumnPage(col, paged.page);
       const head = section.querySelector(".column-header");
-      head.textContent = (COLUMN_LABELS[col] || col) + " (" + allInCol.length + ")";
+      head.textContent = columnHeaderLabel(col) + " (" + allInCol.length + ")";
       fillColumnBody(section.querySelector(".column-body"), paged.slice);
       renderColumnPager(section.querySelector(".column-pager"), col, allInCol.length);
     }
@@ -458,7 +484,7 @@ export function boardKanbanHtml(payload: BoardWebviewPayload): string {
 
       const head = document.createElement("div");
       head.className = "column-header";
-      head.textContent = (COLUMN_LABELS[col] || col) + " (" + allInCol.length + ")";
+      head.textContent = columnHeaderLabel(col) + " (" + allInCol.length + ")";
       section.appendChild(head);
 
       const body = document.createElement("div");
@@ -598,6 +624,19 @@ export function boardKanbanHtml(payload: BoardWebviewPayload): string {
         renderBoard();
       };
 
+      const deprecatedBtn = document.getElementById("deprecated-toggle");
+      const deprecatedN = scoped.filter((s) => resolveColumn(s) === "🚫").length;
+      deprecatedBtn.classList.toggle("on", showDeprecated);
+      deprecatedBtn.classList.toggle("muted", deprecatedN === 0);
+      deprecatedBtn.textContent = deprecatedN
+        ? "Show deprecated (" + deprecatedN + ")"
+        : "Show deprecated";
+      deprecatedBtn.onclick = () => {
+        showDeprecated = !showDeprecated;
+        persist();
+        renderBoard();
+      };
+
       const narrativeBtn = document.getElementById("narrative-toggle");
       const narrativeN = scoped.filter((s) => s.narrative).length;
       narrativeBtn.classList.toggle("on", showNarrative);
@@ -658,6 +697,7 @@ export function boardKanbanHtml(payload: BoardWebviewPayload): string {
         selectedVersions: [...selectedVersions],
         selectedEpics: selectedEpics ? [...selectedEpics] : [],
         showFrozen,
+        showDeprecated,
         showNarrative,
         pageSize,
         columnPages,

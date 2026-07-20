@@ -220,7 +220,7 @@ Reference section — open when you need the detail on a specific file's fields 
 | `title` | What it delivers, not how. |
 | `epic` | Parent epic id (`EPIC-02`). Frontmatter only — no epic text in the body. |
 | `version` | Which release this ships in (`v1`). |
-| `status` | `❌` not started · `🔶` partial · `✅` done · `🧊` frozen |
+| `status` | `❌` not started · `🔶` partial · `✅` done · `🧊` frozen · `🚫` deprecated |
 | `moscow` | `Must` · `Should` · `Could` · `Won't` |
 | `depends_on` | US ids that must be `✅` before this one. |
 | `ready` | `false` at create · `true` after refine. Gate for implementation. |

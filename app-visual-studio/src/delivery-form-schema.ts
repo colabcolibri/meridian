@@ -33,7 +33,7 @@ export type FormFieldDef = {
   catalogKey?: keyof FormCatalog
 }
 
-const US_STATUS = ["❌", "🔶", "✅"]
+const US_STATUS = ["❌", "🔶", "✅", "🧊", "🚫"]
 const US_MOSCOW = ["Must", "Should", "Could", "Wont"]
 const US_TESTS = ["required", "none"]
 const US_TESTS_STATUS = ["pending", "done", "n/a"]

@@ -4,7 +4,7 @@ import type { Moscow, StoryStatus, TestsRequirement, TestsStatus, UserStory } fr
 import { extractUsPreamble } from "./story-narrative.js"
 
 const US_FILENAME = /^US-\d{4}\.md$/i
-const STORY_STATUSES: StoryStatus[] = ["✅", "🔶", "❌", "🧊"]
+const STORY_STATUSES: StoryStatus[] = ["✅", "🔶", "❌", "🧊", "🚫"]
 const MOSCOW: Moscow[] = ["Must", "Should", "Could", "Won't"]
 
 function splitMarkdown(raw: string): { frontmatter: string | null; body: string } {

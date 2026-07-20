@@ -184,6 +184,9 @@ Strict US also require `ready: true | false`.
 | 🔶 | Partial — **Missing:** required in Intent/Acceptance |
 | ✅ | Done — evidence + filled Record when applicable |
 | 🧊 | Frozen for this version |
+| 🚫 | Deprecated — won't implement (superseded or cancelled) |
+
+Board columns **Backlog** and **Todo** are not stored in SQLite: the extension derives them from `status: ❌` plus `ready` (`false` → Backlog, `true` → Todo). Partial, Tests, Done, Frozen, and Deprecated follow `status`, `tests`, and toggles as in `docs/05_architecture.md`.
 
 - `✅` requires proven acceptance; if `tests: required`, then `tests_status: done`, Plan/Planned `[x]`, Record/Executed filled.
 - `✅` requires `## Record` with real paths in `### Files` (skill `complete-user-story`).

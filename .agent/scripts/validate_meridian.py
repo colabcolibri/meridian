@@ -183,7 +183,7 @@ def validate_us_semantics(
             )
         return
 
-    if status == "🧊":
+    if status in ("🧊", "🚫"):
         return
 
     if status not in ("❌", "🔶"):
