@@ -12,6 +12,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Bootstrap delivery SQLite
+        run: python3 .agent/scripts/meridian_delivery.py bootstrap
+
       - name: Validar estrutura Meridian
         run: python3 .agent/scripts/validate_meridian.py . --sqlite-only --strict-kit-md
 
