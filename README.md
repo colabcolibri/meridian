@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/meridian-readme-header.svg" alt="Meridian — infrastructure for AI-assisted delivery" width="100%" />
+  <img src="assets/meridian-readme-header.svg" alt="Meridian — repo-native harness for AI-assisted delivery" width="100%" />
 </p>
 
 <p align="center">
@@ -9,22 +9,69 @@
 </p>
 
 <p align="center">
-  <strong>I'm testing a repo-native harness for AI coding agents —<br />
-  guides and sensors in Git, persistent task specs, and a Scrum-shaped loop I manage.</strong>
+  <strong>Repo-native harness for AI coding agents — phase docs, SQLite backlog,<br />
+  slash workflows, and gates so “done” means what you wrote down, not what chat remembered.</strong>
 </p>
 
-> Very early personal experiment. Rules, structure, and APIs will change.  
-> [Full protocol](.agent/MERIDIAN.md)
+> Early personal experiment: rules, structure, and APIs will change.  
+> Agents and maintainers: [full protocol](.agent/MERIDIAN.md) · humans: [how to use](.agent/references/how-to-use.md)
 
-# Meridian
+## What Meridian is
 
-## How Meridian works
+Meridian is a **thin layer on top of Cursor or Claude Code** that keeps delivery state in the repository:
+
+| Layer | Path | Role |
+| ----- | ---- | ---- |
+| **Phase memory** | `docs/` (`00`–`11`) | Scope, architecture, security — approved before backlog work |
+| **Delivery runtime** | `.meridian/meridian.db` + `delivery.json` | Versions, sprints, epics, user stories (DB gitignored; connector config committed) |
+| **Agent harness** | `.agent/` (kit) | Rules, agents, skills, slash workflows, validators |
+| **IDE board** (optional) | [`app-visual-studio/`](app-visual-studio/) | Kanban and planning views that read SQLite — not the harness itself |
+
+Chat does not persist. **Files do.** You stay the manager; agents draft and execute inside gates (`ready`, `## Record`, `approved`).
+
+**How you drive it:** type **slash workflows** in chat (`/status`, `/create-us`, `/implement-us`) — not agent names. Workflows route to the right persona; override with `@backlog-refiner` when needed. Use the **extension** to see the board and run **Validate Project**; use **chat** to create and change backlog and docs. [Surfaces guide](.agent/references/how-to-use.md)
+
+## Try it now
+
+```bash
+git clone https://github.com/colabcolibri/meridian.git
+cd meridian
+
+# Cursor or Claude Code — generate local adapters (not committed):
+chmod +x .agent/scripts/sync_cursor_kit.sh
+./.agent/scripts/sync_cursor_kit.sh
+```
+
+1. In your IDE: **`/init-meridian`** — creates `docs/` and bootstraps `.meridian/`.
+2. **`/agents-help`** — command map and numbered steps ([`.agent/references/agents-help.md`](.agent/references/agents-help.md)).
+3. Optional: install the VS Code extension — `cd app-visual-studio && pnpm install && pnpm install:cursor`.
+4. Anytime: **`/status`** — blockers, counts, suggested next step.
+
+**Another repo:** copy `.agent/`, run `/init-meridian`, sync the kit. Brownfield → `/document-project` and `docs/inventory/as-is.md`.  
+**Kit-only release:** [`.agent/DISTRIBUTION.md`](.agent/DISTRIBUTION.md) · Marketplace: [Meridian Harness](https://marketplace.visualstudio.com/items?itemName=colabcolibri.meridian-vscode).
+
+## How it works
 
 <p align="center">
   <img src="assets/infographic/meridian-agent-infrastructure-4x5-final.png" alt="Meridian infrastructure for AI-assisted delivery" width="720" />
 </p>
 
-## Screenshots
+```txt
+document → plan → refine → implement → close → commit
+```
+
+| Step | In one line |
+| ---- | ----------- |
+| **Document** | Scope, stack, security, architecture in `docs/00`–`11` — you approve, agent drafts |
+| **Plan** | Epics, versions, sprint, and user stories in `.meridian/meridian.db` |
+| **Refine** | Story gets a concrete Approach and `ready: true` before any product code |
+| **Implement** | Agent reads the US and codes against acceptance criteria |
+| **Close** | Agent fills `## Record` with evidence; you review and set `status: ✅` |
+| **Commit** | One commit per closed story — code and docs together in Git |
+
+**Two rules:** no product code without `ready: true`. No ✅ without a filled `## Record`.
+
+## Extension screenshots
 
 The optional [VS Code / Cursor extension](app-visual-studio/) reads `.meridian/meridian.db` and surfaces the backlog inside the IDE — board, versions, sprints, epics, and user-story detail.
 
@@ -32,7 +79,7 @@ The optional [VS Code / Cursor extension](app-visual-studio/) reads `.meridian/m
   <tr>
     <td width="50%" valign="top">
       <img src="assets/screenshots/board-kanban.jpg" alt="Meridian kanban board with version and epic filters" width="100%" />
-      <p align="center"><sub><strong>Board</strong> — kanban by status, filter by version and epic</sub></p>
+      <p align="center"><sub><strong>Board</strong> — 📋 Backlog / 📌 Todo (from <code>ready</code>), status columns, version and epic filters</sub></p>
     </td>
     <td width="50%" valign="top">
       <img src="assets/screenshots/versions-roadmap.jpg" alt="Meridian versions roadmap with sprints and epics" width="100%" />
@@ -61,121 +108,46 @@ The optional [VS Code / Cursor extension](app-visual-studio/) reads `.meridian/m
   </tr>
 </table>
 
-## The hypothesis
+## Why this experiment
 
-AI agents in the IDE ship code fast — but without a written spec, scope drifts in chat, decisions get lost, and "done" means whatever the model said five messages ago.
+AI agents in the IDE ship code fast — but without a written spec, scope drifts in chat, decisions get lost, and “done” means whatever the model said five messages ago.
 
-**I'm testing another approach:** a thin harness layer on top of Cursor or Claude Code — phase docs in `docs/`, delivery in `.meridian/meridian.db`, `.agent/` for guides and workflows, validators as sensors. I plan the project and work solo with the agent, but I also want to see if it can run longer autonomous stretches on the open backlog without breaking the flow. Chat does not persist. Files do.
+Meridian tests whether **guides, sensors, and structured artifacts** (commands, skills, SQLite backlog, phase docs) let a solo developer — or longer autonomous runs on an open backlog — ship **documented, gated** software without re-explaining context every session.
 
-## What I'm learning
+**Open questions:** Does SQLite-backed delivery reduce drift on long agent sessions? Do file-based Scrum-shaped workflows cost fewer credits than chat-only planning? Do `ready` / `Record` gates actually improve quality, not just speed? This repository is the lab.
 
-- Once versions, sprints, and open US are in **SQLite** (`.meridian/meridian.db`), can the agent run long continuous sessions on the backlog — refine, implement, close — without drifting or skipping harness gates?
-- Does managing Scrum in files (commands, skills, structured artifacts) cost fewer credits than re-explaining context and priorities in chat every session?
-- Does the harness — guides, sensors, `ready` / `Record` gates, phase docs — actually ship functional, organized, secure, **documented** software, not just fast code?
+Scrum-inspired, adapted for **one human directing AI agents** — no story points, velocity, or mandatory Feature layer. [Scrum ↔ Meridian map](.agent/references/scrum-meridian-map.md)
 
-Still open questions. This repository is my lab.
+## Harness layout (`.agent/`)
 
-## Repository lineage (Meridian 2.0)
-
-| Branch / artifact | Purpose |
-| ----------------- | ------- |
-| `main` | Meridian 2.0 — delivery in `.meridian/meridian.db` + `delivery.json`; phase docs in `docs/` |
-| `meridian-v1-old` | Meridian v1 — file-per-artifact Markdown under `docs/us/`, `docs/epics/`, etc. |
-
-Cutover steps: [MERIDIAN_V2_CUTOVER.md](MERIDIAN_V2_CUTOVER.md). Legacy Markdown delivery → **`/migrate-delivery`** (or `migrate_md_to_sqlite.py`).
-
-## The loop I'm testing
-
-```
-document → plan → refine → implement → close → commit
-```
-
-| Step | In one line |
-| ---- | ----------- |
-| **Document** | Scope, stack, security, architecture in `docs/00`–`11` — I approve, agent drafts |
-| **Plan** | Epics, versions, sprint, and user stories in `.meridian/meridian.db` (phase docs in `docs/`) |
-| **Refine** | Story gets a concrete Approach and `ready: true` before any product code |
-| **Implement** | Agent reads the US and codes against acceptance criteria |
-| **Close** | Agent fills `## Record` with evidence; I review and set `status: ✅` |
-| **Commit** | One commit per closed story — code and docs together in Git |
-
-**Two rules of the experiment:** no product code without `ready: true`. No ✅ without a filled `## Record`.
-
-## Layers in a Meridian project
-
-| Path | Role |
-| ---- | ---- |
-| **`docs/`** | Phase memory — scope, architecture, security (`00`–`11`); approved by you |
-| **`.meridian/`** | Delivery runtime — `meridian.db` (gitignored) + `delivery.json` (connector config, commitável) |
-| **`.agent/`** (from kit) | Guides — rules, agents, skills, slash workflows |
-| **`app-visual-studio/`** (optional) | IDE board and deliverables — reads SQLite; not the harness itself |
-
-Scrum-inspired, adapted for a **single human directing AI agents** — no story points, velocity, or mandatory Feature layer. [Scrum ↔ Meridian map](.agent/references/scrum-meridian-map.md)
-
-## The agent harness (`.agent/`)
-
-Slash commands route to **workflows** → **agents** → **skills** → artifacts in `docs/` and SQLite. You stay the manager; agents draft and execute inside gates (`ready`, `Record`, `approved`).
+Slash commands are **workflows** → routed **agents** → **skills** → `docs/` + SQLite. Canonical tree:
 
 ```txt
 .agent/
-├── MERIDIAN.md              # master protocol
-├── rules/                   # P0 constraints (never skip)
-├── workflows/               # slash commands — /status, /create-us, /implement-us, …
-├── agents/                  # domain personas (see below)
-├── skills/                  # repeatable procedures + templates
-├── references/              # guides, templates, agents-help
-└── scripts/                 # validate_meridian.py, meridian_delivery.py, kit sync
+├── MERIDIAN.md, rules/          # protocol and P0 gates
+├── workflows/                   # what you type: /status, /create-us, …
+├── agents/, skills/             # personas and procedures (routed — see agents-help)
+├── references/                  # how-to-use, start-here, usage-guide, agents-help
+└── scripts/                     # Python toolkit (stdlib) — see below
 ```
 
-| Agent | Group | Role |
-| ----- | ----- | ---- |
-| [`scrum-master`](.agent/agents/scrum-master.md) | Orchestration | `/status`, `/init-meridian`, blockers — never closes US or ships code |
-| [`product-owner`](.agent/agents/product-owner.md) | Scope | `00_scope`, discovery, `/create-epic` |
-| [`technical-writer`](.agent/agents/technical-writer.md) | Phase docs | Drafts `01`–`04`, `06`–`08`, `11` |
-| [`security-champion`](.agent/agents/security-champion.md) | Hardening | `02_security`, `/security-pass`, `/security-review` |
-| [`technical-architect`](.agent/agents/technical-architect.md) | Structure | `05_architecture` — **gate before backlog** |
-| [`design-system-owner`](.agent/agents/design-system-owner.md) | UI contract | `09_design_system`, `/design-pass`, `/design-review` |
-| [`quality-owner`](.agent/agents/quality-owner.md) | Testing | `10_test_strategy`, `/test-pass`, `/test-review` |
-| [`sprint-planner`](.agent/agents/sprint-planner.md) | Releases | `/create-version`, `/plan-sprint`, MoSCoW order |
-| [`backlog-refiner`](.agent/agents/backlog-refiner.md) | Backlog | `/create-us`, `/refine-us`, `/complete-us` |
-| [`developer`](.agent/agents/developer.md) | Delivery | `/implement-us` — product code only after `ready: true` |
+**Agent map (all personas):** [agents-help](.agent/references/agents-help.md) — full table, groups, and step order. Do not duplicate that list here.
 
-Full map: [`/agents-help`](.agent/references/agents-help.md) · invoke any persona with `@agent-name` in chat.
+### Python toolkit (`scripts/`)
 
-## Try it now
+Still required in v11 — not replaced by chat. Agents and CI call the **delivery facade**; the extension calls export + validate.
 
-```bash
-git clone https://github.com/colabcolibri/meridian.git
-cd meridian
+| Entry | Role |
+| ----- | ---- |
+| [`meridian_delivery.py`](.agent/scripts/meridian_delivery.py) | **Default CLI** — `counts`, `show`, `create-us`, `update-us`, `prepend-decision`, … (reads `.meridian/delivery.json`) |
+| [`validate_meridian.py`](.agent/scripts/validate_meridian.py) | Structure / governance check (`--sqlite-only` for delivery-only projects) |
+| [`meridian_db_export.py`](.agent/scripts/meridian_db_export.py) | Planning JSON for the IDE board |
+| [`bootstrap_meridian_db.py`](.agent/scripts/bootstrap_meridian_db.py) | Create or upgrade `.meridian/meridian.db` |
 
-# Cursor or Claude Code — generate local adapters (not committed):
-chmod +x .agent/scripts/sync_cursor_kit.sh
-./.agent/scripts/sync_cursor_kit.sh
-```
+Details and maintainer scripts: [`.agent/scripts/README.md`](.agent/scripts/README.md).  
+**Deprecated (v11):** `docs/kanban/board.json` and board sync — kanban lives in SQLite `board_snapshots` only.
 
-1. In your IDE: `/init-meridian` — creates `docs/` + bootstraps `.meridian/` (`meridian.db` + `delivery.json`).
-2. **`/agents-help`** — agent groups, slash commands, numbered steps (`.agent/references/agents-help.md`).
-3. Optional: install the VS Code extension — `cd app-visual-studio && pnpm install && pnpm install:cursor`.
-4. Anytime: `/status` — blockers, counts (`meridian_delivery.py`), suggested next step.
-
-Agents call **`meridian_delivery.py`** for delivery (reads `.meridian/delivery.json`; default connector: sqlite).
-
-**Use in another repo:** copy `.agent/` only, run `/init-meridian`, sync the kit if you use Cursor/Claude. Existing codebase → `docs/inventory/as-is.md`. Coming from v1 Markdown delivery → **`/migrate-delivery`** ([usage guide](.agent/references/usage-guide.md#migrate-an-existing-project)).
-
-**Maintainers:** [instruction surfaces](.agent/references/instruction-surfaces.md) — where to edit when the protocol changes (kit, extension).
-
-Or download a **kit release** (`.agent` only):
-
-```bash
-tar -xzf meridian-kit-1.0.0.tar.gz && cd meridian-kit-1.0.0
-./install.sh /path/to/my-project
-```
-
-Build the tarball from this repo: `KIT_VERSION=1.0.0 ./.agent/scripts/package-kit.sh`
-
-Full distribution guide (kit tarball + extension VSIX, GitHub Releases): [`.agent/DISTRIBUTION.md`](.agent/DISTRIBUTION.md)
-
-**Kit install includes all agents** (`.agent/agents/`) plus skills, workflows, and rules. Cursor/Claude get slash commands via adapter sync; Antigravity uses `.agent/` only (`--no-sync`).
+**Maintainers:** [instruction surfaces](.agent/references/instruction-surfaces.md) · kit tarball: `KIT_VERSION=1.0.0 ./.agent/scripts/package-kit.sh` ([distribution](.agent/DISTRIBUTION.md))
 
 ## Distribution (for others)
 
@@ -187,8 +159,8 @@ Publisher: **colabcolibri** · [GitHub](https://github.com/colabcolibri/meridian
 
 ## What's in this repository
 
-| Piece | Required? | Role in the experiment |
-| ----- | --------- | ---------------------- |
+| Piece | Required? | Role |
+| ----- | --------- | ---- |
 | [`.agent/`](.agent/) | Yes (in your project) | Portable harness kit — guides, skills, validation |
 | `docs/` | Yes (in your project) | Living spec — [example here](docs/) |
 | [`app-visual-studio/`](app-visual-studio/) | No | VS Code/Cursor extension — board reads `.meridian/meridian.db` |
@@ -200,23 +172,23 @@ Publisher: **colabcolibri** · [GitHub](https://github.com/colabcolibri/meridian
 | **v4** | VS Code extension — board, versions, sprints, epics | Shipped |
 | **v9** | SQLite delivery store + kit scripts | Shipped |
 | **v10** | Remove browser monitor; dogfood `docs/` at repo root | Shipped |
-| **v11** | Board só SQLite; facade `meridian_delivery.py` + `delivery.json` | Shipped |
+| **v11** | SQLite-only board; `meridian_delivery.py` facade + `delivery.json` | Shipped |
 | v5+ | Write commands, wizards | Planned |
 
-Details in [`MERIDIAN_V2_CUTOVER.md`](MERIDIAN_V2_CUTOVER.md) and release rows in SQLite (`meridian_delivery.py list versions`) when dogfood DB exists.
+Older protocol notes (v1 Markdown delivery, cutover): [`MERIDIAN_V2_CUTOVER.md`](MERIDIAN_V2_CUTOVER.md) — only if you are upgrading a legacy tree.
 
-## Reference (not the home page)
+## Reference
 
-- [Protocol for agents](.agent/MERIDIAN.md)
-- [How to use Meridian](.agent/references/how-to-use.md) — start here (extension vs chat, layering)
+- [Protocol for agents](.agent/MERIDIAN.md) · [AGENTS.md](AGENTS.md) (IDE layering — workflows vs agents)
+- [How to use Meridian](.agent/references/how-to-use.md) — extension vs chat
 - [Concepts](.agent/references/start-here.md) · [Recipes](.agent/references/usage-guide.md) · [Command reference](.agent/references/agents-help.md)
 - [Scrum ↔ Meridian map](.agent/references/scrum-meridian-map.md)
-- [Validate a project](.agent/scripts/validate_meridian.py): `python3 .agent/scripts/validate_meridian.py . --sqlite-only`
-- [Delivery CLI](.agent/references/templates/delivery-connector-schema.md): `python3 .agent/scripts/meridian_delivery.py counts`
-- [IDE adapters](.agent/IDE_ADAPTERS.md) — Antigravity native; Cursor/Claude via sync script
+- [Scripts index](.agent/scripts/README.md) · validate: `python3 .agent/scripts/validate_meridian.py . --sqlite-only` · delivery: `python3 .agent/scripts/meridian_delivery.py counts`
+- [IDE adapters](.agent/IDE_ADAPTERS.md) — Antigravity native; Cursor/Claude/Codex via sync script
+- Monorepo / multi-product: `.meridian/projects.json` ([usage guide](.agent/references/usage-guide.md))
 
 ## Contributing · license
 
 [`CONTRIBUTING.md`](CONTRIBUTING.md) · [`SECURITY.md`](SECURITY.md) · [PolyForm Noncommercial 1.0.0](LICENSE)
 
-Feedback and issues welcome — this is an open lab, not a finished product.
+Feedback and issues welcome — open lab, not a finished product.
