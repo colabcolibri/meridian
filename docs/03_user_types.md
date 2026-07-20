@@ -26,8 +26,8 @@ blocks: [04_principles.md, 05_architecture.md, 06_database.md, 07_api_contracts.
 - **Permissions:** view planning data from SQLite, open phase docs, run kit commands exposed by the extension, edit delivery via forms that call `meridian_db_export.py --write-form`.
 - **Restrictions:** no remote sync; delivery writes go through kit scripts (not hand-edited `docs/us/*.md` in v11).
 - **Session:** no authenticated session.
-- **Visible data:** workspace files, planning export, validator status.
-- **Edge cases:** missing `meridian.db` (run `bootstrap_meridian_db.py`), stale webview after external CLI edits (refresh board).
+- **Visible data:** workspace files, planning export, validator status; **Board** shows derived columns from `status`, `ready`, and tests fields (see `05_architecture.md`).
+- **Edge cases:** missing `meridian.db` (run `bootstrap_meridian_db.py`), stale webview after external CLI edits (refresh board); new US after `/create-us` appears in 📋 Backlog until `/refine-us` sets `ready: true` (📌 Todo).
 
 ## AI agent (kit actor)
 

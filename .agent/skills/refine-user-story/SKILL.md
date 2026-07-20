@@ -30,6 +30,8 @@ python3 .agent/scripts/meridian_delivery.py set-ready US-0115 --ready true
 
 Never Write `docs/us/`. No `generate-board-json` — upsert records `board_snapshots`.
 
+When checklist passes and `ready: true`, the US moves to **📌 Todo** on the board while `status` stays `❌` until implement/close.
+
 ## Procedure
 
 1. Read guides, checklist, US `--full`, architecture sections.

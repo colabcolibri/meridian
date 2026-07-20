@@ -4,6 +4,13 @@ All notable changes to the **Meridian** VS Code extension (`meridian-vscode`).
 
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [Unreleased]
+
+### Changed
+
+- **Board:** 📋 Backlog and 📌 Todo columns derived from `ready` + `status: ❌`; **🚫 Deprecated** status and toggle; column header icons; `BOARD_STATE_VERSION` 12 (US-0159)
+- **Bundled kit:** protocol docs for board vs frontmatter (`MERIDIAN.md`, artifact reference, backlog-refiner, skills)
+
 ## [1.1.27] - 2026-07-19
 
 ### Added

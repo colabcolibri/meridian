@@ -25,7 +25,7 @@
 
 Today the Process Manager opens the repo and cannot see delivery state without querying many SQLite rows and mentally grouping them by release. This epic adds a monitor in the VS Code extension: Deliverables and Board read from `.meridian/meridian.db` via planning export — `board_snapshots` on upsert, never `board.json` on disk.
 
-The manager filters by version and epic, sees ❌/🔶/✅ in one place, and uses that view in planning sessions. No manual column maintenance, no orphan IDs.
+The manager filters by version and epic, sees backlog/todo (from `ready`), status symbols, and progress in one place. No manual column maintenance, no orphan IDs.
 
 ## Expected outcome
 

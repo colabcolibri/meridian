@@ -42,6 +42,8 @@ This folder is the **source of truth for phase documents** of the Meridian kit +
 
 There is **no** `docs/us/`, `docs/epics/`, or `docs/kanban/board.json`. Board reads SQLite via `meridian_db_export.py --format planning`.
 
+**Board columns (computed in the extension, not DB fields):** 📋 Backlog (`status: ❌`, `ready: false`) · 📌 Todo (`ready: true`, still `❌`) · 🔶 Partial · 🧪 Tests · ✅ Done · toggles 🧊 Frozen · 🚫 Deprecated. Detail: [05_architecture.md](05_architecture.md) and [.agent/MERIDIAN.md](../.agent/MERIDIAN.md) status rules.
+
 ## Work order
 
 | Phase                | Where                             | Axis     |

@@ -75,7 +75,7 @@ Velocity / burndown   →   não usados (capacidade = julgamento + Must + deps)
 | Sprint | SQLite `sprints` | Optional; `stories` order = sprint priority |
 | Product backlog | `user_stories` + epics | Manager orders via sprint scope + MoSCoW |
 | Sprint backlog | Sprint `stories` + active sprint | New work mid-sprint → backlog, not silent scope creep |
-| Kanban board | Extension reads `meridian_db_export --format planning` | `board_snapshots` on upsert — never `board.json` |
+| Kanban board | Extension reads `meridian_db_export --format planning` | Columns derived: 📋 Backlog (`❌` + `ready: false`), 📌 Todo (`❌` + `ready: true`), then status/tests; toggles 🧊/🚫 — never `board.json` |
 | Definition of Done | `04_principles.md` + `/complete-us` | Global DoD in principles; CA per US in Intent |
 | Story points / velocity | — | Not in Meridian (simplicity) |
 

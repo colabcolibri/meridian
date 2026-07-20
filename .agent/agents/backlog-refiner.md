@@ -41,6 +41,19 @@ Epics → `product-owner` + `/create-epic`. Do not create epics here.
 
 Ensure user stories, dependencies, and statuses in SQLite stay consistent. The extension board reads the DB — never edit JSON by hand.
 
+## Board view (extension only)
+
+Agents **do not** set column names or header emojis (📋, 📌, etc.). They set **`status`** and **`ready`**; the board computes columns:
+
+| Board column | Agent sets |
+| ------------ | ---------- |
+| 📋 Backlog | `status: ❌`, `ready: false` (typical after `/create-us`) |
+| 📌 Todo | `status: ❌`, `ready: true` (after `/refine-us`, before implement) |
+| 🔶 Partial | `status: 🔶` (+ `Missing:` in acceptance when applicable) |
+| 🧊 Frozen / 🚫 Deprecated | `status: 🧊` or `🚫` — not implementable without manager waiver |
+
+Tests / Done columns follow `tests`, `tests_status`, and `status: ✅` as today.
+
 ---
 
 ## Status transitions
@@ -51,6 +64,8 @@ Ensure user stories, dependencies, and statuses in SQLite stay consistent. The e
 | 🔶 | ✅ | All `Missing:` resolved + evidence + `## Record` + `tests_status: done` if required |
 | ❌ | ✅ | Full evidence + implementation summary |
 | any | ✅ | All `depends_on` US are ✅ |
+| any | 🧊 | Manager pauses for this version — not `/implement-us` |
+| any | 🚫 | Won't implement — superseded or cancelled slice |
 
 ---
 

@@ -130,7 +130,7 @@ export const MERIDIAN_COMMAND_CATALOG: CommandHelpEntry[] = [
     details: [
       "Use the board to see status — edit delivery via slash commands or kit CLI.",
       "Project row (first toolbar line): active name, docs/ path, US count; dropdown when several products.",
-      "Columns: Backlog, Todo, Partial, Tests, Done; toggles for Frozen and Deprecated.",
+      "Columns: 📋 Backlog · 📌 Todo · 🔶 Partial · 🧪 Tests · ✅ Done (from status + ready); toggles 🧊 Frozen · 🚫 Deprecated.",
       "Click a card to open HTML preview; Edit opens a structured form backed by SQLite.",
     ],
     icon: "$(layout)",

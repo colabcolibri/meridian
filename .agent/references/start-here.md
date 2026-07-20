@@ -228,6 +228,8 @@ Reference section — open when you need the detail on a specific file's fields 
 | `tests` | `required` — must pass · `none` — explicitly skipped (document why) |
 | `tests_status` | `pending` · `done` · `n/a` |
 
+**Board (extension):** agents write `status` and `ready` only. The IDE derives 📋 Backlog / 📌 Todo from `❌` + `ready`; other columns from `status`, tests fields, and toggles — see [artifact-reference.md](./artifact-reference.md#user-story-us-xxxx).
+
 **Body sections:**
 
 `## Intent` → `### Acceptance` (verifiable checklist), `### Why` (problem + before/after), `### Where` (position in release, deps, what it unblocks)

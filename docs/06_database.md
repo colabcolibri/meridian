@@ -205,7 +205,7 @@ Frontmatter maps to columns (`epic` → `epic_id`, `version` → `version_id`, `
 | `title` | TEXT | from frontmatter |
 | `epic_id` | TEXT FK → `epics.id` | required |
 | `version_id` | TEXT FK → `versions.id` | required |
-| `status`, `moscow`, `ready`, `done_when`, `tests`, `tests_status` | | frontmatter |
+| `status`, `moscow`, `ready`, `done_when`, `tests`, `tests_status` | | frontmatter; **`ready`** drives 📋 Backlog vs 📌 Todo on the board when `status` is ❌ |
 | `depends_on_json` | TEXT | denormalized JSON array; synced with `story_dependencies` |
 | `summary` | TEXT | read first; 4–8 sentences after `/complete-us` |
 | `body_markdown` | TEXT | **full US file** — canonical round-trip |
@@ -297,7 +297,7 @@ Composite PK `(sprint_id, story_id)`. Not every US appears here — only US assi
 
 ### `board_snapshots`
 
-Append-only kanban card payloads (`source`: `import` | `upsert`). v11 no longer writes `docs/kanban/board.json`.
+Append-only kanban card payloads (`source`: `import` | `upsert`). v11 no longer writes `docs/kanban/board.json`. Column layout in the Board webview is **derived** at read time (`status` + `ready` + tests) — not stored as a column id.
 
 ### `schema_migrations`
 

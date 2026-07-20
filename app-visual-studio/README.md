@@ -116,7 +116,7 @@ In **chat**:
 | Concepts | **Meridian: Open Start Here** |
 | Situations | **Meridian: Open Usage Guide** |
 | Slash commands | **Meridian: Open Agents Help** |
-| Kanban | **Meridian: Open Board** |
+| Kanban | **Meridian: Open Board** — columns 📋 Backlog · 📌 Todo (from `ready` + `status: ❌`), 🔶 Partial, 🧪 Tests, ✅ Done; toggles 🧊 · 🚫 |
 | Planning | **Open Versions**, **Open Sprints**, **Open Epics**, **Open Decisions** |
 | Validate project | **Meridian: Validate Project** (needs `python3`) |
 | Multi-product | **Meridian: Select Active Project** |

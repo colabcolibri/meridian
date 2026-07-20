@@ -41,6 +41,8 @@ EOF
 
 Never Write `docs/us/` or `docs/kanban/board.json`. Upsert records `board_snapshots` automatically.
 
+After create, the US appears in **📋 Backlog** on the extension board (`ready: false`, `status: ❌`). Do not write board column names in the US body — only `status` and `ready`.
+
 ## Preconditions (hard gate)
 
 | Doc | Required status |

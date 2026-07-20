@@ -201,6 +201,8 @@ Details: [scrum-meridian-map.md](./scrum-meridian-map.md).
 
 Board refreshes when `.meridian/meridian.db` changes (extension) or after any `meridian_delivery.py` upsert (`board_snapshots`).
 
+**Column model:** the board does not store column ids in SQLite. 📋 **Backlog** = `status: ❌` and `ready: false` (after `/create-us`); 📌 **Todo** = same status with `ready: true` (after `/refine-us`); **Partial** = `status: 🔶`; **Frozen** / **Deprecated** = `🧊` / `🚫` with toolbar toggles. Agents edit `status` and `ready` only.
+
 ---
 
 ## Investigate how something works

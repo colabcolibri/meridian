@@ -42,7 +42,7 @@ output lands in   →  docs/ + .meridian/meridian.db
 3. **Meridian: Install Harness** — copies `.agent/` (agents, skills, workflows).
 4. In chat: **`/init-meridian`** if `docs/` does not exist yet.
 5. Brownfield: then **`/document-project`** (documents code — no US for legacy).
-6. **Meridian: Open Board** — reads `.meridian/meridian.db`.
+6. **Meridian: Open Board** — reads `.meridian/meridian.db`. Columns are **not** separate fields: 📋 Backlog = `ready: false` + `status: ❌`; 📌 Todo = `ready: true` + `status: ❌`; agents only edit `status` and `ready` in chat/CLI.
 
 Optional anytime: **`/audit-docs`** — gap report on phase docs.
 

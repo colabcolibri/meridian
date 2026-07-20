@@ -67,7 +67,7 @@ Flat — hierarchy via background contrast (`sideBar-background` vs `editor-back
 
 | Surface | Location | Showcase |
 | ------- | -------- | -------- |
-| Kanban card | `board-webview-html.ts` | planned |
+| Kanban card | `board-webview-html.ts` | Columns: 📋 Backlog · 📌 Todo · 🔶 · 🧪 · ✅; toggles 🧊/🚫; cards show id/title/epic (not a stored “column” field) |
 | Planning toolbar | `webview-project-context.ts` + common CSS | planned |
 | Markdown viewer | `delivery-viewer-html.ts` + `markdown-content-styles.ts` | planned |
 | Accordion block | `webview-common.ts` `.block` | planned |
@@ -93,7 +93,7 @@ Flat — hierarchy via background contrast (`sideBar-background` vs `editor-back
 - Focus visible via `--vscode-focusBorder` on interactive elements.
 - Contrast: inherit VS Code theme (AA assumed for built-in themes).
 - Keyboard: webview buttons and links reachable; no keyboard traps in accordions.
-- Status badges: not color-only — include text/symbol (❌/🔶/✅).
+- Status badges: not color-only — include text/symbol (❌/🔶/✅/🧊/🚫 on forms; board headers use 📋/📌 for Backlog/Todo).
 
 ## Showcase catalog
 

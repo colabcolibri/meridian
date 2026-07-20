@@ -359,7 +359,7 @@ These are **not** agents. They read the **active** `docs/` in the editor (extens
 
 | Group | Command | Purpose |
 | ----- | ------- | ------- |
-| Views | **Open Board**, **Open Versions**, **Open Sprints**, **Open Epics**, **Open Decisions** | Read-only planning UI + decision log; **Project** row in toolbar shows name + `docs/` path |
+| Views | **Open Board**, **Open Versions**, **Open Sprints**, **Open Epics**, **Open Decisions** | Board: 📋 Backlog · 📌 Todo · 🔶 Partial · 🧪 Tests · ✅ Done (from `status` + `ready` + tests); toggles 🧊 Frozen · 🚫 Deprecated. Other tabs read-only; **Project** row shows name + `docs/` path |
 | Governance | **Select Active Project**, **Validate Project**, **Sync Board**, **Show Workspace Status** | Switch product (saved); validate `packageRoot`; board JSON; list all projects |
 | Help | **Open Command Help**, **Open Agents Help** | Extension catalog; kit `agents-help.md` at runtime |
 
