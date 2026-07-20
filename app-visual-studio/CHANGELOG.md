@@ -4,7 +4,7 @@ All notable changes to the **Meridian** VS Code extension (`meridian-vscode`).
 
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
-## [Unreleased]
+## [1.1.28] - 2026-07-20
 
 ### Changed
 
