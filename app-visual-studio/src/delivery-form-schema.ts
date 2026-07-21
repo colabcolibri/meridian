@@ -4,6 +4,7 @@ export type FormCatalogEntry = {
   id: string
   title: string
   status?: string
+  version?: string
 }
 
 export type FormCatalog = {

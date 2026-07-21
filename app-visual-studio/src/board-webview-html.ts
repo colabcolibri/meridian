@@ -1,6 +1,7 @@
 import * as crypto from "node:crypto"
 
 import type { EpicSummary } from "./load-epics.js"
+import type { SprintSummary } from "./load-sprints.js"
 import type { VersionSummary } from "./load-versions.js"
 import type { UserStory } from "./domain/types.js"
 import { compactStoryNarrative } from "./domain/story-narrative.js"
@@ -19,6 +20,7 @@ export type BoardWebviewPayload = {
   stories: UserStory[]
   epics: EpicSummary[]
   versions: VersionSummary[]
+  sprints: SprintSummary[]
   defaultVersions: string[]
   context: WebviewProjectContext
   loadWarning?: string | null
@@ -28,6 +30,7 @@ export function buildBoardPayload(
   stories: UserStory[],
   epics: EpicSummary[],
   versions: VersionSummary[],
+  sprints: SprintSummary[] = [],
 ): BoardWebviewPayload {
   const storyVersionIds = new Set(stories.map((s) => s.version))
   const filteredVersions = versions.filter((v) => storyVersionIds.has(v.id))
@@ -35,6 +38,7 @@ export function buildBoardPayload(
     stories,
     epics,
     versions: filteredVersions,
+    sprints,
     defaultVersions: allSelectedVersionIds(filteredVersions.map((v) => v.id)),
   }
 }
@@ -166,6 +170,17 @@ export function boardKanbanHtml(payload: BoardWebviewPayload): string {
     .card:hover { border-color: var(--vscode-focusBorder); }
     .card-id { font-weight: 600; font-size: 11px; }
     .card-title { font-size: 12px; margin-top: 4px; line-height: 1.35; }
+    .card-sprint {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 600;
+      margin-top: 6px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: var(--vscode-badge-foreground);
+      background: var(--vscode-badge-background);
+      border: 1px solid var(--vscode-contrastBorder, var(--vscode-panel-border));
+    }
     .card-narrative {
       font-size: 10px;
       color: var(--vscode-descriptionForeground);
@@ -200,6 +215,131 @@ export function boardKanbanHtml(payload: BoardWebviewPayload): string {
       background: var(--vscode-input-background);
       color: var(--vscode-foreground);
     }
+    .chip.filter-open.on {
+      background: var(--vscode-button-secondaryBackground, var(--vscode-input-background));
+      color: var(--vscode-button-secondaryForeground, var(--vscode-foreground));
+      border-color: var(--vscode-focusBorder);
+    }
+    .filter-sheet {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: flex-end;
+      align-items: stretch;
+      overflow: hidden;
+    }
+    .filter-sheet[hidden] { display: none; }
+    .filter-sheet-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.35);
+    }
+    .filter-sheet-panel {
+      position: relative;
+      width: min(300px, 100%);
+      max-width: 100vw;
+      height: 100%;
+      background: var(--vscode-sideBar-background);
+      border-left: 1px solid var(--vscode-panel-border);
+      display: flex;
+      flex-direction: column;
+      box-shadow: -6px 0 28px rgba(0, 0, 0, 0.2);
+      overflow: hidden;
+    }
+    .filter-sheet-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--vscode-panel-border);
+      flex-shrink: 0;
+      background: var(--vscode-editor-background);
+    }
+    .filter-sheet-header h2 {
+      margin: 0;
+      font-size: 13px;
+      font-weight: 600;
+      flex: 1;
+      min-width: 0;
+    }
+    .filter-sheet-header-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      flex-shrink: 0;
+      justify-content: flex-end;
+    }
+    .filter-sheet-cols {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      min-height: 0;
+      min-width: 0;
+      overflow: hidden;
+    }
+    .filter-col {
+      flex: 1 1 0;
+      min-height: 0;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--vscode-panel-border);
+      background: var(--vscode-sideBar-background);
+      overflow: hidden;
+    }
+    .filter-col:last-child {
+      border-bottom: none;
+    }
+    .filter-col-head {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--vscode-descriptionForeground);
+      flex-shrink: 0;
+    }
+    .filter-col-actions {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: stretch;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+    .filter-col-actions .chip {
+      flex: 1 1 0;
+      min-width: 0;
+      width: auto;
+      max-width: 100%;
+      text-align: center;
+      margin: 0;
+      box-sizing: border-box;
+    }
+    .filter-list {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      flex: 1;
+      min-height: 0;
+      min-width: 0;
+      overflow-x: hidden;
+      overflow-y: auto;
+      margin: 0;
+      gap: 4px;
+      -webkit-overflow-scrolling: touch;
+    }
+    .filter-list .chip {
+      width: 100%;
+      max-width: 100%;
+      text-align: left;
+      margin: 0;
+      box-sizing: border-box;
+      flex-shrink: 0;
+    }
     ${PROJECT_CONTEXT_STYLES}
   </style>
 </head>
@@ -207,16 +347,7 @@ export function boardKanbanHtml(payload: BoardWebviewPayload): string {
   <div class="toolbar">
     ${projectContextToolbarHtml(payload.context)}
     <div class="toolbar-row">
-      <span class="toolbar-label">Version</span>
-      <button type="button" class="chip" id="version-all">All</button>
-      <button type="button" class="chip" id="version-none">None</button>
-      <div id="version-chips" class="chip-group"></div>
-    </div>
-    <div class="toolbar-row">
-      <span class="toolbar-label">Epic</span>
-      <button type="button" class="chip" id="epic-all">All</button>
-      <button type="button" class="chip" id="epic-none">None</button>
-      <div id="epic-chips" class="chip-group"></div>
+      <button type="button" class="chip filter-open" id="open-filters" aria-expanded="false">Filtros</button>
       <span class="count" id="summary"></span>
     </div>
     <div class="toolbar-row">
@@ -227,6 +358,44 @@ export function boardKanbanHtml(payload: BoardWebviewPayload): string {
       <button type="button" class="chip" id="narrative-toggle" aria-pressed="false">Show narrative</button>
     </div>
   </div>
+  <div id="filter-sheet" class="filter-sheet" hidden aria-hidden="true">
+    <div class="filter-sheet-backdrop" id="filter-sheet-backdrop"></div>
+    <div class="filter-sheet-panel" role="dialog" aria-labelledby="filter-sheet-title">
+      <div class="filter-sheet-header">
+        <h2 id="filter-sheet-title">Filtros</h2>
+        <div class="filter-sheet-header-actions">
+          <button type="button" class="chip" id="reset-filters">Resetar</button>
+          <button type="button" class="chip" id="close-filters">Fechar</button>
+        </div>
+      </div>
+      <div class="filter-sheet-cols">
+        <div class="filter-col" data-filter="version">
+          <div class="filter-col-head">Versão</div>
+          <div class="filter-col-actions">
+            <button type="button" class="chip" id="version-all">All</button>
+            <button type="button" class="chip" id="version-none">None</button>
+          </div>
+          <div id="version-chips" class="filter-list"></div>
+        </div>
+        <div class="filter-col" data-filter="sprint">
+          <div class="filter-col-head">Sprint</div>
+          <div class="filter-col-actions">
+            <button type="button" class="chip" id="sprint-all">All</button>
+            <button type="button" class="chip" id="sprint-none">None</button>
+          </div>
+          <div id="sprint-chips" class="filter-list"></div>
+        </div>
+        <div class="filter-col" data-filter="epic">
+          <div class="filter-col-head">Épico</div>
+          <div class="filter-col-actions">
+            <button type="button" class="chip" id="epic-all">All</button>
+            <button type="button" class="chip" id="epic-none">None</button>
+          </div>
+          <div id="epic-chips" class="filter-list"></div>
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="board-wrap"><div id="board" class="board"></div></div>
   <script nonce="${nonce}">
     const vscode = acquireVsCodeApi();
@@ -234,7 +403,8 @@ export function boardKanbanHtml(payload: BoardWebviewPayload): string {
     ${PROJECT_CONTEXT_SCRIPT}
     wireProjectContext(payload.context);
     ${PAGINATION_SCRIPT}
-    const BOARD_STATE_VERSION = 12;
+    const BOARD_STATE_VERSION = 13;
+    const SPRINT_NONE = "__none__";
     const COLUMN_ORDER = ["backlog", "todo", "🔶", "🧪", "✅", "🧊", "🚫"];
     const ALWAYS_VISIBLE = ["backlog", "todo", "🔶", "🧪", "✅"];
     const COLUMN_HEADER_LABELS = {
@@ -262,29 +432,24 @@ export function boardKanbanHtml(payload: BoardWebviewPayload): string {
     const saved = vscode.getState() || {};
     const freshState = saved.stateVersion !== BOARD_STATE_VERSION;
     let selectedVersions = new Set(
-      !freshState && saved.selectedVersions && saved.selectedVersions.length
+      !freshState && Array.isArray(saved.selectedVersions)
         ? saved.selectedVersions
         : payload.defaultVersions,
     );
-    let selectedEpics = !freshState && saved.selectedEpics && saved.selectedEpics.length
-      ? new Set(saved.selectedEpics)
-      : null;
+    let selectedEpics =
+      !freshState && Array.isArray(saved.selectedEpics)
+        ? new Set(saved.selectedEpics)
+        : null;
+    let selectedSprints =
+      !freshState && Array.isArray(saved.selectedSprints)
+        ? new Set(saved.selectedSprints)
+        : null;
+    let filterSheetOpen = false;
     let showFrozen = !!saved.showFrozen;
     let showDeprecated = !!saved.showDeprecated;
     let showNarrative = !!saved.showNarrative;
     let pageSize = freshState ? DEFAULT_PAGE_SIZE : normalizePageSize(saved.pageSize);
     let columnPages = freshState ? {} : (saved.columnPages || {});
-
-    function ensureVersionSelection() {
-      if (selectedVersions.size > 0) {
-        return;
-      }
-      if (payload.defaultVersions && payload.defaultVersions.length) {
-        selectedVersions = new Set(payload.defaultVersions);
-      }
-    }
-
-    ensureVersionSelection();
 
     function resolveColumn(story) {
       if (story.status === "🧊") return "🧊";
@@ -298,11 +463,49 @@ export function boardKanbanHtml(payload: BoardWebviewPayload): string {
       return b.id.localeCompare(a.id, undefined, { numeric: true });
     }
 
+    function sprintKey(story) {
+      return story.sprint || SPRINT_NONE;
+    }
+
+    function sprintLabel(key) {
+      if (key === SPRINT_NONE) return "Sem sprint";
+      return key;
+    }
+
+    function sprintTitle(key) {
+      if (key === SPRINT_NONE) return "US sem sprint atribuído";
+      const sp = (payload.sprints || []).find((s) => s.id === key);
+      return sp ? sp.id + " — " + sp.title : key;
+    }
+
+    function crossStories(exclude) {
+      return payload.stories.filter((s) => {
+        if (
+          exclude !== "version" &&
+          selectedVersions.size > 0 &&
+          !selectedVersions.has(s.version)
+        ) {
+          return false;
+        }
+        if (exclude !== "epic" && selectedEpics.size > 0 && !selectedEpics.has(s.epic)) {
+          return false;
+        }
+        if (exclude !== "sprint") {
+          const sid = sprintKey(s);
+          if (selectedSprints.size > 0 && !selectedSprints.has(sid)) {
+            return false;
+          }
+        }
+        return true;
+      });
+    }
+
     function versionItems() {
       return payload.versions.map((v) => ({
         id: v.id,
         label: v.id,
-        title: (selectedVersions.has(v.id) ? "Hide" : "Show") + " " + v.id + " — " + v.title,
+        title:
+          (selectedVersions.has(v.id) ? "Ocultar" : "Mostrar") + " " + v.id + " — " + v.title,
       }));
     }
 
@@ -315,22 +518,64 @@ export function boardKanbanHtml(payload: BoardWebviewPayload): string {
       return epicsInScope(scoped).map((e) => e.id);
     }
 
+    function sprintIdsInScope(scoped) {
+      const ids = new Set(scoped.map((s) => sprintKey(s)));
+      return [...ids].sort((a, b) => {
+        if (a === SPRINT_NONE) return 1;
+        if (b === SPRINT_NONE) return -1;
+        return a.localeCompare(b, undefined, { numeric: true });
+      });
+    }
+
     function storiesInVersionScope() {
       if (selectedVersions.size === 0) return [];
       return payload.stories.filter((s) => selectedVersions.has(s.version));
     }
 
-    function ensureEpicSelection(scoped) {
+    function storiesInVersionEpicScope() {
+      if (selectedVersions.size === 0 || selectedEpics.size === 0) return [];
+      return payload.stories.filter(
+        (s) => selectedVersions.has(s.version) && selectedEpics.has(s.epic),
+      );
+    }
+
+    function pruneEpicSelection(scoped) {
       const epicIds = epicIdsInScope(scoped);
-      if (selectedEpics === null || selectedEpics.size === 0) {
+      if (selectedEpics === null) {
         selectedEpics = new Set(epicIds);
         return;
       }
+      if (selectedEpics.size === 0) {
+        return;
+      }
       selectedEpics = new Set([...selectedEpics].filter((id) => epicIds.includes(id)));
-      if (selectedEpics.size === 0 && epicIds.length) {
-        selectedEpics = new Set(epicIds);
+    }
+
+    function pruneSprintSelection(scoped) {
+      const sprintIds = sprintIdsInScope(scoped);
+      if (selectedSprints === null) {
+        selectedSprints = new Set(sprintIds);
+        return;
+      }
+      if (selectedSprints.size === 0) {
+        return;
+      }
+      selectedSprints = new Set([...selectedSprints].filter((id) => sprintIds.includes(id)));
+    }
+
+    function pruneFilterSelections() {
+      if (selectedVersions.size > 0) {
+        pruneEpicSelection(storiesInVersionScope());
+      }
+      if (selectedVersions.size > 0 && selectedEpics.size > 0) {
+        pruneSprintSelection(storiesInVersionEpicScope());
       }
     }
+
+    if (selectedVersions.size === 0 && freshState && payload.defaultVersions?.length) {
+      selectedVersions = new Set(payload.defaultVersions);
+    }
+    pruneFilterSelections();
 
     function colKey(col) {
       return COL_STORAGE_KEY[col] || col;
@@ -442,9 +687,11 @@ export function boardKanbanHtml(payload: BoardWebviewPayload): string {
         const meta =
           s.epic +
           (showVer ? " · " + s.version : "") +
-          (s.sprint ? " · " + s.sprint : "") +
           " · " +
           s.moscow;
+        const sprintHtml = s.sprint
+          ? '<div class="card-sprint" title="Sprint">' + esc(s.sprint) + "</div>"
+          : "";
         const narrativeHtml =
           showNarrative && s.narrative
             ? '<div class="card-narrative">' + esc(s.narrative) + "</div>"
@@ -455,6 +702,7 @@ export function boardKanbanHtml(payload: BoardWebviewPayload): string {
           '</div><div class="card-title">' +
           esc(s.title) +
           "</div>" +
+          sprintHtml +
           narrativeHtml +
           '<div class="card-meta">' +
           esc(meta) +
@@ -507,27 +755,38 @@ export function boardKanbanHtml(payload: BoardWebviewPayload): string {
     }
 
     function filteredStories() {
-      if (selectedVersions.size === 0 || selectedEpics.size === 0) return [];
-      return payload.stories.filter(
-        (s) => selectedVersions.has(s.version) && selectedEpics.has(s.epic),
-      );
+      if (
+        selectedVersions.size === 0 ||
+        selectedEpics.size === 0 ||
+        selectedSprints.size === 0
+      ) {
+        return [];
+      }
+      return payload.stories.filter((s) => {
+        if (!selectedVersions.has(s.version)) return false;
+        if (!selectedEpics.has(s.epic)) return false;
+        if (!selectedSprints.has(sprintKey(s))) return false;
+        return true;
+      });
     }
 
     function wireAllNone(allBtn, noneBtn, allOn, noneOn, disabled, onAll, onNone) {
       allBtn.className = "chip" + (allOn ? " on" : "");
-      allBtn.disabled = disabled || allOn;
+      allBtn.disabled = !!disabled;
       allBtn.onclick = onAll;
       noneBtn.className = "chip" + (noneOn ? " on" : "");
-      noneBtn.disabled = disabled || noneOn;
+      noneBtn.disabled = !!disabled;
       noneBtn.onclick = onNone;
     }
 
-    function renderChipGroup(root, items, selected, disabled, onToggle) {
+    function renderChipGroup(root, items, selected, disabled, onToggle, allSelected) {
       root.innerHTML = "";
+      const hideItemOn = !!allSelected;
       for (const item of items) {
         const b = document.createElement("button");
         b.type = "button";
-        b.className = "chip" + (selected.has(item.id) ? " on" : "");
+        const isOn = selected.has(item.id) && !hideItemOn;
+        b.className = "chip" + (isOn ? " on" : "");
         b.textContent = item.label;
         b.title = item.title || item.label;
         b.disabled = disabled;
@@ -536,7 +795,38 @@ export function boardKanbanHtml(payload: BoardWebviewPayload): string {
       }
     }
 
-    function renderToolbar() {
+    function afterFilterChange() {
+      pruneFilterSelections();
+      resetColumnPages();
+      persist();
+      renderAll();
+    }
+
+    function setFilterSheetOpen(open) {
+      filterSheetOpen = open;
+      const sheet = document.getElementById("filter-sheet");
+      const openBtn = document.getElementById("open-filters");
+      sheet.hidden = !open;
+      sheet.setAttribute("aria-hidden", open ? "false" : "true");
+      openBtn.classList.toggle("on", open);
+      openBtn.setAttribute("aria-expanded", open ? "true" : "false");
+    }
+
+    function resetFilters() {
+      selectedVersions = new Set(payload.versions.map((v) => v.id));
+      selectedEpics = new Set(epicIdsInScope(payload.stories));
+      selectedSprints = new Set(sprintIdsInScope(payload.stories));
+      afterFilterChange();
+    }
+
+    function wireFilterSheet() {
+      document.getElementById("open-filters").onclick = () => setFilterSheetOpen(true);
+      document.getElementById("reset-filters").onclick = () => resetFilters();
+      document.getElementById("close-filters").onclick = () => setFilterSheetOpen(false);
+      document.getElementById("filter-sheet-backdrop").onclick = () => setFilterSheetOpen(false);
+    }
+
+    function renderFilterColumns() {
       const versionItemsList = versionItems();
       const allVersionsOn =
         versionItemsList.length > 0 && versionItemsList.every((v) => selectedVersions.has(v.id));
@@ -550,15 +840,11 @@ export function boardKanbanHtml(payload: BoardWebviewPayload): string {
         false,
         () => {
           selectedVersions = new Set(versionItemsList.map((v) => v.id));
-          resetColumnPages();
-          persist();
-          renderAll();
+          afterFilterChange();
         },
         () => {
           selectedVersions = new Set();
-          resetColumnPages();
-          persist();
-          renderAll();
+          afterFilterChange();
         },
       );
       renderChipGroup(
@@ -569,15 +855,12 @@ export function boardKanbanHtml(payload: BoardWebviewPayload): string {
         (id) => {
           if (selectedVersions.has(id)) selectedVersions.delete(id);
           else selectedVersions.add(id);
-          resetColumnPages();
-          persist();
-          renderAll();
+          afterFilterChange();
         },
+        allVersionsOn,
       );
 
-      const scoped = storiesInVersionScope();
-      ensureEpicSelection(scoped);
-      const epicItems = epicsInScope(scoped).map((e) => ({
+      const epicItems = epicsInScope(crossStories("epic")).map((e) => ({
         id: e.id,
         label: e.id,
         title: e.title,
@@ -594,15 +877,11 @@ export function boardKanbanHtml(payload: BoardWebviewPayload): string {
         noVersionsOn,
         () => {
           selectedEpics = new Set(epicItems.map((e) => e.id));
-          resetColumnPages();
-          persist();
-          renderAll();
+          afterFilterChange();
         },
         () => {
           selectedEpics = new Set();
-          resetColumnPages();
-          persist();
-          renderAll();
+          afterFilterChange();
         },
       );
       renderChipGroup(
@@ -613,16 +892,59 @@ export function boardKanbanHtml(payload: BoardWebviewPayload): string {
         (id) => {
           if (selectedEpics.has(id)) selectedEpics.delete(id);
           else selectedEpics.add(id);
-          resetColumnPages();
-          persist();
-          renderAll();
+          afterFilterChange();
+        },
+        allEpicsOn,
+      );
+
+      const sprintItems = sprintIdsInScope(crossStories("sprint")).map((id) => ({
+        id,
+        label: sprintLabel(id),
+        title: sprintTitle(id),
+      }));
+      const allSprintsOn =
+        sprintItems.length > 0 && sprintItems.every((s) => selectedSprints.has(s.id));
+      const noSprintsOn = selectedSprints.size === 0;
+      const sprintDisabled = noVersionsOn || noEpicsOn;
+
+      wireAllNone(
+        document.getElementById("sprint-all"),
+        document.getElementById("sprint-none"),
+        allSprintsOn,
+        noSprintsOn,
+        sprintDisabled,
+        () => {
+          selectedSprints = new Set(sprintItems.map((s) => s.id));
+          afterFilterChange();
+        },
+        () => {
+          selectedSprints = new Set();
+          afterFilterChange();
         },
       );
+      renderChipGroup(
+        document.getElementById("sprint-chips"),
+        sprintItems,
+        selectedSprints,
+        sprintDisabled,
+        (id) => {
+          if (selectedSprints.has(id)) selectedSprints.delete(id);
+          else selectedSprints.add(id);
+          afterFilterChange();
+        },
+        allSprintsOn,
+      );
+    }
+
+    function renderToolbar() {
+      renderFilterColumns();
 
       const toggleLabel = (on, noun, n) => {
         const base = (on ? "Hide " : "Show ") + noun;
         return n > 0 ? base + " (" + n + ")" : base;
       };
+
+      const scoped = filteredStories();
 
       const frozenBtn = document.getElementById("frozen-toggle");
       const frozenN = scoped.filter((s) => resolveColumn(s) === "🧊").length;
@@ -664,12 +986,13 @@ export function boardKanbanHtml(payload: BoardWebviewPayload): string {
       const summary = document.getElementById("summary");
       summary.textContent =
         selectedVersions.size +
-        " version(s) · " +
+        " versão(ões) · " +
         selectedEpics.size +
-        " epic(s) · " +
+        " épico(s) · " +
+        selectedSprints.size +
+        " sprint(s) · " +
         list.length +
-        " stor" +
-        (list.length === 1 ? "y" : "ies");
+        " US";
 
       renderPageSizeSelect();
     }
@@ -678,12 +1001,17 @@ export function boardKanbanHtml(payload: BoardWebviewPayload): string {
       const root = document.getElementById("board");
       if (selectedVersions.size === 0) {
         root.innerHTML =
-          '<p class="empty">No versions selected — choose All or pick versions to show</p>';
+          '<p class="empty">Nenhuma versão selecionada — abra Filtros e escolha All ou versões</p>';
         return;
       }
       if (selectedEpics.size === 0) {
         root.innerHTML =
-          '<p class="empty">No epics selected — choose All or pick epics to show</p>';
+          '<p class="empty">Nenhum épico selecionado — abra Filtros e escolha All ou épicos</p>';
+        return;
+      }
+      if (selectedSprints.size === 0) {
+        root.innerHTML =
+          '<p class="empty">Nenhum sprint selecionado — abra Filtros e escolha All ou sprints</p>';
         return;
       }
 
@@ -704,6 +1032,7 @@ export function boardKanbanHtml(payload: BoardWebviewPayload): string {
         stateVersion: BOARD_STATE_VERSION,
         selectedVersions: [...selectedVersions],
         selectedEpics: selectedEpics ? [...selectedEpics] : [],
+        selectedSprints: selectedSprints ? [...selectedSprints] : [],
         showFrozen,
         showDeprecated,
         showNarrative,
@@ -715,8 +1044,10 @@ export function boardKanbanHtml(payload: BoardWebviewPayload): string {
     function renderAll() {
       renderToolbar();
       renderBoard();
+      setFilterSheetOpen(filterSheetOpen);
     }
 
+    wireFilterSheet();
     renderAll();
   </script>
 </body>

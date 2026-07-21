@@ -135,3 +135,35 @@ def extract_sprint_sections(body: str) -> dict[str, str | None]:
         "out_of_scope": extract_section_body(body, "Out of scope for this sprint"),
         "retrospective": extract_section_body(body, "Retrospective"),
     }
+
+
+def format_delivery_frontmatter(frontmatter: dict[str, str]) -> str:
+    lines = ["---"]
+    for key, value in frontmatter.items():
+        if value is None:
+            continue
+        text = str(value).strip()
+        if not text and key == "sprint":
+            continue
+        if not text:
+            lines.append(f"{key}:")
+            continue
+        if any(ch in text for ch in ' "\n') or text.startswith("["):
+            escaped = text.replace("\\", "\\\\").replace('"', '\\"')
+            lines.append(f'{key}: "{escaped}"')
+        else:
+            lines.append(f"{key}: {text}")
+    lines.append("---")
+    return "\n".join(lines)
+
+
+def merge_us_sprint_into_markdown(body_markdown: str, sprint_id: str | None) -> str:
+    """Inject sprint_id from SQLite into US export frontmatter (display-only; body unchanged)."""
+    fm, body, _ = read_markdown_text(body_markdown)
+    if not fm and not sprint_id:
+        return body_markdown
+    if sprint_id:
+        fm["sprint"] = sprint_id
+    else:
+        fm.pop("sprint", None)
+    return f"{format_delivery_frontmatter(fm)}\n{body.lstrip()}"

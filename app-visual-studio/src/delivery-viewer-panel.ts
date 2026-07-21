@@ -164,7 +164,15 @@ export class DeliveryViewerPanel {
     }
 
     const { frontmatter, body } = parseDeliveryMarkdown(this.savedMarkdown)
-    const title = frontmatter.title || frontmatter.id || parsed.id
+    const displayFrontmatter = { ...frontmatter }
+    if (
+      parsed.folder === "us" &&
+      this.formState?.frontmatter.sprint &&
+      !displayFrontmatter.sprint
+    ) {
+      displayFrontmatter.sprint = this.formState.frontmatter.sprint
+    }
+    const title = displayFrontmatter.title || displayFrontmatter.id || parsed.id
     this.panel.title = title
 
     if (this.mode === "form" && this.formState) {
@@ -185,7 +193,7 @@ export class DeliveryViewerPanel {
       relativePath: this.relativePath,
       entityLabel: deliveryEntityLabel(parsed.folder),
       folder: parsed.folder,
-      frontmatter,
+      frontmatter: displayFrontmatter,
       bodyMarkdown: body,
       saveError: this.saveError,
       saveOk: this.saveOk,

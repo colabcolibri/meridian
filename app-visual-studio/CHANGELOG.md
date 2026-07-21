@@ -4,6 +4,24 @@ All notable changes to the **Meridian** VS Code extension (`meridian-vscode`).
 
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.1.36] - 2026-07-22
+
+### Added
+
+- **Board:** filter sidebar (version, sprint, epic) with All/None, cross-filtering, **Resetar**, and persisted filter state
+
+### Fixed
+
+- **Board:** filter None/All visual state; independent dimension clears; full version list always visible; sprint badge contrast (`badge-foreground` / `badge-background`)
+
+## [1.1.35] - 2026-07-22
+
+### Fixed
+
+- **US viewer:** sprint badge and form field reflect `sprint_id` from SQLite even when `body_markdown` frontmatter lacks `sprint:`
+- **Board:** dedicated sprint chip on kanban cards (planning export `sprint` field)
+- **US form:** sprint dropdown filtered by US version; sprint labels show version
+
 ## [1.1.34] - 2026-07-22
 
 ### Added

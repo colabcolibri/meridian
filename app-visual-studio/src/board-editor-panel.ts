@@ -78,6 +78,7 @@ export class BoardEditorPanel {
       loaded.payload.stories,
       loaded.payload.epics,
       loaded.payload.versions,
+      loaded.payload.sprints,
     )
     if (board.defaultVersions.length === 0) {
       this.panel.webview.html = emptyBoardHtml(

@@ -693,8 +693,15 @@ def fetch_delivery_form_catalog(
         for row in conn.execute("SELECT id, title FROM versions ORDER BY id")
     ]
     sprints = [
-        {"id": row["id"], "title": row["title"]}
-        for row in conn.execute("SELECT id, title FROM sprints ORDER BY id")
+        {
+            "id": row["id"],
+            "title": row["title"],
+            "status": row["status"] or "",
+            "version": row["version_id"] or "",
+        }
+        for row in conn.execute(
+            "SELECT id, title, status, version_id FROM sprints ORDER BY id"
+        )
     ]
     return {"stories": stories, "epics": epics, "versions": versions, "sprints": sprints}
 
@@ -1312,7 +1319,15 @@ def export_entity_markdown(
         raw = (row["body_markdown"] or "").strip()
         if not raw:
             return None
-        return {"id": row["id"], "entity": entity, "raw": row["body_markdown"] or ""}
+        if table == "user_stories" and _user_stories_has_sprint_column(conn):
+            from meridian_markdown_parse import merge_us_sprint_into_markdown  # noqa: PLC0415
+
+            sprint_row = conn.execute(
+                "SELECT sprint_id FROM user_stories WHERE id = ?", (entity_id,)
+            ).fetchone()
+            sprint_id = sprint_row["sprint_id"] if sprint_row else None
+            raw = merge_us_sprint_into_markdown(raw, sprint_id)
+        return {"id": row["id"], "entity": entity, "raw": raw}
     finally:
         conn.close()
 

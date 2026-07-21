@@ -43,6 +43,9 @@ function catalogLabel(
   const entry = model.form.catalog[field.catalogKey].find((item) => item.id === id)
   if (!entry) return id
   const status = entry.status ? ` · ${entry.status}` : ""
+  if (field.catalogKey === "sprints" && entry.version) {
+    return `${entry.id} — ${entry.version}${status}`
+  }
   return `${entry.id} — ${entry.title}${status}`
 }
 
@@ -82,7 +85,19 @@ function renderField(
 
   const options = selectOptionsForField(model.folder, field, model.form.catalog)
   if (options) {
-    const opts = options
+    let list = options
+    if (model.folder === "us" && field.key === "sprint" && model.form.catalog?.sprints?.length) {
+      const version = model.form.frontmatter.version
+      if (version) {
+        const allowed = new Set(
+          model.form.catalog.sprints
+            .filter((s) => !s.version || s.version === version)
+            .map((s) => s.id),
+        )
+        list = options.filter((opt) => allowed.has(opt))
+      }
+    }
+    const opts = list
       .map((opt) => {
         const label = field.catalogKey ? catalogLabel(model, field, opt) : opt
         return `<option value="${esc(opt)}"${opt === value ? " selected" : ""}>${esc(label)}</option>`
