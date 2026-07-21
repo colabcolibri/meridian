@@ -340,6 +340,35 @@ export function boardKanbanHtml(payload: BoardWebviewPayload): string {
       box-sizing: border-box;
       flex-shrink: 0;
     }
+    .filter-check {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 11px;
+      line-height: 1.35;
+      padding: 5px 4px;
+      border-radius: 4px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .filter-check:hover {
+      background: var(--vscode-list-hoverBackground, rgba(128, 128, 128, 0.12));
+    }
+    .filter-check.disabled {
+      opacity: 0.5;
+      cursor: default;
+      pointer-events: none;
+    }
+    .filter-check input {
+      margin: 2px 0 0;
+      flex-shrink: 0;
+      accent-color: var(--vscode-focusBorder);
+    }
+    .filter-check span {
+      flex: 1;
+      min-width: 0;
+      word-break: break-word;
+    }
     ${PROJECT_CONTEXT_STYLES}
   </style>
 </head>
@@ -403,7 +432,7 @@ export function boardKanbanHtml(payload: BoardWebviewPayload): string {
     ${PROJECT_CONTEXT_SCRIPT}
     wireProjectContext(payload.context);
     ${PAGINATION_SCRIPT}
-    const BOARD_STATE_VERSION = 13;
+    const BOARD_STATE_VERSION = 14;
     const SPRINT_NONE = "__none__";
     const COLUMN_ORDER = ["backlog", "todo", "🔶", "🧪", "✅", "🧊", "🚫"];
     const ALWAYS_VISIBLE = ["backlog", "todo", "🔶", "🧪", "✅"];
@@ -478,26 +507,20 @@ export function boardKanbanHtml(payload: BoardWebviewPayload): string {
       return sp ? sp.id + " — " + sp.title : key;
     }
 
-    function crossStories(exclude) {
-      return payload.stories.filter((s) => {
-        if (
-          exclude !== "version" &&
-          selectedVersions.size > 0 &&
-          !selectedVersions.has(s.version)
-        ) {
-          return false;
-        }
-        if (exclude !== "epic" && selectedEpics.size > 0 && !selectedEpics.has(s.epic)) {
-          return false;
-        }
-        if (exclude !== "sprint") {
-          const sid = sprintKey(s);
-          if (selectedSprints.size > 0 && !selectedSprints.has(sid)) {
-            return false;
-          }
-        }
-        return true;
-      });
+    function sprintFilterItems() {
+      return sprintIdsInScope(payload.stories).map((id) => ({
+        id,
+        label: sprintLabel(id),
+        title: sprintTitle(id),
+      }));
+    }
+
+    function epicFilterItems() {
+      return payload.epics.map((e) => ({
+        id: e.id,
+        label: e.id,
+        title: e.title,
+      }));
     }
 
     function versionItems() {
@@ -509,15 +532,6 @@ export function boardKanbanHtml(payload: BoardWebviewPayload): string {
       }));
     }
 
-    function epicsInScope(scoped) {
-      const ids = new Set(scoped.map((s) => s.epic));
-      return payload.epics.filter((e) => ids.has(e.id));
-    }
-
-    function epicIdsInScope(scoped) {
-      return epicsInScope(scoped).map((e) => e.id);
-    }
-
     function sprintIdsInScope(scoped) {
       const ids = new Set(scoped.map((s) => sprintKey(s)));
       return [...ids].sort((a, b) => {
@@ -527,55 +541,19 @@ export function boardKanbanHtml(payload: BoardWebviewPayload): string {
       });
     }
 
-    function storiesInVersionScope() {
-      if (selectedVersions.size === 0) return [];
-      return payload.stories.filter((s) => selectedVersions.has(s.version));
-    }
-
-    function storiesInVersionEpicScope() {
-      if (selectedVersions.size === 0 || selectedEpics.size === 0) return [];
-      return payload.stories.filter(
-        (s) => selectedVersions.has(s.version) && selectedEpics.has(s.epic),
-      );
-    }
-
-    function pruneEpicSelection(scoped) {
-      const epicIds = epicIdsInScope(scoped);
+    function ensureDefaultFilterSets() {
       if (selectedEpics === null) {
-        selectedEpics = new Set(epicIds);
-        return;
+        selectedEpics = new Set(payload.epics.map((e) => e.id));
       }
-      if (selectedEpics.size === 0) {
-        return;
-      }
-      selectedEpics = new Set([...selectedEpics].filter((id) => epicIds.includes(id)));
-    }
-
-    function pruneSprintSelection(scoped) {
-      const sprintIds = sprintIdsInScope(scoped);
       if (selectedSprints === null) {
-        selectedSprints = new Set(sprintIds);
-        return;
-      }
-      if (selectedSprints.size === 0) {
-        return;
-      }
-      selectedSprints = new Set([...selectedSprints].filter((id) => sprintIds.includes(id)));
-    }
-
-    function pruneFilterSelections() {
-      if (selectedVersions.size > 0) {
-        pruneEpicSelection(storiesInVersionScope());
-      }
-      if (selectedVersions.size > 0 && selectedEpics.size > 0) {
-        pruneSprintSelection(storiesInVersionEpicScope());
+        selectedSprints = new Set(sprintIdsInScope(payload.stories));
       }
     }
 
     if (selectedVersions.size === 0 && freshState && payload.defaultVersions?.length) {
       selectedVersions = new Set(payload.defaultVersions);
     }
-    pruneFilterSelections();
+    ensureDefaultFilterSets();
 
     function colKey(col) {
       return COL_STORAGE_KEY[col] || col;
@@ -779,24 +757,28 @@ export function boardKanbanHtml(payload: BoardWebviewPayload): string {
       noneBtn.onclick = onNone;
     }
 
-    function renderChipGroup(root, items, selected, disabled, onToggle, allSelected) {
+    function renderFilterCheckboxes(root, items, selected, disabled, onChecked) {
       root.innerHTML = "";
-      const hideItemOn = !!allSelected;
       for (const item of items) {
-        const b = document.createElement("button");
-        b.type = "button";
-        const isOn = selected.has(item.id) && !hideItemOn;
-        b.className = "chip" + (isOn ? " on" : "");
-        b.textContent = item.label;
-        b.title = item.title || item.label;
-        b.disabled = disabled;
-        b.onclick = () => onToggle(item.id);
-        root.appendChild(b);
+        const label = document.createElement("label");
+        label.className = "filter-check" + (disabled ? " disabled" : "");
+        const input = document.createElement("input");
+        input.type = "checkbox";
+        input.checked = selected.has(item.id);
+        input.disabled = !!disabled;
+        input.setAttribute("aria-label", item.title || item.label);
+        const span = document.createElement("span");
+        span.textContent = item.label;
+        span.title = item.title || item.label;
+        input.addEventListener("change", () => {
+          onChecked(item.id, input.checked);
+        });
+        label.append(input, span);
+        root.appendChild(label);
       }
     }
 
     function afterFilterChange() {
-      pruneFilterSelections();
       resetColumnPages();
       persist();
       renderAll();
@@ -814,7 +796,7 @@ export function boardKanbanHtml(payload: BoardWebviewPayload): string {
 
     function resetFilters() {
       selectedVersions = new Set(payload.versions.map((v) => v.id));
-      selectedEpics = new Set(epicIdsInScope(payload.stories));
+      selectedEpics = new Set(payload.epics.map((e) => e.id));
       selectedSprints = new Set(sprintIdsInScope(payload.stories));
       afterFilterChange();
     }
@@ -847,24 +829,19 @@ export function boardKanbanHtml(payload: BoardWebviewPayload): string {
           afterFilterChange();
         },
       );
-      renderChipGroup(
+      renderFilterCheckboxes(
         document.getElementById("version-chips"),
         versionItemsList,
         selectedVersions,
         false,
-        (id) => {
-          if (selectedVersions.has(id)) selectedVersions.delete(id);
-          else selectedVersions.add(id);
+        (id, checked) => {
+          if (checked) selectedVersions.add(id);
+          else selectedVersions.delete(id);
           afterFilterChange();
         },
-        allVersionsOn,
       );
 
-      const epicItems = epicsInScope(crossStories("epic")).map((e) => ({
-        id: e.id,
-        label: e.id,
-        title: e.title,
-      }));
+      const epicItems = epicFilterItems();
       const allEpicsOn =
         epicItems.length > 0 && epicItems.every((e) => selectedEpics.has(e.id));
       const noEpicsOn = selectedEpics.size === 0;
@@ -874,7 +851,7 @@ export function boardKanbanHtml(payload: BoardWebviewPayload): string {
         document.getElementById("epic-none"),
         allEpicsOn,
         noEpicsOn,
-        noVersionsOn,
+        false,
         () => {
           selectedEpics = new Set(epicItems.map((e) => e.id));
           afterFilterChange();
@@ -884,35 +861,29 @@ export function boardKanbanHtml(payload: BoardWebviewPayload): string {
           afterFilterChange();
         },
       );
-      renderChipGroup(
+      renderFilterCheckboxes(
         document.getElementById("epic-chips"),
         epicItems,
         selectedEpics,
-        noVersionsOn,
-        (id) => {
-          if (selectedEpics.has(id)) selectedEpics.delete(id);
-          else selectedEpics.add(id);
+        false,
+        (id, checked) => {
+          if (checked) selectedEpics.add(id);
+          else selectedEpics.delete(id);
           afterFilterChange();
         },
-        allEpicsOn,
       );
 
-      const sprintItems = sprintIdsInScope(crossStories("sprint")).map((id) => ({
-        id,
-        label: sprintLabel(id),
-        title: sprintTitle(id),
-      }));
+      const sprintItems = sprintFilterItems();
       const allSprintsOn =
         sprintItems.length > 0 && sprintItems.every((s) => selectedSprints.has(s.id));
       const noSprintsOn = selectedSprints.size === 0;
-      const sprintDisabled = noVersionsOn || noEpicsOn;
 
       wireAllNone(
         document.getElementById("sprint-all"),
         document.getElementById("sprint-none"),
         allSprintsOn,
         noSprintsOn,
-        sprintDisabled,
+        false,
         () => {
           selectedSprints = new Set(sprintItems.map((s) => s.id));
           afterFilterChange();
@@ -922,17 +893,16 @@ export function boardKanbanHtml(payload: BoardWebviewPayload): string {
           afterFilterChange();
         },
       );
-      renderChipGroup(
+      renderFilterCheckboxes(
         document.getElementById("sprint-chips"),
         sprintItems,
         selectedSprints,
-        sprintDisabled,
-        (id) => {
-          if (selectedSprints.has(id)) selectedSprints.delete(id);
-          else selectedSprints.add(id);
+        false,
+        (id, checked) => {
+          if (checked) selectedSprints.add(id);
+          else selectedSprints.delete(id);
           afterFilterChange();
         },
-        allSprintsOn,
       );
     }
 

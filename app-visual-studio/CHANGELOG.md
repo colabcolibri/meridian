@@ -4,6 +4,16 @@ All notable changes to the **Meridian** VS Code extension (`meridian-vscode`).
 
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.1.37] - 2026-07-22
+
+### Changed
+
+- **Board filters:** checkbox lists per dimension; independent version/sprint/epic sets (intersection only on the kanban)
+
+### Fixed
+
+- **Board filters:** version chip toggle when all selected; removed auto-prune that cleared epic/sprint; filter state version 14 reset
+
 ## [1.1.36] - 2026-07-22
 
 ### Added
