@@ -18,8 +18,9 @@ Use with `/implement-us US-XXXX` **before** any Write on product code for that s
 | 6 | `depends_on` | Every listed US has `status: ✅` |
 | 7 | Story status | `❌` or `🔶` (not ✅ closed; not 🧊 frozen or 🚫 deprecated without manager waiver) |
 | 8 | Session scope | One US id cited; manager did not bundle unrelated features |
-| 9 | `04_principles.md` | Read DRY + SRP sections this session |
-| 10 | Code quality | Implementation reuses existing modules per Approach; no copy-paste duplication; layer boundaries respected |
+| 9 | Sprint membership | Row in `sprint_stories` for a sprint with `status: planned` or `active` on the **same** `version` as the US |
+| 10 | `04_principles.md` | Read DRY + SRP sections this session |
+| 11 | Code quality | Implementation reuses existing modules per Approach; no copy-paste duplication; layer boundaries respected |
 
 ---
 
@@ -44,4 +45,9 @@ Reason: ready is false (run /refine-us US-XXXX first)
 ```txt
 Blocked — cannot implement US-XXXX:
 Reason: depends_on US-YYYY not ✅
+```
+
+```txt
+Blocked — cannot implement US-XXXX:
+Reason: not in any sprint — run /plan-sprint and add US to a planned or active sprint first
 ```

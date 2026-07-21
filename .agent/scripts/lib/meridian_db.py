@@ -362,6 +362,87 @@ def check_story_dependencies_satisfied(
     return len(blocking) == 0, blocking
 
 
+OPEN_SPRINT_STATUSES = frozenset({"planned", "active"})
+
+
+def check_story_sprint_membership(
+    conn: sqlite3.Connection,
+    story_id: str,
+    *,
+    version_id: str | None = None,
+) -> tuple[bool, str]:
+    """True when the US is on sprint_stories for a non-complete sprint on the same version."""
+    us = conn.execute(
+        "SELECT version_id FROM user_stories WHERE id = ?",
+        (story_id,),
+    ).fetchone()
+    us_version = us["version_id"] if us else version_id
+    if not us_version:
+        return False, f"{story_id} not in user_stories"
+
+    rows = conn.execute(
+        """
+        SELECT ss.sprint_id, s.status, s.version_id
+        FROM sprint_stories ss
+        JOIN sprints s ON s.id = ss.sprint_id
+        WHERE ss.story_id = ?
+        ORDER BY ss.sprint_id
+        """,
+        (story_id,),
+    ).fetchall()
+
+    if not rows:
+        return (
+            False,
+            "not in any sprint — run /plan-sprint and add US via create-sprint --stories or update-sprint",
+        )
+
+    open_matches: list[str] = []
+    closed_only: list[str] = []
+    version_mismatch: list[str] = []
+
+    for row in rows:
+        sid = row["sprint_id"]
+        if row["version_id"] != us_version:
+            version_mismatch.append(f"{sid} (version {row['version_id']})")
+            continue
+        if (row["status"] or "").strip() in OPEN_SPRINT_STATUSES:
+            open_matches.append(sid)
+        else:
+            closed_only.append(sid)
+
+    if open_matches:
+        return True, f"sprint(s): {', '.join(open_matches)}"
+
+    if version_mismatch and not closed_only:
+        return (
+            False,
+            f"sprint version mismatch for US version {us_version}: {', '.join(version_mismatch)}",
+        )
+
+    if closed_only:
+        return (
+            False,
+            f"only in completed sprint(s): {', '.join(closed_only)} — add to planned/active sprint",
+        )
+
+    return False, "no open sprint on same version"
+
+
+def ensure_ready_has_open_sprint(
+    conn: sqlite3.Connection,
+    story_id: str,
+    *,
+    version_id: str | None = None,
+) -> None:
+    """Raise ValueError when setting ready: true without sprint scope."""
+    if not story_id:
+        raise ValueError("Cannot set ready: true without story id")
+    ok, detail = check_story_sprint_membership(conn, story_id, version_id=version_id)
+    if not ok:
+        raise ValueError(f"Cannot set ready: true for {story_id}: {detail}")
+
+
 def fetch_delivery_form_catalog(
     conn: sqlite3.Connection,
     *,
@@ -402,6 +483,10 @@ def upsert_user_story(
     depends = normalize_depends_on(depends_on)
     validate_story_dependency_ids(conn, story_id, depends)
     ready_val = 1 if frontmatter.get("ready", "").lower() == "true" else 0
+    if ready_val:
+        ensure_ready_has_open_sprint(
+            conn, story_id, version_id=frontmatter.get("version")
+        )
     preamble = extract_us_preamble(body)
     conn.execute(
         """

@@ -4,6 +4,12 @@ All notable changes to the **Meridian** VS Code extension (`meridian-vscode`).
 
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.1.33] - 2026-07-21
+
+### Changed
+
+- **Bundled kit:** US must belong to a planned or active sprint before `ready: true` or `/implement-us` — `implement-gate`, `update-us`, and `set-ready` enforce sprint scope; docs and checklists aligned
+
 ## [1.1.32] - 2026-07-21
 
 ### Fixed

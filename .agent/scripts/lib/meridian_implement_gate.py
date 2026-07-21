@@ -9,6 +9,7 @@ from typing import Any
 
 from meridian_db import (
     check_story_dependencies_satisfied,
+    check_story_sprint_membership,
     connect,
     db_exists,
     load_story_dependencies,
@@ -166,6 +167,13 @@ def check_implement_gate(package_root: str | Path, story_id: str) -> dict[str, A
             "story status",
             status_ok,
             f"status={status} (must be ❌ or 🔶)",
+        )
+
+        sprint_ok, sprint_detail = check_story_sprint_membership(conn, story_id)
+        add_check(
+            "sprint membership",
+            sprint_ok,
+            sprint_detail,
         )
 
         body = row["body_markdown"] or ""

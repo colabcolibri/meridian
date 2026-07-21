@@ -10,7 +10,7 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPO_ROOT / ".agent" / "scripts" / "lib"))
 
-from meridian_db import bootstrap, connect, upsert_epic, upsert_user_story, upsert_version  # noqa: E402
+from meridian_db import bootstrap, connect, upsert_epic, upsert_sprint, upsert_user_story, upsert_version  # noqa: E402
 from meridian_implement_gate import check_implement_gate  # noqa: E402
 from meridian_markdown_parse import extract_us_sections, read_markdown_text  # noqa: E402
 
@@ -22,7 +22,7 @@ version: v1
 status: ❌
 moscow: Must
 depends_on: []
-ready: true
+ready: false
 done_when: Done
 tests: required
 tests_status: pending
@@ -132,6 +132,23 @@ def main() -> int:
             )
             fm, body, full = read_markdown_text(US_READY_BODY)
             upsert_user_story(conn, fm, full, extract_us_sections(body), [])
+            upsert_sprint(
+                conn,
+                {
+                    "id": "v1-S1",
+                    "version": "v1",
+                    "title": "S1",
+                    "status": "active",
+                    "goal": "gate",
+                    "done_when": "done",
+                    "stories": "['US-0001']",
+                },
+                "# v1-S1\n",
+                {"goal": "g", "out_of_scope": "n/a", "retrospective": None},
+                ["US-0001"],
+            )
+            conn.commit()
+            conn.execute("UPDATE user_stories SET ready = 1 WHERE id = 'US-0001'")
             conn.commit()
         finally:
             conn.close()
@@ -151,6 +168,23 @@ def main() -> int:
         blocked = check_implement_gate(root, "US-0001")
         if blocked["ok"]:
             print("FAIL: expected block when ready false")
+            return 1
+
+        conn = connect(root)
+        try:
+            conn.execute("DELETE FROM sprint_stories WHERE story_id = 'US-0001'")
+            conn.execute("UPDATE user_stories SET ready = 1 WHERE id = 'US-0001'")
+            conn.commit()
+        finally:
+            conn.close()
+
+        no_sprint = check_implement_gate(root, "US-0001")
+        if no_sprint["ok"]:
+            print("FAIL: expected block when US not in sprint")
+            return 1
+        sprint_fail = next(f for f in no_sprint["failures"] if f["check"] == "sprint membership")
+        if "not in any sprint" not in sprint_fail["detail"]:
+            print(f"FAIL: unexpected sprint detail: {sprint_fail}")
             return 1
 
     print("OK: implement gate tests passed")

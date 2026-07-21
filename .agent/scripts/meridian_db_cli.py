@@ -15,6 +15,7 @@ from meridian_db import (  # noqa: E402
     connect,
     db_exists,
     delivery_counts,
+    ensure_ready_has_open_sprint,
     fetch_decisions_for_date,
     list_decision_dates,
     next_epic_id,
@@ -522,6 +523,12 @@ def cmd_set_ready(args) -> int:
     root = _root(args)
     conn = connect(root)
     try:
+        if args.ready == "true":
+            try:
+                ensure_ready_has_open_sprint(conn, args.story_id)
+            except ValueError as exc:
+                print(f"ERROR: {exc}", file=sys.stderr)
+                return 1
         conn.execute(
             "UPDATE user_stories SET ready = ?, updated_at = datetime('now') WHERE id = ?",
             (1 if args.ready == "true" else 0, args.story_id),

@@ -72,7 +72,7 @@ Velocity / burndown   →   não usados (capacidade = julgamento + Must + deps)
 | Bug | US with fix acceptance | In-sprint bug: fix inside current US; production: new US + version patch |
 | Spike | US (Notes: timebox) or `prepend-decision` | Outcome = knowledge, not production code |
 | Release / version | SQLite `versions` | Hotfix versions (v1.1) allowed anytime |
-| Sprint | SQLite `sprints` | Optional; `stories` order = sprint priority |
+| Sprint | SQLite `sprints` | **Required before `/implement-us`:** US must be in `sprint_stories` for a `planned` or `active` sprint; `stories` order = sprint priority |
 | Product backlog | `user_stories` + epics | Manager orders via sprint scope + MoSCoW |
 | Sprint backlog | Sprint `stories` + active sprint | New work mid-sprint → backlog, not silent scope creep |
 | Kanban board | Extension reads `meridian_db_export --format planning` | Columns derived: 📋 Backlog (`❌` + `ready: false`), 📌 Todo (`❌` + `ready: true`), then status/tests; toggles 🧊/🚫 — never `board.json` |
