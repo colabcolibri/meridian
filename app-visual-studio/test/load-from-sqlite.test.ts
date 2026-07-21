@@ -47,6 +47,7 @@ conn.commit()
 conn.close()
 `
   execFileSync("python3", ["-c", py], { encoding: "utf-8" })
+  execFileSync("python3", [bootstrap, packageRoot], { encoding: "utf-8" })
 }
 
 test("sqlite planning export maps sprint stories to storyIds", () => {
@@ -60,4 +61,8 @@ test("sqlite planning export maps sprint stories to storyIds", () => {
   assert.ok(payload)
   assert.equal(payload.sprints.length, 1)
   assert.deepEqual(payload.sprints[0]?.storyIds, ["US-0001", "US-0002"])
+  assert.equal(
+    payload.stories.find((s) => s.id === "US-0001")?.sprint,
+    "v1-S1",
+  )
 })

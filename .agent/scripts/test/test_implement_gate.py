@@ -19,10 +19,11 @@ id: US-0001
 title: Gate test
 epic: EPIC-01
 version: v1
+sprint: v1-S1
 status: ❌
 moscow: Must
 depends_on: []
-ready: false
+ready: true
 done_when: Done
 tests: required
 tests_status: pending
@@ -130,8 +131,6 @@ def main() -> int:
                 "",
                 {"capability": "cap"},
             )
-            fm, body, full = read_markdown_text(US_READY_BODY)
-            upsert_user_story(conn, fm, full, extract_us_sections(body), [])
             upsert_sprint(
                 conn,
                 {
@@ -139,16 +138,15 @@ def main() -> int:
                     "version": "v1",
                     "title": "S1",
                     "status": "active",
-                    "goal": "gate",
-                    "done_when": "done",
-                    "stories": "['US-0001']",
+                    "goal": "g",
+                    "done_when": "d",
                 },
                 "# v1-S1\n",
                 {"goal": "g", "out_of_scope": "n/a", "retrospective": None},
-                ["US-0001"],
+                [],
             )
-            conn.commit()
-            conn.execute("UPDATE user_stories SET ready = 1 WHERE id = 'US-0001'")
+            fm, body, full = read_markdown_text(US_READY_BODY)
+            upsert_user_story(conn, fm, full, extract_us_sections(body), [])
             conn.commit()
         finally:
             conn.close()
@@ -168,23 +166,6 @@ def main() -> int:
         blocked = check_implement_gate(root, "US-0001")
         if blocked["ok"]:
             print("FAIL: expected block when ready false")
-            return 1
-
-        conn = connect(root)
-        try:
-            conn.execute("DELETE FROM sprint_stories WHERE story_id = 'US-0001'")
-            conn.execute("UPDATE user_stories SET ready = 1 WHERE id = 'US-0001'")
-            conn.commit()
-        finally:
-            conn.close()
-
-        no_sprint = check_implement_gate(root, "US-0001")
-        if no_sprint["ok"]:
-            print("FAIL: expected block when US not in sprint")
-            return 1
-        sprint_fail = next(f for f in no_sprint["failures"] if f["check"] == "sprint membership")
-        if "not in any sprint" not in sprint_fail["detail"]:
-            print(f"FAIL: unexpected sprint detail: {sprint_fail}")
             return 1
 
     print("OK: implement gate tests passed")

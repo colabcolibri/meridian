@@ -86,8 +86,19 @@ def bootstrap(package_root: str | Path) -> str:
             f"Not a Meridian product folder (missing docs/ fingerprint): {package_root}"
         )
     applied = apply_migrations(package_root)
+    conn = connect(package_root)
+    try:
+        reconcile_msg = reconcile_sprint_links(conn)
+        conn.commit()
+    finally:
+        conn.close()
+    parts: list[str] = []
     if applied:
-        return f"Applied migrations: {', '.join(applied)}"
+        parts.append(f"Applied migrations: {', '.join(applied)}")
+    if reconcile_msg:
+        parts.append(reconcile_msg)
+    if parts:
+        return "; ".join(parts)
     return "Database already up to date"
 
 
@@ -209,6 +220,294 @@ def upsert_epic(
     )
 
 
+OPEN_SPRINT_STATUSES = frozenset({"planned", "active"})
+
+
+def _user_stories_has_sprint_column(conn: sqlite3.Connection) -> bool:
+    cols = {row["name"] for row in conn.execute("PRAGMA table_info(user_stories)")}
+    return "sprint_id" in cols
+
+
+def parse_sprint_id_from_frontmatter(frontmatter: dict[str, str]) -> str | None:
+    raw = (frontmatter.get("sprint") or "").strip()
+    if not raw or raw.lower() in {"n/a", "_n/a_", "tbd", "none", "null"}:
+        return None
+    return raw
+
+
+def rebuild_sprint_scope_cache(conn: sqlite3.Connection, sprint_id: str) -> None:
+    rows = conn.execute(
+        """
+        SELECT id FROM user_stories
+        WHERE sprint_id = ?
+        ORDER BY COALESCE(sprint_position, 0) ASC, id ASC
+        """,
+        (sprint_id,),
+    ).fetchall()
+    stories = [row["id"] for row in rows]
+    conn.execute("DELETE FROM sprint_stories WHERE sprint_id = ?", (sprint_id,))
+    for index, story_id in enumerate(stories):
+        conn.execute(
+            "INSERT OR REPLACE INTO sprint_stories (sprint_id, story_id, position) VALUES (?, ?, ?)",
+            (sprint_id, story_id, index),
+        )
+    conn.execute(
+        "UPDATE sprints SET stories_json = ?, updated_at = ? WHERE id = ?",
+        (json.dumps(stories), _now(), sprint_id),
+    )
+
+
+def _pick_winning_sprint_row(
+    conn: sqlite3.Connection, story_id: str
+) -> sqlite3.Row | None:
+    return conn.execute(
+        """
+        SELECT ss.sprint_id, ss.position, s.status AS sprint_status, s.version_id
+        FROM sprint_stories ss
+        JOIN sprints s ON s.id = ss.sprint_id
+        WHERE ss.story_id = ?
+        ORDER BY
+          CASE s.status WHEN 'active' THEN 0 WHEN 'planned' THEN 1 ELSE 2 END,
+          ss.position ASC,
+          ss.sprint_id ASC
+        LIMIT 1
+        """,
+        (story_id,),
+    ).fetchone()
+
+
+def reconcile_sprint_links(conn: sqlite3.Connection) -> str:
+    """Backfill US sprint_id from junction, dedupe, rebuild sprint caches. Idempotent."""
+    if not _user_stories_has_sprint_column(conn):
+        return ""
+
+    notes: list[str] = []
+
+    for sprint_row in conn.execute(
+        "SELECT id, version_id, stories_json FROM sprints"
+    ):
+        sprint_id = sprint_row["id"]
+        count = conn.execute(
+            "SELECT COUNT(*) AS c FROM sprint_stories WHERE sprint_id = ?",
+            (sprint_id,),
+        ).fetchone()["c"]
+        if count:
+            continue
+        try:
+            story_ids = json.loads(sprint_row["stories_json"] or "[]")
+        except json.JSONDecodeError:
+            story_ids = []
+        if not isinstance(story_ids, list) or not story_ids:
+            continue
+        for index, story_id in enumerate(story_ids):
+            sid = str(story_id).strip()
+            if not sid:
+                continue
+            conn.execute(
+                """
+                INSERT OR IGNORE INTO sprint_stories (sprint_id, story_id, position)
+                VALUES (?, ?, ?)
+                """,
+                (sprint_id, sid, index),
+            )
+        notes.append(f"rebuilt junction for {sprint_id} from stories_json")
+
+    for row in conn.execute(
+        """
+        SELECT story_id, COUNT(*) AS c FROM sprint_stories
+        GROUP BY story_id HAVING c > 1
+        """
+    ):
+        winner = _pick_winning_sprint_row(conn, row["story_id"])
+        if not winner:
+            continue
+        conn.execute(
+            "DELETE FROM sprint_stories WHERE story_id = ? AND sprint_id != ?",
+            (row["story_id"], winner["sprint_id"]),
+        )
+        notes.append(f"deduped {row['story_id']} → {winner['sprint_id']}")
+
+    for row in conn.execute(
+        """
+        SELECT ss.story_id, ss.sprint_id, ss.position
+        FROM sprint_stories ss
+        """
+    ):
+        conn.execute(
+            """
+            UPDATE user_stories
+            SET sprint_id = ?, sprint_position = ?
+            WHERE id = ?
+            """,
+            (row["sprint_id"], row["position"], row["story_id"]),
+        )
+
+    for sprint_row in conn.execute("SELECT id FROM sprints"):
+        rebuild_sprint_scope_cache(conn, sprint_row["id"])
+
+    conn.execute(
+        """
+        CREATE UNIQUE INDEX IF NOT EXISTS idx_sprint_stories_story_id
+        ON sprint_stories(story_id)
+        """
+    )
+
+    if notes:
+        return f"Sprint link reconcile: {len(notes)} duplicate(s) fixed"
+    return ""
+
+
+def validate_story_open_sprint(conn: sqlite3.Connection, story_id: str) -> None:
+    row = conn.execute(
+        "SELECT version_id, sprint_id FROM user_stories WHERE id = ?",
+        (story_id,),
+    ).fetchone()
+    if not row:
+        raise ValueError(f"user story not found: {story_id}")
+    sprint_id = row["sprint_id"]
+    if not sprint_id:
+        raise ValueError(
+            f"{story_id} is not in any sprint — add sprint: <vX-SY> in frontmatter "
+            f"or include the US in a sprint stories: list via /plan-sprint"
+        )
+    sprint = conn.execute(
+        "SELECT version_id, status FROM sprints WHERE id = ?", (sprint_id,)
+    ).fetchone()
+    if not sprint:
+        raise ValueError(f"{story_id} references unknown sprint {sprint_id}")
+    if sprint["version_id"] != row["version_id"]:
+        raise ValueError(
+            f"{story_id} version {row['version_id']} does not match sprint {sprint_id} "
+            f"(version {sprint['version_id']})"
+        )
+    if sprint["status"] not in OPEN_SPRINT_STATUSES:
+        raise ValueError(
+            f"{story_id} sprint {sprint_id} has status {sprint['status']} "
+            f"(must be planned or active for ready: true)"
+        )
+
+
+def ensure_ready_has_open_sprint(conn: sqlite3.Connection, story_id: str) -> None:
+    row = conn.execute(
+        "SELECT ready FROM user_stories WHERE id = ?",
+        (story_id,),
+    ).fetchone()
+    if not row:
+        raise ValueError(f"user story not found: {story_id}")
+    if not row["ready"]:
+        return
+    validate_story_open_sprint(conn, story_id)
+
+
+def assign_story_sprint(
+    conn: sqlite3.Connection,
+    story_id: str,
+    sprint_id: str | None,
+    *,
+    version_id: str,
+    position: int | None = None,
+) -> None:
+    prev = conn.execute(
+        "SELECT sprint_id FROM user_stories WHERE id = ?", (story_id,)
+    ).fetchone()
+    prev_sprint = prev["sprint_id"] if prev else None
+
+    if not sprint_id:
+        conn.execute(
+            "UPDATE user_stories SET sprint_id = NULL, sprint_position = NULL WHERE id = ?",
+            (story_id,),
+        )
+        if prev_sprint:
+            rebuild_sprint_scope_cache(conn, prev_sprint)
+        return
+
+    sprint = conn.execute(
+        "SELECT version_id FROM sprints WHERE id = ?", (sprint_id,)
+    ).fetchone()
+    if not sprint:
+        raise ValueError(f"sprint not found: {sprint_id}")
+    if sprint["version_id"] != version_id:
+        raise ValueError(
+            f"US {story_id} version {version_id} does not match sprint {sprint_id} "
+            f"(version {sprint['version_id']})"
+        )
+
+    if position is None:
+        if prev_sprint == sprint_id:
+            existing = conn.execute(
+                "SELECT sprint_position FROM user_stories WHERE id = ?", (story_id,)
+            ).fetchone()
+            if existing and existing["sprint_position"] is not None:
+                position = int(existing["sprint_position"])
+        if position is None:
+            max_row = conn.execute(
+                """
+                SELECT COALESCE(MAX(sprint_position), -1) AS m
+                FROM user_stories WHERE sprint_id = ?
+                """,
+                (sprint_id,),
+            ).fetchone()
+            position = int(max_row["m"]) + 1
+
+    conn.execute(
+        """
+        UPDATE user_stories SET sprint_id = ?, sprint_position = ? WHERE id = ?
+        """,
+        (sprint_id, position, story_id),
+    )
+    if prev_sprint and prev_sprint != sprint_id:
+        rebuild_sprint_scope_cache(conn, prev_sprint)
+    rebuild_sprint_scope_cache(conn, sprint_id)
+
+
+def apply_sprint_scope_from_list(
+    conn: sqlite3.Connection,
+    sprint_id: str,
+    version_id: str,
+    stories: list[str],
+) -> None:
+    normalized: list[str] = []
+    seen: set[str] = set()
+    for item in stories:
+        sid = str(item).strip()
+        if not sid or sid in seen:
+            continue
+        seen.add(sid)
+        normalized.append(sid)
+
+    in_list = set(normalized)
+    for row in conn.execute(
+        "SELECT id FROM user_stories WHERE sprint_id = ?", (sprint_id,)
+    ):
+        if row["id"] not in in_list:
+            conn.execute(
+                """
+                UPDATE user_stories SET sprint_id = NULL, sprint_position = NULL
+                WHERE id = ?
+                """,
+                (row["id"],),
+            )
+
+    for index, story_id in enumerate(normalized):
+        us = conn.execute(
+            "SELECT version_id FROM user_stories WHERE id = ?", (story_id,)
+        ).fetchone()
+        if not us:
+            raise ValueError(f"sprint stories references unknown US: {story_id}")
+        if us["version_id"] != version_id:
+            raise ValueError(
+                f"{story_id} version {us['version_id']} != sprint version {version_id}"
+            )
+        conn.execute(
+            """
+            UPDATE user_stories SET sprint_id = ?, sprint_position = ? WHERE id = ?
+            """,
+            (sprint_id, index, story_id),
+        )
+
+    rebuild_sprint_scope_cache(conn, sprint_id)
+
+
 def upsert_sprint(
     conn: sqlite3.Connection,
     frontmatter: dict[str, str],
@@ -248,12 +547,17 @@ def upsert_sprint(
             _now(),
         ),
     )
-    conn.execute("DELETE FROM sprint_stories WHERE sprint_id = ?", (frontmatter.get("id"),))
-    for index, story_id in enumerate(stories):
-        conn.execute(
-            "INSERT OR REPLACE INTO sprint_stories (sprint_id, story_id, position) VALUES (?, ?, ?)",
-            (frontmatter.get("id"), story_id, index),
-        )
+    sprint_id = frontmatter.get("id") or ""
+    version_id = frontmatter.get("version") or ""
+    if _user_stories_has_sprint_column(conn):
+        apply_sprint_scope_from_list(conn, sprint_id, version_id, stories)
+    else:
+        conn.execute("DELETE FROM sprint_stories WHERE sprint_id = ?", (sprint_id,))
+        for index, story_id in enumerate(stories):
+            conn.execute(
+                "INSERT OR REPLACE INTO sprint_stories (sprint_id, story_id, position) VALUES (?, ?, ?)",
+                (sprint_id, story_id, index),
+            )
 
 
 def normalize_depends_on(depends_on: list[str]) -> list[str]:
@@ -362,87 +666,6 @@ def check_story_dependencies_satisfied(
     return len(blocking) == 0, blocking
 
 
-OPEN_SPRINT_STATUSES = frozenset({"planned", "active"})
-
-
-def check_story_sprint_membership(
-    conn: sqlite3.Connection,
-    story_id: str,
-    *,
-    version_id: str | None = None,
-) -> tuple[bool, str]:
-    """True when the US is on sprint_stories for a non-complete sprint on the same version."""
-    us = conn.execute(
-        "SELECT version_id FROM user_stories WHERE id = ?",
-        (story_id,),
-    ).fetchone()
-    us_version = us["version_id"] if us else version_id
-    if not us_version:
-        return False, f"{story_id} not in user_stories"
-
-    rows = conn.execute(
-        """
-        SELECT ss.sprint_id, s.status, s.version_id
-        FROM sprint_stories ss
-        JOIN sprints s ON s.id = ss.sprint_id
-        WHERE ss.story_id = ?
-        ORDER BY ss.sprint_id
-        """,
-        (story_id,),
-    ).fetchall()
-
-    if not rows:
-        return (
-            False,
-            "not in any sprint — run /plan-sprint and add US via create-sprint --stories or update-sprint",
-        )
-
-    open_matches: list[str] = []
-    closed_only: list[str] = []
-    version_mismatch: list[str] = []
-
-    for row in rows:
-        sid = row["sprint_id"]
-        if row["version_id"] != us_version:
-            version_mismatch.append(f"{sid} (version {row['version_id']})")
-            continue
-        if (row["status"] or "").strip() in OPEN_SPRINT_STATUSES:
-            open_matches.append(sid)
-        else:
-            closed_only.append(sid)
-
-    if open_matches:
-        return True, f"sprint(s): {', '.join(open_matches)}"
-
-    if version_mismatch and not closed_only:
-        return (
-            False,
-            f"sprint version mismatch for US version {us_version}: {', '.join(version_mismatch)}",
-        )
-
-    if closed_only:
-        return (
-            False,
-            f"only in completed sprint(s): {', '.join(closed_only)} — add to planned/active sprint",
-        )
-
-    return False, "no open sprint on same version"
-
-
-def ensure_ready_has_open_sprint(
-    conn: sqlite3.Connection,
-    story_id: str,
-    *,
-    version_id: str | None = None,
-) -> None:
-    """Raise ValueError when setting ready: true without sprint scope."""
-    if not story_id:
-        raise ValueError("Cannot set ready: true without story id")
-    ok, detail = check_story_sprint_membership(conn, story_id, version_id=version_id)
-    if not ok:
-        raise ValueError(f"Cannot set ready: true for {story_id}: {detail}")
-
-
 def fetch_delivery_form_catalog(
     conn: sqlite3.Connection,
     *,
@@ -469,7 +692,11 @@ def fetch_delivery_form_catalog(
         {"id": row["id"], "title": row["title"]}
         for row in conn.execute("SELECT id, title FROM versions ORDER BY id")
     ]
-    return {"stories": stories, "epics": epics, "versions": versions}
+    sprints = [
+        {"id": row["id"], "title": row["title"]}
+        for row in conn.execute("SELECT id, title FROM sprints ORDER BY id")
+    ]
+    return {"stories": stories, "epics": epics, "versions": versions, "sprints": sprints}
 
 
 def upsert_user_story(
@@ -480,13 +707,27 @@ def upsert_user_story(
     depends_on: list[str],
 ) -> None:
     story_id = frontmatter.get("id") or ""
+    version_id = frontmatter.get("version") or ""
     depends = normalize_depends_on(depends_on)
     validate_story_dependency_ids(conn, story_id, depends)
     ready_val = 1 if frontmatter.get("ready", "").lower() == "true" else 0
-    if ready_val:
-        ensure_ready_has_open_sprint(
-            conn, story_id, version_id=frontmatter.get("version")
-        )
+
+    sprint_target: str | None = None
+    if _user_stories_has_sprint_column(conn):
+        existing = conn.execute(
+            "SELECT sprint_id FROM user_stories WHERE id = ?", (story_id,)
+        ).fetchone()
+        existing_sprint = existing["sprint_id"] if existing else None
+        if "sprint" in frontmatter:
+            sprint_target = parse_sprint_id_from_frontmatter(frontmatter)
+        else:
+            sprint_target = existing_sprint
+        if ready_val and not sprint_target:
+            raise ValueError(
+                f"{story_id} ready: true requires sprint assignment "
+                f"(frontmatter sprint: vX-SY or sprint stories: list)"
+            )
+
     preamble = extract_us_preamble(body)
     conn.execute(
         """
@@ -553,6 +794,15 @@ def upsert_user_story(
         ),
     )
     sync_story_dependencies(conn, story_id, depends)
+    if _user_stories_has_sprint_column(conn):
+        assign_story_sprint(
+            conn,
+            story_id,
+            sprint_target,
+            version_id=version_id,
+        )
+        if ready_val:
+            validate_story_open_sprint(conn, story_id)
 
 
 DECISION_ENTRY_FIELDS = (
@@ -813,7 +1063,7 @@ def export_planning_json(package_root: str | Path) -> dict[str, Any]:
             """
             SELECT id, title, epic_id, version_id, status, moscow,
                    done_when, tests, tests_status, ready, summary,
-                   preamble, body_markdown
+                   preamble, body_markdown, sprint_id
             FROM user_stories ORDER BY id
             """
         ):
@@ -835,6 +1085,7 @@ def export_planning_json(package_root: str | Path) -> dict[str, Any]:
                     "ready": bool(row["ready"]),
                     "summary": row["summary"],
                     "preamble": preamble or None,
+                    "sprint": row["sprint_id"] or None,
                 }
             )
         versions = []

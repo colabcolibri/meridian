@@ -32,7 +32,6 @@ python3 .agent/scripts/meridian_delivery.py show US-0115 --full
 | Architecture | `05_architecture.md` `approved` |
 | US row | exists in SQLite |
 | `ready` | `true` |
-| Sprint | US in `sprint_stories` for `planned` or `active` sprint (same `version`) |
 | Dependencies | all `depends_on` at `✅` |
 
 If gate fails → **no product code**; recommend `/refine-us`.

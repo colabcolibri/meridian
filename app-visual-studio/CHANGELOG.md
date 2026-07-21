@@ -4,6 +4,18 @@ All notable changes to the **Meridian** VS Code extension (`meridian-vscode`).
 
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.1.34] - 2026-07-22
+
+### Added
+
+- **Bundled kit:** US-centric sprint assignment — `user_stories.sprint_id`, frontmatter `sprint:`, migration + `reconcile_sprint_links` on bootstrap; one sprint per US
+- **Upgrade harness:** runs `bootstrap_meridian_db.py` after kit copy (migrations + sprint link reconcile)
+- **Board / US form:** planning export and cards show sprint when allocated
+
+### Changed
+
+- **Bundled kit:** `ready: true`, `set-ready`, and `/implement-us` require US on a `planned`/`active` sprint (same version); docs and checklists updated (`06_database` v3.3)
+
 ## [1.1.33] - 2026-07-21
 
 ### Changed

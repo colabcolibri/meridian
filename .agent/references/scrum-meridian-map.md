@@ -52,7 +52,7 @@ Task / Subtask        →   ## Plan (Approach + Planned) — no tasks/ folder
 Bug                   →   US de correção ou fix na US da sprint
 Spike                 →   US com timebox em Notes OU `prepend-decision`
 Product Backlog       →   `user_stories` + epics (MoSCoW, depends_on)
-Sprint Backlog        →   sprint `stories_json` / frontmatter stories (ordem = prioridade)
+Sprint Backlog        →   `user_stories.sprint_id` (+ sprint `stories:` / `stories_json` cache)
 Cerimônias            →   comandos abaixo (assíncrono, sem timebox rígido)
 PO / priorização      →   gestor humano (agentes não priorizam sozinhos)
 Velocity / burndown   →   não usados (capacidade = julgamento + Must + deps)
@@ -72,10 +72,10 @@ Velocity / burndown   →   não usados (capacidade = julgamento + Must + deps)
 | Bug | US with fix acceptance | In-sprint bug: fix inside current US; production: new US + version patch |
 | Spike | US (Notes: timebox) or `prepend-decision` | Outcome = knowledge, not production code |
 | Release / version | SQLite `versions` | Hotfix versions (v1.1) allowed anytime |
-| Sprint | SQLite `sprints` | **Required before `/implement-us`:** US must be in `sprint_stories` for a `planned` or `active` sprint; `stories` order = sprint priority |
-| Product backlog | `user_stories` + epics | Manager orders via sprint scope + MoSCoW |
-| Sprint backlog | Sprint `stories` + active sprint | New work mid-sprint → backlog, not silent scope creep |
-| Kanban board | Extension reads `meridian_db_export --format planning` | Columns derived: 📋 Backlog (`❌` + `ready: false`), 📌 Todo (`❌` + `ready: true`), then status/tests; toggles 🧊/🚫 — never `board.json` |
+| Sprint | SQLite `sprints` | Child of `version`; US allocation via `sprint_id` or sprint `stories:` |
+| Product backlog | `user_stories` + epics | US without `sprint_id`; MoSCoW + deps |
+| Sprint backlog | US with `sprint_id` on active/planned sprint | One sprint per US; order = `sprint_position` |
+| Kanban board | Extension reads `meridian_db_export --format planning` | Columns derived: 📋 Backlog (`❌` + `ready: false`), 📌 Todo (`❌` + `ready: true`), then status/tests; card meta shows `sprint` when set |
 | Definition of Done | `04_principles.md` + `/complete-us` | Global DoD in principles; CA per US in Intent |
 | Story points / velocity | — | Not in Meridian (simplicity) |
 
@@ -161,7 +161,7 @@ When sprint `vX-SY` has `status: active` in SQLite:
 - **Sprint review:** before `status: complete`, manager confirms increment against sprint `goal` and US Acceptance.
 - **Retrospective:** mandatory fields on sprint close (even one line each).
 
-Sprint planning uses **Must US + `ready` + `depends_on` + human capacity** — not Fibonacci velocity.
+Sprint planning uses **Must US + `ready` + `depends_on` + human capacity** — not Fibonacci velocity. Each US in the sprint has **`sprint_id`** set (via US `sprint:` or sprint `stories:`); at most one sprint per US.
 
 ---
 

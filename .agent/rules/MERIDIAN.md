@@ -80,13 +80,12 @@ Before any action, classify:
 | 3 | Announced `🤖 Applying...`? | Add before the response |
 | 4 | Loaded skills from frontmatter? | Read each listed `SKILL.md` |
 | 5 | Creating/closing epic, version, sprint, or US? | Read `.agent/references/templates/INDEX.md` + full template + `section-contracts.md` **before** Write |
-| 6 | Implementing code for a US? | US `ready: true` + on open sprint + Plan filled; run `/implement-us` or gate first; else `/refine-us` or `/plan-sprint` |
+| 6 | Implementing code for a US? | US `ready: true` + Plan filled; run `/implement-us` or gate first; else `/refine-us` |
 | 7 | Required docs exist at correct maturity? | Block; report to manager |
 
 **Violations:**
 
 - Code without US `ready: true` or without `/implement-us` gate = **protocol failure**
-- Code for US not in a **planned** or **active** sprint = **protocol failure**
 - US without `05_architecture` approved = **protocol failure**
 - `✅` without evidence = **protocol failure**
 - `✅` without filled `## Record` on the US (skill `complete-user-story`) = **protocol failure**

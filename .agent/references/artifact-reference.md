@@ -14,10 +14,11 @@
 | `title` | What it delivers, not how. |
 | `epic` | Parent epic id (`EPIC-02`). Frontmatter only — no epic text in the body. |
 | `version` | Which release this ships in (`v1`). |
+| `sprint` | Sprint id (`v1-S1`) when allocated; omit or empty on product backlog. Column `sprint_id` in SQLite. Required before `ready: true`. |
 | `status` | `❌` not started · `🔶` partial · `✅` done · `🧊` frozen · `🚫` deprecated |
 | `moscow` | `Must` · `Should` · `Could` · `Won't` |
 | `depends_on` | US ids that must be `✅` before this one. |
-| `ready` | `false` at create · `true` after refine. Gate for implementation. |
+| `ready` | `false` at create · `true` after refine. Gate for implementation (requires `sprint` + planned/active sprint). |
 | `done_when` | One measurable sentence — the observable done condition. |
 | `tests` | `required` — must pass · `none` — explicitly skipped (document why) |
 | `tests_status` | `pending` · `done` · `n/a` |
@@ -71,7 +72,7 @@ Templates: `.agent/references/templates/us-template.md`, `writing-guide.md`.
 | `version` | Parent version id (FK). |
 | `goal` | One sentence — what this sprint proves or delivers. |
 | `done_when` | Observable close condition. |
-| `stories` | Canonical US id list. |
+| `stories` | US id list (order = priority). On save, sets each US `sprint_id` and rebuilds `sprint_stories` / `stories_json`. |
 | `status` | `planned` · `active` · `complete` |
 
 **Body:** `## Goal`, `## Scope`, `## Out of scope for this sprint`, `## Retrospective` (mandatory on close)

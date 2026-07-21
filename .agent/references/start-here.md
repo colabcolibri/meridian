@@ -220,10 +220,11 @@ Reference section — open when you need the detail on a specific file's fields 
 | `title` | What it delivers, not how. |
 | `epic` | Parent epic id (`EPIC-02`). Frontmatter only — no epic text in the body. |
 | `version` | Which release this ships in (`v1`). |
+| `sprint` | Sprint id when in sprint backlog; empty at create. Required before `ready: true`. |
 | `status` | `❌` not started · `🔶` partial · `✅` done · `🧊` frozen · `🚫` deprecated |
 | `moscow` | `Must` · `Should` · `Could` · `Won't` |
 | `depends_on` | US ids that must be `✅` before this one. |
-| `ready` | `false` at create · `true` after refine. Gate for implementation. |
+| `ready` | `false` at create · `true` after refine (requires sprint allocation). Gate for implementation. |
 | `done_when` | One measurable sentence — the observable done condition. |
 | `tests` | `required` — must pass · `none` — explicitly skipped (document why) |
 | `tests_status` | `pending` · `done` · `n/a` |
@@ -284,7 +285,7 @@ Reference section — open when you need the detail on a specific file's fields 
 | `version` | Parent version — must exist in SQLite (`list versions`). |
 | `goal` | One sentence — what this sprint proves or delivers. |
 | `done_when` | Observable close condition. |
-| `stories` | Canonical US id list (used by validation). |
+| `stories` | Canonical US id list (used by validation). Writes `sprint_id` on each US. |
 | `status` | `planned` · `active` · `complete` |
 
 **Body:** `## Goal` (why this sprint, why now), `## Scope` (table of US), `## Out of scope for this sprint`, `## Retrospective` (mandatory on close — even one line each)

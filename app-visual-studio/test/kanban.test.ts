@@ -13,6 +13,7 @@ function story(partial: Partial<UserStory> & Pick<UserStory, "id" | "status">): 
     title: partial.id,
     epic: "EPIC-01",
     version: "v1",
+    sprint: null,
     moscow: "Must",
     dependsOn: [],
     doneWhen: "",

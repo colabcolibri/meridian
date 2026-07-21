@@ -10,6 +10,7 @@ function story(id: string, version: string, epic = "EPIC-01"): UserStory {
     title: id,
     epic,
     version,
+    sprint: null,
     status: "❌",
     moscow: "Must",
     dependsOn: [],

@@ -25,7 +25,7 @@ This folder is the **source of truth for phase documents** of the Meridian kit +
 | [03_user_types.md](03_user_types.md)       | approved | Usage profiles                               |
 | [04_principles.md](04_principles.md)       | approved | Implementation principles                    |
 | [05_architecture.md](05_architecture.md)   | approved | Kit + extension architecture                 |
-| [06_database.md](06_database.md)           | draft    | SQLite delivery schema                       |
+| [06_database.md](06_database.md)           | approved | SQLite delivery schema (US `sprint_id`, reconcile on bootstrap) |
 | [07_api_contracts.md](07_api_contracts.md) | draft    | Extension ↔ kit script contracts             |
 | [08_environments.md](08_environments.md)   | approved | Local commands and CI                        |
 | [09_design_system.md](09_design_system.md) | review   | UI contract — Harness webviews (`design-system-owner`) |
@@ -42,7 +42,7 @@ This folder is the **source of truth for phase documents** of the Meridian kit +
 
 There is **no** `docs/us/`, `docs/epics/`, or `docs/kanban/board.json`. Board reads SQLite via `meridian_db_export.py --format planning`.
 
-**Board columns (computed in the extension, not DB fields):** 📋 Backlog (`status: ❌`, `ready: false`) · 📌 Todo (`ready: true`, still `❌`) · 🔶 Partial · 🧪 Tests · ✅ Done · toggles 🧊 Frozen · 🚫 Deprecated. Detail: [05_architecture.md](05_architecture.md) and [.agent/MERIDIAN.md](../.agent/MERIDIAN.md) status rules.
+**Board columns (computed in the extension, not DB fields):** 📋 Backlog (`status: ❌`, `ready: false`) · 📌 Todo (`ready: true`, still `❌`) · 🔶 Partial · 🧪 Tests · ✅ Done · toggles 🧊 Frozen · 🚫 Deprecated. US cards and forms show **`sprint`** when the US is allocated (`user_stories.sprint_id`). Detail: [06_database.md](06_database.md) and [05_architecture.md](05_architecture.md).
 
 ## Work order
 

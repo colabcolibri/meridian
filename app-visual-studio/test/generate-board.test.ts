@@ -9,6 +9,7 @@ const sample: UserStory = {
   title: "Sample",
   epic: "EPIC-01",
   version: "v0",
+  sprint: null,
   status: "❌",
   moscow: "Must",
   dependsOn: [],

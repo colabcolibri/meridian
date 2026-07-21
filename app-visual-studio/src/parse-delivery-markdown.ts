@@ -53,7 +53,7 @@ export function frontmatterBadgeKeys(folder: DeliveryFolder): string[] {
   const common = ["id", "title", "status"]
   switch (folder) {
     case "us":
-      return [...common, "epic", "version", "moscow", "ready"]
+      return [...common, "epic", "version", "sprint", "moscow", "ready"]
     case "epics":
       return [...common, "versions", "outcome"]
     case "versions":

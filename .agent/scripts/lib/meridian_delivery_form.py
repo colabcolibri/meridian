@@ -208,6 +208,13 @@ def export_entity_form(
         try:
             depends = load_story_dependencies(conn, entity_id)
             payload["frontmatter"]["depends_on"] = format_depends_on(depends)
+            sprint_row = conn.execute(
+                "SELECT sprint_id FROM user_stories WHERE id = ?", (entity_id,)
+            ).fetchone()
+            if sprint_row and sprint_row["sprint_id"]:
+                payload["frontmatter"]["sprint"] = sprint_row["sprint_id"]
+            elif "sprint" in payload["frontmatter"] and not payload["frontmatter"]["sprint"]:
+                payload["frontmatter"].pop("sprint", None)
             payload["catalog"] = fetch_delivery_form_catalog(
                 conn, exclude_story_id=entity_id
             )

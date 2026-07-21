@@ -22,7 +22,7 @@
 | `lib/meridian_markdown_parse.py` | Library: frontmatter + section parsing |
 | `lib/meridian_section_contracts.py` | Library: structural validation helpers |
 | `lib/meridian_delivery_form.py` | Library: form ↔ markdown (extension) |
-| `bootstrap_meridian_db.py` | Create/upgrade `.meridian/meridian.db` + `delivery.json` |
+| `bootstrap_meridian_db.py` | Create/upgrade `.meridian/meridian.db` + `delivery.json`; runs `reconcile_sprint_links` after migrations |
 | `meridian_delivery.py` | **Agent facade** — reads `delivery.json`, dispatches connector (`counts`, `show`, `create-us`, …) |
 | `meridian_db_cli.py` | SQLite driver (implementation; facade calls this) |
 | `meridian_db_export.py` | JSON export for extension (`--format planning|decisions`; `--write-form`) |

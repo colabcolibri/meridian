@@ -161,8 +161,8 @@ Create in this order — each one is required before the next:
 
 1. **Epic** — a product capability: `/create-epic`
 2. **Version** — a release that groups epics: `/create-version`
-3. **User story** — an executable slice: `/create-us` (may live in product backlog before sprint planning)
-4. **Sprint** — time-boxed execution within a version: `/plan-sprint` (assign US ids to the sprint **before** `/refine-us` with `ready: true` and **before** `/implement-us`)
+3. **Sprint** *(optional but recommended)* — a time-boxed unit within a version: `/plan-sprint`
+4. **User story** — an executable task: `/create-us`
 
 ### Create a user story
 
@@ -180,9 +180,9 @@ This is the step between creation and implementation. The agent:
 - Writes the **Approach** (minimum 2 explanatory bullets — the technical direction)
 - Sets exact architecture section references
 - Writes concrete test steps under Planned
-- Sets `ready: true` when all checks pass (including **sprint scope** — US must already be on the sprint backlog)
+- Sets `ready: true` when all checks pass
 
-A story without `ready: true` cannot be implemented. A story not in a **planned** or **active** sprint cannot pass `/implement-us` (CLI `implement-gate`).
+A story without `ready: true` cannot be implemented.
 
 ### Sprint priority and scope
 

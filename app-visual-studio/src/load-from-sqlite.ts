@@ -15,6 +15,7 @@ type PlanningExport = {
     title: string
     epic: string
     version: string
+    sprint: string | null
     status: UserStory["status"]
     moscow: UserStory["moscow"]
     dependsOn: string[]
@@ -116,6 +117,7 @@ export function loadPlanningPayloadFromSqliteDetailed(
       title: s.title,
       epic: s.epic,
       version: s.version,
+      sprint: s.sprint ?? null,
       status: s.status,
       moscow: s.moscow,
       dependsOn: s.dependsOn ?? [],

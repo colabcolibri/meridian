@@ -147,7 +147,7 @@ def main() -> int:
                 upsert_user_story(conn, fm_d, full_d, extract_us_sections(body_d), [])
                 conn.commit()
             except ValueError as exc:
-                if "not in any sprint" not in str(exc):
+                if "sprint" not in str(exc).lower():
                     print(f"FAIL: unexpected error: {exc}")
                     return 1
             else:
@@ -170,6 +170,7 @@ def main() -> int:
                 ["US-0001"],
             )
             fm_d["ready"] = "true"
+            fm_d["sprint"] = "v1-S1"
             upsert_user_story(conn, fm_d, full_d, extract_us_sections(body_d), [])
             conn.commit()
             ensure_ready_has_open_sprint(conn, "US-0001")

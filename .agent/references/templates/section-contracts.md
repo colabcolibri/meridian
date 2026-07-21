@@ -13,6 +13,7 @@ Four phase groups replace flat H2 siblings. No legacy aliases.
 | Field | Create (`/create-us`) | Strict (has `ready`) |
 | ----- | -------------------- | -------------------- |
 | `id`, `title`, `epic`, `version`, `status`, `moscow`, `depends_on` | required | required |
+| `sprint` | omit or empty (product backlog) | required (`vX-SY`, same `version`, sprint `planned`/`active`) |
 | `ready` | `false` | required |
 | `done_when`, `tests`, `tests_status` | required | required |
 

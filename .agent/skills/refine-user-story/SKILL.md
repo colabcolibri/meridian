@@ -37,9 +37,8 @@ When checklist passes and `ready: true`, the US moves to **📌 Todo** on the bo
 1. Read guides, checklist, US `--full`, architecture sections.
 2. Deepen Why/Where if needed; **expand Approach** (≥2 bullets).
 3. Exact Architecture refs; DRY/SRP pass; concrete Planned steps.
-4. Confirm sprint membership (`list sprints` / `sprint_stories`) — if missing, stop and route `/plan-sprint` before `ready: true`.
-5. `update-us US-XXXX` (stdin) with `ready: true` in frontmatter only when checklist passes.
-6. `prepend-decision` if scope changed.
+4. `update-us US-XXXX` (stdin) with `ready: true` in frontmatter only when checklist passes.
+5. `prepend-decision` if scope changed.
 
 ## Output
 

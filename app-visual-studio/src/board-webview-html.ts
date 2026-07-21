@@ -439,7 +439,12 @@ export function boardKanbanHtml(payload: BoardWebviewPayload): string {
         const btn = document.createElement("button");
         btn.type = "button";
         btn.className = "card";
-        const meta = s.epic + (showVer ? " · " + s.version : "") + " · " + s.moscow;
+        const meta =
+          s.epic +
+          (showVer ? " · " + s.version : "") +
+          (s.sprint ? " · " + s.sprint : "") +
+          " · " +
+          s.moscow;
         const narrativeHtml =
           showNarrative && s.narrative
             ? '<div class="card-narrative">' + esc(s.narrative) + "</div>"

@@ -13,12 +13,12 @@ Use with `/implement-us US-XXXX` **before** any Write on product code for that s
 | 1 | `05_architecture.md` | `status: approved` |
 | 2 | Epic + version | `epic:` and `version:` exist in folders |
 | 3 | `ready` | Frontmatter `ready: true` (set only by `/refine-us`) |
-| 4 | `## Plan` | Present; not placeholder; Approach has ≥2 explanatory bullets |
-| 5 | Architecture refs | Each ref resolves to § in `05_architecture.md` **or** `docs/architecture/*.md` |
-| 6 | `depends_on` | Every listed US has `status: ✅` |
-| 7 | Story status | `❌` or `🔶` (not ✅ closed; not 🧊 frozen or 🚫 deprecated without manager waiver) |
-| 8 | Session scope | One US id cited; manager did not bundle unrelated features |
-| 9 | Sprint membership | Row in `sprint_stories` for a sprint with `status: planned` or `active` on the **same** `version` as the US |
+| 4 | Sprint scope | `sprint: vX-SY` on US (canonical) or US in sprint `stories:` — sprint `planned`/`active`, same `version` |
+| 5 | `## Plan` | Present; not placeholder; Approach has ≥2 explanatory bullets |
+| 6 | Architecture refs | Each ref resolves to § in `05_architecture.md` **or** `docs/architecture/*.md` |
+| 7 | `depends_on` | Every listed US has `status: ✅` |
+| 8 | Story status | `❌` or `🔶` (not ✅ closed; not 🧊 frozen or 🚫 deprecated without manager waiver) |
+| 9 | Session scope | One US id cited; manager did not bundle unrelated features |
 | 10 | `04_principles.md` | Read DRY + SRP sections this session |
 | 11 | Code quality | Implementation reuses existing modules per Approach; no copy-paste duplication; layer boundaries respected |
 
@@ -45,9 +45,4 @@ Reason: ready is false (run /refine-us US-XXXX first)
 ```txt
 Blocked — cannot implement US-XXXX:
 Reason: depends_on US-YYYY not ✅
-```
-
-```txt
-Blocked — cannot implement US-XXXX:
-Reason: not in any sprint — run /plan-sprint and add US to a planned or active sprint first
 ```

@@ -9,10 +9,10 @@ from typing import Any
 
 from meridian_db import (
     check_story_dependencies_satisfied,
-    check_story_sprint_membership,
     connect,
     db_exists,
     load_story_dependencies,
+    validate_story_open_sprint,
 )
 from meridian_markdown_parse import read_markdown_text
 
@@ -142,6 +142,13 @@ def check_implement_gate(package_root: str | Path, story_id: str) -> dict[str, A
         ready = bool(row["ready"])
         add_check("ready", ready, "ready must be true — run /refine-us first")
 
+        if ready:
+            try:
+                validate_story_open_sprint(conn, story_id)
+                add_check("sprint scope", True, "assigned to planned/active sprint")
+            except ValueError as exc:
+                add_check("sprint scope", False, str(exc))
+
         approach = row["plan_approach"]
         approach_ok = not _is_placeholder(approach) and _approach_bullet_count(approach) >= 2
         add_check(
@@ -167,13 +174,6 @@ def check_implement_gate(package_root: str | Path, story_id: str) -> dict[str, A
             "story status",
             status_ok,
             f"status={status} (must be ❌ or 🔶)",
-        )
-
-        sprint_ok, sprint_detail = check_story_sprint_membership(conn, story_id)
-        add_check(
-            "sprint membership",
-            sprint_ok,
-            sprint_detail,
         )
 
         body = row["body_markdown"] or ""

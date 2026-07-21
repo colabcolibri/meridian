@@ -92,6 +92,28 @@ export type InstallKitResult = {
   projectRoot: string
 }
 
+function runBootstrapDb(projectRoot: string, agentDir: string): string | null {
+  const script = path.join(agentDir, "scripts", "bootstrap_meridian_db.py")
+  if (!fs.existsSync(script)) {
+    return null
+  }
+  const docs = path.join(projectRoot, "docs", "00_scope.md")
+  if (!fs.existsSync(docs)) {
+    return null
+  }
+  const python = process.platform === "win32" ? "python" : "python3"
+  const result = spawnSync(python, [script, projectRoot], {
+    cwd: projectRoot,
+    encoding: "utf8",
+    shell: false,
+  })
+  if (result.status !== 0) {
+    const err = (result.stderr || result.stdout || "").trim()
+    return err || `bootstrap exited with code ${result.status}`
+  }
+  return (result.stdout || "").trim() || null
+}
+
 export function installBundledKit(
   projectRoot: string,
   extensionPath: string,
@@ -129,17 +151,19 @@ export function installBundledKit(
   appendGitignoreAdapterEntries(path.join(root, ".gitignore"))
 
   const syncError = runAdapterSync(root, dest)
+  const bootstrapMsg = runBootstrapDb(root, dest)
+  const bootstrapNote = bootstrapMsg ? ` SQLite: ${bootstrapMsg}.` : ""
   if (syncError) {
     return {
       ok: true,
-      message: `Kit installed at ${dest}. Adapter sync failed (${syncError}) — run .agent/scripts/sync_cursor_kit.sh manually.`,
+      message: `Kit installed at ${dest}. Adapter sync failed (${syncError}) — run .agent/scripts/sync_cursor_kit.sh manually.${bootstrapNote}`,
       projectRoot: root,
     }
   }
 
   return {
     ok: true,
-    message: `Meridian harness installed: ${dest} (agents, skills, workflows) + IDE adapters synced.`,
+    message: `Meridian harness installed: ${dest} (agents, skills, workflows) + IDE adapters synced.${bootstrapNote}`,
     projectRoot: root,
   }
 }

@@ -419,43 +419,6 @@ def validate_sqlite_privacy_refs(
             )
 
 
-def validate_sqlite_sprint_membership(
-    root: Path,
-    warnings: list[str],
-    errors: list[str] | None = None,
-    *,
-    as_error: bool = False,
-) -> None:
-    """Warn or error when open ready US is not on a planned/active sprint."""
-    db_path = root / ".meridian" / "meridian.db"
-    if not db_path.is_file():
-        return
-
-    lib_dir = _SCRIPT_DIR / "lib"
-    if str(lib_dir) not in sys.path:
-        sys.path.insert(0, str(lib_dir))
-    from meridian_db import check_story_sprint_membership, connect  # noqa: PLC0415
-
-    conn = connect(root)
-    try:
-        rows = conn.execute(
-            """
-            SELECT id FROM user_stories
-            WHERE ready = 1 AND status IN ('❌', '🔶')
-            """
-        ).fetchall()
-        for row in rows:
-            ok, detail = check_story_sprint_membership(conn, row["id"])
-            if not ok:
-                msg = f"{row['id']}: ready for implement but {detail} — run /plan-sprint"
-                if as_error and errors is not None:
-                    errors.append(msg)
-                else:
-                    warnings.append(msg)
-    finally:
-        conn.close()
-
-
 def validate_sqlite_design_system_refs(
     root: Path,
     docs: Path,
@@ -947,9 +910,6 @@ def main() -> int:
         validate_sqlite_security_refs(root, docs, warnings)
         validate_sqlite_privacy_refs(root, docs, warnings)
         validate_sqlite_test_strategy_refs(root, docs, warnings)
-        validate_sqlite_sprint_membership(
-            root, warnings, errors, as_error=sqlite_only_flag
-        )
 
     if board_path.exists():
         if sqlite_delivery or sqlite_only_flag:

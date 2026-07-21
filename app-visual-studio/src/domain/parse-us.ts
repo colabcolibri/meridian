@@ -63,6 +63,7 @@ export function parseUserStoryFile(filename: string, raw: string): UserStory | n
     title: str(record, "title") ?? id,
     epic: str(record, "epic") ?? "",
     version: str(record, "version") ?? "",
+    sprint: str(record, "sprint"),
     status,
     moscow,
     dependsOn: Array.isArray(record.depends_on)

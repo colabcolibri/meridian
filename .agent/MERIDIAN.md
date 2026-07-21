@@ -197,8 +197,8 @@ Board columns **Backlog** and **Todo** are not stored in SQLite: the extension d
 ```txt
 /create-us     → Intent + Plan draft, ready: false   (forbidden: draft files — SQLite only)
 /review-us     → optional audit (no edits, no ready)
-/refine-us     → deepen Plan + Approach (required), ready: true (requires sprint scope)
-implement      → developer gate: ready + Plan + sprint membership
+/refine-us     → deepen Plan + Approach (required), ready: true
+implement      → developer gate: ready + Plan filled
 /complete-us   → Record + status ✅
 /sync-board    → removed in v11 (board reads SQLite)
 commit (human) → after close + board sync; one commit per US — see commit-after-us-close.md

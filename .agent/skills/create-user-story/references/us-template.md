@@ -8,6 +8,7 @@ id: US-XXXX
 title: Short title
 epic: EPIC-XX
 version: vX
+sprint:
 status: ❌
 moscow: Must
 depends_on: []
@@ -143,7 +144,13 @@ Board columns **📋 Backlog** / **📌 Todo** are not frontmatter values: the I
 | Value | Meaning |
 | ----- | ------- |
 | `false` | Default on `/create-us` — narrative draft; implement blocked |
-| `true` | After `/refine-us` — plan and tests concrete enough to code |
+| `true` | After `/refine-us` — plan and tests concrete; **must** have `sprint:` (or be on sprint `stories:`) with sprint `planned`/`active` |
+
+## Sprint (frontmatter)
+
+| Field | Values | Rule |
+| ----- | ------- | ----- |
+| `sprint` | `vX-SY` or empty | Omit on `/create-us`. Set at refine or via `/plan-sprint` listing this US. Same `version` as US. Stored as `sprint_id` in SQLite. |
 
 ## Closure
 

@@ -8,6 +8,7 @@ export type UserStory = {
   title: string
   epic: string
   version: string
+  sprint: string | null
   status: StoryStatus
   moscow: Moscow
   dependsOn: string[]

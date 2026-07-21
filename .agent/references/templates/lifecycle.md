@@ -14,15 +14,15 @@ Epic (epic-template.md)
   ↓
 Version (version-template.md)
   ↓
-User story create (us-template.md + …) — status ❌, ready: false, Intent filled (may sit in product backlog without sprint)
+Sprint (sprint-template.md) — optional but recommended
   ↓
-Sprint (sprint-template.md) — **required before implement:** US must appear in sprint `stories` / `sprint_stories` (`/plan-sprint`)
+User story create (us-template.md + writing-guide.md + code-quality-at-us-time.md) — status ❌, ready: false, Intent filled
   ↓
 /review-us (review-checklist.md) — optional audit; report only; never sets ready
   ↓
-/refine-us (refine-checklist.md + …) — deepen Plan; DRY/SRP; `ready: true` (requires sprint scope per checklist)
+/refine-us (refine-checklist.md + code-quality-at-us-time.md + 04_principles) — deepen Plan; allocate sprint (`sprint:` or sprint `stories:`); DRY/SRP; ready: true
   ↓
-/implement-us (implement-gate-checklist.md + …) — gate (incl. sprint membership) then code; DRY/SRP; requires ready true
+/implement-us (implement-gate-checklist.md + code-quality-at-us-time.md) — gate then code; DRY/SRP; requires ready true
   ↓
 User story close (implementation-template.md) — Record + status ✅
   ↓

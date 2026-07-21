@@ -19,11 +19,11 @@ Read `writing-guide.md` for tone: Approach bullets must **explain**, not telegra
 | 7 | Plan / Planned | Numbered manual steps and/or exact commands; no “add when known” |
 | 8 | `done_when` | One measurable sentence in frontmatter |
 | 9 | Epic link | `epic: EPIC-XX` in frontmatter only — body explains slice in own words |
-| 10 | INVEST | Independent enough (`depends_on` justified), Small (one session), Testable (Planned + Acceptance) |
-| 11 | DRY | Approach names existing module/hook to reuse **or** justifies new shared module with path (see `code-quality-at-us-time.md`) |
-| 12 | SRP | One slice; Approach bullets don't mix unrelated layers; **Out of scope** lists creep risks |
-| 13 | Related decisions | `_n/a_` **or** `YYYY-MM-DD — title` when Approach touches scope, architecture, security, or acceptance; run `prepend-decision` first if not logged yet |
-| 14 | Sprint scope | US listed in `sprint_stories` for a sprint with `status: planned` or `active` on the same `version` — use `/plan-sprint` before setting `ready: true` |
+| 10 | Sprint scope | `sprint: vX-SY` (or US listed on sprint `stories:`) — same version; sprint `planned` or `active` before `ready: true` |
+| 11 | INVEST | Independent enough (`depends_on` justified), Small (one session), Testable (Planned + Acceptance) |
+| 12 | DRY | Approach names existing module/hook to reuse **or** justifies new shared module with path (see `code-quality-at-us-time.md`) |
+| 13 | SRP | One slice; Approach bullets don't mix unrelated layers; **Out of scope** lists creep risks |
+| 14 | Related decisions | `_n/a_` **or** `YYYY-MM-DD — title` when Approach touches scope, architecture, security, or acceptance; run `prepend-decision` first if not logged yet |
 
 See `.agent/references/scrum-meridian-map.md` for bugs/spikes (no extra artifact types).
 
@@ -52,7 +52,7 @@ See `.agent/references/scrum-meridian-map.md` for bugs/spikes (no extra artifact
 
 ```yaml
 ready: false   # /create-us — narrative draft (`ready` flag in SQLite; not a draft file)
-ready: true    # /refine-us — implement allowed (CLI rejects without sprint scope)
+ready: true    # /refine-us — implement allowed
 ```
 
 **Forbidden:** `.meridian/drafts/`, `us-*-refine.md` — persist with `update-us` (stdin) only.

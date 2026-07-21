@@ -24,26 +24,29 @@ Dogfood `packageRoot` = repository root (`.`).
 ```txt
 1. versions          (no FK)
 2. epics             (no FK; versions field is text JSON list)
-3. user_stories      (FK: epic_id → epics.id, version_id → versions.id)
+3. user_stories      (FK: epic_id → epics.id, version_id → versions.id; sprint_id → sprints.id optional)
 4. sprints           (FK: version_id → versions.id)
-5. sprint_stories    (FK: sprint_id → sprints.id, story_id → user_stories.id)
+5. sprint_stories    (derived cache; UNIQUE story_id — rebuilt from user_stories.sprint_id or sprint `stories:` upsert)
 6. story_dependencies (FK: story_id → user_stories.id, depends_on_id → user_stories.id)
 7. decisions         (independent)
 8. board_snapshots   (derived; auto on upsert via record_board_snapshot)
 ```
 
-**FK failures** mean parent row missing — insert version and epic before user story; insert user stories before `sprint_stories`.
+**FK failures** mean parent row missing — insert version and epic before user story; sprint row must exist before setting `sprint_id` on a US.
 
 ```mermaid
 erDiagram
   versions ||--o{ sprints : version_id
   versions ||--o{ user_stories : version_id
   epics ||--o{ user_stories : epic_id
+  sprints ||--o{ user_stories : sprint_id
   sprints ||--o{ sprint_stories : sprint_id
   user_stories ||--o{ sprint_stories : story_id
   user_stories ||--o{ story_dependencies : story_id
   user_stories ||--o{ story_dependencies : depends_on_id
 ```
+
+**Sprint link (canonical on US):** frontmatter `sprint: vX-SY` or sprint frontmatter `stories: [US-…]` — both converge on `user_stories.sprint_id`. `bootstrap_meridian_db.py` (also run on **Upgrade harness**) applies migrations and `reconcile_sprint_links()` for legacy DBs.
 
 ## Agent workflow (summary-first)
 
@@ -118,7 +121,8 @@ python3 .agent/scripts/validate_meridian.py . --sqlite-only   # after purge
 ## Inspect without CLI (sqlite3)
 
 ```bash
-sqlite3 .meridian/meridian.db "SELECT id, title, status, ready, summary FROM user_stories WHERE version_id='v10' ORDER BY id;"
+sqlite3 .meridian/meridian.db "SELECT id, title, status, ready, sprint_id FROM user_stories WHERE version_id='v10' ORDER BY id;"
+sqlite3 .meridian/meridian.db "SELECT id, sprint_id, sprint_position, ready FROM user_stories WHERE sprint_id IS NOT NULL ORDER BY sprint_id, sprint_position;"
 sqlite3 .meridian/meridian.db "SELECT ss.sprint_id, ss.story_id, ss.position FROM sprint_stories ss JOIN sprints s ON s.id=ss.sprint_id WHERE s.version_id='v10';"
 sqlite3 .meridian/meridian.db "PRAGMA foreign_key_list(user_stories);"
 ```
@@ -129,8 +133,8 @@ sqlite3 .meridian/meridian.db "PRAGMA foreign_key_list(user_stories);"
 | ------ | -------- | ----- |
 | Version | `upsert_version(conn, fm, body, sections)` | `sections` from `extract_version_sections` |
 | Epic | `upsert_epic(conn, fm, body, sections)` | |
-| User story | `upsert_user_story(conn, fm, body, sections, depends_on)` | `depends_on` is `list[str]` of **existing** `US-XXXX` PKs; synced to `story_dependencies` with FK + cycle check |
-| Sprint | `upsert_sprint(conn, fm, body, sections, stories)` | `stories` rebuilds `sprint_stories` |
+| User story | `upsert_user_story(conn, fm, body, sections, depends_on)` | `sprint` in FM → `sprint_id`; blocks `ready: true` without open sprint |
+| Sprint | `upsert_sprint(conn, fm, body, sections, stories)` | `stories` sets each US `sprint_id`, rebuilds `sprint_stories` + `stories_json` |
 
 `body` = full markdown with YAML frontmatter. Section columns are extracted by `meridian_markdown_parse.py` on every upsert.
 
@@ -192,9 +196,9 @@ Parse → upsert via CLI; do not hand-edit SQL for narrative bodies unless emerg
 | Import + validate | `meridian_db_export.py … --write-form` (JSON stdin) |
 | Build/validate | `.agent/scripts/lib/meridian_delivery_form.py` (shim at `meridian_delivery_form.py`) |
 
-JSON shape: `{ "frontmatter": {…}, "preamble": "…", "sections": { column_key: "markdown body" }, "catalog": { stories, epics, versions } }` (catalog on US export only).
+JSON shape: `{ "frontmatter": {…}, "preamble": "…", "sections": { column_key: "markdown body" }, "catalog": { stories, epics, versions, sprints } }` (catalog on US export only).
 
-US `depends_on` in the form is a **multi-select picker** of story PKs (`US-XXXX`). Save validates FK, rejects self-reference and cycles. `/implement-us` gate: every `depends_on` US must be `status: ✅` (`check_story_dependencies_satisfied` in `meridian_db.py`).
+US `depends_on` in the form is a **multi-select picker** of story PKs (`US-XXXX`). US `sprint` is a **select** from `catalog.sprints` (same version). Save validates FK, rejects self-reference and cycles. `/implement-us` gate: every `depends_on` US must be `status: ✅`; sprint must be `planned`/`active` (`validate_story_open_sprint` in `meridian_db.py`).
 
 Section keys match `extract_*_sections` in `meridian_markdown_parse.py` (e.g. US `intent_acceptance`, epic `capability`). Save runs `validate_*_structure` before upsert — invalid templates are rejected.
 

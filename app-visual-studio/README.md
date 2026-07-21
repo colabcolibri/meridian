@@ -116,7 +116,7 @@ In **chat**:
 | Concepts | **Meridian: Open Start Here** |
 | Situations | **Meridian: Open Usage Guide** |
 | Slash commands | **Meridian: Open Agents Help** |
-| Kanban | **Meridian: Open Board** — columns 📋 Backlog · 📌 Todo (from `ready` + `status: ❌`), 🔶 Partial, 🧪 Tests, ✅ Done; toggles 🧊 · 🚫 |
+| Kanban | **Meridian: Open Board** — columns 📋 Backlog · 📌 Todo (from `ready` + `status: ❌`), 🔶 Partial, 🧪 Tests, ✅ Done; toggles 🧊 · 🚫; cards show sprint when set |
 | Planning | **Open Versions**, **Open Sprints**, **Open Epics**, **Open Decisions** |
 | Validate project | **Meridian: Validate Project** (needs `python3`) |
 | Multi-product | **Meridian: Select Active Project** |
@@ -127,7 +127,7 @@ In **chat**:
 
 1. Update **Meridian Harness** in Extensions
 2. Reload window
-3. **Meridian: Upgrade Harness** in each project
+3. **Meridian: Upgrade Harness** in each project — refreshes `.agent/`, syncs IDE adapters, and runs `bootstrap_meridian_db.py` (migrations + sprint link reconcile on `meridian.db`)
 
 ---
 

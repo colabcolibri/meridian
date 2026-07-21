@@ -10,6 +10,7 @@ export type FormCatalog = {
   stories: FormCatalogEntry[]
   epics: FormCatalogEntry[]
   versions: FormCatalogEntry[]
+  sprints?: FormCatalogEntry[]
 }
 
 export type DeliveryFormPayload = {
@@ -70,6 +71,7 @@ export function deliveryFormFields(folder: DeliveryFolder): FormFieldDef[] {
         fm("title", "Title", "Metadata"),
         fm("epic", "Epic", "Metadata", "select", "epics"),
         fm("version", "Version", "Metadata", "select", "versions"),
+        fm("sprint", "Sprint", "Metadata", "select", "sprints"),
         fm("status", "Status", "Metadata", "select"),
         fm("moscow", "MoSCoW", "Metadata", "select"),
         fm("depends_on", "Depends on", "Metadata", "multiselect", "stories"),

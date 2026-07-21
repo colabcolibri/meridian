@@ -44,7 +44,6 @@ Before product code:
 | --------- | --- |
 | Code without `ready: true` | Protocol — use `/refine-us` |
 | Code without gate exit 0 | Protocol |
-| Code when US not in open sprint | Protocol — use `/plan-sprint` first |
 | `/create-us`, `/complete-us` | `backlog-refiner` |
 | New scope or epic | `product-owner` |
 | Mark `✅` without evidence | `backlog-refiner` + human |
@@ -57,7 +56,6 @@ Before product code:
 | Need | Delegate to |
 | ---- | ----------- |
 | US not ready / weak Plan | `backlog-refiner` → `/refine-us` |
-| US not in sprint | `sprint-planner` → `/plan-sprint` |
 | Blocked deps or architecture | `scrum-master` → `/status` |
 | Security gap in design | `security-champion` |
 | UI tokens / design system | `design-system-owner` |

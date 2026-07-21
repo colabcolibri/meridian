@@ -1,8 +1,8 @@
 ---
 title: Database
 status: approved
-version: 3.2
-updated: 2026-07-18
+version: 3.3
+updated: 2026-07-22
 depends_on: [03_user_types.md, 05_architecture.md]
 blocks: [07_api_contracts.md]
 ---
@@ -29,7 +29,7 @@ Every delivery row (epic, version, sprint, user story) uses **two layers**:
 | **Canonical file** | `body_markdown` | Full Meridian markdown — frontmatter `---` + all `##` / `###` sections. Round-trip for display, export, extension click-to-open, validator. |
 | **Parsed sections** | one TEXT column per `###` | Denormalized at upsert time by `meridian_markdown_parse.py` — query/search without re-parsing. |
 | **Digest** | `summary` | 4–8 sentences after close; agents read before full body. |
-| **Frontmatter** | dedicated columns | e.g. `epic_id`, `version_id`, `status`, `ready`, `depends_on_json` |
+| **Frontmatter** | dedicated columns | e.g. `epic_id`, `version_id`, `sprint_id`, `status`, `ready`, `depends_on_json` |
 
 ```txt
 Agent writes full US markdown
@@ -40,7 +40,7 @@ meridian_delivery.py update-us US-XXXX <<'EOF' … EOF
         ├─► body_markdown          (entire file — source for display)
         ├─► record_files, …        (each ### under ## Record → own column)
         ├─► intent_why, plan_approach, …
-        └─► epic_id, status, ready, …
+        └─► epic_id, sprint_id, status, ready, …
 ```
 
 **Write rule:** always `update-us` with **complete markdown** — never UPDATE a single column without updating `body_markdown`. Kit keeps columns in sync on upsert.
@@ -58,6 +58,7 @@ erDiagram
   versions ||--o{ user_stories : "version_id"
   epics ||--o{ user_stories : "epic_id"
   versions ||--o{ sprints : "version_id"
+  sprints ||--o{ user_stories : "sprint_id SET NULL"
   sprints ||--o{ sprint_stories : "sprint_id CASCADE"
   user_stories ||--o{ sprint_stories : "story_id CASCADE"
   user_stories ||--o{ story_dependencies : "story_id CASCADE"
@@ -87,6 +88,8 @@ erDiagram
     text id PK
     text epic_id FK
     text version_id FK
+    text sprint_id FK
+    int sprint_position
     text status
     text moscow
     text depends_on_json
@@ -118,7 +121,7 @@ erDiagram
 
   sprint_stories {
     text sprint_id PK_FK
-    text story_id PK_FK
+    text story_id UK_FK
     int position
   }
 
@@ -150,14 +153,31 @@ erDiagram
   }
 ```
 
+### Sprint assignment (US-centric)
+
+| Layer | Role |
+| ----- | ---- |
+| **Canonical** | `user_stories.sprint_id` (+ optional frontmatter `sprint: vX-SY` on upsert) |
+| **Order in sprint** | `user_stories.sprint_position` |
+| **Derived cache** | `sprint_stories` + `sprints.stories_json` — rebuilt on every US or sprint upsert |
+
+**Rules:**
+
+- At most **one** sprint per US (`UNIQUE` index on `sprint_stories.story_id`).
+- US may exist **without** sprint (product backlog) until `/plan-sprint` or `sprint:` is set.
+- `ready: true`, `set-ready`, and `/implement-us` require sprint `planned` or `active` on the **same** `version_id` as the US.
+- Writing sprint `stories:` still works: `upsert_sprint` sets `sprint_id` on each listed US, then rebuilds the cache.
+
+**Bootstrap / upgrade harness:** `bootstrap_meridian_db.py` applies migrations then `reconcile_sprint_links()` — backfills `sprint_id` from legacy `sprint_stories` or `stories_json`, dedupes duplicate assignments, rebuilds caches.
+
 ### Insert order (FK-safe)
 
 ```txt
 1. versions          (no FK)
 2. epics             (no FK; versions field is text JSON list, not FK)
-3. user_stories      → epic_id, version_id
+3. user_stories      → epic_id, version_id (sprint_id optional until assigned)
 4. sprints           → version_id
-5. sprint_stories    → sprint_id, story_id (rebuilt by upsert_sprint)
+5. sprint_stories    → derived cache (rebuilt from user_stories.sprint_id or sprint `stories:` upsert)
 6. story_dependencies → story_id, depends_on_id (rebuilt by upsert_user_story; validates US PKs)
 7. decisions         (independent)
 8. board_snapshots   (audit JSON on upsert — `record_board_snapshot()`)
@@ -174,6 +194,7 @@ Migrations:
 | `20260718100000_initial_delivery_schema.sql` | All tables below + indexes |
 | `20260718110000_summary_columns.sql` | `summary TEXT` on versions, epics, sprints, user_stories |
 | `20260718120000_story_dependencies.sql` | `story_dependencies` junction + backfill from `depends_on_json` |
+| `20260722120000_user_story_sprint.sql` | `user_stories.sprint_id`, `sprint_position`; reconcile on bootstrap |
 
 ### `versions`
 
@@ -197,7 +218,7 @@ Migrations:
 
 ### `user_stories`
 
-Frontmatter maps to columns (`epic` → `epic_id`, `version` → `version_id`, `depends_on` → `depends_on_json` + `story_dependencies`).
+Frontmatter maps to columns (`epic` → `epic_id`, `version` → `version_id`, `sprint` → `sprint_id`, `depends_on` → `depends_on_json` + `story_dependencies`).
 
 | Column | Type | Notes |
 | ------ | ---- | ----- |
@@ -205,6 +226,8 @@ Frontmatter maps to columns (`epic` → `epic_id`, `version` → `version_id`, `
 | `title` | TEXT | from frontmatter |
 | `epic_id` | TEXT FK → `epics.id` | required |
 | `version_id` | TEXT FK → `versions.id` | required |
+| `sprint_id` | TEXT FK → `sprints.id` ON DELETE SET NULL | optional at create; required for `ready: true` / implement |
+| `sprint_position` | INTEGER | order within sprint; synced with `sprint_stories.position` |
 | `status`, `moscow`, `ready`, `done_when`, `tests`, `tests_status` | | frontmatter; **`ready`** drives 📋 Backlog vs 📌 Todo on the board when `status` is ❌ |
 | `depends_on_json` | TEXT | denormalized JSON array; synced with `story_dependencies` |
 | `summary` | TEXT | read first; 4–8 sentences after `/complete-us` |
@@ -243,7 +266,7 @@ sqlite3 .meridian/meridian.db "
 "
 ```
 
-Indexes: `idx_user_stories_epic`, `idx_user_stories_version`.
+Indexes: `idx_user_stories_epic`, `idx_user_stories_version`, `idx_user_stories_sprint`.
 
 ### `story_dependencies`
 
@@ -270,21 +293,28 @@ sqlite3 .meridian/meridian.db "
 | ------ | ---- | ----- |
 | `id` | TEXT PK | e.g. `v10-S1` |
 | `version_id` | TEXT FK → `versions.id` | required |
-| `stories_json` | TEXT | JSON array; must match `sprint_stories` rows |
+| `stories_json` | TEXT | JSON array; mirror of US ids with `sprint_id` on this sprint (derived cache) |
 | `goal`, `done_when`, `goal_body`, `scope_table`, … | TEXT | |
 | `summary`, `body_markdown` | TEXT | |
 
 Index: `idx_sprints_version`.
 
-### `sprint_stories` (junction)
+### `sprint_stories` (derived cache)
 
 | Column | Type | Notes |
 | ------ | ---- | ----- |
 | `sprint_id` | TEXT FK → `sprints.id` ON DELETE CASCADE | |
-| `story_id` | TEXT FK → `user_stories.id` ON DELETE CASCADE | |
+| `story_id` | TEXT FK → `user_stories.id` ON DELETE CASCADE | **UNIQUE** — at most one sprint per US |
 | `position` | INTEGER | sprint priority order |
 
-Composite PK `(sprint_id, story_id)`. Not every US appears here — only US assigned to a sprint.
+Composite PK `(sprint_id, story_id)`. Rebuilt from `user_stories` where `sprint_id` matches. Not every US appears here — only US assigned to a sprint.
+
+```bash
+sqlite3 .meridian/meridian.db "
+  SELECT id, sprint_id, sprint_position, ready
+  FROM user_stories WHERE version_id='v10' ORDER BY sprint_id, sprint_position;
+"
+```
 
 ### `decisions`
 
@@ -341,7 +371,7 @@ python3 .agent/scripts/validate_meridian.py . --sqlite-only
 
 | Consumer | Mechanism | Data |
 | -------- | --------- | ---- |
-| Board / planning lists | `meridian_db_export.py --format planning` | Structured JSON (no `body_markdown` in payload) |
+| Board / planning lists | `meridian_db_export.py --format planning` | Structured JSON; each `userStory` includes `sprint` (nullable) |
 | Click-to-open artifact | `meridian_db_export.py --entity us --id US-XXXX` | Single `body_markdown` row |
 | Structured edit (form) | `meridian_db_export.py --format form` / `--write-form` | JSON fields → build markdown → validate → upsert |
 | Board audit | `record_board_snapshot()` on upsert | Optional history in `board_snapshots` |
@@ -409,7 +439,7 @@ Fresh clone: `bootstrap` creates empty schema; import data via `migrate_md_to_sq
 
 | Script | Role |
 | ------ | ---- |
-| `meridian_db.py` | `connect`, `upsert_*`, `export_planning_json`, migrations |
+| `meridian_db.py` | `connect`, `upsert_*`, `reconcile_sprint_links`, `export_planning_json`, migrations |
 | `meridian_delivery.py` | Human/agent query and write CLI |
 | `meridian_db_export.py` | JSON for extension (`--format planning`; `--format form`; `--write-form`) |
 | `meridian_delivery_form.py` | Build markdown from form fields; validate before upsert |

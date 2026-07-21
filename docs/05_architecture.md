@@ -59,7 +59,7 @@ The extension is **not** the source of truth for the protocol. It monitors **`do
 
 | Concern                    | Extension (v4+)                                                                 |
 | -------------------------- | ------------------------------------------------------------------------------- |
-| Board / kanban             | Editor tab; columns 📋 Backlog·📌 Todo·🔶 Partial·🧪 Tests·✅ Done; toggles 🧊 Frozen·🚫 Deprecated; version/epic filters |
+| Board / kanban             | Editor tab; columns 📋 Backlog·📌 Todo·🔶 Partial·🧪 Tests·✅ Done; toggles 🧊 Frozen·🚫 Deprecated; version/epic filters; US cards show `sprint` when allocated |
 | Epics / versions / sprints | Editor tab; version accordions; progress from US metadata                       |
 | Open artifact              | Virtual document from `meridian_db_export.py --entity …`                        |
 | Validate project           | **Meridian: Validate Project** → `validate_meridian.py` (Output channel)      |
@@ -82,7 +82,7 @@ F5 / Extension Development Host is **maintainer-only**. End users install `.vsix
 
 ### Data loading
 
-- **v10+:** extension reads delivery via `meridian_db_export.py --format planning` when `meridian.db` exists (`load-from-sqlite.ts`).
+- **v10+:** extension reads delivery via `meridian_db_export.py --format planning` when `meridian.db` exists (`load-from-sqlite.ts`). Planning JSON includes per-US `sprint` (from `user_stories.sprint_id`).
 - **Decisions:** `meridian_db_export.py --format decisions` → `load-decisions.ts` → **Open Decisions** tab.
 - `MeridianContext` watches `.meridian/meridian.db` → refresh board/deliverables webviews on change.
 

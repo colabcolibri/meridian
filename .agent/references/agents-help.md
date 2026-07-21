@@ -209,7 +209,7 @@ Complete in order: `00` → `01` → `02` → `03` → `04` → **`05`** → `06
 | D3 | **`/plan-sprint`** | `sprint-planner` | `vX-SY` in SQLite | Time-boxed goal + story list. |
 | D4 | **`/complete-sprint vX-SY`** | `sprint-planner` | sprint `status: complete` | Sprint review + Retrospective filled. |
 
-Order: **Epic → Version → User story** (backlog) → **`/plan-sprint`** (US on sprint) → **`/refine-us`** → **`/implement-us`** → **`/complete-sprint`** when increment delivered.
+Order: **Epic → Version → Sprint** (sprint optional but recommended) → User story → **`/complete-sprint`** when increment delivered.
 
 Epic/version **close:** set `status: complete` manually when outcome reached (no `/complete-epic` workflow).
 
@@ -221,7 +221,7 @@ Epic/version **close:** set `status: complete` manually when outcome reached (no
 | ---- | ------- | ----- | -------------- | ------------ |
 | E1 | **`/create-us`** | `backlog-refiner` | `ready: false` | New US: Intent + draft Plan. |
 | E2 | **`/review-us US-XXXX`** | `backlog-refiner` | unchanged | Read-only quality audit. No `ready` change. |
-| E3 | **`/refine-us US-XXXX`** | `backlog-refiner` | `ready: true` | Approach, arch refs, concrete tests; US on sprint. **Gate for code.** |
+| E3 | **`/refine-us US-XXXX`** | `backlog-refiner` | `ready: true` | Approach, arch refs, concrete tests. **Gate for code.** |
 | E4 | **`/implement-us US-XXXX`** | `developer` | — | Gate: `ready: true`, deps, Plan; then product code. **Block if not refined.** |
 | E5 | *(manager review)* | human | — | Review diff and run tests. |
 | E6 | **`/complete-us US-XXXX`** | `backlog-refiner` | `status: ✅` | Fills Record, checks acceptance (SQLite upsert). |

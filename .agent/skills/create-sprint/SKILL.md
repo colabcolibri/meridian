@@ -40,7 +40,6 @@ Never Write `docs/sprints/`. Persist with `update-sprint` on **stdin** (heredoc)
 - Version row exists (`list versions`).
 - Version is `planned` or `active`.
 - `05_architecture.md` `approved` before creating new US.
-- Stories assigned here are **required** before `/implement-us` (`implement-gate` checks `sprint_stories`).
 
 ## Procedure
 
