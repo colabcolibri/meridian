@@ -4,6 +4,12 @@ All notable changes to the **Meridian** VS Code extension (`meridian-vscode`).
 
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.1.32] - 2026-07-21
+
+### Fixed
+
+- **Sprints:** user stories listed again when loading planning data from SQLite (`storyIds` mapping)
+
 ## [1.1.31] - 2026-07-21
 
 ### Changed

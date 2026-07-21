@@ -63,7 +63,7 @@ test("versions, sprints, and epics webviews emit valid scripts", () => {
         status: "active",
         goal: "Prove the flow.",
         doneWhen: "US-0001 is done.",
-        stories: ["US-0001"],
+        storyIds: ["US-0001"],
       },
     ],
     stories: [

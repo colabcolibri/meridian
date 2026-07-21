@@ -145,7 +145,7 @@ export function loadPlanningPayloadFromSqliteDetailed(
       status: s.status,
       goal: s.goal,
       doneWhen: s.doneWhen,
-      stories: s.stories ?? [],
+      storyIds: s.stories ?? [],
     }))
     return { payload: { versions, epics, sprints, stories }, error: null }
   } catch (err) {
