@@ -44,7 +44,7 @@ python3 .agent/scripts/meridian_delivery.py set-summary US-0115 --text "4-8 sent
 3. Fill `## Record` per `implementation-template.md`.
 4. Mark acceptance `[x]`; `tests_status: done` when required.
 5. `update-us US-XXXX` with full markdown on stdin (heredoc); `set-summary` when closing.
-6. `prepend-decision` only for cross-cutting changes.
+6. **Before close:** if delivery changed an `approved` phase doc, security posture, or protocol/kit → `prepend-decision` (skill `update-decisions-log`, real `date`) and add `YYYY-MM-DD — title` under Plan **Related decisions** on the US.
 
 ## Output
 

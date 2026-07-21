@@ -55,7 +55,7 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
    - Edit only `draft` or `review` docs
    - Never set `approved`
    - Never create US/epics
-6. `update-decisions-log` if audit changes scope or architecture narrative.
+6. If apply changed scope, stack, security, or architecture narrative → **mandatory** `/update-decisions-log` (`prepend-decision`) before reporting done; cite affected docs in `--impact`.
 
 ---
 

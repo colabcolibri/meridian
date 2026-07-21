@@ -43,7 +43,8 @@ python3 .agent/scripts/meridian_delivery.py prepend-decision \
 Alternative: single entry JSON file → `--from-json /tmp/decision-entry.json`.
 
 4. If an `approved` phase doc changed → set that doc `status: review` + mention in `--impact`.
-5. **Never** edit or delete old decision rows (append-only by prepend only).
+5. When the change ties to a US → add under Plan **Related decisions**: `YYYY-MM-DD — <title>` (same day/title as the log entry). Log first, then cite in the US via `update-us`.
+6. **Never** edit or delete old decision rows (append-only by prepend only).
 
 ## Read back
 

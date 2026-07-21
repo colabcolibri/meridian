@@ -14,7 +14,7 @@ $ARGUMENTS
 2. **Gate:** implementation delivered; applicable tests passed; `depends_on` at `✅`
 3. **Mandatory read:** `implementation-template.md` + `us-template.md` + `section-contracts.md` + target US **before** editing status
 4. **Do not** mark `✅` with placeholder in `## Record`
-5. `prepend-decision` only if cross-cutting — read skill + run `date` before CLI
+5. Cross-cutting close gate: approved phase doc, kit/protocol, or security change → `prepend-decision` + `YYYY-MM-DD — title` in US Related decisions (skill + `date` before CLI)
 6. suggested commit line in ### Executed
 
 ---

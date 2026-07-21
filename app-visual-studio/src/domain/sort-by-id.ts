@@ -9,8 +9,13 @@ export function sortByIdAsc<T extends IdentifiedItem>(items: readonly T[]): T[] 
   return [...items].sort(compareByIdAsc)
 }
 
+/** Kanban: newest US id first (US-0159 before US-0158). */
+export function compareByIdDesc(a: IdentifiedItem, b: IdentifiedItem): number {
+  return compareByIdAsc(b, a)
+}
+
 export function sortStoriesById<
   T extends IdentifiedItem & { id: string },
 >(stories: T[]): T[] {
-  return sortByIdAsc(stories)
+  return [...stories].sort(compareByIdDesc)
 }

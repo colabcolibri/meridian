@@ -4,6 +4,13 @@ All notable changes to the **Meridian** VS Code extension (`meridian-vscode`).
 
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.1.31] - 2026-07-21
+
+### Changed
+
+- **Board:** cards within each column sort by US id descending (newest first, e.g. US-0159 before US-0158)
+- **Bundled kit:** decision log governance — US Plan cites SQLite log as `YYYY-MM-DD — title`; refine/complete/audit checklists (US-0160)
+
 ## [1.1.30] - 2026-07-20
 
 ### Fixed

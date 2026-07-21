@@ -57,3 +57,7 @@ python3 .agent/scripts/meridian_delivery.py show-decisions --date YYYY-MM-DD
 ```
 
 **Decisions** tab in the Meridian app — list by date with structured detail.
+
+## Link from user stories
+
+When a US change depends on a logged decision, Plan **Related decisions** cites the log (do not duplicate the full entry): `YYYY-MM-DD — title`. Write via `prepend-decision` first, then `update-us` on the story.

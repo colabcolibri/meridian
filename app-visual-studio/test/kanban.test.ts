@@ -61,7 +61,7 @@ test("resolveKanbanColumn maps terminal statuses", () => {
   )
 })
 
-test("groupStoriesForKanban sorts cards by id within column", () => {
+test("groupStoriesForKanban sorts cards by id descending within column", () => {
   const groups = groupStoriesForKanban([
     story({ id: "US-0002", title: "Zebra", status: "❌", ready: true }),
     story({ id: "US-0001", title: "Alpha", status: "❌", ready: true }),
@@ -69,7 +69,7 @@ test("groupStoriesForKanban sorts cards by id within column", () => {
   const todo = groups.find((g) => g.columnId === "todo")
   assert.deepEqual(
     todo?.stories.map((s) => s.id),
-    ["US-0001", "US-0002"],
+    ["US-0002", "US-0001"],
   )
 })
 

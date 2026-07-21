@@ -45,3 +45,4 @@ python3 .agent/scripts/meridian_delivery.py prepend-decision \
 1. Run `prepend-decision`.
 2. Change affected doc `status` to `review`.
 3. Inform manager which re-approval is needed.
+4. If a US drove or tracks the change → Plan **Related decisions**: `YYYY-MM-DD — title`.

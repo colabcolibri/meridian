@@ -295,7 +295,7 @@ export function boardKanbanHtml(payload: BoardWebviewPayload): string {
     }
 
     function compareById(a, b) {
-      return a.id.localeCompare(b.id, undefined, { numeric: true });
+      return b.id.localeCompare(a.id, undefined, { numeric: true });
     }
 
     function versionItems() {

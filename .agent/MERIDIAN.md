@@ -223,6 +223,7 @@ python3 .agent/scripts/validate_meridian.py <project-folder> --json
 - **Before CLI:** run `date +"%Y-%m-%d"` (`--date`) and `date +"%H:%M"` (`--time`)
 - Workflow `/update-decisions-log` + skill `update-decisions-log`; templates `decision-template.md`, `decision-schema.md`
 - Never edit old decision rows; legacy `docs/decisions/*.json` is import-only (purge after migrate)
+- US Plan **Related decisions** cites the log as `YYYY-MM-DD — title` after `prepend-decision` (not a parallel store)
 
 ---
 
