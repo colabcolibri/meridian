@@ -132,8 +132,9 @@ test("architecture diagram webview loads mermaid and meridian theme", () => {
   assert.match(html, /tightenDiagramViewBox/)
   assert.match(html, /fitBtn/)
   assert.match(html, /wireProjectContext\(projectContext\)/)
-  assert.match(html, /optionLabel/)
-  assert.match(html, /KIND_LABELS/)
+  assert.match(html, /diagramSidebar/)
+  assert.match(html, /diagram-list-item/)
+  assert.match(html, /toggleSidebarBtn/)
 })
 
 test("splitFrontmatter separates yaml header", () => {

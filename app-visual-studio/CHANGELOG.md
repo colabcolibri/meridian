@@ -4,6 +4,16 @@ All notable changes to the **Meridian** VS Code extension (`meridian-vscode`).
 
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.1.39] - 2026-07-24
+
+### Added
+
+- **Architecture diagrams:** collapsible sidebar with diagram list grouped by kind (Runtime, Database, …); toolbar **Diagrams** toggle; persisted sidebar and active diagram state
+
+### Fixed
+
+- **Architecture diagrams:** pan drag no longer selects Mermaid label text (`user-select`, `selectstart`, pointer capture)
+
 ## [1.1.38] - 2026-07-24
 
 ### Added

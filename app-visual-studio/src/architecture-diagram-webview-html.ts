@@ -63,16 +63,117 @@ const DIAGRAM_WEBVIEW_STYLES = `
       margin-right: 2px;
     }
     .diagram-select {
+      display: none;
+    }
+    .diagram-workspace {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: row;
+      min-height: 0;
+      min-width: 0;
+    }
+    .diagram-workspace[hidden] { display: none; }
+    .diagram-sidebar {
+      flex-shrink: 0;
+      width: min(260px, 38vw);
+      max-width: 100%;
+      display: flex;
+      flex-direction: column;
+      border-right: 1px solid var(--vscode-panel-border);
+      background: var(--vscode-sideBar-background);
+      min-height: 0;
+      transition: width 0.15s ease, opacity 0.15s ease;
+      overflow: hidden;
+    }
+    .diagram-sidebar.collapsed {
+      width: 0;
+      border-right-width: 0;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .diagram-sidebar-head {
+      flex-shrink: 0;
+      padding: 10px 12px 8px;
+      border-bottom: 1px solid var(--vscode-panel-border);
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .diagram-sidebar-head h2 {
+      margin: 0;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--vscode-descriptionForeground);
+    }
+    .diagram-count {
+      font-size: 10px;
+      color: var(--vscode-descriptionForeground);
+    }
+    .diagram-list {
+      flex: 1;
+      min-height: 0;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .diagram-group-head {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--vscode-descriptionForeground);
+      padding: 8px 6px 4px;
+      margin-top: 4px;
+    }
+    .diagram-group-head:first-child { margin-top: 0; padding-top: 0; }
+    .diagram-list-item {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 2px;
+      width: 100%;
+      text-align: left;
       font: inherit;
       font-size: 11px;
-      padding: 4px 8px;
-      border-radius: 4px;
-      border: 1px solid var(--vscode-widget-border);
-      background: var(--vscode-input-background);
+      padding: 8px 10px;
+      border-radius: 6px;
+      border: 1px solid transparent;
+      background: transparent;
       color: var(--vscode-foreground);
-      min-width: 180px;
-      max-width: min(420px, 100%);
+      cursor: pointer;
+    }
+    .diagram-list-item:hover {
+      background: var(--vscode-list-hoverBackground);
+    }
+    .diagram-list-item.active {
+      background: var(--vscode-list-activeSelectionBackground);
+      color: var(--vscode-list-activeSelectionForeground);
+      border-color: var(--vscode-focusBorder);
+    }
+    .diagram-item-title {
+      font-weight: 600;
+      line-height: 1.3;
+      word-break: break-word;
+    }
+    .diagram-item-file {
+      font-size: 10px;
+      opacity: 0.8;
+      word-break: break-all;
+    }
+    .diagram-main {
       flex: 1;
+      min-width: 0;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
+      position: relative;
     }
     .chip {
       font: inherit;
@@ -118,6 +219,8 @@ const DIAGRAM_WEBVIEW_STYLES = `
       background: var(--vscode-editor-background);
       cursor: grab;
       touch-action: none;
+      user-select: none;
+      -webkit-user-select: none;
     }
     .diagram-viewport.dragging { cursor: grabbing; }
     .diagram-canvas {
@@ -126,16 +229,27 @@ const DIAGRAM_WEBVIEW_STYLES = `
       display: block;
       width: max-content;
       height: max-content;
+      user-select: none;
+      -webkit-user-select: none;
     }
     #diagramHost {
       display: block;
       line-height: 0;
+      user-select: none;
+      -webkit-user-select: none;
     }
     #diagramHost svg.meridian-diagram,
     #diagramHost svg {
       display: block;
       max-width: none;
       height: auto;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+    #diagramHost svg * {
+      user-select: none;
+      -webkit-user-select: none;
+      pointer-events: none;
     }
     .meridian-diagram .node rect,
     .meridian-diagram .node polygon,
@@ -226,7 +340,7 @@ export function architectureDiagramWebviewHtml(
     ${projectContextToolbarHtml(context)}
     <div class="diagram-toolbar">
       <div class="diagram-toolbar-row">
-        <select class="diagram-select" id="diagramSelect" title="Select diagram"></select>
+        <button type="button" class="chip on" id="toggleSidebarBtn" title="Show or hide diagram list">Diagrams</button>
         <button type="button" class="chip" id="openSourceBtn" title="Open source file">Source</button>
         <button type="button" class="chip" id="openDocBtn" title="Open linked phase doc" style="display:none">Doc</button>
         <button type="button" class="chip" id="toggleMetaBtn" title="Show diagram notes">Notes</button>
@@ -243,13 +357,24 @@ export function architectureDiagramWebviewHtml(
   </div>
   <div class="diagram-stage" id="stage">
     <div class="empty-state" id="emptyState"></div>
-    <div class="diagram-viewport" id="diagramViewport" hidden>
-      <div class="diagram-canvas" id="diagramCanvas">
-        <div id="diagramHost"></div>
+    <div class="diagram-workspace" id="diagramWorkspace" hidden>
+      <aside class="diagram-sidebar" id="diagramSidebar" aria-label="Architecture diagrams">
+        <div class="diagram-sidebar-head">
+          <h2>Diagrams</h2>
+          <span class="diagram-count" id="diagramCount">0</span>
+        </div>
+        <div class="diagram-list" id="diagramList" role="listbox" aria-label="Select diagram"></div>
+      </aside>
+      <div class="diagram-main">
+        <div class="diagram-viewport" id="diagramViewport">
+          <div class="diagram-canvas" id="diagramCanvas">
+            <div id="diagramHost"></div>
+          </div>
+          <div class="viewport-hint">Scroll or pinch to zoom · drag to pan · dbl-click fit</div>
+        </div>
+        <div class="diagram-meta" id="diagramMeta"></div>
       </div>
-      <div class="viewport-hint">Scroll or pinch to zoom · drag to pan · dbl-click fit</div>
     </div>
-    <div class="diagram-meta" id="diagramMeta"></div>
   </div>
   <script src="${assets.mermaidScriptSrc}"></script>`
 
@@ -271,6 +396,7 @@ export function architectureDiagramWebviewHtml(
 
     let activeIndex = 0;
     let metaVisible = false;
+    let sidebarVisible = true;
     let renderGeneration = 0;
     let zoom = 1;
     let panX = 0;
@@ -285,11 +411,15 @@ export function architectureDiagramWebviewHtml(
     const MAX_ZOOM = 4;
 
     const emptyState = document.getElementById("emptyState");
+    const diagramWorkspace = document.getElementById("diagramWorkspace");
+    const diagramSidebar = document.getElementById("diagramSidebar");
+    const diagramList = document.getElementById("diagramList");
+    const diagramCount = document.getElementById("diagramCount");
+    const toggleSidebarBtn = document.getElementById("toggleSidebarBtn");
     const diagramViewport = document.getElementById("diagramViewport");
     const diagramCanvas = document.getElementById("diagramCanvas");
     const diagramHost = document.getElementById("diagramHost");
     const diagramMeta = document.getElementById("diagramMeta");
-    const diagramSelect = document.getElementById("diagramSelect");
     const openSourceBtn = document.getElementById("openSourceBtn");
     const openDocBtn = document.getElementById("openDocBtn");
     const toggleMetaBtn = document.getElementById("toggleMetaBtn");
@@ -313,7 +443,10 @@ export function architectureDiagramWebviewHtml(
     function activeEntry() {
       const valid = validDiagrams();
       if (!valid.length) return null;
-      return valid[Math.min(activeIndex, valid.length - 1)];
+      if (activeIndex < 0 || activeIndex >= valid.length) {
+        activeIndex = 0;
+      }
+      return valid[activeIndex];
     }
 
     function applyTransform() {
@@ -473,27 +606,93 @@ export function architectureDiagramWebviewHtml(
 
     function optionLabel(entry) {
       const kind = entry.meta.kind ? KIND_LABELS[entry.meta.kind] || entry.meta.kind : "Diagram";
-      return "[" + kind + "] " + entry.meta.title + " (" + entry.fileName + ")";
+      return "[" + kind + "] " + entry.meta.title;
     }
 
-    function populateSelect() {
-      diagramSelect.innerHTML = "";
+    function kindSortOrder(kind) {
+      const order = ["runtime", "database", "integration", "security", "flow", "other"];
+      const idx = order.indexOf(kind || "other");
+      return idx >= 0 ? idx : order.length;
+    }
+
+    function populateDiagramList() {
+      diagramList.innerHTML = "";
       const valid = validDiagrams();
-      if (!valid.length) {
-        const opt = document.createElement("option");
-        opt.textContent = "No diagrams";
-        diagramSelect.appendChild(opt);
-        diagramSelect.disabled = true;
-        return;
-      }
-      diagramSelect.disabled = false;
+      diagramCount.textContent = String(valid.length);
+      if (!valid.length) return;
+
+      const groups = {};
       valid.forEach((entry, index) => {
-        const opt = document.createElement("option");
-        opt.value = String(index);
-        opt.textContent = optionLabel(entry);
-        if (index === activeIndex) opt.selected = true;
-        diagramSelect.appendChild(opt);
+        const kind = entry.meta.kind || "other";
+        if (!groups[kind]) groups[kind] = [];
+        groups[kind].push({ entry, index });
       });
+
+      Object.keys(groups)
+        .sort((a, b) => kindSortOrder(a) - kindSortOrder(b))
+        .forEach((kind) => {
+          const head = document.createElement("div");
+          head.className = "diagram-group-head";
+          head.textContent = KIND_LABELS[kind] || kind;
+          diagramList.appendChild(head);
+          groups[kind].forEach(({ entry, index }) => {
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.className = "diagram-list-item" + (index === activeIndex ? " active" : "");
+            btn.setAttribute("role", "option");
+            btn.setAttribute("aria-selected", index === activeIndex ? "true" : "false");
+            btn.innerHTML =
+              '<span class="diagram-item-title">' + esc(entry.meta.title) + "</span>" +
+              '<span class="diagram-item-file">' + esc(entry.fileName) + "</span>";
+            btn.onclick = () => selectDiagram(index);
+            diagramList.appendChild(btn);
+          });
+        });
+    }
+
+    function bindDiagramActions(entry) {
+      openSourceBtn.disabled = false;
+      openSourceBtn.onclick = () => vscode.postMessage({ type: "openDiagramSource", path: entry.relativePath });
+      if (entry.meta.source_doc) {
+        openDocBtn.style.display = "";
+        openDocBtn.onclick = () => vscode.postMessage({ type: "openDoc", path: entry.meta.source_doc });
+      } else {
+        openDocBtn.style.display = "none";
+      }
+    }
+
+    function selectDiagram(index) {
+      activeIndex = index;
+      populateDiagramList();
+      const entry = activeEntry();
+      if (!entry) return;
+      showDiagram(entry);
+      renderMeta(entry);
+      bindDiagramActions(entry);
+    }
+
+    function applySidebarVisibility() {
+      diagramSidebar.classList.toggle("collapsed", !sidebarVisible);
+      toggleSidebarBtn.classList.toggle("on", sidebarVisible);
+      toggleSidebarBtn.title = sidebarVisible ? "Hide diagram list" : "Show diagram list";
+      try {
+        vscode.setState({ sidebarVisible, activeIndex });
+      } catch (_) {}
+      if (!diagramWorkspace.hidden && diagramHost.querySelector("svg")) {
+        requestAnimationFrame(() => fitDiagram());
+      }
+    }
+
+    function restoreUiState() {
+      try {
+        const saved = vscode.getState();
+        if (saved && typeof saved.sidebarVisible === "boolean") {
+          sidebarVisible = saved.sidebarVisible;
+        }
+        if (saved && typeof saved.activeIndex === "number") {
+          activeIndex = saved.activeIndex;
+        }
+      } catch (_) {}
     }
 
     function renderAll() {
@@ -501,7 +700,7 @@ export function architectureDiagramWebviewHtml(
       const errors = payload.diagrams.filter((d) => d.error || !d.mermaid);
       if (!valid.length) {
         emptyState.hidden = false;
-        diagramViewport.hidden = true;
+        diagramWorkspace.hidden = true;
         zoomToolbar.hidden = true;
         diagramMeta.classList.remove("visible");
         let msg = "No architecture diagrams found.";
@@ -518,28 +717,21 @@ export function architectureDiagramWebviewHtml(
       }
 
       emptyState.hidden = true;
-      diagramViewport.hidden = false;
+      diagramWorkspace.hidden = false;
       zoomToolbar.hidden = false;
-      populateSelect();
+      populateDiagramList();
       const entry = activeEntry();
       if (!entry) return;
 
       showDiagram(entry);
       renderMeta(entry);
-
-      openSourceBtn.disabled = false;
-      openSourceBtn.onclick = () => vscode.postMessage({ type: "openDiagramSource", path: entry.relativePath });
-      if (entry.meta.source_doc) {
-        openDocBtn.style.display = "";
-        openDocBtn.onclick = () => vscode.postMessage({ type: "openDoc", path: entry.meta.source_doc });
-      } else {
-        openDocBtn.style.display = "none";
-      }
+      bindDiagramActions(entry);
+      applySidebarVisibility();
     }
 
-    diagramSelect.onchange = () => {
-      activeIndex = Number(diagramSelect.value) || 0;
-      renderAll();
+    toggleSidebarBtn.onclick = () => {
+      sidebarVisible = !sidebarVisible;
+      applySidebarVisibility();
     };
 
     toggleMetaBtn.onclick = () => {
@@ -563,7 +755,7 @@ export function architectureDiagramWebviewHtml(
     zoomOutBtn.onclick = () => zoomBy(1 / 1.2);
 
     function onWheel(event) {
-      if (!diagramViewport || diagramViewport.hidden) return;
+      if (!diagramWorkspace || diagramWorkspace.hidden) return;
       const target = event.target;
       if (!diagramViewport.contains(target) && target !== diagramViewport) return;
       event.preventDefault();
@@ -580,7 +772,7 @@ export function architectureDiagramWebviewHtml(
     window.addEventListener("wheel", onWheel, { passive: false, capture: true });
 
     window.addEventListener("keydown", (event) => {
-      if (!diagramViewport || diagramViewport.hidden) return;
+      if (!diagramWorkspace || diagramWorkspace.hidden) return;
       if (event.key === "+" || event.key === "=") {
         event.preventDefault();
         zoomBy(1.2);
@@ -595,6 +787,7 @@ export function architectureDiagramWebviewHtml(
 
     diagramViewport.addEventListener("pointerdown", (event) => {
       if (event.button !== 0) return;
+      event.preventDefault();
       dragging = true;
       diagramViewport.classList.add("dragging");
       dragStartX = event.clientX;
@@ -621,15 +814,18 @@ export function architectureDiagramWebviewHtml(
     diagramViewport.addEventListener("pointerup", endDrag);
     diagramViewport.addEventListener("pointercancel", endDrag);
     diagramViewport.addEventListener("dblclick", () => fitDiagram());
+    diagramViewport.addEventListener("selectstart", (event) => event.preventDefault());
+    diagramViewport.addEventListener("dragstart", (event) => event.preventDefault());
 
     const viewportResize = new ResizeObserver(() => {
-      if (!diagramViewport.hidden && diagramHost.querySelector("svg")) {
+      if (!diagramWorkspace.hidden && diagramHost.querySelector("svg")) {
         fitDiagram();
       }
     });
     viewportResize.observe(diagramViewport);
 
     wireProjectContext(projectContext);
+    restoreUiState();
     renderAll();
   `
 
