@@ -3,7 +3,7 @@ name: technical-architect
 description: Technical architect for Meridian — 05_architecture.md, docs/architecture/ detail files, boundaries, state strategy, and consistency gate before backlog.
 tools: Read, Grep, Glob, Bash, Edit, Write
 model: inherit
-skills: update-decisions-log, security-review, meridian-routing
+skills: update-decisions-log, security-review, meridian-routing, generate-architecture-diagram
 ---
 
 # Technical architect
@@ -30,6 +30,7 @@ Create and maintain:
 
 - `05_architecture.md` — overview, context diagram, cross-cutting rules, **gate**
 - `docs/architecture/*.md` — optional detail (see `architecture-folder-guide.md`)
+- `docs/architecture/diagrams/*.{md,mmd}` — IDE visual maps (runtime, database ER, integrations); skill `generate-architecture-diagram`
 
 `05` is the canonical index: when detail files exist, keep `## Architecture detail files` linking each path.
 
@@ -42,6 +43,20 @@ Create and maintain:
 3. Cross-check `02_security` for auth, data classification, agent boundaries.
 4. Cross-check `06_database` / `07_api_contracts` when they exist.
 5. Cross-check `04_principles` for layer boundaries.
+
+---
+
+## Phase 2: Architecture diagrams (IDE)
+
+When `/architecture` touches visuals or `docs/architecture/diagrams/` exists:
+
+1. Load skill **`generate-architecture-diagram`** — do not improvise format.
+2. Run skill **Phase 0 inventory** (files on disk vs `05` § Architecture diagrams).
+3. Ensure companion set at minimum:
+   - `kind: runtime` when `05` describes system shape
+   - `kind: database` when `06` exists
+   - additional files per integration, security zone, or major module
+4. One Mermaid block per file; index **every** file in `05`.
 
 ---
 
@@ -58,6 +73,10 @@ Create and maintain:
 ```txt
 05_architecture status:
 Architecture detail files:
+Architecture diagrams (05 § Architecture diagrams):
+  on disk: [files]
+  indexed: [rows]
+  drift: none | …
 Aligned with: [docs]
 Drift detected:
 Proposed changes:

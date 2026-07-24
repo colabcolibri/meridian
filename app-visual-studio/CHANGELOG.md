@@ -4,6 +4,17 @@ All notable changes to the **Meridian** VS Code extension (`meridian-vscode`).
 
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.1.38] - 2026-07-24
+
+### Added
+
+- **Architecture diagrams:** command **Meridian: Open Architecture Diagram** — Mermaid maps from `docs/architecture/diagrams/*.{md,mmd}` with multi-file picker, pan/zoom, and Meridian theme (`meridian-mermaid`)
+- **Kit:** skill `generate-architecture-diagram` and `/architecture` workflow updates for runtime, database ER, and multi-file diagram inventory
+
+### Changed
+
+- **Bundled kit:** architecture diagram authoring and `05` index guidance synced with extension viewer
+
 ## [1.1.37] - 2026-07-22
 
 ### Changed

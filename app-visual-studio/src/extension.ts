@@ -1,5 +1,6 @@
 import * as vscode from "vscode"
 
+import { ArchitectureDiagramEditorPanel } from "./architecture-diagram-panel.js"
 import { BoardEditorPanel } from "./board-editor-panel.js"
 import {
   DecisionsEditorPanel,
@@ -35,6 +36,7 @@ let versionsEditor: VersionsEditorPanel | undefined
 let sprintsEditor: SprintsEditorPanel | undefined
 let epicsEditor: EpicsEditorPanel | undefined
 let decisionsEditor: DecisionsEditorPanel | undefined
+let architectureDiagramEditor: ArchitectureDiagramEditorPanel | undefined
 let helpEditor: HelpEditorPanel | undefined
 let howToUseEditor: KitReferenceEditorPanel | undefined
 let startHereEditor: KitReferenceEditorPanel | undefined
@@ -63,6 +65,10 @@ function openEpicsTab(): void {
 
 function openDecisionsTab(): void {
   decisionsEditor?.show(vscode.ViewColumn.One)
+}
+
+function openArchitectureDiagramTab(): void {
+  architectureDiagramEditor?.show(vscode.ViewColumn.One)
 }
 
 function openHelpTab(): void {
@@ -95,6 +101,7 @@ function refreshAllPanels(): void {
   sprintsEditor?.refresh()
   epicsEditor?.refresh()
   decisionsEditor?.refresh()
+  architectureDiagramEditor?.refresh()
   startHereEditor?.refresh()
   howToUseEditor?.refresh()
   usageGuideEditor?.refresh()
@@ -252,6 +259,12 @@ export function activate(context: vscode.ExtensionContext): void {
     onSelectProject,
     refreshAllPanels,
   )
+  architectureDiagramEditor = new ArchitectureDiagramEditorPanel(
+    context.extensionUri,
+    getWorkspace,
+    onSelectProject,
+    refreshAllPanels,
+  )
   helpEditor = new HelpEditorPanel(context.extensionUri)
   howToUseEditor = new KitReferenceEditorPanel(
     HOW_TO_USE_PANEL,
@@ -283,6 +296,10 @@ export function activate(context: vscode.ExtensionContext): void {
     vscode.commands.registerCommand("meridian.openSprints", openSprintsTab),
     vscode.commands.registerCommand("meridian.openEpics", openEpicsTab),
     vscode.commands.registerCommand("meridian.openDecisions", openDecisionsTab),
+    vscode.commands.registerCommand(
+      "meridian.openArchitectureDiagram",
+      openArchitectureDiagramTab,
+    ),
     vscode.commands.registerCommand("meridian.openHelp", openHelpTab),
     vscode.commands.registerCommand("meridian.openHowToUse", openHowToUseTab),
     vscode.commands.registerCommand("meridian.openStartHere", openStartHereTab),
@@ -306,6 +323,7 @@ export function deactivate(): void {
   sprintsEditor = undefined
   epicsEditor = undefined
   decisionsEditor = undefined
+  architectureDiagramEditor = undefined
   helpEditor = undefined
   howToUseEditor = undefined
   startHereEditor = undefined

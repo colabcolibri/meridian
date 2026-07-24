@@ -3,7 +3,7 @@ import * as path from "node:path"
 
 import * as vscode from "vscode"
 
-import { fileEventTouchesMeridianDb } from "./docs-board-sync.js"
+import { fileEventTouchesArchitectureDiagrams, fileEventTouchesMeridianDb } from "./docs-board-sync.js"
 import { clearMeridianDeliveryCache } from "./meridian-document-provider.js"
 import {
   pickMeridianWorkspace,
@@ -142,11 +142,17 @@ export class MeridianContext {
   private onWorkspaceFileEvent(
     files: readonly { readonly oldUri?: vscode.Uri; readonly newUri?: vscode.Uri }[],
   ): void {
-    const packageRoot = this.state.info?.packageRoot
-    if (!packageRoot || !fileEventTouchesMeridianDb(packageRoot, files)) {
+    const info = this.state.info
+    if (!info) {
       return
     }
-    this.schedulePlanningRefresh()
+    if (fileEventTouchesMeridianDb(info.packageRoot, files)) {
+      this.schedulePlanningRefresh()
+      return
+    }
+    if (info.docsExists && fileEventTouchesArchitectureDiagrams(info.docsRoot, files)) {
+      this.onWorkspaceChanged?.()
+    }
   }
 
   private resetDocsWatcher(): void {

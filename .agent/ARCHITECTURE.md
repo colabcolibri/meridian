@@ -70,7 +70,7 @@ Workflows orchestrate agents; they do not replace the master protocol.
 | `product-owner` | `00_scope`, discovery, epics | discover-product, create-epic, update-decisions-log, meridian-routing |
 | `technical-writer` | Phase docs `01`–`08`, `11` | init-project, update-decisions-log, meridian-routing |
 | `security-champion` | `02_security`, security operator | security-review, update-decisions-log, meridian-routing |
-| `technical-architect` | `05_architecture.md` | security-review, update-decisions-log, meridian-routing |
+| `technical-architect` | `05_architecture.md` | generate-architecture-diagram, security-review, update-decisions-log, meridian-routing |
 | `design-system-owner` | `09_design_system.md` | design-system, update-decisions-log, meridian-routing |
 | `quality-owner` | `10_test_strategy.md`, test operator | test-strategy, update-decisions-log, meridian-routing |
 | `sprint-planner` | SQLite `versions`, `sprints` | create-version, create-sprint, complete-sprint, meridian-routing |

@@ -10,8 +10,9 @@ Use with `/architecture` and agent `technical-architect`. Read before creating o
 | ---- | ---- |
 | `docs/05_architecture.md` | Phase doc + **gate** (`status: approved` unlocks backlog). Overview, context diagram, cross-cutting rules, **index** of detail files. |
 | `docs/architecture/*.md` | Deep dives when one file is too large or domains are distinct. |
+| `docs/architecture/diagrams/*.{md,mmd}` | Mermaid visual maps — runtime, database ER, flows; rendered in VS Code extension (`meridian-mermaid` module, pan/zoom). **One mermaid block per file.** Index in `05` § Architecture diagrams. |
 
-One approved `05_architecture.md` is enough for the validator. Detail files do not need their own `approved` status — they are in scope when listed in the `05` index at approval time.
+One approved `05_architecture.md` is enough for the validator. Detail files do not need their own `approved` status — they are in scope when listed in the `05` index at approval time. Diagram files are indexed in `05` § Architecture diagrams when present.
 
 ---
 
@@ -39,6 +40,44 @@ When any detail file exists, add:
 ```
 
 Each detail file should have frontmatter (`title`, `updated`) and link back to the relevant § in `05`.
+
+---
+
+## Architecture diagrams (`diagrams/`)
+
+**Agent:** `technical-architect` · **Skill:** `generate-architecture-diagram` · **Viewer:** VS Code **Meridian: Open Architecture Diagram**
+
+| Rule | Detail |
+| ---- | ------ |
+| One file per view | `meridian-runtime.md`, `meridian-database.md`, `{integration}.md`, … |
+| One ` ```mermaid ` block per file | Extension uses first block only |
+| Index in `05` | § **Architecture diagrams** — required for every file on disk |
+| Kinds | `runtime`, `database`, `integration`, `security`, `flow`, `other` (frontmatter `kind`) |
+
+### Required index in `05_architecture.md`
+
+When any diagram file exists:
+
+```markdown
+## Architecture diagrams
+
+| File | Kind | Scope |
+| ---- | ---- | ----- |
+| `architecture/diagrams/meridian-runtime.md` | runtime | Kit, docs, SQLite, extension |
+| `architecture/diagrams/meridian-database.md` | database | ER companion to 06 |
+```
+
+Add a row for **each** new file. Remove rows when files are deleted (after human confirms).
+
+### Multi-file maintenance
+
+1. **Inventory** — `Glob` `diagrams/*.{md,mmd}` and diff against `05` table (skill Phase 0).
+2. **Update** — edit existing file when the same bounded view changed.
+3. **Add** — new file + new `05` row when a new domain appears (new API, module, schema).
+4. **Refresh all** — `/architecture diagrams` or "update architecture maps": run skill Phase 5 across indexed files.
+5. **Drift** — file without index = add row; index without file = report stale row (do not delete without human).
+
+Template and orientation (LR vs TB vs ER): skill `references/mermaid-diagram-template.md`.
 
 ---
 

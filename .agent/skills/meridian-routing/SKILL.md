@@ -30,7 +30,7 @@ Before responding, classify the request and select the correct Meridian agent. S
 | Human-only action | create account, OAuth, PAT, API key, billing, payment, Stripe dashboard, production deploy, accept terms | **HAR stop** — no agent continues until manager acts | yes |
 | SEO (public web) | SEO, sitemap, meta tags, robots, Core Web Vitals, schema.org | `seo-strategy` skill + `technical-writer` / `developer` | yes |
 | Deploy / CI doc | deploy, rollback, CI pipeline, production release | `technical-writer` + `08_environments` | yes |
-| Architecture | "architecture", `05_architecture`, `/architecture` | `technical-architect` | yes |
+| Architecture | "architecture", `05_architecture`, `/architecture`, diagram, system map, ER map, architecture diagrams | `technical-architect` + `generate-architecture-diagram` | yes |
 | Design system | `09_design`, `/design-pass`, `/design-showcase`, `/design-review`, tokens, UI | `design-system-owner` + `design-system` | yes |
 | Test strategy | `10_test`, `/test-pass`, pyramid, coverage, runners | `quality-owner` + `test-strategy` | yes |
 | Test audit | `/test-review`, tests evidence, before complete-us | `quality-owner` + `test-strategy` | yes |

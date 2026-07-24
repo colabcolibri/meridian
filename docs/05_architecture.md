@@ -75,15 +75,28 @@ The extension is **not** the source of truth for the protocol. It monitors **`do
 | **Editor tab — Sprints**  | Sprint list with version filter                                                       |
 | **Editor tab — Epics**    | Epic progress with version + epic filters                                             |
 | **Editor tab — Decisions**| Read-only decision log by date from SQLite (`--format decisions`)                     |
+| **Editor tab — Architecture** | Interactive maps from `docs/architecture/diagrams/*.{md,mmd}` (pan, zoom, picker) |
 | Status bar                | `Meridian: N US` when `docs/` resolved; project name when multi-product               |
 | **Project context strip** | Toolbar: name, `docs/` path, US count; dropdown when N>1                              |
 
 F5 / Extension Development Host is **maintainer-only**. End users install `.vsix` (`pnpm install:cursor`).
 
+## Architecture diagrams
+
+Visual structures for onboarding and review — **runtime**, **database (ER)**, integrations, flows. One diagram per file in `docs/architecture/diagrams/` (authored via skill `generate-architecture-diagram`). **View:** extension command **Meridian: Open Architecture Diagram** (Meridian diagram renderer in plugin — bundled Mermaid.js + in-house theme, pan/zoom).
+
+| File | Kind | Scope |
+| ---- | ---- | ----- |
+| `architecture/diagrams/meridian-runtime.md` | runtime | Kit, docs, SQLite, extension tabs |
+| `architecture/diagrams/meridian-database.md` | database | Delivery store ER (companion to `06_database`) |
+
+`05_architecture.md` keeps inline Mermaid for the gate; `diagrams/` holds full IDE companion maps with auto-layout. Add a new row here when adding a diagram file — multiple files are expected as the system grows.
+
 ### Data loading
 
 - **v10+:** extension reads delivery via `meridian_db_export.py --format planning` when `meridian.db` exists (`load-from-sqlite.ts`). Planning JSON includes per-US `sprint` (from `user_stories.sprint_id`).
 - **Decisions:** `meridian_db_export.py --format decisions` → `load-decisions.ts` → **Open Decisions** tab.
+- **Architecture diagrams:** `docs/architecture/diagrams/*.{md,mmd}` → `load-architecture-diagrams.ts` → **Open Architecture Diagram** tab (`meridian-mermaid` theme in webview); refreshes when source changes.
 - `MeridianContext` watches `.meridian/meridian.db` → refresh board/deliverables webviews on change.
 
 ### Activation and `docs/` resolution

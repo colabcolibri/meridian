@@ -2,7 +2,7 @@
   "name": "meridian-vscode",
   "displayName": "%extension.displayName%",
   "description": "%extension.description%",
-  "version": "1.1.37",
+  "version": "1.1.38",
   "publisher": "colabcolibri",
   "license": "PolyForm-Noncommercial-1.0.0",
   "icon": "media/icon.png",
@@ -50,6 +50,7 @@
     "onCommand:meridian.openSprints",
     "onCommand:meridian.openEpics",
     "onCommand:meridian.openDecisions",
+    "onCommand:meridian.openArchitectureDiagram",
     "onCommand:meridian.openDeliverables",
     "onCommand:meridian.openHelp",
     "onCommand:meridian.openHowToUse",
@@ -114,6 +115,10 @@
         {
           "command": "meridian.openDecisions",
           "group": "1@5"
+        },
+        {
+          "command": "meridian.openArchitectureDiagram",
+          "group": "1@6"
         },
         {
           "command": "meridian.openHowToUse",
@@ -190,6 +195,11 @@
         "icon": "$(history)"
       },
       {
+        "command": "meridian.openArchitectureDiagram",
+        "title": "%meridian.command.openArchitectureDiagram.title%",
+        "icon": "$(type-hierarchy)"
+      },
+      {
         "command": "meridian.openDeliverables",
         "title": "%meridian.command.openDeliverables.title%",
         "icon": "$(list-tree)"
@@ -262,18 +272,18 @@
     }
   },
   "scripts": {
-    "compile": "node esbuild.mjs",
+    "compile": "node esbuild.mjs && node scripts/copy-mermaid.mjs",
     "watch": "node esbuild.mjs --watch",
     "dev": "pnpm watch",
     "build": "pnpm compile",
     "test": "pnpm compile && node --import tsx --test test/**/*.test.ts",
-    "package:vsix": "node scripts/bundle-kit.mjs && node esbuild.mjs && vsce package --no-dependencies",
-    "publish:marketplace": "node scripts/bundle-kit.mjs && node esbuild.mjs && vsce publish --no-dependencies",
+    "package:vsix": "node scripts/bundle-kit.mjs && node esbuild.mjs && node scripts/copy-mermaid.mjs && vsce package --no-dependencies",
+    "publish:marketplace": "node scripts/bundle-kit.mjs && node esbuild.mjs && node scripts/copy-mermaid.mjs && vsce publish --no-dependencies",
     "publish:marketplace:env": "bash scripts/publish-env.sh",
-    "publish:marketplace:patch": "node scripts/bundle-kit.mjs && node esbuild.mjs && vsce publish patch --no-dependencies",
+    "publish:marketplace:patch": "node scripts/bundle-kit.mjs && node esbuild.mjs && node scripts/copy-mermaid.mjs && vsce publish patch --no-dependencies",
     "install:cursor": "pnpm package:vsix && node scripts/install-vsix.mjs cursor",
     "install:code": "pnpm package:vsix && node scripts/install-vsix.mjs code",
-    "vscode:prepublish": "node scripts/bundle-kit.mjs && node esbuild.mjs"
+    "vscode:prepublish": "node scripts/bundle-kit.mjs && node esbuild.mjs && node scripts/copy-mermaid.mjs"
   },
   "devDependencies": {
     "@types/node": "^22.10.0",
@@ -284,6 +294,7 @@
     "typescript": "~5.6.2"
   },
   "dependencies": {
+    "mermaid": "^11.16.0",
     "yaml": "^2.9.0"
   }
 }

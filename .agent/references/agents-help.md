@@ -174,7 +174,7 @@ Complete in order: `00` → `01` → `02` → `03` → `04` → **`05`** → `06
 | C2 | *(conversation)* | `technical-writer` | `01`, `03`, `04`, `06`–`08` | Draft phase documents. |
 | C3 | **`/security-pass`** | `security-champion` | `02_security.md` | Threat model, secrets, OWASP, agent safety. |
 | C3b | **`/privacy-pass`** | `security-champion` | `02_security.md` § LGPD + GDPR | Brazil (ANPD) and EU (EDPB) privacy sections; official refs in checklist. **Doc only.** |
-| C4 | **`/architecture`** | `technical-architect` | `05_architecture.md` + optional `docs/architecture/` | Overview, index, detail files; gate for backlog. |
+| C4 | **`/architecture`** | `technical-architect` | `05_architecture.md` + optional `docs/architecture/` + `docs/architecture/diagrams/` | Overview, detail files, **diagram index** (multi-file Mermaid maps for IDE); gate for backlog. Skill: `generate-architecture-diagram`. |
 | C5 | **`/design-pass`** | `design-system-owner` | `09_design_system.md` | Contract: tokens, stack, components. Modes: `bootstrap`, `US-XXXX`. **Doc only.** |
 | C6 | **`/design-showcase`** | `design-system-owner` | `09` § Showcase + US drafts | Plan catalog routes; creates showcase US for `developer`. **No code.** |
 | C7 | **`/design-review`** | `design-system-owner` | Report | Audit live UI vs `09` + showcase. **No code.** |

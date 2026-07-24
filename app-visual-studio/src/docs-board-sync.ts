@@ -25,3 +25,28 @@ export function fileEventTouchesMeridianDb(
   }
   return false
 }
+
+export function isArchitectureDiagramPath(docsRoot: string, filePath: string): boolean {
+  const diagramsDir = path.join(docsRoot, "architecture", "diagrams")
+  const resolved = path.resolve(filePath)
+  if (!resolved.startsWith(path.resolve(diagramsDir) + path.sep)) {
+    return false
+  }
+  const ext = path.extname(resolved).toLowerCase()
+  return ext === ".md" || ext === ".mmd"
+}
+
+export function fileEventTouchesArchitectureDiagrams(
+  docsRoot: string,
+  files: readonly { readonly oldUri?: vscode.Uri; readonly newUri?: vscode.Uri }[],
+): boolean {
+  for (const entry of files) {
+    if (entry.newUri && isArchitectureDiagramPath(docsRoot, entry.newUri.fsPath)) {
+      return true
+    }
+    if (entry.oldUri && isArchitectureDiagramPath(docsRoot, entry.oldUri.fsPath)) {
+      return true
+    }
+  }
+  return false
+}

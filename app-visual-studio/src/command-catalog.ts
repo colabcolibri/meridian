@@ -196,6 +196,20 @@ export const MERIDIAN_COMMAND_CATALOG: CommandHelpEntry[] = [
     status: "shipped",
   },
   {
+    id: "architecture-diagram",
+    title: "Open Architecture Diagram",
+    commandId: "meridian.openArchitectureDiagram",
+    paletteTitle: "Meridian: Open Architecture Diagram",
+    group: "views",
+    summary: "Interactive architecture maps from docs/architecture/diagrams (Mermaid .md / .mmd)",
+    details: [
+      "Reads Mermaid from docs/architecture/diagrams; Meridian renderer (theme + pan/zoom).",
+      "Picker lists all diagram files (runtime, database ER, flows); optional Notes; open Source or linked phase doc.",
+    ],
+    icon: "$(type-hierarchy)",
+    status: "shipped",
+  },
+  {
     id: "deliverables",
     title: "Open Deliverables",
     commandId: "meridian.openDeliverables",

@@ -23,4 +23,5 @@ fi
 cd "${ROOT}"
 node scripts/bundle-kit.mjs
 node esbuild.mjs
+node scripts/copy-mermaid.mjs
 pnpm exec vsce publish --no-dependencies

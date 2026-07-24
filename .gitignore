@@ -5,6 +5,7 @@ node_modules/
 # VS Code extension packages (build locally with pnpm package:vsix)
 *.vsix
 app-visual-studio/bundled/
+app-visual-studio/media/mermaid.min.js
 
 # Builds
 dist/
