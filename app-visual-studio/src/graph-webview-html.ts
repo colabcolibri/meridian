@@ -128,10 +128,11 @@ export function graphWebviewHtml(
       --fg-grid: #334155;
       --fg-label: var(--vscode-foreground);
       --fg-highlight: #f8fafc;
-      --fg-done: #4ade80;
+      --fg-open: #fb923c;
+      --fg-done: #22c55e;
       --fg-partial: #fbbf24;
       --fg-muted: #94a3b8;
-      --fg-frozen: #67e8f9;
+      --fg-frozen: #60a5fa;
       --fg-deprecated: #f87171;
     }
     * { box-sizing: border-box; }

@@ -3,18 +3,52 @@
 from __future__ import annotations
 
 import json
-import re
 from dataclasses import dataclass
 from pathlib import Path
 
 _TSCONFIG_NAMES = ("tsconfig.json", "jsconfig.json")
-_JSONC_LINE = re.compile(r"//.*?$", re.MULTILINE)
-_JSONC_BLOCK = re.compile(r"/\*.*?\*/", re.DOTALL)
 
 
 def strip_jsonc(text: str) -> str:
-    text = _JSONC_BLOCK.sub("", text)
-    return _JSONC_LINE.sub("", text)
+    """Remove // and /* */ comments without touching string literals (e.g. glob `**/*.ts`)."""
+    out: list[str] = []
+    i = 0
+    n = len(text)
+    in_string = False
+    escape = False
+    while i < n:
+        ch = text[i]
+        if in_string:
+            out.append(ch)
+            if escape:
+                escape = False
+            elif ch == "\\":
+                escape = True
+            elif ch == '"':
+                in_string = False
+            i += 1
+            continue
+        if ch == '"':
+            in_string = True
+            out.append(ch)
+            i += 1
+            continue
+        if ch == "/" and i + 1 < n:
+            nxt = text[i + 1]
+            if nxt == "/":
+                i += 2
+                while i < n and text[i] not in "\r\n":
+                    i += 1
+                continue
+            if nxt == "*":
+                i += 2
+                while i + 1 < n and not (text[i] == "*" and text[i + 1] == "/"):
+                    i += 1
+                i = min(i + 2, n)
+                continue
+        out.append(ch)
+        i += 1
+    return "".join(out)
 
 
 def _resolve_extends_path(config_dir: Path, spec: str) -> Path | None:

@@ -24,6 +24,7 @@ test("assembleForceGraphRuntime splits responsibilities into modules", () => {
   assert.match(runtime, /function relayout/)
   assert.match(runtime, /applyRepulsionGrid/)
   assert.match(runtime, /simTicks/)
+  assert.match(runtime, /--fg-open/)
   assert.match(runtime, /--fg-frozen/)
   assert.match(runtime, /--fg-deprecated/)
   assert.match(runtime, /drawDeliveryLegend/)

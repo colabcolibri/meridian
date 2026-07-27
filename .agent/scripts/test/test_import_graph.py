@@ -85,6 +85,26 @@ def main() -> int:
             print("FAIL: meta.pathAliases not set")
             return 1
 
+    with tempfile.TemporaryDirectory() as tmp:
+        root = Path(tmp)
+        (root / "tsconfig.json").write_text(
+            """{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": { "@/*": ["src/*"] }
+  },
+  "include": [".expo/types/**/*.ts", "src/**/*.tsx"]
+}
+"""
+        )
+        (root / "src").mkdir()
+        (root / "src" / "util.ts").write_text("export const u = 1;\n")
+        (root / "src" / "main.ts").write_text('import { u } from "@/util";\nexport { u };\n')
+        graph = build_import_graph(root)
+        if not any(e["from"] == "src/main.ts" and e["to"] == "src/util.ts" for e in graph["edges"]):
+            print(f"FAIL: tsconfig glob in include must not break JSONC parse: {graph['edges']}")
+            return 1
+
     print("OK: import graph tests passed")
     return 0
 

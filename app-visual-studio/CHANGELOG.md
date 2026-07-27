@@ -4,6 +4,13 @@ All notable changes to the **Meridian** VS Code extension (`meridian-vscode`).
 
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.1.43] - 2026-07-28
+
+### Fixed
+
+- **Import graph:** JSONC parser no longer treats glob patterns like `**/*.ts` in `tsconfig` `include` as block comments (fixes parse errors on Expo/React Native projects)
+- **Delivery graph:** more distinct status colors — open (orange), done (green), frozen (blue); explicit `--fg-open` token
+
 ## [1.1.42] - 2026-07-28
 
 ### Fixed

@@ -3,9 +3,10 @@ export const GRAPH_RUNTIME_RENDER = `
   function statusColor(status) {
     if (status === "✅") return getComputedStyle(document.documentElement).getPropertyValue("--fg-done").trim() || "#22c55e";
     if (status === "🔶") return getComputedStyle(document.documentElement).getPropertyValue("--fg-partial").trim() || "#f59e0b";
-    if (status === "🧊") return getComputedStyle(document.documentElement).getPropertyValue("--fg-frozen").trim() || "#67e8f9";
+    if (status === "🧊") return getComputedStyle(document.documentElement).getPropertyValue("--fg-frozen").trim() || "#60a5fa";
     if (status === "🚫") return getComputedStyle(document.documentElement).getPropertyValue("--fg-deprecated").trim() || "#f87171";
-    return getComputedStyle(document.documentElement).getPropertyValue("--fg-node").trim() || "#14b8a6";
+    if (status === "❌") return getComputedStyle(document.documentElement).getPropertyValue("--fg-open").trim() || "#fb923c";
+    return getComputedStyle(document.documentElement).getPropertyValue("--fg-muted").trim() || "#94a3b8";
   }
 
   function neighborsOf(node) {
