@@ -1,7 +1,14 @@
 import * as vscode from "vscode"
 
 import { DocsOpenPanel, emptyPanelHtml, type BuiltHtml } from "./docs-open-panel.js"
-import { buildDeliveryGraph, listDeliveryFilterOptions } from "./load-delivery-graph.js"
+import { allSelectedVersionIds } from "./domain/version-filter.js"
+import {
+  buildDeliveryGraph,
+  deliveryStoriesForGraphPayload,
+  epicIdsInScope,
+  listDeliveryFilterOptions,
+  sprintIdsInScope,
+} from "./load-delivery-graph.js"
 import { graphWebviewHtml } from "./graph-webview-html.js"
 import type { MeridianWorkspaceInfo } from "./meridian-workspace.js"
 import { loadPlanningPayloadDetailed } from "./planning-payload.js"
@@ -10,16 +17,12 @@ import { buildWebviewProjectContext, formatMeridianPanelTitle } from "./webview-
 type DeliveryGraphMessage =
   | { type: "openStory"; id: string }
   | { type: "selectProject"; id: string }
-  | { type: "applyFilters"; version: string; sprint: string }
 
 export class DeliveryGraphPanel extends DocsOpenPanel {
   protected readonly viewType = "meridian.deliveryGraph"
   protected readonly defaultTitle = "Meridian Delivery Graph"
   protected readonly emptyMessage =
     "Open a Meridian workspace with SQLite delivery to see the US dependency graph."
-
-  private filterVersion = "All"
-  private filterSprint = "All"
 
   show(column: vscode.ViewColumn = vscode.ViewColumn.One): void {
     if (this.panel) {
@@ -50,47 +53,38 @@ export class DeliveryGraphPanel extends DocsOpenPanel {
     if (!loaded.ok) {
       return { html: emptyPanelHtml(loaded.error), title: this.defaultTitle }
     }
-    const { versions, sprints } = listDeliveryFilterOptions(loaded.payload.stories)
-    const activeVersion =
-      loaded.payload.versions.find((v) => v.status === "active")?.id ??
-      this.filterVersion
-    if (this.filterVersion === "All" && activeVersion && activeVersion !== "All") {
-      this.filterVersion = activeVersion
-    }
-    const model = buildDeliveryGraph(loaded.payload.stories, {
-      version: this.filterVersion,
-      sprint: this.filterSprint,
+    const stories = loaded.payload.stories
+    const { versions } = listDeliveryFilterOptions(stories)
+    const defaultVersions = allSelectedVersionIds(versions)
+    const defaultVersionSet = new Set(defaultVersions)
+    const defaultSprints = new Set(sprintIdsInScope(stories, defaultVersionSet))
+    const defaultEpics = new Set(epicIdsInScope(stories, defaultVersionSet))
+    const model = buildDeliveryGraph(stories, {
+      versions: defaultVersionSet,
+      sprints: defaultSprints,
+      epics: defaultEpics,
     })
     const context = buildWebviewProjectContext(info)
     const webview = this.panel!.webview
-    const mermaidScriptSrc = webview
-      .asWebviewUri(vscode.Uri.joinPath(this.extensionUri, "media", "mermaid.min.js"))
-      .toString()
     return {
       html: graphWebviewHtml(
         {
           kind: "delivery",
           title: "Delivery dependency graph",
           model,
+          stories: deliveryStoriesForGraphPayload(stories),
+          epics: loaded.payload.epics.map((e) => ({ id: e.id, title: e.title })),
           versions,
-          sprints,
-          initialVersion: this.filterVersion,
-          initialSprint: this.filterSprint,
+          defaultVersions,
         },
         context,
-        { mermaidScriptSrc, cspSource: webview.cspSource },
+        { cspSource: webview.cspSource },
       ),
       title: formatMeridianPanelTitle("Delivery Graph", info, model.nodes.length),
     }
   }
 
   private async handleDeliveryMessage(msg: DeliveryGraphMessage): Promise<void> {
-    if (msg.type === "applyFilters") {
-      this.filterVersion = msg.version || "All"
-      this.filterSprint = msg.sprint || "All"
-      this.refresh()
-      return
-    }
     if (msg.type === "openStory") {
       const info = this.getWorkspace()
       if (!info?.docsExists) {

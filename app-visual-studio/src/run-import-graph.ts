@@ -3,10 +3,11 @@ import * as fs from "node:fs"
 import * as path from "node:path"
 
 import type { GraphModel } from "./domain/graph-model.js"
+import { buildFileTypeLegend, enrichImportGraphNode } from "./domain/graph-file-type.js"
 import { kitRootFromPackageRoot, resolvePythonCommand } from "./load-from-sqlite.js"
 
 export type ImportGraphResult =
-  | { ok: true; model: GraphModel; metaLine: string }
+  | { ok: true; model: GraphModel; metaLine: string; fileTypeLegend: ReturnType<typeof buildFileTypeLegend> }
   | { ok: false; error: string }
 
 type ImportGraphJson = {
@@ -44,14 +45,15 @@ export function runImportGraph(packageRoot: string, scopeRoot: string): ImportGr
     )
     const parsed = JSON.parse(stdout) as ImportGraphJson
     const model: GraphModel = {
-      nodes: (parsed.nodes ?? []).map((n) => ({ id: n.id, label: n.label || n.id })),
+      nodes: (parsed.nodes ?? []).map((n) => enrichImportGraphNode(n)),
       edges: (parsed.edges ?? []).map((e) => ({ from: e.from, to: e.to })),
     }
     const meta = parsed.meta ?? {}
     return {
       ok: true,
       model,
-      metaLine: `${meta.nodeCount ?? model.nodes.length} nodes · ${meta.edgeCount ?? model.edges.length} edges · ${scope}`,
+      fileTypeLegend: buildFileTypeLegend(model),
+      metaLine: `${meta.nodeCount ?? model.nodes.length} files · ${meta.edgeCount ?? model.edges.length} imports`,
     }
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err)

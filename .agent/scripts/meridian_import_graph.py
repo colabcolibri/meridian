@@ -59,7 +59,11 @@ def main(argv: list[str] | None = None) -> int:
             )
             return 2
 
-    graph = build_import_graph(root, excludes=DEFAULT_EXCLUDES)
+    graph = build_import_graph(
+        root,
+        excludes=DEFAULT_EXCLUDES,
+        workspace=Path(args.workspace).expanduser().resolve() if args.workspace else None,
+    )
     payload = graph_to_json(graph)
     if args.out:
         out_path = Path(args.out).expanduser().resolve()

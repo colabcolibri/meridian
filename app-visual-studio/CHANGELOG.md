@@ -4,6 +4,24 @@ All notable changes to the **Meridian** VS Code extension (`meridian-vscode`).
 
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.1.40] - 2026-07-27
+
+### Added
+
+- **Import graph:** force-directed canvas viewer (pan/zoom/drag) with colors by file type and legend
+- **Delivery graph:** force-directed layout with lateral filter sheet (version, sprint, epic)
+- **Import graph CLI:** tsconfig/jsconfig path alias resolution (`@/…`), dynamic `import()`, Python relative imports, and `index` resolution
+
+### Changed
+
+- **Graph viewers:** replaced Mermaid + node list with canvas physics; spatial-grid repulsion and viewport culling for large graphs
+- **Import graph:** automatic scope from active package root (no folder picker); stronger spacing to reduce hub hairballs
+
+### Fixed
+
+- **Delivery graph:** filter chip and replot on filter change; layout no longer seeds dependency chains in a line
+- **Import graph:** missing edges for extensionless paths, `import()`, and path aliases
+
 ## [1.1.39] - 2026-07-24
 
 ### Added

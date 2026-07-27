@@ -4,6 +4,10 @@ export type GraphNode = {
   version?: string
   sprint?: string | null
   status?: string
+  /** Import graph: canonical language key (typescript, python, …). */
+  fileType?: string
+  /** Import graph: resolved fill color for canvas. */
+  color?: string
   meta?: Record<string, string>
 }
 
