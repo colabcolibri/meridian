@@ -36,6 +36,7 @@ Before responding, classify the request and select the correct Meridian agent. S
 | Test audit | `/test-review`, tests evidence, before complete-us | `quality-owner` + `test-strategy` | yes |
 | Version / sprint | "version", "sprint", `/create-version`, `/plan-sprint` | `sprint-planner` | yes |
 | Close sprint | `/complete-sprint`, retrospective | `sprint-planner` + `complete-sprint` | yes |
+| Close epic | `/complete-epic`, epic outcome | `sprint-planner` + `complete-epic` | yes |
 | Decisions / log | "decision", `/update-decisions-log` | `update-decisions-log` skill + `date` | yes |
 | User story / board | "user story", "US-", "kanban", `board_snapshots` | `backlog-refiner` | yes |
 | Implement US / code | "implement", "build", `/implement-us` | `developer` + `implement-user-story` | **block** if `ready` not true |

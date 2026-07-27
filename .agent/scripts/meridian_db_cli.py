@@ -31,6 +31,10 @@ from meridian_db import (  # noqa: E402
     validate_decision_entry,
     validate_story_open_sprint,
 )
+from meridian_lifecycle import (  # noqa: E402
+    collect_hygiene_findings,
+    lifecycle_eligible_for_story,
+)
 from meridian_markdown_parse import (  # noqa: E402
     extract_epic_sections,
     extract_sprint_sections,
@@ -646,6 +650,49 @@ def cmd_prepend_decision(args) -> int:
     return 0
 
 
+def cmd_lifecycle_hygiene(args) -> int:
+    root = _root(args)
+    conn = connect(root)
+    try:
+        findings = collect_hygiene_findings(conn)
+    finally:
+        conn.close()
+    if args.json:
+        print(json.dumps({"findings": findings}, ensure_ascii=False, indent=2))
+        return 0
+    if not findings:
+        print("Lifecycle hygiene: no finished-but-open containers.")
+        return 0
+    print(f"Lifecycle hygiene: {len(findings)} finding(s)")
+    for item in findings:
+        print(f"- [{item['kind']}] {item['id']}: {item['reason']}")
+        print(f"  → {item['suggested_command']}")
+    return 0
+
+
+def cmd_lifecycle_eligible(args) -> int:
+    root = _root(args)
+    conn = connect(root)
+    try:
+        payload = lifecycle_eligible_for_story(conn, args.story_id)
+    except ValueError as exc:
+        print(f"ERROR: {exc}", file=sys.stderr)
+        return 1
+    finally:
+        conn.close()
+    if args.json:
+        print(json.dumps(payload, ensure_ascii=False, indent=2))
+        return 0
+    print(f"story: {payload['storyId']} status={payload['storyStatus']}")
+    for key in ("sprint", "epic", "version"):
+        item = payload.get(key)
+        if item:
+            print(f"{key} eligible: {item['id']} — {item['suggested_command']}")
+        else:
+            print(f"{key} eligible: (none)")
+    return 0
+
+
 def cmd_show_decisions(args) -> int:
     root = _root(args)
     conn = connect(root)
@@ -809,6 +856,21 @@ def main() -> int:
     show_dec.add_argument("--date", required=True, help="YYYY-MM-DD")
     show_dec.add_argument("--json", action="store_true")
     show_dec.set_defaults(func=cmd_show_decisions)
+
+    hygiene = sub.add_parser(
+        "lifecycle-hygiene",
+        help="List finished-but-open sprints/epics/versions (warnings for /status)",
+    )
+    hygiene.add_argument("--json", action="store_true")
+    hygiene.set_defaults(func=cmd_lifecycle_hygiene)
+
+    eligible = sub.add_parser(
+        "lifecycle-eligible",
+        help="After /complete-us — containers eligible to close for a story",
+    )
+    eligible.add_argument("story_id")
+    eligible.add_argument("--json", action="store_true")
+    eligible.set_defaults(func=cmd_lifecycle_eligible)
 
     args = parser.parse_args()
     create_commands = {"create-us", "create-epic", "create-version", "create-sprint"}

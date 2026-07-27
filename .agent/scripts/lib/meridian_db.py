@@ -422,7 +422,7 @@ def assign_story_sprint(
         return
 
     sprint = conn.execute(
-        "SELECT version_id FROM sprints WHERE id = ?", (sprint_id,)
+        "SELECT version_id, status FROM sprints WHERE id = ?", (sprint_id,)
     ).fetchone()
     if not sprint:
         raise ValueError(f"sprint not found: {sprint_id}")
@@ -430,6 +430,12 @@ def assign_story_sprint(
         raise ValueError(
             f"US {story_id} version {version_id} does not match sprint {sprint_id} "
             f"(version {sprint['version_id']})"
+        )
+    if sprint["status"] not in OPEN_SPRINT_STATUSES:
+        raise ValueError(
+            f"cannot assign {story_id} to sprint {sprint_id} with status "
+            f"{sprint['status']} — use a planned/active sprint (do not restuff a "
+            f"complete sprint; plan a new sprint instead)"
         )
 
     if position is None:
@@ -515,6 +521,28 @@ def upsert_sprint(
     sections: dict[str, str | None],
     stories: list[str],
 ) -> None:
+    sprint_id = frontmatter.get("id") or ""
+    new_status = frontmatter.get("status", "planned")
+    prev = None
+    if sprint_id:
+        prev = conn.execute(
+            "SELECT status FROM sprints WHERE id = ?", (sprint_id,)
+        ).fetchone()
+    if (
+        prev
+        and prev["status"] == "complete"
+        and new_status in OPEN_SPRINT_STATUSES
+    ):
+        reopen_flag = str(frontmatter.get("reopen", "")).strip().lower()
+        if reopen_flag not in {"true", "1", "yes"}:
+            raise ValueError(
+                f"sprint {sprint_id} is complete — reopening to {new_status} requires "
+                f"frontmatter reopen: true and a decision log entry "
+                f"(prefer a new sprint instead of restuffing a closed one)"
+            )
+    # reopen is a write-path flag only — never persist as a column
+    frontmatter = {k: v for k, v in frontmatter.items() if k != "reopen"}
+
     conn.execute(
         """
         INSERT INTO sprints (
@@ -534,7 +562,7 @@ def upsert_sprint(
             frontmatter.get("id"),
             frontmatter.get("version"),
             frontmatter.get("title", ""),
-            frontmatter.get("status", "planned"),
+            new_status,
             frontmatter.get("goal"),
             frontmatter.get("done_when"),
             json.dumps(stories),

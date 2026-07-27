@@ -2,6 +2,8 @@ import * as vscode from "vscode"
 
 import { ArchitectureDiagramEditorPanel } from "./architecture-diagram-panel.js"
 import { BoardEditorPanel } from "./board-editor-panel.js"
+import { DeliveryGraphPanel } from "./delivery-graph-panel.js"
+import { ImportGraphPanel } from "./import-graph-panel.js"
 import {
   DecisionsEditorPanel,
   EpicsEditorPanel,
@@ -37,6 +39,8 @@ let sprintsEditor: SprintsEditorPanel | undefined
 let epicsEditor: EpicsEditorPanel | undefined
 let decisionsEditor: DecisionsEditorPanel | undefined
 let architectureDiagramEditor: ArchitectureDiagramEditorPanel | undefined
+let deliveryGraphEditor: DeliveryGraphPanel | undefined
+let importGraphEditor: ImportGraphPanel | undefined
 let helpEditor: HelpEditorPanel | undefined
 let howToUseEditor: KitReferenceEditorPanel | undefined
 let startHereEditor: KitReferenceEditorPanel | undefined
@@ -71,6 +75,14 @@ function openArchitectureDiagramTab(): void {
   architectureDiagramEditor?.show(vscode.ViewColumn.One)
 }
 
+function openDeliveryGraphTab(): void {
+  deliveryGraphEditor?.show(vscode.ViewColumn.One)
+}
+
+function openImportGraphTab(): void {
+  importGraphEditor?.show(vscode.ViewColumn.One)
+}
+
 function openHelpTab(): void {
   helpEditor?.show(vscode.ViewColumn.One)
 }
@@ -102,6 +114,8 @@ function refreshAllPanels(): void {
   epicsEditor?.refresh()
   decisionsEditor?.refresh()
   architectureDiagramEditor?.refresh()
+  deliveryGraphEditor?.refresh()
+  importGraphEditor?.refresh()
   startHereEditor?.refresh()
   howToUseEditor?.refresh()
   usageGuideEditor?.refresh()
@@ -265,6 +279,18 @@ export function activate(context: vscode.ExtensionContext): void {
     onSelectProject,
     refreshAllPanels,
   )
+  deliveryGraphEditor = new DeliveryGraphPanel(
+    context.extensionUri,
+    getWorkspace,
+    onSelectProject,
+    refreshAllPanels,
+  )
+  importGraphEditor = new ImportGraphPanel(
+    context.extensionUri,
+    getWorkspace,
+    onSelectProject,
+    refreshAllPanels,
+  )
   helpEditor = new HelpEditorPanel(context.extensionUri)
   howToUseEditor = new KitReferenceEditorPanel(
     HOW_TO_USE_PANEL,
@@ -300,6 +326,8 @@ export function activate(context: vscode.ExtensionContext): void {
       "meridian.openArchitectureDiagram",
       openArchitectureDiagramTab,
     ),
+    vscode.commands.registerCommand("meridian.openDeliveryGraph", openDeliveryGraphTab),
+    vscode.commands.registerCommand("meridian.openImportGraph", openImportGraphTab),
     vscode.commands.registerCommand("meridian.openHelp", openHelpTab),
     vscode.commands.registerCommand("meridian.openHowToUse", openHowToUseTab),
     vscode.commands.registerCommand("meridian.openStartHere", openStartHereTab),
@@ -324,6 +352,8 @@ export function deactivate(): void {
   epicsEditor = undefined
   decisionsEditor = undefined
   architectureDiagramEditor = undefined
+  deliveryGraphEditor = undefined
+  importGraphEditor = undefined
   helpEditor = undefined
   howToUseEditor = undefined
   startHereEditor = undefined

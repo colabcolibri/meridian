@@ -53,6 +53,7 @@ _(fill at sprint close)_
 - `status`: `planned` → `active` → `complete`.
 - **Retrospective** is mandatory on close — even one line each. Decisions → `prepend-decision`.
 - Do not start a sprint without at least one `ready: true` US.
+- Do **not** assign new US to a `complete` sprint — plan a new sprint. Reopening `complete` → `planned`/`active` requires frontmatter `reopen: true` plus a decision log entry (kit rejects silent reopen).
 
 ## Sprint status
 

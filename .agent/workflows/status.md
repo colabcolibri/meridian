@@ -14,6 +14,7 @@ $ARGUMENTS
 2. Use `scrum-master`
 3. Read `docs/README.md` and frontmatter of `00`–`11`
 4. Optional: `python3 .agent/scripts/validate_meridian.py <root>` (append `--json` for CI)
+5. **Lifecycle hygiene:** `python3 .agent/scripts/meridian_delivery.py lifecycle-hygiene` (finished-but-open sprints/epics/versions)
 
 ---
 
@@ -33,8 +34,9 @@ PROCEDURE:
 3. Read docs/README.md for the **active** docs/ tree
 4. For each phase doc 00–08 and 11: record status from frontmatter
 5. Count US by status from `meridian_delivery.py list user_stories` or `counts`
-6. List blockers (missing deps, invalid US, immature docs)
-7. Recommend next human decision
+6. Run lifecycle-hygiene and include findings (suggest /complete-sprint, /complete-epic, update-version)
+7. List blockers (missing deps, invalid US, immature docs)
+8. Recommend next human decision
 ```
 
 ---
@@ -52,6 +54,8 @@ Docs:
 US summary: ❌ n | 🔶 n | ✅ n
 Ready for implement (ready: true): n | not ready: n
 Board in sync: yes | no
+Lifecycle hygiene:
+  (none) | [sprint/epic/version findings + suggested commands]
 Ready:
 Blocked:
 Next action (human):

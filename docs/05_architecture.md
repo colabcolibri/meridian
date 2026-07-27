@@ -76,6 +76,8 @@ The extension is **not** the source of truth for the protocol. It monitors **`do
 | **Editor tab — Epics**    | Epic progress with version + epic filters                                             |
 | **Editor tab — Decisions**| Read-only decision log by date from SQLite (`--format decisions`)                     |
 | **Editor tab — Architecture** | Interactive maps from `docs/architecture/diagrams/*.{md,mmd}` (pan, zoom, picker) |
+| **Editor tab — Delivery Graph** | US nodes + `dependsOn` edges from planning export; version/sprint filters |
+| **Editor tab — Import Graph** | Scoped file import graph via `.agent/scripts/meridian_import_graph.py` |
 | Status bar                | `Meridian: N US` when `docs/` resolved; project name when multi-product               |
 | **Project context strip** | Toolbar: name, `docs/` path, US count; dropdown when N>1                              |
 

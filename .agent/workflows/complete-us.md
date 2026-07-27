@@ -34,6 +34,7 @@ RULES:
 5. Set status ✅ (or 🔶 + Missing: if partial) — only ✅ if tests: none or tests_status: done
 6. `update-us` (stdin heredoc) with status ✅ and filled Record
 7. `prepend-decision` if protocol/architecture changed
+8. Lifecycle cascade — `lifecycle-eligible US-XXXX`; ask manager; on yes run complete-sprint / complete-epic (never silent auto-close)
 ```
 
 ---
@@ -49,6 +50,10 @@ Files touched:
 Tests run:
 Decisions logged:
 Suggested commit:
+Lifecycle cascade:
+  Sprint eligible: …
+  Epic eligible: …
+  Version eligible: …
 Next (human): commit per commit-after-us-close.md
 Open items:
 ```

@@ -51,6 +51,8 @@
     "onCommand:meridian.openEpics",
     "onCommand:meridian.openDecisions",
     "onCommand:meridian.openArchitectureDiagram",
+    "onCommand:meridian.openDeliveryGraph",
+    "onCommand:meridian.openImportGraph",
     "onCommand:meridian.openDeliverables",
     "onCommand:meridian.openHelp",
     "onCommand:meridian.openHowToUse",
@@ -119,6 +121,14 @@
         {
           "command": "meridian.openArchitectureDiagram",
           "group": "1@6"
+        },
+        {
+          "command": "meridian.openDeliveryGraph",
+          "group": "1@7"
+        },
+        {
+          "command": "meridian.openImportGraph",
+          "group": "1@8"
         },
         {
           "command": "meridian.openHowToUse",
@@ -198,6 +208,16 @@
         "command": "meridian.openArchitectureDiagram",
         "title": "%meridian.command.openArchitectureDiagram.title%",
         "icon": "$(type-hierarchy)"
+      },
+      {
+        "command": "meridian.openDeliveryGraph",
+        "title": "%meridian.command.openDeliveryGraph.title%",
+        "icon": "$(type-hierarchy-sub)"
+      },
+      {
+        "command": "meridian.openImportGraph",
+        "title": "%meridian.command.openImportGraph.title%",
+        "icon": "$(type-hierarchy-super)"
       },
       {
         "command": "meridian.openDeliverables",

@@ -3,7 +3,7 @@ name: sprint-planner
 description: Plans Meridian versions, sprints and execution order in SQLite. Use for release planning, US sequencing, MoSCoW and go-live checklist.
 tools: Read, Grep, Glob, Bash, Edit, Write
 model: inherit
-skills: create-epic, create-version, create-sprint, create-user-story, complete-sprint, update-decisions-log, meridian-routing
+skills: create-epic, create-version, create-sprint, create-user-story, complete-sprint, complete-epic, update-decisions-log, meridian-routing
 ---
 
 # Sprint planner
@@ -32,6 +32,7 @@ Registry: `.agent/references/templates/INDEX.md`
 | Version | `version-template.md` + skill `create-version` |
 | Sprint | `sprint-template.md` + skill `create-sprint` |
 | Sprint close | `sprint-template.md` + skill `complete-sprint` |
+| Epic close | `epic-template.md` + skill `complete-epic` |
 | User story | `us-template.md` + skill `create-user-story` |
 
 See `lifecycle.md` in the same folder for ordering epic → version → sprint → US.

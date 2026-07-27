@@ -31,6 +31,8 @@ Board sync (board-schema.md)
 Commit (human) — one commit per closed US; see commit-after-us-close.md
   ↓
 Sprint close (sprint-template.md Retrospective) — /complete-sprint when increment delivered
+  (happy path: /complete-us cascade invites close — do not rely on remembering the slash)
+Epic close — /complete-epic when Must US terminal + outcome confirmed
 ```
 
 Scrum mapping (bugs, spikes, ceremonies, no story points): `.agent/references/scrum-meridian-map.md`.
@@ -53,7 +55,7 @@ Scrum mapping (bugs, spikes, ceremonies, no story points): `.agent/references/sc
 | ------ | ---------------- | ------------ |
 | **Close** (`/complete-sprint`) | `sprint-template.md` + `complete-sprint` | `## Retrospective` filled; `status: complete` |
 
-Epic and version **close** remain manual (`status: complete` in frontmatter when outcome reached) — no separate refine workflow.
+Epic **close** uses `/complete-epic`. Version **close** uses `update-version` (often invited by `/complete-us` cascade or `/status` hygiene). Prefer new epic over reopening `complete`.
 
 Between create and close, the US file is the **contract for implementation**. Structure is enforced by `section-contracts.md` (Python + monitor). If Plan or Planned tests are still generic placeholders, the agent must **not** implement — run `/refine-us` first.
 

@@ -208,10 +208,11 @@ Complete in order: `00` → `01` → `02` → `03` → `04` → **`05`** → `06
 | D2 | **`/create-version`** | `sprint-planner` | `vX` in SQLite | Release grouping epics/US. |
 | D3 | **`/plan-sprint`** | `sprint-planner` | `vX-SY` in SQLite | Time-boxed goal + story list. |
 | D4 | **`/complete-sprint vX-SY`** | `sprint-planner` | sprint `status: complete` | Sprint review + Retrospective filled. |
+| D5 | **`/complete-epic EPIC-XX`** | `sprint-planner` | epic `status: complete` | No open Must US; outcome confirmed. |
 
-Order: **Epic → Version → Sprint** (sprint optional but recommended) → User story → **`/complete-sprint`** when increment delivered.
+Order: **Epic → Version → Sprint** (sprint optional but recommended) → User story → **`/complete-us` cascade invites** `/complete-sprint` / `/complete-epic` when containers are eligible (slash commands remain for recovery).
 
-Epic/version **close:** set `status: complete` manually when outcome reached (no `/complete-epic` workflow).
+Epic/version **close:** `/complete-epic` for epics; version via `update-version` when invited by cascade or hygiene. Prefer new epic over reopening `complete`.
 
 ---
 
@@ -224,7 +225,7 @@ Epic/version **close:** set `status: complete` manually when outcome reached (no
 | E3 | **`/refine-us US-XXXX`** | `backlog-refiner` | `ready: true` | Approach, arch refs, concrete tests. **Gate for code.** |
 | E4 | **`/implement-us US-XXXX`** | `developer` | — | Gate: `ready: true`, deps, Plan; then product code. **Block if not refined.** |
 | E5 | *(manager review)* | human | — | Review diff and run tests. |
-| E6 | **`/complete-us US-XXXX`** | `backlog-refiner` | `status: ✅` | Fills Record, checks acceptance (SQLite upsert). |
+| E6 | **`/complete-us US-XXXX`** | `backlog-refiner` | `status: ✅` | Fills Record, checks acceptance; **lifecycle cascade** offers sprint/epic/version close. |
 
 **Rules:** no code without E3 (`ready: true`) **and** E4 gate. No ✅ without E6 (`## Record` + evidence).
 
@@ -292,6 +293,7 @@ Skills are procedures agents load automatically. Grouped by purpose.
 | `create-version` | sprint-planner | Version file |
 | `create-sprint` | sprint-planner | Sprint file |
 | `complete-sprint` | sprint-planner | Sprint close + Retrospective |
+| `complete-epic` | sprint-planner | Epic close + outcome confirmation |
 | `create-user-story` | technical-writer, backlog-refiner | US file at create |
 
 ### User story quality & close

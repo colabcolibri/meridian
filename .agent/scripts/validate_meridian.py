@@ -232,6 +232,31 @@ def sqlite_delivery_active(root: Path) -> bool:
     return (root / ".meridian" / "meridian.db").is_file()
 
 
+def validate_lifecycle_hygiene(root: Path, warnings: list[str]) -> None:
+    """Warn on finished-but-still-open sprints/epics/versions (US-0166)."""
+    lib = _SCRIPT_DIR / "lib"
+    if str(lib) not in sys.path:
+        sys.path.insert(0, str(lib))
+    try:
+        from meridian_db import connect  # noqa: WPS433
+        from meridian_lifecycle import collect_hygiene_findings  # noqa: WPS433
+    except ImportError:
+        warnings.append("Lifecycle hygiene skipped — meridian_lifecycle import failed.")
+        return
+    try:
+        conn = connect(root)
+        try:
+            for finding in collect_hygiene_findings(conn):
+                warnings.append(
+                    f"Lifecycle hygiene [{finding['kind']} {finding['id']}]: "
+                    f"{finding['reason']} → {finding['suggested_command']}"
+                )
+        finally:
+            conn.close()
+    except Exception as exc:  # noqa: BLE001 — validator must not crash
+        warnings.append(f"Lifecycle hygiene check failed: {exc}")
+
+
 UI_ACCEPTANCE_RE = re.compile(
     r"\b(layout|visual|token|component|responsive|ui\b|a11y|accessibility|"
     r"design system|breakpoint|webview|dialog|button|form field)\b",
@@ -910,6 +935,7 @@ def main() -> int:
         validate_sqlite_security_refs(root, docs, warnings)
         validate_sqlite_privacy_refs(root, docs, warnings)
         validate_sqlite_test_strategy_refs(root, docs, warnings)
+        validate_lifecycle_hygiene(root, warnings)
 
     if board_path.exists():
         if sqlite_delivery or sqlite_only_flag:

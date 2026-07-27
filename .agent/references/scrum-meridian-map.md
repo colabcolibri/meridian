@@ -89,7 +89,8 @@ Velocity / burndown   →   não usados (capacidade = julgamento + Must + deps)
 | Sprint planning | `/plan-sprint` + sprint `stories:` order | Manager + `sprint-planner` |
 | Daily Scrum | `/daily-with-ai` or `/status` + extension Help panels | Manager |
 | Sprint review (demo) | Manager reviews increment against Acceptance + Planned | Manager |
-| Sprint retrospective | `/complete-sprint` — fill `## Retrospective`, `status: complete` | Manager + `sprint-planner` |
+| Sprint retrospective | `/complete-sprint` — fill `## Retrospective`, `status: complete` (also invited from `/complete-us` cascade) | Manager + `sprint-planner` |
+| Epic close | `/complete-epic` — no open Must; outcome confirmed | Manager + `sprint-planner` |
 
 No fixed 15-minute daily or 8-hour planning timeboxes — async manager + AI sessions.
 

@@ -42,6 +42,7 @@ Before any action, classify:
 | **REVIEW US** | "review US", `/review-us`, "audit US", "check story" | `backlog-refiner` + `review-user-story` |
 | **CLOSE US** | "complete US", "mark done", "record", `/complete-us` | `backlog-refiner` + `complete-user-story` |
 | **CLOSE SPRINT** | "complete sprint", "close sprint", `/complete-sprint` | `sprint-planner` + `complete-sprint` |
+| **CLOSE EPIC** | "complete epic", "close epic", `/complete-epic` | `sprint-planner` + `complete-epic` |
 | **LOG DECISION** | "log decision", "decision log", `/update-decisions-log` | read `update-decisions-log` + run `date` before `prepend-decision` CLI |
 | **HAR** | external account, OAuth, PAT, billing, payment, production deploy creds, accept terms | **Stop** — emit HAR block (see below); no simulation |
 | **SECURITY** | "security", "OWASP", "secrets", `02_security`, `/security-review`, `/dependency-audit` | `security-champion` |
