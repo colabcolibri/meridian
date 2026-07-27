@@ -7,6 +7,7 @@ import type { SprintSummary } from "./load-sprints.js"
 import type { VersionSummary } from "./load-versions.js"
 import type { UserStory } from "./domain/types.js"
 import type { PlanningPayload } from "./planning-payload.js"
+import { findKitRoot, findKitScriptsRoot } from "./resolve-meridian-projects.js"
 import { resolveExportScriptPath } from "./resolve-kit-scripts.js"
 
 type PlanningExport = {
@@ -54,15 +55,7 @@ type PlanningExport = {
 }
 
 export function kitRootFromPackageRoot(packageRoot: string): string {
-  const agent = path.join(packageRoot, ".agent", "MERIDIAN.md")
-  if (fs.existsSync(agent)) {
-    return packageRoot
-  }
-  const parent = path.dirname(packageRoot)
-  if (fs.existsSync(path.join(parent, ".agent", "MERIDIAN.md"))) {
-    return parent
-  }
-  return packageRoot
+  return findKitScriptsRoot(packageRoot) ?? findKitRoot(packageRoot) ?? packageRoot
 }
 
 export function sqliteDbExists(packageRoot: string): boolean {

@@ -4,6 +4,13 @@ All notable changes to the **Meridian** VS Code extension (`meridian-vscode`).
 
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.1.42] - 2026-07-28
+
+### Fixed
+
+- **Multi-product monorepos:** kit scripts resolve by walking up from the active project `packageRoot` (`.meridian/`) to the shared `.agent/scripts` at repo root — fixes deliver, board, decisions, and SQLite export when each app has its own `.meridian/meridian.db`
+- **Import graph:** uses active `packageRoot` for script resolution and scan scope (was using kit root for scripts)
+
 ## [1.1.41] - 2026-07-27
 
 ### Changed

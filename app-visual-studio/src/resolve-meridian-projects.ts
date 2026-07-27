@@ -57,6 +57,29 @@ export function findKitRoot(startPath: string): string | null {
   }
 }
 
+function agentScriptsDirHasKit(scriptsDir: string): boolean {
+  return (
+    fs.existsSync(path.join(scriptsDir, "meridian_db_export.py")) ||
+    fs.existsSync(path.join(scriptsDir, "meridian_import_graph.py"))
+  )
+}
+
+/** Walk ancestors until `.agent/scripts` has Meridian kit CLIs (shared kit in monorepos). */
+export function findKitScriptsRoot(startPath: string): string | null {
+  let current = path.resolve(startPath)
+  for (;;) {
+    const scriptsDir = path.join(current, ".agent", "scripts")
+    if (agentScriptsDirHasKit(scriptsDir)) {
+      return current
+    }
+    const parent = path.dirname(current)
+    if (parent === current) {
+      return null
+    }
+    current = parent
+  }
+}
+
 export function toPosixRel(kitRoot: string, absPath: string): string {
   const rel = path.relative(kitRoot, absPath)
   if (rel === "") {

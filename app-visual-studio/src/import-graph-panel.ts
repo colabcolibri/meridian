@@ -78,7 +78,7 @@ export class ImportGraphPanel extends DocsOpenPanel {
   private compute(info: MeridianWorkspaceInfo): void {
     const scope = resolveImportGraphScope(info)
     this.lastScope = scope
-    const result = runImportGraph(info.projectRoot, scope)
+    const result = runImportGraph(info.packageRoot, scope)
     if (!result.ok) {
       this.lastError = result.error
       this.lastModel = { nodes: [], edges: [] }

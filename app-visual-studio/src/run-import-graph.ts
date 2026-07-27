@@ -17,6 +17,7 @@ type ImportGraphJson = {
 }
 
 export function resolveImportGraphScript(packageRoot: string): string {
+  /** Active project folder (`.meridian/`); kit scripts may live at a monorepo ancestor. */
   const kitRoot = kitRootFromPackageRoot(packageRoot)
   return path.join(kitRoot, ".agent", "scripts", "meridian_import_graph.py")
 }
