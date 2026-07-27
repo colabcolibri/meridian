@@ -131,6 +131,8 @@ export function graphWebviewHtml(
       --fg-done: #4ade80;
       --fg-partial: #fbbf24;
       --fg-muted: #94a3b8;
+      --fg-frozen: #67e8f9;
+      --fg-deprecated: #f87171;
     }
     * { box-sizing: border-box; }
     html, body { margin:0; height:100%; overflow:hidden; }

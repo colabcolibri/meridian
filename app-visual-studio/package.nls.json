@@ -1,6 +1,6 @@
 {
   "extension.displayName": "Meridian Harness",
-  "extension.description": "Meridian AI agent harness — bundled kit (.agent/) installed on demand via Install Harness (manual). Board, versions, sprints, epics from docs/. Agents, skills, slash commands for Cursor.",
+  "extension.description": "Repo-native harness for AI-assisted delivery in VS Code and Cursor — board, planning views, graphs, and bundled .agent/ kit. You manage; agents ship story by story.",
   "meridian.activitybar.title": "Meridian",
   "meridian.view.commands.name": "Commands",
   "meridian.submenu.label": "Meridian",

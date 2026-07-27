@@ -3,7 +3,8 @@ export const GRAPH_RUNTIME_RENDER = `
   function statusColor(status) {
     if (status === "✅") return getComputedStyle(document.documentElement).getPropertyValue("--fg-done").trim() || "#22c55e";
     if (status === "🔶") return getComputedStyle(document.documentElement).getPropertyValue("--fg-partial").trim() || "#f59e0b";
-    if (status === "🧊" || status === "🚫") return getComputedStyle(document.documentElement).getPropertyValue("--fg-muted").trim() || "#64748b";
+    if (status === "🧊") return getComputedStyle(document.documentElement).getPropertyValue("--fg-frozen").trim() || "#67e8f9";
+    if (status === "🚫") return getComputedStyle(document.documentElement).getPropertyValue("--fg-deprecated").trim() || "#f87171";
     return getComputedStyle(document.documentElement).getPropertyValue("--fg-node").trim() || "#14b8a6";
   }
 
@@ -109,6 +110,45 @@ export const GRAPH_RUNTIME_RENDER = `
     ctx.restore();
   }
 
+  function drawDeliveryLegend() {
+    if (payload.kind !== "delivery") return;
+    const items = [
+      { label: "Open", color: statusColor("❌") },
+      { label: "Partial", color: statusColor("🔶") },
+      { label: "Done", color: statusColor("✅") },
+      { label: "Frozen", color: statusColor("🧊") },
+      { label: "Deprecated", color: statusColor("🚫") },
+    ];
+    const pad = 10;
+    const rowH = 14;
+    const boxW = 128;
+    const boxH = pad * 2 + items.length * rowH;
+    const x = width - boxW - 12;
+    const y = 12;
+    ctx.save();
+    ctx.fillStyle = "rgba(15, 23, 42, 0.82)";
+    ctx.strokeStyle = "rgba(148, 163, 184, 0.35)";
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.rect(x, y, boxW, boxH);
+    ctx.fill();
+    ctx.stroke();
+    ctx.font = "10px var(--vscode-font-family)";
+    ctx.textAlign = "left";
+    ctx.textBaseline = "middle";
+    for (let i = 0; i < items.length; i++) {
+      const item = items[i];
+      const rowY = y + pad + i * rowH + rowH / 2;
+      ctx.fillStyle = item.color;
+      ctx.beginPath();
+      ctx.arc(x + 12, rowY, 4, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = "var(--fg-label)";
+      ctx.fillText(item.label, x + 22, rowY);
+    }
+    ctx.restore();
+  }
+
   function worldBounds() {
     const pad = 40 / transform.scale;
     return {
@@ -171,6 +211,7 @@ export const GRAPH_RUNTIME_RENDER = `
     }
     ctx.restore();
     drawImportLegend();
+    drawDeliveryLegend();
 
     const stats = document.getElementById("graphStats");
     if (stats) stats.textContent = nodes.length + " nodes · " + edges.length + " links";

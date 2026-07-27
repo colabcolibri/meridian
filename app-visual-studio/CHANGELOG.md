@@ -4,6 +4,13 @@ All notable changes to the **Meridian** VS Code extension (`meridian-vscode`).
 
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.1.41] - 2026-07-27
+
+### Changed
+
+- **README:** value-focused copy for Marketplace and repo — extension vs kit/CLI, who it is for, what you get
+- **Delivery graph:** distinct node colors for frozen (cyan) and deprecated (rose); status legend on canvas
+
 ## [1.1.40] - 2026-07-27
 
 ### Added
