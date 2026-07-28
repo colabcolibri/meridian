@@ -8,8 +8,8 @@ import sys
 import tempfile
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(REPO_ROOT / ".agent" / "scripts" / "lib"))
+_SCRIPT_DIR = Path(__file__).resolve().parent
+sys.path.insert(0, str(_SCRIPT_DIR.parent / "lib"))
 
 from meridian_db import (  # noqa: E402
     bootstrap,

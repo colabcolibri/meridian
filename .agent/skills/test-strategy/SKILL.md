@@ -22,6 +22,7 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 | `references/test-strategy-checklist.md` | **Mandatory** — any pass on `10` |
 | `references/test-review-checklist.md` | **Mandatory** — `/test-review` |
 | `references/test-stack-catalog.md` | **Mandatory** — pick test stack id |
+| `references/ci-gates-catalog.md` | **Mandatory** at bootstrap — optional CI gates per language (CodeQL, Dependabot, audit) |
 | `references/stacks/{id}.md` | **Mandatory** — runner layout for chosen stack |
 | Target US (`show US-XXXX --full`) | `us-align` or `us-scope` modes |
 
@@ -36,8 +37,10 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 
 ```txt
 Task progress:
+- [ ] quality-profile — note qualitySiege; read agentic-quality-model.md if tier unclear
 - [ ] Read 00_scope, 01_tech_stack, 04_principles, 08_environments
 - [ ] test-stack-catalog.md → stacks/{id}.md
+- [ ] ci-gates-catalog.md → CI/CD rows in docs/08 (up to profile tier)
 - [ ] test-strategy-checklist.md → update 10
 - [ ] US Plan refs / review follow-ups
 ```

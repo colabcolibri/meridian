@@ -36,7 +36,8 @@ Relative to kit root (where `.agent/MERIDIAN.md` lives).
     {
       "id": "main",
       "name": "Main product",
-      "docs": "docs"
+      "docs": "docs",
+      "qualitySiege": "standard"
     },
     {
       "id": "app-osc",
@@ -58,6 +59,7 @@ Relative to kit root (where `.agent/MERIDIAN.md` lives).
 | `projects[].id` | yes | Stable slug (`[a-z0-9-]+`) |
 | `projects[].name` | yes | Human label in picker / status bar |
 | `projects[].docs` | yes | Path to folder **`docs`** relative to kit root |
+| `projects[].qualitySiege` | no | `kit` \| `standard` \| `full` — optional robust validation stack (see `agentic-quality-model.md`) |
 | `exclude` | no | `docs` paths to drop (even if discovered) |
 
 ### `docs` path rules
@@ -163,3 +165,34 @@ Validate target: **package folder** that owns `docs/` (e.g. `apps/app-osc`, not 
 ```
 
 Legacy `docs-extra` needs no exclude — discovery never picks it.
+
+---
+
+## qualitySiege (optional)
+
+Declares whether this product uses the **optional robust validation stack** beyond Meridian kit gates.
+
+| Value | Meaning |
+| ----- | ------- |
+| `kit` | Validator + delivery + kit tests only (default when omitted) |
+| `standard` | + product unit/integration, typecheck, lint per `10_test_strategy.md` |
+| `full` | + audit, CodeQL, coverage advisory, mutation pilot, independent review policy |
+
+Agents resolve via `python3 .agent/scripts/meridian_delivery.py quality-profile`.
+
+**Validator:** `validate_meridian.py` warns when `10_test_strategy.md` is `approved` but no `qualitySiege` is declared (stays effective `kit`). Declare explicitly even if tier is `kit`.
+
+**Single-product repo without manifest:** set `.meridian/delivery.json` → `options.qualitySiege` instead.
+
+```json
+{
+  "version": 1,
+  "connector": "sqlite",
+  "package_root": ".",
+  "options": {
+    "qualitySiege": "standard"
+  }
+}
+```
+
+Manifest entry for a project **wins** over `delivery.json` when both exist.

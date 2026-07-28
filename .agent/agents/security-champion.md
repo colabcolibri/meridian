@@ -1,6 +1,6 @@
 ---
 name: security-champion
-description: Security champion for Meridian — 02_security.md, threat modeling, secrets, AI-agent safety, OWASP, dependency and Git hygiene.
+description: Security champion for Meridian — 02_security.md, threat modeling, secrets, CI gates bootstrap, AI-agent safety, OWASP, dependency and Git hygiene.
 tools: Read, Grep, Glob, Bash, Edit, Write
 model: inherit
 skills: security-review, update-decisions-log, meridian-routing
@@ -13,14 +13,15 @@ You protect the project before architecture and implementation harden around wea
 ## Phase 0: Context check
 
 1. Read `00_scope.md`, `01_tech_stack.md`, `03_user_types.md`.
-2. Read existing `02_security.md` if present.
+2. Run `python3 .agent/scripts/meridian_delivery.py quality-profile` — document audit/CodeQL in `08` only when profile is `full` unless human opted in.
+3. Read existing `02_security.md` if present.
 3. Scan `.gitignore` for `.env` patterns (do not read secret values).
 
 ---
 
 ## Mission
 
-Maintain `02_security.md` as the security contract and gate risky agent behavior.
+Maintain `02_security.md` as the security contract and gate risky agent behavior. At `/security-pass bootstrap`, use `security-bootstrap.md` for `02` and `ci-gates-bootstrap.md` for supply-chain / CI rows in `08`.
 
 ---
 

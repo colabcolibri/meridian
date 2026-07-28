@@ -16,6 +16,7 @@ from meridian_db import (  # noqa: E402
     db_exists,
     delivery_counts,
     fetch_decisions_for_date,
+    is_meridian_package,
     list_decision_dates,
     next_epic_id,
     next_sprint_id,
@@ -44,6 +45,30 @@ from meridian_markdown_parse import (  # noqa: E402
     read_markdown_file,
     read_markdown_text,
 )
+from meridian_delivery_config import write_delivery_config  # noqa: E402
+
+BOOTSTRAP_CMD = "python3 .agent/scripts/meridian_delivery.py bootstrap"
+AUTO_BOOTSTRAP_COMMANDS = frozenset(
+    {
+        "counts",
+        "list",
+        "show",
+        "implement-gate",
+        "lifecycle-hygiene",
+        "lifecycle-eligible",
+    }
+)
+
+
+def ensure_delivery_db(root: Path, command: str) -> bool:
+    if db_exists(root):
+        return True
+    if command in AUTO_BOOTSTRAP_COMMANDS and is_meridian_package(root):
+        bootstrap(root)
+        write_delivery_config(root)
+        return True
+    print(f"ERROR: meridian.db not found — run: {BOOTSTRAP_CMD}", file=sys.stderr)
+    return False
 
 US_TEMPLATE_BODY = """# {id} — {title}
 
@@ -209,9 +234,6 @@ def _root(args) -> Path:
 
 def cmd_counts(args) -> int:
     root = _root(args)
-    if not db_exists(root):
-        print("ERROR: meridian.db not found — run bootstrap_meridian_db.py", file=sys.stderr)
-        return 1
     counts = delivery_counts(root)
     for key, value in counts.items():
         print(f"{key}: {value}")
@@ -874,9 +896,9 @@ def main() -> int:
 
     args = parser.parse_args()
     create_commands = {"create-us", "create-epic", "create-version", "create-sprint"}
-    if args.command not in create_commands and not db_exists(args.package_root):
-        print("ERROR: meridian.db not found — run bootstrap_meridian_db.py .", file=sys.stderr)
-        return 1
+    if args.command not in create_commands:
+        if not ensure_delivery_db(Path(args.package_root).resolve(), args.command):
+            return 1
     return args.func(args)
 
 

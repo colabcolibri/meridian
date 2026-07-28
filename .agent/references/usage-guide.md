@@ -55,12 +55,13 @@ Run `/status` at any point to get blockers, current state, and suggested next ac
 When the repo has **more than one** folder named exactly `docs` with Meridian content (any layout — root `docs/`, `apps/pkg/docs`, etc.):
 
 1. **Discovery (B)** — tools scan for `docs/` + fingerprint (`00_scope.md` or `us/US-*.md`). `docs-extra` and other names are ignored.
-2. **Manifest (A)** — optional `.meridian/projects.json` at kit root: ids, names, `default`, `exclude`.
+2. **Manifest (A)** — optional `.meridian/projects.json` at kit root: ids, names, `default`, `exclude`, optional `qualitySiege` per product (`kit` | `standard` | `full`).
 3. **Active project** — one `docs/` at a time for board, validate, `/status`, and US work. Choice is **saved** (`workspaceState` per kit root + optional VS Code setting `meridian.activeProject`) — reopening Board does **not** ask again.
 
 | Action | How |
 | ------ | --- |
 | Declare products | Create `.meridian/projects.json` (see `projects-manifest-template.md`) |
+| Declare quality tier | `projects[].qualitySiege` or `delivery.json` → `options.qualitySiege` — `quality-profile` CLI; see `agentic-quality-model.md` |
 | See which `docs/` is on screen | **Board / Versions / Sprints / Epics** — first toolbar row **Project** (name, path, US count) |
 | Switch in IDE | Dropdown in that toolbar, **Meridian: Select Active Project**, or status bar when N>1 |
 | First visit only | Quick Pick when N>1 and no saved choice — once; then silent until you switch |

@@ -365,6 +365,38 @@ def validate_sqlite_test_strategy_refs(
             )
 
 
+def validate_quality_siege_profile(
+    root: Path,
+    docs: Path,
+    warnings: list[str],
+) -> None:
+    """Warn when 10 is approved but qualitySiege was never declared (effective kit default)."""
+    strategy_path = docs / "10_test_strategy.md"
+    if not strategy_path.is_file():
+        return
+    if read_frontmatter(strategy_path).get("status") != "approved":
+        return
+
+    lib = _SCRIPT_DIR / "lib"
+    if str(lib) not in sys.path:
+        sys.path.insert(0, str(lib))
+    try:
+        from meridian_quality_profile import resolve_quality_siege  # noqa: PLC0415
+    except ImportError:
+        return
+
+    profile = resolve_quality_siege(root, kit_root=root)
+    if profile.get("qualitySiege") != "kit":
+        return
+    source = profile.get("source") or ""
+    if "default" not in source:
+        return
+    warnings.append(
+        "10_test_strategy.md is approved but qualitySiege is undeclared (effective kit) — "
+        "set projects[].qualitySiege or delivery.json options.qualitySiege; see agentic-quality-model.md"
+    )
+
+
 def validate_privacy_sections_in_02(docs: Path, warnings: list[str]) -> None:
     """Warn when 02 cites LGPD/GDPR compliance but privacy sections are thin."""
     security_path = docs / "02_security.md"
@@ -935,6 +967,7 @@ def main() -> int:
         validate_sqlite_security_refs(root, docs, warnings)
         validate_sqlite_privacy_refs(root, docs, warnings)
         validate_sqlite_test_strategy_refs(root, docs, warnings)
+        validate_quality_siege_profile(root, docs, warnings)
         validate_lifecycle_hygiene(root, warnings)
 
     if board_path.exists():

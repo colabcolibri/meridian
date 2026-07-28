@@ -22,8 +22,8 @@
 | `lib/meridian_markdown_parse.py` | Library: frontmatter + section parsing |
 | `lib/meridian_section_contracts.py` | Library: structural validation helpers |
 | `lib/meridian_delivery_form.py` | Library: form ↔ markdown (extension) |
-| `bootstrap_meridian_db.py` | Create/upgrade `.meridian/meridian.db` + `delivery.json`; runs `reconcile_sprint_links` after migrations |
-| `meridian_delivery.py` | **Agent facade** — reads `delivery.json`, dispatches connector (`counts`, `show`, `create-us`, …) |
+| `bootstrap_meridian_db.py` | Shim — same as `meridian_delivery.py bootstrap` (prefer facade) |
+| `meridian_delivery.py` | **Agent facade** — reads `delivery.json`, dispatches connector (`counts`, `show`, `create-us`, …); `quality-profile` resolves `qualitySiege` tier |
 | `meridian_db_cli.py` | SQLite driver (implementation; facade calls this) |
 | `meridian_db_export.py` | JSON export for extension (`--format planning|decisions`; `--write-form`) |
 | `validate_meridian.py` | Governance validator (`--strict-kit-md`, `--json`; deprecated-agent check always on kit) |
@@ -39,13 +39,12 @@
 
 ## CI / tests
 
-Root shims delegate to `test/`:
-
 | Script | Purpose |
 | ------ | ------- |
-| `test_meridian_db_schema.py` | Smoke test migrations |
-| `test_story_dependencies.py` | FK + cycle checks for `story_dependencies` |
-| `test_implement_gate.py` | `/implement-us` gate CLI |
+| `run_kit_tests.py` | Run all `test/test_*.py` (CI + local) |
+| `test_meridian_db_schema.py` | Shim → `test/test_meridian_db_schema.py` |
+| `test_story_dependencies.py` | Shim → `test/test_story_dependencies.py` |
+| `test_implement_gate.py` | Shim → `test/test_implement_gate.py` |
 
 ## Migration lane (`migrate/`)
 
@@ -70,8 +69,8 @@ Run once per project when importing from branch `meridian-v1-old`:
 | -------- | ------- |
 | **Cursor / Claude agents** | `meridian_delivery.py`, `validate_meridian.py` |
 | **VS Code extension** | `validate_meridian.py`, `meridian_db_export.py`, `meridian_delivery_form.py` (path check) |
-| **GitHub Actions** | `validate_meridian.py --strict-kit-md`, `test_*.py` shims |
-| **Pre-commit** | `validate_meridian.py` |
+| **GitHub Actions** | `validate_meridian.py --strict-kit-md`, `run_kit_tests.py`, extension `typecheck`/`lint`/`test` |
+| **Pre-commit** | `bootstrap` + `validate_meridian.py --sqlite-only --strict-kit-md` |
 
 ## Python requirement
 

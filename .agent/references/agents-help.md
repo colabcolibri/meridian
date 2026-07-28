@@ -6,6 +6,8 @@ Explicit map of **who does what**, **which group they belong to**, and **which s
 | ---------- | ---- |
 | Concepts (phases, US, gates) | [start-here.md](./start-here.md) |
 | Day-to-day situations | [usage-guide.md](./usage-guide.md) |
+| Agentic trust / earned no-read policy | [agentic-trust-policy.md](./agentic-trust-policy.md) |
+| Agentic quality model / qualitySiege profiles | [agentic-quality-model.md](./agentic-quality-model.md) |
 | **This file** | Agents, slash commands, skills, step order |
 | Scrum mapping | [scrum-meridian-map.md](./scrum-meridian-map.md) |
 
@@ -172,7 +174,7 @@ Complete in order: `00` → `01` → `02` → `03` → `04` → **`05`** → `06
 | ---- | ------- | ----- | ---------- | ------------ |
 | C1 | *(conversation)* | `product-owner` | `00_scope.md` | Scope, users, out of scope. |
 | C2 | *(conversation)* | `technical-writer` | `01`, `03`, `04`, `06`–`08` | Draft phase documents. |
-| C3 | **`/security-pass`** | `security-champion` | `02_security.md` | Threat model, secrets, OWASP, agent safety. |
+| C3 | **`/security-pass`** | `security-champion` | `02_security.md` + `08` CI rows | Threat model, secrets, OWASP, agent safety; bootstrap uses `security-bootstrap.md` + `ci-gates-bootstrap.md`. |
 | C3b | **`/privacy-pass`** | `security-champion` | `02_security.md` § LGPD + GDPR | Brazil (ANPD) and EU (EDPB) privacy sections; official refs in checklist. **Doc only.** |
 | C4 | **`/architecture`** | `technical-architect` | `05_architecture.md` + optional `docs/architecture/` + `docs/architecture/diagrams/` | Overview, detail files, **diagram index** (multi-file Mermaid maps for IDE); gate for backlog. Skill: `generate-architecture-diagram`. |
 | C5 | **`/design-pass`** | `design-system-owner` | `09_design_system.md` | Contract: tokens, stack, components. Modes: `bootstrap`, `US-XXXX`. **Doc only.** |
@@ -180,7 +182,7 @@ Complete in order: `00` → `01` → `02` → `03` → `04` → **`05`** → `06
 | C7 | **`/design-review`** | `design-system-owner` | Report | Audit live UI vs `09` + showcase. **No code.** |
 | C8 | **`/security-review`** | `security-champion` | Report | Audit code vs `02` + US security acceptance. **No code.** |
 | C9 | **`/dependency-audit`** | `security-champion` | Report | Lockfiles and supply chain hygiene. **No code.** |
-| C10 | **`/test-pass`** | `quality-owner` | `10_test_strategy.md` | Pyramid, runners, coverage. Modes: `bootstrap`, `US-XXXX`. **Doc only.** |
+| C10 | **`/test-pass`** | `quality-owner` | `10_test_strategy.md` | Pyramid, runners, coverage; bootstrap runs `quality-profile` then `test-stack-catalog.md` + `ci-gates-catalog.md` for `08` CI (gates up to declared tier). Modes: `bootstrap`, `US-XXXX`. **Doc only.** |
 | C11 | **`/test-review`** | `quality-owner` | Report | Audit US tests vs strategy before close. **No code.** |
 | C12 | **`/seo-pass`** | `seo-strategy` + `technical-writer` | `12_marketing_seo.md` | Public web only — meta, sitemap, CWV. **Doc only.** Skip CLI-only. |
 | C13 | **`/investigate`** | `code-investigator` | Report | Read-only codebase trace and explanation. **No code.** |

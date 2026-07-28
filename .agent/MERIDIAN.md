@@ -74,7 +74,7 @@ docs/                        ← phase docs only (path varies in monorepos)
 .meridian/
   delivery.json              ← connector profile (commit)
   meridian.db                ← epics, versions, sprints, US, decisions (gitignored)
-  projects.json              ← optional — multi-product monorepos
+  projects.json              ← optional — multi-product monorepos; per-product qualitySiege
 ```
 
 **Multi-product repos:** one `.agent/` kit root; each Meridian product = one folder named exactly `docs` (any path). `.meridian/projects.json` declares ids, default, exclude; discovery finds unnamed `docs/` trees. **Active project** (saved) selects which tree board/validate/US target. IDE: **Project** toolbar row in Board/Deliverables + **Select Active Project**. Maintainer map: `references/instruction-surfaces.md` (EPIC-13 checklist). Template: `projects-manifest-template.md`.
@@ -237,7 +237,7 @@ python3 .agent/scripts/validate_meridian.py <project-folder> --json
 | Security | `security-champion` | `/security-pass`, `/security-review`, `/dependency-audit` |
 | Architecture | `technical-architect` | `/architecture` |
 | Design system | `design-system-owner` | `/design-pass`, `/design-showcase`, `/design-review` |
-| Quality / tests | `quality-owner` | `/test-pass`, `/test-review` |
+| Quality / tests | `quality-owner` | `/test-pass`, `/test-review` — profile via `quality-profile` CLI; see `agentic-quality-model.md` |
 | Versions / sprints | `sprint-planner` | `/create-version`, `/plan-sprint`, `/complete-sprint` |
 | US / board | `backlog-refiner` | `/create-us`, `/refine-us`, `/complete-us` |
 | US implement | `developer` | `/implement-us` (requires `ready: true`) |

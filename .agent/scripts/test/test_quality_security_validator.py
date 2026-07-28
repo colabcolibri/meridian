@@ -14,6 +14,7 @@ if str(_SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(_SCRIPT_DIR))
 
 from validate_meridian import (  # noqa: E402
+    validate_quality_siege_profile,
     validate_sqlite_security_refs,
     validate_sqlite_test_strategy_refs,
 )
@@ -107,6 +108,70 @@ class TestStrategyRefValidationTest(unittest.TestCase):
             self.assertTrue(
                 any("US-0998" in w and "10_test_strategy" in w for w in warnings)
             )
+
+
+class QualitySiegeProfileValidationTest(unittest.TestCase):
+    def _write_kit_root(self, root: Path) -> Path:
+        (root / ".agent").mkdir()
+        (root / ".agent" / "MERIDIAN.md").write_text("# kit\n", encoding="utf-8")
+        return root
+
+    def test_warns_when_10_approved_and_profile_undeclared(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            self._write_kit_root(root)
+            docs = root / "docs"
+            docs.mkdir()
+            (docs / "10_test_strategy.md").write_text(
+                "---\nstatus: approved\n---\n# 10\n",
+                encoding="utf-8",
+            )
+
+            warnings: list[str] = []
+            validate_quality_siege_profile(root, docs, warnings)
+            self.assertTrue(any("qualitySiege is undeclared" in w for w in warnings))
+
+    def test_silent_when_10_not_approved(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            self._write_kit_root(root)
+            docs = root / "docs"
+            docs.mkdir()
+            (docs / "10_test_strategy.md").write_text(
+                "---\nstatus: draft\n---\n# 10\n",
+                encoding="utf-8",
+            )
+
+            warnings: list[str] = []
+            validate_quality_siege_profile(root, docs, warnings)
+            self.assertEqual(warnings, [])
+
+    def test_silent_when_quality_siege_declared_in_delivery(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            self._write_kit_root(root)
+            docs = root / "docs"
+            docs.mkdir()
+            (docs / "10_test_strategy.md").write_text(
+                "---\nstatus: approved\n---\n# 10\n",
+                encoding="utf-8",
+            )
+            meridian = root / ".meridian"
+            meridian.mkdir()
+            (meridian / "delivery.json").write_text(
+                """{
+  "version": 1,
+  "connector": "sqlite",
+  "package_root": ".",
+  "options": { "qualitySiege": "standard" }
+}
+""",
+                encoding="utf-8",
+            )
+
+            warnings: list[str] = []
+            validate_quality_siege_profile(root, docs, warnings)
+            self.assertEqual(warnings, [])
 
 
 if __name__ == "__main__":

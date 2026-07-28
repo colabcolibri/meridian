@@ -25,7 +25,7 @@ export type PlanningLoadResult =
 function sqliteRequiredMessage(packageRoot: string): string {
   return (
     `Meridian: .meridian/meridian.db not found under ${packageRoot}.\n` +
-    "Run: python3 .agent/scripts/bootstrap_meridian_db.py ."
+    "Run: python3 .agent/scripts/meridian_delivery.py bootstrap"
   )
 }
 

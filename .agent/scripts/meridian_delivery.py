@@ -21,12 +21,18 @@ from meridian_delivery_config import (  # noqa: E402
     resolve_package_root,
     write_delivery_config,
 )
+from meridian_quality_profile import resolve_quality_siege  # noqa: E402
 
 
 def _cmd_config(package_root: Path) -> int:
     cfg = load_delivery_config(package_root, create_default=False)
     cfg_path = package_root / ".meridian" / "delivery.json"
     print(json.dumps({"path": str(cfg_path), "config": cfg}, indent=2))
+    return 0
+
+
+def _cmd_quality_profile(package_root: Path) -> int:
+    print(json.dumps(resolve_quality_siege(package_root), indent=2))
     return 0
 
 
@@ -71,7 +77,7 @@ def main() -> int:
     if not argv or argv[0] in ("-h", "--help"):
         print(
             "Usage: meridian_delivery.py [--package-root PATH] <command> [args...]\n"
-            "Facade commands: config | bootstrap | connectors\n"
+            "Facade commands: config | bootstrap | quality-profile | connectors\n"
             "Delivery verbs: counts, list, show, create-us, … (see delivery-connector-schema.md)\n"
             "Config: .meridian/delivery.json (default connector: sqlite)"
         )
@@ -84,6 +90,8 @@ def main() -> int:
         return _cmd_config(package_root)
     if passthrough[0] == "bootstrap":
         return _cmd_bootstrap(package_root)
+    if passthrough[0] == "quality-profile":
+        return _cmd_quality_profile(package_root)
     if passthrough[0] == "connectors":
         print("\n".join(list_connectors()))
         return 0

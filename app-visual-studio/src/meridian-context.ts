@@ -134,8 +134,12 @@ export class MeridianContext {
     this.extensionContext.subscriptions.push(
       vscode.workspace.onDidChangeWorkspaceFolders(() => void this.refresh()),
       vscode.workspace.onDidRenameFiles((e) => this.onWorkspaceFileEvent(e.files)),
-      vscode.workspace.onDidCreateFiles((e) => this.onWorkspaceFileEvent(e.files)),
-      vscode.workspace.onDidDeleteFiles((e) => this.onWorkspaceFileEvent(e.files)),
+      vscode.workspace.onDidCreateFiles((e) =>
+        this.onWorkspaceFileEvent(e.files.map((uri) => ({ newUri: uri }))),
+      ),
+      vscode.workspace.onDidDeleteFiles((e) =>
+        this.onWorkspaceFileEvent(e.files.map((uri) => ({ oldUri: uri }))),
+      ),
     )
   }
 

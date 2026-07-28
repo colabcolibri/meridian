@@ -32,7 +32,7 @@ Before responding, classify the request and select the correct Meridian agent. S
 | Deploy / CI doc | deploy, rollback, CI pipeline, production release | `technical-writer` + `08_environments` | yes |
 | Architecture | "architecture", `05_architecture`, `/architecture`, diagram, system map, ER map, architecture diagrams | `technical-architect` + `generate-architecture-diagram` | yes |
 | Design system | `09_design`, `/design-pass`, `/design-showcase`, `/design-review`, tokens, UI | `design-system-owner` + `design-system` | yes |
-| Test strategy | `10_test`, `/test-pass`, pyramid, coverage, runners | `quality-owner` + `test-strategy` | yes |
+| Test strategy | `10_test`, `/test-pass`, pyramid, coverage, runners, `qualitySiege` | `quality-owner` + `test-strategy` | yes |
 | Test audit | `/test-review`, tests evidence, before complete-us | `quality-owner` + `test-strategy` | yes |
 | Version / sprint | "version", "sprint", `/create-version`, `/plan-sprint` | `sprint-planner` | yes |
 | Close sprint | `/complete-sprint`, retrospective | `sprint-planner` + `complete-sprint` | yes |

@@ -16,12 +16,15 @@ import {
   type WebviewProjectContext,
 } from "./webview-project-context.js"
 
-export type BoardWebviewPayload = {
+export type BoardDataPayload = {
   stories: UserStory[]
   epics: EpicSummary[]
   versions: VersionSummary[]
   sprints: SprintSummary[]
   defaultVersions: string[]
+}
+
+export type BoardWebviewPayload = BoardDataPayload & {
   context: WebviewProjectContext
   loadWarning?: string | null
 }
@@ -31,7 +34,7 @@ export function buildBoardPayload(
   epics: EpicSummary[],
   versions: VersionSummary[],
   sprints: SprintSummary[] = [],
-): BoardWebviewPayload {
+): BoardDataPayload {
   const storyVersionIds = new Set(stories.map((s) => s.version))
   const filteredVersions = versions.filter((v) => storyVersionIds.has(v.id))
   return {

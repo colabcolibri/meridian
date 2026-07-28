@@ -1,6 +1,6 @@
 # Test stack references
 
-Direction-level guides for `/test-pass bootstrap`. See `../test-stack-catalog.md` for selection.
+Direction-level guides for `/test-pass bootstrap`. See `../test-stack-catalog.md` for selection. Pipeline gates (CodeQL, audit, Dependabot): `../ci-gates-catalog.md`.
 
 | File | Stack |
 | ---- | ----- |

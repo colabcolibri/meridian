@@ -1,0 +1,13 @@
+{
+  "version": 1,
+  "default": "meridian",
+  "projects": [
+    {
+      "id": "meridian",
+      "name": "Meridian kit",
+      "docs": "docs",
+      "qualitySiege": "full"
+    }
+  ],
+  "exclude": []
+}

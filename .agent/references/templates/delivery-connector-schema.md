@@ -23,7 +23,26 @@ Agents and skills call **`meridian_delivery.py`** — not `meridian_db_cli.py` d
 | `version` | yes | Always `1` for this schema |
 | `connector` | yes | Backend id — kit ships `sqlite` only |
 | `package_root` | yes | Path to folder with `docs/` (relative to repo or absolute) |
-| `options` | no | Connector-specific; empty object for sqlite |
+| `options` | no | Connector-specific; empty object for sqlite. May include `qualitySiege`: `kit` \| `standard` \| `full` (see `agentic-quality-model.md`) |
+
+### `options.qualitySiege` (optional)
+
+Single-product repos without `.meridian/projects.json` declare the optional robust validation tier here:
+
+```json
+{
+  "version": 1,
+  "connector": "sqlite",
+  "package_root": ".",
+  "options": {
+    "qualitySiege": "standard"
+  }
+}
+```
+
+Monorepos: prefer `projects[].qualitySiege` in `.meridian/projects.json` (wins over `delivery.json`).
+
+Resolve: `python3 .agent/scripts/meridian_delivery.py quality-profile`
 
 ### Future: `postgres` (not implemented)
 
@@ -60,6 +79,7 @@ Creates/upgrades `meridian.db` and writes default `delivery.json` when missing.
 | ------- | ------- |
 | `config` | Print resolved `delivery.json` |
 | `bootstrap` | DB + default delivery profile |
+| `quality-profile` | Resolve `qualitySiege` tier + expected gates for active package |
 | `connectors` | List registered drivers |
 
 All **delivery verbs** pass through unchanged:

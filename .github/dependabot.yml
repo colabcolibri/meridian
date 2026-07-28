@@ -1,0 +1,18 @@
+# Meridian monorepo: Dependabot watches app-visual-studio (extension lockfile).
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /app-visual-studio
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    groups:
+      eslint:
+        patterns:
+          - eslint*
+          - "@eslint/*"
+          - typescript-eslint
+      types:
+        patterns:
+          - "@types/*"
+          - typescript

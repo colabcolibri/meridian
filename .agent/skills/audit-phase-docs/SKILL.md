@@ -42,6 +42,7 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 | 5 | **Evidence** | Mode B claims have paths; stale paths flagged |
 | 6 | **Gates** | `05` not approved while `04` empty; security gaps |
 | 7 | **Inventory** | High rows promoted or explained in scope/architecture |
+| 8 | **Quality profile** | `quality-profile` run; if default but `08`/`10` describe CI siege → suggest `qualitySiege` in manifest or `delivery.json` |
 
 ---
 

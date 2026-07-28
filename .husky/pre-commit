@@ -1,1 +1,3 @@
-python3 .agent/scripts/validate_meridian.py .
+#!/usr/bin/env sh
+python3 .agent/scripts/meridian_delivery.py bootstrap
+python3 .agent/scripts/validate_meridian.py . --sqlite-only --strict-kit-md

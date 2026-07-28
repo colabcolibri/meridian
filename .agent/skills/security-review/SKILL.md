@@ -1,6 +1,6 @@
 ---
 name: security-review
-description: Reviews Meridian security posture, including secrets, threat model, AI-agent safety, OWASP, dependencies and Git hygiene. Use for 02_security.md or security hardening.
+description: Reviews Meridian security posture, including secrets, threat model, CI gates bootstrap, AI-agent safety, OWASP, dependencies and Git hygiene. Use for 02_security.md or security hardening.
 allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 ---
 
@@ -23,7 +23,8 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 | ------- | ---------- |
 | `.agent/references/templates/phase-docs/02-security.md` | **Init** — § Document stub to create `docs/02_security.md` |
 | `references/security-doc-checklist.md` | **Mandatory** — structure of `02` at init and pass |
-| `references/security-bootstrap.md` | **Mandatory** — `/security-pass bootstrap` |
+| `references/security-bootstrap.md` | **Mandatory** — `/security-pass bootstrap` (`02`) |
+| `references/ci-gates-bootstrap.md` | **Mandatory** — `/security-pass bootstrap` (`08` CI rows) |
 | `references/privacy-compliance-checklist.md` | **Mandatory** — `/privacy-pass` (LGPD + GDPR) |
 | `references/privacy-bootstrap.md` | **Mandatory** — `/privacy-pass bootstrap` |
 | `references/checklists.md` | `/security-pass full` or deep `02` review |

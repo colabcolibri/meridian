@@ -105,8 +105,9 @@ Visual structures for onboarding and review — **runtime**, **database (ER)**, 
 
 - `workspaceContains:.agent/MERIDIAN.md`.
 - **Single product:** `docs/` next to `.agent/` at repo root (this dogfood) or client project layout.
-- **Multi-product:** optional `.meridian/projects.json` at kit root; discovery finds `docs/` folders with Meridian fingerprint.
+- **Multi-product:** optional `.meridian/projects.json` at kit root; discovery finds `docs/` folders with Meridian fingerprint; per-product `qualitySiege` tier (`kit` | `standard` | `full`).
 - **Active project:** `meridian.activeProject` + **Select Active Project**; validate uses active `packageRoot` (parent of `docs/`).
+- **Quality profile:** `meridian_delivery.py quality-profile` resolves tier from manifest or `delivery.json` → `options.qualitySiege`; see `.agent/references/agentic-quality-model.md`. Validator WARNs when `10` is `approved` but tier is undeclared.
 
 ### Packaging
 

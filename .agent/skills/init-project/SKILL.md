@@ -128,9 +128,10 @@ If discovery finds **more than one** `docs/` folder named exactly `docs` with Me
 
 1. Read `projects-manifest-template.md`.
 2. Propose `.meridian/projects.json` at kit root with one entry per product (`docs` path relative to kit root).
-3. Do **not** treat `docs-extra` or non-`docs` folder names as products.
-4. Use `exclude` only for stray `docs/` folders that must not appear in the picker.
-5. Set `default` after manager confirms which product is primary.
+3. Ask manager for `qualitySiege` per product (`kit` | `standard` | `full`) — default `kit`; see `agentic-quality-model.md`.
+4. Do **not** treat `docs-extra` or non-`docs` folder names as products.
+5. Use `exclude` only for stray `docs/` folders that must not appear in the picker.
+6. Set `default` after manager confirms which product is primary.
 
 ---
 

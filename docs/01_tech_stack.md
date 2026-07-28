@@ -62,11 +62,11 @@ The extension reads/writes local `docs/` and `.meridian/meridian.db` via kit Pyt
 
 ## DX
 
-- Strict TypeScript in `app-visual-studio/`.
-- ESLint per extension template.
+- Strict TypeScript in `app-visual-studio/` (`pnpm typecheck`).
+- ESLint flat config in `app-visual-studio/` (`pnpm lint`).
 - Prettier as the default formatter.
-- Husky for local Git hooks.
-- lint-staged to format and lint only staged files.
+- Husky pre-commit: bootstrap SQLite + `validate_meridian.py --sqlite-only --strict-kit-md` (mirrors CI governance gate).
+- lint-staged — planned follow-up (not wired in v15-S1); use `pnpm lint` before push when touching extension code.
 - `.editorconfig` and `.vscode/settings.json` for format on save.
 - `pnpm-lock.yaml` as the only versioned lockfile.
 - Componentization by interface domain.

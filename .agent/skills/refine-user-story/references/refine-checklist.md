@@ -23,7 +23,8 @@ Read `writing-guide.md` for tone: Approach bullets must **explain**, not telegra
 | 11 | INVEST | Independent enough (`depends_on` justified), Small (one session), Testable (Planned + Acceptance) |
 | 12 | DRY | Approach names existing module/hook to reuse **or** justifies new shared module with path (see `code-quality-at-us-time.md`) |
 | 13 | SRP | One slice; Approach bullets don't mix unrelated layers; **Out of scope** lists creep risks |
-| 14 | Related decisions | `_n/a_` **or** `YYYY-MM-DD — title` when Approach touches scope, architecture, security, or acceptance; run `prepend-decision` first if not logged yet |
+| 14 | Quality profile | When `tests: required` and profile ≥ `standard`, Plan maps AC → test layer; run `quality-profile` if tier unknown |
+| 15 | Related decisions | `_n/a_` **or** `YYYY-MM-DD — title` when Approach touches scope, architecture, security, or acceptance; run `prepend-decision` first if not logged yet |
 
 See `.agent/references/scrum-meridian-map.md` for bugs/spikes (no extra artifact types).
 

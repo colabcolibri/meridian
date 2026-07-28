@@ -1,8 +1,8 @@
 ---
 title: Environments
 status: approved
-version: 1.2
-updated: 2026-06-04
+version: 1.3
+updated: 2026-07-28
 depends_on: [01_tech_stack.md, 05_architecture.md]
 blocks: []
 ---
@@ -19,10 +19,12 @@ blocks: []
 ### Kit + dogfood (repository root)
 
 ```bash
-python3 .agent/scripts/bootstrap_meridian_db.py .
+python3 .agent/scripts/meridian_delivery.py bootstrap
 python3 .agent/scripts/validate_meridian.py . --sqlite-only
 python3 .agent/scripts/meridian_delivery.py counts
 ```
+
+Canonical bootstrap is **`meridian_delivery.py bootstrap`** (also `bootstrap_meridian_db.py` shim). Read commands (`show`, `list`, `counts`, …) auto-bootstrap when `.meridian/meridian.db` is missing on a valid Meridian product folder.
 
 Fresh clone without `.meridian/meridian.db`: bootstrap creates empty schema + `delivery.json`. Import legacy delivery from branch `meridian-v1-old` via **`/migrate-delivery`** or `migrate_md_to_sqlite.py` (see `docs/06_database.md` § Migration).
 
@@ -80,6 +82,8 @@ After F5, open **Meridian: Open Board** — data loads from SQLite when `.meridi
 | Script                    | Purpose                                      |
 | ------------------------- | -------------------------------------------- |
 | `pnpm compile`            | esbuild bundle to `dist/extension.js`        |
+| `pnpm typecheck`          | `tsc --noEmit` (strict)                      |
+| `pnpm lint`               | ESLint on `src/` and `test/`                 |
 | `pnpm watch` / `pnpm dev` | Watch mode                                   |
 | `pnpm test`               | Compile + unit tests for workspace detection |
 
@@ -112,3 +116,47 @@ v10 extension and kit do not require environment variables.
 ## Differences between environments
 
 There are no remote environments in v0 yet.
+
+## CI/CD
+
+**Quality profile:** `qualitySiege: full` — declared in `.meridian/projects.json` (project `meridian`). Resolve: `python3 .agent/scripts/meridian_delivery.py quality-profile`. Kit reference: `.agent/references/agentic-quality-model.md`.
+
+Workflow map: `.github/workflows/README.md`.
+
+| Workflow | Trigger | Scope | Status |
+| -------- | ------- | ----- | ------ |
+| `ci.yml` → `validate-meridian` | push/PR `main` | Bootstrap → `validate_meridian.py --sqlite-only --strict-kit-md` → `run_kit_tests.py` | required |
+| `ci.yml` → `extension` | push/PR `main` | `pnpm audit --prod` → typecheck → lint → compile → test → coverage (advisory) | required |
+| `codeql.yml` | push/PR `main` | `javascript-typescript`, `python` | required |
+| `dependabot.yml` | schedule | npm @ `app-visual-studio/`, GitHub Actions | required |
+| `pr-review.yml` | PR opened | Checklist comment (independent review nudge) | optional |
+
+### `ci.yml` job detail
+
+| Job | Steps |
+| --- | ----- |
+| `validate-meridian` | Bootstrap SQLite → validator → kit Python suite |
+| `extension` | `pnpm install --frozen-lockfile` → prod audit → typecheck → lint → compile → test → coverage advisory (`continue-on-error`) |
+
+Local parity:
+
+```bash
+python3 .agent/scripts/meridian_delivery.py bootstrap
+python3 .agent/scripts/validate_meridian.py . --sqlite-only --strict-kit-md
+python3 .agent/scripts/run_kit_tests.py
+cd app-visual-studio && pnpm audit --prod --audit-level=high
+cd app-visual-studio && pnpm typecheck && pnpm lint && pnpm compile && pnpm test
+```
+
+Test strategy details: `docs/10_test_strategy.md`.
+
+## Git hooks
+
+Husky `.husky/pre-commit` runs governance validation only (fast):
+
+```bash
+python3 .agent/scripts/meridian_delivery.py bootstrap
+python3 .agent/scripts/validate_meridian.py . --sqlite-only --strict-kit-md
+```
+
+Pre-commit does **not** run the full test suite — CI enforces tests on PR. Match CI flags when editing the hook.

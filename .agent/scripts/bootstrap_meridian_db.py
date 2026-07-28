@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Bootstrap .meridian/meridian.db for a Meridian product folder (US-0106)."""
+"""Bootstrap .meridian/meridian.db — thin shim. Canonical: meridian_delivery.py bootstrap."""
 
 from __future__ import annotations
 

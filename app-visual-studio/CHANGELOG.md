@@ -4,6 +4,12 @@ All notable changes to the **Meridian** VS Code extension (`meridian-vscode`).
 
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.1.44] - 2026-07-28
+
+### Added
+
+- **Multi-product manifest:** `qualitySiege` field on `projects.json` entries (`kit` | `standard` | `full`) — parsed with project resolution for future UI and kit alignment
+
 ## [1.1.43] - 2026-07-28
 
 ### Fixed

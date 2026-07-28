@@ -30,12 +30,20 @@ export type MeridianProject = {
   /** Parent folder of docs (`.` = kit root) */
   packageRoot: string
   source: "manifest" | "discovered"
+  /** Declared in manifest when present */
+  qualitySiege?: "kit" | "standard" | "full"
 }
 
 export type ProjectsManifest = {
   version?: number
   default?: string
-  projects?: Array<{ id: string; name: string; docs: string }>
+  projects?: Array<{
+    id: string
+    name: string
+    docs: string
+    /** Optional quality siege tier — see agentic-quality-model.md */
+    qualitySiege?: "kit" | "standard" | "full"
+  }>
   exclude?: string[]
 }
 
@@ -191,7 +199,12 @@ export function discoverMeridianProjects(kitRoot: string): MeridianProject[] {
 
 function manifestToProject(
   kitRoot: string,
-  entry: { id: string; name: string; docs: string },
+  entry: {
+    id: string
+    name: string
+    docs: string
+    qualitySiege?: "kit" | "standard" | "full"
+  },
 ): MeridianProject | null {
   const docsRel = normalizeDocsRel(entry.docs)
   const docsAbs = path.join(kitRoot, ...docsRel.split("/"))
@@ -205,6 +218,7 @@ function manifestToProject(
     docs: docsRel,
     packageRoot: packageRoot === "" ? "." : packageRoot,
     source: "manifest",
+    ...(entry.qualitySiege ? { qualitySiege: entry.qualitySiege } : {}),
   }
 }
 

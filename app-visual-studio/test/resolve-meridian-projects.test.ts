@@ -7,8 +7,6 @@ import { test } from "node:test"
 import {
   applyExclude,
   discoverMeridianProjects,
-  isMeridianDocs,
-  mergeMeridianProjects,
   resolveMeridianProjects,
 } from "../src/resolve-meridian-projects.ts"
 

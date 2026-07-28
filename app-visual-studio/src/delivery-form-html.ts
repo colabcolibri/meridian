@@ -40,7 +40,7 @@ function catalogLabel(
   if (!field.catalogKey || !model.form.catalog) {
     return id
   }
-  const entry = model.form.catalog[field.catalogKey].find((item) => item.id === id)
+  const entry = model.form.catalog[field.catalogKey]?.find((item) => item.id === id)
   if (!entry) return id
   const status = entry.status ? ` · ${entry.status}` : ""
   if (field.catalogKey === "sprints" && entry.version) {

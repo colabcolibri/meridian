@@ -110,7 +110,7 @@ def check_implement_gate(package_root: str | Path, story_id: str) -> dict[str, A
             failures.append({"check": name, "detail": detail})
 
     if not db_exists(root):
-        add_check("meridian.db", False, "run bootstrap_meridian_db.py first")
+        add_check("meridian.db", False, f"run: python3 .agent/scripts/meridian_delivery.py bootstrap")
         return {"ok": False, "story_id": story_id, "checks": checks, "failures": failures}
 
     arch_fm = _read_phase_frontmatter(docs, "05_architecture.md")

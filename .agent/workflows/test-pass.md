@@ -23,7 +23,7 @@ $ARGUMENTS
 | Argument | Mode | Action |
 | -------- | ---- | ------ |
 | _(empty)_ | **full** | Checklist pass on entire `10` |
-| `bootstrap` | **bootstrap** | Read `01_tech_stack.md` → pick test stack id → fill pyramid + runners |
+| `bootstrap` | **bootstrap** | Run `quality-profile` → read `01_tech_stack.md` → pick test stack id → fill pyramid + runners; use `ci-gates-catalog.md` (gates **up to** profile) → document CI in `08` |
 | `US-XXXX` | **us-align** | Load US `--full`; map Acceptance tests → strategy sections |
 
 ---
@@ -36,6 +36,7 @@ CONTEXT:
 - Mode: TEST PASS
 
 RULES:
+0. Resolve profile: `python3 .agent/scripts/meridian_delivery.py quality-profile` — read `agentic-quality-model.md` when tier is unclear
 1. If no 10_test_strategy.md → copy § Document stub from `.agent/references/templates/phase-docs/10-test-strategy.md`
 2. Run mode procedure (full | bootstrap | us-align)
 3. Walk test-strategy-checklist.md
@@ -49,7 +50,10 @@ RULES:
 
 ```txt
 Mode: full | bootstrap | us-align
+qualitySiege (profile):
+Profile source:
 Test stack id:
+CI gates documented in 08: yes | no | n/a
 10_test_strategy status:
 Sections updated:
 US follow-ups:

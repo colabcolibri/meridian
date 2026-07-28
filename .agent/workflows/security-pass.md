@@ -24,7 +24,7 @@ $ARGUMENTS
 | Argument | Mode | Action |
 | -------- | ---- | ------ |
 | _(empty)_ | **full** | `checklists.md` + `security-doc-checklist.md` on entire `02` |
-| `bootstrap` | **bootstrap** | Read `01_tech_stack.md` → `security-bootstrap.md` → fill `02` sections |
+| `bootstrap` | **bootstrap** | Run `quality-profile` → read `01_tech_stack.md` → `security-bootstrap.md` + `ci-gates-bootstrap.md` → fill `02` and CI rows in `08` **up to** profile tier |
 | `US-XXXX` | **us-align** | Load US `--full`; map security Acceptance → `02` sections |
 
 ---
@@ -37,6 +37,7 @@ CONTEXT:
 - Mode: SECURITY PASS
 
 RULES:
+0. Resolve profile: `python3 .agent/scripts/meridian_delivery.py quality-profile` — audit/CodeQL only when `full` unless human raised profile
 1. security-champion Phase 0
 2. Run mode procedure (full | bootstrap | us-align)
 3. Document risks, mitigations, AI-agent rules for project
@@ -50,7 +51,10 @@ RULES:
 
 ```txt
 Mode: full | bootstrap | us-align
+qualitySiege (profile):
+Profile source:
 02_security status:
+08 CI rows updated: yes | no | n/a
 Sections updated:
 Critical findings:
 Mitigations proposed:

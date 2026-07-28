@@ -32,9 +32,18 @@
 - [ ] Minimum threshold or "no gate" decision explicit
 - [ ] Exclusions documented (generated code, vendor)
 
+## CI gates (bootstrap)
+
+- [ ] `quality-profile` run; gates capped to `qualitySiege` tier
+- [ ] `ci-gates-catalog.md` consulted when filling `08` CI/CD
+- [ ] CodeQL languages match `01_tech_stack` (if CodeQL in scope)
+- [ ] Audit command documented for package manager in `01`
+- [ ] Optional vs required status explicit per job row
+
 ## US alignment
 
 - [ ] Must US with `tests: required` should cite `10_test_strategy` in Plan
+- [ ] Each acceptance item maps to a test layer (unit / integration / e2e) when profile ≥ `standard` — see `agentic-quality-model.md`
 - [ ] Manual vs automated steps distinguished in refine
 
 ## Gate

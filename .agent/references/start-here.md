@@ -56,7 +56,7 @@ Documents produced:
 
 **HAR:** when agents need external accounts, payments, or production secrets → `⛔ Ação humana necessária` (P0 in `rules/MERIDIAN.md`).
 
-**Quality operator:** `/test-pass bootstrap` deepens `10_test_strategy.md` when tests in scope → `/test-review` before `/complete-us` on Must US with `tests: required`.
+**Quality operator:** `/test-pass bootstrap` deepens `10_test_strategy.md` when tests in scope → `/test-review` before `/complete-us` on Must US with `tests: required`. Declare optional robust gates per product: `.meridian/projects.json` → `qualitySiege` (`kit` | `standard` | `full`) — see [agentic-quality-model.md](../references/agentic-quality-model.md).
 
 **SEO operator (optional):** `/seo-pass` when public indexable web is in scope → `12_marketing_seo.md`. Skip CLI-only backends.
 
@@ -117,7 +117,7 @@ One kit (`.agent/`) at the repo root can serve **multiple products**. Each produ
 
 | Layer | File | Role |
 | ----- | ---- | ---- |
-| A — manifest | `.meridian/projects.json` | Declares ids, names, `default`, `exclude` |
+| A — manifest | `.meridian/projects.json` | Declares ids, names, `default`, `exclude`, optional `qualitySiege` per product |
 | B — discovery | automatic | Finds every `docs/` with Meridian fingerprint (`00_scope` or `us/`) |
 | Active project | picker / setting / **saved** | Board, validate, and agent work target one `docs/` at a time; choice persists across tab reopens |
 | **Project context strip** | Board + Deliverables toolbar | First row: **Project** — name, `docs/` path, US count; dropdown when N>1 (v2.04) |

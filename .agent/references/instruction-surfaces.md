@@ -127,7 +127,7 @@ Use this when adding or changing protocol behavior (example: **as-is inventory**
 | New delivery artifact | Template + skill + `INDEX.md` | `start-here.md`, `lifecycle.md`, validator if required |
 | Migration / bootstrap step | `init-project/SKILL.md`, `init-meridian.md` | `usage-guide.md`, `start-here.md` |
 | New `docs/` folder (optional) | `start-here.md`, `doc-templates.md` | init skill |
-| Multi-product / monorepo (resolver) | `projects-manifest-template.md`, `usage-guide.md`, `start-here.md`, `MERIDIAN.md` | `resolve-meridian-projects.ts`, `meridian-workspace.ts`, `meridian-workspace-picker.ts`, `meridian-context.ts`, `package.json`, `command-catalog.ts`, `05_architecture.md` |
+| Multi-product / monorepo (resolver) | `projects-manifest-template.md`, `usage-guide.md`, `start-here.md`, `MERIDIAN.md`, `agentic-quality-model.md` | `resolve-meridian-projects.ts`, `meridian-workspace.ts`, `meridian-workspace-picker.ts`, `meridian-context.ts`, `package.json`, `command-catalog.ts`, `05_architecture.md` |
 | Multi-product UI context | `usage-guide.md`, `start-here.md`, `agents-help.md`, `projects-manifest-template.md` | `webview-project-context.ts`, `*-webview-html.ts`, `planning-panels.ts`, `board-editor-panel.ts`, `command-catalog.ts`, `app-visual-studio/README.md`, `05_architecture.md` § UI structure |
 | Agent behavior only | `.agent/agents/{name}.md` | Usually nothing else |
 | Extension-only feature | `app-visual-studio/` + phase docs | Kit only if protocol changes |
@@ -145,7 +145,9 @@ When changing **several `docs/` trees in one repo** or **project context in the 
 - [ ] `.agent/references/start-here.md` — `docs/` tree + monorepo table
 - [ ] `.agent/references/usage-guide.md` — [Multiple Meridian projects](#multiple-meridian-projects) section
 - [ ] `.agent/references/agents-help.md` — IDE extension commands table
-- [ ] `.agent/references/templates/projects-manifest-template.md` — active project + UI
+- [ ] `.agent/references/templates/projects-manifest-template.md` — active project + UI + `qualitySiege`
+- [ ] `.agent/references/agentic-quality-model.md` — tiers, migration, validator WARN
+- [ ] `.agent/references/templates/delivery-connector-schema.md` — `options.qualitySiege`, `quality-profile` CLI
 - [ ] `.agent/workflows/status.md` — resolve active `docs/` in procedure
 - [ ] `.agent/skills/init-project/SKILL.md` — Phase 5 manifest proposal
 

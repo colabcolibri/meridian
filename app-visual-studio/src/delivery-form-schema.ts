@@ -179,7 +179,8 @@ export function selectOptionsForField(
   catalog?: FormCatalog,
 ): string[] | undefined {
   if (field.catalogKey && catalog?.[field.catalogKey]?.length) {
-    return catalog[field.catalogKey].map((entry) => entry.id)
+    const entries = catalog[field.catalogKey]
+    return entries?.map((entry) => entry.id)
   }
   if (field.scope !== "frontmatter") {
     return undefined

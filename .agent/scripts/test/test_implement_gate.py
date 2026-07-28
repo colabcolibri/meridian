@@ -7,8 +7,8 @@ import sys
 import tempfile
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(REPO_ROOT / ".agent" / "scripts" / "lib"))
+_SCRIPT_DIR = Path(__file__).resolve().parent
+sys.path.insert(0, str(_SCRIPT_DIR.parent / "lib"))
 
 from meridian_db import bootstrap, connect, upsert_epic, upsert_sprint, upsert_user_story, upsert_version  # noqa: E402
 from meridian_implement_gate import check_implement_gate  # noqa: E402

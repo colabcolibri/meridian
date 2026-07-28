@@ -12,7 +12,6 @@ import {
 
 describe("resolve kit scripts", () => {
   const extRoot = path.join(import.meta.dirname, "..")
-  const repoRoot = path.join(extRoot, "..")
 
   it("resolves kit scripts from monorepo root when package has only meridian.db", () => {
     const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "meridian-kit-nested-"))

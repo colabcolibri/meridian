@@ -36,7 +36,15 @@ export function buildWebviewProjectContext(info: MeridianWorkspaceInfo): Webview
   }
 }
 
-export type MeridianPanelKind = "Board" | "Versions" | "Sprints" | "Epics" | "Architecture" | "Decisions"
+export type MeridianPanelKind =
+  | "Board"
+  | "Versions"
+  | "Sprints"
+  | "Epics"
+  | "Architecture"
+  | "Decisions"
+  | "Delivery Graph"
+  | "Import Graph"
 
 export function formatMeridianPanelTitle(
   kind: MeridianPanelKind,

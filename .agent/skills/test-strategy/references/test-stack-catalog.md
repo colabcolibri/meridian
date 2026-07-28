@@ -21,3 +21,5 @@
 ## File map
 
 Each id has `stacks/{id}.md` with folder layout and US Plan citation pattern.
+
+CI pipeline gates (CodeQL, Dependabot, audit): `ci-gates-catalog.md` — use at `/test-pass bootstrap` or `/security-pass bootstrap`.
