@@ -23,7 +23,7 @@
 | `lib/meridian_section_contracts.py` | Library: structural validation helpers |
 | `lib/meridian_delivery_form.py` | Library: form ↔ markdown (extension) |
 | `bootstrap_meridian_db.py` | Shim — same as `meridian_delivery.py bootstrap` (prefer facade) |
-| `meridian_delivery.py` | **Agent facade** — reads `delivery.json`, dispatches connector (`counts`, `show`, `create-us`, …); `quality-profile` resolves `qualitySiege` tier |
+| `meridian_delivery.py` | **Agent facade** — reads `delivery.json`, dispatches connector (`counts`, `show`, `create-us`, `patch-record`, …); `quality-profile` resolves `qualitySiege` tier |
 | `meridian_db_cli.py` | SQLite driver (implementation; facade calls this) |
 | `meridian_db_export.py` | JSON export for extension (`--format planning|decisions`; `--write-form`) |
 | `validate_meridian.py` | Governance validator (`--strict-kit-md`, `--json`; deprecated-agent check always on kit) |

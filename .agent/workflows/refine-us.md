@@ -28,14 +28,15 @@ CONTEXT:
 - Mode: REFINE US
 
 RULES:
-1. Read US, depends_on US, cited architecture sections
-2. Deepen ### Approach — each bullet: what + where + why
-3. Fix ### Architecture refs — exact § from `05_architecture.md` or `docs/architecture/*.md`
-4. DRY / SRP — Approach names reuse; no mixed layers; Out of scope lists creep
-5. Concrete Plan/Planned — numbered manual steps or commands
-6. Fix Why/Where only if create left real gaps
-7. ready: true iff checklist passes (rows 11–12 included)
-8. `update-us` (stdin heredoc); `set-ready` when checklist passes
+1. `show US-XXXX --full` — mandatory before any write
+2. Read depends_on US, cited architecture sections
+3. Deepen ### Approach — each bullet: what + where + why
+4. Fix ### Architecture refs — exact § from `05_architecture.md` or `docs/architecture/*.md`
+5. DRY / SRP — Approach names reuse; no mixed layers; Out of scope lists creep
+6. Concrete Plan/Planned — numbered manual steps or commands
+7. Fix Why/Where only if create left real gaps
+8. ready: true iff checklist passes (rows 11–12 included)
+9. `update-us` with **entire** markdown from step 1 + edits (never partial body — replaces full row)
 ```
 
 ---

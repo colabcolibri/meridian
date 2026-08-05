@@ -7,7 +7,7 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 # Create user story (Meridian)
 
 > **v11:** delivery lives in `.meridian/meridian.db` — never create `docs/us/*.md`.  
-> **Forbidden:** `.meridian/drafts/`, `us-*-refine.md`, `us-*-complete.md`, `docs/us/*.md`. “Draft” = `ready: false` in SQLite. **Persist:** `update-us US-XXXX` with markdown on **stdin** (heredoc) only — no scratch files, no `--from-file`.
+> **Forbidden:** `.meridian/drafts/`, `us-*-refine.md`, `us-*-complete.md`, `docs/us/*.md`. “Draft” = `ready: false` in SQLite. **Persist:** `update-us US-XXXX` with markdown on **stdin** (heredoc) only — no scratch files, no `--from-file`, **no helper `.py`**.
 
 ## Selective reading
 

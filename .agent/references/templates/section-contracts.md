@@ -22,7 +22,7 @@ Four phase groups replace flat H2 siblings. No legacy aliases.
 | # | Section | Phase | Create | Refine | Close |
 | - | ------- | ----- | ------ | ------ | ----- |
 | 1 | Intent | Why we do this | Acceptance + Why + Where | tighten | mark `[x]` |
-| 2 | Plan | How we will do it | Architecture refs + Planned draft | optional Approach + concrete tests | unchanged |
+| 2 | Plan | How we will do it | Architecture refs + Planned draft | optional Approach + concrete tests | **unchanged** — use `patch-record` on close |
 | 3 | Record | What shipped | placeholders | unchanged | Files + layers + Executed |
 | 4 | Boundaries | What we skip | Out of scope | optional | optional |
 

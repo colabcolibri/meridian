@@ -157,6 +157,82 @@ def format_delivery_frontmatter(frontmatter: dict[str, str]) -> str:
     return "\n".join(lines)
 
 
+def replace_h2_section(body: str, heading: str, new_inner: str) -> str:
+    """Replace one ## section body; ``new_inner`` is content under the H2 (may include ###)."""
+    pattern = re.compile(rf"^## {re.escape(heading)}\s*$", re.MULTILINE)
+    match = pattern.search(body)
+    inner = new_inner.strip()
+    if not inner:
+        return body
+    if not match:
+        return body.rstrip() + f"\n\n## {heading}\n\n{inner}\n"
+    start = match.end()
+    rest = body[start:]
+    next_heading = re.search(r"^## ", rest, re.MULTILINE)
+    end = start + next_heading.start() if next_heading else len(body)
+    before = body[: match.start()].rstrip()
+    after = body[end:].lstrip() if next_heading else ""
+    mid = f"## {heading}\n\n{inner}"
+    if after:
+        return f"{before}\n\n{mid}\n\n{after}"
+    return f"{before}\n\n{mid}\n"
+
+
+def replace_h3_in_section(section: str, heading: str, new_inner: str) -> str:
+    """Replace one ### subsection inside an H2 section body."""
+    pattern = re.compile(rf"^### {re.escape(heading)}\s*$", re.MULTILINE)
+    match = pattern.search(section)
+    inner = new_inner.strip()
+    if not inner:
+        return section
+    if not match:
+        return section.rstrip() + f"\n\n### {heading}\n\n{inner}\n"
+    start = match.end()
+    rest = section[start:]
+    next_heading = re.search(r"^### ", rest, re.MULTILINE)
+    end = start + next_heading.start() if next_heading else len(section)
+    before = section[: match.start()].rstrip()
+    after = section[end:].lstrip() if next_heading else ""
+    mid = f"### {heading}\n\n{inner}"
+    if after:
+        return f"{before}\n\n{mid}\n\n{after}"
+    return f"{before}\n\n{mid}\n"
+
+
+def patch_us_record_markdown(existing_text: str, patch_text: str) -> str:
+    """Merge close patch into existing US markdown — Record + optional Acceptance + frontmatter."""
+    existing_fm, existing_body, _ = read_markdown_text(existing_text)
+    patch_fm, patch_body, _ = read_markdown_text(patch_text)
+
+    merged_fm = dict(existing_fm)
+    for key, value in patch_fm.items():
+        merged_fm[key] = value
+
+    body = existing_body
+
+    record_patch = extract_section_body(patch_body, "Record")
+    if record_patch is not None:
+        body = replace_h2_section(body, "Record", record_patch)
+    elif patch_body.strip() and extract_section_body(patch_body, "Intent") is None:
+        if re.search(
+            r"^### (Files|Backend|Frontend|Scripts / Docs|Executed)\s*$",
+            patch_body,
+            re.MULTILINE,
+        ):
+            body = replace_h2_section(body, "Record", patch_body.strip())
+
+    intent_patch = extract_section_body(patch_body, "Intent")
+    if intent_patch is not None:
+        acceptance = extract_subsection_body(intent_patch, "Acceptance")
+        if acceptance is not None:
+            intent_section = extract_section_body(body, "Intent")
+            if intent_section:
+                new_intent = replace_h3_in_section(intent_section, "Acceptance", acceptance)
+                body = replace_h2_section(body, "Intent", new_intent)
+
+    return f"{format_delivery_frontmatter(merged_fm)}\n\n{body.lstrip()}\n"
+
+
 def merge_us_sprint_into_markdown(body_markdown: str, sprint_id: str | None) -> str:
     """Inject sprint_id from SQLite into US export frontmatter (display-only; body unchanged)."""
     fm, body, _ = read_markdown_text(body_markdown)

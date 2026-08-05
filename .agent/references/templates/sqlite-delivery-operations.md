@@ -11,7 +11,7 @@
 | ---- | ---- |
 | Database | `{packageRoot}/.meridian/meridian.db` |
 
-**Forbidden:** `.meridian/drafts/`, `us-*-refine.md`, `us-*-complete.md`, `docs/us/*.md`. Kit “narrative draft” / “Plan draft” = `ready: false` in `user_stories`. Persist: `update-{us|epic|version|sprint}` with markdown on **stdin** (heredoc) only. Do not create scratch `.md` in the repo.
+**Forbidden:** `.meridian/drafts/`, `us-*-refine.md`, `us-*-complete.md`, `docs/us/*.md`, **helper `.py`** for delivery. Kit “narrative draft” / “Plan draft” = `ready: false` in `user_stories`. Persist: `update-{us|epic|version|sprint}` with markdown on **stdin** (heredoc) only, or `patch-record` for US close. Do not create scratch `.md` or `.py` in the repo.
 
 | Migrations | `.agent/migrations/YYYYMMDDHHMMSS_*.sql` |
 | Access layer | `.agent/scripts/lib/meridian_db.py` |
@@ -74,7 +74,20 @@ python3 .agent/scripts/meridian_delivery.py update-us US-0115 <<'EOF'
 id: US-0115
 ...
 ---
-# US body
+# US body (full document — replaces body_markdown)
+EOF
+python3 .agent/scripts/meridian_delivery.py patch-record US-0115 <<'EOF'
+---
+status: ✅
+tests_status: done
+---
+## Record
+### Files
+- `path` — change
+...
+## Intent
+### Acceptance
+- [x] ...
 EOF
 python3 .agent/scripts/meridian_delivery.py update-epic EPIC-15 <<'EOF'
 ---

@@ -32,10 +32,14 @@ Every delivery row (epic, version, sprint, user story) uses **two layers**:
 | **Frontmatter** | dedicated columns | e.g. `epic_id`, `version_id`, `sprint_id`, `status`, `ready`, `depends_on_json` |
 
 ```txt
-Agent writes full US markdown
+Agent writes full US markdown — OR patch-record on close
+        │
+        ├─► update-us  ──► replaces entire body_markdown (must send full doc from show --full)
+        │
+        └─► patch-record ──► merges ## Record + optional Acceptance + frontmatter (Intent/Plan preserved)
         │
         ▼
-meridian_delivery.py update-us US-XXXX <<'EOF' … EOF
+meridian_delivery.py … US-XXXX
         │
         ├─► body_markdown          (entire file — source for display)
         ├─► record_files, …        (each ### under ## Record → own column)
@@ -43,11 +47,11 @@ meridian_delivery.py update-us US-XXXX <<'EOF' … EOF
         └─► epic_id, sprint_id, status, ready, …
 ```
 
-**Write rule:** always `update-us` with **complete markdown** — never UPDATE a single column without updating `body_markdown`. Kit keeps columns in sync on upsert.
+**Write rule:** `update-us` requires **complete markdown** (load with `show --full` first). **`patch-record`** is preferred on `/complete-us` — merges Record without wiping Intent/Plan. CLI rejects `status: ✅` with batch-close boilerplate. Never helper `.py` scripts for delivery.
 
 **Read rule:** `show US-XXXX` (summary) → `show US-XXXX --full` (`body_markdown`). Validator and extension use virtual markdown from `body_markdown`, not isolated columns.
 
-**Close rule (`/complete-us`):** fill `## Record` subsections in markdown (`### Files`, `### Backend`, …) per `implementation-template.md` — each becomes its column automatically.
+**Close rule (`/complete-us`):** `show --full` → `patch-record` with filled `## Record` per `implementation-template.md`; Plan/Approach unchanged unless scope changed deliberately.
 
 ## Schema — entity-relationship diagram
 

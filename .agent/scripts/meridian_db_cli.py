@@ -533,6 +533,23 @@ def cmd_update_us(args) -> int:
     return _cmd_update_markdown(args, "user_stories", args.story_id)
 
 
+def cmd_patch_record(args) -> int:
+    root = _root(args)
+    text = sys.stdin.read()
+    if not text.strip():
+        print("ERROR: empty patch on stdin", file=sys.stderr)
+        return 1
+    try:
+        from meridian_db import patch_user_story_record  # noqa: PLC0415
+
+        patch_user_story_record(root, args.story_id, text)
+    except ValueError as exc:
+        print(f"ERROR: {exc}", file=sys.stderr)
+        return 1
+    print(f"Patched Record for {args.story_id}")
+    return 0
+
+
 def cmd_update_epic(args) -> int:
     return _cmd_update_markdown(args, "epics", args.epic_id)
 
@@ -822,6 +839,13 @@ def main() -> int:
     update = sub.add_parser("update-us", help="Upsert US from markdown on stdin (heredoc)")
     update.add_argument("story_id")
     update.set_defaults(func=cmd_update_us)
+
+    patch_record = sub.add_parser(
+        "patch-record",
+        help="Merge ## Record (+ optional Acceptance, frontmatter) into existing US — preserves Intent/Plan",
+    )
+    patch_record.add_argument("story_id")
+    patch_record.set_defaults(func=cmd_patch_record)
 
     update_epic = sub.add_parser("update-epic", help="Upsert epic from markdown on stdin (heredoc)")
     update_epic.add_argument("epic_id")

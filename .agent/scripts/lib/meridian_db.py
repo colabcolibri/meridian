@@ -14,6 +14,7 @@ US_ID_RE = re.compile(r"^US-\d{4}$")
 
 from meridian_markdown_parse import extract_us_preamble
 from meridian_paths import MIGRATIONS_DIR, REPO_ROOT
+
 DB_FILENAME = "meridian.db"
 MERIDIAN_DIR = ".meridian"
 
@@ -1278,6 +1279,70 @@ ENTITY_TABLE_MAP: dict[str, str] = {
 }
 
 
+def patch_user_story_record(
+    package_root: str | Path,
+    story_id: str,
+    patch_text: str,
+) -> dict[str, str]:
+    """Merge Record (and optional Acceptance + frontmatter) into existing US markdown."""
+    from meridian_markdown_parse import (  # noqa: PLC0415
+        extract_us_sections,
+        parse_depends_on,
+        patch_us_record_markdown,
+        read_markdown_text,
+    )
+
+    if not patch_text.strip():
+        raise ValueError("empty patch")
+
+    conn = connect(package_root)
+    try:
+        row = conn.execute(
+            "SELECT body_markdown FROM user_stories WHERE id = ?",
+            (story_id,),
+        ).fetchone()
+        if not row:
+            raise ValueError(f"{story_id} not found")
+        existing = (row["body_markdown"] or "").strip()
+        if not existing:
+            raise ValueError(f"{story_id} has empty body_markdown — use update-us first")
+
+        merged = patch_us_record_markdown(existing, patch_text)
+        fm, body, full = read_markdown_text(merged)
+        if fm.get("id") and fm["id"] != story_id:
+            raise ValueError(f"patch frontmatter id {fm['id']} does not match {story_id}")
+        fm["id"] = story_id
+        depends = parse_depends_on(fm.get("depends_on"))
+        sections = extract_us_sections(body)
+
+        if (fm.get("status") or "").strip() == "✅":
+            from meridian_us_close_quality import (
+                validate_closed_us_row,  # noqa: PLC0415
+            )
+
+            preview = {
+                "id": story_id,
+                "status": fm.get("status"),
+                "body_markdown": full,
+                "intent_why": sections.get("intent_why"),
+                "plan_approach": sections.get("plan_approach"),
+                "record_files": sections.get("record_files"),
+                "intent_acceptance": sections.get("intent_acceptance"),
+            }
+            close_errors: list[str] = []
+            validate_closed_us_row(preview, close_errors)
+            if close_errors:
+                raise ValueError("; ".join(close_errors))
+
+        upsert_user_story(conn, fm, full, sections, depends)
+        conn.commit()
+    finally:
+        conn.close()
+
+    record_board_snapshot(package_root)
+    return {"id": story_id, "entity": "user_stories"}
+
+
 def upsert_delivery_from_markdown(
     package_root: str | Path,
     entity: str,
@@ -1309,7 +1374,29 @@ def upsert_delivery_from_markdown(
     try:
         if entity_key in ("us", "user_story", "user_stories"):
             depends = parse_depends_on(fm.get("depends_on"))
-            upsert_user_story(conn, fm, full, extract_us_sections(body), depends)
+            sections = extract_us_sections(body)
+            if (fm.get("status") or "").strip() == "✅":
+                from meridian_us_close_quality import (
+                    validate_closed_us_row,  # noqa: PLC0415
+                )
+
+                preview = {
+                    "id": entity_id,
+                    "status": fm.get("status"),
+                    "body_markdown": full,
+                    "intent_why": sections.get("intent_why"),
+                    "plan_approach": sections.get("plan_approach"),
+                    "record_files": sections.get("record_files"),
+                    "intent_acceptance": sections.get("intent_acceptance"),
+                }
+                close_errors: list[str] = []
+                validate_closed_us_row(preview, close_errors)
+                if close_errors:
+                    raise ValueError(
+                        "; ".join(close_errors)
+                        + " — use `show --full`, edit in place, prefer `patch-record` for close"
+                    )
+            upsert_user_story(conn, fm, full, sections, depends)
         elif entity_key in ("epic", "epics"):
             upsert_epic(conn, fm, full, extract_epic_sections(body))
         elif entity_key in ("version", "versions"):
@@ -1348,7 +1435,9 @@ def export_entity_markdown(
         if not raw:
             return None
         if table == "user_stories" and _user_stories_has_sprint_column(conn):
-            from meridian_markdown_parse import merge_us_sprint_into_markdown  # noqa: PLC0415
+            from meridian_markdown_parse import (
+                merge_us_sprint_into_markdown,  # noqa: PLC0415
+            )
 
             sprint_row = conn.execute(
                 "SELECT sprint_id FROM user_stories WHERE id = ?", (entity_id,)

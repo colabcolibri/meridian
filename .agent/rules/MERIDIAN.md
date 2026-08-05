@@ -91,6 +91,7 @@ Before any action, classify:
 - `✅` without evidence = **protocol failure**
 - `✅` without filled `## Record` on the US (skill `complete-user-story`) = **protocol failure**
 - Write `.meridian/drafts/`, `us-*-refine.md`, `us-*-complete.md`, delivery markdown under `.meridian/` or `docs/us/`, or `update-* --from-file` for delivery persist = **protocol failure**
+- Write one-shot `.py` (or any file) to generate, batch-close, or pipe US/epic/sprint markdown — use `meridian_delivery.py update-us` (heredoc) or `patch-record` only = **protocol failure**
 
 ---
 
@@ -100,7 +101,8 @@ Before any action, classify:
 
 - `docs/` is the source of truth of the **target project** (monorepos: resolve via `.meridian/projects.json` — see `projects-manifest-template.md`).
 - Delivery backlog lives in `.meridian/meridian.db` (epics, versions, sprints, US, decisions).
-- **Forbidden — US “draft” paths:** “narrative draft” / “Plan draft” = `ready: false` in SQLite only. Do **not** `Write` `.meridian/drafts/`, `us-*-refine.md`, `us-*-complete.md`, or `docs/us/*.md`. Persist delivery with `update-{us|epic|version|sprint}` and markdown on **stdin** (heredoc) only — no `--from-file`, no scratch `.md`.
+- **Forbidden — US “draft” paths:** “narrative draft” / “Plan draft” = `ready: false` in SQLite only. Do **not** `Write` `.meridian/drafts/`, `us-*-refine.md`, `us-*-complete.md`, or `docs/us/*.md`. Persist delivery with `update-{us|epic|version|sprint}` and markdown on **stdin** (heredoc) only — no `--from-file`, no scratch `.md`, **no helper `.py`** (e.g. `complete_*_sprints.py`, `write_us.py`).
+- **US upsert merge contract:** `update-us` **replaces** the full `body_markdown`. Before any `update-us` or `patch-record`, run `show US-XXXX --full` and edit **in place**. On `/complete-us`, **prefer `patch-record`** (merges `## Record` + optional Acceptance); keep Intent/Plan/Approach unchanged unless evidence requires a deliberate edit.
 - Board UI reads SQLite via `meridian_db_export --format planning`; `board_snapshots` on upsert.
 - Read `.agent/MERIDIAN.md` before changing project structure.
 

@@ -1,7 +1,8 @@
 # Template — Record (fill in on completion)
 
 > **US creation:** placeholders under `## Record`.  
-> **Closure (`✅`):** replace with real record of what was delivered.
+> **Closure (`✅`):** replace placeholders with real delivery record — skill `complete-user-story`.  
+> **Do not** rebuild Intent/Plan from this file — run `show --full` first; use `patch-record` or full `update-us` with preserved sections.
 
 ## Placeholder on creation (status `❌`)
 
@@ -66,6 +67,8 @@ _(pending until close)_
 
 | Rule | Detail |
 | ----- | ------- |
+| Load first | `show US-XXXX --full` — never close from this template alone |
+| Persist | Prefer `patch-record`; else `update-us` with **entire** markdown |
 | Paths | Relative to app root or repo; include folder |
 | One line per file | What changed in that file |
 | Empty layers | `_n/a_` — do not omit heading |

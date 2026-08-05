@@ -282,6 +282,37 @@ PLACEHOLDER_PRIVACY_RE = re.compile(
 )
 
 
+def validate_sqlite_us_close_quality(root: Path, warnings: list[str]) -> None:
+    """Warn when closed US rows contain batch-close boilerplate (legacy debt) or missing refine content."""
+    db_path = root / ".meridian" / "meridian.db"
+    if not db_path.is_file():
+        return
+
+    import sqlite3
+
+    from meridian_us_close_quality import validate_closed_us_row  # noqa: PLC0415
+
+    conn = sqlite3.connect(db_path)
+    conn.row_factory = sqlite3.Row
+    try:
+        rows = conn.execute(
+            """
+            SELECT id, status, body_markdown, intent_why, plan_approach,
+                   record_files, intent_acceptance
+            FROM user_stories
+            WHERE status = '✅'
+            """
+        ).fetchall()
+    finally:
+        conn.close()
+
+    for row in rows:
+        row_errors: list[str] = []
+        validate_closed_us_row(row, row_errors)
+        for msg in row_errors:
+            warnings.append(f"close-quality: {msg}")
+
+
 def validate_sqlite_security_refs(
     root: Path,
     docs: Path,
@@ -968,6 +999,7 @@ def main() -> int:
         validate_sqlite_privacy_refs(root, docs, warnings)
         validate_sqlite_test_strategy_refs(root, docs, warnings)
         validate_quality_siege_profile(root, docs, warnings)
+        validate_sqlite_us_close_quality(root, warnings)
         validate_lifecycle_hygiene(root, warnings)
 
     if board_path.exists():

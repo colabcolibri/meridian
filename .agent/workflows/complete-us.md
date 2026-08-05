@@ -12,10 +12,12 @@ $ARGUMENTS
 
 1. Use `backlog-refiner` + `@[skills/complete-user-story]`
 2. **Gate:** implementation delivered; applicable tests passed; `depends_on` at `✅`
-3. **Mandatory read:** `implementation-template.md` + `us-template.md` + `section-contracts.md` + target US **before** editing status
-4. **Do not** mark `✅` with placeholder in `## Record`
-5. Cross-cutting close gate: approved phase doc, kit/protocol, or security change → `prepend-decision` + `YYYY-MM-DD — title` in US Related decisions (skill + `date` before CLI)
-6. suggested commit line in ### Executed
+3. **Mandatory read:** `implementation-template.md` + `section-contracts.md` + **`show US-XXXX --full`** before any write
+4. **Do not** mark `✅` with placeholder in `## Record`; CLI rejects batch-close boilerplate
+5. **Prefer `patch-record`** — merges Record + Acceptance; **Plan/Approach unchanged** (see `section-contracts.md`)
+6. **Forbidden:** helper `.py` to batch-close or generate US markdown
+7. Cross-cutting close gate: approved phase doc, kit/protocol, or security change → `prepend-decision` + `YYYY-MM-DD — title` in US Related decisions
+8. suggested commit line in ### Executed
 
 ---
 
@@ -28,13 +30,14 @@ CONTEXT:
 
 RULES:
 1. backlog-refiner Phase 0 — verify US id and dependencies
-2. Inspect git diff / files touched for evidence
-3. Fill ## Record (Files + layers + Executed)
-4. Mark Intent/Acceptance [x]; update Plan/Planned [x]; set tests_status: done
-5. Set status ✅ (or 🔶 + Missing: if partial) — only ✅ if tests: none or tests_status: done
-6. `update-us` (stdin heredoc) with status ✅ and filled Record
-7. `prepend-decision` if protocol/architecture changed
-8. Lifecycle cascade — `lifecycle-eligible US-XXXX`; ask manager; on yes run complete-sprint / complete-epic (never silent auto-close)
+2. `show US-XXXX --full` — mandatory; edit in place, do not rebuild from template alone
+3. Inspect git diff / files touched for evidence
+4. Fill ## Record (Files + layers + Executed)
+5. Mark Intent/Acceptance [x]; update Plan/Planned [x]; set tests_status: done
+6. Set status ✅ (or 🔶 + Missing: if partial)
+7. `patch-record` (preferred) OR `update-us` with **entire** markdown from step 2
+8. `prepend-decision` if protocol/architecture changed
+9. Lifecycle cascade — `lifecycle-eligible US-XXXX`; ask manager; on yes run complete-sprint / complete-epic
 ```
 
 ---
