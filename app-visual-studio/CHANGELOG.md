@@ -4,6 +4,12 @@ All notable changes to the **Meridian** VS Code extension (`meridian-vscode`).
 
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.1.45] - 2026-08-05
+
+### Changed
+
+- **Bundled kit:** `patch-record` CLI merges `## Record` on `/complete-us` without replacing Intent/Plan; close-quality gates block batch-close boilerplate; agent skills and P0 rules forbid delivery helper `.py` scripts (US-0185)
+
 ## [1.1.44] - 2026-07-28
 
 ### Added
