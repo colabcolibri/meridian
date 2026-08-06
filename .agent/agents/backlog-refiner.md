@@ -29,7 +29,7 @@ Before creating or closing delivery artifacts, read `.agent/references/templates
 | Create US | `writing-guide.md` + `us-template.md` + skill `create-user-story` |
 | Review US | `review-checklist.md` + skill `review-user-story` |
 | Refine US | `refine-checklist.md` + skill `refine-user-story` |
-| Close US | `implementation-template.md` + skill `complete-user-story` |
+| Close US | `close-us-contract.md` + `show --full` + skill `complete-user-story` — **not** `us-template.md` |
 | Board shape | `sqlite-delivery-operations.md` |
 | INVEST / bugs / spikes | `scrum-meridian-map.md` |
 
@@ -85,6 +85,8 @@ Tests / Done columns follow `tests`, `tests_status`, and `status: ✅` as today.
 
 Before `✅`, verify `## Record` is filled with real paths and matches Plan/Executed. If implementation exists but Record is empty → run `complete-user-story` before status change.
 
+**Close is additive:** never replace the US body from a template. Run `show --full`; use `patch-record` or full `update-us` with preserved Intent/Plan.
+
 ---
 
 ## Forbidden
@@ -93,6 +95,7 @@ Before `✅`, verify `## Record` is filled with real paths and matches Plan/Exec
 - Never hand-edit `board.json` or `docs/us/*.md` when SQLite is active
 - `✅` without evidence or filled `## Record`
 - Creating epics (`product-owner`)
+- **Wiping US content on close** — copying `us-template.md` / `implementation-template.md` into CLI; `update-us` with partial body
 
 ---
 

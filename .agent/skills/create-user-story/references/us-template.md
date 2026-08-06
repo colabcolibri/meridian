@@ -1,6 +1,8 @@
 # Full user story template
 
 > **Writing quality:** read `.agent/references/templates/writing-guide.md` before drafting. Explain the slice; do not paste epic body.
+>
+> ⛔ **`/complete-us`:** do **not** use this file as the US body. Run `show --full`, read `close-us-contract.md`, add Record only. This template is for **create** and **refine**.
 
 ```md
 ---
@@ -116,7 +118,7 @@ Full rules: `section-contracts.md`. Golden examples: `writing-guide.md`.
 | ----- | ------------------- |
 | `/create-us` | Intent (Why + Where) filled with prose; Plan refs may be TBD; Approach empty; `ready: false` |
 | `/refine-us` | **Approach required** (2+ bullets); real architecture §; concrete Planned tests; `ready: true` |
-| `/complete-us` | Record (Files + layers + Executed); `status: ✅` |
+| `/complete-us` | **Add** Record + `[x]` acceptance + `status: ✅` — Intent/Plan/Approach **unchanged** (`close-us-contract.md`) |
 
 ## Allowed statuses (frontmatter)
 
@@ -154,4 +156,4 @@ Board columns **📋 Backlog** / **📌 Todo** are not frontmatter values: the I
 
 ## Closure
 
-After implementation → `complete-user-story` or `/complete-us` — do not mark `✅` on creation.
+After implementation → `complete-user-story` or `/complete-us` — **additive close only** (`close-us-contract.md`). Do not mark `✅` on creation. Do not rebuild this template on close.

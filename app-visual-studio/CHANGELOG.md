@@ -4,6 +4,12 @@ All notable changes to the **Meridian** VS Code extension (`meridian-vscode`).
 
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.1.46] - 2026-08-06
+
+### Changed
+
+- **Bundled kit:** `close-us-contract.md` — `/complete-us` is additive only; agents must not copy `us-template.md` on close; INDEX/TEMPLATE_SOURCES routing fixed (US-0186)
+
 ## [1.1.45] - 2026-08-05
 
 ### Changed

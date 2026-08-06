@@ -35,10 +35,10 @@ EOF
 
 ## Procedure
 
-1. Export sprint markdown; read US statuses via `show`.
+1. Export sprint markdown (`meridian_db_export` or `show`); read US statuses via `show`.
 2. Summarize delivery vs `goal` and `done_when`.
-3. Fill `## Retrospective` (What worked / improve / decisions to log).
-4. Set frontmatter `status: complete`; `update-sprint` with full markdown on stdin (heredoc).
+3. **Add** filled `## Retrospective` to the **existing** sprint body — do not replace Goal/Scope from template memory.
+4. Set frontmatter `status: complete`; `update-sprint` with **full** markdown on stdin (heredoc).
 5. `prepend-decision` if warranted.
 6. `validate_meridian.py`
 

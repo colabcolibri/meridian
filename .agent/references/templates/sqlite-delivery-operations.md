@@ -77,6 +77,7 @@ id: US-0115
 # US body (full document — replaces body_markdown)
 EOF
 python3 .agent/scripts/meridian_delivery.py patch-record US-0115 <<'EOF'
+# Prefer on /complete-us — see close-us-contract.md (additive; never copy us-template.md)
 ---
 status: ✅
 tests_status: done

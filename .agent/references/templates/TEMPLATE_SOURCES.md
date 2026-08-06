@@ -22,11 +22,12 @@ CANONICAL (edit here)          REGISTRY (agents read)              IDE ADAPTER (
 
 | Template | Canonical (edit) | Registry | Used by |
 | -------- | ---------------- | -------- | ------- |
-| `us-template.md` | `.agent/skills/create-user-story/references/us-template.md` | `.agent/references/templates/us-template.md` | `/create-us`, `/refine-us`, `/review-us`, `/implement-us`, `/complete-us` |
+| `us-template.md` | `.agent/skills/create-user-story/references/us-template.md` | `.agent/references/templates/us-template.md` | `/create-us`, `/refine-us`, `/review-us`, `/implement-us` — **not** `/complete-us` body |
 | `refine-checklist.md` | `.agent/skills/refine-user-story/references/refine-checklist.md` | `.agent/references/templates/refine-checklist.md` | `/refine-us` |
 | `implement-gate-checklist.md` | `.agent/skills/implement-user-story/references/implement-gate-checklist.md` | `.agent/references/templates/implement-gate-checklist.md` | `/implement-us` |
 | `review-checklist.md` | `.agent/skills/review-user-story/references/review-checklist.md` | `.agent/references/templates/review-checklist.md` | `/review-us` |
-| `implementation-template.md` | `.agent/skills/complete-user-story/references/implementation-template.md` | `.agent/references/templates/implementation-template.md` | `/complete-us` |
+| `implementation-template.md` | `.agent/skills/complete-user-story/references/implementation-template.md` | `.agent/references/templates/implementation-template.md` | `/complete-us` (Record shape only) |
+| `close-us-contract.md` | `.agent/skills/complete-user-story/references/close-us-contract.md` | `.agent/references/templates/close-us-contract.md` | `/complete-us` (**read first**) |
 | `epic-template.md` | `.agent/skills/create-epic/references/epic-template.md` | `.agent/references/templates/epic-template.md` | `/create-epic` |
 | `version-template.md` | `.agent/skills/create-version/references/version-template.md` | `.agent/references/templates/version-template.md` | `/create-version` |
 | `sprint-template.md` | `.agent/skills/create-sprint/references/sprint-template.md` | `.agent/references/templates/sprint-template.md` | `/plan-sprint` |
@@ -63,7 +64,7 @@ CANONICAL (edit here)          REGISTRY (agents read)              IDE ADAPTER (
 | Refine | `/refine-us` | `refine-checklist.md` + `writing-guide.md` + `code-quality-at-us-time.md` + `us-template.md` + `04_principles.md` |
 | Implement | `/implement-us` | `implement-gate-checklist.md` + `code-quality-at-us-time.md` + target US + `04_principles.md` |
 | Architecture | `/architecture` | `architecture-folder-guide.md` + phase docs 00–04 |
-| Close | `/complete-us` | `implementation-template.md` + `us-template.md` + `section-contracts.md` |
+| Close | `/complete-us` | **`close-us-contract.md`** + `show --full` + `implementation-template.md` (Record shape) + `section-contracts.md` — **not** `us-template.md` |
 
 **Review vs refine:** review = audit report, no edits, no `ready`. Refine = edit US + `ready: true`.
 

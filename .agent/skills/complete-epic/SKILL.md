@@ -42,7 +42,7 @@ EOF
 1. Export epic; list Must US via `list user_stories` / SQL — any status not in ✅/🚫/🧊 blocks close.
 2. Confirm outcome narrative still true (Expected outcome / frontmatter `outcome`).
 3. Remind manager: large follow-ups → **new epic**, do not reopen `complete`.
-4. Set frontmatter `status: complete`; `update-epic` with full markdown on stdin (heredoc).
+4. Set frontmatter `status: complete`; `update-epic` with **full** exported markdown + status edit (do not rebuild epic from template memory).
 5. `prepend-decision` if warranted.
 6. Optionally run `lifecycle-hygiene` / `validate_meridian.py`.
 

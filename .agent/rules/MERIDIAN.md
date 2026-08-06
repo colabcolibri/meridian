@@ -40,7 +40,7 @@ Before any action, classify:
 | **IMPLEMENT US** | "implement US", "build", "code for US", `/implement-us` | `developer` + `implement-user-story` — **block** if `ready` not true |
 | **REFINE US** | "refine US", `/refine-us`, "ready for implement" | `backlog-refiner` + `refine-user-story` |
 | **REVIEW US** | "review US", `/review-us`, "audit US", "check story" | `backlog-refiner` + `review-user-story` |
-| **CLOSE US** | "complete US", "mark done", "record", `/complete-us` | `backlog-refiner` + `complete-user-story` |
+| **CLOSE US** | "complete US", "mark done", "record", `/complete-us` | `backlog-refiner` + `complete-user-story` — **additive only**; read `close-us-contract.md` + `show --full` first |
 | **CLOSE SPRINT** | "complete sprint", "close sprint", `/complete-sprint` | `sprint-planner` + `complete-sprint` |
 | **CLOSE EPIC** | "complete epic", "close epic", `/complete-epic` | `sprint-planner` + `complete-epic` |
 | **LOG DECISION** | "log decision", "decision log", `/update-decisions-log` | read `update-decisions-log` + run `date` before `prepend-decision` CLI |
@@ -102,7 +102,8 @@ Before any action, classify:
 - `docs/` is the source of truth of the **target project** (monorepos: resolve via `.meridian/projects.json` — see `projects-manifest-template.md`).
 - Delivery backlog lives in `.meridian/meridian.db` (epics, versions, sprints, US, decisions).
 - **Forbidden — US “draft” paths:** “narrative draft” / “Plan draft” = `ready: false` in SQLite only. Do **not** `Write` `.meridian/drafts/`, `us-*-refine.md`, `us-*-complete.md`, or `docs/us/*.md`. Persist delivery with `update-{us|epic|version|sprint}` and markdown on **stdin** (heredoc) only — no `--from-file`, no scratch `.md`, **no helper `.py`** (e.g. `complete_*_sprints.py`, `write_us.py`).
-- **US upsert merge contract:** `update-us` **replaces** the full `body_markdown`. Before any `update-us` or `patch-record`, run `show US-XXXX --full` and edit **in place**. On `/complete-us`, **prefer `patch-record`** (merges `## Record` + optional Acceptance); keep Intent/Plan/Approach unchanged unless evidence requires a deliberate edit.
+- **US close contract (`/complete-us`):** **additive only** — add Record + acceptance `[x]` + status. **Never** delete or replace Intent, Plan, Approach, Why, Where, Boundaries. **Never** copy `us-template.md` or `implementation-template.md` into CLI. Read `close-us-contract.md` first.
+- **US upsert merge contract:** `update-us` **replaces** the full `body_markdown`. Before any `update-us`, run `show US-XXXX --full` and send the **entire** edited document. On close, **prefer `patch-record`**.
 - Board UI reads SQLite via `meridian_db_export --format planning`; `board_snapshots` on upsert.
 - Read `.agent/MERIDIAN.md` before changing project structure.
 

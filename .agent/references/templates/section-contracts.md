@@ -21,7 +21,7 @@ Four phase groups replace flat H2 siblings. No legacy aliases.
 
 | # | Section | Phase | Create | Refine | Close |
 | - | ------- | ----- | ------ | ------ | ----- |
-| 1 | Intent | Why we do this | Acceptance + Why + Where | tighten | mark `[x]` |
+| 1 | Intent | Why we do this | Acceptance + Why + Where | tighten | mark `[x]` only — **text unchanged** |
 | 2 | Plan | How we will do it | Architecture refs + Planned draft | optional Approach + concrete tests | **unchanged** — use `patch-record` on close |
 | 3 | Record | What shipped | placeholders | unchanged | Files + layers + Executed |
 | 4 | Boundaries | What we skip | Out of scope | optional | optional |
@@ -43,6 +43,10 @@ Files · Backend · Frontend · Scripts / Docs · Executed
 ### `###` under Boundaries
 
 Out of scope for this story · Notes
+
+### Close (`/complete-us`) — additive only
+
+Read `close-us-contract.md`. Source of truth = `show US-XXXX --full`. **Add** Record; flip acceptance `[x]`; set status. **Never** copy `us-template.md` or `implementation-template.md` as the full body.
 
 ---
 

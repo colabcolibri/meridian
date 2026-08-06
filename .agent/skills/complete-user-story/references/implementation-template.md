@@ -1,10 +1,15 @@
-# Template — Record (fill in on completion)
+# Template — Record section shape (NOT a full US body)
 
-> **US creation:** placeholders under `## Record`.  
-> **Closure (`✅`):** replace placeholders with real delivery record — skill `complete-user-story`.  
-> **Do not** rebuild Intent/Plan from this file — run `show --full` first; use `patch-record` or full `update-us` with preserved sections.
+> ⛔ **This is NOT a user story to copy into `update-us` or `patch-record`.**  
+> On `/complete-us`, run `show US-XXXX --full` first, then **add** a filled `## Record` to that existing document.  
+> Read **`close-us-contract.md`** before closing.
 
-## Placeholder on creation (status `❌`)
+> **US creation:** placeholders under `## Record` in a new US.  
+> **Closure (`✅`):** fill **only** `## Record` (and flip acceptance `[x]`) in the **existing** US from `show --full` — skill `complete-user-story`.
+
+## Placeholder on creation (status `❌`) — create/refine only
+
+Use when **creating** a US (`/create-us`). **Do not paste this block on `/complete-us`.**
 
 ```md
 ## Record
@@ -30,7 +35,9 @@ _(fill on close or _n/a_)_
 _(pending until close)_
 ```
 
-## Record on completion (status `✅`)
+## Record on completion (status `✅`) — example subsection content only
+
+Copy **only** the `### Files` … `### Executed` content into the **existing** `## Record` section of the US from `show --full`. Do not replace Intent or Plan.
 
 ```md
 ## Record
@@ -67,18 +74,21 @@ _(pending until close)_
 
 | Rule | Detail |
 | ----- | ------- |
-| Load first | `show US-XXXX --full` — never close from this template alone |
-| Persist | Prefer `patch-record`; else `update-us` with **entire** markdown |
+| Load first | `show US-XXXX --full` — the US body is **that output**, not this file |
+| Additive close | Change Record + acceptance + status only — see `close-us-contract.md` |
+| Persist | Prefer `patch-record`; else `update-us` with **entire** markdown from `show --full` |
 | Paths | Relative to app root or repo; include folder |
 | One line per file | What changed in that file |
 | Empty layers | `_n/a_` — do not omit heading |
-| Plan vs delivery | On completion, remove bullets describing unimplemented intent |
+| Plan vs delivery | Do **not** delete Plan/Approach bullets on close; remove only Planned items that were explicitly cancelled |
 | Global decisions | `prepend-decision` CLI; local US record stays here |
-| Git | US ✅ = docs closed; **commit is human after** `/complete-us` + board sync — see `commit-after-us-close.md`. On close: **suggested commit** in `### Executed`. After commit: optional **git commit** line with SHA + subject; omit until then |
+| Git | US ✅ = docs closed; **commit is human after** `/complete-us` — see `commit-after-us-close.md` |
 
 ## Anti-patterns (block `✅`)
 
-- `_(fill on close)_` still present
+- Pasting this template (or `us-template.md`) as the full US body
+- `_(fill on close)_` still present in Record
 - Only "No functional change" without listing files when there was a change
 - Acceptance `[x]` without match in Record or Executed
 - Generic list without paths ("monitor components updated")
+- Why/Where/Approach shorter after close than before `show --full`

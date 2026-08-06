@@ -842,7 +842,7 @@ def main() -> int:
 
     patch_record = sub.add_parser(
         "patch-record",
-        help="Merge ## Record (+ optional Acceptance, frontmatter) into existing US — preserves Intent/Plan",
+        help="Merge ## Record (+ optional Acceptance, frontmatter) into existing US — additive close; never replaces Intent/Plan",
     )
     patch_record.add_argument("story_id")
     patch_record.set_defaults(func=cmd_patch_record)

@@ -24,7 +24,7 @@ User story create (us-template.md + writing-guide.md + code-quality-at-us-time.m
   ↓
 /implement-us (implement-gate-checklist.md + code-quality-at-us-time.md) — gate then code; DRY/SRP; requires ready true
   ↓
-User story close (implementation-template.md) — Record + status ✅
+User story close (close-us-contract.md) — **add** Record + status ✅; preserve Intent/Plan
   ↓
 Board sync (board-schema.md)
   ↓
@@ -47,7 +47,7 @@ Scrum mapping (bugs, spikes, ceremonies, no story points): `.agent/references/sc
 | **Review** (`/review-us`) | `review-checklist.md` + `section-contracts.md` | Gap report; **no edits**, **no `ready`** |
 | **Refine** (`/refine-us`) | `refine-checklist.md` + `code-quality-at-us-time.md` + `04_principles.md` | Plan concrete; DRY/SRP in Approach; `ready: true` |
 | **Implement** (`/implement-us`) | `implement-gate-checklist.md` + `code-quality-at-us-time.md` + `04_principles.md` | Gate pass; product code with DRY/SRP |
-| **Close** (`/complete-us`) | `implementation-template.md` | `## Record` filled; `status: ✅` |
+| **Close** (`/complete-us`) | **`close-us-contract.md`** + `show --full` | **Add** `## Record`, flip acceptance `[x]`; **do not** replace Intent/Plan |
 
 ## Sprint — close
 

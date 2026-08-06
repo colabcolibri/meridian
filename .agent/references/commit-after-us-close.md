@@ -10,7 +10,7 @@
 
 | Step | Meridian `status: ✅` | Git |
 | ---- | --------------------- | --- |
-| `/complete-us` | Yes — Record filled in SQLite | Diff read for evidence only |
+| `/complete-us` | Yes — Record filled in SQLite (**additive** — Intent/Plan preserved; see `close-us-contract.md`) | Diff read for evidence only |
 | **Commit (human)** | Unchanged | One commit per closed US |
 
 US closure and repository snapshot are **two done signals**. A story can be ✅ in SQLite while the working tree is still dirty until the manager commits.

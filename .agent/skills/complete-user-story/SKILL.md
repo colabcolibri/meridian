@@ -1,31 +1,31 @@
 ---
 name: complete-user-story
-description: Closes a Meridian user story in SQLite after implementation — fills Record, acceptance, status. Use when marking US done or after /implement-us.
+description: Closes a Meridian user story in SQLite after implementation — adds Record and status without deleting refined content. Use when marking US done or after /implement-us.
 allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 ---
 
 # Complete user story (Meridian)
 
-> **v11:** persist with `patch-record` (preferred) or `update-us` (full heredoc) — never `docs/us/*.md`.  
-> **Forbidden:** helper `.py` scripts to batch-close or generate US markdown.
+> **P0:** `/complete-us` is **additive** — add Record + mark acceptance + status. **Never** rebuild the US from a template.  
+> **Forbidden:** helper `.py` scripts; copying `us-template.md` or `implementation-template.md` into CLI.
 
-## Selective reading
+## Selective reading (order matters)
 
-| File | When to read |
-| ------- | ---------- |
-| `.agent/references/templates/INDEX.md` | Before closing |
-| `.agent/references/templates/section-contracts.md` | Section contract — Plan **unchanged** on close |
-| `references/implementation-template.md` | **Mandatory** for `## Record` shape only |
-| `.agent/references/commit-after-us-close.md` | Suggested commit only |
-| `../create-user-story/references/us-template.md` | Full structure when full `update-us` is required |
+| # | File | When to read |
+| - | ---- | ------------ |
+| 1 | `references/close-us-contract.md` | **Mandatory first** — additive-only rules |
+| 2 | Target US | `meridian_delivery.py show US-XXXX --full` — **mandatory before any write** |
+| 3 | `references/implementation-template.md` | Record **heading examples only** — not the US body |
+| 4 | `.agent/references/templates/section-contracts.md` | Plan **unchanged** on close |
+| 5 | `.agent/references/commit-after-us-close.md` | Suggested commit only |
+
+**Do not read `us-template.md` for close body** — that template is for `/create-us` and `/refine-us` only.
 
 ## Delivery commands
 
-**Preferred (close):**
-
 ```bash
-python3 .agent/scripts/meridian_delivery.py show US-0115 --full   # mandatory first
-python3 .agent/scripts/meridian_delivery.py patch-record US-0115 <<'EOF'
+python3 .agent/scripts/meridian_delivery.py show US-0115 --full   # 1 — mandatory
+python3 .agent/scripts/meridian_delivery.py patch-record US-0115 <<'EOF'   # 2 — preferred
 ---
 status: ✅
 tests_status: done
@@ -57,61 +57,47 @@ tests_status: done
 
 ### Acceptance
 
-- [x] criterion one
+- [x] criterion one (unchanged text — only checkbox)
 - [x] criterion two
 EOF
-```
-
-**Full replace (only when Intent/Plan/frontmatter must change beyond close):**
-
-```bash
-python3 .agent/scripts/meridian_delivery.py show US-0115 --full
-# edit the printed markdown in place — keep Intent/Plan/Approach unless deliberately changing scope
-python3 .agent/scripts/meridian_delivery.py update-us US-0115 <<'EOF'
-(entire US markdown from show --full + your edits)
-EOF
-```
-
-```bash
 python3 .agent/scripts/meridian_delivery.py set-summary US-0115 --text "4-8 sentence summary"
 python3 .agent/scripts/meridian_delivery.py lifecycle-eligible US-0115
 ```
+
+**`update-us` fallback:** only when you must edit outside Record. Pipe the **entire** markdown from `show --full` with surgical edits — if the body got shorter, you deleted content.
 
 ## Preconditions
 
 | Check | Requirement |
 | ----------- | --------- |
-| US row | exists (`show US-XXXX --full` **before** any write) |
+| `show --full` | run in this session **before** any persist |
 | Dependencies | all `depends_on` at `✅` |
 | Evidence | tests/build passed |
-| Record | real paths, not placeholders |
-| Plan | Approach from `/refine-us` preserved — do not rebuild from `implementation-template.md` alone |
+| Record | real paths — no template placeholders |
+| Preserved | Why, Where, Approach, Architecture refs, Boundaries **unchanged** |
 
 ## Procedure
 
-1. **`show --full` (mandatory)** — load existing markdown; never close from template memory.
-2. Read `implementation-template.md` for Record **shape** only.
-3. Inspect `git diff` / test output; fill `## Record` with real paths.
-4. Mark acceptance `[x]`; `tests_status: done` when required; mark Planned `[x]` where done.
-5. **Persist:** `patch-record` with frontmatter + `## Record` + `### Acceptance` patch — **or** `update-us` with the **entire** document from step 1 (Intent/Plan/Approach unchanged unless scope changed).
-6. **Never:** one-shot `.py` scripts, batch-close generators, or `update-us` with only `## Record` (replaces full body and wipes refine).
-7. **Before close:** approved phase doc / kit / security change → `prepend-decision` + cite in Plan **Related decisions**.
-8. **Lifecycle cascade:** `lifecycle-eligible US-XXXX`; ask manager before sprint/epic/version close.
+1. Read `close-us-contract.md`.
+2. **`show --full`** — this is the document you extend; not `us-template.md`.
+3. Inspect `git diff` / test output.
+4. **Add** filled `## Record`; flip acceptance `[x]`; mark Planned `[x]` where done; set `tests_status` / `status`.
+5. **`patch-record`** (default) — never send only Record to `update-us`.
+6. **Never** copy template files into the CLI; never shorten Intent/Plan to stubs.
+7. `prepend-decision` + Plan **Related decisions** when protocol/architecture changed.
+8. `lifecycle-eligible` — ask manager before container close.
 
 ## Output
 
 ```txt
 US completed:
 ID: US-XXXX
-Status:
-Persist path: patch-record | update-us
+Persist: patch-record | update-us (full body)
+Preserved Intent/Plan: yes | NO — STOP
 Implementation summary:
 Files touched:
 Decisions logged: yes | no
 Suggested commit:
 Lifecycle cascade:
-  Sprint eligible: none | vX-SY → ask close?
-  Epic eligible: none | EPIC-XX → ask close?
-  Version eligible: none | vX → ask complete?
 Next (human): commit per commit-after-us-close.md
 ```

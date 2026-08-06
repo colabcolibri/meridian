@@ -4,6 +4,8 @@
 
 Templates are mirrored here from skills (`references/`) so every agent uses the same paths. **Do not invent structure** — copy the template and fill placeholders.
 
+**Exception — `/complete-us`:** do **not** copy any template as the US body. Run `show US-XXXX --full`, then **add** Record + acceptance + status only. Read **`close-us-contract.md`** first. Never use `us-template.md` on close.
+
 ---
 
 ## Artifact → template → agent → skill
@@ -21,7 +23,7 @@ Templates are mirrored here from skills (`references/`) so every agent uses the 
 | User story (refine) | `us-template.md` + `refine-checklist.md` + **`writing-guide.md`** + **`code-quality-at-us-time.md`** | `backlog-refiner` | `refine-user-story` | `/refine-us` |
 | User story (implement) | `implement-gate-checklist.md` + **`code-quality-at-us-time.md`** + target US | `developer` | `implement-user-story` | `/implement-us` |
 | Architecture detail | `architecture-folder-guide.md` + `05` phase doc | `technical-architect` | — | `/architecture` |
-| User story (close) | `implementation-template.md` + `us-template.md` | `backlog-refiner` | `complete-user-story` | `/complete-us` |
+| User story (close) | **`close-us-contract.md`** + `show --full` + `implementation-template.md` (Record shape only) | `backlog-refiner` | `complete-user-story` | `/complete-us` |
 | Decision entry | `decision-template.md` + `decision-schema.md` | any relevant agent | `update-decisions-log` | — |
 | Board (legacy) | _(removed v11)_ | — | SQLite `board_snapshots` + planning export |
 
@@ -67,7 +69,8 @@ See `lifecycle.md` in this folder for the full create → refine → implement �
 
 ## Anti-patterns (protocol failure)
 
-- Upserting US without reading `us-template.md` first
-- Closing US with `✅` without reading `implementation-template.md` first
+- Upserting US without reading `us-template.md` first (create/refine only)
+- Closing US by copying `us-template.md` or `implementation-template.md` into CLI — **deletes refined content**
+- Closing US with `✅` without reading `close-us-contract.md` first
 - Creating epic/version/sprint from memory or from `MERIDIAN.md` excerpts only
 - Partial template (frontmatter only, missing body sections)

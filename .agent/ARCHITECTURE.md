@@ -97,7 +97,7 @@ Each agent includes: phases 0/-1, mission, prohibitions, output format, delegati
 | `review-user-story` | `review-checklist.md`, `writing-guide.md` |
 | `refine-user-story` | `refine-checklist.md`, `writing-guide.md` |
 | `implement-user-story` | `implement-gate-checklist.md` |
-| `complete-user-story` | `implementation-template.md` |
+| `complete-user-story` | `close-us-contract.md`, `implementation-template.md` (Record shape only) |
 | `update-decisions-log` | `decision-template.md`, `decision-schema.md` |
 | `security-review` | `checklists.md`, implementation + supply-chain checklists |
 | `test-strategy` | test-strategy + test-review checklists, test stacks |
