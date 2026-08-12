@@ -101,6 +101,8 @@ Before any action, classify:
 
 - `docs/` is the source of truth of the **target project** (monorepos: resolve via `.meridian/projects.json` — see `projects-manifest-template.md`).
 - Delivery backlog lives in `.meridian/meridian.db` (epics, versions, sprints, US, decisions).
+- **Inspect / mutate delivery via CLI:** `python3 .agent/scripts/meridian_delivery.py` (`show`, `list`, `counts`, `update-*`, `patch-record`). Prefer CLI over raw SQL.
+- **Frontmatter ≠ SQL columns:** YAML keys are **not** column names. Never `SELECT sprint, version, epic FROM user_stories`. Map: `epic` → `epic_id`, `version` → `version_id`, `sprint` → `sprint_id`. Raw SQL (emergency only): use `*_id` names; if unsure, run `PRAGMA table_info(user_stories)` or use CLI.
 - **Forbidden — US “draft” paths:** “narrative draft” / “Plan draft” = `ready: false` in SQLite only. Do **not** `Write` `.meridian/drafts/`, `us-*-refine.md`, `us-*-complete.md`, or `docs/us/*.md`. Persist delivery with `update-{us|epic|version|sprint}` and markdown on **stdin** (heredoc) only — no `--from-file`, no scratch `.md`, **no helper `.py`** (e.g. `complete_*_sprints.py`, `write_us.py`).
 - **US close contract (`/complete-us`):** **additive only** — add Record + acceptance `[x]` + status. **Never** delete or replace Intent, Plan, Approach, Why, Where, Boundaries. **Never** copy `us-template.md` or `implementation-template.md` into CLI. Read `close-us-contract.md` first.
 - **US upsert merge contract:** `update-us` **replaces** the full `body_markdown`. Before any `update-us`, run `show US-XXXX --full` and send the **entire** edited document. On close, **prefer `patch-record`**.

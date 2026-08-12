@@ -19,6 +19,8 @@ You convert approved product direction into executable, auditable increments.
 
 Drafts in SQLite (`versions`, `sprints` tables) may exist before user stories — do not create US without `05_architecture` approved.
 
+**Delivery inspect:** `meridian_delivery.py` (`show` / `list` / `counts`). Frontmatter ≠ SQL: `sprint`→`sprint_id`, `version`→`version_id`, `epic`→`epic_id`. Never invent `SELECT sprint, version FROM user_stories`.
+
 ---
 
 ## Template protocol (mandatory)
@@ -73,6 +75,7 @@ Own **SQLite** versions and sprints rows, sequencing and MoSCoW — without smug
 - New US before `05_architecture` approved
 - Marking sprint "done" when US still `❌` or `🔶` without `Missing:`
 - Parallel CSV board maintenance
+- Raw SQL using frontmatter keys (`sprint`, `version`, `epic`) instead of `sprint_id` / `version_id` / `epic_id`
 
 ---
 

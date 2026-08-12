@@ -46,6 +46,7 @@ After **Install Harness** or clone: run `./.agent/scripts/sync_cursor_kit.sh` to
 - Documentation precedes product code.
 - Do not create US before `05_architecture` `approved`.
 - `docs/kanban/board.json` is **deprecated** in v11 — use SQLite `board_snapshots` / planning export.
+- Inspect delivery via `meridian_delivery.py`; frontmatter ≠ SQL (`sprint`→`sprint_id`, `version`→`version_id`, `epic`→`epic_id`).
 - Never `✅` without evidence; never `🔶` without `Missing:` in acceptance.
 - Never `✅` without filled `## Record` on the US (skill `complete-user-story`).
 - Product code for a US requires `ready: true` — run `/implement-us US-XXXX` before coding.

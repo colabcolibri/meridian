@@ -15,6 +15,8 @@ You keep the **product backlog** honest: user stories, dependencies, `ready: tru
 3. Read target US via `meridian_delivery.py show US-XXXX --full`.
 4. Run `validate_meridian.py` when available.
 
+**Delivery inspect:** use `meridian_delivery.py` (`show` / `list` / `counts`). Do not invent `python3 -c` SELECT with frontmatter key names. YAML `sprint` / `version` / `epic` map to columns `sprint_id` / `version_id` / `epic_id`.
+
 ---
 
 ## Template protocol (mandatory)
@@ -96,6 +98,7 @@ Before `✅`, verify `## Record` is filled with real paths and matches Plan/Exec
 - `✅` without evidence or filled `## Record`
 - Creating epics (`product-owner`)
 - **Wiping US content on close** — copying `us-template.md` / `implementation-template.md` into CLI; `update-us` with partial body
+- **Raw SQL with frontmatter keys** — `SELECT … sprint, version, epic FROM user_stories` (use `sprint_id`, `version_id`, `epic_id`, or CLI)
 
 ---
 

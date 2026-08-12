@@ -48,6 +48,7 @@ Before product code:
 | New scope or epic | `product-owner` |
 | Mark `✅` without evidence | `backlog-refiner` + human |
 | `git commit` without explicit manager request | Human snapshot |
+| Raw SQL with frontmatter keys (`sprint`, `version`) | Use CLI or `sprint_id` / `version_id` |
 
 ---
 

@@ -5,6 +5,19 @@
 
 > **Read this before INSERT/UPDATE on delivery store.** Prefer **`meridian_delivery.py`** over raw SQL. Phase docs (`00`–`11`) stay Markdown — never store them in SQLite.
 
+## Frontmatter ≠ SQL columns (hard rule)
+
+YAML keys in US/epic/version/sprint markdown are **not** SQLite column names. Agents that invent `SELECT sprint, version FROM user_stories` fail with `no such column`.
+
+| Frontmatter key | SQLite column |
+| --------------- | ------------- |
+| `epic` | `epic_id` |
+| `version` | `version_id` |
+| `sprint` | `sprint_id` |
+
+**Inspect:** `meridian_delivery.py show|list|counts` — not ad-hoc `python3 -c` with invented columns.  
+**Raw SQL (emergency only):** use `*_id` names; if unsure, `PRAGMA table_info(user_stories)`.
+
 ## Location
 
 | Item | Path |
@@ -132,7 +145,9 @@ python3 .agent/scripts/validate_meridian.py .
 python3 .agent/scripts/validate_meridian.py . --sqlite-only   # after purge
 ```
 
-## Inspect without CLI (sqlite3)
+## Inspect without CLI (sqlite3) — emergency only
+
+> **Prefer CLI.** If you use sqlite3, column names are `sprint_id` / `version_id` / `epic_id` — never frontmatter keys `sprint` / `version` / `epic`.
 
 ```bash
 sqlite3 .meridian/meridian.db "SELECT id, title, status, ready, sprint_id FROM user_stories WHERE version_id='v10' ORDER BY id;"
