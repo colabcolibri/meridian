@@ -4,6 +4,12 @@ All notable changes to the **Meridian** VS Code extension (`meridian-vscode`).
 
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.1.47] - 2026-08-12
+
+### Changed
+
+- **Bundled kit:** P0 + agents — frontmatter keys (`sprint`, `version`, `epic`) are not SQL columns (`sprint_id`, `version_id`, `epic_id`); prefer `meridian_delivery.py` over invented SELECT
+
 ## [1.1.46] - 2026-08-06
 
 ### Changed
