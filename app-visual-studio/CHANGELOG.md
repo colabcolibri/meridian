@@ -4,6 +4,12 @@ All notable changes to the **Meridian** VS Code extension (`meridian-vscode`).
 
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.1.52] - 2026-08-24
+
+### Fixed
+
+- **Bundled kit:** OpenCode adapter — `sync_kit.sh` generates agents with `permission:` frontmatter instead of Cursor `tools:` strings (fixes `ConfigInvalidError` on OpenCode startup)
+
 ## [1.1.51] - 2026-08-24
 
 ### Added
