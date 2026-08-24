@@ -4,6 +4,16 @@ All notable changes to the **Meridian** VS Code extension (`meridian-vscode`).
 
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.1.48] - 2026-08-24
+
+### Added
+
+- **OpenCode adapter:** bundled kit now ships `sync_kit.sh` — one command generates ALL IDE adapters (Cursor, Claude Code, Codex, OpenCode); installs create `.opencode/` with slash commands, agents, skills, and a delivery plugin (`meridian-tools.ts`: counts/list/show/validate)
+
+### Changed
+
+- **Bundled kit:** `sync_cursor_kit.sh` is now a deprecated shim forwarding to `sync_kit.sh`; kit installer prefers the canonical generator (falls back to shim for older kits); gitignore templates cover `.opencode/`
+
 ## [1.1.47] - 2026-08-12
 
 ### Changed

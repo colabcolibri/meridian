@@ -26,11 +26,11 @@ export function workspaceProjectRoot(
 }
 
 function appendGitignoreAdapterEntries(gitignorePath: string): void {
-  const entries = [".cursor/", ".claude/", ".agents/skills/", ".codex/", "AGENTS.md"]
+  const entries = [".cursor/", ".claude/", ".agents/skills/", ".codex/", ".opencode/", "AGENTS.md"]
   if (!fs.existsSync(gitignorePath)) {
     fs.writeFileSync(
       gitignorePath,
-      "# Meridian IDE adapters (local symlinks)\n.cursor/\n.claude/\n.agents/skills/\n.codex/\nAGENTS.md\n",
+      "# Meridian IDE adapters (local symlinks)\n.cursor/\n.claude/\n.agents/skills/\n.codex/\n.opencode/\nAGENTS.md\n",
       "utf8",
     )
     return
@@ -68,9 +68,12 @@ function chmodScripts(agentDir: string): void {
 }
 
 function runAdapterSync(projectRoot: string, agentDir: string): string | null {
-  const syncScript = path.join(agentDir, "scripts", "sync_cursor_kit.sh")
+  // Prefer the canonical generator; fall back to the deprecated shim for older bundled kits.
+  const canonical = path.join(agentDir, "scripts", "sync_kit.sh")
+  const legacy = path.join(agentDir, "scripts", "sync_cursor_kit.sh")
+  const syncScript = fs.existsSync(canonical) ? canonical : legacy
   if (!fs.existsSync(syncScript)) {
-    return "sync_cursor_kit.sh not found in installed kit"
+    return "sync_kit.sh not found in installed kit"
   }
   chmodScripts(agentDir)
   const bash = process.platform === "win32" ? "bash" : "bash"
@@ -156,7 +159,7 @@ export function installBundledKit(
   if (syncError) {
     return {
       ok: true,
-      message: `Kit installed at ${dest}. Adapter sync failed (${syncError}) — run .agent/scripts/sync_cursor_kit.sh manually.${bootstrapNote}`,
+      message: `Kit installed at ${dest}. Adapter sync failed (${syncError}) — run .agent/scripts/sync_kit.sh manually.${bootstrapNote}`,
       projectRoot: root,
     }
   }

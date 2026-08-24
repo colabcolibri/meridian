@@ -98,7 +98,7 @@ export const MERIDIAN_COMMAND_CATALOG: CommandHelpEntry[] = [
     details: [
       "Manual only — run from status bar, Command Palette, or Meridian → Commands.",
       "Copies agents, skills, workflows, and scripts from the VSIX bundle.",
-      "Syncs .cursor/, .claude/, and Codex IDE adapters via sync_cursor_kit.sh.",
+      "Syncs .cursor/, .claude/, Codex, and .opencode/ IDE adapters via sync_kit.sh.",
       "After install: run /init-meridian in chat if docs/ does not exist yet.",
     ],
     outputChannel: "Meridian Tools",
