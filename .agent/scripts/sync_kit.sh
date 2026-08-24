@@ -177,6 +177,65 @@ EOF
   echo "write ${out_file} (from ${agent_file})"
 }
 
+# OpenCode rejects Cursor-style `tools: Read, Grep, ...` strings — requires permission: object.
+write_opencode_agent_md() {
+  local agent_file="$1"
+  local out_file="$2"
+  local description tools model skills
+  description="$(parse_frontmatter_field "${agent_file}" "description")"
+  tools="$(parse_frontmatter_field "${agent_file}" "tools")"
+  model="$(parse_frontmatter_field "${agent_file}" "model")"
+  skills="$(parse_frontmatter_field "${agent_file}" "skills")"
+
+  local perm_read="deny" perm_grep="deny" perm_glob="deny" perm_bash="deny" perm_edit="deny"
+  if [[ -z "${tools}" ]]; then
+    perm_read="allow"
+    perm_grep="allow"
+    perm_glob="allow"
+    perm_bash="allow"
+    perm_edit="allow"
+  else
+    local tools_lower
+    tools_lower="$(printf '%s' "${tools}" | tr '[:upper:]' '[:lower:]')"
+    [[ "${tools_lower}" == *"read"* ]] && perm_read="allow"
+    [[ "${tools_lower}" == *"grep"* ]] && perm_grep="allow"
+    [[ "${tools_lower}" == *"glob"* ]] && perm_glob="allow"
+    [[ "${tools_lower}" == *"bash"* ]] && perm_bash="allow"
+    if [[ "${tools_lower}" == *"edit"* || "${tools_lower}" == *"write"* ]]; then
+      perm_edit="allow"
+    fi
+  fi
+
+  register_expected "${out_file}"
+
+  if [[ "${DRY_RUN}" -eq 1 ]]; then
+    echo "[dry-run] write ${out_file} (from ${agent_file})"
+    return 0
+  fi
+
+  mkdir -p "$(dirname "${out_file}")"
+  rm -f "${out_file}"
+  {
+    echo "---"
+    echo "description: ${description}"
+    echo "mode: subagent"
+    [[ -n "${model}" ]] && echo "model: ${model}"
+    [[ -n "${skills}" ]] && echo "skills: ${skills}"
+    echo "permission:"
+    echo "  read: ${perm_read}"
+    echo "  grep: ${perm_grep}"
+    echo "  glob: ${perm_glob}"
+    echo "  bash: ${perm_bash}"
+    echo "  edit: ${perm_edit}"
+    echo "---"
+    echo "<!-- meridian-kit-generated -->"
+    awk 'BEGIN { n = 0; found = 0 }
+      /^---$/ { n++; if (n == 2) { found = 1; next } }
+      found { print }' "${agent_file}"
+  } > "${out_file}"
+  echo "write ${out_file} (from ${agent_file})"
+}
+
 prune_orphans() {
   local adapter_root="$1"
   local label="$2"
@@ -222,6 +281,31 @@ prune_codex_agents() {
       else
         rm -f "${toml}"
         echo "removed orphan codex agent: ${toml}"
+      fi
+    fi
+  done
+}
+
+prune_opencode_agents() {
+  local agents_dir="${OPENCODE}/agents"
+  [[ -d "${agents_dir}" ]] || return 0
+
+  for md in "${agents_dir}"/*.md; do
+    [[ -f "${md}" ]] || continue
+    grep -q 'meridian-kit-generated' "${md}" 2>/dev/null || continue
+    local found=0 exp
+    for exp in "${EXPECTED[@]}"; do
+      if [[ "${md}" == "${exp}" ]]; then
+        found=1
+        break
+      fi
+    done
+    if [[ "${found}" -eq 0 ]]; then
+      if [[ "${DRY_RUN}" -eq 1 ]]; then
+        echo "[dry-run] remove orphan opencode agent: ${md}"
+      else
+        rm -f "${md}"
+        echo "removed orphan opencode agent: ${md}"
       fi
     fi
   done
@@ -333,11 +417,11 @@ sync_opencode() {
     link "../../.agent/workflows/${name}" "${OPENCODE}/commands/${name}"
   done
 
-  # Agents become @mentionable subagents — markdown frontmatter compatible.
+  # Agents: generate OpenCode-compatible frontmatter (permission object, no Cursor tools string).
   for agent_file in "${AGENT}"/agents/*.md; do
     [[ -f "${agent_file}" ]] || continue
     name="$(basename "${agent_file}")"
-    link "../../.agent/agents/${name}" "${OPENCODE}/agents/${name}"
+    write_opencode_agent_md "${agent_file}" "${OPENCODE}/agents/${name}"
   done
 
   # Skills mirror kit skills (SKILL.md frontmatter already opencode-compatible).
@@ -361,6 +445,7 @@ sync_opencode() {
 
   if [[ "${PRUNE}" -eq 1 ]]; then
     prune_orphans "${OPENCODE}" "opencode"
+    prune_opencode_agents
   fi
 }
 
