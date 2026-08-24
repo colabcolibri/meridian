@@ -139,12 +139,14 @@ Codex deprecated custom prompts (`~/.codex/prompts/`) in favor of skills — Mer
 | `.opencode/agents/<name>.md` | `.agent/agents/<name>.md` |
 | `.opencode/skills/<name>/` | `.agent/skills/<name>/` |
 | `.opencode/plugins/meridian-tools.ts` | `.agent/adapters/opencode/plugin/meridian-tools.ts` |
+| `.opencode/plugins/meridian-views.ts` | `.agent/adapters/opencode/plugin/meridian-views.ts` (+ `views/` modules) |
 | `AGENTS.md` (repo root) | `.agent/rules/AGENTS.md` — read natively by OpenCode |
 
 Notes:
 
 - Workflows become `/commands`; agents become `@`-mentionable subagents; both are symlinked — frontmatter is already compatible.
-- The **Meridian plugin** exposes read-only delivery tools to the model: `meridian_counts`, `meridian_list`, `meridian_show`, `meridian_validate` (wrapping the kit CLI — the CLI-side counterpart of the meridian-vscode panels).
+- **meridian-tools** exposes read-only delivery tools to the model: `meridian_counts`, `meridian_list`, `meridian_show`, `meridian_validate` (wrapping the kit CLI).
+- **meridian-views** brings the visual delivery system to the browser: starts a local read-only server (127.0.0.1:4788, dies with the OpenCode process) serving the kanban board, versions, sprints, epics and decisions — the OpenCode counterpart of the meridian-vscode panels. The `meridian_board` tool returns the URL and column counts.
 - Kit skills already carry valid `SKILL.md` frontmatter (`name` + `description`). The `meridian-authoring` entry point (`.agent/skills/doc.md`) is intentionally not mirrored — it has no SKILL.md frontmatter and OpenCode validates strictly.
 - OpenCode also reads `.agents/skills/*/SKILL.md` natively, so the Codex sync doubles as an extra skill surface.
 

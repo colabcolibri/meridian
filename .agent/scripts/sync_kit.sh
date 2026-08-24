@@ -349,9 +349,12 @@ sync_opencode() {
     link "../../.agent/skills/${name}" "${OPENCODE}/skills/${name}"
   done
 
-  # Meridian plugin: custom delivery tools (counts/list/validate) via the kit CLI.
+  # Meridian plugins: delivery tools + visual views server via the kit CLI.
   if [[ -f "${AGENT}/adapters/opencode/plugin/meridian-tools.ts" ]]; then
     link "../../.agent/adapters/opencode/plugin/meridian-tools.ts" "${OPENCODE}/plugins/meridian-tools.ts"
+  fi
+  if [[ -f "${AGENT}/adapters/opencode/plugin/meridian-views.ts" ]]; then
+    link "../../.agent/adapters/opencode/plugin/meridian-views.ts" "${OPENCODE}/plugins/meridian-views.ts"
   fi
 
   link "../../.agent/IDE_ADAPTERS.md" "${OPENCODE}/README.md"
