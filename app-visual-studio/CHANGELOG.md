@@ -4,6 +4,12 @@ All notable changes to the **Meridian** VS Code extension (`meridian-vscode`).
 
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.1.49] - 2026-08-24
+
+### Added
+
+- **Bundled kit:** `uninstall-meridian-kit.sh` — removes Meridian adapters (and optionally `.agent/` + gitignore entries) with the same surgical policy; never touches `docs/` or `.meridian/`
+
 ## [1.1.48] - 2026-08-24
 
 ### Added
