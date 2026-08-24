@@ -4,6 +4,12 @@ All notable changes to the **Meridian** VS Code extension (`meridian-vscode`).
 
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.1.50] - 2026-08-24
+
+### Added
+
+- **Remove harness command** (`meridian.uninstallKit`): Kit setup gains a Remove harness entry — runs `uninstall-meridian-kit.sh` with scope choice (adapters only / full removal); `docs/` and `.meridian/` delivery SQLite are never deleted
+
 ## [1.1.49] - 2026-08-24
 
 ### Added

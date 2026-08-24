@@ -174,3 +174,45 @@ export function installBundledKit(
 export function kitInstalledAt(projectRoot: string): boolean {
   return fs.existsSync(path.join(path.resolve(projectRoot), KIT_MARKER))
 }
+
+export function uninstallInstalledKit(
+  projectRoot: string,
+  options: { scope: "adapters" | "all" },
+): InstallKitResult {
+  const root = path.resolve(projectRoot)
+  const agentDir = path.join(root, ".agent")
+  const script = path.join(agentDir, "scripts", "uninstall-meridian-kit.sh")
+
+  if (!fs.existsSync(script)) {
+    return {
+      ok: false,
+      message:
+        "uninstall-meridian-kit.sh not found — this workspace has an older kit. Upgrade harness first, or remove .agent/ manually.",
+      projectRoot: root,
+    }
+  }
+
+  chmodScripts(agentDir)
+  const bash = "bash"
+  const args = options.scope === "all" ? [script, "--all"] : [script]
+  const result = spawnSync(bash, args, {
+    cwd: root,
+    encoding: "utf8",
+    shell: false,
+  })
+  const output = (result.stdout || "").trim()
+  if (result.status !== 0) {
+    const err = (result.stderr || output).trim()
+    return { ok: false, message: err || `uninstall exited with code ${result.status}`, projectRoot: root }
+  }
+
+  const removed =
+    options.scope === "all"
+      ? "Meridian harness removed (adapters + .agent/ + gitignore entries)"
+      : "Meridian IDE adapters removed (.agent/ kept)"
+  return {
+    ok: true,
+    message: `${removed}. docs/ and .meridian/ (delivery SQLite) are never deleted — remove manually if desired.`,
+    projectRoot: root,
+  }
+}

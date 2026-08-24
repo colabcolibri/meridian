@@ -20,6 +20,7 @@
   "meridian.command.openAgentsHelp.title": "Meridian: Open Agents Help",
   "meridian.command.installKit.title": "Meridian: Install Harness",
   "meridian.command.upgradeKit.title": "Meridian: Upgrade Harness",
+  "meridian.command.uninstallKit.title": "Meridian: Remove Harness",
   "meridian.command.validateProject.title": "Meridian: Validate Project",
   "meridian.command.showStatus.title": "Meridian: Show Workspace Status",
   "meridian.command.refreshCommands.title": "Meridian: Refresh Commands",

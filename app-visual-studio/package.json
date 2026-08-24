@@ -2,7 +2,7 @@
   "name": "meridian-vscode",
   "displayName": "%extension.displayName%",
   "description": "%extension.description%",
-  "version": "1.1.49",
+  "version": "1.1.50",
   "publisher": "colabcolibri",
   "license": "PolyForm-Noncommercial-1.0.0",
   "icon": "media/icon.png",
@@ -59,6 +59,7 @@
     "onCommand:meridian.openAgentsHelp",
     "onCommand:meridian.installKit",
     "onCommand:meridian.upgradeKit",
+    "onCommand:meridian.uninstallKit",
     "onCommand:meridian.validateProject",
     "onCommand:meridian.showStatus",
     "onCommand:meridian.selectActiveProject",
@@ -157,6 +158,10 @@
         {
           "command": "meridian.upgradeKit",
           "group": "2@2"
+        },
+        {
+          "command": "meridian.uninstallKit",
+          "group": "2@3"
         },
         {
           "command": "meridian.validateProject",
@@ -258,6 +263,11 @@
         "command": "meridian.upgradeKit",
         "title": "%meridian.command.upgradeKit.title%",
         "icon": "$(cloud-upload)"
+      },
+      {
+        "command": "meridian.uninstallKit",
+        "title": "%meridian.command.uninstallKit.title%",
+        "icon": "$(trash)"
       },
       {
         "command": "meridian.validateProject",

@@ -24,6 +24,7 @@ import { MeridianContext } from "./meridian-context.js"
 import {
   installBundledKit,
   kitInstalledAt,
+  uninstallInstalledKit,
   workspaceProjectRoot,
 } from "./kit-installer.js"
 import { resolveValidateTarget, runValidateMeridian } from "./validate-runner.js"
@@ -147,6 +148,61 @@ async function requireWorkspace(): Promise<MeridianWorkspaceInfo | null> {
     return null
   }
   return info
+}
+
+async function uninstallKit(): Promise<void> {
+  const root = workspaceProjectRoot(vscode.workspace.workspaceFolders)
+  if (!root) {
+    void vscode.window.showWarningMessage("Meridian: open a workspace folder first.")
+    return
+  }
+
+  if (!kitInstalledAt(root)) {
+    void vscode.window.showWarningMessage("Meridian: no .agent/ harness installed in this workspace.")
+    return
+  }
+
+  const scope = await vscode.window.showQuickPick(
+    [
+      {
+        label: "$(eraser) Remove IDE adapters only",
+        description: "Safe",
+        detail: "Removes .cursor/, .claude/, Codex, .opencode/ Meridian links. Keeps .agent/.",
+        value: "adapters" as const,
+      },
+      {
+        label: "$(trash) Full removal",
+        description: "Adapters + .agent/ + gitignore entries",
+        detail: "docs/ and .meridian/ (delivery SQLite) are NEVER deleted — remove manually if desired.",
+        value: "all" as const,
+      },
+    ],
+    { placeHolder: "Meridian: what should be removed?" },
+  )
+  if (!scope) {
+    return
+  }
+
+  const confirm = await vscode.window.showWarningMessage(
+    scope.value === "all"
+      ? "Remove the Meridian harness completely from this workspace?"
+      : "Remove Meridian IDE adapters from this workspace?",
+    "Remove",
+    "Cancel",
+  )
+  if (confirm !== "Remove") {
+    return
+  }
+
+  const result = uninstallInstalledKit(root, { scope: scope.value })
+  appendToolOutput("Remove harness", result.message)
+  if (result.ok) {
+    void vscode.window.showInformationMessage(`Meridian: ${result.message}`)
+    await meridianContext?.refresh()
+    refreshAllPanels()
+  } else {
+    void vscode.window.showErrorMessage(`Meridian: ${result.message}`)
+  }
 }
 
 async function installKit(force = false): Promise<void> {
@@ -335,6 +391,7 @@ export function activate(context: vscode.ExtensionContext): void {
     vscode.commands.registerCommand("meridian.openAgentsHelp", openAgentsHelpTab),
     vscode.commands.registerCommand("meridian.installKit", () => installKit(false)),
     vscode.commands.registerCommand("meridian.upgradeKit", () => installKit(true)),
+    vscode.commands.registerCommand("meridian.uninstallKit", () => uninstallKit()),
     vscode.commands.registerCommand("meridian.validateProject", validateProject),
     vscode.commands.registerCommand("meridian.showStatus", showStatus),
     vscode.commands.registerCommand("meridian.selectActiveProject", () =>

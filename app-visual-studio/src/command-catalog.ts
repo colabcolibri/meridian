@@ -121,6 +121,23 @@ export const MERIDIAN_COMMAND_CATALOG: CommandHelpEntry[] = [
     status: "shipped",
   },
   {
+    id: "uninstall-kit",
+    title: "Remove harness",
+    commandId: "meridian.uninstallKit",
+    paletteTitle: "Meridian: Remove Harness",
+    group: "kit",
+    summary: "Uninstall Meridian adapters (optionally .agent/) via uninstall-meridian-kit.sh",
+    details: [
+      "Adapters only (safe): removes Meridian links in .cursor/, .claude/, Codex, .opencode/.",
+      "Full removal: adapters + .agent/ + gitignore entries.",
+      "docs/ and .meridian/ (delivery SQLite) are never deleted — remove manually if desired.",
+      "Requires kit ≥ 1.1.49 (uninstall-meridian-kit.sh).",
+    ],
+    outputChannel: "Meridian Tools",
+    icon: "$(trash)",
+    status: "shipped",
+  },
+  {
     id: "board",
     title: "Open Board",
     commandId: "meridian.openBoard",
