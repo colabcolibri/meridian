@@ -78,6 +78,8 @@ mkdir -p "${STAGE}"
 
 rsync -a \
   --exclude '.DS_Store' \
+  --exclude '__pycache__/' \
+  --exclude '*.pyc' \
   "${AGENT_SRC}/" "${STAGE}/.agent/"
 
 cp "${REPO_ROOT}/LICENSE" "${STAGE}/LICENSE"

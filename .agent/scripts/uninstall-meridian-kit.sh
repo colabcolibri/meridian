@@ -183,6 +183,9 @@ fi
 # 6) Optional: remove the kit itself
 if [[ "${REMOVE_KIT}" -eq 1 ]]; then
   remove_path "${ROOT}/.agent"
+  echo ""
+  echo "Delivery data preserved: ${ROOT}/.meridian/ (SQLite) and ${ROOT}/docs/."
+  echo "The database is NEVER deleted by this script — remove .meridian/ manually if you really want to purge it."
 else
   echo ""
   echo "Kit kept: ${ROOT}/.agent (use --kit or --all to remove it)"
