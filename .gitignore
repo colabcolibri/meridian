@@ -56,6 +56,7 @@ test-results/
 .claude/
 .agents/skills/
 .codex/
+.opencode/
 /AGENTS.md
 **/package-lock.json
 yarn.lock

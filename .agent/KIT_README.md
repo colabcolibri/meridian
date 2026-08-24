@@ -1,6 +1,6 @@
 # Meridian kit
 
-Portable agent harness for **Cursor**, **Claude Code**, **Codex**, **Antigravity**, and other AI IDEs.
+Portable agent harness for **Cursor**, **Claude Code**, **Codex**, **OpenCode**, **Antigravity**, and other AI IDEs.
 
 **This package contains only the kit** (`.agent/` + installer). No desktop app, no VS Code extension source — those are optional extras in the full [Meridian](https://github.com/colabcolibri/meridian) repository.
 
@@ -11,14 +11,15 @@ Portable agent harness for **Cursor**, **Claude Code**, **Codex**, **Antigravity
 | **Cursor** | Copies `.agent/` + builds `.cursor/` symlinks | Yes — `.cursor/commands/` |
 | **Claude Code** | Copies `.agent/` + builds `.claude/` symlinks | Yes — `.claude/commands/` |
 | **Codex** | Copies `.agent/` + builds `.agents/skills/` + `.codex/` | Yes — `workflow-*` skills (e.g. `$workflow-create-us`) |
+| **OpenCode** | Copies `.agent/` + builds `.opencode/` (commands, agents, skills, plugin) | Yes — `/create-us`, … |
 | **Antigravity / ag-kit** | Copies `.agent/` only (`--no-sync`) | Yes — reads `.agent/workflows/` directly |
 | **Other `.agent` tools** | Copies `.agent/` only (`--no-sync`) | Depends on tool |
 
-Default `./install.sh` syncs Cursor, Claude Code, and Codex adapters. That is safe: only Meridian symlinks and generated Codex agent TOMLs are created; your own `.cursor/rules/` files are never deleted.
+Default `./install.sh` syncs Cursor, Claude Code, Codex, and OpenCode adapters. That is safe: only Meridian symlinks and generated Codex agent TOMLs are created; your own `.cursor/rules/` files are never deleted.
 
 ## What gets installed (agents included)
 
-The full `.agent/` tree is copied — **all agents**, skills, workflows, rules, scripts, and references. Adapter sync then exposes agents and slash commands in Cursor (`.cursor/agents/`, `.cursor/commands/`), Claude Code (`.claude/agents/`, `.claude/commands/`), and Codex (`.agents/skills/workflow-*`, `.codex/agents/`). Antigravity reads `.agent/` directly — use `--no-sync`.
+The full `.agent/` tree is copied — **all agents**, skills, workflows, rules, scripts, and references. Adapter sync then exposes agents and slash commands in Cursor (`.cursor/agents/`, `.cursor/commands/`), Claude Code (`.claude/agents/`, `.claude/commands/`), OpenCode (`.opencode/commands/`, `.opencode/agents/`, delivery plugin), and Codex (`.agents/skills/workflow-*`, `.codex/agents/`). Antigravity reads `.agent/` directly — use `--no-sync`.
 
 See [DISTRIBUTION.md](.agent/DISTRIBUTION.md) for kit vs extension and GitHub Releases.
 
@@ -49,9 +50,10 @@ Or install into the current directory:
 ./install.sh --cursor-only .
 ./install.sh --claude-only .
 ./install.sh --codex-only .
+./install.sh --opencode-only .
 ```
 
-Do **not** commit `.cursor/`, `.claude/`, `.agents/skills/`, `.codex/`, or symlinked `AGENTS.md` — they are regenerated per machine.
+Do **not** commit `.cursor/`, `.claude/`, `.agents/skills/`, `.codex/`, `.opencode/`, or symlinked `AGENTS.md` — they are regenerated per machine.
 
 ## After install
 
@@ -72,9 +74,10 @@ From your project (after a new kit release):
 Re-sync adapters only (no `.agent/` copy):
 
 ```bash
-./.agent/scripts/sync_cursor_kit.sh
-./.agent/scripts/sync_cursor_kit.sh --cursor-only
-./.agent/scripts/sync_cursor_kit.sh --dry-run
+./.agent/scripts/sync_kit.sh
+./.agent/scripts/sync_kit.sh --cursor-only
+./.agent/scripts/sync_kit.sh --opencode-only
+./.agent/scripts/sync_kit.sh --dry-run
 ```
 
 ## Build tarball (maintainers)

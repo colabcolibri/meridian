@@ -22,6 +22,7 @@ Options:
   --cursor-only   Sync .cursor/ adapter only (after copy)
   --claude-only   Sync .claude/ adapter only (after copy)
   --codex-only    Sync Codex adapters only (after copy)
+  --opencode-only Sync OpenCode adapter only (.opencode/) (after copy)
   --dry-run       Show actions without writing
   -h, --help      This help
 
@@ -32,6 +33,7 @@ IDE support:
   Cursor       .agent/ + .cursor/ symlinks (default install)
   Claude Code  .agent/ + .claude/ symlinks (default install)
   Codex        .agent/ + .agents/skills/ + .codex/ (default install)
+  OpenCode     .agent/ + .opencode/ commands/agents/skills/plugin (default install)
   Antigravity  .agent/ only — pass --no-sync
 
 Examples:
@@ -56,6 +58,7 @@ while [[ $# -gt 0 ]]; do
     --cursor-only) SYNC_FLAGS=(--cursor-only); shift ;;
     --claude-only) SYNC_FLAGS=(--claude-only); shift ;;
     --codex-only) SYNC_FLAGS=(--codex-only); shift ;;
+    --opencode-only) SYNC_FLAGS=(--opencode-only); shift ;;
     --dry-run) DRY_RUN=1; shift ;;
     -h | --help) usage; exit 0 ;;
     -*)
@@ -101,7 +104,7 @@ echo ""
 if [[ -d "${TARGET}/.agent" && "${FORCE}" -ne 1 && "${DRY_RUN}" -ne 1 ]]; then
   echo "WARNING: ${TARGET}/.agent already exists."
   echo "Re-run with --force to overwrite, or sync adapters only:"
-  echo "  ${TARGET}/.agent/scripts/sync_cursor_kit.sh"
+  echo "  ${TARGET}/.agent/scripts/sync_kit.sh"
   exit 1
 fi
 
@@ -117,9 +120,9 @@ fi
 if [[ "${NO_SYNC}" -eq 1 ]]; then
   echo "Skipped adapter sync (--no-sync). .agent/ is enough for Antigravity-style tools."
 elif [[ "${DRY_RUN}" -eq 1 ]]; then
-  echo "[dry-run] (cd ${TARGET} && ${TARGET}/.agent/scripts/sync_cursor_kit.sh ${SYNC_FLAGS[*]})"
+  echo "[dry-run] (cd ${TARGET} && ${TARGET}/.agent/scripts/sync_kit.sh ${SYNC_FLAGS[*]})"
 else
-  SYNC="${TARGET}/.agent/scripts/sync_cursor_kit.sh"
+  SYNC="${TARGET}/.agent/scripts/sync_kit.sh"
   if [[ ! -x "${SYNC}" ]]; then
     chmod +x "${SYNC}"
   fi
@@ -139,13 +142,13 @@ elif [[ "${NO_SYNC}" -eq 0 ]]; then
     if [[ -f "${GITIGNORE}" ]]; then
       grep -qxF "${entry}" "${GITIGNORE}" 2>/dev/null && return 0
       if ! grep -q 'Meridian IDE adapters' "${GITIGNORE}" 2>/dev/null; then
-        printf '\n# Meridian IDE adapters (local symlinks — regenerate with .agent/scripts/sync_cursor_kit.sh)\n' >> "${GITIGNORE}"
+        printf '\n# Meridian IDE adapters (local symlinks — regenerate with .agent/scripts/sync_kit.sh)\n' >> "${GITIGNORE}"
       fi
       printf '%s\n' "${entry}" >> "${GITIGNORE}"
       echo "Updated: ${GITIGNORE} (+${entry})"
     else
       cat > "${GITIGNORE}" <<EOF
-# Meridian IDE adapters (local symlinks — regenerate with .agent/scripts/sync_cursor_kit.sh)
+# Meridian IDE adapters (local symlinks — regenerate with .agent/scripts/sync_kit.sh)
 ${entry}
 EOF
       echo "Created: ${GITIGNORE}"
@@ -162,6 +165,9 @@ EOF
     append_gitignore ".codex/"
     append_gitignore "AGENTS.md"
   fi
+  if [[ "${#SYNC_FLAGS[@]}" -eq 0 ]] || [[ "${SYNC_FLAGS[0]:-}" == "--opencode-only" ]]; then
+    append_gitignore ".opencode/"
+  fi
 fi
 
 cat <<EOF
@@ -170,13 +176,13 @@ Done.
 
 Next steps:
   1. Open ${TARGET} in your IDE
-     - Cursor / Claude Code / Codex: workflows work after adapter sync
+     - Cursor / Claude Code / Codex / OpenCode: workflows work after adapter sync
      - Antigravity / .agent-native: open project — workflows live in .agent/
   2. If docs/ is missing: /init-meridian
   3. Read .agent/references/agents-help.md or /agents-help
   4. After kit updates: re-run install with --force, or:
-       ${TARGET}/.agent/scripts/sync_cursor_kit.sh
+        ${TARGET}/.agent/scripts/sync_kit.sh
 
-Note: .cursor/, .claude/, .agents/skills/, .codex/, and AGENTS.md (when symlinked) are local adapters — do not commit them.
+Note: .cursor/, .claude/, .agents/skills/, .codex/, .opencode/, and AGENTS.md (when symlinked) are local adapters — do not commit them.
       Commit .agent/ if this project owns its kit copy.
 EOF

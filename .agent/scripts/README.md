@@ -33,7 +33,7 @@
 
 | Script | Purpose |
 | ------ | ------- |
-| `sync_cursor_kit.sh` | Regenerate `.cursor/`, `.claude/`, Codex adapters |
+| `sync_kit.sh` | Regenerate `.cursor/`, `.claude/`, Codex adapters |
 | `install-meridian-kit.sh` | Install `.agent/` into a target project |
 | `package-kit.sh` | Build `meridian-kit-*.tar.gz` |
 

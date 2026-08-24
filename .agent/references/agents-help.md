@@ -352,7 +352,7 @@ Skills are procedures agents load automatically. Grouped by purpose.
 | Brownfield baseline | C | `technical-writer` | `/document-project` |
 | Phase doc audit | C | `technical-writer` | `/audit-docs` |
 | Product discovery | C | `product-owner` | `/discover` |
-| Extend Meridian kit | — | `create-meridian-artifact` skill | edit `.agent/` + `sync_cursor_kit.sh` |
+| Extend Meridian kit | — | `create-meridian-artifact` skill | edit `.agent/` + `sync_kit.sh` |
 | Validate structure | F | script / extension | `validate_meridian.py` or **Validate Project** |
 
 ---

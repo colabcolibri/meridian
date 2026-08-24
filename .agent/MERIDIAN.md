@@ -66,7 +66,7 @@ See `.agent/ARCHITECTURE.md` for the full map. Minimum:
   scripts/
     validate_meridian.py
     migrate_us_v2_structure.py   # one-off US schema migration
-    sync_cursor_kit.sh
+    sync_kit.sh
 
 docs/                        ← phase docs only (path varies in monorepos)
   00_scope.md … 11_decisions.md
@@ -79,7 +79,7 @@ docs/                        ← phase docs only (path varies in monorepos)
 
 **Multi-product repos:** one `.agent/` kit root; each Meridian product = one folder named exactly `docs` (any path). `.meridian/projects.json` declares ids, default, exclude; discovery finds unnamed `docs/` trees. **Active project** (saved) selects which tree board/validate/US target. IDE: **Project** toolbar row in Board/Deliverables + **Select Active Project**. Maintainer map: `references/instruction-surfaces.md` (EPIC-13 checklist). Template: `projects-manifest-template.md`.
 
-**IDE adapters:** edit `.agent/`, run `./.agent/scripts/sync_cursor_kit.sh` for `.cursor/` and `.claude/`. Do not commit adapter folders. See [IDE_ADAPTERS.md](./IDE_ADAPTERS.md).
+**IDE adapters:** edit `.agent/`, run `./.agent/scripts/sync_kit.sh` for all adapters (`.cursor/`, `.claude/`, Codex, `.opencode/`). Do not commit adapter folders. See [IDE_ADAPTERS.md](./IDE_ADAPTERS.md).
 
 ---
 

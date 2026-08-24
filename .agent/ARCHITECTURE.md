@@ -23,7 +23,7 @@ The VS Code extension (`app-visual-studio/`) is the optional monitor for Meridia
 - **`.agent/`** — Antigravity convention; copyable to projects and other tools.
 - **`.cursor/`** — **local** adapter (generated symlinks; **do not commit**).
 
-**Edit in `.agent/`** and run `./.agent/scripts/sync_cursor_kit.sh` to recreate adapters in `.cursor/`, `.claude/`, and Codex paths (required after clone).
+**Edit in `.agent/`** and run `./.agent/scripts/sync_kit.sh` to recreate adapters in `.cursor/`, `.claude/`, Codex paths, and `.opencode/` (required after clone).
 
 ---
 
@@ -39,14 +39,20 @@ The VS Code extension (`app-visual-studio/`) is the optional monitor for Meridia
   scripts/
     validate_meridian.py
     migrate_us_v2_structure.py
-    sync_cursor_kit.sh
+    sync_kit.sh
   references/templates/      # delivery templates (INDEX, writing-guide, section-contracts, …)
 
-.cursor/                   # Cursor adapter (local, gitignored — sync_cursor_kit.sh)
+.cursor/                   # Cursor adapter (local, gitignored — sync_kit.sh)
   rules/meridian.mdc       # alwaysApply
   skills/
   agents/
   commands/                # workflows as slash commands
+
+.opencode/                 # OpenCode adapter (local, gitignored — sync_kit.sh)
+  commands/                # workflows as slash commands
+  agents/                  # kit agents
+  skills/                  # kit skills
+  plugins/meridian-tools.ts  # delivery tools (counts/list/show/validate)
 ```
 
 ---
@@ -161,7 +167,7 @@ python3 .agent/scripts/migrate_us_v2_structure.py <project-root>
 python3 .agent/scripts/migrate_us_v2_structure.py <project-root> --restore-preamble
 
 # IDE adapters (after clone or kit changes)
-./.agent/scripts/sync_cursor_kit.sh
+./.agent/scripts/sync_kit.sh
 ```
 
 ---

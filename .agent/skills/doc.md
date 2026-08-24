@@ -13,7 +13,7 @@ This file is the lightweight entry point symlinked as `meridian-authoring` in ID
 | Full procedure + checklists | `create-meridian-artifact/SKILL.md` + `references/registry-checklist.md` |
 | Surface map | `.agent/references/instruction-surfaces.md` |
 | Agent/skill/workflow tables | `.agent/ARCHITECTURE.md` |
-| Sync adapters | `./.agent/scripts/sync_cursor_kit.sh` |
+| Sync adapters | `./.agent/scripts/sync_kit.sh` |
 
 ---
 

@@ -15,7 +15,7 @@ By contributing, you agree that your contributions will be licensed under the [P
 | What you want to change | Where to edit |
 | ----------------------- | ------------- |
 | Agents, skills, workflows, rules | **`.agent/`** (canonical source) |
-| Cursor / Claude Code adapters (local symlinks) | Run `./.agent/scripts/sync_cursor_kit.sh` — **do not** commit `.cursor/` or `.claude/` |
+| Cursor / Claude Code adapters (local symlinks) | Run `./.agent/scripts/sync_kit.sh` — **do not** commit `.cursor/` or `.claude/` |
 | VS Code extension | `app-visual-studio/src/` |
 | Dogfood product documentation | `docs/` |
 | Architecture decisions | `prepend-decision` (skill `update-decisions-log`) |
@@ -43,8 +43,8 @@ pnpm package:vsix
 After clone or when adding a new item under `.agent/`:
 
 ```bash
-chmod +x .agent/scripts/sync_cursor_kit.sh
-./.agent/scripts/sync_cursor_kit.sh
+chmod +x .agent/scripts/sync_kit.sh
+./.agent/scripts/sync_kit.sh
 ```
 
 Builds `.cursor/` and `.claude/` locally. See [`.agent/IDE_ADAPTERS.md`](.agent/IDE_ADAPTERS.md).

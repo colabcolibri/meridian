@@ -47,7 +47,7 @@ You stay the manager. Agents execute **one user story at a time**, with gates so
 
 **Kit without extension:** see [`.agent/KIT_README.md`](.agent/KIT_README.md) or run `./install.sh` from a kit release.
 
-**Developing Meridian itself:** clone this repo, `./.agent/scripts/sync_cursor_kit.sh`, then `cd app-visual-studio && pnpm install`.
+**Developing Meridian itself:** clone this repo, `./.agent/scripts/sync_kit.sh`, then `cd app-visual-studio && pnpm install`.
 
 ## How it works
 

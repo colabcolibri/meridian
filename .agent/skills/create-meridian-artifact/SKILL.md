@@ -11,7 +11,7 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 
 Use when adding or changing anything in `.agent/` that agents or managers invoke: **skill**, **agent**, **workflow** (slash command), or **delivery template**.
 
-**Do not** edit `.cursor/`, `.claude/`, or `.agents/skills/` directly — run `sync_cursor_kit.sh` after `.agent/` changes.
+**Do not** edit `.cursor/`, `.claude/`, or `.agents/skills/` directly — run `sync_kit.sh` after `.agent/` changes.
 
 ---
 
@@ -101,12 +101,12 @@ Walk **every** applicable row in `references/registry-checklist.md`:
 | P2 | `app-visual-studio/src/command-catalog.ts` | Only extension palette commands — **not** chat slash |
 | P2 | `create-meridian-artifact` → `registry-checklist.md` § **K** | New extension view (SQLite-backed tab) |
 
-**Auto-sync (no manual edit):** `.cursor/commands/`, `.cursor/skills/`, `.cursor/agents/`, `.agents/skills/workflow-*`, `.codex/agents/*.toml` — via sync script.
+**Auto-sync (no manual edit):** `.cursor/commands/`, `.cursor/skills/`, `.cursor/agents/`, `.agents/skills/workflow-*`, `.codex/agents/*.toml`, `.opencode/*` — via sync script.
 
 ### Phase 5 — sync and validate
 
 ```bash
-./.agent/scripts/sync_cursor_kit.sh
+./.agent/scripts/sync_kit.sh
 python3 .agent/scripts/validate_meridian.py . --sqlite-only --strict-kit-md
 ```
 

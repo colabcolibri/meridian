@@ -67,4 +67,4 @@ Next: /… | human
 1. Add row to `.agent/rules/meridian.mdc` slash table.
 2. Add row to `.agent/references/agents-help.md` (correct group).
 3. Add row to `meridian-routing` matrix.
-4. Run `./.agent/scripts/sync_cursor_kit.sh`.
+4. Run `./.agent/scripts/sync_kit.sh`.

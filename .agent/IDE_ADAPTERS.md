@@ -9,6 +9,7 @@ The kit source lives in **`.agent/`** (committed). How you wire it depends on yo
 | **Cursor** | `.cursor/` | Yes | default, or `--cursor-only` |
 | **Claude Code** | `.claude/` | Yes | default, or `--claude-only` |
 | **Codex** | `.agents/skills/`, `.codex/`, `AGENTS.md` | Yes | default, or `--codex-only` |
+| **OpenCode** | `.opencode/` (+ `AGENTS.md` via Codex sync) | Yes | default, or `--opencode-only` |
 | **Antigravity / ag-kit** | _(none)_ | No | `--no-sync` |
 | **Other `.agent` indexers** | _(none)_ | No | `--no-sync` |
 
@@ -18,12 +19,14 @@ The kit source lives in **`.agent/`** (committed). How you wire it depends on yo
 ./install.sh --no-sync /path/to/project
 ```
 
-## Sync script (Cursor + Claude + Codex)
+## Sync script (all adapters — one command)
 
 ```bash
-chmod +x .agent/scripts/sync_cursor_kit.sh   # once
-./.agent/scripts/sync_cursor_kit.sh
+chmod +x .agent/scripts/sync_kit.sh   # once
+./.agent/scripts/sync_kit.sh
 ```
+
+`sync_cursor_kit.sh` still exists as a deprecated shim that forwards to `sync_kit.sh`.
 
 ### Surgical sync policy
 
@@ -32,7 +35,7 @@ chmod +x .agent/scripts/sync_cursor_kit.sh   # once
 - Removes **orphan** Meridian symlinks when a workflow/agent/skill was removed from the kit
 - **Never touches** real files or symlinks pointing outside `.agent/`
 
-Options: `--cursor-only`, `--claude-only`, `--codex-only`, `--no-prune`, `--dry-run`
+Options: `--cursor-only`, `--claude-only`, `--codex-only`, `--opencode-only`, `--no-prune`, `--dry-run`
 
 ## Install kit into another project
 
@@ -75,7 +78,7 @@ cd meridian-kit-1.0.0
 
 **Future channels:** GitHub Releases (`kit-v*` + `extension-v*` tags with `.tar.gz` and `.vsix` assets). See [DISTRIBUTION.md](DISTRIBUTION.md).
 
-Always edit in `.agent/` first; then run `./.agent/scripts/sync_cursor_kit.sh` for IDE adapters (`.cursor/references/templates/` included).
+Always edit in `.agent/` first; then run `./.agent/scripts/sync_kit.sh` for IDE adapters (`.cursor/references/templates/` included).
 
 ## What gets generated
 
@@ -84,6 +87,7 @@ Always edit in `.agent/` first; then run `./.agent/scripts/sync_cursor_kit.sh` f
 | **Cursor** | `.cursor/` | rules, skills, agents, slash commands, template registry |
 | **Claude Code** | `.claude/` | agents, slash commands |
 | **Codex** | `.agents/skills/`, `.codex/`, `AGENTS.md` | skills (workflows + kit skills), subagent TOMLs, project guidance |
+| **OpenCode** | `.opencode/` | slash commands, agents, skills, delivery plugin |
 
 Both adapters symlink workflows from `.agent/workflows/` as slash commands and agents from `.agent/agents/`.
 
@@ -118,12 +122,29 @@ Claude Code does not mirror skills, rules, or templates — workflows and agents
 
 Codex deprecated custom prompts (`~/.codex/prompts/`) in favor of skills — Meridian workflows are exposed as skills under `.agents/skills/`. Subagent TOMLs are generated (not symlinked) because Codex expects TOML, not Markdown.
 
+### OpenCode mapping
+
+| OpenCode | Canonical source |
+| -------- | ---------------- |
+| `.opencode/commands/<name>.md` | `.agent/workflows/<name>.md` |
+| `.opencode/agents/<name>.md` | `.agent/agents/<name>.md` |
+| `.opencode/skills/<name>/` | `.agent/skills/<name>/` |
+| `.opencode/plugins/meridian-tools.ts` | `.agent/adapters/opencode/plugin/meridian-tools.ts` |
+| `AGENTS.md` (repo root) | `.agent/rules/AGENTS.md` — read natively by OpenCode |
+
+Notes:
+
+- Workflows become `/commands`; agents become `@`-mentionable subagents; both are symlinked — frontmatter is already compatible.
+- The **Meridian plugin** exposes read-only delivery tools to the model: `meridian_counts`, `meridian_list`, `meridian_show`, `meridian_validate` (wrapping the kit CLI — the CLI-side counterpart of the meridian-vscode panels).
+- Kit skills already carry valid `SKILL.md` frontmatter (`name` + `description`). The `meridian-authoring` entry point (`.agent/skills/doc.md`) is intentionally not mirrored — it has no SKILL.md frontmatter and OpenCode validates strictly.
+- OpenCode also reads `.agents/skills/*/SKILL.md` natively, so the Codex sync doubles as an extra skill surface.
+
 ## Git
 
-`.cursor/`, `.claude/`, `.agents/skills/`, `.codex/`, and `AGENTS.md` (when symlinked) are in `.gitignore` — local adapters, not versioned duplicates. Do not commit them. Canonical source stays in `.agent/` (including `.agent/rules/AGENTS.md`).
+`.cursor/`, `.claude/`, `.agents/skills/`, `.codex/`, `.opencode/`, and `AGENTS.md` (when symlinked) are in `.gitignore` — local adapters, not versioned duplicates. Do not commit them. Canonical source stays in `.agent/` (including `.agent/rules/AGENTS.md`).
 
 ## Native `.agent/` IDEs
 
-Antigravity, ag-kit, and other tools that index `.agent/` directly need **no adapter** — use `--no-sync` on install and skip `sync_cursor_kit.sh`. Workflows, agents, and skills work from the committed folder.
+Antigravity, ag-kit, and other tools that index `.agent/` directly need **no adapter** — use `--no-sync` on install and skip `sync_kit.sh`. Workflows, agents, and skills work from the committed folder.
 
 See also: `.agent/KIT_README.md` (distribution package README).

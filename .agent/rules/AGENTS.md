@@ -19,9 +19,10 @@ docs/                                             (source of truth)
 | **Cursor** | `/status`, `/create-us`, … | `.cursor/commands/` ← `.agent/workflows/` |
 | **Claude Code** | same slash commands | `.claude/commands/` ← workflows |
 | **Codex** | `$workflow-status`, `$workflow-create-us`, … | `.agents/skills/workflow-*/` ← workflows |
+| **OpenCode** | `/status`, `/create-us`, … | `.opencode/commands/` ← workflows (+ plugin de delivery) |
 | **Antigravity / .agent-native** | read `.agent/workflows/` directly | none — `.agent/` only |
 
-After **Install Harness** or clone: run `./.agent/scripts/sync_cursor_kit.sh` to refresh adapters.
+After **Install Harness** or clone: run `./.agent/scripts/sync_kit.sh` to refresh adapters.
 
 ## Human guides (read in order)
 

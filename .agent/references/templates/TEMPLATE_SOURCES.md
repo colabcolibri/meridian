@@ -14,7 +14,7 @@ CANONICAL (edit here)          REGISTRY (agents read)              IDE ADAPTER (
 - **Registry** = symlinks + kit-owned files (`INDEX.md`, `writing-guide.md`, `section-contracts.md`, `lifecycle.md`, `TEMPLATE_SOURCES.md`).
 - **Never** edit symlinks in `.cursor/` — they point at `.agent/`.
 - **No `docs/templates/`** — removed in v11 (Onda C). Do not recreate under `docs/`.
-- After adding a new template file: update `INDEX.md`, edit the canonical skill `references/` path, then run `./.agent/scripts/sync_cursor_kit.sh` (syncs `.cursor/references/templates/` only).
+- After adding a new template file: update `INDEX.md`, edit the canonical skill `references/` path, then run `./.agent/scripts/sync_kit.sh` (syncs `.cursor/references/templates/` only).
 
 ---
 
@@ -80,5 +80,5 @@ Templates for **reading** (not copying into `docs/`):
 Regenerate Cursor mirrors after clone:
 
 ```bash
-./.agent/scripts/sync_cursor_kit.sh
+./.agent/scripts/sync_kit.sh
 ```
