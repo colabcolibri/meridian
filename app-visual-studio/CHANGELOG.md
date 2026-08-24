@@ -4,6 +4,12 @@ All notable changes to the **Meridian** VS Code extension (`meridian-vscode`).
 
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.1.51] - 2026-08-24
+
+### Added
+
+- **Bundled kit:** meridian-views opencode plugin — visual kanban (VSCode board columns/mapping), versions/sprints/epics/decisions pages served on 127.0.0.1:4788; auto-starts with opencode, read-only, dies with the process; `meridian_board` tool returns the URL
+
 ## [1.1.50] - 2026-08-24
 
 ### Added
