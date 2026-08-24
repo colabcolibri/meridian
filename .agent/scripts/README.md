@@ -33,7 +33,8 @@
 
 | Script | Purpose |
 | ------ | ------- |
-| `sync_kit.sh` | Regenerate `.cursor/`, `.claude/`, Codex adapters |
+| `sync_kit.sh` | Regenerate all IDE adapters (`.cursor/`, `.claude/`, Codex, `.opencode/`) |
+| `uninstall-meridian-kit.sh` | Remove Meridian adapters (and optionally kit + gitignore entries) — never touches `docs/` or `.meridian/` |
 | `install-meridian-kit.sh` | Install `.agent/` into a target project |
 | `package-kit.sh` | Build `meridian-kit-*.tar.gz` |
 

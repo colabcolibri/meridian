@@ -185,4 +185,5 @@ Next steps:
 
 Note: .cursor/, .claude/, .agents/skills/, .codex/, .opencode/, and AGENTS.md (when symlinked) are local adapters — do not commit them.
       Commit .agent/ if this project owns its kit copy.
+      To remove everything later: ${TARGET}/.agent/scripts/uninstall-meridian-kit.sh --all
 EOF

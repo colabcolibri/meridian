@@ -37,6 +37,15 @@ chmod +x .agent/scripts/sync_kit.sh   # once
 
 Options: `--cursor-only`, `--claude-only`, `--codex-only`, `--opencode-only`, `--no-prune`, `--dry-run`
 
+## Uninstall
+
+```bash
+./.agent/scripts/uninstall-meridian-kit.sh          # remove IDE adapters only
+./.agent/scripts/uninstall-meridian-kit.sh --all    # adapters + .agent/ + gitignore entries
+```
+
+Same surgical policy as sync: removes only Meridian symlinks, generated Codex TOMLs, and empty adapter dirs. Real files, foreign symlinks, `docs/`, and `.meridian/` are never touched.
+
 ## Install kit into another project
 
 ```bash
