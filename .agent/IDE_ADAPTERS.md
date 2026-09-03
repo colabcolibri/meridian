@@ -96,7 +96,7 @@ Always edit in `.agent/` first; then run `./.agent/scripts/sync_kit.sh` for IDE 
 | **Cursor** | `.cursor/` | rules, skills, agents, slash commands, template registry |
 | **Claude Code** | `.claude/` | agents, slash commands |
 | **Codex** | `.agents/skills/`, `.codex/`, `AGENTS.md` | skills (workflows + kit skills), subagent TOMLs, project guidance |
-| **OpenCode** | `.opencode/` | slash commands, agents, skills, delivery plugin |
+| **OpenCode** | `.opencode/` | slash commands, agents, skills |
 
 Both adapters symlink workflows from `.agent/workflows/` as slash commands and agents from `.agent/agents/`.
 
@@ -138,15 +138,12 @@ Codex deprecated custom prompts (`~/.codex/prompts/`) in favor of skills — Mer
 | `.opencode/commands/<name>.md` | `.agent/workflows/<name>.md` |
 | `.opencode/agents/<name>.md` | generated from `.agent/agents/<name>.md` (OpenCode `permission:` frontmatter) |
 | `.opencode/skills/<name>/` | `.agent/skills/<name>/` |
-| `.opencode/plugins/meridian-tools.ts` | `.agent/adapters/opencode/plugin/meridian-tools.ts` |
-| `.opencode/plugins/meridian-views.ts` | `.agent/adapters/opencode/plugin/meridian-views.ts` (+ `views/` modules) |
 | `AGENTS.md` (repo root) | `.agent/rules/AGENTS.md` — read natively by OpenCode |
 
 Notes:
 
 - Workflows become `/commands` (symlinked); agents are **generated** with OpenCode-compatible frontmatter (`permission:` object instead of Cursor `tools:` string).
-- **meridian-tools** exposes read-only delivery tools to the model: `meridian_counts`, `meridian_list`, `meridian_show`, `meridian_validate` (wrapping the kit CLI).
-- **meridian-views** brings the visual delivery system to the browser: starts a local read-only server (127.0.0.1:4788, dies with the OpenCode process) serving the kanban board, versions, sprints, epics and decisions — the OpenCode counterpart of the meridian-vscode panels. The `meridian_board` tool returns the URL and column counts.
+- OpenCode has **no Meridian plugins** — agents use Bash/CLI (`meridian_delivery.py`) like other IDEs. Board UI stays in the VS Code extension.
 - Kit skills already carry valid `SKILL.md` frontmatter (`name` + `description`). The `meridian-authoring` entry point (`.agent/skills/doc.md`) is intentionally not mirrored — it has no SKILL.md frontmatter and OpenCode validates strictly.
 - OpenCode also reads `.agents/skills/*/SKILL.md` natively, so the Codex sync doubles as an extra skill surface.
 

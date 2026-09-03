@@ -408,7 +408,7 @@ sync_codex() {
 }
 
 sync_opencode() {
-  mkdir -p "${OPENCODE}/commands" "${OPENCODE}/agents" "${OPENCODE}/skills" "${OPENCODE}/plugins"
+  mkdir -p "${OPENCODE}/commands" "${OPENCODE}/agents" "${OPENCODE}/skills"
 
   # Workflows become slash commands (/create-us, /status, ...) — frontmatter compatible.
   for workflow_file in "${AGENT}"/workflows/*.md; do
@@ -433,19 +433,22 @@ sync_opencode() {
     link "../../.agent/skills/${name}" "${OPENCODE}/skills/${name}"
   done
 
-  # Meridian plugins: delivery tools + visual views server via the kit CLI.
-  if [[ -f "${AGENT}/adapters/opencode/plugin/meridian-tools.ts" ]]; then
-    link "../../.agent/adapters/opencode/plugin/meridian-tools.ts" "${OPENCODE}/plugins/meridian-tools.ts"
-  fi
-  if [[ -f "${AGENT}/adapters/opencode/plugin/meridian-views.ts" ]]; then
-    link "../../.agent/adapters/opencode/plugin/meridian-views.ts" "${OPENCODE}/plugins/meridian-views.ts"
-  fi
+  # No OpenCode plugins — agents/commands/skills only. Board UI stays in VS Code.
 
   link "../../.agent/IDE_ADAPTERS.md" "${OPENCODE}/README.md"
 
   if [[ "${PRUNE}" -eq 1 ]]; then
     prune_orphans "${OPENCODE}" "opencode"
     prune_opencode_agents
+    # Drop leftover plugins from older kit versions (views/tools).
+    if [[ -d "${OPENCODE}/plugins" ]]; then
+      if [[ "${DRY_RUN}" -eq 1 ]]; then
+        echo "[dry-run] remove ${OPENCODE}/plugins"
+      else
+        rm -rf "${OPENCODE}/plugins"
+        echo "removed ${OPENCODE}/plugins"
+      fi
+    fi
   fi
 }
 

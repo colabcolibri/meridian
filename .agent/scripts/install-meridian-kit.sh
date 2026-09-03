@@ -33,7 +33,7 @@ IDE support:
   Cursor       .agent/ + .cursor/ symlinks (default install)
   Claude Code  .agent/ + .claude/ symlinks (default install)
   Codex        .agent/ + .agents/skills/ + .codex/ (default install)
-  OpenCode     .agent/ + .opencode/ commands/agents/skills/plugin (default install)
+  OpenCode     .agent/ + .opencode/ commands/agents/skills (default install)
   Antigravity  .agent/ only — pass --no-sync
 
 Examples:

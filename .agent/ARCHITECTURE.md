@@ -50,9 +50,8 @@ The VS Code extension (`app-visual-studio/`) is the optional monitor for Meridia
 
 .opencode/                 # OpenCode adapter (local, gitignored — sync_kit.sh)
   commands/                # workflows as slash commands
-  agents/                  # kit agents
+  agents/                  # kit agents (generated frontmatter)
   skills/                  # kit skills
-  plugins/meridian-tools.ts  # delivery tools (counts/list/show/validate)
 ```
 
 ---

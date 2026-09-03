@@ -80,7 +80,7 @@
 | `.cursor/commands/`, `.cursor/skills/`, `.cursor/agents/`, `.cursor/rules/` | `sync_kit.sh` |
 | `.claude/commands/`, `.claude/agents/` | `sync_kit.sh` |
 | `.agents/skills/` (incl. `workflow-*`), `.codex/agents/*.toml`, `AGENTS.md` (symlink) | `sync_kit.sh` |
-| `.opencode/commands/`, `.opencode/agents/`, `.opencode/skills/`, `.opencode/plugins/` | `sync_kit.sh` |
+| `.opencode/commands/`, `.opencode/agents/`, `.opencode/skills/` | `sync_kit.sh` |
 
 ---
 

@@ -110,7 +110,7 @@ Complete **A + B + C** in order:
 | `.claude/commands/`, `.claude/agents/` | `sync_kit.sh` |
 | `.agents/skills/workflow-*` | `sync_kit.sh` |
 | `.codex/agents/*.toml` | `sync_kit.sh` (from `.agent/agents/`) |
-| `.opencode/commands|agents|skills|plugins` | `sync_kit.sh` (from `.agent/workflows`, `agents`, `skills`, `adapters/opencode/plugin`) |
+| `.opencode/commands|agents|skills` | `sync_kit.sh` (from `.agent/workflows`, `agents`, `skills`) |
 | `meridian-authoring` symlink | Points to `.agent/skills/doc.md` |
 
 ---

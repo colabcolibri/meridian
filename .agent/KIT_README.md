@@ -11,7 +11,7 @@ Portable agent harness for **Cursor**, **Claude Code**, **Codex**, **OpenCode**,
 | **Cursor** | Copies `.agent/` + builds `.cursor/` symlinks | Yes — `.cursor/commands/` |
 | **Claude Code** | Copies `.agent/` + builds `.claude/` symlinks | Yes — `.claude/commands/` |
 | **Codex** | Copies `.agent/` + builds `.agents/skills/` + `.codex/` | Yes — `workflow-*` skills (e.g. `$workflow-create-us`) |
-| **OpenCode** | Copies `.agent/` + builds `.opencode/` (commands, agents, skills, plugin) | Yes — `/create-us`, … |
+| **OpenCode** | Copies `.agent/` + builds `.opencode/` (commands, agents, skills) | Yes — `/create-us`, … |
 | **Antigravity / ag-kit** | Copies `.agent/` only (`--no-sync`) | Yes — reads `.agent/workflows/` directly |
 | **Other `.agent` tools** | Copies `.agent/` only (`--no-sync`) | Depends on tool |
 
@@ -19,7 +19,7 @@ Default `./install.sh` syncs Cursor, Claude Code, Codex, and OpenCode adapters. 
 
 ## What gets installed (agents included)
 
-The full `.agent/` tree is copied — **all agents**, skills, workflows, rules, scripts, and references. Adapter sync then exposes agents and slash commands in Cursor (`.cursor/agents/`, `.cursor/commands/`), Claude Code (`.claude/agents/`, `.claude/commands/`), OpenCode (`.opencode/commands/`, `.opencode/agents/`, delivery plugin), and Codex (`.agents/skills/workflow-*`, `.codex/agents/`). Antigravity reads `.agent/` directly — use `--no-sync`.
+The full `.agent/` tree is copied — **all agents**, skills, workflows, rules, scripts, and references. Adapter sync then exposes agents and slash commands in Cursor (`.cursor/agents/`, `.cursor/commands/`), Claude Code (`.claude/agents/`, `.claude/commands/`), OpenCode (`.opencode/commands/`, `.opencode/agents/`, skills), and Codex (`.agents/skills/workflow-*`, `.codex/agents/`). Antigravity reads `.agent/` directly — use `--no-sync`.
 
 See [DISTRIBUTION.md](.agent/DISTRIBUTION.md) for kit vs extension and GitHub Releases.
 
