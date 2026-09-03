@@ -4,6 +4,18 @@ All notable changes to the **Meridian** VS Code extension (`meridian-vscode`).
 
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.1.53] - 2026-09-03
+
+### Added
+
+- **Bundled kit:** `deus-ex` dispatch station (`/deus-ex`) — allocates next agent/slash, does not cook
+- **Bundled kit:** `/design-flow` and `/design-theme` — screen journeys, responsive surfaces, theme modes, type ramp
+- **Bundled kit:** sprint/epic close integrity — CLI rejects empty retrospective or incomplete Must US
+
+### Changed
+
+- **Bundled kit:** maker/checker stations, object-prefix skills, container-integrity validator WARNs on historical closes
+
 ## [1.1.52] - 2026-08-24
 
 ### Fixed

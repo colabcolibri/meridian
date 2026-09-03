@@ -95,6 +95,7 @@ Keep the project consistent, visible and auditable while specialists execute wor
 
 | Need | Delegate to |
 | ---- | ----------- |
+| Who / which station / allocate | `deus-ex` → `/deus-ex` |
 | Discovery, scope, epic | `product-owner` |
 | Phase docs `01`–`08`, `11` | `technical-writer` |
 | `02_security` | `security-champion` |

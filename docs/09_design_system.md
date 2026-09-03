@@ -43,6 +43,38 @@ Extension webviews map to VS Code theme tokens (do not hardcode hex in webview C
 | meta | IDs, counts, chips | 10–11px, `descriptionForeground` |
 | code | Inline / blocks | `var(--vscode-editor-font-family)`, `textCodeBlock-background` |
 
+_Ramp: do not add a fourth body size. Host font size wins for body. `/design-theme`._
+
+## Theme modes
+
+| Mode | When it applies | Token set / file |
+| ---- | --------------- | ---------------- |
+| host | Extension webviews | `--vscode-*` via `webview-common.ts` |
+| kit-html | `.agent/board-ui/` (not a webview) | `board-ui/css/tokens.css` — independent of editor theme |
+
+Same semantic roles (canvas, foreground, border, primary, muted, focus). Do not hardcode a light-only palette in webviews.
+
+## Screen flows
+
+Jobs for the manager in the harness. Chrome is the **host** (activity bar / tabs). In-view toolbars wrap; they are not a second app shell.
+
+| Flow | Surfaces | Entry | Empty | Error | Exit |
+| ---- | -------- | ----- | ----- | ----- | ---- |
+| Review delivery board | Extension webview, kit HTML | Command **Open Board** / `python3 .agent/board` | Columns with no cards in that filter — still show column headers | DB/export fail — message in webview, not a blank canvas | Switch view or close panel |
+| Inspect epic / version / sprint | Extension webviews | Sidebar commands | Empty list + create via **chat** slash (not in-webview create) | Same as board | Back to list / close |
+| Read kit help | Extension help panels | Commands sidebar | n/a (static md) | Missing kit files — installer path | Close editor |
+| Filter by project (monorepo) | Board toolbar | Project dropdown | n/a | Missing `projects.json` — single product | Persist selection |
+
+```mermaid
+flowchart LR
+  Host[IDE activity bar] --> Board[Board webview]
+  Board --> Filter[Project / version filter]
+  Filter --> Card[US card]
+  Card --> Chat[Chat slash for create/change]
+```
+
+Do not clone a marketing landing into webviews. `/design-flow`.
+
 ## Layout
 
 - **Spacing:** 4px rhythm (8, 12, 16, 20, 24px margins in webview-common).
@@ -78,6 +110,7 @@ Flat — hierarchy via background contrast (`sideBar-background` vs `editor-back
 
 - Do use `--vscode-*` variables for colors in webviews.
 - Do extract repeated webview markup into composed templates when touching UI US.
+- Do run `/design-flow` / `/design-theme` when adding a surface or mode.
 - Do run `/design-review` before closing Must UI US.
 - Don't hardcode light/dark colors — respect editor theme.
 - Don't edit shadcn `ui/*` primitives for product copy or layout.

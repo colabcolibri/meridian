@@ -37,7 +37,7 @@ CONTEXT:
 
 RULES:
 1. Read 09 + component-composition-pattern.md
-2. Check: tokens, composed vs edited primitives, responsive, a11y baseline
+2. Check: tokens, type roles, composed vs edited primitives, screen-flow row, responsive, a11y baseline
 3. Compare showcase routes (if any) to 09 § Showcase catalog
 4. Classify gaps: doc fix (/design-pass) | code fix (US) | both
 5. Never mark 09 approved — human only
@@ -55,5 +55,5 @@ Gaps (doc):
 Gaps (code):
 09 updates suggested:
 US follow-ups:
-Next: /design-pass | /design-showcase | /refine-us US-XXXX | /implement-us US-XXXX
+Next: /design-pass | /design-flow | /design-theme | /design-showcase | /refine-us US-XXXX | /implement-us US-XXXX
 ```

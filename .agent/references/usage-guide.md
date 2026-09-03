@@ -44,6 +44,7 @@ Run `/status` at any point to get blockers, current state, and suggested next ac
 | No `docs/` folder yet | [Start a new project](#start-a-new-project) |
 | Existing codebase, no `docs/` | [Migrate an existing project](#migrate-an-existing-project) |
 | `docs/` exists, phase docs incomplete | [Work through the phase documents](#work-through-the-phase-documents) |
+| UI screens look unstructured or themes clash | [Design flows and themes](#design-flows-and-themes) |
 | Architecture approved, no backlog yet | [Build the backlog](#build-the-backlog) |
 | Backlog exists, ready to implement | [Implement a user story](#implement-a-user-story) |
 | Implementation done, not recorded | [Close a user story](#close-a-user-story) |
@@ -137,6 +138,7 @@ Phase documents must be completed in order. Each one unlocks the next.
 4. Use specialized commands when available:
    - **`/architecture`** — draft or review `05_architecture.md`
    - **`/security-pass`** — draft or review `02_security.md`
+   - **`/design-pass`**, **`/design-flow`**, **`/design-theme`** — `09` contract, journeys, theme/type (UI products)
 5. When a document is ready, **you** set `status: review` in the frontmatter.
 6. After your review, **you** set `status: approved`. The agent never sets `approved`.
 
@@ -150,6 +152,19 @@ Any significant decision made while working on a document — technology choice,
 
 - Run **`/update-decisions-log`** — agent uses `prepend-decision` (run `date` first).
 - Never edit existing entries.
+
+## Design flows and themes
+
+UI products need more than a token table. The owner is always `design-system-owner` — extra skills, not a new agent.
+
+| Pain | Command | Lands in `09` |
+| ---- | ------- | ------------- |
+| Screens without a journey; missing empty/error; desktop IA on phone | `/design-flow` | § Screen flows + what changes at each breakpoint |
+| Broken dark mode, one-off hex, four body sizes | `/design-theme` | § Theme modes + type ramp (one size per role) |
+| Stack, components, showcase | `/design-pass` / `/design-showcase` | Rest of `09` |
+| Live UI vs contract | `/design-review` | Report |
+
+Run flow and theme **before** treating `09` as ready to approve. Code still goes through `/implement-us`.
 
 ---
 

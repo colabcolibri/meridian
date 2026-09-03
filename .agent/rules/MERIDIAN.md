@@ -34,6 +34,7 @@ Before any action, classify:
 | Type | Triggers | Outcome |
 | ---- | -------- | ------- |
 | **QUESTION** | "what is", "how does", "explain" | Text answer; do not change docs |
+| **ALLOCATE** | "who should", "which agent", "deus ex", `/deus-ex` | `deus-ex` + `/deus-ex` — pass only |
 | **STATUS** | "status", "where are we", "blockers" | `scrum-master` + `/status` |
 | **DOC / PHASE** | "scope", "epic", "version", "architecture", `00_`–`11_` | Documentation agent per matrix |
 | **US / BOARD** | "user story", "US-", "kanban", "board" | `story-maker`, `story-checker`, or `sprint-planner` |
@@ -49,7 +50,7 @@ Before any action, classify:
 | **SECURITY** | "security", "OWASP", "secrets", `02_security`, `/security-review`, `/dependency-audit` | `security-champion` |
 | **PRIVACY** | LGPD, GDPR, privacy pass, titular, data subject, encarregado, DPO, consent | `security-champion` + `/privacy-pass` |
 | **QUALITY** | "test strategy", `10_test`, `/test-pass`, `/test-review`, coverage | `quality-owner` |
-| **DESIGN** | `09_design`, `/design-pass`, `/design-review` | `design-system-owner` |
+| **DESIGN** | `09_design`, `/design-pass`, `/design-flow`, `/design-theme`, `/design-review` | `design-system-owner` |
 | **SEO** | SEO, sitemap, meta tags, Core Web Vitals, indexation (public web only) | `seo-strategy` skill + phase doc `12` |
 | **START PROJECT** | "start", "meridian setup", "create docs" | `scrum-master` + `init-project` |
 | **CODE** | "implement", "create app", "fix", "refactor" | `/implement-us US-XXXX` or equivalent gate; US `ready: true` required |

@@ -1,6 +1,6 @@
 # Agent station map — maker vs checker
 
-> **Live roster:** twelve actors. `story-maker` cooks `/create-us` + `/refine-us`. `story-checker` attests `/review-us` (`ready`) + `/complete-us`.
+> **Live roster:** thirteen actors. `deus-ex` dispatches (does not cook). `story-maker` cooks `/create-us` + `/refine-us`. `story-checker` attests `/review-us` (`ready`) + `/complete-us`.
 
 v11 rename history stays in [plans/agent-roster-and-workflow-v11.md](./plans/agent-roster-and-workflow-v11.md). This file is the **production-line contract** (EPIC-23). **Areas** (discovery → attest): [agent-areas.md](./agent-areas.md).
 
@@ -24,6 +24,7 @@ Who cooks the US must not set `ready` or `✅`.
 
 | Command | Live owner (now) | Target owner |
 | ------- | ---------------- | ------------ |
+| `/deus-ex` | `deus-ex` | same (dispatch only — must not execute the next station) |
 | `/init-meridian`, `/status`, `/daily-with-ai`, `/agents-help` | `scrum-master` | same |
 | `/discover`, `/create-epic` | `product-owner` | same |
 | `/create-version`, `/plan-sprint`, `/complete-sprint`, `/complete-epic` | `sprint-planner` | same |
@@ -32,26 +33,27 @@ Who cooks the US must not set `ready` or `✅`.
 | `/implement-us` | `developer` | same |
 | `/security-pass`, `/security-review`, `/privacy-pass`, `/dependency-audit` | `security-champion` | same (doc vs code are different artifacts) |
 | `/architecture` | `technical-architect` | same |
-| `/design-pass`, `/design-showcase`, `/design-review` | `design-system-owner` | same |
+| `/design-pass`, `/design-flow`, `/design-theme`, `/design-showcase`, `/design-review` | `design-system-owner` | same |
 | `/test-pass`, `/test-review` | `quality-owner` | same |
 | `/investigate` | `code-investigator` | same (consult only) |
 
 Skills may be **shared as tools** (`update-decisions-log`). A skill listed on an agent that is **not** the slash owner is a protocol bug (US-0188).
 
-## Target twelve-actor roster
+## Target thirteen-actor roster
 
-1. `scrum-master` — dispatch only  
-2. `product-owner` — discovery, scope, epic  
-3. `technical-writer`  
-4. `security-champion`  
-5. `technical-architect`  
-6. `design-system-owner`  
-7. `quality-owner`  
-8. `sprint-planner`  
-9. `story-maker` — create + refine US  
-10. `story-checker` — review (`ready`) + complete (`✅`)  
-11. `developer`  
-12. `code-investigator` — consult  
+1. `deus-ex` — allocate station (pass only; not `/status`)  
+2. `scrum-master` — ceremonies, `/status`, init  
+3. `product-owner` — discovery, scope, epic  
+4. `technical-writer`  
+5. `security-champion`  
+6. `technical-architect`  
+7. `design-system-owner`  
+8. `quality-owner`  
+9. `sprint-planner`  
+10. `story-maker` — create + refine US  
+11. `story-checker` — review (`ready`) + complete (`✅`)  
+12. `developer`  
+13. `code-investigator` — consult  
 
 ## Allowed interactions
 

@@ -40,8 +40,9 @@ RULES:
 2. Run mode procedure (full | bootstrap | us-align)
 3. Walk design-system-checklist.md
 4. Recommend /refine-us if Must UI US Plan missing 09 refs
-5. Recommend /design-showcase when Components or Showcase sections empty
-6. prepend-decision on material stack or token changes
+5. Recommend /design-flow when § Screen flows is empty; /design-theme when Colors/Typography are placeholders
+6. Recommend /design-showcase when Components or Showcase sections empty
+7. prepend-decision on material stack or token changes
 ```
 
 ---
@@ -56,5 +57,5 @@ Composed path:
 09_design_system status:
 Sections updated:
 US follow-ups:
-Next: human review → approved | /design-showcase | /refine-us US-XXXX | /design-review
+Next: human review → approved | /design-flow | /design-theme | /design-showcase | /refine-us US-XXXX | /design-review
 ```

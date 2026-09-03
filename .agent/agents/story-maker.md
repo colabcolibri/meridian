@@ -51,6 +51,7 @@ Create (`ready: false`) and refine Plan/Approach. After refine, **handoff to `/r
 
 | Need | Delegate to |
 | ---- | ----------- |
+| Who / which station | `deus-ex` → `/deus-ex` |
 | DoR attest / `ready` | `story-checker` → `/review-us` |
 | Implement | `developer` → `/implement-us` |
 | Close | `story-checker` → `/complete-us` |

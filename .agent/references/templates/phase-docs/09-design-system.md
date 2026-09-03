@@ -9,25 +9,27 @@
 
 ## What this document is for
 
-`09_design_system` is the **visual and UX contract**: tokens, typography, components, responsive rules, accessibility baseline, showcase catalog. UI Must US cite this in Plan after `approved`. Product code uses composed templates — not edited vendor primitives.
+`09_design_system` is the **visual and UX contract**: screen flows, theme modes, type ramp, tokens, components, responsive rules, accessibility baseline, showcase catalog. UI Must US cite this in Plan after `approved`. Product code uses composed templates — not edited vendor primitives.
 
 ## When to write and revisit
 
 | Moment | Action |
 | ------ | ------ |
 | Init (UI products) | Stub after `01` indicates UI stack |
-| Stack/theme change | `review`; update tokens + paths |
-| New UI epic | Extend component inventory + showcase rows |
+| Stack/theme change | `review`; update tokens + paths — `/design-theme` |
+| New UI epic | Extend screen flows + component inventory + showcase rows — `/design-flow` |
 | Before closing UI US | `/design-review` against this doc |
 
 ## How to complete each section
 
-Follow stub order. Pick **stack id** from `ui-stack-catalog.md` in Overview. Document **primitive path** (read-only) and **composed path** (`App*` templates). Fill token tables with semantic names + theme keys, not only hex. Breakpoints must include no horizontal overflow rule. Showcase catalog lists routes or planned US for catalog.
+Follow stub order. Pick **stack id** from `ui-stack-catalog.md` in Overview. Document **primitive path** (read-only) and **composed path** (`App*` templates). Fill token tables with semantic names + theme keys, not only hex. Fill **Theme modes** and a type **ramp** (one size per role). Fill **Screen flows** (jobs, states, mermaid). Breakpoints must include what changes at each width and no horizontal overflow. Showcase catalog lists routes or planned US for catalog.
 
 ## Depth checklist
 
 - [ ] Stack id recorded
 - [ ] Primitive vs composed paths explicit
+- [ ] Screen flows filled (`/design-flow`)
+- [ ] Theme modes + type ramp filled (`/design-theme`)
 - [ ] Component inventory lists composed templates
 - [ ] a11y baseline filled
 - [ ] `design-system-checklist.md` satisfied before `approved`
@@ -52,7 +54,7 @@ Phase docs are **living contracts**. Re-open this file when:
 
 ## Related
 
-- `design-system` skill checklists, `/design-pass`, `/design-review`
+- `design-system`, `design-flow`, `design-theme` skills; `/design-pass`, `/design-flow`, `/design-theme`, `/design-review`
 ---
 
 ## Document stub
@@ -91,13 +93,26 @@ _Semantic tokens — document theme file path, not only hex._
 | destructive | Danger actions | |
 | border | Dividers | |
 
+## Theme modes
+
+| Mode | When it applies | Token set / file |
+| ---- | --------------- | ---------------- |
+| _(host / light / dark / system)_ | | |
+
+_Same semantic roles in every mode. `/design-theme`._
+
 ## Typography
 
-| Level | Use | Stack key |
-| ----- | --- | --------- |
-| display / h1 | Page titles | |
-| body | Default copy | |
-| label | Metadata, captions | |
+| Role | Use | Size / weight / line-height | Stack key |
+| ---- | --- | --------------------------- | --------- |
+| h1 | Screen title (one per view) | | |
+| h2 | Section | | |
+| body | Default copy | | |
+| label | Fields, chips | | |
+| caption | Meta, ids | | |
+| code | Mono | | |
+
+_One size per role. Do not skip heading levels. `/design-theme`._
 
 ## Layout
 
@@ -141,7 +156,21 @@ _(shadows or tonal layers — stack-specific)_
 | tablet | | |
 | desktop | | |
 
-Content areas must not cause horizontal overflow (`overflow-x`).
+Content areas must not cause horizontal overflow (`overflow-x`). At each breakpoint, document **what changes** (stack, sheet, hide nav) — `/design-flow` + `surface-patterns.md`.
+
+## Screen flows
+
+_Jobs → screens → states. `/design-flow`. Skip for CLI-only._
+
+| Flow | Surfaces | Entry | Empty | Error | Exit |
+| ---- | -------- | ----- | ----- | ----- | ---- |
+| | | | | | |
+
+```mermaid
+flowchart LR
+  A[Entry] --> B[Primary screen]
+  B --> C[Success]
+```
 
 ## Accessibility baseline
 

@@ -21,6 +21,7 @@ Use with `/implement-us US-XXXX` **before** any Write on product code for that s
 | 9 | Session scope | One US id cited; manager did not bundle unrelated features |
 | 10 | `04_principles.md` | Read DRY + SRP sections this session |
 | 11 | Code quality | Implementation reuses existing modules per Approach; no copy-paste duplication; layer boundaries respected |
+| 12 | UI vs `09` | If Acceptance is visual: `09` exists; do not invent tokens or a new type size; follow documented flow row |
 
 ---
 

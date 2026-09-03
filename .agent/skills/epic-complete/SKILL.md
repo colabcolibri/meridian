@@ -13,6 +13,7 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 | File | When to read |
 | ------- | ---------- |
 | `../epic-create/references/epic-template.md` | Close rules + status |
+| `references/epic-close-checklist.md` | **Mandatory** — Must US + outcome bar |
 | Target epic | `meridian_db_export.py . --entity epics --id EPIC-XX` |
 | Hygiene | `meridian_delivery.py lifecycle-hygiene` / `lifecycle-eligible` |
 | `../update-decisions-log/SKILL.md` | Follow-up decisions |
@@ -39,8 +40,8 @@ EOF
 
 ## Procedure
 
-1. Export epic; list Must US via `list user_stories` / SQL — any status not in ✅/🚫/🧊 blocks close.
-2. Confirm outcome narrative still true (Expected outcome / frontmatter `outcome`).
+1. Export epic; list Must US — any status not in ✅/🚫/🧊 **blocks** (`update-epic` raises). Zero US also blocks.
+2. Confirm outcome narrative still true; frontmatter `outcome` must be a real sentence.
 3. Remind manager: large follow-ups → **new epic**, do not reopen `complete`.
 4. Set frontmatter `status: complete`; `update-epic` with **full** exported markdown + status edit (do not rebuild epic from template memory).
 5. `prepend-decision` if warranted.

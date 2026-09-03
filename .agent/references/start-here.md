@@ -44,11 +44,11 @@ Documents produced:
 - `06_database.md` — data model and migrations
 - `07_api_contracts.md` — API definitions
 - `08_environments.md` — dev, staging, production
-- `09_design_system.md` — **UI products only** — visual contract (tokens, components, showcase index)
+- `09_design_system.md` — **UI products only** — visual and UX contract (flows, theme, type, tokens, components, showcase index)
 
 **Gate:** `05_architecture.md` approved → unlocks Phase 3.
 
-**Design operator (UI products):** after `01_tech_stack` is drafted → `/design-pass bootstrap` → human approves `09` → `/design-showcase` → refine UI US → `/design-review` before close.
+**Design operator (UI products):** after `01_tech_stack` is drafted → `/design-pass bootstrap` → `/design-flow` → `/design-theme` → human approves `09` → `/design-showcase` → refine UI US → `/design-review` before close.
 
 **Security operator:** `/security-pass` deepens `02` → after `/implement-us` run `/security-review` (and `/dependency-audit` when deps change) before close on sensitive US.
 
@@ -83,6 +83,8 @@ The AI implements each user story, guided by the files from Phase 3. You review 
 **No code without `ready: true`** (only `/review-us` attests that). No `✅` without evidence in the Record.
 
 Cycles (discovery → standards → planning → build → attest) are named in [agent-areas.md](./agent-areas.md). They are not extra agents.
+
+If you do not know **which agent** should run, `/deus-ex` (dispatch only). Health numbers stay `/status`.
 
 ---
 

@@ -14,9 +14,11 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 
 | Workflow | Purpose |
 | -------- | ------- |
-| `/design-pass` | Create/update `09` — full, `bootstrap`, or `US-XXXX` |
+| `/design-pass` | Create/update `09` — stack, components, showcase index |
 | `/design-showcase` | Plan catalog routes + showcase US (no code) |
 | `/design-review` | Audit live UI vs `09` + showcase (no code) |
+
+Siblings: `design-flow` (`/design-flow`), `design-theme` (`/design-theme`).
 
 ## Selective reading
 
@@ -34,7 +36,7 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 
 ## When to trigger
 
-- `/design-pass`, `/design-showcase`, `/design-review`
+- `/design-pass`, `/design-showcase`, `/design-review` (flow/theme: those skills)
 - Create or deepen `09_design_system.md`
 - Before `/refine-us` on Must US with visual Acceptance
 - Stack change in `01_tech_stack.md`

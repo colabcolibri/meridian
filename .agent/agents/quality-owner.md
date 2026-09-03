@@ -58,6 +58,7 @@ You are the **quality enabler** in Meridian: test strategy documentation and pre
 
 | Need | Delegate to |
 | ---- | ----------- |
+| Who / which station | `deus-ex` → `/deus-ex` |
 | US not ready | `story-maker` → `/refine-us` then `story-checker` `/review-us` |
 | Security gap | `security-champion` → `/security-review` |
 | Implement tests | `developer` → `/implement-us` |

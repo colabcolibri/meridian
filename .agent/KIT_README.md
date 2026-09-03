@@ -59,7 +59,7 @@ Do **not** commit `.cursor/`, `.claude/`, `.agents/skills/`, `.codex/`, `.openco
 
 1. Open your project in your IDE.
 2. Run **`/init-meridian`** if `docs/` does not exist yet.
-3. Read **`.agent/references/agents-help.md`** or run **`/agents-help`**.
+3. Read **`.agent/references/agents-help.md`** or run **`/agents-help`**. Lost on who should run? **`/deus-ex`**.
 
 ## Update the kit
 

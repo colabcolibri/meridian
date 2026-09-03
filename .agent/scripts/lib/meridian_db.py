@@ -188,6 +188,14 @@ def upsert_epic(
     body: str,
     sections: dict[str, str | None],
 ) -> None:
+    epic_id = frontmatter.get("id") or ""
+    new_status = frontmatter.get("status", "active")
+    if new_status == "complete" and epic_id:
+        from meridian_container_integrity import epic_complete_blockers
+
+        blockers = epic_complete_blockers(conn, epic_id, frontmatter.get("outcome"))
+        if blockers:
+            raise ValueError("; ".join(blockers))
     conn.execute(
         """
         INSERT INTO epics (
@@ -543,6 +551,14 @@ def upsert_sprint(
             )
     # reopen is a write-path flag only — never persist as a column
     frontmatter = {k: v for k, v in frontmatter.items() if k != "reopen"}
+
+    if new_status == "complete" and sprint_id:
+        from meridian_container_integrity import sprint_complete_blockers
+
+        retro = sections.get("retrospective")
+        blockers = sprint_complete_blockers(conn, sprint_id, retro, stories)
+        if blockers:
+            raise ValueError("; ".join(blockers))
 
     conn.execute(
         """

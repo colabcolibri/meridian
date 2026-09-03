@@ -1,6 +1,6 @@
 ---
 name: meridian-routing
-description: Automatic Meridian agent selection and task routing. Analyzes requests and picks scrum-master, product-owner, technical-writer, security-champion, technical-architect, design-system-owner, quality-owner, sprint-planner, story-maker, story-checker, developer, code-investigator.
+description: Automatic Meridian agent selection and task routing. Analyzes requests and picks deus-ex (dispatch), scrum-master, product-owner, technical-writer, security-champion, technical-architect, design-system-owner, quality-owner, sprint-planner, story-maker, story-checker, developer, code-investigator.
 allowed-tools: Read, Glob, Grep
 version: 1.1.0
 ---
@@ -13,12 +13,13 @@ version: 1.1.0
 
 Before responding, classify the request and select the correct Meridian agent. State which expertise is active.
 
-**Station contract:** [agent-station-map.md](../../references/agent-station-map.md) — cook vs attest, pass/bounce/consult. Live roster includes `story-maker` and `story-checker`.
+**Station contract:** [agent-station-map.md](../../references/agent-station-map.md) — cook vs attest, pass/bounce/consult. `deus-ex` allocates; `story-maker` / `story-checker` cook vs attest US.
 
 ## Selection matrix
 
 | Intent | Keywords | Agent(s) | Auto? |
 | -------- | -------------- | -------- | ----- |
+| Allocate station | "who should", "which agent", "which station", "orquestr", "orchestrat", "deus ex", `/deus-ex`, `@deus-ex` | `deus-ex` | yes |
 | Start / structure | "start", "setup", "create docs", "init meridian" | `scrum-master` | yes |
 | Status / governance | "status", "phase", "blocker", "can advance" | `scrum-master` | yes |
 | Daily AI workflow | "how to use AI", "day to day", "cursor routine", `/daily-with-ai` | `scrum-master` | yes |
@@ -34,6 +35,8 @@ Before responding, classify the request and select the correct Meridian agent. S
 | Deploy / CI doc | deploy, rollback, CI pipeline, production release | `technical-writer` + `08_environments` | yes |
 | Architecture | "architecture", `05_architecture`, `/architecture`, diagram, system map, ER map, architecture diagrams | `technical-architect` + `generate-architecture-diagram` | yes |
 | Design system | `09_design`, `/design-pass`, `/design-showcase`, `/design-review`, tokens, UI | `design-system-owner` + `design-system` | yes |
+| Screen flow / IA | screen flow, jornada, telas, navigation map, empty state, `/design-flow`, responsive app/web | `design-system-owner` + `design-flow` | yes |
+| Theme / type | theme, dark mode, tokens, font hierarchy, tipografia, `/design-theme` | `design-system-owner` + `design-theme` | yes |
 | Test strategy | `10_test`, `/test-pass`, pyramid, coverage, runners, `qualitySiege` | `quality-owner` + `test-strategy` | yes |
 | Test audit | `/test-review`, tests evidence, before complete-us | `quality-owner` + `test-review` | yes |
 | Version / sprint | "version", "sprint", `/create-version`, `/plan-sprint` | `sprint-planner` | yes |

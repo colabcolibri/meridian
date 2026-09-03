@@ -11,7 +11,8 @@ $ARGUMENTS
 ## Critical rules
 
 1. Use `sprint-planner` + `@[skills/epic-complete]`
-2. **Hard block:** any Must US with status not in ✅ / 🚫 / 🧊
+2. **Hard block:** any Must US with status not in ✅ / 🚫 / 🧊 — also enforced on `update-epic`
+2b. **Hard block:** empty epic or thin `outcome`
 3. Prefer **new epic** for large follow-ups — do not reopen `complete`
 4. Persist only via `update-epic` stdin heredoc
 5. Happy path after last US: invited from `/complete-us` cascade (US-0168) — this slash is also for recovery/late close

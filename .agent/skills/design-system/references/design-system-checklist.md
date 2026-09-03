@@ -12,8 +12,9 @@ Use when creating or reviewing `docs/09_design_system.md`.
 
 ## Tokens
 
-- [ ] Color palette (semantic names, not only hex)
-- [ ] Typography scale
+- [ ] Color palette (semantic names, not only hex) — deepen with `/design-theme`
+- [ ] Typography scale (one size per role) — deepen with `/design-theme`
+- [ ] Theme modes named (light / dark / system / host) when the product has more than one
 - [ ] Spacing scale
 - [ ] Border radius / elevation if used
 
@@ -37,6 +38,8 @@ Use when creating or reviewing `docs/09_design_system.md`.
 - [ ] Breakpoints: mobile, tablet, desktop
 - [ ] Container max-widths
 - [ ] No horizontal overflow rule for content areas
+- [ ] Screen flows table + mermaid for primary jobs — `/design-flow` if empty
+- [ ] Responsive rules say **what changes** (stack, sheet, hide), not only widths
 
 ## Accessibility
 

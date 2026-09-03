@@ -12,8 +12,8 @@ $ARGUMENTS
 
 1. Use `sprint-planner` + `@[skills/sprint-complete]`
 2. Export sprint: `meridian_db_export.py . --entity sprints --id vX-SY`
-3. **Gate:** manager confirms increment vs sprint `goal`
-4. Fill `## Retrospective`; `update-sprint` (stdin heredoc)
+3. **Gate:** manager confirms increment vs sprint `goal` (review). Then fill Retrospective per `retrospective-checklist.md`.
+4. Fill `## Retrospective`; `update-sprint` (stdin heredoc). CLI rejects placeholder retro and non-terminal linked US.
 5. `prepend-decision` if retrospective lists cross-cutting decisions
 
 ---

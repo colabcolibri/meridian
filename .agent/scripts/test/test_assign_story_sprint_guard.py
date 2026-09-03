@@ -133,16 +133,40 @@ def main() -> int:
                     "id": "v1-S1",
                     "version": "v1",
                     "title": "S1",
-                    "status": "complete",
+                    "status": "planned",
                     "goal": "g",
                     "done_when": "d",
                 },
                 "# v1-S1\n",
-                {"goal": "g", "out_of_scope": "n/a", "retrospective": "done"},
+                {"goal": "g", "out_of_scope": "n/a", "retrospective": None},
                 [],
             )
             fm, body, full = read_markdown_text(US_BODY)
             upsert_user_story(conn, fm, full, extract_us_sections(body), [])
+            # Terminal US required to complete the sprint (container integrity).
+            conn.execute("UPDATE user_stories SET status = '✅' WHERE id = 'US-0001'")
+            good_retro = (
+                "### What worked\n"
+                "- Assign-guard kept new US off a closed sprint.\n\n"
+                "### What to improve\n"
+                "- Do not complete sprints with placeholder retrospectives.\n\n"
+                "### Decisions to log\n"
+                "- _n/a_\n"
+            )
+            upsert_sprint(
+                conn,
+                {
+                    "id": "v1-S1",
+                    "version": "v1",
+                    "title": "S1",
+                    "status": "complete",
+                    "goal": "g",
+                    "done_when": "d",
+                },
+                "# v1-S1\n\n## Retrospective\n\n" + good_retro,
+                {"goal": "g", "out_of_scope": "n/a", "retrospective": good_retro},
+                ["US-0001"],
+            )
             conn.commit()
 
             try:

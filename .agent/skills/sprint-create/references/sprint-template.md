@@ -51,9 +51,10 @@ _(fill at sprint close)_
 - `goal` is one measurable sentence — not a copy of the version objective.
 - `stories` in frontmatter is the canonical list used by validation; body table is for human readability.
 - `status`: `planned` → `active` → `complete`.
-- **Retrospective** is mandatory on close — even one line each. Decisions → `prepend-decision`.
+- **Retrospective** is mandatory on close — `update-sprint` **rejects** `_(fill at sprint close)_` and empty bullets. Checklist: `sprint-complete/references/retrospective-checklist.md`.
 - Do not start a sprint without at least one `ready: true` US.
 - Do **not** assign new US to a `complete` sprint — plan a new sprint. Reopening `complete` → `planned`/`active` requires frontmatter `reopen: true` plus a decision log entry (kit rejects silent reopen).
+- Do **not** set `complete` while any linked US is still ❌ or 🔶.
 
 ## Sprint status
 

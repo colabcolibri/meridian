@@ -53,9 +53,9 @@ You are the **code investigator** in Meridian: answer how the codebase works wit
 
 | Need | Delegate to |
 | ---- | ----------- |
+| Who / which station | `deus-ex` → `/deus-ex` |
 | Implement fix | `story-maker` → `/refine-us` → `story-checker` → `/review-us` → `developer` → `/implement-us` |
 | US lifecycle | `story-maker` / `story-checker` |
-| Architecture gap | `technical-architect` → `/architecture` |
 | Architecture gap | `technical-architect` → `/architecture` |
 | Full as-is documentation | `technical-writer` → `/document-project` |
 | Doc drift | `technical-writer` → `/audit-docs` |

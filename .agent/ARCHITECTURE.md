@@ -72,11 +72,12 @@ Workflows orchestrate agents; they do not replace the master protocol.
 
 | Agent | Purpose | Skills |
 | ----- | ------- | ------ |
+| `deus-ex` | Allocate next station (pass only) | deus-dispatch, meridian-routing |
 | `product-owner` | `00_scope`, discovery, epics | discover-product, epic-create, update-decisions-log, meridian-routing |
 | `technical-writer` | Phase docs `01`–`08`, `11` | init-project, update-decisions-log, meridian-routing |
 | `security-champion` | `02_security`, security operator | security-doc, security-privacy, security-code, security-supply-chain, update-decisions-log, meridian-routing |
 | `technical-architect` | `05_architecture.md` | generate-architecture-diagram, update-decisions-log, meridian-routing |
-| `design-system-owner` | `09_design_system.md` | design-system, update-decisions-log, meridian-routing |
+| `design-system-owner` | `09_design_system.md` | design-system, design-flow, design-theme, update-decisions-log, meridian-routing |
 | `quality-owner` | `10_test_strategy.md`, test operator | test-strategy, test-review, update-decisions-log, meridian-routing |
 | `sprint-planner` | SQLite `versions`, `sprints`, epic close | version-create, sprint-create, sprint-complete, epic-complete, meridian-routing |
 | `story-maker` | US create + refine (no `ready`) | us-create, us-refine, update-decisions-log, meridian-routing |
@@ -97,8 +98,8 @@ Each agent includes: phases 0/-1, mission, prohibitions, output format, delegati
 | `epic-create` | `epic-template.md`, `writing-guide.md` |
 | `version-create` | `version-template.md`, `writing-guide.md` |
 | `sprint-create` | `sprint-template.md` |
-| `sprint-complete` | `sprint-template.md` |
-| `epic-complete` | `epic-template.md` |
+| `sprint-complete` | `sprint-template.md`, retrospective-checklist.md |
+| `epic-complete` | `epic-template.md`, epic-close-checklist.md |
 | `us-create` | `us-template.md`, `writing-guide.md` |
 | `us-review` | `review-checklist.md`, `writing-guide.md` |
 | `us-refine` | `refine-checklist.md`, `writing-guide.md` |
@@ -112,6 +113,9 @@ Each agent includes: phases 0/-1, mission, prohibitions, output format, delegati
 | `test-strategy` | test-strategy checklist, test stacks |
 | `test-review` | test-review checklist |
 | `design-system` | design-system checklists, UI stacks |
+| `design-flow` | screen-flow checklist, surface patterns (web/app/extension) |
+| `design-theme` | theme modes, type hierarchy |
+| `deus-dispatch` | project-context, dispatch-checklist, handoff-envelope |
 | `meridian-routing` | — (inline matrix) |
 | `investigate-codebase` | investigation checklist, report template |
 | `create-meridian-artifact` | registry-checklist, skill/agent/workflow templates |
@@ -126,6 +130,7 @@ See `.agent/skills/doc.md` to create new skills — full procedure: `create-meri
 
 | Workflow | Agent | Mode |
 | -------- | ----- | ---- |
+| `deus-ex` | deus-ex | dispatch next station — do not execute it |
 | `init-meridian` | scrum-master | init, no code |
 | `status` | scrum-master | read-only |
 | `plan-sprint` | sprint-planner | planning |
@@ -144,6 +149,8 @@ See `.agent/skills/doc.md` to create new skills — full procedure: `create-meri
 | `security-review` | security-champion | code vs 02 — report only |
 | `dependency-audit` | security-champion | supply chain — report only |
 | `design-pass` | design-system-owner | doc 09 |
+| `design-flow` | design-system-owner | screen flows / IA — doc 09 |
+| `design-theme` | design-system-owner | theme + type ramp — doc 09 |
 | `design-showcase` | design-system-owner | showcase plan |
 | `design-review` | design-system-owner | UI audit — report only |
 | `test-pass` | quality-owner | doc 10 |

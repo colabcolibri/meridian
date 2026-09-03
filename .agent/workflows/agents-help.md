@@ -11,7 +11,7 @@ $ARGUMENTS
 ## Critical rules
 
 1. Read `.agent/references/agents-help.md` fully
-2. Use `scrum-master` for orchestration context
+2. Use `deus-ex` for “who / which station”; `scrum-master` for health and init
 3. Summarize v11 roster: 9 core agents + `quality-owner` enabler
 
 ---
@@ -26,5 +26,6 @@ Design operator: /design-pass, /design-showcase, /design-review → design-syste
 Backlog: /create-us /refine-us → story-maker; /review-us /complete-us → story-checker
 Implement: /implement-us → developer
 Governance: /status, /init-meridian → scrum-master
+Dispatch: /deus-ex → deus-ex
 Full guide: .agent/references/agents-help.md
 ```

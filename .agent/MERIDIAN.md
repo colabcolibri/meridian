@@ -231,12 +231,13 @@ python3 .agent/scripts/validate_meridian.py <project-folder> --json
 
 | Need | Agent | Entry |
 | ---- | ----- | ----- |
+| Allocate station | `deus-ex` | `/deus-ex` |
 | Status / gates | `scrum-master` | `/status` |
 | Scope | `product-owner` | `/init-meridian` |
 | Phase docs | `technical-writer` | — |
 | Security | `security-champion` | `/security-pass`, `/security-review`, `/dependency-audit` |
 | Architecture | `technical-architect` | `/architecture` |
-| Design system | `design-system-owner` | `/design-pass`, `/design-showcase`, `/design-review` |
+| Design system | `design-system-owner` | `/design-pass`, `/design-flow`, `/design-theme`, `/design-showcase`, `/design-review` |
 | Quality / tests | `quality-owner` | `/test-pass`, `/test-review` — profile via `quality-profile` CLI; see `agentic-quality-model.md` |
 | Versions / sprints | `sprint-planner` | `/create-version`, `/plan-sprint`, `/complete-sprint` |
 | US cook | `story-maker` | `/create-us`, `/refine-us` |

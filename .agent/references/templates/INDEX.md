@@ -13,11 +13,15 @@ Templates are mirrored here from skills (`references/`) so every agent uses the 
 | Artifact | Template (read before Write) | Primary agent | Skill | Workflow |
 | -------- | ---------------------------- | ------------- | ----- | -------- |
 | Phase docs `00`–`11` | `doc-templates.md` | `technical-writer` | `init-project` | `/init-meridian` |
+| Design (`09` flows) | `phase-docs/09-design-system.md` + skill `design-flow/references/screen-flow-checklist.md` | `design-system-owner` | `design-flow` | `/design-flow` |
+| Design (`09` theme) | `phase-docs/09-design-system.md` + skill `design-theme/references/` | `design-system-owner` | `design-theme` | `/design-theme` |
 | As-is inventory `docs/inventory/as-is.md` | `as-is-inventory-template.md` | `technical-writer` | `init-project` (Mode B) | `/init-meridian` |
 | Projects manifest `.meridian/projects.json` | `projects-manifest-template.md` | `scrum-master` | `init-project` | `/init-meridian`, `/status` |
 | Epic (SQLite) | `epic-template.md` + **`writing-guide.md`** | `product-owner` | `epic-create` | `/create-epic` |
 | Version (SQLite) | `version-template.md` + **`writing-guide.md`** | `sprint-planner` | `version-create` | `/create-version` |
 | Sprint (SQLite) | `sprint-template.md` | `sprint-planner` | `sprint-create` | `/plan-sprint` |
+| Sprint (close) | `sprint-template.md` + **`retrospective-checklist.md`** | `sprint-planner` | `sprint-complete` | `/complete-sprint` |
+| Epic (close) | `epic-template.md` + **`epic-close-checklist.md`** | `sprint-planner` | `epic-complete` | `/complete-epic` |
 | User story (create) | `us-template.md` + **`writing-guide.md`** + **`code-quality-at-us-time.md`** | `story-maker` | `us-create` | `/create-us` |
 | User story (review) | `review-checklist.md` + `us-template.md` + **`writing-guide.md`** + `section-contracts.md` | `story-checker` | `us-review` | `/review-us` |
 | User story (refine) | `us-template.md` + `refine-checklist.md` + **`writing-guide.md`** + **`code-quality-at-us-time.md`** | `story-maker` | `us-refine` | `/refine-us` |

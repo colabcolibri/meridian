@@ -56,6 +56,7 @@ Before product code:
 
 | Need | Delegate to |
 | ---- | ----------- |
+| Who / which station | `deus-ex` → `/deus-ex` |
 | US not ready / weak Plan | `story-maker` → `/refine-us` then `story-checker` → `/review-us` |
 | Blocked deps or architecture | `scrum-master` → `/status` |
 | Security gap in design | `security-champion` |

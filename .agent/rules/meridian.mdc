@@ -42,6 +42,7 @@ Priority: **P0 rules > P1 agent + MERIDIAN.md > P2 skills**.
 | ------- | ---- |
 | `/init-meridian` | `.cursor/commands/init-meridian.md` |
 | `/status` | `.cursor/commands/status.md` |
+| `/deus-ex` | `.cursor/commands/deus-ex.md` |
 | `/plan-sprint` | `.cursor/commands/plan-sprint.md` |
 | `/create-version` | `.cursor/commands/create-version.md` |
 | `/create-epic` | `.cursor/commands/create-epic.md` |
@@ -61,6 +62,8 @@ Priority: **P0 rules > P1 agent + MERIDIAN.md > P2 skills**.
 | `/test-pass` | `.cursor/commands/test-pass.md` |
 | `/test-review` | `.cursor/commands/test-review.md` |
 | `/design-pass` | `.cursor/commands/design-pass.md` |
+| `/design-flow` | `.cursor/commands/design-flow.md` |
+| `/design-theme` | `.cursor/commands/design-theme.md` |
 | `/design-showcase` | `.cursor/commands/design-showcase.md` |
 | `/design-review` | `.cursor/commands/design-review.md` |
 | `/update-decisions-log` | `.cursor/commands/update-decisions-log.md` |

@@ -64,7 +64,7 @@ python3 .agent/scripts/meridian_delivery.py bootstrap
 ```
 
 4. **Phase docs:** for each template in `references/doc-templates.md`, read the **agent guide** in `phase-docs/{doc}.md` (sections *What / When / How / Depth checklist*), copy **§ Document stub** to the product path, and fill using *How to complete each section* — not blank headings. Do not copy the agent guide into `docs/`.
-5. **UI products:** if stack has UI surfaces, also copy § Document stub from `phase-docs/09-design-system.md` → `docs/09_design_system.md`. Skip for CLI-only backends.
+5. **UI products:** if stack has UI surfaces, also copy § Document stub from `phase-docs/09-design-system.md` → `docs/09_design_system.md`. Skip for CLI-only backends. Follow with `/design-flow` and `/design-theme` before treating `09` as complete.
 6. **Tested products:** if scope includes automated tests, copy § Document stub from `phase-docs/10-test-strategy.md` → `docs/10_test_strategy.md`. Skip for throwaway prototypes.
 7. `11_decisions.md` stub + initial decision via `prepend-decision` ("Project started with Meridian").
 8. Validate `.gitignore` with `references/gitignore-baseline.md`.

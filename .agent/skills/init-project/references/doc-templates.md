@@ -68,7 +68,7 @@ Use `/audit-docs` for a full pass across all phase docs.
 | --- | ------- |
 | `02_security` | `/security-pass bootstrap` → `full`; `/privacy-pass bootstrap` → `full` when PII |
 | `05_architecture` | `/architecture` |
-| `09_design_system` | `/design-pass bootstrap` |
+| `09_design_system` | `/design-pass bootstrap` then `/design-flow` and `/design-theme` |
 | `10_test_strategy` | `/test-pass bootstrap` |
 | `12_marketing_seo` | `/seo-pass bootstrap` → `full` (public web only) |
 

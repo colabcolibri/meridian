@@ -49,6 +49,7 @@ AGENT_KIT_PATHS = [
 ]
 
 REQUIRED_AGENTS = [
+    "deus-ex.md",
     "product-owner.md",
     "technical-writer.md",
     "security-champion.md",
@@ -314,6 +315,28 @@ def validate_sqlite_us_close_quality(root: Path, warnings: list[str]) -> None:
         validate_closed_us_row(row, row_errors)
         for msg in row_errors:
             warnings.append(f"close-quality: {msg}")
+
+
+def validate_sqlite_container_integrity(root: Path, warnings: list[str]) -> None:
+    """Warn when complete sprints/epics fail the close bar (legacy rows stay WARN)."""
+    db_path = root / ".meridian" / "meridian.db"
+    if not db_path.is_file():
+        return
+    lib = _SCRIPT_DIR / "lib"
+    if str(lib) not in sys.path:
+        sys.path.insert(0, str(lib))
+    try:
+        from meridian_container_integrity import collect_closed_container_warnings
+        from meridian_db import connect
+    except ImportError:
+        warnings.append("Container integrity skipped — import failed.")
+        return
+    conn = connect(root)
+    try:
+        for msg in collect_closed_container_warnings(conn):
+            warnings.append(msg)
+    finally:
+        conn.close()
 
 
 def validate_sqlite_security_refs(
@@ -1003,6 +1026,7 @@ def main() -> int:
         validate_sqlite_test_strategy_refs(root, docs, warnings)
         validate_quality_siege_profile(root, docs, warnings)
         validate_sqlite_us_close_quality(root, warnings)
+        validate_sqlite_container_integrity(root, warnings)
         validate_lifecycle_hygiene(root, warnings)
 
     if board_path.exists():

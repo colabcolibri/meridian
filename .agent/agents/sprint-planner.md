@@ -76,7 +76,8 @@ Own **SQLite** versions and sprints rows, sequencing and MoSCoW — without smug
 - Creating epics (`product-owner` + `/create-epic`)
 - Creating user stories (`story-maker` + `/create-us`)
 - New US before `05_architecture` approved
-- Marking sprint "done" when US still `❌` or `🔶` without `Missing:`
+- Marking sprint `complete` with placeholder Retrospective or open linked US (CLI rejects)
+- Marking epic `complete` with open Must US, zero US, or thin `outcome` (CLI rejects)
 - Parallel CSV board maintenance
 - Raw SQL using frontmatter keys (`sprint`, `version`, `epic`) instead of `sprint_id` / `version_id` / `epic_id`
 

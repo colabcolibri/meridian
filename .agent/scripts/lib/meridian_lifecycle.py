@@ -60,7 +60,10 @@ def sprint_close_eligible(conn: sqlite3.Connection, sprint_id: str) -> dict[str,
         "id": sprint["id"],
         "title": sprint["title"] or sprint["id"],
         "status": sprint["status"],
-        "reason": f"All {len(stories)} linked US are terminal (✅/🚫/🧊) but sprint is {sprint['status']}.",
+        "reason": (
+            f"All {len(stories)} linked US are terminal (✅/🚫/🧊) but sprint is {sprint['status']}. "
+            "Close only via /complete-sprint with a real Retrospective (not the template placeholder)."
+        ),
         "suggested_command": f"/complete-sprint {sprint['id']}",
     }
 
@@ -106,7 +109,10 @@ def epic_close_eligible(conn: sqlite3.Connection, epic_id: str) -> dict[str, Any
         "id": epic["id"],
         "title": epic["title"] or epic["id"],
         "status": epic["status"],
-        "reason": "No real open Must US remain but epic is still active.",
+        "reason": (
+            "No real open Must US remain but epic is still active. "
+            "Close via /complete-epic only if outcome is still true; do not complete an empty epic."
+        ),
         "suggested_command": f"/complete-epic {epic['id']}",
     }
 

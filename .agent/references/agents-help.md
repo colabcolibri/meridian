@@ -35,7 +35,7 @@ docs/                       →  source of truth
 | **Agent** | Domain persona with gates and output format | Automatic routing or `@agent-name` |
 | **Skill** | Repeatable procedure (templates, scripts) | Used by agent — rarely typed by human |
 
-**Routing:** describe the task in chat → agent announces `Applying knowledge from @[agent]…`. Override with `@story-maker`, `@story-checker`, `@scrum-master`, etc.
+**Routing:** describe the task in chat → agent announces `Applying knowledge from @[agent]…`. Override with `@deus-ex`, `@story-maker`, `@story-checker`, `@scrum-master`, etc.
 
 **Priority:** P0 rules → MERIDIAN.md → agent → skill → templates.
 
@@ -43,19 +43,21 @@ docs/                       →  source of truth
 
 ## Agent groups
 
-Twelve live specialists. Line: [agent-station-map.md](./agent-station-map.md).
+Thirteen live actors. Line: [agent-station-map.md](./agent-station-map.md). `deus-ex` allocates; the others cook or attest.
 
 ### Group 1 — Orchestration
 
-Keeps you as manager. Gates phases, reports blockers, decides what can move next.
+Keeps you as manager. `deus-ex` picks the station. `scrum-master` reports health and runs init/daily.
 
 | Agent | Serves for | Primary artifacts | Does not |
 | ----- | ---------- | ----------------- | -------- |
-| **`scrum-master`** | Project health, phase progression, “can we advance?”, init, daily loop | All `docs/` (read), decision log | Invent MVP code; approve docs; mark ✅ without Record |
+| **`deus-ex`** | “Who should run?”, which station, messy requests | Handoff block only | Cook US; `ready`; `✅`; product code; `/status` numbers |
+| **`scrum-master`** | Project health, phase progression, init, daily loop | All `docs/` (read), decision log | Invent MVP code; approve docs; mark ✅ without Record; allocate stations (`deus-ex`) |
 
-**When to use:** `/status`, `/init-meridian`, `/daily-with-ai`, vague “what next?”, before any implementation.
+**When to use:** `/deus-ex` or `@deus-ex` for allocation; `/status`, `/init-meridian`, `/daily-with-ai` for ceremonies and health.
 
-**Skills:** `init-project`, `update-decisions-log`, `meridian-routing`
+**Skills (`deus-ex`):** `deus-dispatch`, `meridian-routing`  
+**Skills (`scrum-master`):** `init-project`, `update-decisions-log`, `meridian-routing`
 
 ---
 
@@ -164,6 +166,7 @@ Slash command groups — workflows in **six groups**. Each maps to one primary a
 
 | Step | Command | Agent | What it does |
 | ---- | ------- | ----- | ------------ |
+| B0 | **`/deus-ex`** | `deus-ex` | Dispatch: next agent + next command. Does **not** execute that station. |
 | B1 | **`/status`** | `scrum-master` | Read-only health: kit root, Meridian projects (multi-`docs/` repos), active product, phase doc statuses, US counts, blockers. |
 | B2 | **`/daily-with-ai`** | `scrum-master` | Guided session: status → pick story → implement → close → sync. |
 | B3 | **`/agents-help`** | `scrum-master` | Opens this reference; summarizes groups and current-step hints. |
@@ -182,6 +185,8 @@ Complete in order: `00` → `01` → `02` → `03` → `04` → **`05`** → `06
 | C3b | **`/privacy-pass`** | `security-champion` | `02_security.md` § LGPD + GDPR | Brazil (ANPD) and EU (EDPB) privacy sections; official refs in checklist. **Doc only.** |
 | C4 | **`/architecture`** | `technical-architect` | `05_architecture.md` + optional `docs/architecture/` + `docs/architecture/diagrams/` | Overview, detail files, **diagram index** (multi-file Mermaid maps for IDE); gate for backlog. Skill: `generate-architecture-diagram`. |
 | C5 | **`/design-pass`** | `design-system-owner` | `09_design_system.md` | Contract: tokens, stack, components. Modes: `bootstrap`, `US-XXXX`. **Doc only.** |
+| C5b | **`/design-flow`** | `design-system-owner` | `09` § Screen flows | Jobs → screens → states; web vs app vs extension. **Doc only.** |
+| C5c | **`/design-theme`** | `design-system-owner` | `09` § Theme + type | Modes, semantic tokens, type ramp integrity. **Doc only.** |
 | C6 | **`/design-showcase`** | `design-system-owner` | `09` § Showcase + US drafts | Plan catalog routes; creates showcase US for `developer`. **No code.** |
 | C7 | **`/design-review`** | `design-system-owner` | Report | Audit live UI vs `09` + showcase. **No code.** |
 | C8 | **`/security-review`** | `security-champion` | Report | Audit code vs `02` + US security acceptance. **No code.** |
@@ -196,7 +201,7 @@ Complete in order: `00` → `01` → `02` → `03` → `04` → **`05`** → `06
 
 **HAR (ação humana necessária):** agents stop for external accounts, OAuth/PAT, billing, production credentials — see `rules/MERIDIAN.md`. Not a slash command; applies during any workflow.
 
-**UI products:** create `09` stub at `/init-meridian` when stack has UI. Run `/design-pass bootstrap` after `01_tech_stack`. Human approves `09` before Must UI US ship.
+**UI products:** create `09` stub at `/init-meridian` when stack has UI. Run `/design-pass bootstrap` after `01_tech_stack`, then `/design-flow` and `/design-theme` before treating `09` as complete. Human approves `09` before Must UI US ship.
 
 **Tested products:** create `10` stub when automated tests in scope. Run `/test-pass bootstrap` after `01_tech_stack`.
 
@@ -262,12 +267,14 @@ Every station ends with a **handoff** block: `station`, `agent`, `done`, `blocke
 Use this as the canonical sequence. Skip steps only when the artifact already exists and is approved.
 
 ```txt
+ 0. /deus-ex (when lost on who/station)     [Group B]  deus-ex — pass, do not cook
  1. /init-meridian                          [Group A]  scrum-master
  2. Complete 00_scope → approve             [Group C]  product-owner
  3. Complete 01, 03, 04 (draft → approve)  [Group C]  technical-writer
  4. /security-pass → approve 02             [Group C]  security-champion
  5. /architecture → approve 05              [Group C]  technical-architect  ← GATE
  5b. /design-pass bootstrap → approve 09     [Group C]  design-system-owner    (UI products)
+ 5b2. /design-flow + /design-theme            [Group C]  design-system-owner    (UI products — journeys + tokens)
  5c. /design-showcase (catalog US)          [Group C]  design-system-owner    (UI products)
  6. Complete 06, 07, 08 as needed          [Group C]  technical-writer
  7. /create-epic                            [Group D]  product-owner
@@ -297,6 +304,7 @@ Skills are procedures agents load automatically. Grouped by purpose.
 
 | Skill | Used by | Purpose |
 | ----- | ------- | ------- |
+| `deus-dispatch` | deus-ex | Product context + allocate station (read-only) |
 | `meridian-routing` | all agents | Pick correct agent from intent |
 | `init-project` | scrum-master, product-owner, technical-writer | Bootstrap `docs/` |
 | `update-decisions-log` | most agents | Prepend decision JSON (real `date` commands) |
@@ -333,6 +341,8 @@ Skills are procedures agents load automatically. Grouped by purpose.
 | `test-strategy` | quality-owner | `10`, `/test-pass` |
 | `test-review` | quality-owner | `/test-review` evidence audit |
 | `design-system` | design-system-owner | `09`, stack bootstrap, showcase, review checklists |
+| `design-flow` | design-system-owner | `/design-flow` — screen IA, states, web/app |
+| `design-theme` | design-system-owner | `/design-theme` — modes, type ramp |
 | `investigate-codebase` | code-investigator | `/investigate` checklists and report template |
 
 ### Kit maintenance (maintainers)
@@ -347,6 +357,7 @@ Skills are procedures agents load automatically. Grouped by purpose.
 
 | You want to… | Group | Agent | Command |
 | ------------ | ----- | ----- | ------- |
+| Who should run this / which station | B | `deus-ex` | `/deus-ex` |
 | Start or migrate project | A | `scrum-master` | `/init-meridian` |
 | See blockers and next step | B | `scrum-master` | `/status` |
 | Full guided day | B | `scrum-master` | `/daily-with-ai` |
@@ -364,6 +375,8 @@ Skills are procedures agents load automatically. Grouped by purpose.
 | Board refresh | — | Extension reads SQLite on save |
 | Log a decision | F | any | `/update-decisions-log` |
 | Design contract (`09`) | C | `design-system-owner` | `/design-pass`, `/design-pass bootstrap` |
+| Screen flows / IA | C | `design-system-owner` | `/design-flow` |
+| Theme / type hierarchy | C | `design-system-owner` | `/design-theme` |
 | Design catalog plan | C | `design-system-owner` | `/design-showcase` |
 | Design UI audit | C | `design-system-owner` | `/design-review` |
 | Code investigation | C | `code-investigator` | `/investigate` |

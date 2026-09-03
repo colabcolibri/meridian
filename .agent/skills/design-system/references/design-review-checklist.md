@@ -18,9 +18,16 @@
 ## Visual
 
 - [ ] Colors match `09` § Colors (spot-check primary, background, destructive)
-- [ ] Typography scale consistent with `09`
+- [ ] No feature hex / one-off palette vs token source
+- [ ] Typography matches `09` roles — no extra ad-hoc sizes
 - [ ] Spacing rhythm — no cramped or broken layouts
 - [ ] No horizontal overflow on mobile width (375px)
+
+## Flow and surfaces
+
+- [ ] Screen matches a `09` § Screen flows row (or gap filed)
+- [ ] Empty / error / loading exist if the flow documents them
+- [ ] Narrow layout follows `09` § Responsive (not desktop IA squeezed)
 
 ## States
 
@@ -45,6 +52,8 @@
 | Type | Route to |
 | ---- | -------- |
 | Doc outdated | `/design-pass` |
+| Flow / IA gap | `/design-flow` |
+| Theme / type drift | `/design-theme` |
 | Missing catalog | `/design-showcase` |
 | Code drift | `/refine-us` + `/implement-us` |
 | US missing 09 refs | `/refine-us` |

@@ -57,6 +57,7 @@ Agents set `status` and `ready`; the extension derives columns. After attest, To
 
 | Need | Delegate to |
 | ---- | ----------- |
+| Who / which station | `deus-ex` → `/deus-ex` |
 | Weak Plan / missing Approach | `story-maker` → `/refine-us` (bounce) |
 | Code | `developer` |
 | Specialist dish check | `security-champion` / `quality-owner` / `design-system-owner` |

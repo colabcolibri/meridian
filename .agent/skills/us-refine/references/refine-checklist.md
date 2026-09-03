@@ -28,7 +28,11 @@ Read `writing-guide.md` for tone: Approach bullets must **explain**, not telegra
 
 See `.agent/references/scrum-meridian-map.md` for bugs/spikes (no extra artifact types).
 
----
+## UI stories (when Acceptance is visual)
+
+- [ ] Plan Architecture refs include `09` § Screen flows (or named flow) after `/design-flow`
+- [ ] Theme/type: cite `09` § Colors / Typography — no “pick a nice blue”
+- [ ] Responsive: what happens at the narrow breakpoint is in Approach, not only “must be responsive”
 
 ## Approach — good vs bad
 
