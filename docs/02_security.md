@@ -1,8 +1,8 @@
 ---
 title: Security
 status: approved
-version: 1.2
-updated: 2026-07-18
+version: 1.3
+updated: 2026-09-03
 depends_on: [00_scope.md, 01_tech_stack.md]
 blocks: [03_user_types.md, 04_principles.md]
 ---
@@ -17,11 +17,14 @@ No authentication in the local harness or extension. Single operator on the mach
 
 No role-based permissions in the product. The human manager directs agents; agents follow kit rules and US gates (`ready`, `Record`, architecture `approved`).
 
+The kit HTML monitor is **GET-only** on `127.0.0.1`. It must not upsert `ready`, `status`, or Record. Binding to `0.0.0.0` is forbidden. CORS, if any, is limited to localhost and `null` (file://). Static and `docs/` paths must stay inside the package root (`Path.resolve` prefix check).
+
 ## Data protection
 
 - No sensitive credentials required for the harness itself.
 - Phase docs and SQLite delivery may contain project information — treat as local workspace data.
 - VS Code extension performs **local disk writes only** under resolved `docs/` (phase docs, `decisions/`) and `.meridian/meridian.db` — no network calls, no telemetry.
+- Kit HTML serve reads SQLite and `docs/`; it does not write delivery. It listens only on loopback.
 
 ## VS Code extension (`app-visual-studio/`)
 
@@ -43,6 +46,7 @@ Disk writes from the extension must mirror what agents do in Cursor: phase Markd
 - Meridian structure validations run in kit Python (`validate_meridian.py`, section contracts).
 - Required US fields validated before `ready: true` and before `status: ✅`.
 - Status `🔶` must include `Missing:` in acceptance.
+- HTML monitor: reject `..` and paths outside `docs/` for `/api/doc`; escape or sanitize any markdown rendered in the browser (XSS). Non-GET HTTP methods return 405.
 
 ## Rate limiting
 

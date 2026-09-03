@@ -5,6 +5,7 @@
   "meridian.view.commands.name": "Commands",
   "meridian.submenu.label": "Meridian",
   "meridian.command.openBoard.title": "Meridian: Open Board",
+  "meridian.command.openLocalHtmlBoard.title": "Meridian: Open local HTML board",
   "meridian.command.openVersions.title": "Meridian: Open Versions",
   "meridian.command.openSprints.title": "Meridian: Open Sprints",
   "meridian.command.openEpics.title": "Meridian: Open Epics",

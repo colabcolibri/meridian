@@ -1,8 +1,8 @@
 ---
 title: Architecture
 status: approved
-version: 2.1
-updated: 2026-07-18
+version: 2.2
+updated: 2026-09-03
 depends_on:
   [00_scope.md, 01_tech_stack.md, 02_security.md, 03_user_types.md, 04_principles.md]
 blocks: [06_database.md, 07_api_contracts.md, 08_environments.md]
@@ -12,7 +12,7 @@ blocks: [06_database.md, 07_api_contracts.md, 08_environments.md]
 
 ## Objective
 
-Document Meridian repository architecture: kit, phase docs, SQLite delivery store, and VS Code extension.
+Document Meridian repository architecture: kit, phase docs, SQLite delivery store, VS Code extension, and the kit HTML monitor (local GET serve).
 
 ## Repository context
 
@@ -25,11 +25,13 @@ meridian/                    # kit + dogfood product
     agents/
     skills/
     workflows/
+    board-ui/                # static HTML monitor (no pnpm)
     scripts/validate_meridian.py
     scripts/meridian_delivery.py
     scripts/meridian_db_cli.py
     scripts/meridian_db_export.py
-    scripts/meridian_db.py
+    board                            # shortcut → meridian_board_serve.py
+    scripts/meridian_board_serve.py  # 127.0.0.1, ephemeral port
     scripts/migrate_md_to_sqlite.py
     migrations/              # SQLite schema (YYYYMMDDHHMMSS_*.sql)
   .meridian/
@@ -41,7 +43,7 @@ meridian/                    # kit + dogfood product
     dist/extension.js
 ```
 
-The extension is **not** the source of truth for the protocol. It monitors **`docs/`** for phase documents and **`.meridian/meridian.db`** for delivery. **ER diagram and table contract:** `docs/06_database.md` § Schema.
+The extension is **not** the source of truth for the protocol. It monitors **`docs/`** for phase documents and **`.meridian/meridian.db`** for delivery. The kit HTML monitor is a second **reader** of the same store. **ER diagram and table contract:** `docs/06_database.md` § Schema.
 
 ## Layers
 
@@ -52,6 +54,7 @@ The extension is **not** the source of truth for the protocol. It monitors **`do
 | Phase documents      | `docs/00`–`11`, discovery, architecture detail — **Markdown on disk**          |
 | Delivery store       | `.meridian/meridian.db` — canonical ER: `docs/06_database.md` § Schema         |
 | VS Code extension    | Board + Deliverables editor tabs; validate via kit Python; reads SQLite       |
+| Kit HTML monitor     | `.agent/board-ui/` + `meridian_board_serve.py`; GET snapshot/events; no upsert |
 
 ## VS Code extension (`app-visual-studio/`)
 
@@ -78,6 +81,7 @@ The extension is **not** the source of truth for the protocol. It monitors **`do
 | **Editor tab — Architecture** | Interactive maps from `docs/architecture/diagrams/*.{md,mmd}` (pan, zoom, picker) |
 | **Editor tab — Delivery Graph** | US nodes + `dependsOn` edges from planning export; version/sprint filters |
 | **Editor tab — Import Graph** | Scoped file import graph via `.agent/scripts/meridian_import_graph.py` |
+| **Kit HTML board**        | Browser; `python3 .agent/board`; `127.0.0.1` + porta efêmera; Ctrl+C encerra |
 | Status bar                | `Meridian: N US` when `docs/` resolved; project name when multi-product               |
 | **Project context strip** | Toolbar: name, `docs/` path, US count; dropdown when N>1                              |
 
@@ -89,7 +93,7 @@ Visual structures for onboarding and review — **runtime**, **database (ER)**, 
 
 | File | Kind | Scope |
 | ---- | ---- | ----- |
-| `architecture/diagrams/meridian-runtime.md` | runtime | Kit, docs, SQLite, extension tabs |
+| `architecture/diagrams/meridian-runtime.md` | runtime | Kit, docs, SQLite, extension tabs, kit HTML serve |
 | `architecture/diagrams/meridian-database.md` | database | Delivery store ER (companion to `06_database`) |
 
 `05_architecture.md` keeps inline Mermaid for the gate; `diagrams/` holds full IDE companion maps with auto-layout. Add a new row here when adding a diagram file — multiple files are expected as the system grows.
@@ -100,6 +104,7 @@ Visual structures for onboarding and review — **runtime**, **database (ER)**, 
 - **Decisions:** `meridian_db_export.py --format decisions` → `load-decisions.ts` → **Open Decisions** tab.
 - **Architecture diagrams:** `docs/architecture/diagrams/*.{md,mmd}` → `load-architecture-diagrams.ts` → **Open Architecture Diagram** tab (`meridian-mermaid` theme in webview); refreshes when source changes.
 - `MeridianContext` watches `.meridian/meridian.db` → refresh board/deliverables webviews on change.
+- **Kit HTML:** `meridian_board_serve.py` watches mtime of `meridian.db` + `-wal` + `-shm` and pushes SSE; browser refetches planning export. Same JSON as `meridian_db_export.py --format planning` plus a derived `column` field **only** on the monitor snapshot (extension schema unchanged).
 
 ### Activation and `docs/` resolution
 
@@ -114,9 +119,9 @@ Visual structures for onboarding and review — **runtime**, **database (ER)**, 
 - `pnpm package:vsix` / `pnpm install:cursor` — validate requires `python3` on PATH.
 - `npm.autoDetect: off` in extension folder.
 
-## Removed: browser monitor (`app-desktop/`)
+## Removed: Vite desktop (`app-desktop/`)
 
-The Vite/React desktop app was removed in v10 (2026-07-18). Use the VS Code extension for all IDE visibility.
+The Vite/React desktop app was removed in v10 (2026-07-18). **Do not revive it.** v19 adds a **kit** HTML monitor: static files + Python stdlib on loopback, GET only, foreground process. It is not `app-desktop/`, not a remote API, and not a replacement for the extension.
 
 ## Removed: `docs/kanban/board.json` (v11)
 
@@ -125,4 +130,5 @@ Kanban is read directly from SQLite. No JSON export on disk; optional `board_sna
 ## Limits
 
 - Extension does not replace agent routing (`meridian-routing` stays in the IDE chat).
+- Kit HTML monitor does not upsert delivery; canceling the serve command frees the port.
 - SQLite DB is local and gitignored; team sync is via phase docs in Git + shared migration/bootstrap scripts (not committed DB file).

@@ -100,8 +100,8 @@
       ],
       "meridian.submenu": [
         {
-          "command": "meridian.openBoard",
-          "group": "1@1"
+          "command": "meridian.openLocalHtmlBoard",
+          "group": "1@1a"
         },
         {
           "command": "meridian.openVersions",
@@ -185,9 +185,9 @@
     ],
     "commands": [
       {
-        "command": "meridian.openBoard",
-        "title": "%meridian.command.openBoard.title%",
-        "icon": "$(layout)"
+        "command": "meridian.openLocalHtmlBoard",
+        "title": "%meridian.command.openLocalHtmlBoard.title%",
+        "icon": "$(globe)"
       },
       {
         "command": "meridian.openVersions",

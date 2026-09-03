@@ -49,7 +49,7 @@ Yes. Meridian works **without** this plugin.
 | `.agent/` agents, skills, validators | ✅ (via Install Harness) | ✅ (install script or copy `.agent/`) |
 | `docs/` + `.meridian/meridian.db` delivery | ✅ | ✅ |
 | Python CLI (`meridian_delivery.py`, export, validate) | ✅ | ✅ |
-| Board, graphs, planning UI | ✅ | ❌ — use `/status` and SQLite export instead |
+| Board, graphs, planning UI | ✅ | Kit HTML: `python3 .agent/board` |
 
 Use the **extension** when you want the board and graphs in the IDE. Use the **kit alone** in headless setups, other editors, or CI — same protocol, no visual layer.
 
@@ -81,7 +81,7 @@ document → plan → refine → implement → close
 4. **Implement** — agent codes only when the story is `ready` (`/implement-us`)
 5. **Close** — evidence on the story record (`/complete-us`); you approve
 
-**You type workflows** (`/create-us`), not low-level skills. Workflows route agents automatically. Override with `@story-maker`, `@story-checker`, `@scrum-master`, etc. when needed.
+**You type workflows** (`/create-us`), not low-level skills. Workflows route agents automatically. Override with `@deus-ex`, `@story-maker`, `@story-checker`, `@scrum-master`, etc. when needed.
 
 ---
 

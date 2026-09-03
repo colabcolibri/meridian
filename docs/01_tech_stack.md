@@ -1,8 +1,8 @@
 ---
 title: Tech Stack
 status: approved
-version: 1.1
-updated: 2026-06-04
+version: 1.2
+updated: 2026-09-03
 depends_on: [00_scope.md]
 blocks: [02_security.md, 04_principles.md, 08_environments.md]
 ---
@@ -18,7 +18,7 @@ blocks: [02_security.md, 04_principles.md, 08_environments.md]
 - Components: shadcn/ui
 - Icons: lucide-react
 
-**Rationale:** React + Vite inside the extension host for Board/Epics/Versions/Sprints webviews. Not a standalone browser app (monitor removed v10).
+**Rationale:** React + Vite inside the extension host for Board/Epics/Versions/Sprints webviews. The kit HTML monitor is a **separate** surface (no React, no Vite).
 
 **Discarded alternatives:**
 
@@ -41,14 +41,26 @@ blocks: [02_security.md, 04_principles.md, 08_environments.md]
 
 **Discarded for v4+:**
 
-- Separate browser monitor duplicating the extension board — removed (v10); use **Meridian Harness** only.
+- Recreating `app-desktop/` (Vite/React/pnpm) as a second product — removed v10. v19 kit HTML is not that stack.
 - Shared npm package with unrelated apps — separate build graphs.
+
+## Kit HTML monitor (`.agent/board-ui/` — v19)
+
+| Piece | Choice |
+| ----- | ------ |
+| Markup | Static HTML + CSS + JS modules in the kit (no bundler, no pnpm) |
+| Serve | Python 3 **stdlib** `http.server` via `python3 .agent/board` (`meridian_board_serve.py`) |
+| Bind | `127.0.0.1`, ephemeral port (`bind(..., 0)`), foreground; Ctrl+C stops the process |
+| Data | Same `export_planning_json` / `export_decisions_json` as the extension; GET only |
+| Markdown | Vendored parser + sanitizer in `board-ui/vendor/` (no CDN required) |
+
+**Rationale:** Codex and git clones need a board without the VSIX. Python is already required for delivery.
 
 ## Backend
 
 There is no remote backend.
 
-The extension reads/writes local `docs/` and `.meridian/meridian.db` via kit Python scripts on disk.
+The extension and the kit HTML monitor read local `docs/` and `.meridian/meridian.db` via kit Python scripts on disk. Only the CLI/workflows upsert delivery.
 
 ## Database
 

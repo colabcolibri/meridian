@@ -154,6 +154,21 @@ export const MERIDIAN_COMMAND_CATALOG: CommandHelpEntry[] = [
     status: "shipped",
   },
   {
+    id: "local-html-board",
+    title: "Open local HTML board",
+    commandId: "meridian.openLocalHtmlBoard",
+    paletteTitle: "Meridian: Open local HTML board",
+    group: "views",
+    summary: "Spawn kit python3 serve in a terminal (same HTML as clone without VSIX)",
+    details: [
+      "Runs .agent/scripts/meridian_board_serve.py on the active packageRoot.",
+      "Does not start on extension activate. Ctrl+C in that terminal stops the process.",
+      "Source of truth is the kit folder, not a copy inside the extension.",
+    ],
+    icon: "$(globe)",
+    status: "shipped",
+  },
+  {
     id: "versions",
     title: "Open Versions",
     commandId: "meridian.openVersions",

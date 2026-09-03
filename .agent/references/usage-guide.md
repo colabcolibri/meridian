@@ -18,10 +18,11 @@ The **extension** shows and validates `docs/`. **Chat slash commands** create an
 
 | You want to… | Use | Not |
 | ------------ | --- | --- |
-| See kanban, versions, epics | Extension: **Open Board**, **Open Versions**, … | `/create-us` |
+| See kanban, versions, epics | Extension: **Open Board**, **Open Versions**, … **or** `python3 .agent/board` | `/create-us` |
 | Validate project | Extension: **Validate Project** | Manual edits |
 | Bootstrap or change docs | Chat: `/init-meridian`, `/create-us`, `/complete-us`, … | Extension forms (v5) |
 | Health check | Chat: `/status` | — |
+| Who should run this | Chat: `/deus-ex` | Guessing an `@` worker |
 
 **Reading order in the IDE** (Meridian sidebar → Commands):
 
@@ -202,7 +203,7 @@ Details: [scrum-meridian-map.md](./scrum-meridian-map.md).
 
 ### After backlog changes
 
-Board refreshes when `.meridian/meridian.db` changes (extension) or after any `meridian_delivery.py` upsert (`board_snapshots`).
+Board refreshes when `.meridian/meridian.db` changes (extension webview, or kit HTML SSE after `python3 .agent/board`) and after any `meridian_delivery.py` upsert (`board_snapshots`).
 
 **Column model:** the board does not store column ids in SQLite. 📋 **Backlog** = `status: ❌` and `ready: false` (after `/create-us`); 📌 **Todo** = same status with `ready: true` (after `/review-us` DoR attest) and `in_progress` false; 🔨 **Doing** = `in_progress` true; **Partial** = `status: 🔶` and not in progress; **Frozen** / **Deprecated** = `🧊` / `🚫` with toolbar toggles. Agents edit `status`, `ready`, and `in_progress` only.
 

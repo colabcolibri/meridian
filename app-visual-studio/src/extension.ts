@@ -27,6 +27,7 @@ import {
   uninstallInstalledKit,
   workspaceProjectRoot,
 } from "./kit-installer.js"
+import { openLocalHtmlBoard } from "./open-local-html-board.js"
 import { resolveValidateTarget, runValidateMeridian } from "./validate-runner.js"
 import {
   MERIDIAN_DOCUMENT_SCHEME,
@@ -373,6 +374,9 @@ export function activate(context: vscode.ExtensionContext): void {
 
   context.subscriptions.push(
     vscode.commands.registerCommand("meridian.openBoard", openBoardTab),
+    vscode.commands.registerCommand("meridian.openLocalHtmlBoard", () =>
+      openLocalHtmlBoard(meridianContext?.workspace ?? null, context.extensionPath),
+    ),
     vscode.commands.registerCommand("meridian.openVersions", openVersionsTab),
     vscode.commands.registerCommand("meridian.openDeliverables", openVersionsTab),
     vscode.commands.registerCommand("meridian.openSprints", openSprintsTab),

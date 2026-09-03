@@ -2,7 +2,7 @@
 title: Design System
 status: review
 version: 1.0
-updated: 2026-07-18
+updated: 2026-09-03
 depends_on: [01_tech_stack.md, 04_principles.md, 05_architecture.md]
 blocks: []
 ---
@@ -11,8 +11,9 @@ blocks: []
 
 ## Overview
 
-- **Surfaces:** VS Code / Cursor extension webviews — Board, Epics, Versions, Sprints, Deliverables, kit help panels.
-- **Primary UI stack:** `ts-shadcn` per `01_tech_stack.md` for new React UI; **runtime theme** inherits VS Code semantic colors in existing webviews.
+- **Surfaces:** VS Code / Cursor extension webviews — Board, Epics, Versions, Sprints, Deliverables, kit help panels — **and** the kit HTML monitor (`.agent/board-ui/`).
+- **Primary UI stack (extension):** `ts-shadcn` per `01_tech_stack.md` for new React UI; **runtime theme** inherits VS Code semantic colors in existing webviews.
+- **Kit HTML stack:** static CSS tokens in `board-ui/css/tokens.css` (not `--vscode-*`). Same mood: work tool, not marketing.
 - **Mood:** Work tool — moderate density, clear hierarchy, no marketing chrome (aligned with `04_principles.md` § Visual decision).
 
 ## Colors
@@ -47,6 +48,7 @@ Extension webviews map to VS Code theme tokens (do not hardcode hex in webview C
 - **Spacing:** 4px rhythm (8, 12, 16, 20, 24px margins in webview-common).
 - **Container:** Full webview width; `overflow-x: auto` on tables (`.table-wrap`).
 - **Toolbar:** Project context strip + filters — single row, wrap on narrow widths.
+- **Kit HTML monitor:** `html, body` use `height: 100dvh` (fallback `100vh`) and `overflow: hidden`. Header is `flex-shrink: 0`. `#view-root.view-board` is a flex column with `min-height: 0` (kanban track scrolls inside columns, not the page). List views scroll in `#view-root`. Filter and entity detail are overlay sheets, not a persistent inspector.
 
 ## Elevation and depth
 
@@ -67,7 +69,7 @@ Flat — hierarchy via background contrast (`sideBar-background` vs `editor-back
 
 | Surface | Location | Showcase |
 | ------- | -------- | -------- |
-| Kanban card | `board-webview-html.ts` | Columns: 📋 Backlog · 📌 Todo · 🔶 · 🧪 · ✅; toggles 🧊/🚫; cards show id/title/epic (not a stored “column” field) |
+| Kanban card | `board-webview-html.ts` **and** `.agent/board-ui/` (read-only) | Columns derived; cards show id/title/epic |
 | Planning toolbar | `webview-project-context.ts` + common CSS | planned |
 | Markdown viewer | `delivery-viewer-html.ts` + `markdown-content-styles.ts` | planned |
 | Accordion block | `webview-common.ts` `.block` | planned |
@@ -80,12 +82,15 @@ Flat — hierarchy via background contrast (`sideBar-background` vs `editor-back
 - Don't hardcode light/dark colors — respect editor theme.
 - Don't edit shadcn `ui/*` primitives for product copy or layout.
 - Don't increase horizontal overflow on mobile-width webviews.
+- Don't use `--vscode-*` in `.agent/board-ui/` (not a webview). Don't introduce a second `100vh` on `body` in view CSS.
 
 ## Responsive behavior
 
 | Context | Rule |
 | ------- | ---- |
 | Narrow webview | Toolbar chips wrap; tables scroll inside `.table-wrap` |
+| Kit HTML ≤768px | Inspector becomes a bottom sheet; header stays visible |
+| Kit HTML ≤480px | One board column at a time; no `overflow-x` on `body` |
 | Touch | Chip/button hit area ≥ 28px height (prefer 32px for new controls) |
 
 ## Accessibility baseline

@@ -1,8 +1,8 @@
 ---
 title: Environments
 status: approved
-version: 1.3
-updated: 2026-07-28
+version: 1.4
+updated: 2026-09-03
 depends_on: [01_tech_stack.md, 05_architecture.md]
 blocks: []
 ---
@@ -22,7 +22,10 @@ blocks: []
 python3 .agent/scripts/meridian_delivery.py bootstrap
 python3 .agent/scripts/validate_meridian.py . --sqlite-only
 python3 .agent/scripts/meridian_delivery.py counts
+python3 .agent/board
 ```
+
+`python3 .agent/board` is the human shortcut (same as `python3 .agent/scripts/meridian_board_serve.py`). On macOS/Linux you can also run `./.agent/board`. It binds `127.0.0.1` on an ephemeral port, prints the URL, opens the default browser, and **exits when you Ctrl+C**. It is not started by the Cursor extension `activate` hook. Requires `.meridian/meridian.db` (run bootstrap first). No pnpm.
 
 Canonical bootstrap is **`meridian_delivery.py bootstrap`** (also `bootstrap_meridian_db.py` shim). Read commands (`show`, `list`, `counts`, …) auto-bootstrap when `.meridian/meridian.db` is missing on a valid Meridian product folder.
 
@@ -40,8 +43,9 @@ python3 .agent/scripts/validate_meridian.py <package-root> --json   # CI
 
 | Who | Needs Python? | Why |
 | --- | ------------- | --- |
-| **Kit / agents (Cursor, Claude)** | **Yes** | `meridian_delivery.py`, `validate_meridian.py`, `meridian_db_export.py` — stdlib only, no `pip` |
+| **Kit / agents (Cursor, Claude, Codex)** | **Yes** | `meridian_delivery.py`, `validate_meridian.py`, `meridian_db_export.py`, `meridian_board_serve.py` — stdlib only, no `pip` |
 | **VS Code extension** | **Yes** | Validate command + Board/Deliverables read SQLite via `python3 .agent/scripts/meridian_db_export.py` |
+| **Kit HTML board (browser)** | **Yes** | Same `python3`; no Node |
 | **Chat-only (no validate, no board)** | No | Not a supported workflow — docs would drift without validator |
 | **Phase docs only** | No | Editing `docs/00_scope.md` etc. is plain Markdown |
 

@@ -25,7 +25,9 @@
 | `bootstrap_meridian_db.py` | Shim — same as `meridian_delivery.py bootstrap` (prefer facade) |
 | `meridian_delivery.py` | **Agent facade** — reads `delivery.json`, dispatches connector (`counts`, `show`, `create-us`, `patch-record`, …); `quality-profile` resolves `qualitySiege` tier |
 | `meridian_db_cli.py` | SQLite driver (implementation; facade calls this) |
-| `meridian_db_export.py` | JSON export for extension (`--format planning|decisions`; `--write-form`) |
+| `lib/meridian_board_columns.py` | Derived kanban `column` for the kit HTML snapshot (not the extension export schema) |
+| `meridian_board_serve.py` | Foreground HTML monitor: `127.0.0.1`, ephemeral port, GET snapshot/events |
+| `../board` | Human shortcut → same serve (`python3 .agent/board`) |
 | `validate_meridian.py` | Governance validator (`--strict-kit-md`, `--json`; deprecated-agent check always on kit) |
 | `meridian_delivery_form.py` | Shim — re-exports `lib/meridian_delivery_form.py` for extension path checks |
 
@@ -68,6 +70,7 @@ Run once per project when importing from branch `meridian-v1-old`:
 
 | Consumer | Scripts |
 | -------- | ------- |
+| **Kit HTML board** | `.agent/board` → `meridian_board_serve.py` |
 | **Cursor / Claude agents** | `meridian_delivery.py`, `validate_meridian.py` |
 | **VS Code extension** | `validate_meridian.py`, `meridian_db_export.py`, `meridian_delivery_form.py` (path check) |
 | **GitHub Actions** | `validate_meridian.py --strict-kit-md`, `run_kit_tests.py`, extension `typecheck`/`lint`/`test` |
