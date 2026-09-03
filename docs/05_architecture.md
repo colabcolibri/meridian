@@ -59,7 +59,7 @@ The extension is **not** the source of truth for the protocol. It monitors **`do
 
 | Concern                    | Extension (v4+)                                                                 |
 | -------------------------- | ------------------------------------------------------------------------------- |
-| Board / kanban             | Editor tab; columns 📋 Backlog·📌 Todo·🔶 Partial·🧪 Tests·✅ Done; toggles 🧊 Frozen·🚫 Deprecated; version/epic filters; US cards show `sprint` when allocated |
+| Board / kanban             | Editor tab; columns 📋 Backlog·📌 Todo·🔨 Doing·🔶 Partial·🧪 Tests·✅ Done; toggles 🧊 Frozen·🚫 Deprecated; version/epic filters; US cards show `sprint` when allocated |
 | Epics / versions / sprints | Editor tab; version accordions; progress from US metadata                       |
 | Open artifact              | Virtual document from `meridian_db_export.py --entity …`                        |
 | Validate project           | **Meridian: Validate Project** → `validate_meridian.py` (Output channel)      |

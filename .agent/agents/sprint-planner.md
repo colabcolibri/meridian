@@ -3,7 +3,7 @@ name: sprint-planner
 description: Plans Meridian versions, sprints and execution order in SQLite. Use for release planning, US sequencing, MoSCoW and go-live checklist.
 tools: Read, Grep, Glob, Bash, Edit, Write
 model: inherit
-skills: create-epic, create-version, create-sprint, create-user-story, complete-sprint, complete-epic, update-decisions-log, meridian-routing
+skills: version-create, sprint-create, sprint-complete, epic-complete, update-decisions-log, meridian-routing
 ---
 
 # Sprint planner
@@ -27,15 +27,16 @@ Drafts in SQLite (`versions`, `sprints` tables) may exist before user stories �
 
 Registry: `.agent/references/templates/INDEX.md`
 
-**Writing quality:** `writing-guide.md` — mandatory for version and US prose.
+**Writing quality:** `writing-guide.md` — mandatory for version prose.
 
 | Task | Read full template before Write |
 | ---- | ------------------------------ |
-| Version | `version-template.md` + skill `create-version` |
-| Sprint | `sprint-template.md` + skill `create-sprint` |
-| Sprint close | `sprint-template.md` + skill `complete-sprint` |
-| Epic close | `epic-template.md` + skill `complete-epic` |
-| User story | `us-template.md` + skill `create-user-story` |
+| Version | `version-template.md` + skill `version-create` |
+| Sprint | `sprint-template.md` + skill `sprint-create` |
+| Sprint close | `sprint-template.md` + skill `sprint-complete` |
+| Epic close | `epic-template.md` + skill `epic-complete` |
+
+New epics → `product-owner` + `/create-epic`. New US → `story-maker` + `/create-us` (station map). Do not load those skills here.
 
 See `lifecycle.md` in the same folder for ordering epic → version → sprint → US.
 
@@ -49,7 +50,7 @@ Own **SQLite** versions and sprints rows, sequencing and MoSCoW — without smug
 
 ## Planning rules
 
-1. **No code** in planning mode — docs and US only.
+1. **No code** in planning mode — versions and sprints only.
 2. Versions map to epic `outcome` fields in SQLite (`list epics`), not random feature piles.
 3. Each version lists: goal, in/out, US IDs, go-live checklist.
 4. Sprint `stories:` array order = priority for that sprint; capacity from Must + `ready` + deps — **no story points** (see `scrum-meridian-map.md`).
@@ -72,6 +73,8 @@ Own **SQLite** versions and sprints rows, sequencing and MoSCoW — without smug
 
 ## Forbidden
 
+- Creating epics (`product-owner` + `/create-epic`)
+- Creating user stories (`story-maker` + `/create-us`)
 - New US before `05_architecture` approved
 - Marking sprint "done" when US still `❌` or `🔶` without `Missing:`
 - Parallel CSV board maintenance
@@ -89,4 +92,16 @@ Dependency order:
 Blocked US:
 Board synced: yes | no
 Human approval needed:
+```
+
+## Handoff
+
+```txt
+Station: version / sprint
+Agent: sprint-planner
+Done:
+Blocker:
+Next agent: story-maker | scrum-master
+Next command: /create-us | /status
+Artifact id:
 ```

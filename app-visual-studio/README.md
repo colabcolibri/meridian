@@ -81,7 +81,7 @@ document → plan → refine → implement → close
 4. **Implement** — agent codes only when the story is `ready` (`/implement-us`)
 5. **Close** — evidence on the story record (`/complete-us`); you approve
 
-**You type workflows** (`/create-us`), not low-level skills. Workflows route agents automatically. Override with `@backlog-refiner` when needed.
+**You type workflows** (`/create-us`), not low-level skills. Workflows route agents automatically. Override with `@story-maker`, `@story-checker`, `@scrum-master`, etc. when needed.
 
 ---
 

@@ -1,5 +1,6 @@
 # Audit skills + references v11 — inventário honesto
 
+> **Roster ao vivo:** `story-maker` + `story-checker` — [agent-station-map.md](../agent-station-map.md). O slug `backlog-refiner` foi removido.
 > **Última revisão G7:** jul/2026  
 > **Regra:** `references/*.md` de **delivery** = forma de `body_markdown` no SQLite — persistir com `meridian_delivery.py update-*` (stdin heredoc).  
 > **Phase docs** (`docs/discovery/`, `docs/09_design_system.md`, `docs/11_decisions.md` index) stay Markdown on disk. **Delivery decisions** live in SQLite (`decisions` table) — never `docs/decisions/*.json`.
@@ -14,15 +15,15 @@
 
 | # | Skill | G7 | v11 banner | `## Delivery commands` | sqlite-ops | Alterações G7 |
 | - | ----- | -- | ---------- | -------------- | ---------- | ------------- |
-| 1 | `create-user-story` | ✅ | ✅ | ✅ | ✅ | CLI §; output `ID:` |
-| 2 | `review-user-story` | ✅ | ✅ | ✅ read-only | ✅ | CLI §; paths corrigidos |
-| 3 | `refine-user-story` | ✅ | ✅ | ✅ | ✅ | CLI §; `set-ready` |
-| 4 | `implement-user-story` | ✅ | ✅ | ✅ | ✅ | CLI gate + banner |
-| 5 | `complete-user-story` | ✅ | ✅ | ✅ | ✅ | reescrita completa |
-| 6 | `create-epic` | ✅ | ✅ | ✅ | ✅ | CLI § |
-| 7 | `create-version` | ✅ | ✅ | ✅ | ✅ | CLI § |
-| 8 | `create-sprint` | ✅ | ✅ | ✅ | ✅ | CLI § |
-| 9 | `complete-sprint` | ✅ | ✅ | ✅ | 👁 | CLI § |
+| 1 | `us-create` | ✅ | ✅ | ✅ | ✅ | CLI §; output `ID:` |
+| 2 | `us-review` | ✅ | ✅ | ✅ read-only | ✅ | CLI §; paths corrigidos |
+| 3 | `us-refine` | ✅ | ✅ | ✅ | ✅ | CLI §; `set-ready` |
+| 4 | `us-implement` | ✅ | ✅ | ✅ | ✅ | CLI gate + banner |
+| 5 | `us-complete` | ✅ | ✅ | ✅ | ✅ | reescrita completa |
+| 6 | `epic-create` | ✅ | ✅ | ✅ | ✅ | CLI § |
+| 7 | `version-create` | ✅ | ✅ | ✅ | ✅ | CLI § |
+| 8 | `sprint-create` | ✅ | ✅ | ✅ | ✅ | CLI § |
+| 9 | `sprint-complete` | ✅ | ✅ | ✅ | 👁 | CLI § |
 | 10 | `init-project` | ✅ | 👁 | ✅ bootstrap | 👁 | checkpoints v11 |
 | 11 | `discover-product` | ✅ | — | — | — | phase doc; grep OK |
 | 12 | `update-decisions-log` | ✅ | — | — | — | JSON; grep OK |
@@ -123,7 +124,7 @@ Fonte: `.agent/references/templates/delivery-connector-schema.md` + `sqlite-deli
 | Refine / close | `update-us` (stdin heredoc) + `set-ready` / `set-summary` |
 | Ready | `meridian_delivery.py set-ready US-XXXX --ready true` |
 | Implement gate | `meridian_delivery.py implement-gate US-XXXX` |
-| Epic / version / sprint | `create-epic` / `create-version` / `create-sprint` |
+| Epic / version / sprint | `epic-create` / `version-create` / `sprint-create` |
 | Counts / status | `meridian_delivery.py counts` |
 | Validate | `validate_meridian.py . --sqlite-only` |
 

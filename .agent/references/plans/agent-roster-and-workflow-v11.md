@@ -1,6 +1,6 @@
 # Agent roster v11 — nomes Scrum/ágil e redesign
 
-> **Status:** decisão de design — jul/2026 (fechada para H1)  
+> **Status:** decisão de design — jul/2026 (H1 fechada). **Roster ao vivo:** `story-maker` + `story-checker` — [agent-station-map.md](../agent-station-map.md). O slug `backlog-refiner` foi removido.  
 > **Princípio:** cada agente = **papel reconhecível em Scrum ou em enablement ágil** — não metáforas genéricas (`keeper`, `guardian`, `manager` que implementa código).  
 > **Humano:** continua **Product Owner de fato** (prioriza, aprova, commita). Agentes **facilitam e executam** no protocolo Meridian.
 
@@ -72,7 +72,7 @@ Scrum Master          scrum-master            /status, /daily-with-ai, /init-mer
 | - | - |
 | **Scrum** | Product Owner (descoberta + épico + escopo — humano prioriza) |
 | **Missão** | Problema, usuários, valor, `00_scope.md`, `docs/discovery/`, epics no SQLite |
-| **Skills** | `discover-product`, `create-epic`, `update-decisions-log`, `meridian-routing` |
+| **Skills** | `discover-product`, `epic-create`, `update-decisions-log`, `meridian-routing` |
 | **Não faz** | Implementar código; refinar Plan técnico de US; fechar sprint |
 
 Absorve o antigo `scope-architect` (`00_scope` é charter do produto — trabalho de PO antes do backlog executável).
@@ -128,7 +128,7 @@ Absorve o antigo `scope-architect` (`00_scope` é charter do produto — trabalh
 | - | - |
 | **Scrum** | Facilitador de Sprint Planning + release |
 | **Missão** | `versions`, `sprints` no SQLite; fechar sprint com retrospectiva |
-| **Skills** | `create-version`, `create-sprint`, `complete-sprint`, `meridian-routing` |
+| **Skills** | `version-create`, `sprint-create`, `sprint-complete`, `meridian-routing` |
 
 ### 4.7 `backlog-refiner`
 
@@ -136,7 +136,7 @@ Absorve o antigo `scope-architect` (`00_scope` é charter do produto — trabalh
 | - | - |
 | **Scrum** | Backlog refinement (qualidade do PBI / DoR / evidência no close) |
 | **Missão** | Ciclo US: create → review → refine (`ready: true`) → complete (`Record`, ✅) |
-| **Skills** | `create-user-story`, `review-user-story`, `refine-user-story`, `complete-user-story`, `sqlite-delivery-operations` |
+| **Skills** | `us-create`, `us-review`, `us-refine`, `us-complete`, `sqlite-delivery-operations` |
 | **Não faz** | Código de produto (`developer`); épico (`product-owner`) |
 
 ### 4.8 `developer`
@@ -145,7 +145,7 @@ Absorve o antigo `scope-architect` (`00_scope` é charter do produto — trabalh
 | - | - |
 | **Scrum** | Developer (Development Team) |
 | **Missão** | `implement-gate` exit 0 → código alinhado ao Plan; **não** fecha US |
-| **Skills** | `implement-user-story`, `code-quality-at-us-time` (via refs), `meridian-routing` |
+| **Skills** | `us-implement`, `code-quality-at-us-time` (via refs), `meridian-routing` |
 | **Proibições** | `create-us`, `complete-us`, escopo novo, código sem US `ready: true` |
 
 ### 4.9 `scrum-master`
@@ -155,7 +155,7 @@ Absorve o antigo `scope-architect` (`00_scope` é charter do produto — trabalh
 | **Scrum** | Scrum Master (facilita processo; não é o PO humano) |
 | **Missão** | Maturidade de docs, `/status`, impedimentos, `/daily-with-ai`, init; **nunca** código de produto |
 | **Skills** | `init-project`, `meridian-routing`, `update-decisions-log` |
-| **Remove** | `implement-user-story` do frontmatter |
+| **Remove** | `us-implement` do frontmatter |
 
 ---
 
@@ -193,7 +193,7 @@ flowchart TB
 | 1 | Slug **`developer`** — papel Scrum explícito, não “implementation-specialist” |
 | 2 | Slug **`scrum-master`** — substitui `process-manager` para facilitação |
 | 3 | Slug **`backlog-refiner`** — substitui `board-keeper` |
-| 4 | Épico fica com **`product-owner`** + skill `create-epic` (não technical-writer) |
+| 4 | Épico fica com **`product-owner`** + skill `epic-create` (não technical-writer) |
 | 5 | **`scope-architect`** deixa de existir — merge em `product-owner` |
 | 6 | `/design-pass` **recomendado** se Acceptance tem UI; obrigatório só para US Must visuais após `09_design_system` `approved` |
 | 7 | Renomeação em **H1**: criar novos `.md` + aliases de routing 1 sprint; **H2**: remover arquivos antigos |

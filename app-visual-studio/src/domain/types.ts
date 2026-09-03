@@ -16,5 +16,6 @@ export type UserStory = {
   tests: TestsRequirement
   testsStatus: TestsStatus
   ready: boolean | null
+  inProgress?: boolean
   preamble?: string | null
 }

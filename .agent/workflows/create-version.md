@@ -10,9 +10,9 @@ $ARGUMENTS
 
 ## Critical rules
 
-1. Use `sprint-planner` + `@[skills/create-version]`
+1. Use `sprint-planner` + `@[skills/version-create]`
 2. **Mandatory read:** `version-template.md`
-3. `create-version` + `update-version` (stdin heredoc) — never `docs/versions/`
+3. `version-create` + `update-version` (stdin heredoc) — never `docs/versions/`
 
 ---
 

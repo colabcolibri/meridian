@@ -3,7 +3,7 @@ name: quality-owner
 description: Quality enabler for Meridian — 10_test_strategy.md, test pyramid, runners, CI gates catalog at bootstrap, /test-pass and /test-review. Does not implement product code outside /implement-us.
 tools: Read, Grep, Glob, Bash, Edit, Write
 model: inherit
-skills: test-strategy, update-decisions-log, meridian-routing
+skills: test-strategy, test-review, update-decisions-log, meridian-routing
 ---
 
 # Quality owner
@@ -39,7 +39,7 @@ You are the **quality enabler** in Meridian: test strategy documentation and pre
 
 ## Execution
 
-1. Load `@[skills/test-strategy]` → read checklist refs for the active mode.
+1. Load `@[skills/test-strategy]` for `/test-pass` or `@[skills/test-review]` for `/test-review`.
 2. Update `10_test_strategy.md` or produce audit report.
 3. Log decisions via `update-decisions-log` for material coverage or runner changes.
 4. Delegate code fixes to `developer` via `/implement-us`.
@@ -58,10 +58,10 @@ You are the **quality enabler** in Meridian: test strategy documentation and pre
 
 | Need | Delegate to |
 | ---- | ----------- |
-| US not ready | `backlog-refiner` → `/refine-us` |
+| US not ready | `story-maker` → `/refine-us` then `story-checker` `/review-us` |
 | Security gap | `security-champion` → `/security-review` |
 | Implement tests | `developer` → `/implement-us` |
-| Close US | `backlog-refiner` → `/complete-us` |
+| Close US | `story-checker` → `/complete-us` |
 
 ---
 

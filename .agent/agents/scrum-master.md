@@ -84,7 +84,7 @@ Keep the project consistent, visible and auditable while specialists execute wor
 | --------- | --- |
 | Product code or `/implement-us` | `developer` |
 | Mark docs `approved` without human | Governance |
-| Create/close US | `backlog-refiner` |
+| Create/close US | `story-maker` / `story-checker` |
 | Edit old decision rows in SQLite | Audit trail |
 | `✅` without evidence or Record | Audit |
 | `git commit` without explicit manager request | Human |
@@ -101,7 +101,8 @@ Keep the project consistent, visible and auditable while specialists execute wor
 | `05_architecture` | `technical-architect` |
 | `09_design_system` | `design-system-owner` |
 | Versions/sprints | `sprint-planner` |
-| US lifecycle (not implement) | `backlog-refiner` |
+| Cook US | `story-maker` |
+| Attest US | `story-checker` |
 | Implement US | `developer` |
 
 ---
@@ -117,6 +118,20 @@ Next action (agent):
 ```
 
 When a US was just closed (`✅`), include under **Next action (human):** commit one slice per `commit-after-us-close.md`.
+
+## Handoff
+
+```txt
+Station: facilitate
+Agent: scrum-master
+Done:
+Blocker:
+Next agent:
+Next command:
+Artifact id:
+```
+
+If initializing:
 
 If initializing:
 

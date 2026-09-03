@@ -36,13 +36,14 @@ Before any action, classify:
 | **QUESTION** | "what is", "how does", "explain" | Text answer; do not change docs |
 | **STATUS** | "status", "where are we", "blockers" | `scrum-master` + `/status` |
 | **DOC / PHASE** | "scope", "epic", "version", "architecture", `00_`–`11_` | Documentation agent per matrix |
-| **US / BOARD** | "user story", "US-", "kanban", "board" | `backlog-refiner` or `sprint-planner` |
-| **IMPLEMENT US** | "implement US", "build", "code for US", `/implement-us` | `developer` + `implement-user-story` — **block** if `ready` not true |
-| **REFINE US** | "refine US", `/refine-us`, "ready for implement" | `backlog-refiner` + `refine-user-story` |
-| **REVIEW US** | "review US", `/review-us`, "audit US", "check story" | `backlog-refiner` + `review-user-story` |
-| **CLOSE US** | "complete US", "mark done", "record", `/complete-us` | `backlog-refiner` + `complete-user-story` — **additive only**; read `close-us-contract.md` + `show --full` first |
-| **CLOSE SPRINT** | "complete sprint", "close sprint", `/complete-sprint` | `sprint-planner` + `complete-sprint` |
-| **CLOSE EPIC** | "complete epic", "close epic", `/complete-epic` | `sprint-planner` + `complete-epic` |
+| **US / BOARD** | "user story", "US-", "kanban", "board" | `story-maker`, `story-checker`, or `sprint-planner` |
+| **CREATE US** | `/create-us`, "new user story" | `story-maker` + `us-create` |
+| **REFINE US** | "refine US", `/refine-us` | `story-maker` + `us-refine` — does **not** set `ready` |
+| **REVIEW US** | "review US", `/review-us`, "audit US", "ready for implement" | `story-checker` + `us-review` — only path for `ready: true` |
+| **CLOSE US** | "complete US", "mark done", "record", `/complete-us` | `story-checker` + `us-complete` — **additive only**; read `close-us-contract.md` + `show --full` first |
+| **IMPLEMENT US** | "implement US", "build", "code for US", `/implement-us` | `developer` + `us-implement` — **block** if `ready` not true |
+| **CLOSE SPRINT** | "complete sprint", "close sprint", `/complete-sprint` | `sprint-planner` + `sprint-complete` |
+| **CLOSE EPIC** | "complete epic", "close epic", `/complete-epic` | `sprint-planner` + `epic-complete` |
 | **LOG DECISION** | "log decision", "decision log", `/update-decisions-log` | read `update-decisions-log` + run `date` before `prepend-decision` CLI |
 | **HAR** | external account, OAuth, PAT, billing, payment, production deploy creds, accept terms | **Stop** — emit HAR block (see below); no simulation |
 | **SECURITY** | "security", "OWASP", "secrets", `02_security`, `/security-review`, `/dependency-audit` | `security-champion` |
@@ -89,7 +90,7 @@ Before any action, classify:
 - Code without US `ready: true` or without `/implement-us` gate = **protocol failure**
 - US without `05_architecture` approved = **protocol failure**
 - `✅` without evidence = **protocol failure**
-- `✅` without filled `## Record` on the US (skill `complete-user-story`) = **protocol failure**
+- `✅` without filled `## Record` on the US (skill `us-complete`) = **protocol failure**
 - Write `.meridian/drafts/`, `us-*-refine.md`, `us-*-complete.md`, delivery markdown under `.meridian/` or `docs/us/`, or `update-* --from-file` for delivery persist = **protocol failure**
 - Write one-shot `.py` (or any file) to generate, batch-close, or pipe US/epic/sprint markdown — use `meridian_delivery.py update-us` (heredoc) or `patch-record` only = **protocol failure**
 
@@ -178,13 +179,13 @@ Resume work only after the manager provides evidence or explicit skip with logge
 | `02_security.md` | `security-champion` | `security-review` |
 | `05_architecture.md` | `technical-architect` | `architecture-folder-guide.md` + `security-review` |
 | `docs/architecture/*.md` | `technical-architect` | indexed from `05`; gate stays on `05` only |
-| Epics / versions / sprints (create/plan) | `sprint-planner` | `create-sprint`, `create-version` |
-| Sprints (close) | `sprint-planner` | `complete-sprint` |
-| User stories (create) | `backlog-refiner` | `create-user-story` |
-| User stories (review) | `backlog-refiner` | `review-user-story` |
-| User stories (refine) | `backlog-refiner` | `refine-user-story` |
-| User stories (implement) | `scrum-master` | `implement-user-story` |
-| User stories (close) | `backlog-refiner` | `complete-user-story` |
+| Epics / versions / sprints (create/plan) | `sprint-planner` | `sprint-create`, `version-create` |
+| Sprints (close) | `sprint-planner` | `sprint-complete` |
+| User stories (create) | `story-maker` | `us-create` |
+| User stories (refine) | `story-maker` | `us-refine` |
+| User stories (review) | `story-checker` | `us-review` |
+| User stories (implement) | `developer` | `us-implement` |
+| User stories (close) | `story-checker` | `us-complete` |
 | Decision log | any relevant agent | `update-decisions-log` (`prepend-decision`) |
 | `11_decisions.md` (stub) | any relevant agent | `update-decisions-log` |
 
@@ -213,5 +214,6 @@ Resume work only after the manager provides evidence or explicit skip with logge
 - **Security:** `security-champion`
 - **Architecture:** `technical-architect`
 - **Versions/sprints:** `sprint-planner`
-- **US/board:** `backlog-refiner`
+- **US cook:** `story-maker`
+- **US attest:** `story-checker`
 - **Routing:** `meridian-routing`

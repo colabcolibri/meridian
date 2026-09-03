@@ -586,6 +586,29 @@ def cmd_set_ready(args) -> int:
     return 0
 
 
+def cmd_set_in_progress(args) -> int:
+    from meridian_db import apply_migrations
+
+    root = _root(args)
+    apply_migrations(root)
+    conn = connect(root)
+    try:
+        flag = args.in_progress == "true"
+        conn.execute(
+            "UPDATE user_stories SET in_progress = ?, updated_at = datetime('now') WHERE id = ?",
+            (1 if flag else 0, args.story_id),
+        )
+        if conn.total_changes == 0:
+            print(f"ERROR: {args.story_id} not found", file=sys.stderr)
+            return 1
+        conn.commit()
+    finally:
+        conn.close()
+    record_board_snapshot(root)
+    print(f"{args.story_id} in_progress={'true' if args.in_progress == 'true' else 'false'}")
+    return 0
+
+
 def cmd_set_summary(args) -> int:
     root = _root(args)
     conn = connect(root)
@@ -867,6 +890,14 @@ def main() -> int:
     ready.add_argument("story_id")
     ready.add_argument("--ready", choices=["true", "false"], default="true")
     ready.set_defaults(func=cmd_set_ready)
+
+    wip = sub.add_parser(
+        "set-in-progress",
+        help="Claim US for Doing column (in_progress); not a status emoji",
+    )
+    wip.add_argument("story_id")
+    wip.add_argument("--in-progress", choices=["true", "false"], default="true")
+    wip.set_defaults(func=cmd_set_in_progress)
 
     summary = sub.add_parser("set-summary")
     summary.add_argument("story_id")

@@ -59,8 +59,8 @@ See `.agent/ARCHITECTURE.md` for the full map. Minimum:
   MERIDIAN.md              ← this manifest
   rules/MERIDIAN.md        ← P0 always-on
   ARCHITECTURE.md          ← kit structure
-  agents/                  ← personas (backlog-refiner, scrum-master, …)
-  skills/                  ← procedures (create-user-story, …)
+  agents/                  ← personas (story-maker, story-checker, scrum-master, …)
+  skills/                  ← procedures (us-create, …)
   workflows/               ← slash commands (/create-us, …)
   references/templates/    ← INDEX, section-contracts, us-template, …
   scripts/
@@ -189,22 +189,22 @@ Strict US also require `ready: true | false`.
 Board columns **Backlog** and **Todo** are not stored in SQLite: the extension derives 📋 Backlog / 📌 Todo from `status: ❌` plus `ready` (`false` → Backlog, `true` → Todo). Partial, Tests, Done, Frozen, and Deprecated follow `status`, `tests`, and toggles as in `docs/05_architecture.md`. Agents set `status` and `ready` — not board header labels.
 
 - `✅` requires proven acceptance; if `tests: required`, then `tests_status: done`, Plan/Planned `[x]`, Record/Executed filled.
-- `✅` requires `## Record` with real paths in `### Files` (skill `complete-user-story`).
+- `✅` requires `## Record` with real paths in `### Files` (skill `us-complete`).
 - US may leave ❌ only when all `depends_on` are ✅.
 
 ### US lifecycle
 
 ```txt
 /create-us     → Intent + Plan draft, ready: false   (forbidden: draft files — SQLite only)
-/review-us     → optional audit (no edits, no ready)
-/refine-us     → deepen Plan + Approach (required), ready: true
+/refine-us     → deepen Plan + Approach (required), ready stays false
+/review-us     → DoR attest (ready: true) or report-only
 implement      → developer gate: ready + Plan filled
 /complete-us   → Record + status ✅
 /sync-board    → removed in v11 (board reads SQLite)
 commit (human) → after close + board sync; one commit per US — see commit-after-us-close.md
 ```
 
-Agent: `backlog-refiner`. Skills: `create-user-story`, `review-user-story`, `refine-user-story`, `complete-user-story`.
+Agents: `story-maker` (create/refine), `story-checker` (review/complete).
 
 ---
 
@@ -239,7 +239,8 @@ python3 .agent/scripts/validate_meridian.py <project-folder> --json
 | Design system | `design-system-owner` | `/design-pass`, `/design-showcase`, `/design-review` |
 | Quality / tests | `quality-owner` | `/test-pass`, `/test-review` — profile via `quality-profile` CLI; see `agentic-quality-model.md` |
 | Versions / sprints | `sprint-planner` | `/create-version`, `/plan-sprint`, `/complete-sprint` |
-| US / board | `backlog-refiner` | `/create-us`, `/refine-us`, `/complete-us` |
+| US cook | `story-maker` | `/create-us`, `/refine-us` |
+| US attest | `story-checker` | `/review-us`, `/complete-us` |
 | US implement | `developer` | `/implement-us` (requires `ready: true`) |
 | Decisions | any relevant agent | `/update-decisions-log` |
 | Auto-pick | `meridian-routing` skill | — |

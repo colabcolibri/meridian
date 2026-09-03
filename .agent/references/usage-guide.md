@@ -175,13 +175,15 @@ After creating, run **`/review-us US-XXXX`** to get a quality audit of the story
 
 ### Refine a user story
 
-Run: **`/refine-us US-XXXX`**
+Run: **`/refine-us US-XXXX`** (`story-maker`)
 
-This is the step between creation and implementation. The agent:
+This is the step that cooks the Plan. The agent:
 - Writes the **Approach** (minimum 2 explanatory bullets — the technical direction)
 - Sets exact architecture section references
 - Writes concrete test steps under Planned
-- Sets `ready: true` when all checks pass
+- Leaves `ready: false`
+
+Then run **`/review-us US-XXXX`** (`story-checker`) to attest DoR. That is the only command that sets `ready: true`.
 
 A story without `ready: true` cannot be implemented.
 
@@ -202,7 +204,7 @@ Details: [scrum-meridian-map.md](./scrum-meridian-map.md).
 
 Board refreshes when `.meridian/meridian.db` changes (extension) or after any `meridian_delivery.py` upsert (`board_snapshots`).
 
-**Column model:** the board does not store column ids in SQLite. 📋 **Backlog** = `status: ❌` and `ready: false` (after `/create-us`); 📌 **Todo** = same status with `ready: true` (after `/refine-us`); **Partial** = `status: 🔶`; **Frozen** / **Deprecated** = `🧊` / `🚫` with toolbar toggles. Agents edit `status` and `ready` only.
+**Column model:** the board does not store column ids in SQLite. 📋 **Backlog** = `status: ❌` and `ready: false` (after `/create-us`); 📌 **Todo** = same status with `ready: true` (after `/review-us` DoR attest) and `in_progress` false; 🔨 **Doing** = `in_progress` true; **Partial** = `status: 🔶` and not in progress; **Frozen** / **Deprecated** = `🧊` / `🚫` with toolbar toggles. Agents edit `status`, `ready`, and `in_progress` only.
 
 ---
 
@@ -323,7 +325,8 @@ Run at the project root. Fix errors before creating US or marking docs `approved
 | `/complete-sprint vX-SY` | Close sprint — retrospective + status complete |
 | `/create-us` | New user story (gates: architecture approved + epic + version exist) |
 | `/review-us US-XXXX` | Quality audit — read-only, no changes, no `ready` |
-| `/refine-us US-XXXX` | Deepen Plan and Approach — sets `ready: true` when checklist passes |
+| `/refine-us US-XXXX` | Deepen Plan and Approach — does not set `ready` |
+| `/review-us US-XXXX` | Audit or DoR attest — only path that sets `ready: true` |
 | `/implement-us US-XXXX` | Gate + implement — requires `ready: true` |
 | `/complete-us US-XXXX` | Close story — fills Record, marks `✅` (SQLite upsert) |
 | `/investigate` | Read-only code trace — how/where/flow with evidence |

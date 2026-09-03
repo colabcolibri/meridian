@@ -10,7 +10,7 @@ $ARGUMENTS
 
 ## Critical rules
 
-1. Use `sprint-planner` + `@[skills/complete-sprint]`
+1. Use `sprint-planner` + `@[skills/sprint-complete]`
 2. Export sprint: `meridian_db_export.py . --entity sprints --id vX-SY`
 3. **Gate:** manager confirms increment vs sprint `goal`
 4. Fill `## Retrospective`; `update-sprint` (stdin heredoc)

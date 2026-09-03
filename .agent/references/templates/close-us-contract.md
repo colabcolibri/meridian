@@ -1,1 +1,1 @@
-../../skills/complete-user-story/references/close-us-contract.md
+../../skills/us-complete/references/close-us-contract.md

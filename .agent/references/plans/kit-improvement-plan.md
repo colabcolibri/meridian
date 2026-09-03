@@ -114,7 +114,7 @@ Subpastas `lib/`, `migrate/`, `test/`, `dev/` com shims na raiz para CI/extensã
 
 ### Onda E — Epic / version / sprint no CLI — **✅ concluída (jul/2026)**
 
-`meridian_db_cli.py create-epic`, `create-version`, `create-sprint`.
+`meridian_db_cli.py create-epic`, `version-create`, `sprint-create`.
 
 ### Onda G — Audit markdown v11 — **✅ concluída (G1–G7 + H1/H2)**
 

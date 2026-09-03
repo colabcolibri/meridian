@@ -1,1 +1,1 @@
-../../skills/create-user-story/references/us-template.md
+../../skills/us-create/references/us-template.md

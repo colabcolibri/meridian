@@ -10,12 +10,12 @@ $ARGUMENTS
 
 ## Critical rules
 
-1. Use `backlog-refiner` + `@[skills/refine-user-story]`
+1. Use `story-maker` + `@[skills/us-refine]`
 2. **Mandatory read:** `writing-guide.md` + `code-quality-at-us-time.md` + `refine-checklist.md`
 3. **Mandatory read:** `docs/04_principles.md` (DRY, SRP) this session
 4. **NO product code** — docs only
 5. Approach bullets must **explain** (full sentences) — not bare paths
-6. `ready: true` only when checklist passes
+6. Keep `ready: false` — `/review-us` (`story-checker`) attests DoR
 7. **Not a review** — for audit-only without edits, use `/review-us` first
 
 ---
@@ -35,7 +35,7 @@ RULES:
 5. DRY / SRP — Approach names reuse; no mixed layers; Out of scope lists creep
 6. Concrete Plan/Planned — numbered manual steps or commands
 7. Fix Why/Where only if create left real gaps
-8. ready: true iff checklist passes (rows 11–12 included)
+8. ready stays false; next `/review-us`
 9. `update-us` with **entire** markdown from step 1 + edits (never partial body — replaces full row)
 ```
 

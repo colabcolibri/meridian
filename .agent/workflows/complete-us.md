@@ -15,14 +15,14 @@ $ARGUMENTS
 **Never** copy `us-template.md` or `implementation-template.md` into `update-us` / `patch-record`. Those are not the US body.
 
 1. `show US-XXXX --full` — mandatory
-2. `@[skills/complete-user-story/references/close-us-contract.md]` — mandatory
+2. `@[skills/us-complete/references/close-us-contract.md]` — mandatory
 3. `patch-record` — default persist path
 
 ---
 
 ## Critical rules
 
-1. Use `backlog-refiner` + `@[skills/complete-user-story]`
+1. Use `story-checker` + `@[skills/us-complete]`
 2. **Gate:** implementation delivered; tests passed; `depends_on` at `✅`
 3. **Do not** mark `✅` with placeholder Record; CLI rejects boilerplate
 4. **Forbidden:** helper `.py`; rebuilding US from template; `update-us` with partial body
@@ -39,7 +39,7 @@ CONTEXT:
 - Mode: COMPLETE US (ADDITIVE — never wipe existing US text)
 
 RULES:
-1. backlog-refiner Phase 0 — US id + dependencies
+1. story-checker Phase 0 — US id + dependencies
 2. Read close-us-contract.md
 3. show US-XXXX --full — copy of record in SQLite; extend this, do not replace
 4. Add ## Record (real paths) + flip Acceptance [x] + Planned [x] where done

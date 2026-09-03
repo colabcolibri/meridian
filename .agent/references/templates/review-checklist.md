@@ -1,1 +1,1 @@
-../../skills/review-user-story/references/review-checklist.md
+../../skills/us-review/references/review-checklist.md

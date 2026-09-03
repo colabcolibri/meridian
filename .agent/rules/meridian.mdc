@@ -28,7 +28,7 @@ Priority: **P0 rules > P1 agent + MERIDIAN.md > P2 skills**.
 - Documentation precedes product code.
 - Do not create US before `05_architecture` `approved`.
 - Never `✅` without evidence; never `🔶` without `Missing:` in acceptance.
-- Never `✅` without filled `## Record` on the US (skill `complete-user-story`).
+- Never `✅` without filled `## Record` on the US (skill `us-complete`).
 - **`/complete-us` is additive:** `show --full` + `close-us-contract.md` + `patch-record` — never copy `us-template.md` into CLI.
 - Product code for a US requires `ready: true` — use `/implement-us US-XXXX` before coding.
 - Decisions: `prepend-decision` CLI — run `date +"%Y-%m-%d"` and `date +"%H:%M"` first (`/update-decisions-log`).

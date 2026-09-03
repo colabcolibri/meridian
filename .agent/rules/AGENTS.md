@@ -7,9 +7,9 @@ This repository uses the [Meridian](https://github.com/colabcolibri/meridian) pr
 ```txt
 YOU  →  /create-us  or  $workflow-create-us     (workflow)
          ↓
-Agent (@backlog-refiner, …)                          (routed by workflow — override with @name if needed)
+Agent (@story-maker, …)                          (routed by workflow — override with @name if needed)
          ↓
-Skill (create-user-story, …)                      (loaded by agent — rarely typed by human)
+Skill (us-create, …)                      (loaded by agent — rarely typed by human)
          ↓
 docs/                                             (source of truth)
 ```
@@ -49,7 +49,7 @@ After **Install Harness** or clone: run `./.agent/scripts/sync_kit.sh` to refres
 - `docs/kanban/board.json` is **deprecated** in v11 — use SQLite `board_snapshots` / planning export.
 - Inspect delivery via `meridian_delivery.py`; frontmatter ≠ SQL (`sprint`→`sprint_id`, `version`→`version_id`, `epic`→`epic_id`).
 - Never `✅` without evidence; never `🔶` without `Missing:` in acceptance.
-- Never `✅` without filled `## Record` on the US (skill `complete-user-story`).
+- Never `✅` without filled `## Record` on the US (skill `us-complete`).
 - Product code for a US requires `ready: true` — run `/implement-us US-XXXX` before coding.
 - Decisions: prepend via `meridian_delivery.py prepend-decision` (SQLite). Before CLI run `date +"%Y-%m-%d"` and `date +"%H:%M"` — use `/update-decisions-log`.
 - Structural contract: `.agent/references/templates/section-contracts.md` (validator + monitor).

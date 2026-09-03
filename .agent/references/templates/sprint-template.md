@@ -1,1 +1,1 @@
-../../skills/create-sprint/references/sprint-template.md
+../../skills/sprint-create/references/sprint-template.md

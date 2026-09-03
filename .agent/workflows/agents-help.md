@@ -23,7 +23,7 @@ Roster (v11):
 Security operator: /security-pass, /security-review, /dependency-audit → security-champion
 Quality operator: /test-pass, /test-review → quality-owner
 Design operator: /design-pass, /design-showcase, /design-review → design-system-owner
-Backlog: /create-us … /complete-us → backlog-refiner
+Backlog: /create-us /refine-us → story-maker; /review-us /complete-us → story-checker
 Implement: /implement-us → developer
 Governance: /status, /init-meridian → scrum-master
 Full guide: .agent/references/agents-help.md

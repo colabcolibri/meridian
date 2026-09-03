@@ -53,6 +53,27 @@ test("resolveKanbanColumn splits ❌ into backlog vs todo by ready", () => {
   )
 })
 
+test("resolveKanbanColumn maps in_progress to doing without a new status", () => {
+  assert.equal(
+    resolveKanbanColumn(
+      story({ id: "US-0004", status: "❌", ready: true, inProgress: true }),
+    ),
+    "doing",
+  )
+  assert.equal(
+    resolveKanbanColumn(
+      story({ id: "US-0005", status: "🔶", ready: true, inProgress: true, testsStatus: "done" }),
+    ),
+    "doing",
+  )
+  assert.equal(
+    resolveKanbanColumn(
+      story({ id: "US-0006", status: "❌", ready: true, inProgress: false }),
+    ),
+    "todo",
+  )
+})
+
 test("resolveKanbanColumn maps terminal statuses", () => {
   assert.equal(resolveKanbanColumn(story({ id: "US-0001", status: "🧊" })), "🧊")
   assert.equal(resolveKanbanColumn(story({ id: "US-0002", status: "🚫" })), "🚫")

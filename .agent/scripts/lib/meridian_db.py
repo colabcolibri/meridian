@@ -1092,6 +1092,7 @@ def load_delivery_markdown_files(package_root: str | Path) -> dict[str, list[tup
 
 def export_planning_json(package_root: str | Path) -> dict[str, Any]:
     """Structured export for IDE extension (no markdown parse in TS)."""
+    apply_migrations(package_root)
     conn = connect(package_root)
     try:
         stories = []
@@ -1099,7 +1100,7 @@ def export_planning_json(package_root: str | Path) -> dict[str, Any]:
             """
             SELECT id, title, epic_id, version_id, status, moscow,
                    done_when, tests, tests_status, ready, summary,
-                   preamble, body_markdown, sprint_id
+                   preamble, body_markdown, sprint_id, in_progress
             FROM user_stories ORDER BY id
             """
         ):
@@ -1119,6 +1120,7 @@ def export_planning_json(package_root: str | Path) -> dict[str, Any]:
                     "tests": row["tests"] or "required",
                     "testsStatus": row["tests_status"] or "pending",
                     "ready": bool(row["ready"]),
+                    "inProgress": bool(row["in_progress"]),
                     "summary": row["summary"],
                     "preamble": preamble or None,
                     "sprint": row["sprint_id"] or None,
@@ -1335,6 +1337,14 @@ def patch_user_story_record(
                 raise ValueError("; ".join(close_errors))
 
         upsert_user_story(conn, fm, full, sections, depends)
+        status = (fm.get("status") or "").strip()
+        if status in ("✅", "🧊", "🚫"):
+            cols = {r[1] for r in conn.execute("PRAGMA table_info(user_stories)")}
+            if "in_progress" in cols:
+                conn.execute(
+                    "UPDATE user_stories SET in_progress = 0, updated_at = datetime('now') WHERE id = ?",
+                    (story_id,),
+                )
         conn.commit()
     finally:
         conn.close()

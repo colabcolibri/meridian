@@ -10,7 +10,7 @@ $ARGUMENTS
 
 ## Critical rules
 
-1. Use `security-champion` + `@[skills/security-review]`
+1. Use `security-champion` + `@[skills/security-doc]`
 2. If creating `02` from scratch → copy § Document stub from `.agent/references/templates/phase-docs/02-security.md`
 3. Read checklist for active mode before Write on `02_security.md`
 4. Relevant decisions → `prepend-decision` (read `update-decisions-log` skill)

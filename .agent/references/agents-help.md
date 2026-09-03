@@ -10,6 +10,8 @@ Explicit map of **who does what**, **which group they belong to**, and **which s
 | Agentic quality model / qualitySiege profiles | [agentic-quality-model.md](./agentic-quality-model.md) |
 | **This file** | Agents, slash commands, skills, step order |
 | Scrum mapping | [scrum-meridian-map.md](./scrum-meridian-map.md) |
+| **Station map** | [agent-station-map.md](./agent-station-map.md) — cook vs attest |
+| **Areas** | [agent-areas.md](./agent-areas.md) — discovery, standards, planning, build, attest |
 
 ---
 
@@ -20,9 +22,9 @@ Human (manager)
     ↓ approves direction, sets approved / ✅
 Slash command (/create-us)  →  opens workflow in .agent/workflows/
     ↓ assigns persona
-Agent (@backlog-refiner)       →  .agent/agents/{name}.md
+Agent (@story-maker / @story-checker)  →  .agent/agents/{name}.md
     ↓ executes procedure
-Skill (create-user-story)   →  .agent/skills/{name}/SKILL.md
+Skill (us-create)           →  .agent/skills/{name}/SKILL.md
     ↓ writes artifacts
 docs/                       →  source of truth
 ```
@@ -33,7 +35,7 @@ docs/                       →  source of truth
 | **Agent** | Domain persona with gates and output format | Automatic routing or `@agent-name` |
 | **Skill** | Repeatable procedure (templates, scripts) | Used by agent — rarely typed by human |
 
-**Routing:** describe the task in chat → agent announces `Applying knowledge from @[agent]…`. Override anytime with `@scrum-master`, `@backlog-refiner`, etc.
+**Routing:** describe the task in chat → agent announces `Applying knowledge from @[agent]…`. Override with `@story-maker`, `@story-checker`, `@scrum-master`, etc.
 
 **Priority:** P0 rules → MERIDIAN.md → agent → skill → templates.
 
@@ -41,7 +43,7 @@ docs/                       →  source of truth
 
 ## Agent groups
 
-Eleven agents in **seven groups**. One agent may appear in notes when it supports another group.
+Twelve live specialists. Line: [agent-station-map.md](./agent-station-map.md).
 
 ### Group 1 — Orchestration
 
@@ -53,7 +55,7 @@ Keeps you as manager. Gates phases, reports blockers, decides what can move next
 
 **When to use:** `/status`, `/init-meridian`, `/daily-with-ai`, vague “what next?”, before any implementation.
 
-**Skills:** `init-project`, `create-epic`, `update-decisions-log`, `meridian-routing`
+**Skills:** `init-project`, `update-decisions-log`, `meridian-routing`
 
 ---
 
@@ -63,11 +65,11 @@ Defines *what the product is* before structure and code.
 
 | Agent | Serves for | Primary artifacts | Does not |
 | ----- | ---------- | ----------------- | -------- |
-| **`product-owner`** | Problem, users, in/out of scope, assumptions, risks | `docs/00_scope.md`, scope decisions | Tech stack, architecture, US |
+| **`product-owner`** | Problem, users, in/out of scope, assumptions, risks, epics | `docs/00_scope.md`, SQLite epics | Tech stack, architecture, US |
 
-**When to use:** drafting or challenging `00_scope`, scope arguments, “is this in scope?”
+**When to use:** drafting or challenging `00_scope`, scope arguments, `/discover`, `/create-epic`.
 
-**Skills:** `init-project`, `update-decisions-log`, `meridian-routing`
+**Skills:** `discover-product`, `epic-create`, `init-project`, `update-decisions-log`, `meridian-routing`
 
 ---
 
@@ -77,11 +79,11 @@ Writes and reviews phase documents and product-facing docs agents can execute.
 
 | Agent | Serves for | Primary artifacts | Does not |
 | ----- | ---------- | ----------------- | -------- |
-| **`technical-writer`** | Phase docs `01`–`04`, `06`–`08`, `11`; epic drafting | `docs/01_*` … `docs/08_*` | Approve `status: approved`; implement code |
+| **`technical-writer`** | Phase docs `01`–`04`, `06`–`08`, `11` | `docs/01_*` … `docs/08_*` | Approve `status: approved`; implement code; epics; US |
 
-**When to use:** filling tech stack, principles, environments; `/create-epic` (with templates).
+**When to use:** filling tech stack, principles, environments.
 
-**Skills:** `init-project`, `create-epic`, `create-user-story`, `update-decisions-log`, `meridian-routing`
+**Skills:** `init-project`, `document-existing-project`, `audit-phase-docs`, `update-decisions-log`, `meridian-routing`
 
 ---
 
@@ -96,9 +98,9 @@ Hardens structure before backlog and implementation.
 
 **When to use:** `/security-pass`, `/architecture`, security review before merge.
 
-**Skills:** `security-review`, `update-decisions-log`, `meridian-routing` (+ `security-review` on technical-architect)
+**Skills:** `security-doc`, `security-privacy`, `security-code`, `security-supply-chain`, `update-decisions-log`, `meridian-routing` (architect **consults** `security-code`, does not own `/security-review`)
 
-**Gate:** `05_architecture.md` must be **`approved`** before epics/versions/US (enforced by `sprint-planner` and `backlog-refiner`).
+**Gate:** `05_architecture.md` must be **`approved`** before epics/versions/US (enforced by `sprint-planner` and `story-maker`).
 
 ---
 
@@ -112,7 +114,7 @@ Turns approved architecture into releases, sprints, and execution order.
 
 **When to use:** `/create-version`, `/plan-sprint`, roadmap and sprint scope.
 
-**Skills:** `create-epic`, `create-version`, `create-sprint`, `create-user-story`, `update-decisions-log`, `meridian-routing`
+**Skills:** `version-create`, `sprint-create`, `sprint-complete`, `epic-complete`, `update-decisions-log`, `meridian-routing`
 
 ---
 
@@ -122,11 +124,13 @@ Owns the executable backlog and honest execution state.
 
 | Agent | Serves for | Primary artifacts | Does not |
 | ----- | ---------- | ----------------- | -------- |
-| **`backlog-refiner`** | US lifecycle, dependencies, close with evidence | SQLite `user_stories` | Implement without `ready: true`; mark ✅ without Record |
+| **`story-maker`** | Cook US Intent/Plan | SQLite `user_stories` | Set `ready` or `✅`; product code |
+| **`story-checker`** | Attest DoR (`ready`) and DoD (`✅`) | SQLite `user_stories` | Cook Plan; implement |
 
-**When to use:** `/create-us`, `/review-us`, `/refine-us`, `/complete-us`, kanban consistency.
+**When to use:** `/create-us`, `/refine-us` → maker; `/review-us`, `/complete-us` → checker.
 
-**Skills:** `create-user-story`, `review-user-story`, `refine-user-story`, `complete-user-story`, `update-decisions-log`, `meridian-routing`
+**Skills (maker):** `us-create`, `us-refine`, `update-decisions-log`, `meridian-routing`  
+**Skills (checker):** `us-review`, `us-complete`, `update-decisions-log`, `meridian-routing`
 
 ---
 
@@ -222,14 +226,24 @@ Epic/version **close:** `/complete-epic` for epics; version via `update-version`
 
 | Step | Command | Agent | US state after | What it does |
 | ---- | ------- | ----- | -------------- | ------------ |
-| E1 | **`/create-us`** | `backlog-refiner` | `ready: false` | New US: Intent + draft Plan. |
-| E2 | **`/review-us US-XXXX`** | `backlog-refiner` | unchanged | Read-only quality audit. No `ready` change. |
-| E3 | **`/refine-us US-XXXX`** | `backlog-refiner` | `ready: true` | Approach, arch refs, concrete tests. **Gate for code.** |
-| E4 | **`/implement-us US-XXXX`** | `developer` | — | Gate: `ready: true`, deps, Plan; then product code. **Block if not refined.** |
+| E1 | **`/create-us`** | `story-maker` | `ready: false` | New US: Intent + draft Plan. |
+| E2 | **`/refine-us US-XXXX`** | `story-maker` | `ready: false` | Approach, arch refs, concrete tests. Does **not** set ready. |
+| E3 | **`/review-us US-XXXX`** | `story-checker` | `ready: true` if DoR attest | Audit; only path that sets `ready`. Report-only leaves ready unchanged. |
+| E4 | **`/implement-us US-XXXX`** | `developer` | — | Gate: `ready: true`, deps, Plan; then product code. **Block if not attested.** |
 | E5 | *(manager review)* | human | — | Review diff and run tests. |
-| E6 | **`/complete-us US-XXXX`** | `backlog-refiner` | `status: ✅` | Fills Record, checks acceptance; **lifecycle cascade** offers sprint/epic/version close. |
+| E6 | **`/complete-us US-XXXX`** | `story-checker` | `status: ✅` | Fills Record; **lifecycle cascade** offers sprint/epic/version close. |
 
 **Rules:** no code without E3 (`ready: true`) **and** E4 gate. No ✅ without E6 (`## Record` + evidence).
+
+### Pass / bounce / consult
+
+Every station ends with a **handoff** block: `station`, `agent`, `done`, `blocker`, `next agent`, `next command`, `artifact id`. The next agent reads the artifact + block, not the previous persona.
+
+| Interaction | Meaning |
+| ----------- | ------- |
+| **Pass** | Work finished; handoff names the next owner and slash command |
+| **Bounce** | Checker reject → one station back (`story-checker` → `story-maker`; specialist review → `developer`). Skip to `product-owner` only for **scope** |
+| **Consult** | `technical-architect` and `code-investigator` mid-station; they must not set `ready`, `✅`, or write product code |
 
 ---
 
@@ -259,15 +273,15 @@ Use this as the canonical sequence. Skip steps only when the artifact already ex
  7. /create-epic                            [Group D]  product-owner
  8. /create-version                         [Group D]  sprint-planner
  9. /plan-sprint                            [Group D]  sprint-planner
-10. /create-us                               [Group E]  backlog-refiner
-11. /review-us US-XXXX                       [Group E]  backlog-refiner  (optional)
-12. /refine-us US-XXXX                       [Group E]  backlog-refiner  → ready: true
+10. /create-us                               [Group E]  story-maker
+11. /refine-us US-XXXX                       [Group E]  story-maker  (Plan; ready stays false)
+12. /review-us US-XXXX                       [Group E]  story-checker → ready: true
 13. /implement-us US-XXXX                    [Group E]  developer → gate then code
 14. /design-review (UI US)                   [Group C]  design-system-owner → before close
 14b. /security-review (sensitive US)          [Group C]  security-champion → before close
 14c. /test-review (tests: required)           [Group C]  quality-owner → before close
 15. Manager review diff + tests              [Group E]  human
-16. /complete-us US-XXXX                     [Group E]  backlog-refiner
+16. /complete-us US-XXXX                     [Group E]  story-checker
 17. git commit (human)                       [Group F]  you — one US per commit
 18. /status or /daily-with-ai                [Group B]  scrum-master → back to step 10
 19. /complete-sprint vX-SY (when sprint done) [Group D]  sprint-planner — after US in sprint closed
@@ -291,29 +305,33 @@ Skills are procedures agents load automatically. Grouped by purpose.
 
 | Skill | Used by | Purpose |
 | ----- | ------- | ------- |
-| `create-epic` | technical-writer, sprint-planner | Epic file from template |
-| `create-version` | sprint-planner | Version file |
-| `create-sprint` | sprint-planner | Sprint file |
-| `complete-sprint` | sprint-planner | Sprint close + Retrospective |
-| `complete-epic` | sprint-planner | Epic close + outcome confirmation |
-| `create-user-story` | technical-writer, backlog-refiner | US file at create |
+| `epic-create` | product-owner | Epic row in SQLite |
+| `version-create` | sprint-planner | Version file |
+| `sprint-create` | sprint-planner | Sprint file |
+| `sprint-complete` | sprint-planner | Sprint close + Retrospective |
+| `epic-complete` | sprint-planner | Epic close + outcome confirmation |
+| `us-create` | story-maker | US row at create |
+| `us-refine` | story-maker | Approach; does not set `ready` |
+| `us-review` | story-checker | Audit; may set `ready` |
+| `us-complete` | story-checker | Record + ✅ + board sync |
 
 ### User story quality & close
 
 | Skill | Used by | Purpose |
 | ----- | ------- | ------- |
-| `review-user-story` | backlog-refiner | Read-only US audit |
-| `refine-user-story` | backlog-refiner | Approach + `ready: true` |
-| `implement-user-story` | developer | Gate + implement when `ready: true` |
-| `complete-user-story` | backlog-refiner | Record + ✅ + board sync |
+| `us-implement` | developer | Gate + implement when `ready: true` |
 
 ### Board & security
 
 | Skill | Used by | Purpose |
 | ----- | ------- | ------- |
 | _(removed)_ | — | v11: `board_snapshots` in SQLite |
-| `security-review` | security-champion, technical-architect | Security pass, review, dependency audit |
-| `test-strategy` | quality-owner | `10`, test pass/review checklists |
+| `security-doc` | security-champion | `/security-pass` — `02` |
+| `security-privacy` | security-champion | `/privacy-pass` |
+| `security-code` | security-champion | `/security-review` — code vs `02` |
+| `security-supply-chain` | security-champion | `/dependency-audit` |
+| `test-strategy` | quality-owner | `10`, `/test-pass` |
+| `test-review` | quality-owner | `/test-review` evidence audit |
 | `design-system` | design-system-owner | `09`, stack bootstrap, showcase, review checklists |
 | `investigate-codebase` | code-investigator | `/investigate` checklists and report template |
 
@@ -342,7 +360,7 @@ Skills are procedures agents load automatically. Grouped by purpose.
 | Architecture doc | C | `technical-architect` | `/architecture` |
 | New epic | D | `product-owner` | `/create-epic` |
 | New version / sprint | D | `sprint-planner` | `/create-version`, `/plan-sprint`, `/complete-sprint` |
-| New / refine / implement / close US | E | `backlog-refiner` / `developer` | `/create-us`, `/refine-us`, `/implement-us`, `/complete-us` |
+| New / refine / review / close US | E | `story-maker` / `story-checker` / `developer` | `/create-us`, `/refine-us`, `/review-us`, `/implement-us`, `/complete-us` |
 | Board refresh | — | Extension reads SQLite on save |
 | Log a decision | F | any | `/update-decisions-log` |
 | Design contract (`09`) | C | `design-system-owner` | `/design-pass`, `/design-pass bootstrap` |
@@ -363,7 +381,7 @@ These are **not** agents. They read the **active** `docs/` in the editor (extens
 
 | Group | Command | Purpose |
 | ----- | ------- | ------- |
-| Views | **Open Board**, **Open Versions**, **Open Sprints**, **Open Epics**, **Open Decisions** | Board: 📋 Backlog · 📌 Todo · 🔶 Partial · 🧪 Tests · ✅ Done (from `status` + `ready` + tests); toggles 🧊 Frozen · 🚫 Deprecated. Other tabs read-only; **Project** row shows name + `docs/` path |
+| Views | **Open Board**, **Open Versions**, **Open Sprints**, **Open Epics**, **Open Decisions** | Board: 📋 Backlog · 📌 Todo · 🔨 Doing · 🔶 Partial · 🧪 Tests · ✅ Done (from `status` + `ready` + `in_progress` + tests); toggles 🧊 Frozen · 🚫 Deprecated. Other tabs read-only; **Project** row shows name + `docs/` path |
 | Governance | **Select Active Project**, **Validate Project**, **Sync Board**, **Show Workspace Status** | Switch product (saved); validate `packageRoot`; board JSON; list all projects |
 | Help | **Open Command Help**, **Open Agents Help** | Extension catalog; kit `agents-help.md` at runtime |
 
@@ -376,7 +394,7 @@ These are **not** agents. They read the **active** `docs/` in the editor (extens
 | Method | Example | When |
 | ------ | ------- | ---- |
 | Slash command | `/refine-us US-0017` | Known workflow step |
-| Explicit agent | `@backlog-refiner refine US-0017` | Override routing |
+| Explicit agent | `@story-maker refine US-0017` | Override routing |
 | Natural language | “Implement US-0017” | Run `/implement-us US-0017` if `ready: true`; else block |
 | Read-only check | `/status` | Start of every session |
 

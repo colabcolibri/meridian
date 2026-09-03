@@ -134,6 +134,7 @@ python3 .agent/scripts/meridian_db_export.py . --entity us --id US-0115 --write-
 python3 .agent/scripts/meridian_delivery.py implement-gate US-0115
 python3 .agent/scripts/meridian_delivery.py implement-gate US-0115 --json
 python3 .agent/scripts/meridian_delivery.py set-ready US-0115 --ready true
+python3 .agent/scripts/meridian_delivery.py set-in-progress US-0115 --in-progress true
 python3 .agent/scripts/meridian_delivery.py set-summary US-0115 --text "4-8 sentence summary"
 python3 .agent/scripts/meridian_delivery.py prepend-decision \
   --date "$(date +"%Y-%m-%d")" --time "$(date +"%H:%M")" \
@@ -208,10 +209,10 @@ python3 .agent/scripts/purge_delivery_md.py . --require-verify
 
 | Artifact | Markdown shape template |
 | -------- | ----------------------- |
-| User story | `.agent/skills/create-user-story/references/us-template.md` |
-| Epic | `.agent/skills/create-epic/references/epic-template.md` |
-| Version | `.agent/skills/create-version/references/version-template.md` |
-| Sprint | `.agent/skills/create-sprint/references/sprint-template.md` |
+| User story | `.agent/skills/us-create/references/us-template.md` |
+| Epic | `.agent/skills/epic-create/references/epic-template.md` |
+| Version | `.agent/skills/version-create/references/version-template.md` |
+| Sprint | `.agent/skills/sprint-create/references/sprint-template.md` |
 
 Parse → upsert via CLI; do not hand-edit SQL for narrative bodies unless emergency.
 

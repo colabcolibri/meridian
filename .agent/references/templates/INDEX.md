@@ -15,15 +15,15 @@ Templates are mirrored here from skills (`references/`) so every agent uses the 
 | Phase docs `00`–`11` | `doc-templates.md` | `technical-writer` | `init-project` | `/init-meridian` |
 | As-is inventory `docs/inventory/as-is.md` | `as-is-inventory-template.md` | `technical-writer` | `init-project` (Mode B) | `/init-meridian` |
 | Projects manifest `.meridian/projects.json` | `projects-manifest-template.md` | `scrum-master` | `init-project` | `/init-meridian`, `/status` |
-| Epic (SQLite) | `epic-template.md` + **`writing-guide.md`** | `product-owner` | `create-epic` | `/create-epic` |
-| Version (SQLite) | `version-template.md` + **`writing-guide.md`** | `sprint-planner` | `create-version` | `/create-version` |
-| Sprint (SQLite) | `sprint-template.md` | `sprint-planner` | `create-sprint` | `/plan-sprint` |
-| User story (create) | `us-template.md` + **`writing-guide.md`** + **`code-quality-at-us-time.md`** | `backlog-refiner` | `create-user-story` | `/create-us` |
-| User story (review) | `review-checklist.md` + `us-template.md` + **`writing-guide.md`** + `section-contracts.md` | `backlog-refiner` | `review-user-story` | `/review-us` |
-| User story (refine) | `us-template.md` + `refine-checklist.md` + **`writing-guide.md`** + **`code-quality-at-us-time.md`** | `backlog-refiner` | `refine-user-story` | `/refine-us` |
-| User story (implement) | `implement-gate-checklist.md` + **`code-quality-at-us-time.md`** + target US | `developer` | `implement-user-story` | `/implement-us` |
+| Epic (SQLite) | `epic-template.md` + **`writing-guide.md`** | `product-owner` | `epic-create` | `/create-epic` |
+| Version (SQLite) | `version-template.md` + **`writing-guide.md`** | `sprint-planner` | `version-create` | `/create-version` |
+| Sprint (SQLite) | `sprint-template.md` | `sprint-planner` | `sprint-create` | `/plan-sprint` |
+| User story (create) | `us-template.md` + **`writing-guide.md`** + **`code-quality-at-us-time.md`** | `story-maker` | `us-create` | `/create-us` |
+| User story (review) | `review-checklist.md` + `us-template.md` + **`writing-guide.md`** + `section-contracts.md` | `story-checker` | `us-review` | `/review-us` |
+| User story (refine) | `us-template.md` + `refine-checklist.md` + **`writing-guide.md`** + **`code-quality-at-us-time.md`** | `story-maker` | `us-refine` | `/refine-us` |
+| User story (implement) | `implement-gate-checklist.md` + **`code-quality-at-us-time.md`** + target US | `developer` | `us-implement` | `/implement-us` |
 | Architecture detail | `architecture-folder-guide.md` + `05` phase doc | `technical-architect` | — | `/architecture` |
-| User story (close) | **`close-us-contract.md`** + `show --full` + `implementation-template.md` (Record shape only) | `backlog-refiner` | `complete-user-story` | `/complete-us` |
+| User story (close) | **`close-us-contract.md`** + `show --full` + `implementation-template.md` (Record shape only) | `story-checker` | `us-complete` | `/complete-us` |
 | Decision entry | `decision-template.md` + `decision-schema.md` | any relevant agent | `update-decisions-log` | — |
 | Board (legacy) | _(removed v11)_ | — | SQLite `board_snapshots` + planning export |
 
@@ -53,7 +53,7 @@ When an agent from the table is activated:
 If the request is **implement code** for a US (`developer` gate):
 
 1. Read `implement-gate-checklist.md` + `meridian_delivery.py show US-XXXX --full`.
-2. Block if `ready` is not `true` → `/refine-us` first.
+2. Block if `ready` is not `true` → `/review-us` first (after `/refine-us`).
 3. Block if `## Plan` is empty or only placeholders.
 4. Read every path listed under Plan / **Architecture refs** before writing code.
 5. Read **`code-quality-at-us-time.md`** and `docs/04_principles.md` before writing code.

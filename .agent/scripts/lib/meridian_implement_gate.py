@@ -140,7 +140,7 @@ def check_implement_gate(package_root: str | Path, story_id: str) -> dict[str, A
         )
 
         ready = bool(row["ready"])
-        add_check("ready", ready, "ready must be true — run /refine-us first")
+        add_check("ready", ready, "ready must be true — run /review-us after /refine-us")
 
         if ready:
             try:

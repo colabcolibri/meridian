@@ -199,6 +199,7 @@ Migrations:
 | `20260718110000_summary_columns.sql` | `summary TEXT` on versions, epics, sprints, user_stories |
 | `20260718120000_story_dependencies.sql` | `story_dependencies` junction + backfill from `depends_on_json` |
 | `20260722120000_user_story_sprint.sql` | `user_stories.sprint_id`, `sprint_position`; reconcile on bootstrap |
+| `20260903115657_user_story_in_progress.sql` | `user_stories.in_progress` (Doing column; not a new `status`) |
 
 ### `versions`
 
@@ -232,7 +233,7 @@ Frontmatter maps to columns (`epic` → `epic_id`, `version` → `version_id`, `
 | `version_id` | TEXT FK → `versions.id` | required |
 | `sprint_id` | TEXT FK → `sprints.id` ON DELETE SET NULL | optional at create; required for `ready: true` / implement |
 | `sprint_position` | INTEGER | order within sprint; synced with `sprint_stories.position` |
-| `status`, `moscow`, `ready`, `done_when`, `tests`, `tests_status` | | frontmatter; **`ready`** drives 📋 Backlog vs 📌 Todo on the board when `status` is ❌ |
+| `status`, `moscow`, `ready`, `in_progress`, `done_when`, `tests`, `tests_status` | | frontmatter / CLI; **`ready`** splits 📋 Backlog vs 📌 Todo; **`in_progress`** is 🔨 Doing when `status` is ❌ or 🔶 |
 | `depends_on_json` | TEXT | denormalized JSON array; synced with `story_dependencies` |
 | `summary` | TEXT | read first; 4–8 sentences after `/complete-us` |
 | `body_markdown` | TEXT | **full US file** — canonical round-trip |

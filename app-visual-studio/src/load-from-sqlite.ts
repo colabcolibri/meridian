@@ -24,6 +24,7 @@ type PlanningExport = {
     tests: UserStory["tests"]
     testsStatus: UserStory["testsStatus"]
     ready: boolean
+    inProgress?: boolean
     summary: string | null
     preamble: string | null
   }>
@@ -118,6 +119,7 @@ export function loadPlanningPayloadFromSqliteDetailed(
       tests: s.tests,
       testsStatus: s.testsStatus,
       ready: s.ready,
+      inProgress: s.inProgress === true,
       preamble: s.preamble ?? null,
     }))
     const versions: VersionSummary[] = data.versions.map((v) => ({

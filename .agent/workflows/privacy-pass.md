@@ -10,7 +10,7 @@ $ARGUMENTS
 
 ## Critical rules
 
-1. Use `security-champion` + `@[skills/security-review]`
+1. Use `security-champion` + `@[skills/security-privacy]`
 2. Read `privacy-compliance-checklist.md` before Write on `02_security.md`
 3. **LGPD and GDPR are separate** — fill both, mark N/A per jurisdiction with manager rationale
 4. Use **official references only** in tables (ANPD, Planalto, EUR-Lex, EDPB, European Commission)

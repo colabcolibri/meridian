@@ -1,5 +1,5 @@
 ---
-description: Audit a user story against templates and checklists — read-only report, no ready flag.
+description: Audit a user story (report-only) or attest DoR (ready true). Story-checker only.
 ---
 
 # /review-us — review user story
@@ -10,12 +10,12 @@ $ARGUMENTS
 
 ## Critical rules
 
-1. Use `backlog-refiner` + `@[skills/review-user-story]`
-2. **Read-only** — do not upsert US unless manager explicitly asks to fix in the same turn
-3. **Never** set `ready: true` — only `/refine-us` does that
-4. **NO product code**
-5. **Mandatory read:** `TEMPLATE_SOURCES.md` (if path confusion) + `writing-guide.md` + `review-checklist.md` + target US
-6. Run `validate_meridian.py` when available
+1. Use `story-checker` + `@[skills/us-review]`
+2. **Default report-only** — do not upsert unless DoR attest is requested or clearly implied (“ready for implement”, “pode implementar”)
+3. **`ready: true` only here** — never `/refine-us`
+4. Failing checklist → bounce `/refine-us` (`story-maker`); do not set ready
+5. **NO product code**
+6. **Mandatory read:** `review-checklist.md` + target US `show --full`
 
 ---
 
@@ -24,31 +24,14 @@ $ARGUMENTS
 ```txt
 CONTEXT:
 - User Request: $ARGUMENTS
-- Mode: REVIEW US (audit)
+- Mode: REVIEW US (story-checker)
 
 RULES:
-1. Resolve US id from $ARGUMENTS or ask
-2. Read US, depends_on US, cited architecture sections (for R6 only)
-3. Run validate_meridian.py on project folder
-4. Score review-checklist R1–R13 — pass | fail | warn per row
-5. Output gap table + single recommendation
-6. Do NOT edit US or ready flag unless explicit fix request
-```
-
----
-
-## Output
-
-```txt
-US review:
-File:
-Validator:
-Checklist: X/13 pass
-
-Failures:
-Warnings:
-ready in file: true | false | unset
-Recommendation: /refine-us | /complete-us | implement | human
+1. Resolve US id
+2. Score review-checklist (and refine-checklist if attesting)
+3. Report-only unless manager wants DoR attest
+4. Attest → set-ready true iff pass
+5. Do not cook Plan (delegate story-maker)
 ```
 
 ---
@@ -57,7 +40,8 @@ Recommendation: /refine-us | /complete-us | implement | human
 
 | `/review-us` | `/refine-us` |
 | --- | --- |
-| Report gaps | Fix gaps in file |
-| Never sets ready | Sets ready: true when checklist passes |
+| Attest or report | Cook Plan / Approach |
+| May set ready | Must not set ready |
+| `story-checker` | `story-maker` |
 
-Typical flow: `/create-us` → `/review-us` (optional) → `/refine-us` → implement.
+Typical flow: `/create-us` → `/refine-us` → `/review-us` (ready) → `/implement-us`.

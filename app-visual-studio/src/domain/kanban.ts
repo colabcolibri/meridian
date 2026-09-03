@@ -1,10 +1,11 @@
 import type { UserStory } from "./types.js"
 import { sortStoriesById } from "./sort-by-id.js"
 
-/** Board columns — derived from SQLite `ready` + `status`, not stored separately. */
+/** Board columns — derived from SQLite `ready` + `status` + `in_progress`, not stored separately. */
 export type KanbanColumnId =
   | "backlog"
   | "todo"
+  | "doing"
   | "🔶"
   | "🧪"
   | "✅"
@@ -19,6 +20,7 @@ export type KanbanColumnGroup = {
 export const KANBAN_COLUMN_ORDER: KanbanColumnId[] = [
   "backlog",
   "todo",
+  "doing",
   "🔶",
   "🧪",
   "✅",
@@ -30,6 +32,7 @@ export const KANBAN_COLUMN_ORDER: KanbanColumnId[] = [
 const COLUMN_HEADER_LABELS: Record<KanbanColumnId, string> = {
   backlog: "📋 Backlog",
   todo: "📌 Todo",
+  doing: "🔨 Doing",
   "🔶": "🔶 Partial",
   "🧪": "🧪 Tests",
   "✅": "✅ Done",
@@ -50,12 +53,19 @@ export function isReadyForTodo(story: UserStory): boolean {
   return story.ready === true
 }
 
+export function isInProgress(story: UserStory): boolean {
+  return story.inProgress === true
+}
+
 export function resolveKanbanColumn(story: UserStory): KanbanColumnId {
   if (story.status === "🧊") {
     return "🧊"
   }
   if (story.status === "🚫") {
     return "🚫"
+  }
+  if (isInProgress(story) && (story.status === "❌" || story.status === "🔶")) {
+    return "doing"
   }
   if (story.status === "❌") {
     return isReadyForTodo(story) ? "todo" : "backlog"

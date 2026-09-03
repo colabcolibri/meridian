@@ -1,1 +1,1 @@
-../../skills/complete-user-story/references/implementation-template.md
+../../skills/us-complete/references/implementation-template.md

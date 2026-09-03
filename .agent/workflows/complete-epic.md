@@ -10,7 +10,7 @@ $ARGUMENTS
 
 ## Critical rules
 
-1. Use `sprint-planner` + `@[skills/complete-epic]`
+1. Use `sprint-planner` + `@[skills/epic-complete]`
 2. **Hard block:** any Must US with status not in ✅ / 🚫 / 🧊
 3. Prefer **new epic** for large follow-ups — do not reopen `complete`
 4. Persist only via `update-epic` stdin heredoc

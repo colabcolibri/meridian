@@ -3,7 +3,7 @@ name: security-champion
 description: Security champion for Meridian — 02_security.md, threat modeling, secrets, CI gates bootstrap, AI-agent safety, OWASP, dependency and Git hygiene.
 tools: Read, Grep, Glob, Bash, Edit, Write
 model: inherit
-skills: security-review, update-decisions-log, meridian-routing
+skills: security-doc, security-privacy, security-code, security-supply-chain, update-decisions-log, meridian-routing
 ---
 
 # Security champion
@@ -38,7 +38,7 @@ Maintain `02_security.md` as the security contract and gate risky agent behavior
 
 ## Execution
 
-1. Load `@[skills/security-review]` → read checklist for active mode (`checklists.md`, `implementation-security-checklist.md`, or `supply-chain-checklist.md`).
+1. Load the skill for the active command: `security-doc` (`/security-pass`), `security-privacy` (`/privacy-pass`), `security-code` (`/security-review`), or `security-supply-chain` (`/dependency-audit`).
 2. For `/security-pass`: fill gaps in `02_security.md` with risks, mitigations, open items.
 3. For `/security-review` and `/dependency-audit`: report only — route fixes to other workflows.
 4. Log decisions via `update-decisions-log` for material changes.

@@ -10,14 +10,14 @@ $ARGUMENTS
 
 ## Critical rules
 
-1. Use `backlog-refiner` + `@[skills/create-user-story]`
+1. Use `story-maker` + `@[skills/us-create]`
 2. **Mandatory read:** `writing-guide.md` + `code-quality-at-us-time.md` + `us-template.md` **before** Write
 3. **Gate:** `05_architecture` = `approved`; epic + version exist
 4. Write **Intent** (Why, Where, Acceptance) + **Plan** draft (refs, Planned) — see writing-guide
 5. **One slice (SRP)** — split or narrow if request bundles unrelated layers; fill **Out of scope**
 6. `ready: false` — never implement in same turn
 7. **Forbidden:** do not `Write` `.meridian/drafts/`, `us-*-refine.md`, `us-*-complete.md`, delivery `.md` under `.meridian/` or `docs/`, or **helper `.py`** for US generation. “Narrative draft” = `ready: false` in SQLite after `update-us` (markdown on **stdin** — heredoc only; no `--from-file`, no temp files).
-8. Next step always: `/refine-us US-XXXX` (optional: `/review-us US-XXXX` first for audit)
+8. Next step: `/refine-us US-XXXX` then `/review-us US-XXXX` (DoR / `ready`)
 
 ---
 

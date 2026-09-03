@@ -11,7 +11,7 @@ $ARGUMENTS
 ## Critical rules
 
 1. **NO CODE** — only SQLite delivery (`versions`, `sprints`, `user_stories`)
-2. Use `sprint-planner` + `create-sprint` / `create-user-story` skills
+2. Use `sprint-planner` + `version-create` / `sprint-create` skills. New US → `/create-us` (`story-maker`), not this planner.
 3. Requires `05_architecture.md` approved
 4. Log scope shifts → `prepend-decision` (read `update-decisions-log` skill + run `date`)
 5. `validate_meridian.py` when available

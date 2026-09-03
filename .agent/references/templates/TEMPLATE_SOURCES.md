@@ -22,15 +22,15 @@ CANONICAL (edit here)          REGISTRY (agents read)              IDE ADAPTER (
 
 | Template | Canonical (edit) | Registry | Used by |
 | -------- | ---------------- | -------- | ------- |
-| `us-template.md` | `.agent/skills/create-user-story/references/us-template.md` | `.agent/references/templates/us-template.md` | `/create-us`, `/refine-us`, `/review-us`, `/implement-us` — **not** `/complete-us` body |
-| `refine-checklist.md` | `.agent/skills/refine-user-story/references/refine-checklist.md` | `.agent/references/templates/refine-checklist.md` | `/refine-us` |
-| `implement-gate-checklist.md` | `.agent/skills/implement-user-story/references/implement-gate-checklist.md` | `.agent/references/templates/implement-gate-checklist.md` | `/implement-us` |
-| `review-checklist.md` | `.agent/skills/review-user-story/references/review-checklist.md` | `.agent/references/templates/review-checklist.md` | `/review-us` |
-| `implementation-template.md` | `.agent/skills/complete-user-story/references/implementation-template.md` | `.agent/references/templates/implementation-template.md` | `/complete-us` (Record shape only) |
-| `close-us-contract.md` | `.agent/skills/complete-user-story/references/close-us-contract.md` | `.agent/references/templates/close-us-contract.md` | `/complete-us` (**read first**) |
-| `epic-template.md` | `.agent/skills/create-epic/references/epic-template.md` | `.agent/references/templates/epic-template.md` | `/create-epic` |
-| `version-template.md` | `.agent/skills/create-version/references/version-template.md` | `.agent/references/templates/version-template.md` | `/create-version` |
-| `sprint-template.md` | `.agent/skills/create-sprint/references/sprint-template.md` | `.agent/references/templates/sprint-template.md` | `/plan-sprint` |
+| `us-template.md` | `.agent/skills/us-create/references/us-template.md` | `.agent/references/templates/us-template.md` | `/create-us`, `/refine-us`, `/review-us`, `/implement-us` — **not** `/complete-us` body |
+| `refine-checklist.md` | `.agent/skills/us-refine/references/refine-checklist.md` | `.agent/references/templates/refine-checklist.md` | `/refine-us` |
+| `implement-gate-checklist.md` | `.agent/skills/us-implement/references/implement-gate-checklist.md` | `.agent/references/templates/implement-gate-checklist.md` | `/implement-us` |
+| `review-checklist.md` | `.agent/skills/us-review/references/review-checklist.md` | `.agent/references/templates/review-checklist.md` | `/review-us` |
+| `implementation-template.md` | `.agent/skills/us-complete/references/implementation-template.md` | `.agent/references/templates/implementation-template.md` | `/complete-us` (Record shape only) |
+| `close-us-contract.md` | `.agent/skills/us-complete/references/close-us-contract.md` | `.agent/references/templates/close-us-contract.md` | `/complete-us` (**read first**) |
+| `epic-template.md` | `.agent/skills/epic-create/references/epic-template.md` | `.agent/references/templates/epic-template.md` | `/create-epic` |
+| `version-template.md` | `.agent/skills/version-create/references/version-template.md` | `.agent/references/templates/version-template.md` | `/create-version` |
+| `sprint-template.md` | `.agent/skills/sprint-create/references/sprint-template.md` | `.agent/references/templates/sprint-template.md` | `/plan-sprint` |
 | `board-schema.md` | _(removed v11)_ | — | use `meridian_db_export --format planning` |
 | `decision-template.md` | `.agent/skills/update-decisions-log/references/decision-template.md` | `.agent/references/templates/decision-template.md` | `update-decisions-log` |
 | `decision-schema.md` | `.agent/skills/update-decisions-log/references/decision-schema.md` | `.agent/references/templates/decision-schema.md` | `update-decisions-log` (validation) |
@@ -66,7 +66,7 @@ CANONICAL (edit here)          REGISTRY (agents read)              IDE ADAPTER (
 | Architecture | `/architecture` | `architecture-folder-guide.md` + phase docs 00–04 |
 | Close | `/complete-us` | **`close-us-contract.md`** + `show --full` + `implementation-template.md` (Record shape) + `section-contracts.md` — **not** `us-template.md` |
 
-**Review vs refine:** review = audit report, no edits, no `ready`. Refine = edit US + `ready: true`.
+**Review vs refine:** `/refine-us` (`us-refine`) cooks Plan and **leaves `ready: false`**. `/review-us` (`us-review`) is the only path that sets `ready: true` (DoR attest). Report-only review does not flip `ready`.
 
 ---
 

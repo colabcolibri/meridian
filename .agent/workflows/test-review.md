@@ -10,7 +10,7 @@ $ARGUMENTS
 
 ## Critical rules
 
-1. Use `quality-owner` + `@[skills/test-strategy]`
+1. Use `quality-owner` + `@[skills/test-review]`
 2. Read `test-review-checklist.md` before reporting
 3. Requires `10_test_strategy.md` when product uses automated tests; else audit US tests field only
 4. **No product code** — report only; fixes via `/test-pass`, `/refine-us`, or `/implement-us`

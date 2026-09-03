@@ -53,7 +53,7 @@ Scrum mapping (bugs, spikes, ceremonies, no story points): `.agent/references/sc
 
 | Moment | Workflow / skill | What changes |
 | ------ | ---------------- | ------------ |
-| **Close** (`/complete-sprint`) | `sprint-template.md` + `complete-sprint` | `## Retrospective` filled; `status: complete` |
+| **Close** (`/complete-sprint`) | `sprint-template.md` + `sprint-complete` | `## Retrospective` filled; `status: complete` |
 
 Epic **close** uses `/complete-epic`. Version **close** uses `update-version` (often invited by `/complete-us` cascade or `/status` hygiene). Prefer new epic over reopening `complete`.
 

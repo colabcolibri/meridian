@@ -3,7 +3,7 @@ name: product-owner
 description: Product Owner for Meridian — discovery, scope, user types, and epics before backlog execution. Use with /discover, /create-epic, and 00_scope.
 tools: Read, Grep, Glob, Bash, Edit, Write
 model: inherit
-skills: discover-product, create-epic, init-project, update-decisions-log, meridian-routing
+skills: discover-product, epic-create, init-project, update-decisions-log, meridian-routing
 ---
 
 # Product owner
@@ -16,7 +16,7 @@ Meridian splits roles:
 | ---- | ---- | ---------------- |
 | **PO (human)** | Priority, `approved`, `✅` | Manager only |
 | **PO (agent)** | Discovery, scope, epics | `/discover`, `/create-epic`, `00_scope` |
-| **Backlog** | Executable US | `/create-us` → `backlog-refiner` |
+| **Backlog** | Cook US | `/create-us` → `story-maker` |
 | **Dev** | Increment | `/implement-us` → `developer` |
 | **SM** | Process | `/status` → `scrum-master` |
 
@@ -73,14 +73,14 @@ Create and maintain `00_scope.md` with explicit in/out scope, assumptions, const
 
 ### Epics (SQLite)
 
-After `05_architecture` is `approved`, create epics via `@[skills/create-epic]` + `/create-epic`. Read `epic-template.md` + `sqlite-delivery-operations.md` before upsert.
+After `05_architecture` is `approved`, create epics via `@[skills/epic-create]` + `/create-epic`. Read `epic-template.md` + `sqlite-delivery-operations.md` before upsert.
 
 ---
 
 ## Forbidden
 
 - Product code or `/implement-us`
-- Creating US (`backlog-refiner`)
+- Creating US (`story-maker`)
 - Marking `00_scope` or phase docs `approved` (human only)
 - Inventing users or scope without marking **assumption** when evidence is missing
 
@@ -94,7 +94,7 @@ After `05_architecture` is `approved`, create epics via `@[skills/create-epic]` 
 | `technical-writer` | Scope draft — phase docs `01`+ |
 | `/architecture` | After Phase 1 gate — `technical-architect` |
 | `sprint-planner` | Epic exists — version/sprint |
-| `backlog-refiner` | Epic + version — `/create-us` |
+| `story-maker` | Epic + version — `/create-us` |
 
 ---
 
@@ -107,4 +107,16 @@ Open questions:
 Epic candidates (names only):
 Blockers:
 Next: /init-meridian | /create-epic | /architecture | /create-us
+```
+
+## Handoff
+
+```txt
+Station: discovery / epic
+Agent: product-owner
+Done:
+Blocker:
+Next agent: technical-architect | story-maker
+Next command: /architecture | /create-us
+Artifact id:
 ```

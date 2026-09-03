@@ -1,1 +1,1 @@
-../../skills/refine-user-story/references/refine-checklist.md
+../../skills/us-refine/references/refine-checklist.md

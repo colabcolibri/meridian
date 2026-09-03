@@ -11,10 +11,11 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 | File | When to read |
 | ------- | ---------- |
 | `.agent/references/templates/discovery-folder-guide.md` | **Mandatory** before Write |
+| `.agent/references/agent-areas.md` | **Mandatory** — discovery vs document-project |
 | `.agent/references/templates/init-interview-guide.md` | When context thin — interview gate |
 | `references/product-brief-template.md` | **Mandatory** before Write |
 | `docs/discovery/product-brief.md` | Existing brief |
-| `docs/inventory/as-is.md` | Mode B — existing codebase |
+| `docs/inventory/as-is.md` | **Mode B — required.** If missing, say so; do not invent as-is. |
 | `docs/00_scope.md`, `docs/03_user_types.md` | Avoid contradicting approved content |
 
 ## When to trigger
@@ -45,11 +46,13 @@ If `docs/` missing → create only `docs/discovery/` + `product-brief.md` (minim
 
 1. Read guides + template + existing artifacts.
 2. Detect mode A | B | C from repo and `$ARGUMENTS`.
-3. Run Socratic questions (max 5) — skip answered items.
-4. Write or update `docs/discovery/product-brief.md` from template.
-5. Mode B: fill **Evidence** with inventory/code pointers; mark assumptions.
-6. If `$ARGUMENTS` contains `promote` and manager confirmed → draft updates to `00_scope.md` / `03_user_types.md` (stay `draft`; never `approved`).
-7. `update-decisions-log` when product direction materially changes.
+3. **Mode B:** read `docs/inventory/as-is.md` or record **Inventory missing**. Do not infer product intent from folder names alone.
+4. Run Socratic questions (max 5) — skip answered items.
+5. Write or update `docs/discovery/product-brief.md` from template.
+6. Mode B: fill **Evidence** with inventory/code pointers; mark assumptions.
+7. Handoff consult: investigator + architect on mode B; `security-champion` if PII/regulated data appears. They must not set `ready` or write code.
+8. If `$ARGUMENTS` contains `promote` and manager confirmed → draft updates to `00_scope.md` / `03_user_types.md` (stay `draft`; never `approved`).
+9. `update-decisions-log` when product direction materially changes.
 
 ---
 
@@ -79,7 +82,9 @@ Discovery complete:
 Mode: greenfield | existing | deepen
 File: docs/discovery/product-brief.md
 Status: draft | ready for scope
+Inventory read: yes | missing
+Consult next: code-investigator | technical-architect | security-champion | none
 Open questions:
 Epic candidates:
-Next: /init-meridian | promote to 00_scope | /discover again | product-owner review
+Next: /init-meridian | /investigate | /architecture | /privacy-pass | promote to 00_scope
 ```

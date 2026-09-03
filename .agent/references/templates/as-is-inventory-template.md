@@ -73,7 +73,7 @@ When a row is validated, move knowledge out of this file:
 - [ ] System structure → `docs/05_architecture.md`
 - [ ] Data model → `docs/06_database.md`
 - [ ] APIs → `docs/07_api_contracts.md`
-- [ ] Large capability block → epic in SQLite (`create-epic`; `status: complete` if already shipped)
+- [ ] Large capability block → epic in SQLite (`epic-create`; `status: complete` if already shipped)
 - [ ] Past technical choice → `prepend-decision`
 
 After `05_architecture` is **approved**, archive or delete this file. Do not maintain two sources of truth.

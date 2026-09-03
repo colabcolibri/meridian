@@ -22,8 +22,8 @@
 
 ```txt
 YOU type          →  /create-us              workflow  (.agent/workflows/)
-workflow routes   →  @backlog-refiner        agent     (.agent/agents/)
-agent runs        →  create-user-story       skill     (.agent/skills/)  ← you never type this
+workflow routes   →  @story-maker / @story-checker  agent     (.agent/agents/)
+agent runs        →  us-create               skill     (.agent/skills/)  ← you never type this
 output lands in   →  docs/ + .meridian/meridian.db
 ```
 

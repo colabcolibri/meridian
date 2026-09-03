@@ -437,11 +437,12 @@ export function boardKanbanHtml(payload: BoardWebviewPayload): string {
     ${PAGINATION_SCRIPT}
     const BOARD_STATE_VERSION = 14;
     const SPRINT_NONE = "__none__";
-    const COLUMN_ORDER = ["backlog", "todo", "🔶", "🧪", "✅", "🧊", "🚫"];
-    const ALWAYS_VISIBLE = ["backlog", "todo", "🔶", "🧪", "✅"];
+    const COLUMN_ORDER = ["backlog", "todo", "doing", "🔶", "🧪", "✅", "🧊", "🚫"];
+    const ALWAYS_VISIBLE = ["backlog", "todo", "doing", "🔶", "🧪", "✅"];
     const COLUMN_HEADER_LABELS = {
       backlog: "📋 Backlog",
       todo: "📌 Todo",
+      doing: "🔨 Doing",
       "🔶": "🔶 Partial",
       "🧪": "🧪 Tests",
       "✅": "✅ Done",
@@ -454,6 +455,7 @@ export function boardKanbanHtml(payload: BoardWebviewPayload): string {
     const COL_STORAGE_KEY = {
       backlog: "backlog",
       todo: "todo",
+      doing: "doing",
       "🔶": "partial",
       "🧪": "tests",
       "✅": "done",
@@ -486,6 +488,7 @@ export function boardKanbanHtml(payload: BoardWebviewPayload): string {
     function resolveColumn(story) {
       if (story.status === "🧊") return "🧊";
       if (story.status === "🚫") return "🚫";
+      if (story.inProgress === true && (story.status === "❌" || story.status === "🔶")) return "doing";
       if (story.status === "❌") return story.ready === true ? "todo" : "backlog";
       if (story.tests === "required" && story.testsStatus === "pending") return "🧪";
       return story.status;

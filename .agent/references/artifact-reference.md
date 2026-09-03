@@ -23,7 +23,7 @@
 | `tests` | `required` — must pass · `none` — explicitly skipped (document why) |
 | `tests_status` | `pending` · `done` · `n/a` |
 
-**Board (extension, not stored in SQLite):** columns are computed when you open **Open Board**. Set only `status` and `ready` in the US — never a “column” field. 📋 Backlog = `status: ❌` and `ready: false`; 📌 Todo = `status: ❌` and `ready: true`; 🔶 Partial = `status: 🔶`; 🧊 / 🚫 = same symbols in `status`; Tests column when `tests: required` and `tests_status: pending`. Header emojis are UI labels only.
+**Board (extension, not stored in SQLite):** columns are computed when you open **Open Board**. Set `status`, `ready`, and `in_progress` — never a “column” field. 📋 Backlog = `status: ❌` and `ready: false`; 📌 Todo = `status: ❌`, `ready: true`, `in_progress` false; 🔨 Doing = `in_progress` true with `❌` or `🔶`; 🔶 Partial = `status: 🔶` and not in progress; 🧊 / 🚫 = same symbols in `status`; Tests column when `tests: required` and `tests_status: pending`. Header emojis are UI labels only.
 
 **Body sections:**
 

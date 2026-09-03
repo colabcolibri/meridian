@@ -10,7 +10,7 @@ $ARGUMENTS
 
 ## Critical rules
 
-1. Use `security-champion` + `@[skills/security-review]`
+1. Use `security-champion` + `@[skills/security-supply-chain]`
 2. Read `supply-chain-checklist.md` before reporting
 3. **Report only** — run audit tools when manager approves; document findings
 4. Distinguish from `/security-pass` (Phase 2 doc) and `/security-review` (code vs contract)

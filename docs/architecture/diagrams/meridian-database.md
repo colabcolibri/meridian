@@ -49,6 +49,7 @@ erDiagram
     text sprint_id FK
     text status
     int ready
+    int in_progress
     text body_markdown
   }
 

@@ -42,7 +42,7 @@ This folder is the **source of truth for phase documents** of the Meridian kit +
 
 There is **no** `docs/us/`, `docs/epics/`, or `docs/kanban/board.json`. Board reads SQLite via `meridian_db_export.py --format planning`.
 
-**Board columns (computed in the extension, not DB fields):** 📋 Backlog (`status: ❌`, `ready: false`) · 📌 Todo (`ready: true`, still `❌`) · 🔶 Partial · 🧪 Tests · ✅ Done · toggles 🧊 Frozen · 🚫 Deprecated. US cards and forms show **`sprint`** when the US is allocated (`user_stories.sprint_id`). Detail: [06_database.md](06_database.md) and [05_architecture.md](05_architecture.md).
+**Board columns (computed in the extension, not DB fields):** 📋 Backlog (`status: ❌`, `ready: false`) · 📌 Todo (`ready: true`, still `❌`, not in progress) · 🔨 Doing (`in_progress`) · 🔶 Partial · 🧪 Tests · ✅ Done · toggles 🧊 Frozen · 🚫 Deprecated. US cards and forms show **`sprint`** when the US is allocated (`user_stories.sprint_id`). Detail: [06_database.md](06_database.md) and [05_architecture.md](05_architecture.md).
 
 ## Work order
 

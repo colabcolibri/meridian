@@ -8,6 +8,7 @@
 ## A. New skill only
 
 - [ ] `.agent/skills/{name}/SKILL.md` — frontmatter `name` = folder name
+- [ ] Object-prefix families when it is a procedure (`us-create`, `security-doc`) — **not** the slash name (`/create-us` stays). Do **not** keep a second folder for the old slug.
 - [ ] `.agent/skills/{name}/references/*.md` — if procedure > ~80 lines
 - [ ] "When to read" table in `SKILL.md`
 - [ ] Owning agent(s) — add skill to `skills:` frontmatter in `.agent/agents/*.md`
@@ -26,6 +27,7 @@
 - [ ] `.agent/skills/meridian-routing/SKILL.md` — selection matrix row(s)
 - [ ] `.agent/references/agents-help.md` — agent group table + skills list
 - [ ] `.agent/ARCHITECTURE.md` — § Agents table
+- [ ] US cook/attest: `story-maker` vs `story-checker` (see `agent-station-map.md`); never add a third US cook+attest agent
 - [ ] `./.agent/scripts/sync_kit.sh` (auto: `.cursor/agents/`, `.codex/agents/*.toml`)
 - [ ] `validate_meridian.py`
 

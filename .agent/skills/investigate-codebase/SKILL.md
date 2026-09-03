@@ -83,7 +83,7 @@ Use output template in `references/investigation-checklist.md`.
 | Forbidden | Why |
 | --------- | --- |
 | Product code | `developer` + `/implement-us` |
-| Create US/epic/version | `backlog-refiner` / `product-owner` |
+| Create US/epic/version | `story-maker` / `product-owner` |
 | Mark docs `approved` | Human only |
 | Guess without labeling `low` confidence | Report integrity |
 

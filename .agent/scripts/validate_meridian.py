@@ -56,9 +56,11 @@ REQUIRED_AGENTS = [
     "design-system-owner.md",
     "quality-owner.md",
     "sprint-planner.md",
-    "backlog-refiner.md",
+    "story-maker.md",
+    "story-checker.md",
     "developer.md",
     "scrum-master.md",
+    "code-investigator.md",
 ]
 
 LEGACY_AGENTS = [
@@ -68,6 +70,7 @@ LEGACY_AGENTS = [
     "security-steward.md",
     "architecture-guardian.md",
     "board-keeper.md",
+    "backlog-refiner.md",
 ]
 
 

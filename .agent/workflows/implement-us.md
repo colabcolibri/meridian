@@ -10,10 +10,10 @@ $ARGUMENTS
 
 ## Critical rules
 
-1. Use `developer` + `@[skills/implement-user-story]`
+1. Use `developer` + `@[skills/us-implement]`
 2. **Mandatory read:** `implement-gate-checklist.md` + `code-quality-at-us-time.md` + target US **before** product code
 3. **Mandatory read:** `docs/04_principles.md` (DRY, SRP) before Write on code
-4. **Hard block:** `ready: true` required — if false → stop; recommend `/refine-us`
+4. **Hard block:** `ready: true` required — if false → stop; recommend `/review-us` after `/refine-us`
 5. Read every **Architecture refs** section before Write on code
 6. Implement with DRY + SRP — reuse modules per Approach; no scope creep across layers
 7. One US per session — cite `US-XXXX` and load with `show --full`
@@ -60,8 +60,8 @@ Next: /complete-us US-XXXX (after manager review)
 
 | `/refine-us` | `/implement-us` |
 | --- | --- |
-| Docs only; sets `ready: true` | Gate + product code |
+| Docs only; does not set `ready` | Gate + product code |
 | Deepens Plan | Requires Plan already concrete |
 | Never writes app code | Writes code after gate passes |
 
-Typical flow: `/create-us` → `/refine-us` → **`/implement-us`** → `/complete-us`.
+Typical flow: `/create-us` → `/refine-us` → `/review-us` → **`/implement-us`** → `/complete-us`.

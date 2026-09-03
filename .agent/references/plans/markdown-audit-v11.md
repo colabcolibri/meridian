@@ -1,5 +1,6 @@
 # Audit markdown v11 — review completo para estrutura SQLite
 
+> **Roster ao vivo:** `story-maker` + `story-checker` — [agent-station-map.md](../agent-station-map.md). O slug `backlog-refiner` foi removido.
 > **Status:** onda G + **G7** ✅ — inventário em [`skill-references-audit-v11.md`](./skill-references-audit-v11.md)
 > **Gatilho:** onda A marcou skills como ✅, mas dezenas de `.md` ainda descreviam delivery como arquivos `docs/us/*.md`, `app-desktop`, `/sync-board`, ou “US file”.  
 > **Objetivo:** um agente ou humano consegue seguir **qualquer** markdown do kit sem ambiguidade v1 vs v11.
@@ -175,7 +176,7 @@ Marque `[x]` quando **v11-operacional** (sem P0; P1 aceito ou corrigido).
 ### 7.7 Skills — SKILL.md
 
 > **Inventário arquivo a arquivo (honesto):** [`skill-references-audit-v11.md`](./skill-references-audit-v11.md) §1–§2.  
-> Resumo: 9 skills delivery ✅ CLI; 5 skills phase/routing 👁 grep; `implement-user-story` banner ✅ G7.
+> Resumo: 9 skills delivery ✅ CLI; 5 skills phase/routing 👁 grep; `us-implement` banner ✅ G7.
 
 - [x] Delivery skills (create → complete + epic/version/sprint) — [`skill-references-audit-v11.md`](./skill-references-audit-v11.md) §1
 - [x] G7 fechado — §5 skill-references-audit ✅
@@ -264,9 +265,9 @@ python3 .agent/scripts/validate_meridian.py . --strict-kit-md
 | `documentation-strategist` | `technical-writer` |
 | `scope-architect` | `product-owner` |
 | `implementation-specialist` / `design-steward` | `developer` / `design-system-owner` |
-| `docs/epics/EPIC-XX.md` | `epics` table / `create-epic` |
-| `docs/versions/vX.md` | `versions` table / `create-version` |
-| `docs/sprints/vX-SY.md` | `sprints` table / `create-sprint` |
+| `docs/epics/EPIC-XX.md` | `epics` table / `epic-create` |
+| `docs/versions/vX.md` | `versions` table / `version-create` |
+| `docs/sprints/vX-SY.md` | `sprints` table / `sprint-create` |
 | `board.json` | `meridian_db_export --format planning` |
 | `/sync-board` | _(removido)_ |
 | `app-desktop` monitor | `app-visual-studio` extension |
@@ -281,7 +282,7 @@ python3 .agent/scripts/validate_meridian.py . --strict-kit-md
 - [x] Zero P0 no grep com allowlist (guardrail CI)
 - [x] Vocabulário de agentes alinhado com **`agent-roster-and-workflow-v11.md`** (H1 ✅)
 - [x] Guardrail G6 no CI (`--strict-kit-md`)
-- [x] Novo agente: `/create-us` → só SQLite (`create-user-story` skill)
+- [x] Novo agente: `/create-us` → só SQLite (`us-create` skill)
 
 ---
 

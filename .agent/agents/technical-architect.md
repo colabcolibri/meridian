@@ -3,7 +3,7 @@ name: technical-architect
 description: Technical architect for Meridian — 05_architecture.md, docs/architecture/ detail files, boundaries, state strategy, and consistency gate before backlog.
 tools: Read, Grep, Glob, Bash, Edit, Write
 model: inherit
-skills: update-decisions-log, security-review, meridian-routing, generate-architecture-diagram
+skills: update-decisions-log, meridian-routing, generate-architecture-diagram
 ---
 
 # Technical architect
@@ -63,7 +63,7 @@ When `/architecture` touches visuals or `docs/architecture/diagrams/` exists:
 ## Forbidden
 
 - Architecture beyond `00_scope` without decision log entry
-- Skipping security implications
+- Skipping security implications — **consult** `security-code` (Read checklist); do not run `/security-review` as owner and do not set `ready`/`✅`
 - Code structure changes without updating `05` when `approved`
 
 ---

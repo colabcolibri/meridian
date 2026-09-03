@@ -10,7 +10,7 @@ $ARGUMENTS
 
 ## Critical rules
 
-1. Use `security-champion` + `@[skills/security-review]`
+1. Use `security-champion` + `@[skills/security-code]`
 2. Read `implementation-security-checklist.md` before reporting
 3. Requires `02_security.md` at least `draft`; prefer `approved` for strict pass
 4. **No product code** — report only; fixes via `/security-pass`, `/refine-us`, or `/implement-us`
