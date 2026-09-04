@@ -4,6 +4,12 @@ All notable changes to the **Meridian** VS Code extension (`meridian-vscode`).
 
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [2.1.1] - 2026-09-04
+
+### Fixed
+
+- **Validator:** `validate_meridian.py` adds `.agent/scripts/lib` to `sys.path` before importing `meridian_us_close_quality` — fixes `ModuleNotFoundError` on client projects after upgrade.
+
 ## [2.1.0] - 2026-09-04
 
 ### Breaking changes (kit v3)

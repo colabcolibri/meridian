@@ -337,7 +337,14 @@ def validate_sqlite_us_close_quality(root: Path, warnings: list[str]) -> None:
 
     import sqlite3
 
-    from meridian_us_close_quality import validate_closed_us_row  # noqa: PLC0415
+    lib = _SCRIPT_DIR / "lib"
+    if str(lib) not in sys.path:
+        sys.path.insert(0, str(lib))
+    try:
+        from meridian_us_close_quality import validate_closed_us_row  # noqa: PLC0415
+    except ImportError:
+        warnings.append("US close-quality skipped — meridian_us_close_quality import failed.")
+        return
 
     conn = sqlite3.connect(db_path)
     conn.row_factory = sqlite3.Row
