@@ -13,7 +13,7 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 | File | When to read |
 | ------- | ---------- |
 | `.agent/references/templates/writing-guide.md` | Epic prose + golden example |
-| `.agent/references/scrum-meridian-map.md` | Epic lifecycle |
+| `.agent/references/scrum/scrum-meridian-map.md` | Epic lifecycle |
 | `references/epic-template.md` | **Mandatory** — `body_markdown` shape |
 | `docs/03_user_types.md` | Validate `profiles` |
 

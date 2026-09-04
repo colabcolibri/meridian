@@ -37,7 +37,7 @@ Global “done” for any closed user story — in addition to that story’s Ac
 - One git commit per closed US (code + delivery change in scope), unless the manager batches intentionally
 - Cross-cutting changes logged via `prepend-decision` (`/update-decisions-log`)
 
-Per-story scope stays in US Intent — this section is the team-wide bar. See `.agent/references/scrum-meridian-map.md`.
+Per-story scope stays in US Intent — this section is the team-wide bar. See `.agent/references/scrum/scrum-meridian-map.md`.
 
 ## Mandatory conventions
 

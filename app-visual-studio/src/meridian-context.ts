@@ -15,6 +15,14 @@ import {
   formatStatusTooltip,
   type MeridianWorkspaceInfo,
 } from "./meridian-workspace.js"
+import { bundledKitAgentDir, kitInstalledAt } from "./kit-installer.js"
+import {
+  HARNESS_DISMISS_STATE_KEY,
+  formatHarnessPrompt,
+  formatHarnessStatusLine,
+  formatHarnessTooltip,
+  inspectHarness,
+} from "./harness-stamp.js"
 
 export type MeridianContextState = {
   info: MeridianWorkspaceInfo | null
@@ -28,6 +36,7 @@ export class MeridianContext {
   private lastWarnedDocsRoot: string | null = null
   private docsWatcher: vscode.FileSystemWatcher | undefined
   private boardSyncTimer: ReturnType<typeof setTimeout> | undefined
+  private harnessPromptShown = false
 
   constructor(
     private readonly extensionContext: vscode.ExtensionContext,
@@ -56,6 +65,7 @@ export class MeridianContext {
     this.logState("refresh")
     this.resetDocsWatcher()
     this.onWorkspaceChanged?.()
+    void this.offerHarnessUpgradeIfNeeded()
     if (picked?.info && !picked.info.docsExists) {
       if (this.lastWarnedDocsRoot !== picked.info.docsRoot) {
         this.lastWarnedDocsRoot = picked.info.docsRoot
@@ -230,6 +240,48 @@ export class MeridianContext {
     this.output.appendLine(`[${kind}] ${formatStatusTooltip(info).replace(/\n/g, " · ")}`)
   }
 
+  private inspectWorkspaceHarness() {
+    const folder = vscode.workspace.workspaceFolders?.[0]
+    if (!folder) {
+      return null
+    }
+    const root = folder.uri.fsPath
+    if (!kitInstalledAt(root)) {
+      return null
+    }
+    return inspectHarness(root, this.extensionPath, bundledKitAgentDir(this.extensionPath))
+  }
+
+  private async offerHarnessUpgradeIfNeeded(): Promise<void> {
+    if (this.harnessPromptShown) {
+      return
+    }
+    const inspection = this.inspectWorkspaceHarness()
+    if (!inspection || inspection.skipPrompt || inspection.relation !== "behind") {
+      return
+    }
+    const dismissed = this.extensionContext.globalState.get<string>(HARNESS_DISMISS_STATE_KEY)
+    if (dismissed === inspection.availableVersion) {
+      return
+    }
+    this.harnessPromptShown = true
+    const choice = await vscode.window.showInformationMessage(
+      formatHarnessPrompt(inspection),
+      "Upgrade harness",
+      "Later",
+    )
+    if (choice === "Upgrade harness") {
+      await vscode.commands.executeCommand("meridian.upgradeKit")
+      return
+    }
+    if (choice === "Later") {
+      await this.extensionContext.globalState.update(
+        HARNESS_DISMISS_STATE_KEY,
+        inspection.availableVersion,
+      )
+    }
+  }
+
   private updateStatusBar(): void {
     if (!this.statusItem) {
       this.statusItem = vscode.window.createStatusBarItem(
@@ -253,11 +305,43 @@ export class MeridianContext {
       return
     }
 
+    const harness = kitInstalledAt(folder.uri.fsPath)
+      ? inspectHarness(
+          folder.uri.fsPath,
+          this.extensionPath,
+          bundledKitAgentDir(this.extensionPath),
+        )
+      : null
+    const harnessTip = harness ? `\n\n${formatHarnessTooltip(harness)}` : ""
+    const bumpLine = harness ? formatHarnessStatusLine(harness) : null
+
     if (!info) {
+      if (bumpLine) {
+        this.statusItem.command = "meridian.upgradeKit"
+        this.statusItem.text = bumpLine
+        this.statusItem.tooltip =
+          "Install is done; this folder’s kit is older than the extension." + harnessTip
+        this.statusItem.backgroundColor = new vscode.ThemeColor(
+          "statusBarItem.warningBackground",
+        )
+        this.statusItem.show()
+        return
+      }
       this.statusItem.command = "meridian.installKit"
       this.statusItem.text = "Meridian: install harness"
       this.statusItem.tooltip =
         "Install bundled Meridian kit (.agent/ — agents, skills, workflows) into this workspace"
+      this.statusItem.backgroundColor = new vscode.ThemeColor(
+        "statusBarItem.warningBackground",
+      )
+      this.statusItem.show()
+      return
+    }
+
+    if (bumpLine) {
+      this.statusItem.command = "meridian.upgradeKit"
+      this.statusItem.text = bumpLine
+      this.statusItem.tooltip = formatStatusTooltip(info) + harnessTip
       this.statusItem.backgroundColor = new vscode.ThemeColor(
         "statusBarItem.warningBackground",
       )
@@ -273,7 +357,7 @@ export class MeridianContext {
     this.statusItem.text = info.docsExists
       ? `Meridian: ${projectLabel}${info.usCount} US`
       : "Meridian: no docs"
-    this.statusItem.tooltip = formatStatusTooltip(info)
+    this.statusItem.tooltip = formatStatusTooltip(info) + harnessTip
     this.statusItem.show()
   }
 }

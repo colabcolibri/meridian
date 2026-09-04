@@ -37,7 +37,7 @@ function renderEntry(entry: CommandHelpEntry): string {
 const HOW_TO_USE_HTML = `
   <section class="onboarding" id="extension-commands-intro">
     <h1>Extension commands</h1>
-    <p class="lead">This tab lists <strong>IDE palette commands</strong> (board, validate, kit install). For chat slash commands (<code>/create-us</code>, <code>/status</code>), open <strong>Meridian: Open How to Use</strong> or <code>.agent/references/agents-help.md</code>.</p>
+    <p class="lead">This tab lists <strong>IDE palette commands</strong> (board, validate, kit install). For chat slash commands (<code>/create-us</code>, <code>/status</code>), open <strong>Meridian: Open How to Use</strong> or <code>.agent/references/guides/agents-help.md</code>.</p>
     <p class="hint">Human guides (read in order): How to use → Concepts → Usage guide → Agents help (reference).</p>
   </section>
 `

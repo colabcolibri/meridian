@@ -1,1 +1,1 @@
-../../skills/us-implement/references/implement-gate-checklist.md
+../../agents/developer/references/us-implement/implement-gate-checklist.md

@@ -2,7 +2,7 @@
   "name": "meridian-vscode",
   "displayName": "%extension.displayName%",
   "description": "%extension.description%",
-  "version": "1.1.53",
+  "version": "2.1.0",
   "publisher": "colabcolibri",
   "license": "PolyForm-Noncommercial-1.0.0",
   "icon": "media/icon.png",
@@ -60,7 +60,8 @@
     "onCommand:meridian.installKit",
     "onCommand:meridian.upgradeKit",
     "onCommand:meridian.uninstallKit",
-    "onCommand:meridian.validateProject",
+    "onCommand:meridian.openWelcome",
+    "onCommand:meridian.doctor",
     "onCommand:meridian.showStatus",
     "onCommand:meridian.selectActiveProject",
     "workspaceContains:.agent/MERIDIAN.md"
@@ -132,6 +133,10 @@
           "group": "1@8"
         },
         {
+          "command": "meridian.openWelcome",
+          "group": "2@0"
+        },
+        {
           "command": "meridian.openHowToUse",
           "group": "2@3"
         },
@@ -162,6 +167,10 @@
         {
           "command": "meridian.uninstallKit",
           "group": "2@3"
+        },
+        {
+          "command": "meridian.doctor",
+          "group": "3@0"
         },
         {
           "command": "meridian.validateProject",
@@ -268,6 +277,16 @@
         "command": "meridian.uninstallKit",
         "title": "%meridian.command.uninstallKit.title%",
         "icon": "$(trash)"
+      },
+      {
+        "command": "meridian.openWelcome",
+        "title": "%meridian.command.openWelcome.title%",
+        "icon": "$(rocket)"
+      },
+      {
+        "command": "meridian.doctor",
+        "title": "%meridian.command.doctor.title%",
+        "icon": "$(heart)"
       },
       {
         "command": "meridian.validateProject",

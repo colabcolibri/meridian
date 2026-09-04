@@ -17,7 +17,7 @@ trigger: always_on
 Agent activated → check frontmatter `skills:` → read `SKILL.md` (index) → read `.agent/references/templates/INDEX.md` when creating/closing delivery artifacts → read the **full template file** listed for that artifact → read `section-contracts.md` for US/epic/version structure → read only other relevant files in `references/`.
 
 - **Selective reading:** Do NOT read every file in the skill folder. Read `SKILL.md` first; then only what the request requires.
-- **Scrum:** use `.agent/references/scrum-meridian-map.md` for delivery mapping. Do **not** read `scrum-guide-complete.md` unless the manager explicitly asks.
+- **Scrum:** use `.agent/references/scrum/scrum-meridian-map.md` for delivery mapping. Do **not** read `scrum-guide-complete.md` unless the manager explicitly asks.
 - **Rule priority:** P0 (`rules/MERIDIAN.md`) > P1 (`.agent/MERIDIAN.md` + agent `.md`) > P2 (`SKILL.md`).
 
 ### 2. Enforcement protocol
@@ -51,6 +51,16 @@ Before any action, classify:
 | **PRIVACY** | LGPD, GDPR, privacy pass, titular, data subject, encarregado, DPO, consent | `security-champion` + `/privacy-pass` |
 | **QUALITY** | "test strategy", `10_test`, `/test-pass`, `/test-review`, coverage | `quality-owner` |
 | **DESIGN** | `09_design`, `/design-pass`, `/design-flow`, `/design-theme`, `/design-review` | `design-system-owner` |
+| **UX** | personas, JTBD, user research, `03_user_types`, `/ux-pass` | `ux-researcher` |
+| **I18N** | `/i18n-pass`, locale, RTL, translation strategy | `design-system-owner` |
+| **A11Y** | `/a11y-pass`, WCAG, accessibility baseline | `design-system-owner` |
+| **API** | `/api-pass`, `07_api_contracts`, REST, GraphQL, webhooks | `technical-architect` |
+| **PAYMENT** | `/payment-pass`, billing, PCI (doc); provider dashboard = HAR | `security-champion` |
+| **PERF** | `/perf-pass`, CWV, performance budget, bundle size | `quality-owner` |
+| **MCP** | `/architecture mcp`, MCP server, agent tools contract | `technical-architect` |
+| **GEO** | `/seo-pass geo`, AI discoverability, generative search | `seo-strategy` + `technical-writer` |
+| **DATA** | `06_database`, schema, migration, retention, `/database-pass` | `data-engineer` |
+| **DEVOPS** | `08_environments`, CI/CD, deploy runbook, `/release-pass` (human push/deploy) | `devops-engineer` |
 | **SEO** | SEO, sitemap, meta tags, Core Web Vitals, indexation (public web only) | `seo-strategy` skill + phase doc `12` |
 | **START PROJECT** | "start", "meridian setup", "create docs" | `scrum-master` + `init-project` |
 | **CODE** | "implement", "create app", "fix", "refactor" | `/implement-us US-XXXX` or equivalent gate; US `ready: true` required |
@@ -79,7 +89,7 @@ Before any action, classify:
 | Step | Check | If it fails |
 | ---- | ----- | ----------- |
 | 1 | Correct agent for the domain? | Stop; reclassify the request |
-| 2 | Read `.agent/agents/{agent}.md`? | Stop; open the agent |
+| 2 | Read `.agent/agents/{agent}/agent.md`? | Stop; open the agent |
 | 3 | Announced `🤖 Applying...`? | Add before the response |
 | 4 | Loaded skills from frontmatter? | Read each listed `SKILL.md` |
 | 5 | Creating/closing epic, version, sprint, or US? | Read `.agent/references/templates/INDEX.md` + full template + `section-contracts.md` **before** Write |
@@ -132,7 +142,7 @@ Do not write product code until required docs for the current phase exist (see `
 - Protect `.env`, `.env.*`, logs, builds, `node_modules`, caches.
 - Do not expose secrets; do not run destructive commands without approval.
 - Security changes require a decision via `prepend-decision` (SQLite).
-- After `/complete-us`, the **manager** commits (one US per commit by default). Agents suggest message in `### Executed`; they do not `git commit` unless explicitly asked. See `.agent/references/commit-after-us-close.md`.
+- After `/complete-us`, the **manager** commits (one US per commit by default). Agents suggest message in `### Executed`; they do not `git commit` unless explicitly asked. See `.agent/references/protocol/commit-after-us-close.md`.
 
 ### Human manager
 
@@ -176,9 +186,14 @@ Resume work only after the manager provides evidence or explicit skip with logge
 | `docs/inventory/as-is.md` (Mode B) | `technical-writer` | `init-project` |
 | `.meridian/projects.json` (multi-product) | `scrum-master` | `init-project` |
 | `00_scope.md` | `product-owner` | `init-project` |
-| `01`–`08`, `11` (phase) | `technical-writer` | `update-decisions-log` |
-| `02_security.md` | `security-champion` | `security-review` |
-| `05_architecture.md` | `technical-architect` | `architecture-folder-guide.md` + `security-review` |
+| `03_user_types.md` | `ux-researcher` | `ux-research` |
+| `01`, `04`, `07`, `11` (phase) | `technical-writer` | `update-decisions-log` |
+| `02_security.md` | `security-champion` | `security-doc` |
+| `05_architecture.md` | `technical-architect` | `architecture-folder-guide.md` |
+| `06_database.md` | `data-engineer` | `data-engineering` |
+| `08_environments.md` | `devops-engineer` | `release-ops` |
+| `09_design_system.md` | `design-system-owner` | `design-system` |
+| `10_test_strategy.md` | `quality-owner` | `test-strategy` |
 | `docs/architecture/*.md` | `technical-architect` | indexed from `05`; gate stays on `05` only |
 | Epics / versions / sprints (create/plan) | `sprint-planner` | `sprint-create`, `version-create` |
 | Sprints (close) | `sprint-planner` | `sprint-complete` |
@@ -203,7 +218,7 @@ Resume work only after the manager provides evidence or explicit skip with logge
 | Skills | `.agent/skills/` |
 | Workflows | `.agent/workflows/` |
 | Validation | `python3 .agent/scripts/validate_meridian.py <project-folder>` (`--json` for CI) |
-| Instruction surfaces (maintainers) | `.agent/references/instruction-surfaces.md` |
+| Instruction surfaces (maintainers) | `.agent/references/protocol/instruction-surfaces.md` |
 
 ---
 

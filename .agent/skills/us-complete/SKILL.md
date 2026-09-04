@@ -17,7 +17,7 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 | 2 | Target US | `meridian_delivery.py show US-XXXX --full` — **mandatory before any write** |
 | 3 | `references/implementation-template.md` | Record **heading examples only** — not the US body |
 | 4 | `.agent/references/templates/section-contracts.md` | Plan **unchanged** on close |
-| 5 | `.agent/references/commit-after-us-close.md` | Suggested commit only |
+| 5 | `.agent/references/protocol/commit-after-us-close.md` | Suggested commit only |
 
 **Do not read `us-template.md` for close body** — that template is for `/create-us` and `/refine-us` only.
 

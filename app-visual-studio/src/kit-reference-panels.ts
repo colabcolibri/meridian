@@ -5,7 +5,7 @@ export const HOW_TO_USE_PANEL: KitReferencePanelConfig = {
   viewType: "meridian.howToUse",
   tabTitle: "Meridian — how to use",
   relativeFromAgent: KIT_REFERENCES.howToUse,
-  sourceLabel: ".agent/references/how-to-use.md",
+  sourceLabel: ".agent/references/guides/how-to-use.md",
   intro: {
     title: "Meridian — how to use",
     description:
@@ -17,7 +17,7 @@ export const START_HERE_PANEL: KitReferencePanelConfig = {
   viewType: "meridian.startHere",
   tabTitle: "Meridian — start here",
   relativeFromAgent: KIT_REFERENCES.startHere,
-  sourceLabel: ".agent/references/start-here.md",
+  sourceLabel: ".agent/references/guides/start-here.md",
   intro: {
     title: "Meridian — start here",
     description:
@@ -29,7 +29,7 @@ export const USAGE_GUIDE_PANEL: KitReferencePanelConfig = {
   viewType: "meridian.usageGuide",
   tabTitle: "Meridian — usage guide",
   relativeFromAgent: KIT_REFERENCES.usageGuide,
-  sourceLabel: ".agent/references/usage-guide.md",
+  sourceLabel: ".agent/references/guides/usage-guide.md",
   intro: {
     title: "Meridian — usage guide",
     description:
@@ -41,7 +41,7 @@ export const AGENTS_HELP_PANEL: KitReferencePanelConfig = {
   viewType: "meridian.agentsHelp",
   tabTitle: "Meridian — agents & slash commands",
   relativeFromAgent: KIT_REFERENCES.agentsHelp,
-  sourceLabel: ".agent/references/agents-help.md",
+  sourceLabel: ".agent/references/guides/agents-help.md",
   intro: {
     title: "Meridian — agents & slash commands",
     description:
@@ -53,7 +53,7 @@ export const ARTIFACT_REFERENCE_PANEL: KitReferencePanelConfig = {
   viewType: "meridian.artifactReference",
   tabTitle: "Meridian — artifact reference",
   relativeFromAgent: KIT_REFERENCES.artifactReference,
-  sourceLabel: ".agent/references/artifact-reference.md",
+  sourceLabel: ".agent/references/protocol/artifact-reference.md",
   intro: {
     title: "Meridian — artifact reference",
     description:

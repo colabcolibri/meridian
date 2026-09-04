@@ -2,33 +2,30 @@
 
 This repository uses the [Meridian](https://github.com/colabcolibri/meridian) protocol. The kit source of truth is `.agent/`; product docs live under `docs/` of the **active Meridian product** (monorepos: see `.meridian/projects.json`).
 
-## How to invoke (you type workflows, not agents)
+## How to invoke
 
 ```txt
-YOU  →  /create-us  or  $workflow-create-us     (workflow)
-         ↓
-Agent (@deus-ex, @story-maker, …)                          (routed by workflow — override with @name if needed)
-         ↓
-Skill (us-create, …)                      (loaded by agent — rarely typed by human)
-         ↓
-docs/                                             (source of truth)
+YOU  →  /us-create  or  @story-maker     (skill slash or agent)
+     →  docs/                             (source of truth)
 ```
 
 | IDE | You invoke | Adapter (local, gitignored) |
 | --- | ---------- | ----------------------------- |
-| **Cursor** | `/status`, `/create-us`, … | `.cursor/commands/` ← `.agent/workflows/` |
-| **Claude Code** | same slash commands | `.claude/commands/` ← workflows |
-| **Codex** | `$workflow-status`, `$workflow-create-us`, … | `.agents/skills/workflow-*/` ← workflows |
-| **OpenCode** | `/status`, `/create-us`, … | `.opencode/commands/` ← workflows (+ plugin de delivery) |
-| **Antigravity / .agent-native** | read `.agent/workflows/` directly | none — `.agent/` only |
+| **Cursor** | `/us-create`, `@story-maker`, … | `.cursor/skills/` + `.cursor/agents/` ← `.agent/` |
+| **Claude Code** | same | `.claude/agents/` ← agents |
+| **Codex** | skills in chat | `.agents/skills/` ← `.agent/skills/` |
+| **OpenCode** | skills + agents | `.opencode/skills/`, `.opencode/agents/` |
+| **Antigravity / .agent-native** | read `.agent/skills/` directly | none |
 
 After **Install Harness** or clone: run `./.agent/scripts/sync_kit.sh` to refresh adapters.
 
 ## Human guides (read in order)
 
-1. `.agent/references/start-here.md` — concepts, phases, gates
-2. `.agent/references/usage-guide.md` — day-to-day situations
-3. `.agent/references/agents-help.md` — agents, slash commands, steps 1–17
+0. `.agent/references/INDEX.md` — map of the references tree
+1. `.agent/references/guides/how-to-use.md` — extension vs chat entry
+2. `.agent/references/guides/start-here.md` — concepts, phases, gates
+3. `.agent/references/guides/usage-guide.md` — day-to-day situations
+4. `.agent/references/guides/agents-help.md` — agents, slash commands, steps 1–17
 
 ## Required reading (agents)
 

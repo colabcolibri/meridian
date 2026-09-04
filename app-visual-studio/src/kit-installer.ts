@@ -4,6 +4,8 @@ import { spawnSync } from "node:child_process"
 
 import type * as vscode from "vscode"
 
+import { readExtensionVersion, stampWorkspaceHarness } from "./harness-stamp.js"
+
 const KIT_MARKER = path.join(".agent", "MERIDIAN.md")
 
 export function bundledKitAgentDir(extensionPath: string): string {
@@ -117,6 +119,20 @@ function runBootstrapDb(projectRoot: string, agentDir: string): string | null {
   return (result.stdout || "").trim() || null
 }
 
+function backupAgentDirBeforeOverwrite(dest: string): string | null {
+  if (!fs.existsSync(dest)) {
+    return null
+  }
+  const stamp = new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19)
+  const backupPath = `${dest}.backup-${stamp}`
+  try {
+    fs.cpSync(dest, backupPath, { recursive: true })
+    return backupPath
+  } catch {
+    return null
+  }
+}
+
 export function installBundledKit(
   projectRoot: string,
   extensionPath: string,
@@ -143,9 +159,15 @@ export function installBundledKit(
     }
   }
 
+  let backupNote = ""
   try {
+    const backupPath = options.force ? backupAgentDirBeforeOverwrite(dest) : null
     fs.cpSync(src, dest, { recursive: true, force: true })
+    stampWorkspaceHarness(dest, extensionPath)
     chmodScripts(dest)
+    if (backupPath) {
+      backupNote = ` Previous kit backed up at ${path.relative(root, backupPath)}/.`
+    }
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err)
     return { ok: false, message: `Failed to copy kit: ${msg}`, projectRoot: root }
@@ -159,14 +181,14 @@ export function installBundledKit(
   if (syncError) {
     return {
       ok: true,
-      message: `Kit installed at ${dest}. Adapter sync failed (${syncError}) — run .agent/scripts/sync_kit.sh manually.${bootstrapNote}`,
+      message: `Kit installed at ${dest}. Adapter sync failed (${syncError}) — run .agent/scripts/sync_kit.sh manually.${backupNote}${bootstrapNote}`,
       projectRoot: root,
     }
   }
 
   return {
     ok: true,
-    message: `Meridian harness installed: ${dest} (agents, skills, workflows) + IDE adapters synced.${bootstrapNote}`,
+    message: `Meridian harness ${readExtensionVersion(extensionPath)} installed: ${dest} (agents, skills, workflows) + IDE adapters synced.${backupNote}${bootstrapNote}`,
     projectRoot: root,
   }
 }

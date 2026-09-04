@@ -6,7 +6,7 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 
 # Create Meridian artifact (maintainer)
 
-> **Canonical map:** `.agent/references/instruction-surfaces.md`  
+> **Canonical map:** `.agent/references/protocol/instruction-surfaces.md`  
 > **This skill:** step-by-step procedure + per-artifact checklists in `references/`.
 
 Use when adding or changing anything in `.agent/` that agents or managers invoke: **skill**, **agent**, **workflow** (slash command), or **delivery template**.
@@ -23,7 +23,7 @@ Use when adding or changing anything in `.agent/` that agents or managers invoke
 | `references/skill-template.md` | Creating a new skill |
 | `references/agent-template.md` | Creating a new agent |
 | `references/workflow-template.md` | Creating a new slash workflow |
-| `.agent/references/instruction-surfaces.md` | Protocol-level changes, EPIC-13, validator |
+| `.agent/references/protocol/instruction-surfaces.md` | Protocol-level changes, EPIC-13, validator |
 | `.agent/ARCHITECTURE.md` | Agent/skill/workflow tables |
 | `.agent/skills/meridian-routing/SKILL.md` | New intent → agent routing row |
 
@@ -43,13 +43,14 @@ Use when adding or changing anything in `.agent/` that agents or managers invoke
 
 | You need | Create | Also register |
 | -------- | ------ | ------------- |
-| Repeatable procedure | `.agent/skills/{name}/SKILL.md` (+ `references/`) | Agent frontmatter if agent-owned; `ARCHITECTURE.md` skills table |
-| Persona + gates + output | `.agent/agents/{name}.md` | Skills list; routing matrix; `agents-help.md` group |
-| Human slash command | `.agent/workflows/{name}.md` | `meridian.mdc` table; `agents-help.md`; optional `usage-guide.md` |
-| Delivery file shape | `.agent/references/templates/` + `INDEX.md` | `TEMPLATE_SOURCES.md`; agent template protocol |
+| Station procedure (one owner) | `.agent/agents/{owner}/references/{pass}/` (`PROCEDURE.md` + checklists) | Workflow → `@owner` only; `station-references.md` |
+| Shared cross-station procedure | `.agent/skills/{name}/SKILL.md` — **only if 2+ agents** | Agent frontmatter on each consumer |
+| Persona + gates + output | `.agent/agents/{name}/agent.md` | Shared skills only in frontmatter; routing matrix |
+| Human slash command | `.agent/workflows/{name}.md` | `meridian.mdc` table; `agents-help.md` |
+| Delivery file shape | `.agent/references/templates/` + `INDEX.md` | `TEMPLATE_SOURCES.md` |
 | Routing only | `meridian-routing` matrix row | `agents-help.md` intent lookup |
 
-**Order of work (recommended):** skill → agent → workflow → registries → sync → validate.
+**Order of work (recommended):** agent references → workflow → registries → sync → validate. Add `.agent/skills/` only when truly shared.
 
 ---
 
@@ -62,13 +63,15 @@ Use when adding or changing anything in `.agent/` that agents or managers invoke
 3. Pick **owning agent** (existing or new).
 4. Read `references/registry-checklist.md` for the artifact type — print the checklist in output.
 
-### Phase 1 — skill (if needed)
+### Phase 1 — station references (default)
 
-1. Copy structure from `references/skill-template.md`.
+1. Create `.agent/agents/{owner}/references/{pass-name}/PROCEDURE.md` (+ checklists).
+2. Do **not** create `.agent/skills/{pass-name}/` unless a second agent shares the procedure.
+
+### Phase 1b — shared skill (rare)
+
+1. Copy `references/skill-template.md` only when **2+ agents** need the same procedure.
 2. Create `.agent/skills/{skill-name}/SKILL.md`.
-3. Add `references/*.md` for long checklists (keep `SKILL.md` as index).
-4. `name` in frontmatter **must match** folder name.
-5. `description` must include **triggers** ("Use when…").
 
 ### Phase 2 — agent (if needed)
 
@@ -81,7 +84,7 @@ Use when adding or changing anything in `.agent/` that agents or managers invoke
 
 1. Copy `references/workflow-template.md`.
 2. Create `.agent/workflows/{command}.md` (filename = slash without `/`).
-3. Wire: agent + `@[skills/skill-name]`.
+3. Wire: `@owner` + path to `agents/{owner}/references/{pass}/` checklist.
 4. Modes via `$ARGUMENTS` table when applicable.
 5. **No product code** unless workflow is `/implement-us`.
 

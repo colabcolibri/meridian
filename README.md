@@ -36,7 +36,7 @@ You stay the manager. Agents execute **one user story at a time**, with gates so
 **Recommended:** install [Meridian Harness](https://marketplace.visualstudio.com/items?itemName=colabcolibri.meridian-vscode) for the kanban board, graphs, and in-IDE guides.  
 **Kit only:** copy or install `.agent/` into your project — same harness, no UI. Use `/status` and CLI export when you need visibility.
 
-[How extension vs chat works →](.agent/references/how-to-use.md) · [Distribution →](.agent/DISTRIBUTION.md)
+[How extension vs chat works →](.agent/references/guides/how-to-use.md) · [Distribution →](.agent/DISTRIBUTION.md)
 
 ## Install (recommended)
 
@@ -68,7 +68,7 @@ document → plan → refine → implement → close → commit
 | **Close** | Evidence on the story; you mark it done |
 | **Commit** | One commit per closed story (recommended) |
 
-Scrum-inspired for **one human directing AI agents** — no story points or velocity theater. [Scrum ↔ Meridian](.agent/references/scrum-meridian-map.md)
+Scrum-inspired for **one human directing AI agents** — no story points or velocity theater. [Scrum ↔ Meridian](.agent/references/scrum/scrum-meridian-map.md)
 
 ## Screenshots
 
@@ -123,7 +123,7 @@ Meridian is a lab for a thinner path: **you** own delivery; **agents** execute i
 
 ## Reference
 
-- [How to use](.agent/references/how-to-use.md) · [Concepts](.agent/references/start-here.md) · [Recipes](.agent/references/usage-guide.md) · [Commands](.agent/references/agents-help.md)
+- [How to use](.agent/references/guides/how-to-use.md) · [Concepts](.agent/references/guides/start-here.md) · [Recipes](.agent/references/guides/usage-guide.md) · [Commands](.agent/references/guides/agents-help.md)
 - [Protocol](.agent/MERIDIAN.md) · [AGENTS.md](AGENTS.md) · [Distribution](.agent/DISTRIBUTION.md) · [IDE adapters](.agent/IDE_ADAPTERS.md)
 
 ## Contributing · license

@@ -98,7 +98,7 @@ Always edit in `.agent/` first; then run `./.agent/scripts/sync_kit.sh` for IDE 
 | **Codex** | `.agents/skills/`, `.codex/`, `AGENTS.md` | skills (workflows + kit skills), subagent TOMLs, project guidance |
 | **OpenCode** | `.opencode/` | slash commands, agents, skills |
 
-Both adapters symlink workflows from `.agent/workflows/` as slash commands and agents from `.agent/agents/`.
+Both adapters symlink workflows from `.agent/workflows/` as slash commands. Agents: flat `.cursor/agents/{slug}.md` → `.agent/agents/{slug}/agent.md` (persona); `references/` stays in `.agent/` only.
 
 ### Cursor mapping
 
@@ -106,7 +106,7 @@ Both adapters symlink workflows from `.agent/workflows/` as slash commands and a
 | ------ | ------------------ |
 | `.cursor/rules/meridian.mdc` | `.agent/rules/meridian.mdc` |
 | `.cursor/skills/` | `.agent/skills/` |
-| `.cursor/agents/` | `.agent/agents/` |
+| `.cursor/agents/{slug}.md` | symlink → `.agent/agents/{slug}/agent.md` |
 | `.cursor/commands/` | `.agent/workflows/` |
 | `.cursor/references/templates/` | `.agent/references/templates/` |
 
@@ -115,7 +115,7 @@ Both adapters symlink workflows from `.agent/workflows/` as slash commands and a
 | Claude Code | Canonical source |
 | ----------- | ------------------ |
 | `.claude/commands/` | `.agent/workflows/` |
-| `.claude/agents/` | `.agent/agents/` |
+| `.claude/agents/{slug}.md` | symlink → `.agent/agents/{slug}/agent.md` |
 
 Claude Code does not mirror skills, rules, or templates — workflows and agents read `.agent/skills/` and templates from the repo when needed.
 
@@ -126,7 +126,7 @@ Claude Code does not mirror skills, rules, or templates — workflows and agents
 | `.agents/skills/<name>/` | `.agent/skills/<name>/` |
 | `.agents/skills/workflow-<name>/SKILL.md` | `.agent/workflows/<name>.md` |
 | `.agents/skills/meridian-authoring/SKILL.md` | `.agent/skills/doc.md` |
-| `.codex/agents/<name>.toml` | generated from `.agent/agents/<name>.md` |
+| `.codex/agents/<name>.toml` | generated from `.agent/agents/<name>/agent.md` |
 | `AGENTS.md` (repo root, when safe) | `.agent/rules/AGENTS.md` |
 
 Codex deprecated custom prompts (`~/.codex/prompts/`) in favor of skills — Meridian workflows are exposed as skills under `.agents/skills/`. Subagent TOMLs are generated (not symlinked) because Codex expects TOML, not Markdown.
@@ -136,7 +136,7 @@ Codex deprecated custom prompts (`~/.codex/prompts/`) in favor of skills — Mer
 | OpenCode | Canonical source |
 | -------- | ---------------- |
 | `.opencode/commands/<name>.md` | `.agent/workflows/<name>.md` |
-| `.opencode/agents/<name>.md` | generated from `.agent/agents/<name>.md` (OpenCode `permission:` frontmatter) |
+| `.opencode/agents/<name>.md` | generated from `.agent/agents/<name>/agent.md` (OpenCode `permission:` frontmatter) |
 | `.opencode/skills/<name>/` | `.agent/skills/<name>/` |
 | `AGENTS.md` (repo root) | `.agent/rules/AGENTS.md` — read natively by OpenCode |
 

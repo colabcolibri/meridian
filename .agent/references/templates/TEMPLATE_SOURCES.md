@@ -7,8 +7,8 @@
 ## How the mirror works
 
 ```txt
-CANONICAL (edit here)          REGISTRY (agents read)              IDE ADAPTER (read-only mirror)
-.agent/skills/.../references/  →  .agent/references/templates/  →  .cursor/references/templates/
+CANONICAL (edit here)                    REGISTRY (agents read)              IDE ADAPTER (read-only mirror)
+.agent/agents/{slug}/references/{pass}/  →  .agent/references/templates/  →  .cursor/references/templates/
 ```
 
 - **Registry** = symlinks + kit-owned files (`INDEX.md`, `writing-guide.md`, `section-contracts.md`, `lifecycle.md`, `TEMPLATE_SOURCES.md`).
@@ -22,15 +22,15 @@ CANONICAL (edit here)          REGISTRY (agents read)              IDE ADAPTER (
 
 | Template | Canonical (edit) | Registry | Used by |
 | -------- | ---------------- | -------- | ------- |
-| `us-template.md` | `.agent/skills/us-create/references/us-template.md` | `.agent/references/templates/us-template.md` | `/create-us`, `/refine-us`, `/review-us`, `/implement-us` — **not** `/complete-us` body |
-| `refine-checklist.md` | `.agent/skills/us-refine/references/refine-checklist.md` | `.agent/references/templates/refine-checklist.md` | `/refine-us` |
-| `implement-gate-checklist.md` | `.agent/skills/us-implement/references/implement-gate-checklist.md` | `.agent/references/templates/implement-gate-checklist.md` | `/implement-us` |
-| `review-checklist.md` | `.agent/skills/us-review/references/review-checklist.md` | `.agent/references/templates/review-checklist.md` | `/review-us` |
-| `implementation-template.md` | `.agent/skills/us-complete/references/implementation-template.md` | `.agent/references/templates/implementation-template.md` | `/complete-us` (Record shape only) |
-| `close-us-contract.md` | `.agent/skills/us-complete/references/close-us-contract.md` | `.agent/references/templates/close-us-contract.md` | `/complete-us` (**read first**) |
-| `epic-template.md` | `.agent/skills/epic-create/references/epic-template.md` | `.agent/references/templates/epic-template.md` | `/create-epic` |
-| `version-template.md` | `.agent/skills/version-create/references/version-template.md` | `.agent/references/templates/version-template.md` | `/create-version` |
-| `sprint-template.md` | `.agent/skills/sprint-create/references/sprint-template.md` | `.agent/references/templates/sprint-template.md` | `/plan-sprint` |
+| `us-template.md` | `.agent/agents/story-maker/references/us-create/us-template.md` | `.agent/references/templates/us-template.md` | `/create-us`, `/refine-us`, `/review-us`, `/implement-us` — **not** `/complete-us` body |
+| `refine-checklist.md` | `.agent/agents/story-maker/references/us-refine/refine-checklist.md` | `.agent/references/templates/refine-checklist.md` | `/refine-us` |
+| `implement-gate-checklist.md` | `.agent/agents/developer/references/us-implement/implement-gate-checklist.md` | `.agent/references/templates/implement-gate-checklist.md` | `/implement-us` |
+| `review-checklist.md` | `.agent/agents/story-checker/references/us-review/review-checklist.md` | `.agent/references/templates/review-checklist.md` | `/review-us` |
+| `implementation-template.md` | `.agent/agents/story-checker/references/us-complete/implementation-template.md` | `.agent/references/templates/implementation-template.md` | `/complete-us` (Record shape only) |
+| `close-us-contract.md` | `.agent/agents/story-checker/references/us-complete/close-us-contract.md` | `.agent/references/templates/close-us-contract.md` | `/complete-us` (**read first**) |
+| `epic-template.md` | `.agent/agents/product-owner/references/epic-create/epic-template.md` | `.agent/references/templates/epic-template.md` | `/create-epic` |
+| `version-template.md` | `.agent/agents/sprint-planner/references/version-create/version-template.md` | `.agent/references/templates/version-template.md` | `/create-version` |
+| `sprint-template.md` | `.agent/agents/sprint-planner/references/sprint-create/sprint-template.md` | `.agent/references/templates/sprint-template.md` | `/plan-sprint` |
 | `board-schema.md` | _(removed v11)_ | — | use `meridian_db_export --format planning` |
 | `decision-template.md` | `.agent/skills/update-decisions-log/references/decision-template.md` | `.agent/references/templates/decision-template.md` | `update-decisions-log` |
 | `decision-schema.md` | `.agent/skills/update-decisions-log/references/decision-schema.md` | `.agent/references/templates/decision-schema.md` | `update-decisions-log` (validation) |

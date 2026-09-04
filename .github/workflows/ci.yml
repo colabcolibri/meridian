@@ -18,6 +18,12 @@ jobs:
       - name: Validar estrutura Meridian
         run: python3 .agent/scripts/validate_meridian.py . --sqlite-only --strict-kit-md
 
+      - name: Sync IDE adapters
+        run: bash .agent/scripts/sync_kit.sh
+
+      - name: Validate kit parity
+        run: python3 .agent/scripts/validate_kit_parity.py . --strict
+
       - name: Kit Python test suite
         run: python3 .agent/scripts/run_kit_tests.py
 

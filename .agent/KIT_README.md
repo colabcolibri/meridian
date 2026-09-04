@@ -59,7 +59,7 @@ Do **not** commit `.cursor/`, `.claude/`, `.agents/skills/`, `.codex/`, `.openco
 
 1. Open your project in your IDE.
 2. Run **`/init-meridian`** if `docs/` does not exist yet.
-3. Read **`.agent/references/agents-help.md`** or run **`/agents-help`**. Lost on who should run? **`/deus-ex`**.
+3. Read **`.agent/references/guides/agents-help.md`** or run **`/agents-help`**. Lost on who should run? **`/deus-ex`**.
 
 ## Update the kit
 
@@ -97,7 +97,7 @@ python3 .agent/scripts/validate_meridian.py .
 
 ## Optional: VS Code / Cursor extension
 
-**Meridian Harness** on the [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=colabcolibri.meridian-vscode) — bundles the kit and installs it when you run **Meridian: Install Harness**. Kanban and planning views in the editor.
+**Meridian Harness** on the [Visual Studio Marketplace](https://marketplace.visualstudio.com/items?itemName=colabcolibri.meridian-vscode) — bundles the kit and installs it when you run **Meridian: Install Harness**. Status bar `harness A → B` means this folder is behind; use **Upgrade Harness**. Kanban and planning views in the editor.
 
 Details: [app-visual-studio/README.md](app-visual-studio/README.md)
 

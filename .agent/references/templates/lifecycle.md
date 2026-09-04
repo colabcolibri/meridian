@@ -35,7 +35,7 @@ Sprint close (sprint-template.md Retrospective) — /complete-sprint when increm
 Epic close — /complete-epic when Must US terminal + outcome confirmed
 ```
 
-Scrum mapping (bugs, spikes, ceremonies, no story points): `.agent/references/scrum-meridian-map.md`.
+Scrum mapping (bugs, spikes, ceremonies, no story points): `.agent/references/scrum/scrum-meridian-map.md`.
 
 ---
 

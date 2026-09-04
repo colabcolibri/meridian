@@ -225,4 +225,4 @@ Roster Scrum v11 — ver `agent-roster-and-workflow-v11.md`. H2/H3 = legacy remo
 
 ---
 
-*Documento vivo — atualizar após cada onda. Maintainer map: `.agent/references/instruction-surfaces.md`.*
+*Documento vivo — atualizar após cada onda. Maintainer map: `.agent/references/protocol/instruction-surfaces.md`.*

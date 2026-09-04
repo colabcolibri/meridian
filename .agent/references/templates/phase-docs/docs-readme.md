@@ -91,6 +91,6 @@ _(One paragraph: what this product is and who maintains these docs.)_
 | Resource | Path |
 | -------- | ---- |
 | Protocol | `.agent/MERIDIAN.md` |
-| Agents help | `.agent/references/agents-help.md` |
-| Start here | `.agent/references/start-here.md` |
+| Agents help | `.agent/references/guides/agents-help.md` |
+| Start here | `.agent/references/guides/start-here.md` |
 

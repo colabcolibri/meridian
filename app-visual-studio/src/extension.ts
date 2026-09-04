@@ -28,6 +28,8 @@ import {
   workspaceProjectRoot,
 } from "./kit-installer.js"
 import { openLocalHtmlBoard } from "./open-local-html-board.js"
+import { runMeridianDoctor } from "./doctor-runner.js"
+import { WelcomeEditorPanel } from "./welcome-editor-panel.js"
 import { resolveValidateTarget, runValidateMeridian } from "./validate-runner.js"
 import {
   MERIDIAN_DOCUMENT_SCHEME,
@@ -48,9 +50,11 @@ let howToUseEditor: KitReferenceEditorPanel | undefined
 let startHereEditor: KitReferenceEditorPanel | undefined
 let usageGuideEditor: KitReferenceEditorPanel | undefined
 let agentsHelpEditor: KitReferenceEditorPanel | undefined
+let welcomeEditor: WelcomeEditorPanel | undefined
 let commandsProvider: MeridianCommandsProvider | undefined
 let outputGeneral: vscode.OutputChannel | undefined
 let outputValidate: vscode.OutputChannel | undefined
+let outputDoctor: vscode.OutputChannel | undefined
 let outputTools: vscode.OutputChannel | undefined
 
 function openBoardTab(): void {
@@ -122,6 +126,7 @@ function refreshAllPanels(): void {
   howToUseEditor?.refresh()
   usageGuideEditor?.refresh()
   agentsHelpEditor?.refresh()
+  welcomeEditor?.refresh()
   commandsProvider?.refresh()
 }
 
@@ -236,6 +241,54 @@ async function installKit(force = false): Promise<void> {
   }
 }
 
+async function openWelcomeTab(): Promise<void> {
+  await meridianContext?.refresh()
+  welcomeEditor?.show(vscode.ViewColumn.One)
+}
+
+const WELCOME_OFFERED_KEY = "meridian.welcomeOfferedPaths"
+
+async function offerWelcomeIfNeeded(context: vscode.ExtensionContext): Promise<void> {
+  const root = workspaceProjectRoot(vscode.workspace.workspaceFolders)
+  if (!root) {
+    return
+  }
+  const offered = context.globalState.get<string[]>(WELCOME_OFFERED_KEY) ?? []
+  if (offered.includes(root)) {
+    return
+  }
+  await context.globalState.update(WELCOME_OFFERED_KEY, [...offered, root])
+  const pick = await vscode.window.showInformationMessage(
+    "Meridian: open the first-value onboarding checklist?",
+    "Open welcome",
+    "Later",
+  )
+  if (pick === "Open welcome") {
+    await openWelcomeTab()
+  }
+}
+
+async function runDoctor(): Promise<void> {
+  const root = workspaceProjectRoot(vscode.workspace.workspaceFolders)
+  if (!root) {
+    void vscode.window.showWarningMessage("Meridian: open a workspace folder first.")
+    return
+  }
+  outputDoctor?.clear()
+  outputDoctor?.appendLine(`meridian_doctor.py ${root}`)
+  outputDoctor?.show(true)
+
+  const { code, output } = await runMeridianDoctor(root)
+  outputDoctor?.appendLine(output)
+  outputDoctor?.appendLine(`\nExit code: ${code}`)
+
+  if (code === 0) {
+    void vscode.window.showInformationMessage("Meridian: doctor — healthy (see Output › Meridian Doctor).")
+  } else {
+    void vscode.window.showErrorMessage("Meridian: doctor found issues — see Output › Meridian Doctor.")
+  }
+}
+
 async function validateProject(): Promise<void> {
   const info = await requireWorkspace()
   if (!info) {
@@ -283,8 +336,9 @@ export function activate(context: vscode.ExtensionContext): void {
 
   outputGeneral = vscode.window.createOutputChannel("Meridian")
   outputValidate = vscode.window.createOutputChannel("Meridian Validate")
+  outputDoctor = vscode.window.createOutputChannel("Meridian Doctor")
   outputTools = vscode.window.createOutputChannel("Meridian Tools")
-  context.subscriptions.push(outputGeneral, outputValidate, outputTools)
+  context.subscriptions.push(outputGeneral, outputValidate, outputDoctor, outputTools)
 
   const deliveryDocProvider = new MeridianDocumentProvider()
   context.subscriptions.push(
@@ -369,8 +423,9 @@ export function activate(context: vscode.ExtensionContext): void {
     context.extensionUri,
     getWorkspace,
   )
+  welcomeEditor = new WelcomeEditorPanel(context.extensionUri, getWorkspace)
   meridianContext.registerListeners()
-  void meridianContext.refresh()
+  void meridianContext.refresh().then(() => offerWelcomeIfNeeded(context))
 
   context.subscriptions.push(
     vscode.commands.registerCommand("meridian.openBoard", openBoardTab),
@@ -393,6 +448,8 @@ export function activate(context: vscode.ExtensionContext): void {
     vscode.commands.registerCommand("meridian.openStartHere", openStartHereTab),
     vscode.commands.registerCommand("meridian.openUsageGuide", openUsageGuideTab),
     vscode.commands.registerCommand("meridian.openAgentsHelp", openAgentsHelpTab),
+    vscode.commands.registerCommand("meridian.openWelcome", openWelcomeTab),
+    vscode.commands.registerCommand("meridian.doctor", runDoctor),
     vscode.commands.registerCommand("meridian.installKit", () => installKit(false)),
     vscode.commands.registerCommand("meridian.upgradeKit", () => installKit(true)),
     vscode.commands.registerCommand("meridian.uninstallKit", () => uninstallKit()),
@@ -420,5 +477,6 @@ export function deactivate(): void {
   startHereEditor = undefined
   usageGuideEditor = undefined
   agentsHelpEditor = undefined
+  welcomeEditor = undefined
   commandsProvider = undefined
 }

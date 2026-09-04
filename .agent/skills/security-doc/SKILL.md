@@ -30,6 +30,17 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 - Create or deepen `02_security.md` before architecture `approved`
 - Threat model / secrets / OWASP **in the document** (not a code audit)
 
+
+## Modes (`$ARGUMENTS`)
+
+| Argument | Mode | Action |
+| -------- | ---- | ------ |
+| _(empty)_ | **full** | `checklists.md` + `security-doc-checklist.md` on entire `02` |
+| `bootstrap` | **bootstrap** | Run `quality-profile` → read `01_tech_stack.md` → `security-bootstrap.md` + `ci-gates-bootstrap.md` → fill `02` and CI rows in `08` **up to** profile tier |
+| `US-XXXX` | **us-align** | Load US `--full`; map security Acceptance → `02` sections |
+
+---
+
 ## Procedure
 
 1. Read `00_scope.md`, `01_tech_stack.md`, `03_user_types.md`.
@@ -47,4 +58,24 @@ Critical gaps:
 Decisions logged:
 Blocked until:
 Next: /privacy-pass | /security-review | /architecture
+```
+
+## Workflow steps (from `/security-pass`)
+
+```txt
+```txt
+CONTEXT:
+- User Request: $ARGUMENTS
+- Mode: SECURITY PASS
+
+RULES:
+0. Resolve profile: `python3 .agent/scripts/meridian_delivery.py quality-profile` — audit/CodeQL only when `full` unless human raised profile
+1. security-champion Phase 0
+2. Run mode procedure (full | bootstrap | us-align)
+3. Document risks, mitigations, AI-agent rules for project
+4. No weakening controls without logged decision
+5. Report blockers to scrum-master if needed
+```
+
+---
 ```

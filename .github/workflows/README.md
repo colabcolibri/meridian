@@ -19,4 +19,4 @@ Other repos using the kit define CI from their own phase docs:
 2. `docs/10_test_strategy.md` — test runners (`/test-pass bootstrap`)  
 3. `docs/08_environments.md` — CI/CD table (`/security-pass bootstrap` + `ci-gates-catalog.md`)
 
-Kit reference: `.agent/skills/test-strategy/references/ci-gates-catalog.md`
+Kit reference: `.agent/agents/quality-owner/references/test-strategy/ci-gates-catalog.md`

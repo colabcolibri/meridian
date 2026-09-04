@@ -123,7 +123,7 @@ There are no remote environments in v0 yet.
 
 ## CI/CD
 
-**Quality profile:** `qualitySiege: full` — declared in `.meridian/projects.json` (project `meridian`). Resolve: `python3 .agent/scripts/meridian_delivery.py quality-profile`. Kit reference: `.agent/references/agentic-quality-model.md`.
+**Quality profile:** `qualitySiege: full` — declared in `.meridian/projects.json` (project `meridian`). Resolve: `python3 .agent/scripts/meridian_delivery.py quality-profile`. Kit reference: `.agent/references/protocol/agentic-quality-model.md`.
 
 Workflow map: `.github/workflows/README.md`.
 

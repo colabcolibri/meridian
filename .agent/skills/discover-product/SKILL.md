@@ -11,7 +11,7 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 | File | When to read |
 | ------- | ---------- |
 | `.agent/references/templates/discovery-folder-guide.md` | **Mandatory** before Write |
-| `.agent/references/agent-areas.md` | **Mandatory** — discovery vs document-project |
+| `.agent/references/agents/agent-areas.md` | **Mandatory** — discovery vs document-project |
 | `.agent/references/templates/init-interview-guide.md` | When context thin — interview gate |
 | `references/product-brief-template.md` | **Mandatory** before Write |
 | `docs/discovery/product-brief.md` | Existing brief |

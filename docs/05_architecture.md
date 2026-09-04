@@ -82,7 +82,7 @@ The extension is **not** the source of truth for the protocol. It monitors **`do
 | **Editor tab — Delivery Graph** | US nodes + `dependsOn` edges from planning export; version/sprint filters |
 | **Editor tab — Import Graph** | Scoped file import graph via `.agent/scripts/meridian_import_graph.py` |
 | **Kit HTML board**        | Browser; `python3 .agent/board`; `127.0.0.1` + porta efêmera; Ctrl+C encerra |
-| Status bar                | `Meridian: N US` when `docs/` resolved; project name when multi-product               |
+| Status bar                | `Meridian: N US` when current; `harness A → B` (click = Upgrade) when workspace `.agent/VERSION` is behind the extension |
 | **Project context strip** | Toolbar: name, `docs/` path, US count; dropdown when N>1                              |
 
 F5 / Extension Development Host is **maintainer-only**. End users install `.vsix` (`pnpm install:cursor`).
@@ -112,7 +112,7 @@ Visual structures for onboarding and review — **runtime**, **database (ER)**, 
 - **Single product:** `docs/` next to `.agent/` at repo root (this dogfood) or client project layout.
 - **Multi-product:** optional `.meridian/projects.json` at kit root; discovery finds `docs/` folders with Meridian fingerprint; per-product `qualitySiege` tier (`kit` | `standard` | `full`).
 - **Active project:** `meridian.activeProject` + **Select Active Project**; validate uses active `packageRoot` (parent of `docs/`).
-- **Quality profile:** `meridian_delivery.py quality-profile` resolves tier from manifest or `delivery.json` → `options.qualitySiege`; see `.agent/references/agentic-quality-model.md`. Validator WARNs when `10` is `approved` but tier is undeclared.
+- **Quality profile:** `meridian_delivery.py quality-profile` resolves tier from manifest or `delivery.json` → `options.qualitySiege`; see `.agent/references/protocol/agentic-quality-model.md`. Validator WARNs when `10` is `approved` but tier is undeclared.
 
 ### Packaging
 

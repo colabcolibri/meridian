@@ -1,1 +1,1 @@
-../../skills/us-complete/references/implementation-template.md
+../../agents/story-checker/references/us-complete/implementation-template.md

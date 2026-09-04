@@ -1,1 +1,1 @@
-../../skills/us-create/references/us-template.md
+../../agents/story-maker/references/us-create/us-template.md

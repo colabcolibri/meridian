@@ -10,8 +10,8 @@ This folder is the **source of truth for phase documents** of the Meridian kit +
 | [`../.agent/MERIDIAN.md`](../.agent/MERIDIAN.md)                                                     | Master protocol for agents                                                                                         |
 | [`../.agent/rules/MERIDIAN.md`](../.agent/rules/MERIDIAN.md)                                         | Global rules (`trigger: always_on`)                                                                                |
 | [`../.agent/ARCHITECTURE.md`](../.agent/ARCHITECTURE.md)                                             | Map of agents, skills, and workflows                                                                               |
-| [`../.agent/references/instruction-surfaces.md`](../.agent/references/instruction-surfaces.md)       | **Where to edit** when protocol changes                                                                            |
-| [`../.agent/references/usage-guide.md`](../.agent/references/usage-guide.md)                         | Day-to-day guide                                                                                                   |
+| [`../.agent/references/protocol/instruction-surfaces.md`](../.agent/references/protocol/instruction-surfaces.md)       | **Where to edit** when protocol changes                                                                            |
+| [`../.agent/references/guides/usage-guide.md`](../.agent/references/guides/usage-guide.md)                         | Day-to-day guide                                                                                                   |
 | [`../.agent/references/plans/markdown-audit-v11.md`](../.agent/references/plans/markdown-audit-v11.md) | Markdown audit checklist (onda G)                                                                                  |
 | [`../.agent/references/plans/agent-roster-and-workflow-v11.md`](../.agent/references/plans/agent-roster-and-workflow-v11.md) | Agent roster redesign (onda H) |
 
@@ -62,7 +62,7 @@ Validate: `python3 .agent/scripts/validate_meridian.py . --sqlite-only`
 
 ## How agents should work
 
-See: [Start here](../.agent/references/start-here.md) · [Usage guide](../.agent/references/usage-guide.md) · [Agents help](../.agent/references/agents-help.md) · `/daily-with-ai`
+See: [Start here](../.agent/references/guides/start-here.md) · [Usage guide](../.agent/references/guides/usage-guide.md) · [Agents help](../.agent/references/guides/agents-help.md) · `/daily-with-ai`
 
 ### Daily loop (manager + AI)
 

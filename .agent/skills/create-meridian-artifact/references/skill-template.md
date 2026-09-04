@@ -1,21 +1,17 @@
-# Skill template — copy to `.agent/skills/{name}/SKILL.md`
+# Station reference template — copy to `.agent/agents/{slug}/references/{pass}/PROCEDURE.md`
+
+> **Kit v12:** domain procedures live under the owning agent, not `.agent/skills/`. Use `.agent/skills/` only for cross-station shared skills (see `station-references.md`).
 
 ```markdown
----
-name: {skill-name}
-description: One line with outcome and triggers. Use when user asks for …
-allowed-tools: Read, Glob, Grep   # add Edit, Write, Bash only if needed
----
-
 # {Title}
 
-> One-sentence purpose.
+> One-sentence purpose. Loaded by @{agent-slug} — humans invoke `/workflow-name` or @{agent-slug}, not this path directly.
 
 ## Selective reading
 
 | File | When to read |
 | ---- | ------------ |
-| `references/{checklist}.md` | **Mandatory** — … |
+| `{checklist}.md` | **Mandatory** — … |
 
 ## When to trigger
 
@@ -46,7 +42,6 @@ Next:
 
 ## Rules
 
-- `name` = folder name (kebab-case).
-- `description` is the primary discovery trigger for agents.
-- Keep `SKILL.md` under ~120 lines; move checklists to `references/`.
-- Long templates live in `references/`, not in `.agent/references/templates/` unless shared across agents (see `TEMPLATE_SOURCES.md`).
+- Folder name = pass name (kebab-case), sibling to `PROCEDURE.md`.
+- Keep `PROCEDURE.md` under ~120 lines; move checklists to the same folder.
+- Delivery templates: edit canonical path per `TEMPLATE_SOURCES.md`; registry symlinks under `.agent/references/templates/`.

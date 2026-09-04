@@ -48,21 +48,27 @@ AGENT_KIT_PATHS = [
     "scripts/validate_meridian.py",
 ]
 
-REQUIRED_AGENTS = [
-    "deus-ex.md",
-    "product-owner.md",
-    "technical-writer.md",
-    "security-champion.md",
-    "technical-architect.md",
-    "design-system-owner.md",
-    "quality-owner.md",
-    "sprint-planner.md",
-    "story-maker.md",
-    "story-checker.md",
-    "developer.md",
-    "scrum-master.md",
-    "code-investigator.md",
+REQUIRED_AGENT_STATIONS = [
+    "deus-ex",
+    "product-owner",
+    "technical-writer",
+    "security-champion",
+    "technical-architect",
+    "design-system-owner",
+    "quality-owner",
+    "sprint-planner",
+    "story-maker",
+    "story-checker",
+    "developer",
+    "scrum-master",
+    "code-investigator",
+    "ux-researcher",
+    "data-engineer",
+    "devops-engineer",
 ]
+
+# kit v2 and earlier — flat persona at agents/{slug}.md
+LEGACY_FLAT_AGENT_FILES = [f"{slug}.md" for slug in REQUIRED_AGENT_STATIONS]
 
 LEGACY_AGENTS = [
     "process-manager.md",
@@ -73,6 +79,19 @@ LEGACY_AGENTS = [
     "board-keeper.md",
     "backlog-refiner.md",
 ]
+
+# Kit v3: domain skills canonical in `.agent/skills/`; agents load skills; workflows are aliases.
+
+SHARED_SKILL_DIRS = frozenset({
+    "create-meridian-artifact",
+    "discover-product",
+    "init-project",
+    "meridian-routing",
+    "update-decisions-log",
+})
+
+# Cross-station only — not owned by a single station's references/ symlink set.
+DOMAIN_SKILL_DIRS_FORBIDDEN: frozenset[str] = frozenset()
 
 
 def validate_cursor_adapter(repo_root: Path, warnings: list[str]) -> None:
@@ -116,9 +135,21 @@ def validate_agent_kit(
         warnings.append(".agent/rules/MERIDIAN.md missing trigger: always_on")
     agents_dir = agent_dir / "agents"
     if agents_dir.is_dir():
-        for name in REQUIRED_AGENTS:
-            if not (agents_dir / name).exists():
-                warnings.append(f"Missing .agent/agents/{name}")
+        for slug in REQUIRED_AGENT_STATIONS:
+            agent_md = agents_dir / slug / "agent.md"
+            if not agent_md.is_file():
+                warnings.append(f"Missing .agent/agents/{slug}/agent.md")
+        for legacy_flat in LEGACY_FLAT_AGENT_FILES:
+            legacy_path = agents_dir / legacy_flat
+            if legacy_path.is_file():
+                msg = (
+                    f"Legacy flat agent file: .agent/agents/{legacy_flat} "
+                    f"— use .agent/agents/{legacy_flat.removesuffix('.md')}/agent.md (kit v2)"
+                )
+                if strict:
+                    errors.append(msg)
+                else:
+                    warnings.append(msg)
         for legacy in LEGACY_AGENTS:
             legacy_path = agents_dir / legacy
             if legacy_path.exists():
@@ -127,6 +158,18 @@ def validate_agent_kit(
                     errors.append(msg)
                 else:
                     warnings.append(msg)
+    skills_dir = agent_dir / "skills"
+    if skills_dir.is_dir():
+        for required in SHARED_SKILL_DIRS:
+            if not (skills_dir / required / "SKILL.md").is_file():
+                warnings.append(f"Missing shared skill `.agent/skills/{required}/SKILL.md`")
+        for entry in sorted(skills_dir.iterdir()):
+            if not entry.is_dir() or entry.name.startswith("."):
+                continue
+            if entry.name == "doc.md":
+                continue
+            if not (entry / "SKILL.md").is_file():
+                warnings.append(f"Skill folder `.agent/skills/{entry.name}/` missing SKILL.md")
 
 
 CONTEXT_PLACEHOLDER_MARKERS = (

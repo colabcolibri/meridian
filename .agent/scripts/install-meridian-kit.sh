@@ -179,7 +179,7 @@ Next steps:
      - Cursor / Claude Code / Codex / OpenCode: workflows work after adapter sync
      - Antigravity / .agent-native: open project — workflows live in .agent/
   2. If docs/ is missing: /init-meridian
-  3. Read .agent/references/agents-help.md or /agents-help
+  3. Read .agent/references/guides/agents-help.md or /agents-help
   4. After kit updates: re-run install with --force, or:
         ${TARGET}/.agent/scripts/sync_kit.sh
 

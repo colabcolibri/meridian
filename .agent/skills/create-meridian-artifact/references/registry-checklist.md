@@ -1,7 +1,7 @@
 # Registry checklist — Meridian kit artifacts
 
 > Print the applicable section when creating or changing kit pieces.  
-> **Canonical maintainer map:** `.agent/references/instruction-surfaces.md`
+> **Canonical maintainer map:** `.agent/references/protocol/instruction-surfaces.md`
 
 ---
 
@@ -11,7 +11,7 @@
 - [ ] Object-prefix families when it is a procedure (`us-create`, `security-doc`) — **not** the slash name (`/create-us` stays). Do **not** keep a second folder for the old slug.
 - [ ] `.agent/skills/{name}/references/*.md` — if procedure > ~80 lines
 - [ ] "When to read" table in `SKILL.md`
-- [ ] Owning agent(s) — add skill to `skills:` frontmatter in `.agent/agents/*.md`
+- [ ] Owning agent(s) — add shared skills to `skills:` frontmatter in `.agent/agents/{slug}/agent.md`
 - [ ] `.agent/ARCHITECTURE.md` — § Skills table
 - [ ] `./.agent/scripts/sync_kit.sh`
 - [ ] `validate_meridian.py . --sqlite-only --strict-kit-md`
@@ -22,10 +22,10 @@
 
 ## B. New agent only
 
-- [ ] `.agent/agents/{name}.md` — frontmatter: name, description, skills, tools
+- [ ] `.agent/agents/{slug}/agent.md` — frontmatter: name, description, skills, tools
 - [ ] Phase 0, mission, forbidden, delegation, output format
 - [ ] `.agent/skills/meridian-routing/SKILL.md` — selection matrix row(s)
-- [ ] `.agent/references/agents-help.md` — agent group table + skills list
+- [ ] `.agent/references/guides/agents-help.md` — agent group table + skills list
 - [ ] `.agent/ARCHITECTURE.md` — § Agents table
 - [ ] US cook/attest: `story-maker` vs `story-checker` (see `agent-station-map.md`); never add a third US cook+attest agent
 - [ ] `./.agent/scripts/sync_kit.sh` (auto: `.cursor/agents/`, `.codex/agents/*.toml`)
@@ -40,10 +40,10 @@
 - [ ] `.agent/workflows/{command}.md` — `$ARGUMENTS`, critical rules, output
 - [ ] Owning agent + skill reference in workflow body
 - [ ] `.agent/rules/meridian.mdc` — Slash commands table
-- [ ] `.agent/references/agents-help.md` — Group C (or correct group) row + intent lookup
+- [ ] `.agent/references/guides/agents-help.md` — Group C (or correct group) row + intent lookup
 - [ ] `.agent/skills/meridian-routing/SKILL.md` — keywords → agent
 - [ ] `.agent/ARCHITECTURE.md` — § Workflows table
-- [ ] `.agent/references/usage-guide.md` — "when to use" recipe (recommended)
+- [ ] `.agent/references/guides/usage-guide.md` — "when to use" recipe (recommended)
 - [ ] `./.agent/scripts/sync_kit.sh` (auto: `.cursor/commands/`, `.agents/skills/workflow-{command}/`)
 
 **Not chat slash:** `app-visual-studio/src/command-catalog.ts` is for **extension palette** only.
@@ -64,7 +64,7 @@ When shipping a new read-only tab in `app-visual-studio` (e.g. Board, Epics, Dec
 - [ ] `app-visual-studio/src/command-catalog.ts` — help catalog entry
 - [ ] `app-visual-studio/test/*.test.ts` — webview script smoke
 - [ ] `docs/05_architecture.md` § UI structure + § Data loading
-- [ ] `.agent/references/agents-help.md` — IDE extension commands table
+- [ ] `.agent/references/guides/agents-help.md` — IDE extension commands table
 - [ ] `app-visual-studio/README.md` — command table when user-facing
 - [ ] Phase doc that documents the surface (e.g. `docs/11_decisions.md`) — keep promise aligned
 
@@ -99,7 +99,7 @@ Complete **A + B + C** in order:
 ## F. Routing-only change
 
 - [ ] `.agent/skills/meridian-routing/SKILL.md` — matrix + decision flow if needed
-- [ ] `.agent/references/agents-help.md` — intent lookup row
+- [ ] `.agent/references/guides/agents-help.md` — intent lookup row
 - [ ] No sync required unless agents/skills/workflows also changed
 
 ---
@@ -123,10 +123,10 @@ Complete **A + B + C** in order:
 | ---- | ----------- |
 | `.agent/MERIDIAN.md` | New gate, lifecycle rule, forbidden |
 | `.agent/rules/MERIDIAN.md` | P0 tier table, artifact owner |
-| `.agent/references/start-here.md` | New phase, folder tree, concept |
-| `.agent/references/usage-guide.md` | New day-to-day situation |
-| `.agent/references/agents-help.md` | Always for new agent/workflow |
-| `.agent/references/scrum-meridian-map.md` | New artifact type (spike, bug policy) |
+| `.agent/references/guides/start-here.md` | New phase, folder tree, concept |
+| `.agent/references/guides/usage-guide.md` | New day-to-day situation |
+| `.agent/references/guides/agents-help.md` | Always for new agent/workflow |
+| `.agent/references/scrum/scrum-meridian-map.md` | New artifact type (spike, bug policy) |
 | `README.md` | User-facing feature one-liner |
 | `.agent/KIT_README.md` | Distribution / install notes |
 

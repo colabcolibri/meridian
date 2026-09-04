@@ -1,1 +1,1 @@
-../../skills/us-review/references/review-checklist.md
+../../agents/story-checker/references/us-review/review-checklist.md

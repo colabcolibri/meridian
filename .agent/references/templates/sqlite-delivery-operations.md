@@ -209,10 +209,10 @@ python3 .agent/scripts/purge_delivery_md.py . --require-verify
 
 | Artifact | Markdown shape template |
 | -------- | ----------------------- |
-| User story | `.agent/skills/us-create/references/us-template.md` |
-| Epic | `.agent/skills/epic-create/references/epic-template.md` |
-| Version | `.agent/skills/version-create/references/version-template.md` |
-| Sprint | `.agent/skills/sprint-create/references/sprint-template.md` |
+| User story | `.agent/agents/story-maker/references/us-create/references/us-template.md` |
+| Epic | `.agent/agents/product-owner/references/epic-create/references/epic-template.md` |
+| Version | `.agent/agents/sprint-planner/references/version-create/references/version-template.md` |
+| Sprint | `.agent/agents/sprint-planner/references/sprint-create/references/sprint-template.md` |
 
 Parse → upsert via CLI; do not hand-edit SQL for narrative bodies unless emergency.
 

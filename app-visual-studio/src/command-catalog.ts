@@ -20,15 +20,29 @@ export const COMMAND_HELP_GROUPS: { id: CommandHelpEntry["group"]; label: string
 
 export const MERIDIAN_COMMAND_CATALOG: CommandHelpEntry[] = [
   {
+    id: "welcome",
+    title: "Welcome (first-value checklist)",
+    commandId: "meridian.openWelcome",
+    paletteTitle: "Meridian: Open Welcome",
+    group: "guides",
+    summary: "Onboarding checklist — kit, docs, delivery DB, adapters, board",
+    details: [
+      "Binary first-value target for new workspaces (see ide-integration.md).",
+      "Orchestration stays in chat: /deus-ex dispatches specialist agents.",
+    ],
+    icon: "$(rocket)",
+    status: "shipped",
+  },
+  {
     id: "guide-how-to",
     title: "How to use (start here)",
     commandId: "meridian.openHowToUse",
     paletteTitle: "Meridian: Open How to Use",
     group: "guides",
-    summary: "Entry guide — extension vs chat, workflows, setup, reading order",
+    summary: "Entry guide — extension vs chat, skills, setup, reading order",
     details: [
-      "Kit file: .agent/references/how-to-use.md — single human entry point.",
-      "You type slash workflows (/create-us). Agents and skills run automatically.",
+      "Kit file: .agent/references/guides/how-to-use.md — single human entry point.",
+      "You type skill slashes (/us-create) or @agent. Procedures live in .agent/skills/.",
     ],
     icon: "$(lightbulb)",
     status: "shipped",
@@ -42,7 +56,7 @@ export const MERIDIAN_COMMAND_CATALOG: CommandHelpEntry[] = [
     summary: "Phases, gates, folders — mental model only",
     details: [
       "No command lists — recipes are in the usage guide; commands in agents help.",
-      "Kit file: .agent/references/start-here.md",
+      "Kit file: .agent/references/guides/start-here.md",
     ],
     icon: "$(home)",
     status: "shipped",
@@ -55,7 +69,7 @@ export const MERIDIAN_COMMAND_CATALOG: CommandHelpEntry[] = [
     group: "guides",
     summary: "Situation → steps: new project, brownfield, implement, close US",
     details: [
-      "Kit file: .agent/references/usage-guide.md",
+      "Kit file: .agent/references/guides/usage-guide.md",
     ],
     icon: "$(list-unordered)",
     status: "shipped",
@@ -69,7 +83,7 @@ export const MERIDIAN_COMMAND_CATALOG: CommandHelpEntry[] = [
     summary: "Lookup: all /commands, agent groups, steps 1–20",
     details: [
       "Use Ctrl+F — not meant as a linear tutorial.",
-      "Kit file: .agent/references/agents-help.md",
+      "Kit file: .agent/references/guides/agents-help.md",
     ],
     icon: "$(book)",
     status: "shipped",
@@ -83,7 +97,7 @@ export const MERIDIAN_COMMAND_CATALOG: CommandHelpEntry[] = [
     summary: "Palette commands for board, validate, kit install — not chat slash commands",
     details: [
       "Opens this help tab listing extension-only commands.",
-      "Chat slash commands (/status, /create-us) live in agents-help.md.",
+      "Chat skills (/us-create, /project-status) and @agents — see agents-help.md.",
     ],
     icon: "$(symbol-event)",
     status: "shipped",
@@ -97,7 +111,7 @@ export const MERIDIAN_COMMAND_CATALOG: CommandHelpEntry[] = [
     summary: "Copy bundled Meridian kit (.agent/) into the workspace",
     details: [
       "Manual only — run from status bar, Command Palette, or Meridian → Commands.",
-      "Copies agents, skills, workflows, and scripts from the VSIX bundle.",
+      "Copies agents, skills, and scripts from the VSIX bundle.",
       "Syncs .cursor/, .claude/, Codex, and .opencode/ IDE adapters via sync_kit.sh.",
       "After install: run /init-meridian in chat if docs/ does not exist yet.",
     ],
@@ -114,7 +128,10 @@ export const MERIDIAN_COMMAND_CATALOG: CommandHelpEntry[] = [
     summary: "Replace existing .agent/ with the bundled kit version",
     details: [
       "Overwrites .agent/ and re-runs adapter sync.",
-      "Use after updating the extension to pick up kit changes.",
+      "Creates .agent.backup-<timestamp>/ before overwrite when upgrading.",
+      "Status bar shows harness A → B when this folder is behind the extension.",
+      "A prompt lists installed vs bundled version once per extension version (Later dismisses that bump).",
+      "Writes .agent/VERSION so later reloads can compare. Kit source repo (this monorepo) is not prompted.",
     ],
     outputChannel: "Meridian Tools",
     icon: "$(cloud-upload)",
@@ -281,6 +298,22 @@ export const MERIDIAN_COMMAND_CATALOG: CommandHelpEntry[] = [
     summary: "Alias for Open Versions (v4 compatibility)",
     details: ["Same tab and behavior as Open Versions."],
     icon: "$(list-tree)",
+    status: "shipped",
+  },
+  {
+    id: "doctor",
+    title: "Doctor (workspace health)",
+    commandId: "meridian.doctor",
+    paletteTitle: "Meridian: Doctor",
+    group: "governance",
+    summary: "Runs meridian_doctor.py — kit, docs, delivery DB, adapter parity",
+    details: [
+      "Defensive checks before delivery work — not a generic AI installer doctor.",
+      "Equivalent to python3 .agent/scripts/meridian_doctor.py <project-root>.",
+      "See .agent/references/protocol/ide-integration.md for IDE matrix and external harness notes.",
+    ],
+    outputChannel: "Meridian Doctor",
+    icon: "$(heart)",
     status: "shipped",
   },
   {

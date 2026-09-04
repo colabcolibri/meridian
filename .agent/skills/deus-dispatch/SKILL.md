@@ -15,8 +15,8 @@ allowed-tools: Read, Glob, Grep, Bash
 | `references/project-context.md` | **Mandatory** — what to read on the product before allocating |
 | `references/dispatch-checklist.md` | **Mandatory** — area → station → slash → stop |
 | `references/handoff-envelope.md` | **Mandatory** — output shape + evidence line |
-| `.agent/references/agent-areas.md` | Name the area |
-| `.agent/references/agent-station-map.md` | Slash owner (wins over gut feel) |
+| `.agent/references/agents/agent-areas.md` | Name the area |
+| `.agent/references/agents/agent-station-map.md` | Slash owner (wins over gut feel) |
 | `@[skills/meridian-routing]` | Keyword matrix — after context, before emit |
 
 Do **not** load `us-create`, `us-implement`, `epic-create`, or other cook skills. Knowing the line is not owning the stove.

@@ -17,7 +17,7 @@ This repository is the Meridian **product** (kit + VS Code extension). It runs t
 - **Python** — stdlib scripts in `.agent/scripts/test/`
 
 - **Test stack id:** `ts-node-test-py-stdlib`
-- **Quality profile:** `qualitySiege: full` (`.meridian/projects.json`) — gates capped per `.agent/references/agentic-quality-model.md`
+- **Quality profile:** `qualitySiege: full` (`.meridian/projects.json`) — gates capped per `.agent/references/protocol/agentic-quality-model.md`
 - **CI:** `.github/workflows/` — mapped in `.github/workflows/README.md` and `docs/08_environments.md` § CI/CD
 - **Other Meridian products:** pick stack id from `test-stack-catalog.md` and CI from `ci-gates-catalog.md` via `/test-pass bootstrap` and `/security-pass bootstrap`
 

@@ -11,7 +11,7 @@ This file is the lightweight entry point symlinked as `meridian-authoring` in ID
 | Need | Read |
 | ---- | ---- |
 | Full procedure + checklists | `create-meridian-artifact/SKILL.md` + `references/registry-checklist.md` |
-| Surface map | `.agent/references/instruction-surfaces.md` |
+| Surface map | `.agent/references/protocol/instruction-surfaces.md` |
 | Agent/skill/workflow tables | `.agent/ARCHITECTURE.md` |
 | Sync adapters | `./.agent/scripts/sync_kit.sh` |
 
@@ -54,7 +54,7 @@ Rules: `name` = folder name (kebab-case); `description` includes triggers.
 | Layer | Path | Role |
 | ----- | ---- | ---- |
 | Workflow | `.agent/workflows/{cmd}.md` | Slash command recipe |
-| Agent | `.agent/agents/{name}.md` | Persona, gates, output |
+| Agent | `.agent/agents/{name}/agent.md` | Persona, gates, output |
 | Skill | `.agent/skills/{name}/SKILL.md` | Repeatable procedure |
 
 **Order when adding a full operator:** skill → agent → workflow → registries → sync.

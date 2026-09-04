@@ -27,6 +27,16 @@ allowed-tools: Read, Glob, Grep, Bash
 - `/test-review`
 - Before `/complete-us` on Must US with `tests: required`
 
+
+## Modes (`$ARGUMENTS`)
+
+| Argument | Mode | Action |
+| -------- | ---- | ------ |
+| `US-XXXX` | **us-scope** | Compare US Planned/Executed vs strategy (default) |
+| `sprint` | **sprint** | All open Must US in active sprint with `tests: required` |
+
+---
+
 ## Procedure
 
 1. Load US from SQLite.
@@ -43,4 +53,22 @@ Gaps (doc):
 Gaps (US):
 Gaps (code):
 Next: /test-pass | /refine-us | /implement-us | /complete-us
+```
+
+## Workflow steps (from `/test-review`)
+
+```txt
+```txt
+CONTEXT:
+- User Request: $ARGUMENTS
+- Mode: TEST REVIEW
+
+RULES:
+1. Read 10_test_strategy.md (if exists) + test-review-checklist.md
+2. Load US from SQLite — check tests, tests_status, Planned vs Executed
+3. Verify pyramid level matches strategy (unit vs e2e)
+4. Classify gaps: doc (/test-pass) | US (/refine-us) | code (/implement-us)
+```
+
+---
 ```

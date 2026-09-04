@@ -31,7 +31,10 @@ export type MeridianWorkspaceInfo = {
   projectName: string
   projects: MeridianProjectSummary[]
   kitDetected: true
+  kitInstalled: boolean
   docsExists: boolean
+  meridianDbExists: boolean
+  cursorAdaptersSynced: boolean
   usCount: number
 }
 
@@ -46,6 +49,17 @@ export function countUserStoriesInDocs(docsRoot: string, packageRoot?: string): 
 
 function docsDirExists(docsDir: string): boolean {
   return fs.existsSync(docsDir) && fs.statSync(docsDir).isDirectory()
+}
+
+function cursorAdaptersSynced(kitRoot: string): boolean {
+  const workflows = path.join(kitRoot, ".agent", "workflows")
+  const commands = path.join(kitRoot, ".cursor", "commands")
+  if (!fs.existsSync(workflows) || !fs.existsSync(commands)) {
+    return false
+  }
+  const workflowCount = fs.readdirSync(workflows).filter((n) => n.endsWith(".md")).length
+  const commandCount = fs.readdirSync(commands).filter((n) => n.endsWith(".md")).length
+  return workflowCount > 0 && workflowCount === commandCount
 }
 
 function buildInfo(
@@ -79,7 +93,10 @@ function buildInfo(
     projectName: project.name,
     projects,
     kitDetected: true,
+    kitInstalled: fs.existsSync(path.join(kitRoot, ".agent", "MERIDIAN.md")),
     docsExists,
+    meridianDbExists: sqliteDbExists(packageRoot),
+    cursorAdaptersSynced: cursorAdaptersSynced(kitRoot),
     usCount: docsExists ? countUserStoriesInDocs(docsRoot, packageRoot) : 0,
   }
 }

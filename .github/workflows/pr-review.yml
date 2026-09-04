@@ -27,7 +27,7 @@ jobs:
             - [ ] Spec/architecture changes: human approval on phase docs or US acceptance
             - [ ] Security-sensitive paths: run \`/security-review\` when touching \`.agent/scripts/lib/\` or auth
 
-            See \`.agent/references/agentic-trust-policy.md\` for earned-trust tiers.
+            See \`.agent/references/protocol/agentic-trust-policy.md\` for earned-trust tiers.
             `;
             const { data: comments } = await github.rest.issues.listComments({
               owner: context.repo.owner,

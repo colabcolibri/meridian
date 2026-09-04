@@ -1,6 +1,6 @@
 # Phase doc template — `06_database.md`
 
-**Agent:** `technical-writer`  
+**Agent:** `data-engineer` (Mnemosyne)  
 **Product path:** `docs/06_database.md`  
 **Depends on:** `05_architecture.md`
 

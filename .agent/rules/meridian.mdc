@@ -29,54 +29,22 @@ Priority: **P0 rules > P1 agent + MERIDIAN.md > P2 skills**.
 - Do not create US before `05_architecture` `approved`.
 - Never `✅` without evidence; never `🔶` without `Missing:` in acceptance.
 - Never `✅` without filled `## Record` on the US (skill `us-complete`).
-- **`/complete-us` is additive:** `show --full` + `close-us-contract.md` + `patch-record` — never copy `us-template.md` into CLI.
-- Product code for a US requires `ready: true` — use `/implement-us US-XXXX` before coding.
-- Decisions: `prepend-decision` CLI — run `date +"%Y-%m-%d"` and `date +"%H:%M"` first (`/update-decisions-log`).
+- Product code for a US requires `ready: true` — load skill `us-implement` or `@developer` before coding.
+- Decisions: `prepend-decision` CLI — run `date +"%Y-%m-%d"` and `date +"%H:%M"` first (skill `update-decisions-log`).
 - Structural contract: `.agent/references/templates/section-contracts.md`.
 - Routing: skill `meridian-routing` or specialized agents.
 - Announce: `🤖 Applying knowledge from @[agent-name]...` before specialized work.
 
-## Slash commands (Cursor)
+## Invoke (chat)
 
-| Command | File |
-| ------- | ---- |
-| `/init-meridian` | `.cursor/commands/init-meridian.md` |
-| `/status` | `.cursor/commands/status.md` |
-| `/deus-ex` | `.cursor/commands/deus-ex.md` |
-| `/plan-sprint` | `.cursor/commands/plan-sprint.md` |
-| `/create-version` | `.cursor/commands/create-version.md` |
-| `/create-epic` | `.cursor/commands/create-epic.md` |
-| `/create-us` | `.cursor/commands/create-us.md` |
-| `/review-us` | `.cursor/commands/review-us.md` |
-| `/refine-us` | `.cursor/commands/refine-us.md` |
-| `/implement-us` | `.cursor/commands/implement-us.md` |
-| `/complete-us` | `.cursor/commands/complete-us.md` |
-| `/complete-sprint` | `.cursor/commands/complete-sprint.md` |
-| `/complete-epic` | `.cursor/commands/complete-epic.md` |
-| `/architecture` | `.cursor/commands/architecture.md` |
-| `/privacy-pass` | `.cursor/commands/privacy-pass.md` |
-| `/seo-pass` | `.cursor/commands/seo-pass.md` |
-| `/security-pass` | `.cursor/commands/security-pass.md` |
-| `/security-review` | `.cursor/commands/security-review.md` |
-| `/dependency-audit` | `.cursor/commands/dependency-audit.md` |
-| `/test-pass` | `.cursor/commands/test-pass.md` |
-| `/test-review` | `.cursor/commands/test-review.md` |
-| `/design-pass` | `.cursor/commands/design-pass.md` |
-| `/design-flow` | `.cursor/commands/design-flow.md` |
-| `/design-theme` | `.cursor/commands/design-theme.md` |
-| `/design-showcase` | `.cursor/commands/design-showcase.md` |
-| `/design-review` | `.cursor/commands/design-review.md` |
-| `/update-decisions-log` | `.cursor/commands/update-decisions-log.md` |
-| `/daily-with-ai` | `.cursor/commands/daily-with-ai.md` |
-| `/agents-help` | `.cursor/commands/agents-help.md` |
-| `/discover` | `.cursor/commands/discover.md` |
-| `/document-project` | `.cursor/commands/document-project.md` |
-| `/audit-docs` | `.cursor/commands/audit-docs.md` |
-| `/investigate` | `.cursor/commands/investigate.md` |
+| Entry | Example | Canonical path |
+| ----- | ------- | -------------- |
+| **Skill** | `/us-create`, `/data-engineering`, `/project-status` | `.agent/skills/{name}/SKILL.md` |
+| **Agent** | `@story-maker`, `@data-engineer`, `@scrum-master` | `.agent/agents/{slug}/agent.md` |
 
-Human reference: `.agent/references/agents-help.md`
+No `.agent/workflows/` — procedures are **skills only**. Catalog: `.agent/references/guides/agents-help.md`
 
-Maintainer map: `.agent/references/instruction-surfaces.md`
+Maintainer map: `.agent/references/protocol/instruction-surfaces.md`
 
 ## Validate project
 

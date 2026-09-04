@@ -45,7 +45,7 @@ All paths in this folder are relative to `.agent/references/templates/`.
 
 When an agent from the table is activated:
 
-1. Read `.agent/agents/{agent}.md` (persona + prohibitions).
+1. Read `.agent/agents/{agent}/agent.md` (persona + prohibitions).
 2. Read the skill `SKILL.md` listed in the table.
 3. Read the **full template file** from this folder — not only frontmatter examples in `MERIDIAN.md`.
 4. Read **`writing-guide.md`** when creating or refining epic, version, or US.

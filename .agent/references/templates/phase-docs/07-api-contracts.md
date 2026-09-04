@@ -1,6 +1,6 @@
 # Phase doc template — `07_api_contracts.md`
 
-**Agent:** `technical-writer`  
+**Agent:** `technical-architect` (Daedalus) — `/api-pass`  
 **Product path:** `docs/07_api_contracts.md`  
 **Depends on:** `05`, `06`
 

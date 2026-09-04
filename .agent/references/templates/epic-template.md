@@ -1,1 +1,1 @@
-../../skills/epic-create/references/epic-template.md
+../../agents/product-owner/references/epic-create/epic-template.md

@@ -154,7 +154,7 @@ write_codex_agent_toml() {
   local name description
   name="$(parse_frontmatter_field "${agent_file}" "name")"
   description="$(parse_frontmatter_field "${agent_file}" "description")"
-  [[ -n "${name}" ]] || name="$(basename "${agent_file}" .md)"
+  [[ -n "${name}" ]] || name="$(basename "$(dirname "${agent_file}")")"
   [[ -n "${description}" ]] || description="Meridian agent ${name}"
 
   register_expected "${out_file}"
@@ -170,7 +170,7 @@ write_codex_agent_toml() {
 name = "$(toml_escape "${name}")"
 description = "$(toml_escape "${description}")"
 developer_instructions = """
-Follow the Meridian agent definition at .agent/agents/${name}.md.
+Follow the Meridian agent definition at .agent/agents/${name}/agent.md.
 Read that file fully before acting. Skills listed in its frontmatter apply.
 """
 EOF
@@ -329,16 +329,11 @@ sync_cursor() {
   mkdir -p "${CURSOR}/skills/meridian-authoring"
   link "../../../.agent/skills/doc.md" "${CURSOR}/skills/meridian-authoring/SKILL.md"
 
-  for agent_file in "${AGENT}"/agents/*.md; do
-    [[ -f "${agent_file}" ]] || continue
-    name="$(basename "${agent_file}")"
-    link "../../.agent/agents/${name}" "${CURSOR}/agents/${name}"
-  done
-
-  for workflow_file in "${AGENT}"/workflows/*.md; do
-    [[ -f "${workflow_file}" ]] || continue
-    name="$(basename "${workflow_file}")"
-    link "../../.agent/workflows/${name}" "${CURSOR}/commands/${name}"
+  for station_dir in "${AGENT}"/agents/*/; do
+    [[ -d "${station_dir}" ]] || continue
+    [[ -f "${station_dir}agent.md" ]] || continue
+    slug="$(basename "${station_dir}")"
+    link "../../.agent/agents/${slug}/agent.md" "${CURSOR}/agents/${slug}.md"
   done
 
   link "../../.agent/rules/meridian.mdc" "${CURSOR}/rules/meridian.mdc"
@@ -350,18 +345,13 @@ sync_cursor() {
 }
 
 sync_claude() {
-  mkdir -p "${CLAUDE}/commands" "${CLAUDE}/agents"
+  mkdir -p "${CLAUDE}/agents"
 
-  for workflow_file in "${AGENT}"/workflows/*.md; do
-    [[ -f "${workflow_file}" ]] || continue
-    name="$(basename "${workflow_file}")"
-    link "../../.agent/workflows/${name}" "${CLAUDE}/commands/${name}"
-  done
-
-  for agent_file in "${AGENT}"/agents/*.md; do
-    [[ -f "${agent_file}" ]] || continue
-    name="$(basename "${agent_file}")"
-    link "../../.agent/agents/${name}" "${CLAUDE}/agents/${name}"
+  for station_dir in "${AGENT}"/agents/*/; do
+    [[ -d "${station_dir}" ]] || continue
+    [[ -f "${station_dir}agent.md" ]] || continue
+    slug="$(basename "${station_dir}")"
+    link "../../.agent/agents/${slug}/agent.md" "${CLAUDE}/agents/${slug}.md"
   done
 
   link "../../.agent/IDE_ADAPTERS.md" "${CLAUDE}/README.md"
@@ -383,18 +373,12 @@ sync_codex() {
   mkdir -p "${AGENTS_SKILLS}/meridian-authoring"
   link "../../../.agent/skills/doc.md" "${AGENTS_SKILLS}/meridian-authoring/SKILL.md"
 
-  for workflow_file in "${AGENT}"/workflows/*.md; do
-    [[ -f "${workflow_file}" ]] || continue
-    name="$(basename "${workflow_file}" .md)"
-    skill_name="workflow-${name}"
-    mkdir -p "${AGENTS_SKILLS}/${skill_name}"
-    link "../../../.agent/workflows/${name}.md" "${AGENTS_SKILLS}/${skill_name}/SKILL.md"
-  done
-
-  for agent_file in "${AGENT}"/agents/*.md; do
-    [[ -f "${agent_file}" ]] || continue
-    name="$(basename "${agent_file}" .md)"
-    write_codex_agent_toml "${agent_file}" "${CODEX}/agents/${name}.toml"
+  for station_dir in "${AGENT}"/agents/*/; do
+    [[ -d "${station_dir}" ]] || continue
+    agent_md="${station_dir}agent.md"
+    [[ -f "${agent_md}" ]] || continue
+    slug="$(basename "${station_dir}")"
+    write_codex_agent_toml "${agent_md}" "${CODEX}/agents/${slug}.toml"
   done
 
   link "../../.agent/IDE_ADAPTERS.md" "${CODEX}/README.md"
@@ -408,20 +392,14 @@ sync_codex() {
 }
 
 sync_opencode() {
-  mkdir -p "${OPENCODE}/commands" "${OPENCODE}/agents" "${OPENCODE}/skills"
+  mkdir -p "${OPENCODE}/agents" "${OPENCODE}/skills"
 
-  # Workflows become slash commands (/create-us, /status, ...) — frontmatter compatible.
-  for workflow_file in "${AGENT}"/workflows/*.md; do
-    [[ -f "${workflow_file}" ]] || continue
-    name="$(basename "${workflow_file}")"
-    link "../../.agent/workflows/${name}" "${OPENCODE}/commands/${name}"
-  done
-
-  # Agents: generate OpenCode-compatible frontmatter (permission object, no Cursor tools string).
-  for agent_file in "${AGENT}"/agents/*.md; do
-    [[ -f "${agent_file}" ]] || continue
-    name="$(basename "${agent_file}")"
-    write_opencode_agent_md "${agent_file}" "${OPENCODE}/agents/${name}"
+  for station_dir in "${AGENT}"/agents/*/; do
+    [[ -d "${station_dir}" ]] || continue
+    agent_md="${station_dir}agent.md"
+    [[ -f "${agent_md}" ]] || continue
+    slug="$(basename "${station_dir}")"
+    write_opencode_agent_md "${agent_md}" "${OPENCODE}/agents/${slug}.md"
   done
 
   # Skills mirror kit skills (SKILL.md frontmatter already opencode-compatible).

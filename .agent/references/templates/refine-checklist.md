@@ -1,1 +1,1 @@
-../../skills/us-refine/references/refine-checklist.md
+../../agents/story-maker/references/us-refine/refine-checklist.md

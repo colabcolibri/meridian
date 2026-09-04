@@ -31,6 +31,17 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 - Before `/refine-us` on Must US with `tests: required` (strategy refs in Plan)
 - Stack change in `01_tech_stack.md`
 
+
+## Modes (`$ARGUMENTS`)
+
+| Argument | Mode | Action |
+| -------- | ---- | ------ |
+| _(empty)_ | **full** | Checklist pass on entire `10` |
+| `bootstrap` | **bootstrap** | Run `quality-profile` → read `01_tech_stack.md` → pick test stack id → fill pyramid + runners; use `ci-gates-catalog.md` (gates **up to** profile) → coordinate with `devops-engineer` for CI rows in `08` |
+| `US-XXXX` | **us-align** | Load US `--full`; map Acceptance tests → strategy sections |
+
+---
+
 ## Procedure (test-pass)
 
 ```txt
@@ -52,4 +63,24 @@ Stack id:
 Sections updated:
 US follow-ups:
 Next: /test-review | /refine-us US-XXXX
+```
+
+## Workflow steps (from `/test-pass`)
+
+```txt
+```txt
+CONTEXT:
+- User Request: $ARGUMENTS
+- Mode: TEST PASS
+
+RULES:
+0. Resolve profile: `python3 .agent/scripts/meridian_delivery.py quality-profile` — read `agentic-quality-model.md` when tier is unclear
+1. If no 10_test_strategy.md → copy § Document stub from `.agent/references/templates/phase-docs/10-test-strategy.md`
+2. Run mode procedure (full | bootstrap | us-align)
+3. Walk test-strategy-checklist.md
+4. Recommend /refine-us if Must US Plan missing test strategy refs
+5. prepend-decision on material runner or coverage policy changes
+```
+
+---
 ```

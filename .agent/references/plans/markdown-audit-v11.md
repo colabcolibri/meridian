@@ -68,9 +68,9 @@ Protocolo      → .agent/MERIDIAN.md, rules/, agents/, skills/, workflows/
 | ------- | -------- | ------ |
 | `.agent/rules/MERIDIAN.md` § TIER 1 | paths v1 | ✅ G1 |
 | `.agent/references/templates/lifecycle.md` | US file | ✅ G1 |
-| `.agent/references/start-here.md` | filename | ✅ G1 |
-| `.agent/references/instruction-surfaces.md` | app-desktop | ✅ G1 |
-| `.agent/references/scrum-meridian-map.md` | docs/sprints | ✅ G2 |
+| `.agent/references/guides/start-here.md` | filename | ✅ G1 |
+| `.agent/references/protocol/instruction-surfaces.md` | app-desktop | ✅ G1 |
+| `.agent/references/scrum/scrum-meridian-map.md` | docs/sprints | ✅ G2 |
 | `.agent/references/templates/as-is-inventory-template.md` | docs/epics, versions | ✅ G2 |
 | `.agent/references/templates/projects-manifest-template.md` | us/US-XXXX.md only | ✅ G2 |
 | `create-sprint/.../sprint-template.md` | docs/versions | ✅ G2 |
@@ -92,7 +92,7 @@ Protocolo      → .agent/MERIDIAN.md, rules/, agents/, skills/, workflows/
 | Arquivo | Ação | Status |
 | ------- | ---- | ------ |
 | `.agent/MERIDIAN.md` | extensão vs monitor | ✅ G3 |
-| `.agent/references/usage-guide.md` | app-desktop UI | ✅ G3 |
+| `.agent/references/guides/usage-guide.md` | app-desktop UI | ✅ G3 |
 | `.agent/references/templates/writing-guide.md` | anti-pattern paths | ✅ G2 |
 | `README.md` | link docs/versions | ✅ G5 |
 | Skills `create-epic/version` | padronizar wording | ✅ G2 |
@@ -134,7 +134,7 @@ Marque `[x]` quando **v11-operacional** (sem P0; P1 aceito ou corrigido).
 - [x] `references/usage-guide.md` — G3
 - [x] `references/agents-help.md` — H1
 - [x] `references/commit-after-us-close.md` — SQLite + human commit
-- [x] `references/instruction-surfaces.md` — G1
+- [x] `references/protocol/instruction-surfaces.md` — G1
 - [x] `references/scrum-meridian-map.md` — G2 + H1 roles
 - [x] `references/scrum-guide-complete.md` — P2 textbook (não operacional)
 

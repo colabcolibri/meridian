@@ -33,6 +33,18 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 - Adding dark mode, high contrast, or a second brand theme
 - `/design-pass bootstrap` left Colors/Typography as placeholders
 
+
+## Modes (`$ARGUMENTS`)
+
+| Argument | Mode | Action |
+| -------- | ---- | ------ |
+| _(empty)_ | **full** | Colors + Theme modes + type ramp |
+| `bootstrap` | **bootstrap** | After stack id exists — fill tokens and ramp (pairs with `/design-pass bootstrap`) |
+| `audit` | **audit** | Report-only vs current `09` + spot-check feature CSS for hex / size drift |
+| `US-XXXX` | **us-scope** | Tokens/type cited by that US Acceptance |
+
+---
+
 ## Procedure
 
 1. Read `01`, `04`, `09`, stack file for token paths.
@@ -60,4 +72,23 @@ Type ramp roles:
 Integrity gaps:
 09 status:
 Next: /design-flow | /design-pass | /design-review | human review 09
+```
+
+## Workflow steps (from `/design-theme`)
+
+```txt
+```txt
+CONTEXT:
+- User Request: $ARGUMENTS
+- Mode: DESIGN THEME
+
+RULES:
+1. If no 09 or no stack id → /design-pass bootstrap first
+2. Walk theme-checklist.md then type-hierarchy-checklist.md
+3. Fill § Colors, § Theme modes, § Typography; name the token file
+4. audit mode: do not Write unless manager asked to patch 09
+5. prepend-decision on mode model or family change
+```
+
+---
 ```

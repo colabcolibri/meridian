@@ -1,10 +1,14 @@
-# Workflow template — copy to `.agent/workflows/{command}.md`
+# Workflow template
 
 Filename = slash without slash: `/investigate` → `investigate.md`
 
+## Alias workflow (default — kit v3)
+
+**Preferred human entry:** `@agent` in chat. Workflow is an optional slash alias — **no `## Task`**, no duplicated rules.
+
 ```markdown
 ---
-description: One line — what the command does and deliverable type (report, doc, US).
+description: One line — deliverable and owner.
 ---
 
 # /{command} — {short title}
@@ -13,58 +17,29 @@ $ARGUMENTS
 
 ---
 
-## Critical rules
+**Invoke:** @{agent-slug} — load skill `{skill-name}` and execute with `$ARGUMENTS`.
 
-1. Use `{agent-name}` + `@[skills/{skill-name}]`
-2. **Mandatory read:** `references/{checklist}.md` before reporting
-3. **No product code** — report only (or state exception)
-4. …
+Slash is optional. Same work: **`@{agent-slug}`** + your request.
 
 ---
-
-## Modes (`$ARGUMENTS`)
-
-| Argument | Mode | Action |
-| -------- | ---- | ------ |
-| _(empty)_ | **default** | … |
-| `US-XXXX` | **us-scope** | … |
-| `thorough` | **deep** | … |
-
----
-
-## Task
-
-\`\`\`txt
-CONTEXT:
-- User Request: $ARGUMENTS
-- Mode: {MODE}
-
-RULES:
-1. …
-2. …
-\`\`\`
-
----
-
-## Output
-
-\`\`\`txt
-Field:
-Confidence:
-Handoff:
-Next: /… | human
-\`\`\`
-
----
-
-## When to run
-
-- …
 ```
 
-## After creating the workflow
+## Multi-skill alias
 
-1. Add row to `.agent/rules/meridian.mdc` slash table.
-2. Add row to `.agent/references/agents-help.md` (correct group).
-3. Add row to `meridian-routing` matrix.
-4. Run `./.agent/scripts/sync_kit.sh`.
+When one slash maps to multiple skills (e.g. `/plan-sprint`):
+
+```markdown
+**Invoke:** @{agent-slug} — load the skill that matches `$ARGUMENTS` among `version-create`, `sprint-create`.
+```
+
+## Procedure lives in skill
+
+All steps, modes, checklists, and output → `.agent/skills/{skill-name}/SKILL.md` only.
+
+## After creating
+
+1. Add or update `.agent/skills/{skill}/SKILL.md`
+2. Add skill to owner `agent.md` frontmatter + `references/` symlink
+3. `.agent/rules/meridian.mdc` slash table (if new command)
+4. `agent-station-map.md`, `meridian-routing`, `agents-help.md`
+5. `./.agent/scripts/sync_kit.sh`

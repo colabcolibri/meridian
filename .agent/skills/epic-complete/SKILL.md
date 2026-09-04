@@ -17,7 +17,7 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 | Target epic | `meridian_db_export.py . --entity epics --id EPIC-XX` |
 | Hygiene | `meridian_delivery.py lifecycle-hygiene` / `lifecycle-eligible` |
 | `../update-decisions-log/SKILL.md` | Follow-up decisions |
-| `.agent/references/scrum-meridian-map.md` | Prefer new epic over reopen |
+| `.agent/references/scrum/scrum-meridian-map.md` | Prefer new epic over reopen |
 
 ## Delivery commands
 

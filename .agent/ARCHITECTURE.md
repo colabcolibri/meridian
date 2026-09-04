@@ -14,9 +14,9 @@
 | Always-on rules | `.agent/rules/meridian.mdc` + `.agent/rules/MERIDIAN.md` | Agents |
 | Master protocol | `.agent/MERIDIAN.md` | Full governance |
 | Operations | `.agent/agents`, `skills`, `workflows` | Personas and procedures |
-| Human references | `.agent/references/` | `start-here`, `usage-guide`, `agents-help`, `instruction-surfaces`, `scrum-meridian-map`, optional `scrum-guide-complete` |
+| Human references | `.agent/references/` | `INDEX.md`, `guides/`, `protocol/`, `agents/`, `scrum/`, `templates/` |
 
-The VS Code extension (`app-visual-studio/`) is the optional monitor for Meridian folders; it is not the source of truth. Help panels read `.agent/references/*.md` at runtime — see [instruction-surfaces.md](./references/instruction-surfaces.md) when the protocol changes.
+The VS Code extension (`app-visual-studio/`) is the optional monitor for Meridian folders; it is not the source of truth. Help panels read `.agent/references/guides/` and `.agent/references/protocol/` at runtime — see [instruction-surfaces.md](./references/protocol/instruction-surfaces.md) when the protocol changes.
 
 ### Why `.agent` and `.cursor`?
 
@@ -33,14 +33,15 @@ The VS Code extension (`app-visual-studio/`) is the optional monitor for Meridia
 .agent/                    # canonical source (Antigravity / distribution)
   MERIDIAN.md
   rules/MERIDIAN.md
-  agents/
+  agents/                    # {slug}/agent.md + references/
+    README.md
   skills/
   workflows/
   scripts/
     validate_meridian.py
     migrate_us_v2_structure.py
     sync_kit.sh
-  references/templates/      # delivery templates (INDEX, writing-guide, section-contracts, …)
+  references/                # INDEX, guides/, protocol/, agents/, scrum/, templates/, plans/
 
 .cursor/                   # Cursor adapter (local, gitignored — sync_kit.sh)
   rules/meridian.mdc       # alwaysApply
@@ -60,8 +61,9 @@ The VS Code extension (`app-visual-studio/`) is the optional monitor for Meridia
 
 ```txt
 P0  .agent/rules/MERIDIAN.md
-P1  .agent/MERIDIAN.md + .agent/agents/{agent}.md
-P2  .agent/skills/{skill}/SKILL.md (+ references on demand)
+P1  .agent/MERIDIAN.md + .agent/agents/{agent}/agent.md
+P2  .agent/skills/  (+ agent `references/` symlinks → skills)
+      + references/templates/         artifact structure (canonical)
 ```
 
 Workflows orchestrate agents; they do not replace the master protocol.
@@ -70,63 +72,42 @@ Workflows orchestrate agents; they do not replace the master protocol.
 
 ## Agents
 
-| Agent | Purpose | Skills |
-| ----- | ------- | ------ |
-| `deus-ex` | Allocate next station (pass only) | deus-dispatch, meridian-routing |
-| `product-owner` | `00_scope`, discovery, epics | discover-product, epic-create, update-decisions-log, meridian-routing |
-| `technical-writer` | Phase docs `01`–`08`, `11` | init-project, update-decisions-log, meridian-routing |
-| `security-champion` | `02_security`, security operator | security-doc, security-privacy, security-code, security-supply-chain, update-decisions-log, meridian-routing |
-| `technical-architect` | `05_architecture.md` | generate-architecture-diagram, update-decisions-log, meridian-routing |
-| `design-system-owner` | `09_design_system.md` | design-system, design-flow, design-theme, update-decisions-log, meridian-routing |
-| `quality-owner` | `10_test_strategy.md`, test operator | test-strategy, test-review, update-decisions-log, meridian-routing |
-| `sprint-planner` | SQLite `versions`, `sprints`, epic close | version-create, sprint-create, sprint-complete, epic-complete, meridian-routing |
-| `story-maker` | US create + refine (no `ready`) | us-create, us-refine, update-decisions-log, meridian-routing |
-| `story-checker` | US review (`ready`) + complete (`✅`) | us-review, us-complete, update-decisions-log, meridian-routing |
-| `developer` | `/implement-us` increment | us-implement, update-decisions-log, meridian-routing |
-| `scrum-master` | Governance, status, init, daily | init-project, update-decisions-log, meridian-routing |
-| `code-investigator` | `/investigate` read-only traces | investigate-codebase, update-decisions-log, meridian-routing |
+Sixteen stations. Each agent lists **skills** in frontmatter (domain + shared). Procedures live in `.agent/skills/`. See [station-references.md](./references/protocol/station-references.md).
 
-Each agent includes: phases 0/-1, mission, prohibitions, output format, delegation.
+| Agent | Purpose | Shared skills |
+| ----- | ------- | ------------- |
+| `deus-ex` | Allocate next station (pass only) | meridian-routing, update-decisions-log |
+| `product-owner` | `00_scope`, discovery, epics | discover-product, init-project, update-decisions-log, meridian-routing |
+| `technical-writer` | Phase docs `01`, `04`, `11`; SEO operator | init-project, update-decisions-log, meridian-routing |
+| `ux-researcher` (Iris) | `03_user_types`, `/ux-pass` | discover-product, update-decisions-log, meridian-routing |
+| `data-engineer` (Mnemosyne) | `06_database.md` | update-decisions-log, meridian-routing |
+| `devops-engineer` (Vulcan) | `08_environments.md` | update-decisions-log, meridian-routing |
+| `security-champion` (Janus) | `02`, security passes | update-decisions-log, meridian-routing |
+| `technical-architect` (Daedalus) | `05`, `07`, `/api-pass`, MCP | update-decisions-log, meridian-routing |
+| `design-system-owner` (Harmonia) | `09`, design/i18n/a11y passes | update-decisions-log, meridian-routing |
+| `quality-owner` (Themis) | `10`, test/perf passes | update-decisions-log, meridian-routing |
+| `sprint-planner` (Hesperus) | versions, sprints, epic close | update-decisions-log, meridian-routing |
+| `story-maker` (Penelope) | US create + refine | update-decisions-log, meridian-routing |
+| `story-checker` (Argus) | US review + complete | update-decisions-log, meridian-routing |
+| `developer` (Hephaestus) | `/implement-us` | update-decisions-log, meridian-routing |
+| `scrum-master` (Kairos) | Governance, status, init | init-project, update-decisions-log, meridian-routing |
+| `code-investigator` (Hermes) | `/investigate` read-only | update-decisions-log, meridian-routing |
 
----
-
-## Skills
-
-| Skill | References |
-| ----- | ---------- |
-| `init-project` | `doc-templates.md`, `gitignore-baseline.md` |
-| `epic-create` | `epic-template.md`, `writing-guide.md` |
-| `version-create` | `version-template.md`, `writing-guide.md` |
-| `sprint-create` | `sprint-template.md` |
-| `sprint-complete` | `sprint-template.md`, retrospective-checklist.md |
-| `epic-complete` | `epic-template.md`, epic-close-checklist.md |
-| `us-create` | `us-template.md`, `writing-guide.md` |
-| `us-review` | `review-checklist.md`, `writing-guide.md` |
-| `us-refine` | `refine-checklist.md`, `writing-guide.md` |
-| `us-implement` | `implement-gate-checklist.md` |
-| `us-complete` | `close-us-contract.md`, `implementation-template.md` (Record shape only) |
-| `update-decisions-log` | `decision-template.md`, `decision-schema.md` |
-| `security-doc` | `02` checklists, bootstrap, CI gates bootstrap |
-| `security-privacy` | LGPD + GDPR checklists |
-| `security-code` | implementation security checklist |
-| `security-supply-chain` | supply-chain checklist |
-| `test-strategy` | test-strategy checklist, test stacks |
-| `test-review` | test-review checklist |
-| `design-system` | design-system checklists, UI stacks |
-| `design-flow` | screen-flow checklist, surface patterns (web/app/extension) |
-| `design-theme` | theme modes, type hierarchy |
-| `deus-dispatch` | project-context, dispatch-checklist, handoff-envelope |
-| `meridian-routing` | — (inline matrix) |
-| `investigate-codebase` | investigation checklist, report template |
-| `create-meridian-artifact` | registry-checklist, skill/agent/workflow templates |
-
-**Agent mirror:** all delivery templates are symlinked under `.agent/references/templates/` with registry `INDEX.md`. Agents must read INDEX + full template before Write — see each agent's **Template protocol** section.
-
-See `.agent/skills/doc.md` to create new skills — full procedure: `create-meridian-artifact`.
+Each agent includes: phases 0/-1, mission, **station references**, prohibitions, output format, delegation.
 
 ---
 
-## Workflows
+## Skills (`.agent/skills/`)
+
+Domain procedures (e.g. `us-create`, `data-engineering`, `design-system`) and shared utilities (`meridian-routing`, `update-decisions-log`, …). Each station's `agent.md` declares which skills to load.
+
+**Agent mirror:** `agents/{slug}/references/{skill}/` symlinks → `skills/{skill}/` for template registry paths.
+
+See `.agent/skills/doc.md` and `create-meridian-artifact` to extend the kit.
+
+---
+
+## Workflows (optional aliases)
 
 | Workflow | Agent | Mode |
 | -------- | ----- | ---- |
@@ -148,6 +129,9 @@ See `.agent/skills/doc.md` to create new skills — full procedure: `create-meri
 | `privacy-pass` | security-champion | LGPD + GDPR in 02 |
 | `security-review` | security-champion | code vs 02 — report only |
 | `dependency-audit` | security-champion | supply chain — report only |
+| `ux-pass` | ux-researcher | doc 03 / discovery |
+| `database-pass` | data-engineer | doc 06 |
+| `release-pass` | devops-engineer | doc 08 — human deploy |
 | `design-pass` | design-system-owner | doc 09 |
 | `design-flow` | design-system-owner | screen flows / IA — doc 09 |
 | `design-theme` | design-system-owner | theme + type ramp — doc 09 |

@@ -28,10 +28,10 @@ line
 test("kitReferenceWebviewHtml wraps kit agents-help.md", () => {
   const mdPath = path.resolve(
     import.meta.dirname,
-    "../../.agent/references/agents-help.md",
+    "../../.agent/references/guides/agents-help.md",
   )
   const md = readFileSync(mdPath, "utf8")
-  const html = kitReferenceWebviewHtml(md, ".agent/references/agents-help.md", {
+  const html = kitReferenceWebviewHtml(md, ".agent/references/guides/agents-help.md", {
     title: "Meridian — agents & slash commands",
     description: "Test intro",
   })

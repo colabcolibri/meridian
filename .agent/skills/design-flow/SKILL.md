@@ -32,6 +32,17 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 - New epic with more than one UI surface
 - Before `/refine-us` on Must UI that introduces a route or sheet
 
+
+## Modes (`$ARGUMENTS`)
+
+| Argument | Mode | Action |
+| -------- | ---- | ------ |
+| _(empty)_ | **full** | Inventory jobs → update § Screen flows |
+| `web` / `app` / `extension` | **surface** | One surface vs `surface-patterns.md` |
+| `US-XXXX` | **us-scope** | Map that US to a flow row; gaps in Plan |
+
+---
+
 ## Procedure
 
 1. Read `00_scope`, `03_user_types`, `05_architecture` frontend boundaries, current `09`.
@@ -59,4 +70,23 @@ Gaps (doc):
 Gaps (US):
 09 status:
 Next: /design-theme | /design-pass | /refine-us US-XXXX | human review 09
+```
+
+## Workflow steps (from `/design-flow`)
+
+```txt
+```txt
+CONTEXT:
+- User Request: $ARGUMENTS
+- Mode: DESIGN FLOW
+
+RULES:
+1. If no 09 → copy stub from phase-docs/09-design-system.md (or run /design-pass bootstrap first)
+2. Walk screen-flow-checklist.md
+3. Fill § Screen flows + mermaid; align § Responsive behavior with surface-patterns.md
+4. Recommend /design-theme if Colors/Typography are still placeholders
+5. Recommend /refine-us when Must UI US has no flow row
+```
+
+---
 ```

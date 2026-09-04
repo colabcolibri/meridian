@@ -1,1 +1,1 @@
-../../skills/us-complete/references/close-us-contract.md
+../../agents/story-checker/references/us-complete/close-us-contract.md

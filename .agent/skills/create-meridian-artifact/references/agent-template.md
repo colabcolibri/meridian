@@ -1,4 +1,4 @@
-# Agent template — copy to `.agent/agents/{name}.md`
+# Agent template — copy to `.agent/agents/{name}/agent.md`
 
 ```markdown
 ---

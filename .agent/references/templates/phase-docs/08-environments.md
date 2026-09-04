@@ -1,6 +1,6 @@
 # Phase doc template — `08_environments.md`
 
-**Agent:** `technical-writer`  
+**Agent:** `devops-engineer` (Vulcan)  
 **Product path:** `docs/08_environments.md`  
 **Depends on:** `01`, `05` | **Feeds:** `10_test_strategy`
 

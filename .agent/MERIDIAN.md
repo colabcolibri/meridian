@@ -41,8 +41,8 @@ Meridian is not a mesh of autonomous agents. It is a minimal, auditable loop.
 ```txt
 P0  .agent/rules/MERIDIAN.md          always-on gates and routing
 P1  .agent/MERIDIAN.md (this file)    manifest + phase order
-      + .agent/agents/{agent}.md      domain procedures
-P2  .agent/skills/{skill}/SKILL.md    task execution
+P2  .agent/skills/                    domain + shared skills (procedures)
+      + .agent/agents/{agent}/agent.md   persona + skill list
       + references/templates/         artifact structure (canonical)
 ```
 
@@ -59,9 +59,8 @@ See `.agent/ARCHITECTURE.md` for the full map. Minimum:
   MERIDIAN.md              ← this manifest
   rules/MERIDIAN.md        ← P0 always-on
   ARCHITECTURE.md          ← kit structure
-  agents/                  ← personas (story-maker, story-checker, scrum-master, …)
-  skills/                  ← procedures (us-create, …)
-  workflows/               ← slash commands (/create-us, …)
+  agents/                  ← {slug}/agent.md + references/ → skills/
+  skills/                  ← all procedures (invoke /skill-name)
   references/templates/    ← INDEX, section-contracts, us-template, …
   scripts/
     validate_meridian.py
@@ -77,7 +76,7 @@ docs/                        ← phase docs only (path varies in monorepos)
   projects.json              ← optional — multi-product monorepos; per-product qualitySiege
 ```
 
-**Multi-product repos:** one `.agent/` kit root; each Meridian product = one folder named exactly `docs` (any path). `.meridian/projects.json` declares ids, default, exclude; discovery finds unnamed `docs/` trees. **Active project** (saved) selects which tree board/validate/US target. IDE: **Project** toolbar row in Board/Deliverables + **Select Active Project**. Maintainer map: `references/instruction-surfaces.md` (EPIC-13 checklist). Template: `projects-manifest-template.md`.
+**Multi-product repos:** one `.agent/` kit root; each Meridian product = one folder named exactly `docs` (any path). `.meridian/projects.json` declares ids, default, exclude; discovery finds unnamed `docs/` trees. **Active project** (saved) selects which tree board/validate/US target. IDE: **Project** toolbar row in Board/Deliverables + **Select Active Project**. Maintainer map: `references/protocol/instruction-surfaces.md` (EPIC-13 checklist). Template: `projects-manifest-template.md`.
 
 **IDE adapters:** edit `.agent/`, run `./.agent/scripts/sync_kit.sh` for all adapters (`.cursor/`, `.claude/`, Codex, `.opencode/`). Do not commit adapter folders. See [IDE_ADAPTERS.md](./IDE_ADAPTERS.md).
 
@@ -233,12 +232,16 @@ python3 .agent/scripts/validate_meridian.py <project-folder> --json
 | ---- | ----- | ----- |
 | Allocate station | `deus-ex` | `/deus-ex` |
 | Status / gates | `scrum-master` | `/status` |
-| Scope | `product-owner` | `/init-meridian` |
-| Phase docs | `technical-writer` | — |
-| Security | `security-champion` | `/security-pass`, `/security-review`, `/dependency-audit` |
-| Architecture | `technical-architect` | `/architecture` |
-| Design system | `design-system-owner` | `/design-pass`, `/design-flow`, `/design-theme`, `/design-showcase`, `/design-review` |
-| Quality / tests | `quality-owner` | `/test-pass`, `/test-review` — profile via `quality-profile` CLI; see `agentic-quality-model.md` |
+| Discovery, scope, epic | `product-owner` | `/discover`, `/create-epic` |
+| UX research | `ux-researcher` | `/ux-pass` |
+| Phase docs `01`,`04`,`11` | `technical-writer` | `/document-project`, `/audit-docs` |
+| `07` API contracts | `technical-architect` | `/api-pass` |
+| `02` security | `security-champion` | `/security-pass`, `/security-review`, `/dependency-audit`, `/payment-pass` |
+| `05` architecture | `technical-architect` | `/architecture`, `/architecture mcp`, `/api-pass` |
+| `06` database | `data-engineer` | `/database-pass` |
+| `08` environments | `devops-engineer` | `/release-pass` (human push/deploy) |
+| `09` design | `design-system-owner` | `/design-pass`, `/design-flow`, `/design-theme`, `/i18n-pass`, `/a11y-pass`, `/design-showcase`, `/design-review` |
+| Quality / tests | `quality-owner` | `/test-pass`, `/test-review`, `/perf-pass` |
 | Versions / sprints | `sprint-planner` | `/create-version`, `/plan-sprint`, `/complete-sprint` |
 | US cook | `story-maker` | `/create-us`, `/refine-us` |
 | US attest | `story-checker` | `/review-us`, `/complete-us` |
@@ -246,7 +249,7 @@ python3 .agent/scripts/validate_meridian.py <project-folder> --json
 | Decisions | any relevant agent | `/update-decisions-log` |
 | Auto-pick | `meridian-routing` skill | — |
 
-Always announce: `🤖 Applying knowledge from @[agent-name]...` before specialized work.
+Always announce: `🤖 Applying knowledge from @[agent-slug] (CallSign)...` — see [agent-personas.md](references/agents/agent-personas.md).
 
 ### Agent may
 
@@ -283,12 +286,12 @@ Both modes:
 5. Epics/versions after architecture approved (SQLite bootstrap)
 6. `.gitignore` before secrets or dependencies land
 
-Human guide: `.agent/references/start-here.md`  
-Operational guide: `.agent/references/usage-guide.md`  
-Maintainer map (where to edit instructions): `.agent/references/instruction-surfaces.md`  
-Agents & commands (groups, steps): `.agent/references/agents-help.md`  
-Scrum ↔ Meridian (agents + managers): `.agent/references/scrum-meridian-map.md`  
-Scrum textbook (human only, optional): `.agent/references/scrum-guide-complete.md`
+Human guide: `.agent/references/INDEX.md` → `guides/start-here.md`  
+Operational guide: `.agent/references/guides/usage-guide.md`  
+Maintainer map (where to edit instructions): `.agent/references/protocol/instruction-surfaces.md`  
+Agents & commands (groups, steps): `.agent/references/guides/agents-help.md`  
+Scrum ↔ Meridian (agents + managers): `.agent/references/scrum/scrum-meridian-map.md`  
+Scrum textbook (human only, optional): `.agent/references/scrum/scrum-guide-complete.md`
 
 ---
 
@@ -319,7 +322,7 @@ Delivery is done when:
 - `board_snapshots` updated on upsert (no manual board.json)
 - Cross-cutting changes in decision log (skill `update-decisions-log` + real clock)
 
-**Repository (human, after the above):** one git commit per closed US — code + SQLite delivery state in scope. Agents suggest message on close; they do not commit unless the manager explicitly asks. See `.agent/references/commit-after-us-close.md`.
+**Repository (human, after the above):** one git commit per closed US — code + SQLite delivery state in scope. Agents suggest message on close; they do not commit unless the manager explicitly asks. See `.agent/references/protocol/commit-after-us-close.md`.
 
 ---
 

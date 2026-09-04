@@ -28,6 +28,17 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 - `/privacy-pass`
 - PII, consent, DPO/encarregado, data-subject rights in discovery or `02`
 
+
+## Modes (`$ARGUMENTS`)
+
+| Argument | Mode | Action |
+| -------- | ---- | ------ |
+| _(empty)_ | **full** | Walk full `privacy-compliance-checklist.md` (LGPD + GDPR) |
+| `bootstrap` | **bootstrap** | Read `00` + `01` → `privacy-bootstrap.md` → draft privacy § in `02` |
+| `US-XXXX` | **us-align** | Load US `--full`; map PII acceptance → privacy sections |
+
+---
+
 ## Procedure
 
 1. Treat LGPD and GDPR as **separate** sections; N/A needs manager rationale.
@@ -43,4 +54,24 @@ LGPD: filled | N/A (rationale)
 GDPR: filled | N/A (rationale)
 HAR:
 Next: /security-pass | /security-review
+```
+
+## Workflow steps (from `/privacy-pass`)
+
+```txt
+```txt
+CONTEXT:
+- User Request: $ARGUMENTS
+- Mode: PRIVACY PASS
+
+RULES:
+1. security-champion Phase 0
+2. Determine jurisdictions (BR, EU, both, neither)
+3. Run checklist per active jurisdiction
+4. Update § Privacy — LGPD and § Privacy — GDPR in 02_security.md
+5. Log material scope changes via prepend-decision
+6. Report gaps — never claim legal compliance
+```
+
+---
 ```

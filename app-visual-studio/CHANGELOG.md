@@ -4,6 +4,81 @@ All notable changes to the **Meridian** VS Code extension (`meridian-vscode`).
 
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [2.1.0] - 2026-09-04
+
+### Breaking changes (kit v3)
+
+- **Workflows removed:** `.agent/workflows/*.md` deleted — procedures live only in `.agent/skills/{name}/SKILL.md`. Invoke `/us-create`, `/data-engineering`, etc. (not legacy `/create-us`, `/database-pass`).
+- **Skills canonical:** all domain procedures moved to `.agent/skills/`; `agents/{slug}/references/{skill}/` are symlinks for template registry compatibility.
+- **Entry points:** prefer `/skill-name` or `@agent` in chat; `sync_kit.sh` syncs skills + agents (no `.cursor/commands/`).
+- **Upgrade:** **Meridian: Upgrade Harness** → `./.agent/scripts/sync_kit.sh`. See bundled `references/protocol/kit-v3-migration.md`.
+
+### Changed
+
+- Agent `agent.md` frontmatter lists domain + shared skills.
+- `validate_kit_parity.py` checks skills/agents parity (not workflow commands).
+- Docs: `agents-help`, `station-references`, `meridian.mdc` invoke table updated.
+
+## [2.0.0] - 2026-09-04
+
+### Breaking changes (kit v2)
+
+- **Agent stations:** personas moved to `.agent/agents/{slug}/agent.md` (self-contained folder + `references/`). Flat `.agent/agents/{slug}.md` removed.
+- **Skills:** domain skills removed from `.agent/skills/` — only five shared skills remain (`meridian-routing`, `update-decisions-log`, `init-project`, `discover-product`, `create-meridian-artifact`). Pass procedures live under each agent's `references/`.
+- **References tree:** `.agent/references/` reorganized into `guides/`, `protocol/`, `agents/`, `scrum/`, `templates/`, `plans/` with `INDEX.md` hub.
+- **Template registry:** symlinks now target agent `references/` paths (not removed skills).
+- **Upgrade:** install extension 2.0.0 → **Meridian: Upgrade Harness** → `./.agent/scripts/sync_kit.sh`. See bundled `references/protocol/kit-v2-migration.md`.
+
+### Added (since 1.1.x, now in v2 bundle)
+
+- Sixteen-agent roster with pantheon call signs (`agent-personas.md`)
+- Agents: `ux-researcher`, `data-engineer`, `devops-engineer`; `/deus-ex` dispatch
+- Stack-agnostic passes: `/i18n-pass`, `/a11y-pass`, `/payment-pass`, `/api-pass`, `/perf-pass`, `/seo-pass geo`, `/architecture mcp`
+- `offensive-checklist.md` for `/security-review offensive`
+
+### Changed
+
+- Workflows route to `@agent` + explicit `references/` paths (no domain skill invoke)
+- `validate_meridian.py --strict-kit-md` errors on domain skills in `.agent/skills/` or flat agent files
+- IDE adapters: `.cursor/agents/{slug}.md` symlinks to `agents/{slug}/agent.md`
+
+## [1.1.57] - 2026-09-03
+
+### Added
+
+- **Bundled kit:** stack-agnostic phase passes — `/i18n-pass`, `/a11y-pass`, `/payment-pass`, `/api-pass`, `/perf-pass`
+- **Bundled kit:** `/seo-pass geo` (GEO) and `/architecture mcp` (MCP agent-tool contract)
+- **Bundled kit:** skills `i18n-localization`, `accessibility`, `payment-integration`, `api-contract`, `performance-budget`, `geo-optimization`, `mcp-integration`
+- **Bundled kit:** `offensive-checklist.md` for `/security-review offensive` (checklist-only, no exploits)
+
+### Changed
+
+- **Bundled kit:** `07_api_contracts` owner → `technical-architect`; routing, station map, and agents-help updated (40 skills, 42 workflows)
+
+## [1.1.56] - 2026-09-03
+
+### Added
+
+- **Bundled kit:** sixteen-agent roster — `ux-researcher` (Iris, `/ux-pass`), `data-engineer` (Mnemosyne, `/database-pass`), `devops-engineer` (Vulcan, `/release-pass`)
+- **Bundled kit:** Meridian pantheon protocol — mythic call signs for all agents (`agent-personas.md`); announce as `@agent (CallSign)` in chat
+- **Bundled kit:** skills `ux-research`, `data-engineering`, `release-ops`; ownership split for `03`, `06`, `08`
+
+### Changed
+
+- **Bundled kit:** `agents-help`, station map, routing, and Cursor slash table include `/ux-pass`, `/database-pass`, `/release-pass`
+
+## [1.1.55] - 2026-09-03
+
+### Changed
+
+- **Harness upgrade prompt:** plain-language copy for unstamped folders (`legacy` in the status bar); changelog bullets stripped to readable text (no raw markdown in notifications); tooltip keeps full notes.
+
+## [1.1.54] - 2026-09-03
+
+### Added
+
+- **Harness version:** Install/Upgrade stamps `.agent/VERSION`. Status bar shows `harness A → B` when the folder kit is behind the extension. One prompt per bundled version (Later dismisses that bump). The Meridian kit repo is not prompted.
+
 ## [1.1.53] - 2026-09-03
 
 ### Added

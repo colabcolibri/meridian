@@ -21,6 +21,7 @@ export type CategoryTreeItem = {
 export type MeridianTreeItem = CategoryTreeItem | CommandTreeItem
 
 const PINNED_IDS = new Set([
+  "welcome",
   "guide-how-to",
   "guide-extension-commands",
   "guide-start-here",
