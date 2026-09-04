@@ -20,6 +20,7 @@ rmSync(kitDest, { recursive: true, force: true })
 
 cpSync(kitSrc, kitDest, {
   recursive: true,
+  dereference: true,
   filter: (src) => !src.includes("__pycache__") && !src.endsWith(".DS_Store"),
 })
 
