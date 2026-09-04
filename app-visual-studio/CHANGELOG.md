@@ -4,6 +4,12 @@ All notable changes to the **Meridian** VS Code extension (`meridian-vscode`).
 
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [2.1.2] - 2026-09-04
+
+### Changed
+
+- **Upgrade Harness backup:** replaces `.agent.backup-<timestamp>/` at repo root with `agent-backup/harness-<timestamp>.zip` (folder fallback if zip is unavailable). Keeps the 5 most recent backups and adds `agent-backup/` to `.gitignore`.
+
 ## [2.1.1] - 2026-09-04
 
 ### Fixed

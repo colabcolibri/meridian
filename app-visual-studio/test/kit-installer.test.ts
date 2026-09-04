@@ -5,6 +5,10 @@ import * as path from "node:path"
 import { describe, it } from "node:test"
 
 import {
+  AGENT_BACKUP_DIR,
+  backupAgentDirBeforeOverwrite,
+} from "../src/kit-agent-backup.js"
+import {
   bundledKitAgentDir,
   installBundledKit,
   kitInstalledAt,
@@ -59,10 +63,20 @@ describe("kit-installer", () => {
       const upgrade = installBundledKit(tmp, extRoot, { force: true })
       assert.equal(upgrade.ok, true)
       assert.match(upgrade.message, /backup/i)
-      const backups = fs.readdirSync(tmp).filter((n) => n.startsWith(".agent.backup-"))
+      const backupRoot = path.join(tmp, AGENT_BACKUP_DIR)
+      assert.equal(fs.existsSync(backupRoot), true)
+      const backups = fs.readdirSync(backupRoot).filter((n) => n.startsWith("harness-"))
       assert.equal(backups.length >= 1, true)
-      const backupMarker = path.join(tmp, backups[0]!, "MERIDIAN.md")
-      assert.match(fs.readFileSync(backupMarker, "utf8"), /custom local marker/)
+      const backupName = backups[0]!
+      const zipPath = path.join(backupRoot, backupName)
+      if (backupName.endsWith(".zip")) {
+        assert.equal(fs.statSync(zipPath).isFile(), true)
+      } else {
+        const backupMarker = path.join(zipPath, "MERIDIAN.md")
+        assert.match(fs.readFileSync(backupMarker, "utf8"), /custom local marker/)
+      }
+      const gitignore = fs.readFileSync(path.join(tmp, ".gitignore"), "utf8")
+      assert.match(gitignore, /agent-backup\//)
     } finally {
       fs.rmSync(tmp, { recursive: true, force: true })
     }

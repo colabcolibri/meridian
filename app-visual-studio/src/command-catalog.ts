@@ -128,7 +128,7 @@ export const MERIDIAN_COMMAND_CATALOG: CommandHelpEntry[] = [
     summary: "Replace existing .agent/ with the bundled kit version",
     details: [
       "Overwrites .agent/ and re-runs adapter sync.",
-      "Creates .agent.backup-<timestamp>/ before overwrite when upgrading.",
+      "Creates agent-backup/harness-<timestamp>.zip before overwrite when upgrading (folder fallback if zip unavailable).",
       "Status bar shows harness A → B when this folder is behind the extension.",
       "A prompt lists installed vs bundled version once per extension version (Later dismisses that bump).",
       "Writes .agent/VERSION so later reloads can compare. Kit source repo (this monorepo) is not prompted.",

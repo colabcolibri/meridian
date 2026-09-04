@@ -19,7 +19,7 @@ Kit v2 is a **breaking** layout change. Behavior (workflows, SQLite delivery, ph
 ## Upgrade steps
 
 1. Install **Meridian Harness 2.0.0** (Marketplace) and reload.
-2. **Meridian: Upgrade Harness** on each product folder (creates `.agent.backup-<timestamp>/` before overwrite).
+2. **Meridian: Upgrade Harness** on each product folder (backs up previous kit to `agent-backup/harness-<timestamp>.zip` before overwrite).
 3. Run `./.agent/scripts/sync_kit.sh` to refresh `.cursor/`, `.claude/`, Codex, OpenCode adapters.
 4. **Meridian: Validate Project** — fix any WARNs; with kit repo: `python3 .agent/scripts/validate_meridian.py . --strict-kit-md`.
 5. Update **custom** docs, rules, or scripts that cited old paths (see below).
@@ -49,6 +49,6 @@ No migration is required for `.meridian/meridian.db` or `docs/` phase files.
 
 ## Rollback
 
-Restore from `.agent.backup-*` created by Upgrade Harness, or reinstall extension **1.1.57** and upgrade again to the older bundle.
+Restore from `agent-backup/harness-*` (zip or folder) created by Upgrade Harness, or reinstall extension **1.1.57** and upgrade again to the older bundle.
 
 See also: [station-references.md](./station-references.md), [INDEX.md](../INDEX.md).

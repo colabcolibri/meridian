@@ -43,7 +43,7 @@ output lands in   →  docs/ + .meridian/meridian.db
 
 1. Install **Meridian Harness** extension and reload.
 2. Open your project folder.
-3. **Meridian: Install Harness** — copies `.agent/` (agents, skills, workflows). Later, if the status bar shows `harness A → B`, run **Meridian: Upgrade Harness** (creates `.agent.backup-<timestamp>/` before overwrite; reload does not copy a new kit).
+3. **Meridian: Install Harness** — copies `.agent/` (agents, skills, workflows). Later, if the status bar shows `harness A → B`, run **Meridian: Upgrade Harness** (backs up the previous kit to `agent-backup/harness-<timestamp>.zip` before overwrite; reload does not copy a new kit).
 4. **Meridian: Open Welcome** — first-value checklist (kit, docs, delivery DB, adapters).
 5. In chat: **`/init-meridian`** if `docs/` does not exist yet.
 6. Brownfield: then **`/document-project`** (documents code — no US for legacy).

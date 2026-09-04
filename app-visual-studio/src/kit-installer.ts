@@ -5,6 +5,10 @@ import { spawnSync } from "node:child_process"
 import type * as vscode from "vscode"
 
 import { readExtensionVersion, stampWorkspaceHarness } from "./harness-stamp.js"
+import {
+  appendGitignoreBackupEntry,
+  backupAgentDirBeforeOverwrite,
+} from "./kit-agent-backup.js"
 
 const KIT_MARKER = path.join(".agent", "MERIDIAN.md")
 
@@ -119,20 +123,6 @@ function runBootstrapDb(projectRoot: string, agentDir: string): string | null {
   return (result.stdout || "").trim() || null
 }
 
-function backupAgentDirBeforeOverwrite(dest: string): string | null {
-  if (!fs.existsSync(dest)) {
-    return null
-  }
-  const stamp = new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19)
-  const backupPath = `${dest}.backup-${stamp}`
-  try {
-    fs.cpSync(dest, backupPath, { recursive: true })
-    return backupPath
-  } catch {
-    return null
-  }
-}
-
 export function installBundledKit(
   projectRoot: string,
   extensionPath: string,
@@ -161,12 +151,14 @@ export function installBundledKit(
 
   let backupNote = ""
   try {
-    const backupPath = options.force ? backupAgentDirBeforeOverwrite(dest) : null
+    const backupPath = options.force ? backupAgentDirBeforeOverwrite(root, dest) : null
     fs.cpSync(src, dest, { recursive: true, force: true })
     stampWorkspaceHarness(dest, extensionPath)
     chmodScripts(dest)
     if (backupPath) {
-      backupNote = ` Previous kit backed up at ${path.relative(root, backupPath)}/.`
+      const rel = path.relative(root, backupPath)
+      backupNote = ` Previous kit backed up at ${rel}.`
+      appendGitignoreBackupEntry(path.join(root, ".gitignore"))
     }
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err)
