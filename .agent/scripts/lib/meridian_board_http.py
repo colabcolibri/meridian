@@ -73,6 +73,13 @@ class BoardHandler(BaseHTTPRequestHandler):
     def log_message(self, fmt: str, *args: Any) -> None:
         return
 
+    def handle(self) -> None:
+        try:
+            super().handle()
+        except (ConnectionResetError, BrokenPipeError):
+            # Browser prefetch / cancelled tabs may connect then reset before the request line.
+            return
+
     def _cors(self) -> None:
         origin = self.headers.get("Origin", "")
         allow = origin in ("null",) or origin.startswith("http://127.0.0.1") or origin.startswith(

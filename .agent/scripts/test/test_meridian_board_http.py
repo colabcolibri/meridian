@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import json
+import socket
 import sys
 import tempfile
 import threading
@@ -79,6 +80,9 @@ def main() -> int:
             assert doc_status == 404
             ok, body = _get(f"{base}/api/doc?path=00_scope.md")
             assert ok == 200 and isinstance(body, dict) and "raw" in body
+            sock = socket.create_connection(("127.0.0.1", port), timeout=2)
+            sock.close()
+
             page_status, page = _get(f"{base}/")
             assert page_status == 200
             css_status, css = _get(f"{base}/css/layout.css")
