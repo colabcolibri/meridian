@@ -1,6 +1,7 @@
 import { filteredStories } from "./filters.js";
 import { state } from "./state.js";
 import { escapeHtml } from "./render-state.js";
+import { compactStoryNarrative } from "./story-narrative.js";
 
 const ORDER = ["backlog", "todo", "doing", "🔶", "🧪", "✅", "🧊", "🚫"];
 const ALWAYS = ["backlog", "todo", "doing", "🔶", "🧪", "✅"];
@@ -53,9 +54,14 @@ function cardHtml(story) {
   const sprint = story.sprint
     ? `<div class="card-sprint">${escapeHtml(story.sprint)}</div>`
     : "";
+  const narrativeText = state.showNarrative ? compactStoryNarrative(story.preamble) : null;
+  const narrative = narrativeText
+    ? `<div class="card-narrative">${escapeHtml(narrativeText)}</div>`
+    : "";
   return `<button type="button" class="card${sel}" data-id="${escapeHtml(story.id)}">
     <div class="card-id">${escapeHtml(story.id)}</div>
     <div class="card-title">${escapeHtml(story.title || "")}</div>
+    ${narrative}
     ${sprint}
     <div class="card-meta">${meta}</div>
   </button>`;

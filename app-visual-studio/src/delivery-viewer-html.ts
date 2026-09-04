@@ -45,8 +45,8 @@ export function buildDeliveryViewerHtml(model: DeliveryViewerModel): string {
     body {
       margin: 0;
       font-family: var(--vscode-font-family);
-      font-size: calc(var(--vscode-font-size) * 1.02);
-      line-height: 1.55;
+      font-size: calc(var(--vscode-font-size) * 1.12);
+      line-height: 1.6;
       color: var(--vscode-foreground);
       background: var(--vscode-editor-background);
       min-height: 100vh;

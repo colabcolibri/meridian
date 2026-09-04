@@ -1,4 +1,5 @@
 import { persistFilters, SPRINT_NONE, state } from "./state.js";
+import { compactStoryNarrative } from "./story-narrative.js";
 
 export function sprintKey(story) {
   return story.sprint || SPRINT_NONE;
@@ -56,6 +57,15 @@ export function filteredStories() {
   if (!versions || !epics || !sprints) return all;
   if (versions.size === 0 || epics.size === 0 || sprints.size === 0) return [];
   return all.filter((s) => versions.has(s.version) && epics.has(s.epic) && sprints.has(sprintKey(s)));
+}
+
+export function narrativeCount(stories = filteredStories()) {
+  return stories.filter((s) => compactStoryNarrative(s.preamble)).length;
+}
+
+function toggleLabel(on, noun, count) {
+  const base = on ? `Ocultar ${noun}` : `Mostrar ${noun}`;
+  return count > 0 ? `${base} (${count})` : base;
 }
 
 export function filterSummaryText() {
@@ -195,8 +205,15 @@ export function updateFilterChrome() {
   if (summary) summary.textContent = filterSummaryText();
   const frozen = document.getElementById("toggle-frozen");
   const deprecated = document.getElementById("toggle-deprecated");
+  const narrative = document.getElementById("toggle-narrative");
+  const scoped = filteredStories();
   frozen?.classList.toggle("on", state.showFrozen);
   frozen?.setAttribute("aria-pressed", state.showFrozen ? "true" : "false");
   deprecated?.classList.toggle("on", state.showDeprecated);
   deprecated?.setAttribute("aria-pressed", state.showDeprecated ? "true" : "false");
+  const narrativeN = narrativeCount(scoped);
+  narrative?.classList.toggle("on", state.showNarrative);
+  narrative?.classList.toggle("muted", narrativeN === 0);
+  narrative?.setAttribute("aria-pressed", state.showNarrative ? "true" : "false");
+  if (narrative) narrative.textContent = toggleLabel(state.showNarrative, "narrativa", narrativeN);
 }

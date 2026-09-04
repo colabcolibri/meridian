@@ -11,6 +11,7 @@ export const state = {
   selectedSprints: null,
   showFrozen: false,
   showDeprecated: false,
+  showNarrative: false,
   mobileColumn: "backlog",
   live: "off",
   knownVersions: new Set(),
@@ -28,6 +29,7 @@ export function loadPersistedFilters() {
     if (Array.isArray(data.sprints)) state.selectedSprints = new Set(data.sprints);
     state.showFrozen = !!data.showFrozen;
     state.showDeprecated = !!data.showDeprecated;
+    state.showNarrative = !!data.showNarrative;
   } catch {
     /* ignore */
   }
@@ -43,6 +45,7 @@ export function persistFilters() {
         sprints: [...(state.selectedSprints || [])],
         showFrozen: state.showFrozen,
         showDeprecated: state.showDeprecated,
+        showNarrative: state.showNarrative,
       }),
     );
   } catch {

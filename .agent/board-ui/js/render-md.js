@@ -1,3 +1,5 @@
+import { enrichMarkdownStructure } from "./md-structure.js";
+
 function stripFrontmatter(raw) {
   if (!raw.startsWith("---")) return { meta: "", body: raw };
   const end = raw.indexOf("\n---", 3);
@@ -41,6 +43,7 @@ export function renderMarkdown(target, raw) {
     html = `<pre>${escape(body)}</pre>`;
   }
   target.innerHTML = `<article class="md-doc">${frontmatterGrid(meta)}${html}</article>`;
+  enrichMarkdownStructure(target);
   target.querySelectorAll("table").forEach((table) => {
     const wrap = document.createElement("div");
     wrap.className = "table-wrap";

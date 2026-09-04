@@ -177,6 +177,11 @@ document.getElementById("toggle-deprecated")?.addEventListener("click", () => {
   persistFilters();
   void paint();
 });
+document.getElementById("toggle-narrative")?.addEventListener("click", () => {
+  state.showNarrative = !state.showNarrative;
+  persistFilters();
+  void paint();
+});
 
 document.addEventListener("keydown", (ev) => {
   if (ev.key === "Escape") closeTopSheet();

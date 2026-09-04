@@ -4,11 +4,11 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Meridian board</title>
-  <link rel="stylesheet" href="css/tokens.css?v=3" />
-  <link rel="stylesheet" href="css/layout.css?v=3" />
-  <link rel="stylesheet" href="css/board.css?v=3" />
-  <link rel="stylesheet" href="css/sheets.css?v=3" />
-  <link rel="stylesheet" href="css/markdown.css?v=3" />
+  <link rel="stylesheet" href="css/tokens.css?v=5" />
+  <link rel="stylesheet" href="css/layout.css?v=5" />
+  <link rel="stylesheet" href="css/board.css?v=5" />
+  <link rel="stylesheet" href="css/sheets.css?v=5" />
+  <link rel="stylesheet" href="css/markdown.css?v=5" />
 </head>
 <body>
   <div id="app">
@@ -30,6 +30,7 @@
         <span class="filter-summary" id="filter-summary"></span>
         <button type="button" class="chip board-only" id="toggle-frozen" aria-pressed="false">🧊 Frozen</button>
         <button type="button" class="chip board-only" id="toggle-deprecated" aria-pressed="false">🚫 Deprecated</button>
+        <button type="button" class="chip board-only" id="toggle-narrative" aria-pressed="false" title="As / I want / so that nos cards">Narrativa</button>
         <span id="live-chip" class="is-off">offline</span>
       </div>
       <div id="app-banner" role="status"></div>
@@ -94,6 +95,6 @@
   <script src="vendor/marked.min.js"></script>
   <script src="vendor/purify.min.js"></script>
   <script src="vendor/mermaid.min.js"></script>
-  <script type="module" src="js/app.js?v=3"></script>
+  <script type="module" src="js/app.js?v=5"></script>
 </body>
 </html>

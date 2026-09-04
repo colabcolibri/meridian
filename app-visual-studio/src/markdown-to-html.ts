@@ -1,3 +1,5 @@
+import { structureMarkdownHtml } from "./markdown-structure.js"
+
 function esc(text: string): string {
   return text
     .replace(/&/g, "&amp;")
@@ -136,7 +138,7 @@ export function markdownToHtml(markdown: string): string {
     out.push(`<p>${formatInline(para.join(" "))}</p>`)
   }
 
-  return out.join("\n")
+  return structureMarkdownHtml(out.join("\n"))
 }
 
 export { esc, formatInline }

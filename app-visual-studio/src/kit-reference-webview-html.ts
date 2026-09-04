@@ -35,8 +35,8 @@ export function kitReferenceWebviewHtml(
     body {
       margin: 0;
       font-family: var(--vscode-font-family);
-      font-size: calc(var(--vscode-font-size) * 1.08);
-      line-height: 1.55;
+      font-size: calc(var(--vscode-font-size) * 1.12);
+      line-height: 1.6;
       color: var(--vscode-foreground);
       background: var(--vscode-editor-background);
       padding: 20px 24px 32px;

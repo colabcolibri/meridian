@@ -19,9 +19,14 @@ def main() -> int:
     assert "#view-root.view-board" in layout
     board = (UI / "css" / "board.css").read_text(encoding="utf-8")
     assert ".board-track" in board
+    assert ".card-narrative" in board
+    assert "font-size: 16px" in (UI / "css" / "markdown.css").read_text(encoding="utf-8")
+    assert ".md-lane" in (UI / "css" / "markdown.css").read_text(encoding="utf-8")
+    assert (UI / "js" / "md-structure.js").is_file()
     assert "flex: 1 1 auto" in board
     index = (UI / "index.html").read_text(encoding="utf-8")
     assert "js/app.js" in index
+    assert 'id="toggle-narrative"' in index
     assert "vendor/mermaid.min.js" in index
     assert 'id="filter-sheet"' in index
     assert 'id="detail-sheet"' in index

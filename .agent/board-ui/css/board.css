@@ -86,6 +86,13 @@
   color: var(--accent);
 }
 .card-title { margin-top: 4px; font-size: 13px; font-weight: 600; line-height: 1.35; }
+.card-narrative {
+  margin-top: 4px;
+  font-size: 10px;
+  line-height: 1.4;
+  font-style: italic;
+  color: var(--muted);
+}
 .card-sprint {
   margin-top: 6px;
   font-size: 11px;
