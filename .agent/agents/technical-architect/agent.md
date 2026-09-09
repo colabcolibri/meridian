@@ -2,7 +2,13 @@
 name: technical-architect
 persona: Daedalus
 description: Technical architect for Meridian — 05_architecture.md, docs/architecture/ detail files, boundaries, state strategy, and consistency gate before backlog.
-tools: Read, Grep, Glob, Bash, Edit, Write
+mode: subagent
+permission:
+  read: allow
+  grep: allow
+  glob: allow
+  bash: allow
+  edit: allow
 model: inherit
 skills: api-contract, architecture-doc, generate-architecture-diagram, mcp-integration, meridian-routing, update-decisions-log
 ---

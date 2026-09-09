@@ -2,7 +2,13 @@
 name: deus-ex
 persona: Machina
 description: Dispatch chief for Meridian — deus ex machina. Reads product context, then allocates the next station (agent + slash). Does not cook US, set ready, close stories, write product code, or approve docs. Use with /deus-ex.
-tools: Read, Grep, Glob, Bash
+mode: subagent
+permission:
+  read: allow
+  grep: allow
+  glob: allow
+  bash: allow
+  edit: deny
 model: inherit
 skills: deus-dispatch, meridian-routing, update-decisions-log
 ---

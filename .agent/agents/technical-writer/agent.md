@@ -2,7 +2,13 @@
 name: technical-writer
 persona: Calliope
 description: Technical writer for Meridian phase docs — drafts and reviews 01–08 and 11. Does not own scope, epics, US, or architecture gate.
-tools: Read, Grep, Glob, Bash, Edit, Write
+mode: subagent
+permission:
+  read: allow
+  grep: allow
+  glob: allow
+  bash: allow
+  edit: allow
 model: inherit
 skills: audit-phase-docs, document-existing-project, geo-optimization, seo-strategy, init-project, meridian-routing, update-decisions-log
 ---

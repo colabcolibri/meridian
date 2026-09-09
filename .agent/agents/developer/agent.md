@@ -2,7 +2,13 @@
 name: developer
 persona: Hephaestus
 description: Development Team agent for Meridian — gates and implements user stories after ready true. Use with /implement-us US-XXXX before product code.
-tools: Read, Grep, Glob, Bash, Edit, Write
+mode: subagent
+permission:
+  read: allow
+  grep: allow
+  glob: allow
+  bash: allow
+  edit: allow
 model: inherit
 skills: us-implement, meridian-routing, update-decisions-log
 ---

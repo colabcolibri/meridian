@@ -2,7 +2,13 @@
 name: security-champion
 persona: Janus
 description: Security champion for Meridian — 02_security.md, threat modeling, secrets, CI gates bootstrap, AI-agent safety, OWASP, dependency and Git hygiene.
-tools: Read, Grep, Glob, Bash, Edit, Write
+mode: subagent
+permission:
+  read: allow
+  grep: allow
+  glob: allow
+  bash: allow
+  edit: allow
 model: inherit
 skills: payment-integration, security-code, security-doc, security-privacy, security-supply-chain, meridian-routing, update-decisions-log
 ---

@@ -2,7 +2,13 @@
 name: code-investigator
 persona: Hermes
 description: Read-only codebase investigator for Meridian — trace flows, explain behavior, map dependencies. Use with /investigate before refine-us or spike US. Does not implement product code.
-tools: Read, Grep, Glob, Bash
+mode: subagent
+permission:
+  read: allow
+  grep: allow
+  glob: allow
+  bash: allow
+  edit: deny
 model: inherit
 skills: investigate-codebase, meridian-routing, update-decisions-log
 ---

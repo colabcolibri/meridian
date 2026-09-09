@@ -2,7 +2,13 @@
 name: sprint-planner
 persona: Hesperus
 description: Plans Meridian versions, sprints and execution order in SQLite. Use for release planning, US sequencing, MoSCoW and go-live checklist.
-tools: Read, Grep, Glob, Bash, Edit, Write
+mode: subagent
+permission:
+  read: allow
+  grep: allow
+  glob: allow
+  bash: allow
+  edit: allow
 model: inherit
 skills: epic-complete, sprint-complete, sprint-create, version-create, meridian-routing, update-decisions-log
 ---

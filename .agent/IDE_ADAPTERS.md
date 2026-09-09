@@ -136,13 +136,13 @@ Codex deprecated custom prompts (`~/.codex/prompts/`) in favor of skills — Mer
 | OpenCode | Canonical source |
 | -------- | ---------------- |
 | `.opencode/commands/<name>.md` | `.agent/workflows/<name>.md` |
-| `.opencode/agents/<name>.md` | generated from `.agent/agents/<name>/agent.md` (OpenCode `permission:` frontmatter) |
+| `.opencode/agents/<name>.md` | symlink → `.agent/agents/<name>/agent.md` |
 | `.opencode/skills/<name>/` | `.agent/skills/<name>/` |
 | `AGENTS.md` (repo root) | `.agent/rules/AGENTS.md` — read natively by OpenCode |
 
 Notes:
 
-- Workflows become `/commands` (symlinked); agents are **generated** with OpenCode-compatible frontmatter (`permission:` object instead of Cursor `tools:` string).
+- Workflows become `/commands` (symlinked); agents are **symlinked** like Cursor and Claude — canonical `agent.md` carries `mode: subagent` and `permission:` frontmatter (OpenCode-native; Cursor/Claude ignore extra keys).
 - OpenCode has **no Meridian plugins** — agents use Bash/CLI (`meridian_delivery.py`) like other IDEs. Board UI stays in the VS Code extension.
 - Kit skills already carry valid `SKILL.md` frontmatter (`name` + `description`). The `meridian-authoring` entry point (`.agent/skills/doc.md`) is intentionally not mirrored — it has no SKILL.md frontmatter and OpenCode validates strictly.
 - OpenCode also reads `.agents/skills/*/SKILL.md` natively, so the Codex sync doubles as an extra skill surface.

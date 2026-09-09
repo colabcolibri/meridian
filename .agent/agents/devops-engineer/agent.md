@@ -2,7 +2,13 @@
 name: devops-engineer
 persona: Vulcan
 description: DevOps engineer for Meridian — /release-pass; owns docs/08_environments.md CI/CD, deploy, rollback. Human executes git push and production release.
-tools: Read, Grep, Glob, Bash, Edit, Write
+mode: subagent
+permission:
+  read: allow
+  grep: allow
+  glob: allow
+  bash: allow
+  edit: allow
 model: inherit
 skills: release-ops, meridian-routing, update-decisions-log
 ---

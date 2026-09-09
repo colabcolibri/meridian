@@ -2,7 +2,13 @@
 name: ux-researcher
 persona: Iris
 description: UX researcher for Meridian — /ux-pass; personas, JTBD, journey hypotheses for 03_user_types. Feeds design-system-owner; does not own tokens or code.
-tools: Read, Grep, Glob, Bash, Edit, Write
+mode: subagent
+permission:
+  read: allow
+  grep: allow
+  glob: allow
+  bash: allow
+  edit: allow
 model: inherit
 skills: ux-research, discover-product, meridian-routing, update-decisions-log
 ---

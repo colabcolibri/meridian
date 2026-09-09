@@ -2,7 +2,13 @@
 name: design-system-owner
 persona: Harmonia
 description: Design system operator for Meridian — /design-pass, /design-flow, /design-theme, /design-showcase, /design-review; maintains 09_design_system.md, screen flows, theme/type integrity, stack bootstrap, showcase planning, and UI compliance audits.
-tools: Read, Grep, Glob, Bash, Edit, Write
+mode: subagent
+permission:
+  read: allow
+  grep: allow
+  glob: allow
+  bash: allow
+  edit: allow
 model: inherit
 skills: accessibility, design-flow, design-system, design-theme, i18n-localization, meridian-routing, update-decisions-log
 ---

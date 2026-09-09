@@ -2,7 +2,13 @@
 name: scrum-master
 persona: Kairos
 description: Scrum Master for Meridian — facilitates process, status, init, and blockers. Never writes product code or closes US.
-tools: Read, Grep, Glob, Bash, Edit, Write
+mode: subagent
+permission:
+  read: allow
+  grep: allow
+  glob: allow
+  bash: allow
+  edit: allow
 model: inherit
 skills: project-status, init-project, meridian-routing, update-decisions-log
 ---

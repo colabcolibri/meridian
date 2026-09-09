@@ -4,6 +4,13 @@ All notable changes to the **Meridian** VS Code extension (`meridian-vscode`).
 
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [2.1.4] - 2026-09-09
+
+### Changed
+
+- **OpenCode agents:** `.opencode/agents/*.md` are symlinks to `.agent/agents/{slug}/agent.md` (same as Cursor/Claude) — removes duplicate generated copies with `meridian-kit-generated`.
+- **Agent frontmatter:** canonical `agent.md` uses `mode: subagent` + `permission:` instead of Cursor-only `tools:` string; `sync_kit.sh` no longer writes OpenCode agent files.
+
 ## [2.1.3] - 2026-09-09
 
 ### Changed

@@ -2,7 +2,13 @@
 name: product-owner
 persona: Clio
 description: Product Owner for Meridian — discovery, scope, user types, and epics before backlog execution. Use with /discover, /create-epic, and 00_scope.
-tools: Read, Grep, Glob, Bash, Edit, Write
+mode: subagent
+permission:
+  read: allow
+  grep: allow
+  glob: allow
+  bash: allow
+  edit: allow
 model: inherit
 skills: epic-create, discover-product, init-project, meridian-routing, update-decisions-log
 ---

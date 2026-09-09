@@ -4,7 +4,13 @@
 ---
 name: {agent-name}
 description: Role in Meridian — primary outputs and slash commands. Does not …
-tools: Read, Grep, Glob, Bash
+mode: subagent
+permission:
+  read: allow
+  grep: allow
+  glob: allow
+  bash: allow
+  edit: deny
 model: inherit
 skills: {primary-skill}, update-decisions-log, meridian-routing
 ---
@@ -64,6 +70,6 @@ Next:
 ## Rules
 
 - List every skill the agent may load in frontmatter `skills:`.
-- Read-only operators: omit `Write` from tools unless doc pass agent.
+- Read-only operators: set `permission.edit: deny`; implementers set `edit: allow`.
 - Always include forbidden + delegation tables.
 - Match output format used by sibling agents (`security-champion`, `quality-owner`).

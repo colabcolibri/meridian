@@ -2,7 +2,13 @@
 name: quality-owner
 persona: Themis
 description: Quality enabler for Meridian — 10_test_strategy.md, test pyramid, runners, CI gates catalog at bootstrap, /test-pass and /test-review. Does not implement product code outside /implement-us.
-tools: Read, Grep, Glob, Bash, Edit, Write
+mode: subagent
+permission:
+  read: allow
+  grep: allow
+  glob: allow
+  bash: allow
+  edit: allow
 model: inherit
 skills: performance-budget, test-review, test-strategy, meridian-routing, update-decisions-log
 ---

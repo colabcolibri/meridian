@@ -2,7 +2,13 @@
 name: story-maker
 persona: Penelope
 description: Cooks Meridian user stories in SQLite — create and refine Intent/Plan. Does not set ready or close US. Use with /create-us and /refine-us.
-tools: Read, Grep, Glob, Bash, Edit, Write
+mode: subagent
+permission:
+  read: allow
+  grep: allow
+  glob: allow
+  bash: allow
+  edit: allow
 model: inherit
 skills: us-create, us-refine, meridian-routing, update-decisions-log
 ---

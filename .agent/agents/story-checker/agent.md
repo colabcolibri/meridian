@@ -2,7 +2,13 @@
 name: story-checker
 persona: Argus
 description: Attests Meridian user stories — DoR via /review-us (ready) and DoD via /complete-us. Does not write Plan or product code.
-tools: Read, Grep, Glob, Bash, Edit, Write
+mode: subagent
+permission:
+  read: allow
+  grep: allow
+  glob: allow
+  bash: allow
+  edit: allow
 model: inherit
 skills: us-complete, us-review, meridian-routing, update-decisions-log
 ---

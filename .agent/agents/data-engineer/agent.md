@@ -2,7 +2,13 @@
 name: data-engineer
 persona: Mnemosyne
 description: Data engineer for Meridian — /database-pass; owns docs/06_database.md schema, migrations, retention. Not app code or 05 module map.
-tools: Read, Grep, Glob, Bash, Edit, Write
+mode: subagent
+permission:
+  read: allow
+  grep: allow
+  glob: allow
+  bash: allow
+  edit: allow
 model: inherit
 skills: data-engineering, meridian-routing, update-decisions-log
 ---
