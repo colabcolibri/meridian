@@ -1,55 +1,59 @@
 ---
 name: us-refine
-description: Refines a Meridian user story in SQLite for implementation — deepens Approach, architecture refs and tests. Use between /create-us and coding.
+description: Refines a Meridian user story in SQLite for implementation — deepens Approach, architecture refs and tests. Use between /us-create and coding.
 allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 ---
 
 # Refine user story (Meridian)
 
-> **v11:** persist with `update-us` (stdin heredoc) only.
-> **Forbidden:** `.meridian/drafts/`, `us-*-refine.md`, helper `.py` for delivery. **Always** `show --full` before `update-us`; send the **entire** document (merge in place — `update-us` replaces `body_markdown`).
+> `show --full` first. `update-us` replaces the whole body. **Never** `set-ready true` — story-checker only.
 
-| File | When to read |
-| ------- | ---------- |
-| `.agent/references/templates/writing-guide.md` | Approach depth |
-| `.agent/references/templates/code-quality-at-us-time.md` | **Mandatory** |
-| `references/refine-checklist.md` | **Mandatory** |
-| `references/us-template.md` | Full structure |
-| Target US | `meridian_delivery.py show US-XXXX --full` |
-| `docs/05_architecture.md`, `docs/04_principles.md` | Refs + DRY/SRP |
+## Read first
 
-## Delivery commands
+`refine-checklist.md` · `writing-guide.md` (refine example) · target US · `05_architecture.md` + any `docs/architecture/*` cited
+
+## What to deepen
+
+Re-read Intent. If Why or Where are still one line, expand them using the same rules as create (problem → slice outcome → deps/unblocks).
+
+**### Approach** — required. Minimum two bullets. Each bullet is one or two sentences covering:
+
+- what you will change and why that layer,
+- which module, route, or test area,
+- what existing code you reuse (DRY),
+- a constraint from architecture or security.
+
+**### Architecture refs** — path plus exact `§ Heading` from `05` or a detail file under `docs/architecture/`.
+
+**### API / DB impact** — name tables, endpoints, or migrations touched; or `_n/a_` with a short phrase why.
+
+**### Planned** — how a reviewer verifies before merge:
+
+- **manual** — numbered steps and expected result,
+- **automated** — exact command and scope when `tests: required`.
+
+Merge edits into the full document from `show --full`; do not send a partial patch.
+
+## Commands
 
 ```bash
-python3 .agent/scripts/meridian_delivery.py show US-0115 --full
-python3 .agent/scripts/meridian_delivery.py update-us US-0115 <<'EOF'
-(full US markdown)
+python3 .agent/scripts/meridian_delivery.py show US-XXXX --full
+python3 .agent/scripts/meridian_delivery.py update-us US-XXXX <<'EOF'
+(full markdown, ready: false)
 EOF
-# Do not set-ready — story-checker /review-us
 ```
 
-Never Write `docs/us/`. No `generate-board-json` — upsert records `board_snapshots`.
+## Steps
 
-After refine, `ready` stays **false**. Attest is `/review-us` (`story-checker`). Do **not** run `set-ready true`.
-
-## Procedure
-
-1. Read guides, checklist, **`show --full`**, architecture sections.
-2. Deepen Why/Where if needed; **expand Approach** (≥2 bullets).
-3. Exact Architecture refs; DRY/SRP pass; concrete Planned steps.
-4. `update-us US-XXXX` (stdin) with **full markdown from step 1** + edits; keep `ready: false`.
-5. Handoff to `story-checker` `/review-us` for DoR attest.
-6. `prepend-decision` if scope changed.
+1. `show --full` + read cited architecture sections.
+2. Fill Approach, refs, Planned per above.
+3. Check `refine-checklist.md`.
+4. `update-us`; `ready: false`.
+5. Hand off to `/us-review`.
 
 ## Output
 
 ```txt
-US refined:
-ID: US-XXXX
-Ready for implementation: no (await /review-us)
-Handoff: story-checker /review-us
-Approach explanatory: yes | no
-Architecture § exact: yes | no
-Blockers:
-Next: /implement-us US-XXXX
+US refined: US-XXXX
+Next: /us-review US-XXXX
 ```

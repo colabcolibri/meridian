@@ -33,9 +33,9 @@ See `.agent/references/agents/agent-station-map.md`.
 Two modes:
 
 1. **Report-only** — manager asked for an audit. Do **not** change `ready`.
-2. **DoR attest** — checklist passes and manager wants the story implementable. `set-ready true`. This is the **only** kit path that sets `ready: true`.
+2. **DoR attest** — US matches `writing-guide.md` refine example and `refine-checklist.md`. `set-ready true`. **Only** kit path that sets `ready: true`.
 
-Do not rewrite Plan to “fix” gaps unless the manager explicitly asks; prefer bounce to `story-maker` `/refine-us`.
+Do not rewrite Plan — name the thin section and bounce to `story-maker` `/us-refine`.
 
 ### `/complete-us` (dish attest)
 

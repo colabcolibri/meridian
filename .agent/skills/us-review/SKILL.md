@@ -1,53 +1,34 @@
 ---
 name: us-review
-description: Audits a Meridian user story against DoR. Report-only or attest ready true. Use with /review-us US-XXXX. Does not cook Plan (story-maker).
+description: Audits a Meridian user story against DoR. Report-only or attest ready true. Use with /us-review US-XXXX. Does not cook Plan (story-maker).
 allowed-tools: Read, Glob, Grep, Bash
 ---
 
 # Review user story (Meridian)
 
-Load US from SQLite (`show --full`). You are `story-checker`.
+> You are `story-checker`. Compare the US to `writing-guide.md` refine example and `refine-checklist.md`.
 
 ## Modes
 
-| Mode | When | `ready` |
-| ---- | ---- | ------- |
-| **Report-only** | Manager asked for an audit, or checklist fails | **Do not** change |
-| **DoR attest** | Checklist passes **and** manager wants the US implementable | `set-ready true` — **only** this skill/workflow may do that |
+| Mode | `ready` |
+| ---- | ------- |
+| Report-only | unchanged |
+| DoR attest | `set-ready true` when Intent + Plan are implementable without guessing |
 
-Bounce to `story-maker` `/refine-us` when Plan is too thin to attest.
+**DoR bar:** preamble is user language; Why and Where are full sentences; Approach has ≥2 explanatory bullets; Planned has verifiable steps. If any section is still a label, a title repeat, or a bare path, report it and send back to `/us-refine` — do not rewrite Plan yourself unless the manager asks.
 
-## Selective reading
-
-| File | When to read |
-| ------- | ---------- |
-| `references/review-checklist.md` | **Mandatory** |
-| `references/refine-checklist.md` | When attesting DoR (same bar as former refine-ready) |
-| Target US | `meridian_delivery.py show US-XXXX --full` |
-
-## Delivery commands
+## Commands
 
 ```bash
-python3 .agent/scripts/meridian_delivery.py show US-0115 --full
-python3 .agent/scripts/validate_meridian.py .
-# DoR attest only:
-python3 .agent/scripts/meridian_delivery.py set-ready US-0115 --ready true
+python3 .agent/scripts/meridian_delivery.py show US-XXXX --full
+python3 .agent/scripts/meridian_delivery.py set-ready US-XXXX --ready true
 ```
-
-## Procedure
-
-1. Read checklists + US `--full`.
-2. Score review-checklist. If attesting, also confirm refine-checklist rows for Approach, arch refs, sprint, tests.
-3. Report-only → no upsert. Attest → `set-ready true` only if every required row passes.
-4. Recommend `/refine-us` (maker), `/implement-us`, or `/complete-us`.
 
 ## Output
 
 ```txt
-US review:
-ID: US-XXXX
+US review: US-XXXX
 Mode: report-only | DoR attest
-Validator:
-ready: true | false | unchanged
-Recommendation: /refine-us | /implement-us | /complete-us
+Gaps: (section + what is missing)
+Next: /us-refine | /us-implement US-XXXX
 ```

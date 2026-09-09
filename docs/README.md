@@ -9,7 +9,7 @@ This folder is the **source of truth for phase documents** of the Meridian kit +
 | [`../README.md`](../README.md)                                                                       | Repository onboarding (Git/GitHub)                                                                                 |
 | [`../.agent/MERIDIAN.md`](../.agent/MERIDIAN.md)                                                     | Master protocol for agents                                                                                         |
 | [`../.agent/rules/MERIDIAN.md`](../.agent/rules/MERIDIAN.md)                                         | Global rules (`trigger: always_on`)                                                                                |
-| [`../.agent/ARCHITECTURE.md`](../.agent/ARCHITECTURE.md)                                             | Map of agents, skills, and workflows                                                                               |
+| [`../.agent/ARCHITECTURE.md`](../.agent/ARCHITECTURE.md)                                             | Map of agents, skills, and kit layout                                                                              |
 | [`../.agent/references/protocol/instruction-surfaces.md`](../.agent/references/protocol/instruction-surfaces.md)       | **Where to edit** when protocol changes                                                                            |
 | [`../.agent/references/guides/usage-guide.md`](../.agent/references/guides/usage-guide.md)                         | Day-to-day guide                                                                                                   |
 | [`../.agent/references/plans/markdown-audit-v11.md`](../.agent/references/plans/markdown-audit-v11.md) | Markdown audit checklist (onda G)                                                                                  |
@@ -56,7 +56,7 @@ There is **no** `docs/us/`, `docs/epics/`, or `docs/kanban/board.json`. Board re
 
 US gate: `05_architecture` approved + epic/version exist in SQLite + `ready: true` for `/implement-us`.
 
-**US lifecycle:** `/create-us` → `/refine-us` → `/implement-us` (`developer`) → `/complete-us` → commit (human).
+**US lifecycle:** `/us-create` → `/us-refine` → `/us-implement` (`@developer`) → `/us-complete` → commit (human).
 
 Validate: `python3 .agent/scripts/validate_meridian.py . --sqlite-only`
 
@@ -67,10 +67,10 @@ See: [Start here](../.agent/references/guides/start-here.md) · [Usage guide](..
 ### Daily loop (manager + AI)
 
 1. **Orient** — `/status`; VS Code **Meridian: Open Board**; pick an unblocked Must US.
-2. **Create/refine** — `/create-us` then `/refine-us US-XXXX` until `ready: true`.
+2. **Create/refine** — `/us-create` then `/us-refine US-XXXX` until `ready: true`.
 3. **Contextualize** — `meridian_delivery.py show US-XXXX --full`.
-4. **Implement** — `/implement-us US-XXXX` after gate; review diff.
-5. **Close** — `/complete-us US-XXXX` (Record + `✅`); board refreshes on DB save.
+4. **Implement** — `/us-implement US-XXXX` after gate; review diff.
+5. **Close** — `/us-complete US-XXXX` (Record + `✅`); board refreshes on DB save.
 6. **Commit** — one commit per US per `commit-after-us-close.md`.
 
 ## Dogfooding in the IDE

@@ -20,7 +20,7 @@ Use with skill `us-review` and workflow `/review-us`. **Do not edit the US** unl
 | R2 | Section contract | All required `##` / `###` present per `section-contracts.md` |
 | R3 | Why | 2+ sentences; slice clear; not epic paste |
 | R4 | Where | 2+ sentences; version/deps/unblocks |
-| R5 | Approach | optional — if present, bullets must explain (not bare paths) |
+| R5 | Approach | **required** for DoR — ≥2 explanatory bullets; no bare paths (see refine-checklist) |
 | R6 | Architecture refs | Exact `§ heading` from `05_architecture.md` (not `§ TBD` / placeholder) |
 | R7 | API / DB / Security | `_n/a_` with phrase **or** concrete impact |
 | R8 | Acceptance | Each item observable; not vague |

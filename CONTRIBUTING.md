@@ -14,7 +14,7 @@ By contributing, you agree that your contributions will be licensed under the [P
 
 | What you want to change | Where to edit |
 | ----------------------- | ------------- |
-| Agents, skills, workflows, rules | **`.agent/`** (canonical source) |
+| Agents, skills, rules | **`.agent/`** (canonical source) |
 | Cursor / Claude Code adapters (local symlinks) | Run `./.agent/scripts/sync_kit.sh` — **do not** commit `.cursor/` or `.claude/` |
 | VS Code extension | `app-visual-studio/src/` |
 | Dogfood product documentation | `docs/` |

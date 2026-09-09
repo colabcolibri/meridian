@@ -1,6 +1,6 @@
 # Meridian agent architecture
 
-> Structure of agents, skills, workflows, rules and scripts — Antigravity pattern adapted to the Meridian protocol.
+> Structure of agents, skills, rules and scripts — kit v3 (skills-only, no workflows).
 
 ---
 
@@ -13,7 +13,7 @@
 | IDE adapters | `.cursor/`, `.claude/`, `.agents/skills/`, `.codex/` (local, gitignored) | Cursor, Claude Code, Codex (symlinks + generated TOMLs → `.agent/`) — see [IDE_ADAPTERS.md](./IDE_ADAPTERS.md) |
 | Always-on rules | `.agent/rules/meridian.mdc` + `.agent/rules/MERIDIAN.md` | Agents |
 | Master protocol | `.agent/MERIDIAN.md` | Full governance |
-| Operations | `.agent/agents`, `skills`, `workflows` | Personas and procedures |
+| Operations | `.agent/agents`, `skills` | Personas and procedures |
 | Human references | `.agent/references/` | `INDEX.md`, `guides/`, `protocol/`, `agents/`, `scrum/`, `templates/` |
 
 The VS Code extension (`app-visual-studio/`) is the optional monitor for Meridian folders; it is not the source of truth. Help panels read `.agent/references/guides/` and `.agent/references/protocol/` at runtime — see [instruction-surfaces.md](./references/protocol/instruction-surfaces.md) when the protocol changes.
@@ -33,10 +33,10 @@ The VS Code extension (`app-visual-studio/`) is the optional monitor for Meridia
 .agent/                    # canonical source (Antigravity / distribution)
   MERIDIAN.md
   rules/MERIDIAN.md
-  agents/                    # {slug}/agent.md + references/
+  agents/                    # {slug}/agent.md + references/ → skills/
     README.md
-  skills/
-  workflows/
+  skills/                    # {name}/SKILL.md — canonical procedures
+  board-ui/                  # HTML monitor (python3 .agent/board)
   scripts/
     validate_meridian.py
     migrate_us_v2_structure.py
@@ -45,14 +45,12 @@ The VS Code extension (`app-visual-studio/`) is the optional monitor for Meridia
 
 .cursor/                   # Cursor adapter (local, gitignored — sync_kit.sh)
   rules/meridian.mdc       # alwaysApply
-  skills/
-  agents/
-  commands/                # workflows as slash commands
+  skills/                  # symlinks → .agent/skills/
+  agents/                  # symlinks → .agent/agents/{slug}/agent.md
 
 .opencode/                 # OpenCode adapter (local, gitignored — sync_kit.sh)
-  commands/                # workflows as slash commands
-  agents/                  # kit agents (generated frontmatter)
-  skills/                  # kit skills
+  agents/
+  skills/
 ```
 
 ---
@@ -66,7 +64,7 @@ P2  .agent/skills/  (+ agent `references/` symlinks → skills)
       + references/templates/         artifact structure (canonical)
 ```
 
-Workflows orchestrate agents; they do not replace the master protocol.
+Skills are invoked as `/skill-name` in chat (e.g. `/us-create`); agents as `@slug`. See [kit-v3-migration.md](./references/protocol/kit-v3-migration.md).
 
 ---
 
@@ -89,7 +87,7 @@ Sixteen stations. Each agent lists **skills** in frontmatter (domain + shared). 
 | `sprint-planner` (Hesperus) | versions, sprints, epic close | update-decisions-log, meridian-routing |
 | `story-maker` (Penelope) | US create + refine | update-decisions-log, meridian-routing |
 | `story-checker` (Argus) | US review + complete | update-decisions-log, meridian-routing |
-| `developer` (Hephaestus) | `/implement-us` | update-decisions-log, meridian-routing |
+| `developer` (Hephaestus) | `/us-implement` | update-decisions-log, meridian-routing |
 | `scrum-master` (Kairos) | Governance, status, init | init-project, update-decisions-log, meridian-routing |
 | `code-investigator` (Hermes) | `/investigate` read-only | update-decisions-log, meridian-routing |
 
@@ -103,50 +101,9 @@ Domain procedures (e.g. `us-create`, `data-engineering`, `design-system`) and sh
 
 **Agent mirror:** `agents/{slug}/references/{skill}/` symlinks → `skills/{skill}/` for template registry paths.
 
-See `.agent/skills/doc.md` and `create-meridian-artifact` to extend the kit.
+See `.agent/skills/` and skill `create-meridian-artifact` to extend the kit.
 
----
-
-## Workflows (optional aliases)
-
-| Workflow | Agent | Mode |
-| -------- | ----- | ---- |
-| `deus-ex` | deus-ex | dispatch next station — do not execute it |
-| `init-meridian` | scrum-master | init, no code |
-| `status` | scrum-master | read-only |
-| `plan-sprint` | sprint-planner | planning |
-| `create-version` | sprint-planner | create release in SQLite |
-| `create-us` | story-maker | create US |
-| `review-us` | story-checker | audit US; may set `ready` |
-| `refine-us` | story-maker | refine US; must not set `ready` |
-| `implement-us` | developer | gate + implement when `ready: true` |
-| `complete-us` | story-checker | close US after implementation (+ lifecycle cascade invite) |
-| `complete-sprint` | sprint-planner | close sprint + retrospective |
-| `complete-epic` | sprint-planner | close epic + outcome |
-| `create-epic` | product-owner | create epic in SQLite |
-| `architecture` | technical-architect | doc 05 |
-| `security-pass` | security-champion | doc 02 |
-| `privacy-pass` | security-champion | LGPD + GDPR in 02 |
-| `security-review` | security-champion | code vs 02 — report only |
-| `dependency-audit` | security-champion | supply chain — report only |
-| `ux-pass` | ux-researcher | doc 03 / discovery |
-| `database-pass` | data-engineer | doc 06 |
-| `release-pass` | devops-engineer | doc 08 — human deploy |
-| `design-pass` | design-system-owner | doc 09 |
-| `design-flow` | design-system-owner | screen flows / IA — doc 09 |
-| `design-theme` | design-system-owner | theme + type ramp — doc 09 |
-| `design-showcase` | design-system-owner | showcase plan |
-| `design-review` | design-system-owner | UI audit — report only |
-| `test-pass` | quality-owner | doc 10 |
-| `test-review` | quality-owner | tests audit — report only |
-| `seo-pass` | seo-strategy | doc 12 (public web) |
-| `investigate` | code-investigator | read-only code trace — report only |
-| `discover` | product-owner | product brief — no code |
-| `document-project` | technical-writer | brownfield phase docs — no US |
-| `audit-docs` | technical-writer | phase doc audit — report only |
-| `daily-with-ai` | scrum-master | daily manager + AI routine |
-
-All support `$ARGUMENTS` and a critical rules section.
+**Workflows removed (v3.1):** `.agent/workflows/README.md` is a redirect only. Full command map: [agents-help.md](./references/guides/agents-help.md).
 
 ---
 
@@ -172,9 +129,8 @@ python3 .agent/scripts/migrate_us_v2_structure.py <project-root> --restore-pream
 1. User instruction
 2. `.agent/MERIDIAN.md`
 3. `.agent/rules/MERIDIAN.md`
-4. Workflows
-5. Agents
-6. Skills
+4. Agents
+5. Skills
 
 ---
 

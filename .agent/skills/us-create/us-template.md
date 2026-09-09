@@ -23,8 +23,8 @@ tests_status: pending
 # US-XXXX — Short title
 
 **As** [user type from 03_user_types.md],
-**I want** [concrete action],
-**so that** [benefit the user feels — not internal implementation].
+**I want** [capability in plain language — verb + object],
+**so that** [user-visible outcome this slice enables].
 
 ## Intent
 

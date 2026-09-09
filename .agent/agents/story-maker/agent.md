@@ -36,7 +36,9 @@ Epics → `product-owner`. Review / ready / complete → `story-checker`. Code �
 
 ## Mission
 
-Create (`ready: false`) and refine Plan/Approach. After refine, **handoff to `/review-us`** — never `set-ready true`.
+Create (`ready: false`) and refine Plan/Approach. After refine, **handoff to `/us-review`** — never `set-ready true`.
+
+**Prose bar:** each section filled per `us-create` / `us-refine` skills and `writing-guide.md` golden examples — explanatory sentences, not labels or title repeats.
 
 ## Skills
 

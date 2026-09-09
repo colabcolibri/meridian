@@ -4,6 +4,13 @@ All notable changes to the **Meridian** VS Code extension (`meridian-vscode`).
 
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [2.1.3] - 2026-09-09
+
+### Changed
+
+- **US skills:** `/us-create`, `/us-refine`, `/us-review` — section-by-section writing guidance (preamble, Why, Where, Approach, Planned); story-maker / story-checker aligned.
+- **Docs:** GitHub README, extension README, `KIT_README`, `ARCHITECTURE.md` — kit v3, sixteen agents, HTML board; command names updated.
+
 ## [2.1.2] - 2026-09-04
 
 ### Changed

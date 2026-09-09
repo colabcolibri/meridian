@@ -16,7 +16,7 @@
 
 Install Harness copies `.agent/` and syncs `.cursor/` / `.claude/`. The extension never installs the kit automatically.
 
-**Update kit:** extension **2.0.0** is a major — see [kit-v2-migration.md](references/protocol/kit-v2-migration.md). **Meridian: Upgrade Harness** → `./.agent/scripts/sync_kit.sh`.
+**Update kit:** **Meridian: Upgrade Harness** → `./.agent/scripts/sync_kit.sh`. See [kit-v3-migration.md](references/protocol/kit-v3-migration.md) when upgrading from 2.x.
 
 User-facing install guide: [`app-visual-studio/README.md`](../app-visual-studio/README.md).
 

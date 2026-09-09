@@ -1,8 +1,8 @@
 # Refine checklist — US ready for implementation
 
-Use after `/create-us`, before any product code. Mark `ready: true` only when **every** required row passes **and** `/review-us` attests (`story-checker`). `/refine-us` must leave `ready: false`.
+Use after `/us-create`, before any product code. Mark `ready: true` only when **every** required row passes **and** `/us-review` attests (`story-checker`). `/us-refine` must leave `ready: false`.
 
-Read `writing-guide.md` for tone: Approach bullets must **explain**, not telegraph.
+Read `writing-guide.md` — match the refine golden example before checking rows below.
 
 ---
 
@@ -10,21 +10,21 @@ Read `writing-guide.md` for tone: Approach bullets must **explain**, not telegra
 
 | # | Check | Pass when |
 | - | ----- | --------- |
-| 1 | Intent / `### Why` | 2+ sentences; explains slice, before/after; not epic paste |
-| 2 | Intent / `### Where` | 2+ sentences; release position, deps, unblocks; US ids ok |
-| 3 | Plan / `### Approach` | **required** — minimum 2 explanatory bullets; no placeholders |
-| 4 | Plan / Architecture refs | Real path — `docs/05_architecture.md` **or** `docs/architecture/*.md` — § **exact heading** |
-| 5 | Plan / API / DB impact | `_n/a_` with short phrase **or** named endpoint/table/migration |
-| 6 | Intent / Acceptance | Each item observable; not vague intent |
-| 7 | Plan / Planned | Numbered manual steps and/or exact commands; no “add when known” |
-| 8 | `done_when` | One measurable sentence in frontmatter |
-| 9 | Epic link | `epic: EPIC-XX` in frontmatter only — body explains slice in own words |
-| 10 | Sprint scope | `sprint: vX-SY` (or US listed on sprint `stories:`) — same version; sprint `planned` or `active` before `ready: true` |
-| 11 | INVEST | Independent enough (`depends_on` justified), Small (one session), Testable (Planned + Acceptance) |
-| 12 | DRY | Approach names existing module/hook to reuse **or** justifies new shared module with path (see `code-quality-at-us-time.md`) |
-| 13 | SRP | One slice; Approach bullets don't mix unrelated layers; **Out of scope** lists creep risks |
-| 14 | Quality profile | When `tests: required` and profile ≥ `standard`, Plan maps AC → test layer; run `quality-profile` if tier unknown |
-| 15 | Related decisions | `_n/a_` **or** `YYYY-MM-DD — title` when Approach touches scope, architecture, security, or acceptance; run `prepend-decision` first if not logged yet |
+| 1 | Preamble | **I want** = verb + object in user language; **so that** = outcome they feel |
+| 2 | Intent / `### Why` | 2+ sentences: gap today → what this US changes |
+| 3 | Intent / `### Where` | 2+ sentences: deps, unblocks, scope |
+| 4 | Plan / `### Approach` | **required** — ≥2 bullets, full sentences; no bare filenames |
+| 5 | Plan / Architecture refs | `docs/05…` or `docs/architecture/*` — § **exact heading** |
+| 6 | Plan / API / DB impact | `_n/a_` + phrase **or** named endpoint/table |
+| 7 | Intent / Acceptance | ≥2 items; observable; `[ ]` not `[x]` until close |
+| 8 | Plan / Planned | Numbered manual steps + exact test command when `tests: required` |
+| 9 | `done_when` | One measurable sentence |
+| 10 | Epic link | `epic:` in frontmatter only — body explains slice |
+| 11 | Sprint | `sprint: vX-SY`; sprint `planned`/`active` before `ready: true` |
+| 12 | INVEST | Small slice; testable; deps justified |
+| 13 | DRY / SRP | Reuse named in Approach; **Out of scope** real |
+| 14 | Quality profile | `tests: required` + profile ≥ `standard` → AC maps to test layer |
+| 15 | Related decisions | `_n/a_` or `YYYY-MM-DD — title` when scope/arch/security shifts |
 
 See `.agent/references/scrum/scrum-meridian-map.md` for bugs/spikes (no extra artifact types).
 

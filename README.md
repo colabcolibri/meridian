@@ -1,74 +1,139 @@
 <p align="center">
-  <img src="assets/meridian-readme-header.svg" alt="Meridian — a simple Scrum-based harness for coding with IDEs" width="100%" />
+  <img src="assets/meridian-readme-header.svg" alt="Meridian — a Scrum-based harness for coding with AI in the IDE" width="100%" />
 </p>
 
 <p align="center">
+  <a href="https://marketplace.visualstudio.com/items?itemName=colabcolibri.meridian-vscode"><img src="https://img.shields.io/visual-studio-marketplace/v/colabcolibri.meridian-vscode?label=extension" alt="Marketplace version" /></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-PolyForm%20Noncommercial-blue" alt="PolyForm Noncommercial 1.0.0" /></a>
   <a href=".github/workflows/ci.yml"><img src="https://img.shields.io/badge/CI-GitHub%20Actions-2088FF?logo=githubactions&logoColor=white" alt="CI" /></a>
-  <img src="https://img.shields.io/badge/status-experiment-orange" alt="Experiment" />
 </p>
 
 <p align="center">
-  <strong>You manage delivery. AI agents ship story by story.<br />
+  <strong>You manage delivery. Sixteen specialist agents ship story by story.<br />
   The plan lives in the repo — not in yesterday's chat.</strong>
 </p>
 
+---
+
 ## What Meridian is
 
-Meridian is a **harness for AI-assisted development in IDEs**. It wraps Cursor, VS Code, Claude Code, and Codex with:
+Meridian is a **repo-native harness for AI-assisted development**. It turns Cursor, VS Code, Claude Code, and Codex into a disciplined delivery loop:
 
-- **Written intent** — scope, architecture, and security in `docs/` before backlog work
+- **Written intent** — scope, architecture, and security in `docs/` *before* backlog work
 - **Structured delivery** — versions, sprints, epics, and user stories in `.meridian/meridian.db`
-- **Agent discipline** — slash workflows, roles, skills, and validators in `.agent/`
+- **Specialist agents** — sixteen stations with call signs (Penelope weaves stories, Hephaestus forges code, Machina dispatches — never cooks)
+- **Skills + gates** — procedures in `.agent/skills/`, personas in `.agent/agents/`, validators that block vague “done”
 
-You stay the manager. Agents execute **one user story at a time**, with gates so product code does not start on a vague prompt and “done” requires evidence.
+You stay the manager. Agents execute **one user story at a time**, with evidence when a story closes.
 
-## Extension or kit only?
+---
 
-| | **[Meridian Harness extension](app-visual-studio/)** | **Kit / CLI only** |
-| - | ---------------------------------------------------- | ------------------- |
-| Slash workflows (`/status`, `/create-us`, …) | ✅ | ✅ |
-| Agents, skills, `.agent/` protocol | ✅ | ✅ |
-| Delivery in SQLite + phase docs | ✅ | ✅ |
-| Python toolkit (`meridian_delivery.py`, validate, export) | ✅ | ✅ |
-| Board, planning views, dependency graphs | ✅ | ❌ |
+## Why teams pick it up
 
-**Recommended:** install [Meridian Harness](https://marketplace.visualstudio.com/items?itemName=colabcolibri.meridian-vscode) for the kanban board, graphs, and in-IDE guides.  
-**Kit only:** copy or install `.agent/` into your project — same harness, no UI. Use `/status` and CLI export when you need visibility.
+| Pain without a harness | What Meridian gives you |
+| ---------------------- | ------------------------ |
+| Scope drifts every chat session | Phase docs + SQLite backlog survive reloads |
+| “Done” means whatever the model said last | `ready: true` before code; `✅` only with Record evidence |
+| One generic assistant for everything | **16 agents** — PO, architect, security, data, design, QA, dev, … |
+| No visibility into what’s in flight | **Kanban board** in the IDE or **HTML monitor** in the browser |
+| Re-explaining the project from zero | Open the board, run `/status`, continue where you left off |
 
-[How extension vs chat works →](.agent/references/guides/how-to-use.md) · [Distribution →](.agent/DISTRIBUTION.md)
+---
 
-## Install (recommended)
+## Quick start
 
-1. Install [Meridian Harness](https://marketplace.visualstudio.com/items?itemName=colabcolibri.meridian-vscode) in VS Code or Cursor.
+1. Install **[Meridian Harness](https://marketplace.visualstudio.com/items?itemName=colabcolibri.meridian-vscode)** (VS Code or Cursor).
 2. Open your project → **Meridian: Install Harness**.
 3. In chat: **`/init-meridian`** (greenfield) or **`/document-project`** (brownfield).
-4. **Meridian: Open Board** · anytime **`/status`**.
+4. **Meridian: Open Board** · anytime **`/status`** · lost? **`/deus-ex`** or **`@deus-ex`**.
 
-**Kit without extension:** see [`.agent/KIT_README.md`](.agent/KIT_README.md) or run `./install.sh` from a kit release.
+**Kit without extension:** [`.agent/KIT_README.md`](.agent/KIT_README.md) · `./install.sh` from a kit release.
 
-**Developing Meridian itself:** clone this repo, `./.agent/scripts/sync_kit.sh`, then `cd app-visual-studio && pnpm install`.
+**Developing Meridian itself:** clone → `./.agent/scripts/sync_kit.sh` → `cd app-visual-studio && pnpm install`.
+
+---
 
 ## How it works
-
-<p align="center">
-  <img src="assets/infographic/meridian-agent-infrastructure-4x5-final.png" alt="Meridian infrastructure for AI-assisted delivery" width="720" />
-</p>
 
 ```txt
 document → plan → refine → implement → close → commit
 ```
 
-| Step | What happens |
-| ---- | ------------ |
-| **Document** | You approve scope and architecture in `docs/` |
-| **Plan** | Epics, versions, sprints, and stories land in SQLite |
-| **Refine** | Story is concrete enough to build before any product code |
-| **Implement** | Agent codes against acceptance criteria (`ready: true` required) |
-| **Close** | Evidence on the story; you mark it done |
-| **Commit** | One commit per closed story (recommended) |
+| Step | You / agent | Gate |
+| ---- | ----------- | ---- |
+| **Document** | Approve scope & architecture in `docs/` | `05_architecture` approved |
+| **Plan** | Epics, versions, sprints, stories in SQLite | `/us-create`, `/epic-create`, … |
+| **Refine** | Story is concrete enough to build | `ready: true` (`/us-review`) |
+| **Implement** | Agent codes against acceptance | `/us-implement` only when ready |
+| **Close** | Evidence on the story Record | `/us-complete` — no batch boilerplate |
+| **Commit** | One commit per closed story (recommended) | Human |
 
-Scrum-inspired for **one human directing AI agents** — no story points or velocity theater. [Scrum ↔ Meridian](.agent/references/scrum/scrum-meridian-map.md)
+Scrum-inspired for **one human directing AI agents** — no story points or velocity theater.  
+[Scrum ↔ Meridian](.agent/references/scrum/scrum-meridian-map.md)
+
+---
+
+## Invoke: skills, agents, and dispatch
+
+Kit **v3** uses **skills** (procedures) and **agents** (personas + gates). Workflows were removed.
+
+```txt
+YOU  →  /us-create  or  @story-maker     (skill slash or agent mention)
+     →  docs/ + .meridian/meridian.db     (source of truth)
+```
+
+| Layer | Example | Role |
+| ----- | ------- | ---- |
+| **Skill** | `/us-create`, `/data-engineering`, `/project-status` | Full procedure |
+| **Agent** | `@story-maker`, `@developer`, `@security-champion` | Persona + gates + skill list |
+| **Dispatch** | `/deus-ex` · `@deus-ex` (Machina) | Picks the right station — never cooks |
+
+Full roster and call signs: [agent-personas.md](.agent/references/agents/agent-personas.md) · [agents-help.md](.agent/references/guides/agents-help.md)
+
+<details>
+<summary><strong>The sixteen stations (click to expand)</strong></summary>
+
+| Agent | Call sign | Domain |
+| ----- | --------- | ------ |
+| `deus-ex` | **Machina** | Dispatch — allocates, never cooks |
+| `scrum-master` | **Kairos** | Process, init, daily loop |
+| `product-owner` | **Clio** | Scope, epics |
+| `ux-researcher` | **Iris** | Personas, JTBD |
+| `technical-writer` | **Calliope** | Phase docs prose |
+| `security-champion` | **Janus** | Threat model, secrets |
+| `technical-architect` | **Daedalus** | Modules, boundaries |
+| `data-engineer` | **Mnemosyne** | Schema, migrations |
+| `design-system-owner` | **Harmonia** | Tokens, UI contract |
+| `quality-owner` | **Themis** | Test strategy |
+| `devops-engineer` | **Vulcan** | CI/CD, environments |
+| `sprint-planner` | **Hesperus** | Versions, sprints |
+| `story-maker` | **Penelope** | Create & refine US |
+| `story-checker` | **Argus** | Review & complete US |
+| `developer` | **Hephaestus** | Implementation |
+| `code-investigator` | **Hermes** | Trace code, imports |
+
+</details>
+
+---
+
+## Three ways to see the board
+
+| Mode | Best for |
+| ---- | -------- |
+| **[Meridian Harness extension](app-visual-studio/)** | Kanban, planning views, dependency graphs, architecture diagrams — inside VS Code / Cursor |
+| **Kit HTML monitor** | `python3 .agent/board` — local browser board on loopback (no extension) |
+| **CLI** | `meridian_delivery.py show`, `list`, `counts` — scripts and CI |
+
+| | **Extension** | **Kit / CLI only** |
+| - | ------------- | ------------------- |
+| Skills & agents in chat | ✅ | ✅ |
+| `docs/` + `.meridian/meridian.db` | ✅ | ✅ |
+| Python toolkit (validate, export, bootstrap) | ✅ | ✅ |
+| IDE board & graphs | ✅ | HTML monitor only |
+
+[How extension vs chat works →](.agent/references/guides/how-to-use.md) · [Distribution →](.agent/DISTRIBUTION.md)
+
+---
 
 ## Screenshots
 
@@ -105,29 +170,34 @@ Scrum-inspired for **one human directing AI agents** — no story points or velo
   </tr>
 </table>
 
-## Why this exists
-
-Agents ship code fast. Without a written plan, scope drifts in chat and every new session starts from zero.
-
-Meridian is a lab for a thinner path: **you** own delivery; **agents** execute inside rules; state grows in the repo so the next session opens on the board, not on “let me explain the project again.”
+---
 
 ## In this repository
 
 | Piece | Role |
 | ----- | ---- |
-| [`.agent/`](.agent/) | Portable harness (workflows, agents, skills, Python toolkit) |
-| [`docs/`](docs/) | Phase docs for Meridian itself (example project) |
-| [`app-visual-studio/`](app-visual-studio/) | IDE extension — board, graphs, kit installer ([Marketplace](https://marketplace.visualstudio.com/items?itemName=colabcolibri.meridian-vscode)) |
+| [`.agent/`](.agent/) | Portable harness — skills, agents, validators, Python toolkit, HTML board |
+| [`docs/`](docs/) | Phase docs for Meridian itself (dogfood example) |
+| [`app-visual-studio/`](app-visual-studio/) | VS Code extension — board, graphs, kit installer ([Marketplace](https://marketplace.visualstudio.com/items?itemName=colabcolibri.meridian-vscode)) |
 
 **Toolkit:** `meridian_delivery.py`, `validate_meridian.py`, `meridian_db_export.py` — [scripts README](.agent/scripts/README.md).
 
-## Reference
+---
 
-- [How to use](.agent/references/guides/how-to-use.md) · [Concepts](.agent/references/guides/start-here.md) · [Recipes](.agent/references/guides/usage-guide.md) · [Commands](.agent/references/guides/agents-help.md)
-- [Protocol](.agent/MERIDIAN.md) · [AGENTS.md](AGENTS.md) · [Distribution](.agent/DISTRIBUTION.md) · [IDE adapters](.agent/IDE_ADAPTERS.md)
+## Documentation map
+
+| Audience | Start here |
+| -------- | ---------- |
+| **New human** | [How to use](.agent/references/guides/how-to-use.md) → [Start here](.agent/references/guides/start-here.md) → [Usage guide](.agent/references/guides/usage-guide.md) |
+| **Commands & agents** | [Agents & commands help](.agent/references/guides/agents-help.md) |
+| **AI agents in the IDE** | [AGENTS.md](AGENTS.md) · [MERIDIAN.md](.agent/MERIDIAN.md) |
+| **Upgrade from 2.x** | [kit-v3-migration.md](.agent/references/protocol/kit-v3-migration.md) |
+| **Contributing** | [CONTRIBUTING.md](CONTRIBUTING.md) |
+
+---
 
 ## Contributing · license
 
 [`CONTRIBUTING.md`](CONTRIBUTING.md) · [`SECURITY.md`](SECURITY.md) · [PolyForm Noncommercial 1.0.0](LICENSE)
 
-Feedback welcome — open lab, not a finished product.
+Active development — feedback and PRs welcome on the protocol, kit, and extension.
