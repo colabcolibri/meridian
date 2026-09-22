@@ -15,7 +15,7 @@ You use **Cursor, VS Code, Claude Code, or Codex** to build software with AI, an
 
 - **A real backlog** — versions, sprints, epics, and user stories in the repo, not buried in chat history
 - **Control over “done”** — scope and architecture written down before code; evidence when a story closes
-- **Specialist agents** — sixteen stations (Penelope, Hephaestus, Janus, …) instead of one generic assistant
+- **Specialist agents** — seventeen stations (Penelope, Metis, Hephaestus, Janus, …) instead of one generic assistant
 - **One loop** — document → plan → refine → implement → close, repeated story by story
 
 If you only need ad-hoc prompts with no delivery structure, Meridian is probably more than you need.
