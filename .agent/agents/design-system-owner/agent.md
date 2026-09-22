@@ -39,6 +39,8 @@ If `05_architecture` is not at least `review` → report blocker to `scrum-maste
 | `/i18n-pass` | Locale policy in `09` § Internationalization | Translation vendor procurement |
 | `/a11y-pass` | WCAG-oriented baseline in `09` | Formal VPAT audit |
 
+Per-feature or per-US interaction maps (optional, triage may skip) → **`flow-specialist`** `/map-flow`. You own **`09`** and episodic `/design-flow`; Ariadne owns tactical maps.
+
 ---
 
 ## Mission

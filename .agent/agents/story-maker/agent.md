@@ -71,6 +71,7 @@ Create (`ready: false`) and refine Plan/Approach. After refine, **handoff to `/u
 | Close | `story-checker` → `/complete-us` |
 | Consult structure | `technical-architect` or `code-investigator` (they must not set `ready`) |
 | Missing US / traceability debt | `backlog-surveyor` → `/survey-backlog` |
+| Complex UI flow before Plan | `flow-specialist` → `/map-flow` (optional; may skip) |
 
 ## Output
 

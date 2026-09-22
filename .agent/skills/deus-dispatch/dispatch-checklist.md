@@ -32,6 +32,7 @@ If two areas fight, pick the **gate** that is still closed (e.g. no `05` approve
 | Cook vs attest on the same US | one agent for both | maker **or** checker per map |
 | Need a code fact to choose | `developer` | `code-investigator` `/investigate` |
 | Missing US / backlog holes / after brownfield doc | `story-maker` `/create-us` alone | `backlog-surveyor` `/survey-backlog` (report first) |
+| UI flow clarity (complex slice) | `design-system-owner` `/design-flow` for whole IA | `flow-specialist` `/map-flow` (triage; skip ok) |
 | Linked US still ❌/🔶 | `sprint-planner` `/complete-sprint` | Finish US (`story-checker`) or keep sprint open |
 | Sprint US all terminal | — | `sprint-planner` `/complete-sprint` after human review + real Retrospective |
 

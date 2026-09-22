@@ -1,6 +1,6 @@
 # Agent station map — maker vs checker
 
-> **Live roster:** seventeen actors. Call signs: [agent-personas.md](./agent-personas.md). `deus-ex` (Machina) dispatches (does not cook). `story-maker` (Penelope) cooks intent-led `/create-us` + `/refine-us`. `backlog-surveyor` (Metis) cooks gap-led `/survey-backlog` apply. `story-checker` (Argus) attests `/review-us` (`ready`) + `/complete-us`.
+> **Live roster:** eighteen actors. Call signs: [agent-personas.md](./agent-personas.md). `deus-ex` (Machina) dispatches (does not cook). `story-maker` (Penelope) cooks intent-led `/create-us` + `/refine-us`. `backlog-surveyor` (Metis) cooks gap-led `/survey-backlog` apply. `story-checker` (Argus) attests `/review-us` (`ready`) + `/complete-us`.
 
 v11 rename history stays in [plans/agent-roster-and-workflow-v11.md](../plans/agent-roster-and-workflow-v11.md). This file is the **production-line contract**. **Areas:** [agent-areas.md](./agent-areas.md).
 
@@ -46,11 +46,12 @@ Who cooks the US must not set `ready` or `✅`.
 | `/test-pass`, `/test-review`, `/perf-pass` | `quality-owner` |
 | `/seo-pass` | `technical-writer` + `seo-strategy` |
 | `/investigate` | `code-investigator` |
+| `/map-flow` | `flow-specialist` |
 | Phase docs `01`,`04`,`11`, `/document-project`, `/audit-docs` | `technical-writer` |
 
 Skills may be **shared as tools** (`update-decisions-log`, `init-project`, `discover-product`, `meridian-routing`). Domain procedures live in `.agent/skills/` — agents load them; humans invoke **`@owner`** (slash is optional alias). See [station-references.md](../protocol/station-references.md).
 
-## Seventeen-actor roster
+## Eighteen-actor roster
 
 1. `deus-ex` — Machina — dispatch only  
 2. `scrum-master` — Kairos — ceremonies, `/status`, init  
@@ -69,12 +70,15 @@ Skills may be **shared as tools** (`update-decisions-log`, `init-project`, `disc
 15. `developer` — Hephaestus — implement  
 16. `code-investigator` — Hermes — consult  
 17. `backlog-surveyor` — Metis — backlog reconcile + gap-led US  
+18. `flow-specialist` — Ariadne — on-demand UI / feature interaction maps  
+
+**Harmonia vs Ariadne:** `design-system-owner` maintains `09` and episodic `/design-flow`. `flow-specialist` runs `/map-flow` per feature/US with **triage** (skip allowed) — not a mandatory gate for simple US.
 
 ## Allowed interactions
 
 1. **Pass** — handoff block with `next agent` + `next command`.  
 2. **Bounce** — checker → maker; specialist gap → owner of that standard.  
-3. **Consult** — `technical-architect`, `data-engineer`, `code-investigator` mid-station; no `ready`/`✅`/product code.
+3. **Consult** — `technical-architect`, `data-engineer`, `code-investigator`, `flow-specialist` mid-station; no `ready`/`✅`/product code.
 
 ## Explicitly not a new agent
 

@@ -21,7 +21,7 @@ Meridian is a **repo-native harness for AI-assisted development**. It turns Curs
 
 - **Written intent** — scope, architecture, and security in `docs/` *before* backlog work
 - **Structured delivery** — versions, sprints, epics, and user stories in `.meridian/meridian.db`
-- **Specialist agents** — seventeen stations with call signs (Penelope weaves stories, Metis finds missing work, Hephaestus forges code, Machina dispatches — never cooks)
+- **Specialist agents** — eighteen stations with call signs (Penelope weaves stories, Metis finds missing work, Ariadne maps flows, Hephaestus forges code, Machina dispatches — never cooks)
 - **Skills + gates** — procedures in `.agent/skills/`, personas in `.agent/agents/`, validators that block vague “done”
 
 You stay the manager. Agents execute **one user story at a time**, with evidence when a story closes.
@@ -34,7 +34,7 @@ You stay the manager. Agents execute **one user story at a time**, with evidence
 | ---------------------- | ------------------------ |
 | Scope drifts every chat session | Phase docs + SQLite backlog survive reloads |
 | “Done” means whatever the model said last | `ready: true` before code; `✅` only with Record evidence |
-| One generic assistant for everything | **17 agents** — PO, architect, security, data, design, QA, dev, backlog surveyor, … |
+| One generic assistant for everything | **18 agents** — PO, architect, security, data, design, flows, QA, dev, backlog surveyor, … |
 | No visibility into what’s in flight | **Kanban board** in the IDE or **HTML monitor** in the browser |
 | Re-explaining the project from zero | Open the board, run `/status`, continue where you left off |
 
@@ -91,7 +91,7 @@ YOU  →  /us-create  or  @story-maker     (skill slash or agent mention)
 Full roster and call signs: [agent-personas.md](.agent/references/agents/agent-personas.md) · [agents-help.md](.agent/references/guides/agents-help.md)
 
 <details>
-<summary><strong>The seventeen stations (click to expand)</strong></summary>
+<summary><strong>The eighteen stations (click to expand)</strong></summary>
 
 | Agent | Call sign | Domain |
 | ----- | --------- | ------ |
@@ -112,6 +112,7 @@ Full roster and call signs: [agent-personas.md](.agent/references/agents/agent-p
 | `developer` | **Hephaestus** | Implementation |
 | `code-investigator` | **Hermes** | Trace code, imports |
 | `backlog-surveyor` | **Metis** | Reconcile backlog gaps |
+| `flow-specialist` | **Ariadne** | On-demand UI / feature flows |
 
 </details>
 

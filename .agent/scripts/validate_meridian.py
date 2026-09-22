@@ -63,6 +63,7 @@ REQUIRED_AGENT_STATIONS = [
     "scrum-master",
     "code-investigator",
     "backlog-surveyor",
+    "flow-specialist",
     "ux-researcher",
     "data-engineer",
     "devops-engineer",

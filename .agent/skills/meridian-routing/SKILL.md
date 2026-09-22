@@ -1,6 +1,6 @@
 ---
 name: meridian-routing
-description: Automatic Meridian agent selection and task routing. Analyzes requests and picks deus-ex, scrum-master, product-owner, ux-researcher, technical-writer, security-champion, technical-architect, data-engineer, design-system-owner, quality-owner, devops-engineer, sprint-planner, story-maker, story-checker, developer, code-investigator, backlog-surveyor.
+description: Automatic Meridian agent selection and task routing. Analyzes requests and picks deus-ex, scrum-master, product-owner, ux-researcher, technical-writer, security-champion, technical-architect, data-engineer, design-system-owner, quality-owner, devops-engineer, sprint-planner, story-maker, story-checker, developer, code-investigator, backlog-surveyor, flow-specialist.
 allowed-tools: Read, Glob, Grep
 version: 1.1.0
 ---
@@ -44,6 +44,7 @@ Before responding, classify the request and select the correct Meridian agent. S
 | Architecture | "architecture", `05_architecture`, `/architecture`, diagram, system map, ER map, architecture diagrams | `technical-architect` | yes |
 | Design system | `09_design`, `/design-pass`, `/design-showcase`, `/design-review`, tokens, UI | `design-system-owner` | yes |
 | Screen flow / IA | screen flow, jornada, telas, navigation map, empty state, `/design-flow`, responsive app/web | `design-system-owner` | yes |
+| Feature / UI interaction map | `/map-flow`, "desenhar fluxo", "fluxo da tela", "fluxo da feature", dialog/modal branches, mermaid UI process | `flow-specialist` | yes |
 | Theme / type | theme, dark mode, tokens, font hierarchy, tipografia, `/design-theme` | `design-system-owner` | yes |
 | Test strategy | `10_test`, `/test-pass`, pyramid, coverage, runners, `qualitySiege` | `quality-owner` | yes |
 | Test audit | `/test-review`, tests evidence, before complete-us | `quality-owner` | yes |

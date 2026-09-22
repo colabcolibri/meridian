@@ -4,6 +4,17 @@ All notable changes to the **Meridian** VS Code extension (`meridian-vscode`).
 
 Format based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [2.1.6] - 2026-09-22
+
+### Added
+
+- **Kit:** eighteenth agent **`flow-specialist`** (call sign **Ariadne**) and skill **`map-interaction-flow`** — slash **`/map-flow`** for on-demand UI and feature interaction maps with **triage** (skip simple work), **`light`**, **`standard`**, **`product`**, and **`code`** modes; optional `docs/architecture/diagrams/feature-*.md` (`kind: feature-interaction`).
+- **Routing:** `meridian-routing`, `agents-help`, `deus-ex`, `us-refine` checklist, and eighteen-station roster updates.
+
+### Changed
+
+- **Harmonia vs Ariadne:** `design-system-owner` keeps episodic `/design-flow` on `09`; tactical per-feature maps delegate to `/map-flow`.
+
 ## [2.1.5] - 2026-09-22
 
 ### Added

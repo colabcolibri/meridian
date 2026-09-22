@@ -11,7 +11,7 @@ Explicit map of **who does what**, **which group they belong to**, and **which s
 | **This file** | Agents, slash commands, skills, step order |
 | Scrum mapping | [scrum-meridian-map.md](../scrum/scrum-meridian-map.md) |
 | **Station map** | [agent-station-map.md](../agents/agent-station-map.md) — cook vs attest |
-| Call signs | [agent-personas.md](../agents/agent-personas.md) — mythic names for all 17 agents |
+| Call signs | [agent-personas.md](../agents/agent-personas.md) — mythic names for all 18 agents |
 | **Station skills** | [station-references.md](../protocol/station-references.md) — agents + skills (kit v3) |
 | **Upgrade from 2.x** | [kit-v3-migration.md](../protocol/kit-v3-migration.md) |
 | **Areas** | [agent-areas.md](../agents/agent-areas.md) — discovery, standards, planning, build, attest |
@@ -45,7 +45,7 @@ docs/
 
 ## Agent groups
 
-Seventeen live actors. Line: [agent-station-map.md](../agents/agent-station-map.md). Call signs: [agent-personas.md](../agents/agent-personas.md). `deus-ex` allocates; the others cook or attest.
+Eighteen live actors. Line: [agent-station-map.md](../agents/agent-station-map.md). Call signs: [agent-personas.md](../agents/agent-personas.md). `deus-ex` allocates; the others cook or attest.
 
 ### Group 1 — Orchestration
 
@@ -156,7 +156,21 @@ Finds traceability debt and creates **gap-derived** US (`ready: false`) after ev
 
 ---
 
-### Group 8 — Code investigation (read-only)
+### Group 8 — Interaction flows (on demand)
+
+Maps UI and feature processes when helpful — **triage skips simple US** (not a rigid gate).
+
+| Agent | Serves for | Primary artifacts | Does not |
+| ----- | ---------- | ----------------- | -------- |
+| **`flow-specialist`** | Feature/screen interaction maps, branches, empty/error | Chat mermaid (`light`) or `docs/architecture/diagrams/feature-*.md` | Product code; approve `09`; replace full `/design-flow` |
+
+**When to use:** `/map-flow` before `/refine-us` on multi-step UI; optional anytime you need clarity. Skip is valid for trivial slices.
+
+**Skills:** `map-interaction-flow`, `investigate-codebase` (code mode), `update-decisions-log`, `meridian-routing`
+
+---
+
+### Group 9 — Code investigation (read-only)
 
 Trace flows and explain behavior before refine, spike, or architecture updates.
 
@@ -228,6 +242,7 @@ Complete in order: `00` → `01` → `02` → `03` → `04` → **`05`** → `06
 | C15 | **`/document-project`** | `technical-writer` (Calliope) | `docs/` + `inventory/as-is.md` | Brownfield baseline in phase docs. **No US.** |
 | C16 | **`/audit-docs`** | `technical-writer` (Calliope) | Report | Phase docs depth and drift vs code. **Report only** unless `apply`. |
 | C17 | **`/survey-backlog`** | `backlog-surveyor` (Metis) | Report and/or US | Reconcile backlog gaps. **`report`** default; **`apply`** creates US (`ready: false`) for approved gaps. |
+| C18 | **`/map-flow`** | `flow-specialist` (Ariadne) | Report and/or diagram file | Triage → skip, `light`, `standard`, `product`, or `code` interaction maps. **Not mandatory** for simple US. |
 
 **HAR (ação humana necessária):** agents stop for external accounts, OAuth/PAT, billing, production credentials — see `rules/MERIDIAN.md`. Not a slash command; applies during any workflow.
 
@@ -388,6 +403,7 @@ Full contract: [station-references.md](../protocol/station-references.md).
 | New version / sprint | D | `sprint-planner` | `/create-version`, `/plan-sprint`, `/complete-sprint` |
 | New / refine / review / close US | E | `story-maker` / `story-checker` / `developer` | `/create-us`, `/refine-us`, `/review-us`, `/implement-us`, `/complete-us` |
 | Backlog gaps / missing US | D | `backlog-surveyor` (Metis) | `/survey-backlog`, `/survey-backlog apply` |
+| UI / feature interaction map | C / E | `flow-specialist` (Ariadne) | `/map-flow`, `/map-flow light US-XXXX` |
 | Board refresh | — | Extension reads SQLite on save |
 | Log a decision | F | any | `/update-decisions-log` |
 | Design contract (`09`) | C | `design-system-owner` | `/design-pass`, `/design-pass bootstrap` |

@@ -33,6 +33,7 @@ See `.agent/references/scrum/scrum-meridian-map.md` for bugs/spikes (no extra ar
 - [ ] Plan Architecture refs include `09` § Screen flows (or named flow) after `/design-flow`
 - [ ] Theme/type: cite `09` § Colors / Typography — no “pick a nice blue”
 - [ ] Responsive: what happens at the narrow breakpoint is in Approach, not only “must be responsive”
+- [ ] Multi-step UI (dialog, branches, empty/error): Plan cites `/map-flow` artifact or mermaid — **or** one-line skip rationale from triage; simple single-screen US do not require a map
 
 ## Approach — good vs bad
 

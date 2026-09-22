@@ -363,6 +363,7 @@ Run at the project root. Fix errors before creating US or marking docs `approved
 | `/complete-us US-XXXX` | Close story — fills Record, marks `✅` (SQLite upsert) |
 | `/investigate` | Read-only code trace — how/where/flow with evidence |
 | `/survey-backlog` | Reconcile backlog gaps — report default; `apply` creates US (`ready: false`) |
+| `/map-flow` | Interaction flow maps — triage may skip; `light` / `standard` / `product` / `code` modes |
 | `/discover` | Product discovery brief — before scope |
 | `/document-project` | Brownfield baseline in phase docs — no US |
 | `/audit-docs` | Audit phase docs vs code — report only |

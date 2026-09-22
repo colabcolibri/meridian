@@ -87,6 +87,7 @@ flowchart LR
 | `integration` | `flowchart` or `sequenceDiagram` | `05` or `07_api_contracts` |
 | `security` | `flowchart TB` + `subgraph` | `docs/02_security.md` |
 | `flow` | `sequenceDiagram`, `stateDiagram-v2` | relevant architecture detail |
+| `feature-interaction` | `flowchart LR` (+ optional impl table in prose) | US / feature UI — skill `map-interaction-flow`, agent `flow-specialist` |
 
 For ER companions: include entities and key relationships; omit rarely used columns (full contract stays in `06`).
 

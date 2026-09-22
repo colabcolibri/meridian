@@ -32,6 +32,7 @@ allowed-tools: Read, Glob, Grep, Bash, Edit, Write
 - New epic with more than one UI surface
 - Before `/refine-us` on Must UI that introduces a route or sheet
 
+Per-feature maps (optional; triage may skip trivial work) → `/map-flow` (`flow-specialist`), not a substitute for full § Screen flows here.
 
 ## Modes (`$ARGUMENTS`)
 
